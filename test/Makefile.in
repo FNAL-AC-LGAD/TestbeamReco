@@ -1,0 +1,78 @@
+# Variables set by configure 
+FASTJET_DIR = @FASTJETDIR@
+FASTJETLIBS = @FASTJETLIBS@
+CXX      = @CXX@
+LD       = @CXX@
+CXXFLAGS = @CXXFLAGS@
+LDFLAGS  = @LDFLAGS@
+
+# Path to source directories
+WDIR    = .
+ODIR    = obj
+TDIR    = $(PWD)/../..
+IFWDIR  = $(TDIR)/TestbeamReco/interface
+SFWDIR  = $(TDIR)/TestbeamReco/src
+
+# Enable the maximun warning
+CXXFLAGS += -Wall -Wextra -Wpedantic
+
+# Flags for generating auto dependancies
+CXXDEPFLAGS = -MMD -MP
+
+##########################################################
+#Necessary includes and libraries, the order matters here!
+##########################################################
+
+# Include ROOT
+INCLUDESDIRS  += $(shell root-config --cflags)
+
+# ROOT libraries
+LIBS          += $(shell root-config --glibs)
+
+# Fastjet includes and libraries
+ifdef FASTJET_DIR
+	INCLUDESDIRS += -I$(FASTJET_DIR)/include
+	LIBS         += -L$(FASTJET_DIR)/lib $(FASTJETLIBS)
+endif
+
+# Include our code
+INCLUDESDIRS += -I$(TDIR) -I$(IFWDIR) -I$(SFWDIR) -I$(ITTDir) -I$(STTDir)
+
+PROGRAMS = MyAnalysis
+
+ANALYZERS = $(ODIR)/Analyze.o 
+HELPERS = $(ODIR)/NTupleReader.o $(ODIR)/Utility.o $(ODIR)/samples.o $(ODIR)/SATException.o $(ODIR)/MiniTupleMaker.o
+
+all: mkobj sampPyWrap $(PROGRAMS)
+
+mkobj:
+	@mkdir -p $(ODIR)
+
+# Code to compile shared library to link samples to python
+sampPyWrap: $(ODIR)/samplesModule.so
+
+$(ODIR)/samplesModule.so: $(ODIR)/samplesPyWrap.o $(ODIR)/samplesModulePyWrap.o
+	$(CXX) -shared -o $@ $^
+
+$(ODIR)/samplesPyWrap.o: $(SFWDIR)/samples.cc $(IFWDIR)/samples.h 
+	$(CXX) --std=c++11 -c -fPIC -o $@ $<
+
+$(ODIR)/samplesModulePyWrap.o: $(SFWDIR)/samplesModule.cc
+	$(CXX) --std=c++11 -c -fPIC -o $@ $<
+
+SRC_EXT = cpp c cc C
+SRC_DIR = $(SFWDIR) $(STTDir) $(WDIR) 
+define compile_rule
+$$(ODIR)/%.o : $1/%.$2
+	$$(CXX) $$(CXXFLAGS) $$(CXXDEPFLAGS)  $$(INCLUDESDIRS) -o $$@ -c $$<
+endef    
+$(foreach DIR,$(SRC_DIR),$(foreach EXT,$(SRC_EXT),$(eval $(call compile_rule,$(DIR),$(EXT)))))
+
+# Make executables
+MyAnalysis: $(ODIR)/MyAnalysis.o $(HELPERS) $(ANALYZERS)
+	$(LD) $^ $(LIBS) -o $@
+
+clean:
+	@rm -rf $(ODIR)/*.o $(ODIR)/*.so $(ODIR)/*.d $(PROGRAMS) core $(ODIR) config.log  config.status
+
+-include $(ODIR)/*.d
