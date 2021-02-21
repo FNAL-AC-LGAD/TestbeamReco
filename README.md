@@ -7,6 +7,7 @@ git clone git@github.com:FNAL-AC-LGAD/TestbeamReco.git
 cd TestbeamReco/test
 source setup.sh
 ./configure
+make clean
 make -j4
 ```
 
