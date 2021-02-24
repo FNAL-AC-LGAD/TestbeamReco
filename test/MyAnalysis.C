@@ -45,7 +45,7 @@ template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf
         std::cout << "Running over sample " << file.tag << std::endl;
         TChain* ch = new TChain( (file.treePath).c_str() );
         file.addFilesToChain(ch, startFile, nFiles);
-        NTupleReader tr(ch, {"RunNum"});
+        NTupleReader tr(ch, {"i_evt"});
         tr.registerDerivedVar("filetag",file.tag);
         tr.registerDerivedVar("analyzer",analyzer);
 

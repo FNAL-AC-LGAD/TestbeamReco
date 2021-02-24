@@ -5,12 +5,9 @@
 
 #include <TH1D.h>
 #include <TH2D.h>
-#include <TStyle.h>
-#include <TCanvas.h>
 #include <TEfficiency.h>
-#include <TRandom3.h>
-#include <iostream>
 #include <TFile.h>
+#include <iostream>
 
 Analyze::Analyze()
 {
@@ -49,13 +46,18 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         if( maxevents != -1 && tr.getEvtNum() >= maxevents ) break;
         if( tr.getEvtNum() % 1000 == 0 ) printf( " Event %i\n", tr.getEvtNum() );
         
-        //const auto& passBaseline  = tr.getVar<bool>("passBaseline1l_Good");
-       
+        //Add fun code here
+        std::cout<<"-----------------------"<<std::endl;
+        const auto& amp = tr.getVec<float>("amp");
+        std::cout<<"amp "<<amp.size()<<" "<<amp[0]<<" "<<amp[3]<<std::endl;
+
+        const auto& channel = tr.getVecVec<float>("channel");
+        std::cout<<"channel: "<<channel.size()<<" "<<channel[0].size()<<" "<<channel[0][0]<<" "<<channel[1][0]<<" "<<channel[0][1]<<std::endl;
+
         //Define weight
         double weight = 1.0;
         
         //Make cuts and fill histograms here
-        //if( passBaseline ) 
         if( true ) 
         {
             my_histos["h_njets"]->Fill( 1.0, weight ); 

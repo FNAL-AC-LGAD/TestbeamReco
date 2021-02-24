@@ -41,10 +41,17 @@ namespace utility
 
     std::string split(const std::string& half, const std::string& s, const std::string& h)
     {
-        std::string token;
-        if      ("first"==half) token = s.substr(0, s.find(h));
-        else if ("last" ==half) token = s.substr(s.find(h) + h.length(), std::string::npos);
-        return token;
+        if(s.find(h) != std::string::npos)
+        {
+            std::string token;
+            if      ("first"==half) token = s.substr(0, s.find(h));
+            else if ("last" ==half) token = s.substr(s.find(h) + h.length(), std::string::npos);            
+            return token;
+        }
+        else
+        {
+            return s;
+        }
     } 
 
     bool compare_pt_TLV( const TLorentzVector& v1, const TLorentzVector& v2 )
