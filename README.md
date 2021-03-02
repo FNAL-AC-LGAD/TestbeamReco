@@ -15,7 +15,7 @@ Example of running MyAnalysis interactively
 ```
 cd <WorkingArea>/TestbeamReco/test
 source setup.sh
-./MyAnalysis -A Analyze -H myoutputfile.root -D BNL2020_220V -E 1001
+./MyAnalysis -A Analyze -H myoutputfile.root -D BNL2020_220V -E 100001
 ```
 
 Can find all dataset options in the `sampleCollections.cfg` and  `sampleSets.cfg ` inside the `test` directory
