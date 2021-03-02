@@ -10,6 +10,7 @@
 #include <string>
 
 class NTupleReader;
+class BNL2020Geometry;
 
 class Analyze 
 {
@@ -22,7 +23,7 @@ public:
     ~Analyze(){};
     
     void Loop(NTupleReader& tr, int maxevents = -1);
-    void InitHistos();
+    void InitHistos(const BNL2020Geometry& g);
     void WriteHistos(TFile* outfile);
     
 };

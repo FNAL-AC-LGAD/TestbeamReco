@@ -322,7 +322,7 @@ void NTupleReader::createVectorsForArrayReads(int evt)
     //if this tree is defined this is a TChain
     if(chainCurrentTree_ >= -1)
     {
-        //Loaf next file in chain if needed and get local event number for file 
+        //Load next file in chain if needed and get local event number for file 
         iEvtLocal = tree_->LoadTree(evt);
 
         //check if we have moved to a new file in the chain
@@ -347,6 +347,11 @@ void NTupleReader::createVectorsForArrayReads(int evt)
                 if(l->GetLeafCount())
                 { 
                     handlePair.second.branch = l->GetLeafCount()->GetBranch();
+                }
+                else if(l->GetLen() > 1)
+                {
+                    handlePair.second.branch = handlePair.second.branchVec;
+                    handlePair.second.branchVec = nullptr;
                 }
                 else
                 {

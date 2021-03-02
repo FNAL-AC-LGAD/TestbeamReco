@@ -17,6 +17,7 @@
 #include <typeindex>
 #include <functional>
 #include <cxxabi.h>
+#include <iostream>
 
 #ifdef __CINT__
 #pragma link off all globals;
