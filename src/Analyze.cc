@@ -54,7 +54,6 @@ void Analyze::InitHistos(const BNL2020Geometry& g)
     //Get the config settings for the sensor you want to use
     std::map<std::string,double> sensorConfigMap = GetSensorConfigMap("BNL2020");
 
-
     //This event counter histogram is necessary so that we know that all the condor jobs ran successfully. If not, when you use the hadder script, you will see a discrepancy in red as the files are being hadded.
     my_histos.emplace( "EventCounter", std::make_shared<TH1D>( "EventCounter", "EventCounter", 2, -1.1, 1.1 ) ) ;
 
@@ -83,8 +82,6 @@ void Analyze::InitHistos(const BNL2020Geometry& g)
       for(unsigned int i = 0; i < row.size(); i++) {
 	const auto& r = std::to_string(rowIndex);
 	const auto& s = std::to_string(i);            
-	my_histos.emplace( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), std::make_shared<TH1D>( ("amp"+r+s).c_str(), ("amp"+r+s).c_str(), 450, -50.0, 400.0 ) ) ;
-	
 	my_2d_histos.emplace( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (sensorConfigMap["xmax"]-sensorConfigMap["xmin"]) / 0.02 ,sensorConfigMap["xmin"],sensorConfigMap["xmax"],(sensorConfigMap["ymax"]-sensorConfigMap["ymin"]) / 0.1 ,sensorConfigMap["ymin"],sensorConfigMap["ymax"] ) );
       }
       rowIndex++;
@@ -102,14 +99,11 @@ void Analyze::InitHistos(const BNL2020Geometry& g)
       for(unsigned int i = 0; i < row.size(); i++) {
    	const auto& r = std::to_string(rowIndex);
    	const auto& s = std::to_string(i);            
-   	my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("efficiency_vs_xy_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (sensorConfigMap["xmax"]-sensorConfigMap["xmin"]) / 0.02 ,sensorConfigMap["xmin"],sensorConfigMap["xmax"],(sensorConfigMap["ymax"]-sensorConfigMap["ymin"]) / 0.1,sensorConfigMap["ymin"],sensorConfigMap["ymax"],500,0,500 ) );	
+   	my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (sensorConfigMap["xmax"]-sensorConfigMap["xmin"]) / 0.02 ,sensorConfigMap["xmin"],sensorConfigMap["xmax"],(sensorConfigMap["ymax"]-sensorConfigMap["ymin"]) / 0.1,sensorConfigMap["ymin"],sensorConfigMap["ymax"],500,0,500 ) );	
       }
       rowIndex++;
     }
     
-  
-
-
     //Define TEfficiencies if you are doing trigger studies (for proper error bars) or cut flow charts.
     my_efficiencies.emplace("event_sel_weight", std::make_shared<TEfficiency>("event_sel_weight","event_sel_weight",9,0,9));
 }
@@ -131,7 +125,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         if( tr.getEvtNum() % 100000 == 0 ) printf( " Event %i\n", tr.getEvtNum() );
                        
         //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
-        const auto& run = tr.getVar<int>("run");
+        //const auto& run = tr.getVar<int>("run");
         const auto& amp = tr.getVec<float>("amp");
         const auto& ampLGAD = g.remapToLGADgeometry(tr,amp,"ampLGAD");        
 
@@ -151,12 +145,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& nplanes = tr.getVar<int>("nplanes");
         const auto& npix = tr.getVar<int>("npix");
-        const auto& chi2 = tr.getVar<float>("chi2");
                                    
         //Make cuts and fill histograms here
-        if( ntracks==1 && nplanes>10 && npix>0 
-	    //&& chi2 < 6
-	    ) 
+        if( ntracks==1 && nplanes>10 && npix>0 ) 
         {
             int rowIndex = 0;
             for(const auto& row : ampLGAD)
@@ -173,8 +164,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
             }
 
         }
-
-
 
 	//******************************************************************
 	//Efficiency
