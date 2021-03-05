@@ -2,7 +2,6 @@
 #include "TestbeamReco/interface/Analyze.h"
 #include "TestbeamReco/interface/Utility.h"
 #include "TestbeamReco/interface/NTupleReader.h"
-#include "TestbeamReco/interface/Geometry.h"
 
 #include <TH1D.h>
 #include <TH2D.h>
@@ -14,52 +13,23 @@ Analyze::Analyze()
 {
 }
 
-std::map<std::string, double> Analyze::GetSensorConfigMap(std::string sensorName) {
-
-  std::map<std::string,double> myMap;
-  myMap["angle"] = 0;
-  myMap["xmin"] = 0;
-  myMap["xmax"] = 0;
-  myMap["ymin"] = 0;
-  myMap["ymax"] = 0;
-
-  if (sensorName == "BNL2020") {
-    //myMap["angle"] = 12.6;
-    myMap["angle"] = 1.5;
-    myMap["xmin"] = -0.5;
-    myMap["xmax"] = 1.5;
-    myMap["ymin"] = 9.5;
-    myMap["ymax"] = 12;
-  }
-
-  return myMap;
-
-}
-
-
-std::pair<double,double> Analyze::Rotate(double x0, double y0, double angle) {
-  double rad_angle = angle*3.14159/180.;
-  double x_rot = x0*cos(rad_angle) + y0*sin(rad_angle);
-  double y_rot = y0*cos(rad_angle) - x0*sin(rad_angle);
-  return std::pair<double,double>(x_rot,y_rot);
-}
-
-
 //Define all your histograms here. 
-void Analyze::InitHistos(const BNL2020Geometry& g)
+void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const std::map<std::string,double>& sensorConfigMap)
 {
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();
-
-    //Get the config settings for the sensor you want to use
-    std::map<std::string,double> sensorConfigMap = GetSensorConfigMap("BNL2020");
 
     //This event counter histogram is necessary so that we know that all the condor jobs ran successfully. If not, when you use the hadder script, you will see a discrepancy in red as the files are being hadded.
     my_histos.emplace( "EventCounter", std::make_shared<TH1D>( "EventCounter", "EventCounter", 2, -1.1, 1.1 ) ) ;
 
     //Define 1D histograms
+    auto xmin = sensorConfigMap.at("xmin");
+    auto xmax = sensorConfigMap.at("xmax");
+    auto ymin = sensorConfigMap.at("ymin");
+    auto ymax = sensorConfigMap.at("ymax");
+
     int rowIndex = 0;
-    for(const auto& row : g.geometry)
+    for(const auto& row : geometry)
     {
         if(row.size()<2) continue;
         for(unsigned int i = 0; i < row.size(); i++)
@@ -77,29 +47,30 @@ void Analyze::InitHistos(const BNL2020Geometry& g)
 
     //Per Channel 2D efficiencies
     rowIndex = 0;
-    for(const auto& row : g.geometry) {
+    for(const auto& row : geometry) {
       if(row.size()<2) continue;
       for(unsigned int i = 0; i < row.size(); i++) {
 	const auto& r = std::to_string(rowIndex);
 	const auto& s = std::to_string(i);            
-	my_2d_histos.emplace( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (sensorConfigMap["xmax"]-sensorConfigMap["xmin"]) / 0.02 ,sensorConfigMap["xmin"],sensorConfigMap["xmax"],(sensorConfigMap["ymax"]-sensorConfigMap["ymin"]) / 0.1 ,sensorConfigMap["ymin"],sensorConfigMap["ymax"] ) );
+	my_2d_histos.emplace( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
+	my_2d_histos.emplace( ("relFrac_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_x_channel"+r+s).c_str(), ("relFrac_vs_x_channel"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
+	my_2d_histos.emplace( ("relFrac_vs_y_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_y_channel"+r+s).c_str(), ("relFrac_vs_y_channel"+r+s+"; Y [mm]; relFrac").c_str(), (ymax-ymin)/0.1,ymin,ymax, 100,0.0,1.0 ) );
       }
       rowIndex++;
     }
     
     //Global 2D efficiencies
-    my_2d_histos.emplace( "efficiency_vs_xy_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_numerator", "efficiency_vs_xy_numerator; X [mm]; Y [mm]", (sensorConfigMap["xmax"]-sensorConfigMap["xmin"]) / 0.02 ,sensorConfigMap["xmin"],sensorConfigMap["xmax"],(sensorConfigMap["ymax"]-sensorConfigMap["ymin"]) / 0.1,sensorConfigMap["ymin"],sensorConfigMap["ymax"] ) );
-    my_2d_histos.emplace( "efficiency_vs_xy_denominator", std::make_shared<TH2D>( "efficiency_vs_xy_denominator", "efficiency_vs_xy_denominator; X [mm]; Y [mm]", (sensorConfigMap["xmax"]-sensorConfigMap["xmin"]) / 0.02 ,sensorConfigMap["xmin"],sensorConfigMap["xmax"],(sensorConfigMap["ymax"]-sensorConfigMap["ymin"]) / 0.1,sensorConfigMap["ymin"],sensorConfigMap["ymax"] ) );
-
+    my_2d_histos.emplace( "efficiency_vs_xy_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_numerator", "efficiency_vs_xy_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
+    my_2d_histos.emplace( "efficiency_vs_xy_denominator", std::make_shared<TH2D>( "efficiency_vs_xy_denominator", "efficiency_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
 
     //Define 3D histograms
     rowIndex = 0;
-    for(const auto& row : g.geometry) {
+    for(const auto& row : geometry) {
       if(row.size()<2) continue;
       for(unsigned int i = 0; i < row.size(); i++) {
    	const auto& r = std::to_string(rowIndex);
    	const auto& s = std::to_string(i);            
-   	my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (sensorConfigMap["xmax"]-sensorConfigMap["xmin"]) / 0.02 ,sensorConfigMap["xmin"],sensorConfigMap["xmax"],(sensorConfigMap["ymax"]-sensorConfigMap["ymin"]) / 0.1,sensorConfigMap["ymin"],sensorConfigMap["ymax"],500,0,500 ) );	
+   	my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax, 500,0,500 ) );	
       }
       rowIndex++;
     }
@@ -111,13 +82,14 @@ void Analyze::InitHistos(const BNL2020Geometry& g)
 //Put everything you want to do per event here.
 void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
-    BNL2020Geometry g;
-    std::map<std::string,double> sensorConfigMap = GetSensorConfigMap("BNL2020");
-    InitHistos(g);
+    const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
+    const auto& sensorConfigMap = tr.getVar<std::map<std::string,double>>("sensorConfigMap");
+    InitHistos(geometry, sensorConfigMap);
+
     while( tr.getNextEvent() )
     {
         //This is added to count the number of events- do not change the next two lines.
-        const auto& eventCounter        = tr.getVar<int>("eventCounter");
+        const auto& eventCounter = tr.getVar<int>("eventCounter");
         my_histos["EventCounter"]->Fill( eventCounter );
 
         //Print Event Number 
@@ -127,7 +99,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
         //const auto& run = tr.getVar<int>("run");
         const auto& amp = tr.getVec<float>("amp");
-        const auto& ampLGAD = g.remapToLGADgeometry(tr,amp,"ampLGAD");        
+        const auto& ampLGAD = utility::remapToLGADgeometry(tr, amp, "ampLGAD");        
 
         auto maxAmpIter = std::max_element(ampLGAD[0].begin(),ampLGAD[0].end());
         int maxAmpIndex = std::distance(ampLGAD[0].begin(), maxAmpIter);
@@ -145,7 +117,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& nplanes = tr.getVar<int>("nplanes");
         const auto& npix = tr.getVar<int>("npix");
-                                   
+        const auto& x = tr.getVar<double>("x");
+        const auto& y = tr.getVar<double>("y");
+                                  
         //Make cuts and fill histograms here
         if( ntracks==1 && nplanes>10 && npix>0 ) 
         {
@@ -159,23 +133,16 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                     my_histos["amp"+r+s]->Fill(ampLGAD[rowIndex][i], 1.0);
                     if(maxAmpIndex == int(i)) my_histos["ampMax"+r+s]->Fill(ampLGAD[rowIndex][i], 1.0);
                     my_histos["relFrac"+r+s]->Fill(relFrac[i], 1.0);
+                    my_2d_histos["relFrac_vs_x_channel"+r+s]->Fill(x, relFrac[i]);
+                    my_2d_histos["relFrac_vs_y_channel"+r+s]->Fill(y, relFrac[i]);
                 }
                 rowIndex++;
             }
-
         }
 
 	//******************************************************************
 	//Efficiency
 	//******************************************************************
-	const double angle = sensorConfigMap["angle"];
-	const auto& x_dut = tr.getVec<float>("x_dut");
-	const auto& y_dut = tr.getVec<float>("y_dut");
-	double x = x_dut[0];
-	double y = y_dut[0];
-	std::pair<double,double> tmp_pair = Rotate(x_dut[0], y_dut[0], angle);
-	x = tmp_pair.first;
-	y = tmp_pair.second;
 
 	//Make cuts and fill histograms here
 	if( ntracks==1 && nplanes>10 && npix>0 ) {
