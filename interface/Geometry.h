@@ -3,6 +3,22 @@
 
 #include "TestbeamReco/interface/NTupleReader.h"
 
+class DefaultGeometry
+{
+public:
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}};
+    std::vector<std::vector<int>> geometry = {{0}};
+    std::map<int, bool> acLGADChannelMap = {{0,false}};
+    int numLGADchannels = 0;
+    std::map<std::string,double> sensorConfigMap = {
+        {"angle", -1},
+        {"xmin",  -1},
+        {"xmax",  -1},
+        {"ymin",  -1},
+        {"ymax",  -1},        
+    };
+};
+
 class BNL2020Geometry
 {
 public:
@@ -46,26 +62,14 @@ public:
 
     int numLGADchannels = 6;
 
-    template<typename T> std::vector<std::vector<T>>& remapToLGADgeometry(NTupleReader& tr, std::vector<T> vec, const std::string& name) const
-    {
-        auto& vecvec = tr.createDerivedVec<std::vector<T>>(name);
-    
-        for(const auto& row : geometry)
-        {
-            if(row.size()<2) continue;
-    
-            vecvec.emplace_back(row.size());
-            for(unsigned int i = 0; i < vec.size(); i++)
-            {            
-                if(std::find(row.begin(), row.end(), i) != row.end())
-                {
-                    const int index = indexToGeometryMap.at(i)[1];
-                    vecvec.back()[index] = vec[i];
-                }
-            }
-        }        
-        return vecvec;
-    }
+    std::map<std::string,double> sensorConfigMap = {
+        //{"angle", 12.6},
+        {"angle", 1.5},
+        {"xmin", -0.5},
+        {"xmax",  1.5},
+        {"ymin",  9.5},
+        {"ymax", 12.0},        
+    };
 };
 
 #endif
