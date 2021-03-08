@@ -4,7 +4,7 @@ import EfficiencyUtils
 
 
 
-inputfile = TFile("/uscms/home/sxie/work/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.root")
+inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/run2/analysis/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.root")
 
 efficiency_numerator_global = inputfile.Get("efficiency_vs_xy_numerator")
 efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator")
