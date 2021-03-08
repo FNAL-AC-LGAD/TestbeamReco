@@ -47,6 +47,8 @@ fit = langaus.LanGausFit()
 #loop over X,Y bins
 for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
     for j in range(1, amplitude_vs_xy.GetYaxis().GetNbins()):
+
+        ##For Debugging
         #if not (i==46 and j==5):
         #    continue
 
@@ -69,9 +71,11 @@ for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
                 myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-2*myRMS,myMean+3*myRMS))
                 myMPV = myLanGausFunction.GetParameter(1)
                 value = myMPV
-                tmpHist.Draw("hist")
-                myLanGausFunction.Draw("same")
-                canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
+
+                ##For Debugging
+                #tmpHist.Draw("hist")
+                #myLanGausFunction.Draw("same")
+                #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
 
             print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             list_amplitude_vs_xy[channel].SetBinContent(i,j,value)
