@@ -141,6 +141,24 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         }
 
 	//******************************************************************
+	//Time Resolution
+	//******************************************************************
+	if( ntracks==1 && nplanes>10 && npix>0 ) 
+        {
+            const auto& LP2_20 = tr.getVec<float>("LP2_20");
+            const auto& photekIndex = tr.getVar<int>("photekIndex");
+            for(const auto& row : geometry) 
+            {
+                if(row.size()<2) continue;
+                for(unsigned int i = 0; i < row.size(); i++) 
+                {
+                    //std::cout<<LP2_20[i]<<" "<<LP2_20[photekIndex]<<std::endl;
+                }
+            }
+            //LP2_20[{0}]-LP2_20[{1}]
+        }
+
+	//******************************************************************
 	//Efficiency
 	//******************************************************************
 
