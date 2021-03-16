@@ -44,6 +44,7 @@ public:
             tr.registerDerivedVar("acLGADChannelMap", g.acLGADChannelMap);
             tr.registerDerivedVar("numLGADchannels", g.numLGADchannels);
             tr.registerDerivedVar("sensorConfigMap", g.sensorConfigMap);
+            tr.registerDerivedVar("photekIndex", g.photekIndex);
         }
         else
         {
@@ -53,6 +54,7 @@ public:
             tr.registerDerivedVar("acLGADChannelMap", g.acLGADChannelMap);
             tr.registerDerivedVar("numLGADchannels", g.numLGADchannels);
             tr.registerDerivedVar("sensorConfigMap", g.sensorConfigMap);
+            tr.registerDerivedVar("photekIndex", g.photekIndex);
         }
 
         //Register Modules that are needed for each Analyzer

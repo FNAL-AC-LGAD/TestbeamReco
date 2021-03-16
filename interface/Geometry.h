@@ -9,7 +9,8 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}};
     std::vector<std::vector<int>> geometry = {{0}};
     std::map<int, bool> acLGADChannelMap = {{0,false}};
-    int numLGADchannels = 0;
+    static const int numLGADchannels = 0;
+    static const int photekIndex = 0;
     std::map<std::string,double> sensorConfigMap = {
         {"angle", -1},
         {"xmin",  -1},
@@ -60,7 +61,8 @@ public:
         {7,false},        
     };
 
-    int numLGADchannels = 6;
+    static const int numLGADchannels = 6;
+    static const int photekIndex = 7;
 
     std::map<std::string,double> sensorConfigMap = {
         //{"angle", 12.6},
