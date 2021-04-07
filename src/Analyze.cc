@@ -164,8 +164,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
 	//Make cuts and fill histograms here
 	if( ntracks==1 && nplanes>10 && npix>0 ) {
-      
-	  if (amp[7] > 50) {
+
+	  //Require at least 50 mV signal on Photek
+	  if (amp[7] > sensorConfigMap.at("photekSignalThreshold")) {
 	    my_2d_histos["efficiency_vs_xy_denominator"]->Fill(x,y);
 
 	    bool hasGlobalSignal = false;
@@ -174,9 +175,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	      for(unsigned int i = 0; i < row.size(); i++)  {
 		const auto& r = std::to_string(rowIndex);
 		const auto& s = std::to_string(i);
-		my_3d_histos["amplitude_vs_xy_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
 		
-		if (ampLGAD[rowIndex][i]  > 30 ) {
+		if (ampLGAD[rowIndex][i] > sensorConfigMap.at("noiseAmpThreshold")) {
+		  my_3d_histos["amplitude_vs_xy_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
+		}
+		
+		
+		if (ampLGAD[rowIndex][i]  > sensorConfigMap.at("signalAmpThreshold") ) {
 		  hasGlobalSignal = true; 
 		  my_2d_histos["efficiency_vs_xy_numerator_channel"+r+s]->Fill(x,y);
 		}

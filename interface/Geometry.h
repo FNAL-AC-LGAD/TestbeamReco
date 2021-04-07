@@ -16,8 +16,12 @@ public:
         {"xmin",  -1},
         {"xmax",  -1},
         {"ymin",  -1},
-        {"ymax",  -1},        
-    };
+        {"ymax",  -1}, 
+	{"photekSignalThreshold", 50.0}, //in mV
+	{"noiseAmpThreshold", 10.0},      //in mV
+	{"signalAmpThreshold", 30.0},    //in mV
+	
+    };   
 };
 
 class BNL2020Geometry
@@ -70,7 +74,10 @@ public:
         {"xmin", -0.5},
         {"xmax",  1.5},
         {"ymin",  9.5},
-        {"ymax", 12.0},        
+        {"ymax", 12.0}, 
+	{"photekSignalThreshold", 50.0},
+     	{"noiseAmpThreshold", 10.0},
+	{"signalAmpThreshold", 30.0},
     };
 };
 
