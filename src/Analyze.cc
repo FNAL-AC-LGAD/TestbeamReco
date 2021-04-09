@@ -52,7 +52,8 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
       for(unsigned int i = 0; i < row.size(); i++) {
 	const auto& r = std::to_string(rowIndex);
 	const auto& s = std::to_string(i);            
-	my_2d_histos.emplace( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
+	my_2d_histos.emplace( ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
+	my_2d_histos.emplace( ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
 	my_2d_histos.emplace( ("relFrac_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_x_channel"+r+s).c_str(), ("relFrac_vs_x_channel"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
 	my_2d_histos.emplace( ("relFrac_vs_y_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_y_channel"+r+s).c_str(), ("relFrac_vs_y_channel"+r+s+"; Y [mm]; relFrac").c_str(), (ymax-ymin)/0.1,ymin,ymax, 100,0.0,1.0 ) );
       }
@@ -60,7 +61,8 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
     }
     
     //Global 2D efficiencies
-    my_2d_histos.emplace( "efficiency_vs_xy_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_numerator", "efficiency_vs_xy_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
+    my_2d_histos.emplace( "efficiency_vs_xy_highThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_highThreshold_numerator", "efficiency_vs_xy_highThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
+    my_2d_histos.emplace( "efficiency_vs_xy_lowThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_lowThreshold_numerator", "efficiency_vs_xy_lowThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_denominator", std::make_shared<TH2D>( "efficiency_vs_xy_denominator", "efficiency_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
 
     //Define 3D histograms
@@ -169,7 +171,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	  if (amp[7] > sensorConfigMap.at("photekSignalThreshold")) {
 	    my_2d_histos["efficiency_vs_xy_denominator"]->Fill(x,y);
 
-	    bool hasGlobalSignal = false;
+	    bool hasGlobalSignal_highThreshold = false;
+	    bool hasGlobalSignal_lowThreshold = false;
 	    for(const auto& row : ampLGAD)  {
 	      int rowIndex = 0;
 	      for(unsigned int i = 0; i < row.size(); i++)  {
@@ -177,18 +180,22 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 		const auto& s = std::to_string(i);
 		
 		if (ampLGAD[rowIndex][i] > sensorConfigMap.at("noiseAmpThreshold")) {
-		  my_3d_histos["amplitude_vs_xy_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
+		  my_3d_histos["amplitude_vs_xy_lowThreshold_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
+		  hasGlobalSignal_lowThreshold = true; 
+		  my_2d_histos["efficiency_vs_xy_lowThreshold_numerator_channel"+r+s]->Fill(x,y);		  
 		}
-		
-		
+				
 		if (ampLGAD[rowIndex][i]  > sensorConfigMap.at("signalAmpThreshold") ) {
-		  hasGlobalSignal = true; 
-		  my_2d_histos["efficiency_vs_xy_numerator_channel"+r+s]->Fill(x,y);
+		  hasGlobalSignal_highThreshold = true; 
+		  my_2d_histos["efficiency_vs_xy_highThreshold_numerator_channel"+r+s]->Fill(x,y);
 		}
+
 	      }
 	      rowIndex++;
 	    }
-	    if (hasGlobalSignal) my_2d_histos["efficiency_vs_xy_numerator"]->Fill(x,y);
+
+	    if (hasGlobalSignal_lowThreshold) my_2d_histos["efficiency_vs_xy_lowThreshold_numerator"]->Fill(x,y);
+	    if (hasGlobalSignal_highThreshold) my_2d_histos["efficiency_vs_xy_highThreshold_numerator"]->Fill(x,y);
 
 	  }
 	}
