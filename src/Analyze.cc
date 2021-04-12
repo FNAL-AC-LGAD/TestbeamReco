@@ -178,9 +178,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	      for(unsigned int i = 0; i < row.size(); i++)  {
 		const auto& r = std::to_string(rowIndex);
 		const auto& s = std::to_string(i);
-		
+
 		if (ampLGAD[rowIndex][i] > sensorConfigMap.at("noiseAmpThreshold")) {
-		  my_3d_histos["amplitude_vs_xy_lowThreshold_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
+		  my_3d_histos["amplitude_vs_xy_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
 		  hasGlobalSignal_lowThreshold = true; 
 		  my_2d_histos["efficiency_vs_xy_lowThreshold_numerator_channel"+r+s]->Fill(x,y);		  
 		}
@@ -189,19 +189,15 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 		  hasGlobalSignal_highThreshold = true; 
 		  my_2d_histos["efficiency_vs_xy_highThreshold_numerator_channel"+r+s]->Fill(x,y);
 		}
-
 	      }
 	      rowIndex++;
 	    }
 
 	    if (hasGlobalSignal_lowThreshold) my_2d_histos["efficiency_vs_xy_lowThreshold_numerator"]->Fill(x,y);
 	    if (hasGlobalSignal_highThreshold) my_2d_histos["efficiency_vs_xy_highThreshold_numerator"]->Fill(x,y);
-
 	  }
 	}
-
 	//******************************************************************
-
 
 	// Example Fill event selection efficiencies
 	my_efficiencies["event_sel_weight"]->SetUseWeightedEvents();
