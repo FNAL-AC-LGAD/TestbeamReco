@@ -64,6 +64,8 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
     my_2d_histos.emplace( "efficiency_vs_xy_highThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_highThreshold_numerator", "efficiency_vs_xy_highThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_lowThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_lowThreshold_numerator", "efficiency_vs_xy_lowThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_denominator", std::make_shared<TH2D>( "efficiency_vs_xy_denominator", "efficiency_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
+    my_2d_histos.emplace( "clusterSize_vs_x", std::make_shared<TH2D>( "clusterSize_vs_x", "clusterSize_vs_x; X [mm]; Cluster Size", (xmax-xmin)/0.02,xmin,xmax, 20,-0.5,19.5 ) );
+
 
     //Define 3D histograms
     rowIndex = 0;
@@ -79,6 +81,7 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
     
     //Define TEfficiencies if you are doing trigger studies (for proper error bars) or cut flow charts.
     my_efficiencies.emplace("event_sel_weight", std::make_shared<TEfficiency>("event_sel_weight","event_sel_weight",9,0,9));
+
 }
 
 //Put everything you want to do per event here.
@@ -173,6 +176,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
 	    bool hasGlobalSignal_highThreshold = false;
 	    bool hasGlobalSignal_lowThreshold = false;
+	    int clusterSize = 0;
+
 	    for(const auto& row : ampLGAD)  {
 	      int rowIndex = 0;
 	      for(unsigned int i = 0; i < row.size(); i++)  {
@@ -180,8 +185,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 		const auto& s = std::to_string(i);
 
 		if (ampLGAD[rowIndex][i] > sensorConfigMap.at("noiseAmpThreshold")) {
-		  my_3d_histos["amplitude_vs_xy_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
 		  hasGlobalSignal_lowThreshold = true; 
+		  clusterSize++;
+		  my_3d_histos["amplitude_vs_xy_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
 		  my_2d_histos["efficiency_vs_xy_lowThreshold_numerator_channel"+r+s]->Fill(x,y);		  
 		}
 				
@@ -194,15 +200,20 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	    }
 
 	    if (hasGlobalSignal_lowThreshold) my_2d_histos["efficiency_vs_xy_lowThreshold_numerator"]->Fill(x,y);
-	    if (hasGlobalSignal_highThreshold) my_2d_histos["efficiency_vs_xy_highThreshold_numerator"]->Fill(x,y);
-	  }
-	}
+	    if (hasGlobalSignal_highThreshold) {
+	      my_2d_histos["efficiency_vs_xy_highThreshold_numerator"]->Fill(x,y);
+	      my_2d_histos["clusterSize_vs_x"]->Fill(x,clusterSize);
+	    }
+
+	  } //if it passes Photek threshold
+	} //if there's a valid track
 	//******************************************************************
 
 	// Example Fill event selection efficiencies
 	my_efficiencies["event_sel_weight"]->SetUseWeightedEvents();
 	my_efficiencies["event_sel_weight"]->FillWeighted(true,1.0,0);
-    } 
+
+    } //event loop
 }
 
 void Analyze::WriteHistos(TFile* outfile)
