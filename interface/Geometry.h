@@ -7,22 +7,21 @@ class DefaultGeometry
 {
 public:
     virtual ~DefaultGeometry() = default;
-    std::map<int, std::vector<int>> indexToGeometryMap;// = {{0,{0,0}}};
-    std::vector<std::vector<int>> geometry;// = {{0}};
-    std::map<int, bool> acLGADChannelMap;// = {{0,false}};
-    int numLGADchannels;// = 0;
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}};
+    std::vector<std::vector<int>> geometry = {{0}};
+    std::map<int, bool> acLGADChannelMap = {{0,false}};
+    int numLGADchannels = 0;
     int photekIndex = 7;
-    std::map<std::string,double> sensorConfigMap;// = {
-    //{"angle", -1},
-    //    {"xmin",  -1},
-    //    {"xmax",  -1},
-    //    {"ymin",  -1},
-    //    {"ymax",  -1}, 
-    //    {"photekSignalThreshold", 50.0}, //in mV
-    //    {"noiseAmpThreshold", 10.0},      //in mV
-    //    {"signalAmpThreshold", 30.0},    //in mV
-    //    
-    //};   
+    std::map<std::string,double> sensorConfigMap = {
+        {"angle", -1},
+        {"xmin",  -1},
+        {"xmax",  -1},
+        {"ymin",  -1},
+        {"ymax",  -1}, 
+        {"photekSignalThreshold", 50.0}, //in mV
+        {"noiseAmpThreshold", 10.0},      //in mV
+        {"signalAmpThreshold", 30.0},    //in mV        
+    };   
 };
 
 class BNL2020Geometry : public DefaultGeometry
