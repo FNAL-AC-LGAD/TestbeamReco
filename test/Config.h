@@ -96,9 +96,22 @@ public:
         {
             registerGeometry(tr, HPKPadB2Geometry());
         }
+        else if(filetag.find("HPK_strips") != std::string::npos)
+        {
+            registerGeometry(tr, HPKStripsC2WideMetalGeometry());
+        }
+        else if(filetag.find("Ron_wide") != std::string::npos)
+        {
+            registerGeometry(tr, RonStripsGeometry());
+        }
+        else if(filetag.find("BNL2021_quadpix") != std::string::npos)
+        {
+            registerGeometry(tr, BNLPixelHexGeometry());
+        }
         else
         {
             registerGeometry(tr, DefaultGeometry());
+            std::cout<<"Warning: Using DefaultGeometry, odds are this is not what you want"<<std::endl;
         }
 
         //Register Modules that are needed for each Analyzer
