@@ -10,6 +10,8 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}};
     std::vector<std::vector<int>> geometry = {{0}};
     std::map<int, bool> acLGADChannelMap = {{0,false}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}};
     int numLGADchannels = 0;
     int photekIndex = 7;
     std::map<std::string,double> sensorConfigMap = {
@@ -63,6 +65,28 @@ public:
         {5,true},
         {6,true},
         {7,false},        
+    };
+
+    std::map<int, double> amplitudeCorrectionFactor = {
+        {0,1.0},
+        {1,1/1.043},
+        {2,1/1.000},
+        {3,1/1.078},
+        {4,1/1.084},
+        {5,1/1.067},
+        {6,1/1.017},
+        {7,1.0},        
+    };
+
+    std::map<int, double> timeCalibrationCorrection = {
+        {0,0.0},
+        {1,0.0},
+        {2,0.0},
+        {3,0.0},
+        {4,0.0},
+        {5,0.0},
+        {6,0.0},
+        {7,0.0},        
     };
 
     int numLGADchannels = 6;
@@ -142,6 +166,25 @@ public:
         {4,true},
         {7,false},        
     };
+
+   std::map<int, double> amplitudeCorrectionFactor = {
+        {0,1.0},
+        {1,1/1.043},
+        {2,1/1.000},
+        {3,1/1.078},
+        {4,1/1.084},       
+        {7,1.0},        
+    };
+
+    std::map<int, double> timeCalibrationCorrection = {
+        {0,0.0},
+        {1,0.0},
+        {2,0.0},
+        {3,0.0},
+        {4,0.0},      
+        {7,0.0},        
+    };
+
 
     int numLGADchannels = 4;
 
@@ -253,6 +296,28 @@ public:
         {7,false},        
     };
 
+   std::map<int, double> amplitudeCorrectionFactor = {
+        {0,1.0},
+        {1,1/1.043},
+        {2,1/1.000},
+        {3,1/1.078},
+        {4,1/1.084},
+        {5,1/1.067},
+        {6,1/1.017},
+        {7,1.0},        
+    };
+
+    std::map<int, double> timeCalibrationCorrection = {
+        {0,0.0},
+        {1,0.0},
+        {2,0.0},
+        {3,0.0},
+        {4,0.0},
+        {5,0.0},
+        {6,0.0},
+        {7,0.0},        
+    };
+
     int numLGADchannels = 6;
 
     std::map<std::string,double> sensorConfigMap = {
@@ -331,7 +396,29 @@ public:
         {7,false},        
     };
 
-    int numLGADchannels = 6;
+   std::map<int, double> amplitudeCorrectionFactor = {
+        {0,1.0},
+        {1,1/1.043},
+        {2,1/1.000},
+        {3,1/1.078},
+        {4,1/1.084},
+        {5,1/1.067},
+        {6,1/1.017},
+        {7,1.0},        
+    };
+
+    std::map<int, double> timeCalibrationCorrection = {
+        {0,0.0},
+        {1,0.0},
+        {2,0.0},
+        {3,0.0},
+        {4,0.0},
+        {5,0.0},
+        {6,0.0},
+        {7,0.0},        
+    };
+
+   int numLGADchannels = 6;
 
     std::map<std::string,double> sensorConfigMap = {
         //{"angle", 12.6},
@@ -343,6 +430,7 @@ public:
 	{"photekSignalThreshold", 50.0},
      	{"noiseAmpThreshold", 10.0},
 	{"signalAmpThreshold", 30.0},
+	{"strip1AmpCorr", 1.0},
     };
 };
 

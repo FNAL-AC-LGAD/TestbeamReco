@@ -15,6 +15,19 @@ private:
         tr.registerDerivedVar("y", y_rot);
     }
 
+    void ApplyAmplitudeCorrection(NTupleReader& tr) const
+    {     
+      const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
+      auto& corrAmp = tr.createDerivedVec<double>("corrAmp");
+      const auto& amp = tr.getVec<float>("amp");
+      int counter = 0;
+      for(auto thisAmp : amp) 
+      {
+	corrAmp.emplace_back(thisAmp*ampCorrectionFactors.at(counter));
+	counter++;
+      }      
+    }
+
     void prepNTupleVars(NTupleReader& tr)
     {
         // Create the eventCounter variable to keep track of processed events
@@ -27,6 +40,7 @@ private:
 	const auto& x_dut = tr.getVec<float>("x_dut");
 	const auto& y_dut = tr.getVec<float>("y_dut");
 	Rotate(tr, x_dut[0], y_dut[0], angle);
+	ApplyAmplitudeCorrection(tr);
     }
 
 public:
