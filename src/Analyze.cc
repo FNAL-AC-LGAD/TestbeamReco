@@ -103,7 +103,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                        
         //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
         //const auto& run = tr.getVar<int>("run");
-        const auto& corrAmp = tr.getVec<float>("corrAmp");
+        const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");        
 
         auto maxAmpIter = std::max_element(ampLGAD[0].begin(),ampLGAD[0].end());
