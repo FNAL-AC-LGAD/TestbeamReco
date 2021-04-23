@@ -171,7 +171,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	if( ntracks==1 && nplanes>10 && npix>0 ) {
 
 	  //Require at least 50 mV signal on Photek
-	  if (amp[7] > sensorConfigMap.at("photekSignalThreshold")) {
+	  const auto& photekIndex = tr.getVar<int>("photekIndex");
+	  if (corrAmp[photekIndex] > sensorConfigMap.at("photekSignalThreshold")) {
 	    my_2d_histos["efficiency_vs_xy_denominator"]->Fill(x,y);
 
 	    bool hasGlobalSignal_highThreshold = false;
