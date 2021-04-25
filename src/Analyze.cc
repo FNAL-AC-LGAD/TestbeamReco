@@ -124,9 +124,11 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& npix = tr.getVar<int>("npix");
         const auto& x = tr.getVar<double>("x");
         const auto& y = tr.getVar<double>("y");
-                                  
+        const auto& hitSensor = tr.getVar<bool>("hitSensor");
+        bool pass = ntracks==1 && nplanes>10 && npix>0 && hitSensor;
+
         //Make cuts and fill histograms here
-        if( ntracks==1 && nplanes>10 && npix>0 ) 
+        if(pass) 
         {
             int rowIndex = 0;
             for(const auto& row : ampLGAD)
@@ -148,7 +150,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	//******************************************************************
 	//Time Resolution
 	//******************************************************************
-	if( ntracks==1 && nplanes>10 && npix>0 ) 
+	if(pass) 
         {
             const auto& LP2_20 = tr.getVec<float>("LP2_20");
             const auto& photekIndex = tr.getVar<int>("photekIndex");
@@ -168,7 +170,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	//******************************************************************
 
 	//Make cuts and fill histograms here
-	if( ntracks==1 && nplanes>10 && npix>0 ) {
+	if(pass) {
 
 	  //Require at least 50 mV signal on Photek
 	  const auto& photekIndex = tr.getVar<int>("photekIndex");
