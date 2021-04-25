@@ -2,6 +2,7 @@
 #include "TestbeamReco/interface/SATException.h"
 #include "TestbeamReco/interface/NTupleReader.h"
 #include "TestbeamReco/interface/MiniTupleMaker.h"
+#include "TestbeamReco/interface/MakeNNVariables.h"
 #include "TestbeamReco/interface/Utility.h"
 #include "TestbeamReco/interface/Analyze.h"
 #include "Config.h"
@@ -141,6 +142,7 @@ int main(int argc, char *argv[])
 
     std::vector<std::pair<std::string, std::function<void(const std::set<AnaSamples::FileSummary>&,const int,const int,const int,TFile* const,const std::string&)>>> AnalyzerPairVec = {
         {"Analyze",             run<Analyze>},
+        {"MakeNNVariables",     run<MakeNNVariables>},
     }; 
 
     try
