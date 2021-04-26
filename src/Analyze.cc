@@ -74,7 +74,7 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
       for(unsigned int i = 0; i < row.size(); i++) {
    	const auto& r = std::to_string(rowIndex);
    	const auto& s = std::to_string(i);            
-   	my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax, 500,0,500 ) );	
+   	my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.01,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax, 500,0,500 ) );	
       }
       rowIndex++;
     }
@@ -103,7 +103,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                        
         //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
         //const auto& run = tr.getVar<int>("run");
-        const auto& corrAmp = tr.getVec<float>("corrAmp");
+        const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");        
 
         auto maxAmpIter = std::max_element(ampLGAD[0].begin(),ampLGAD[0].end());
