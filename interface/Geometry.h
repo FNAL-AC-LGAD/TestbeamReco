@@ -24,6 +24,10 @@ public:
         {"noiseAmpThreshold", 10.0},      //in mV
         {"signalAmpThreshold", 30.0},    //in mV        
     };   
+    std::vector<std::vector<double>> sensorEdges = {
+        {-999.9, 999.9},
+        {-999.9, 999.9},
+    };
 };
 
 class BNL2020Geometry : public DefaultGeometry
@@ -101,6 +105,11 @@ public:
 	{"photekSignalThreshold", 50.0},
      	{"noiseAmpThreshold", 10.0},
 	{"signalAmpThreshold", 30.0},
+    };
+
+    std::vector<std::vector<double>> sensorEdges = {
+        {-0.1,  9.8},
+        { 0.8, 11.6},
     };
 };
 
