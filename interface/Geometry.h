@@ -127,6 +127,28 @@ public:
     // |000000000000000|             -----
     // -----------------
 
+    std::map<int, double> amplitudeCorrectionFactor = {
+        {0,1.0},
+        {1,1.0},
+        {2,1.0},
+        {3,1.0},
+        {4,1.0},
+        {5,1.0},
+        {6,1.0},
+        {7,1.0},        
+    };
+
+    std::map<int, double> timeCalibrationCorrection = {
+        {0,0.0},
+        {1,0.0},
+        {2,0.0},
+        {3,0.0},
+        {4,0.0},
+        {5,0.0},
+        {6,0.0},
+        {7,0.0},        
+    };
+
     std::map<std::string,double> sensorConfigMap = {
         {"angle", 1.5},
         {"xmin", -0.5},
@@ -221,6 +243,25 @@ public:
     // |0 4 3 0|             |777|
     // |0000000|             -----
     // ----------
+
+   std::map<int, double> amplitudeCorrectionFactor = {
+        {0,1.0},
+        {1,1.0},
+        {2,1.0},
+        {3,1.0},
+        {4,1.0},       
+        {7,1.0},        
+    };
+
+    std::map<int, double> timeCalibrationCorrection = {
+        {0,0.0},
+        {1,0.0},
+        {2,0.0},
+        {3,0.0},
+        {4,0.0},      
+        {7,0.0},        
+    };
+
     std::map<std::string,double> sensorConfigMap = {
         {"angle", 1.5},
         {"xmin", -0.5},
@@ -249,6 +290,28 @@ public:
     // |0 6 6 6 6 6 0|
     // |0000000000000|
     // ----------
+    std::map<int, double> amplitudeCorrectionFactor = {
+        {0,1.0},
+        {1,1.0},
+        {2,1.0},
+        {3,1.0},
+        {4,1.0},
+        {5,1.0},
+        {6,1.0},
+        {7,1.0},        
+    };
+
+    std::map<int, double> timeCalibrationCorrection = {
+        {0,0.0},
+        {1,0.0},
+        {2,0.0},
+        {3,0.0},
+        {4,0.0},
+        {5,0.0},
+        {6,0.0},
+        {7,0.0},        
+    };
+
     std::map<std::string,double> sensorConfigMap = {
         {"angle", 1.5},
         {"xmin", -0.5},
@@ -354,6 +417,28 @@ public:
     // |0 1 2 3 4 5 6 0|             |777|
     // |000000000000000|             -----
     // -----------------
+    std::map<int, double> amplitudeCorrectionFactor = {
+        {0,1.0},
+        {1,1.0},
+        {2,1.0},
+        {3,1.0},
+        {4,1.0},
+        {5,1.0},
+        {6,1.0},
+        {7,1.0},        
+    };
+
+    std::map<int, double> timeCalibrationCorrection = {
+        {0,0.0},
+        {1,0.0},
+        {2,0.0},
+        {3,0.0},
+        {4,0.0},
+        {5,0.0},
+        {6,0.0},
+        {7,0.0},        
+    };
+
     std::map<std::string,double> sensorConfigMap = {
         {"angle", 1.5},
         {"xmin", -0.5},
