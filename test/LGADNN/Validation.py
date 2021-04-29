@@ -108,7 +108,7 @@ class Validation:
             h = ROOT.TH1D(name,name,bins,arange[0],arange[1])
             for x in hists[i]:
                 h.Fill(x)
-            h.Draw("sames")
+            h.Draw("he sames")
             plotMax = h.GetMaximum()
 
             fit = ROOT.TF1("fit", "gaus")    
@@ -145,10 +145,41 @@ class Validation:
         fig.savefig(self.config["outputDir"]+"/%s.png"%(name), dpi=fig.dpi)
         plt.close(fig)
 
+    def timePlots(self, t_Train, t_Val, t_Train_true, t_Val_true, time3Train, colors, labels, suffix = ""):
+        nBinsReg = 200
+        timeRange = (-4, 4)
+        arange = (-2, 2)
+        timeDiffTrain = t_Train - t_Train_true
+        timeDiffVal = t_Val - t_Val_true
+
+        self.plotDisc([timeDiffTrain, timeDiffVal], colors, labels, "tRes"+suffix, 'Events', 'NN - photek', arange=arange, bins=nBinsReg)
+        self.plotDisc([timeDiffTrain, timeDiffVal], colors, labels, "tResLog"+suffix, 'Events', 'NN - photek', arange=arange, bins=nBinsReg, doLog=True)
+        self.plot2DVar(name="tNN_Photek"+suffix, binxl=timeRange[0], binxh=timeRange[1], numbin=nBinsReg, xIn=t_Train, yIn=t_Train_true, nbiny=nBinsReg)
+        self.plot1D([timeDiffTrain], colors, labels, "tResROOT"+suffix, 'Events', 'NN - photek', arange=arange, bins=nBinsReg, doLog=True)
+        self.plotDisc([t_Train, t_Val], colors, labels, "timeTrain"+suffix, 'Events', 'NN', arange=timeRange, bins=nBinsReg)
+        self.plotDisc([t_Train_true, t_Val_true], colors, labels, "timeTrainTrue"+suffix, 'Events', 'photek', arange=timeRange, bins=nBinsReg)
+        self.plotDisc([time3Train - t_Train_true], colors, labels, "tResTime3"+suffix, 'Events', 'time3 - photek', arange=arange, bins=nBinsReg)
+        self.plot1D([time3Train - t_Train_true], colors, labels, "tResTime3ROOT"+suffix, 'Events', 'time3 - photek', arange=arange, bins=nBinsReg, doLog=True)
+
+    def xPlots(self, y_Train, y_Val, y_Train_true, y_Val_true, colors, labels, suffix = ""):
+        nBinsReg = 90
+        sensorRange = (-0.1, 0.8)
+        arange = (-0.5, 0.5)
+        positionDiffTrain = y_Train - y_Train_true
+        positionDiffVal = y_Val - y_Val_true
+
+        self.plotDisc([positionDiffTrain, positionDiffVal], colors, labels, "xRes"+suffix, 'Events', 'NN - tracker', arange=arange, bins=nBinsReg)
+        self.plotDisc([positionDiffTrain, positionDiffVal], colors, labels, "xResLog"+suffix, 'Events', 'NN - tracker', arange=arange, bins=nBinsReg, doLog=True)
+        self.plot2DVar(name="xNN_Tracker"+suffix, binxl=sensorRange[0], binxh=sensorRange[1], numbin=nBinsReg, xIn=y_Train, yIn=y_Train_true, nbiny=nBinsReg)
+        self.plot1D([positionDiffTrain], colors, labels, "xResROOT"+suffix, 'Events', 'NN - tracker', arange=arange, bins=nBinsReg, doLog=True)
+        self.plotDisc([y_Train, y_Val], colors, labels, "xTrain"+suffix, 'Events', 'NN', arange=sensorRange, bins=nBinsReg)
+        self.plotDisc([y_Train_true, y_Val_true], colors, labels, "xTrainTrue"+suffix, 'Events', 'tracker', arange=sensorRange, bins=nBinsReg)
+
     def makePlots(self, doQuickVal=True):
         valData = get_data(["BNL2020_220V_272_Val.root"], self.config)
         output_Train = self.model.predict(self.trainData["data"])
         output_Val = self.model.predict(valData["data"])
+
         y_Train = self.getResults(output_Train, outputNum=0, columnNum=0)
         y_Train_true = self.trainData["targetX"][:,0]
         y_Val = self.getResults(output_Val, outputNum=0, columnNum=0)
@@ -159,56 +190,30 @@ class Validation:
         t_Val = self.getResults(output_Val, outputNum=1, columnNum=0)
         t_Val_true = valData["targetT"][:,0]
 
+        time3Train = self.trainData["time3"][:,0]
+        amp2Train = self.trainData["amp2"][:,0]
+        amp3Train = self.trainData["amp3"][:,0]
+        amp4Train = self.trainData["amp4"][:,0]
+        amp2Val = valData["amp2"][:,0]
+        amp3Val = valData["amp3"][:,0]
+        amp4Val = valData["amp4"][:,0]
+
+        maskRange = (0.23, 0.53)
+        maskTrain = (maskRange[0] < y_Train_true) & (y_Train_true < maskRange[1]) & (amp3Train > amp2Train) & (amp3Train > amp4Train)
+        maskVal = (maskRange[0] < y_Val_true) & (y_Val_true < maskRange[1]) & (amp3Val > amp2Val) & (amp3Val > amp4Val)
 
         #############################
         # X position measurement
         #############################
-        nBinsReg = 90
-        sensorRange = (-0.1, 0.8)
-        maskRange = (0.23, 0.53)
-        arange = (-0.5, 0.5)
         colors = ["red", "green", "blue", "magenta", "orange", "black"]; labels = ["Train", "Val"]
-        maskTrain = (maskRange[0] < y_Train_true) & (y_Train_true < maskRange[1])        
-        maskVal = (maskRange[0] < y_Val_true) & (y_Val_true < maskRange[1])        
-
-        positionDiffTrain = y_Train - y_Train_true
-        positionDiffVal = y_Val - y_Val_true
-        self.plotDisc([positionDiffTrain, positionDiffVal], colors, labels, "xRes", 'Events', 'NN - tracker', arange=arange, bins=nBinsReg)
-        #self.plotDisc([positionDiffTrain, positionDiffVal], colors, labels, "xResLog", 'Events', 'NN - tracker', arange=arange, bins=nBinsReg, doLog=True)
-        self.plot2DVar(name="xNN_Tracker", binxl=sensorRange[0], binxh=sensorRange[1], numbin=nBinsReg, xIn=y_Train, yIn=y_Train_true, nbiny=nBinsReg)
-        self.plot1D([positionDiffTrain], colors, labels, "xResROOT", 'Events', 'NN - tracker', arange=arange, bins=nBinsReg, doLog=True)
-
-        positionDiffTrain = y_Train[maskTrain] - y_Train_true[maskTrain]
-        positionDiffVal = y_Val[maskVal] - y_Val_true[maskVal]
-        self.plotDisc([positionDiffTrain, positionDiffVal], colors, labels, "xRes_Mask", 'Events', 'NN - tracker', arange=arange, bins=nBinsReg)
-        #self.plotDisc([positionDiffTrain, positionDiffVal], colors, labels, "xResLog", 'Events', 'NN - tracker', arange=arange, bins=nBinsReg, doLog=True)
-        self.plot2DVar(name="xNN_Tracker_Mask", binxl=sensorRange[0], binxh=sensorRange[1], numbin=nBinsReg, xIn=y_Train[maskTrain], yIn=y_Train_true[maskTrain], nbiny=nBinsReg)
+        self.xPlots(y_Train, y_Val, y_Train_true, y_Val_true, colors, labels, suffix = "")
+        self.xPlots(y_Train[maskTrain], y_Val[maskVal], y_Train_true[maskTrain], y_Val_true[maskVal], colors, labels, suffix = "_Mask")
 
         #############################
         # T position measurement
         #############################
-        nBinsReg = 100
-        timeRange = (-4, 4)
-        arange = (-4, 4)
-        timeDiffTrain = t_Train - t_Train_true
-        timeDiffVal = t_Val - t_Val_true
-        self.plotDisc([timeDiffTrain, timeDiffVal], colors, labels, "tRes", 'Events', 'NN - photek', arange=arange, bins=nBinsReg)
-        #self.plotDisc([timeDiffTrain, timeDiffVal], colors, labels, "tResLog", 'Events', 'NN - photek', arange=arange, bins=nBinsReg, doLog=True)
-        self.plotDisc([self.trainData["time3"][:,0] - t_Train_true], colors, labels, "tResTime3", 'Events', 'time3 - photek', arange=(-14,-6), bins=nBinsReg)
-        self.plot2DVar(name="tNN_Photek", binxl=timeRange[0], binxh=timeRange[1], numbin=nBinsReg, xIn=t_Train, yIn=t_Train_true, nbiny=nBinsReg)
-        self.plotDisc([t_Train, t_Val], colors, labels, "timeTrain", 'Events', 'NN', arange=timeRange, bins=nBinsReg)
-        self.plotDisc([t_Train_true, t_Val_true], colors, labels, "timeTrainTrue", 'Events', 'NN', arange=timeRange, bins=nBinsReg)
-        self.plot1D([timeDiffTrain], colors, labels, "tResROOT", 'Events', 'NN - photek', arange=arange, bins=nBinsReg, doLog=True)
-
-        timeDiffTrain = t_Train[maskTrain] - t_Train_true[maskTrain]
-        timeDiffVal = t_Val[maskVal] - t_Val_true[maskVal]
-        self.plotDisc([timeDiffTrain, timeDiffVal], colors, labels, "tRes_Mask", 'Events', 'NN - photek', arange=arange, bins=nBinsReg)
-        #self.plotDisc([timeDiffTrain, timeDiffVal], colors, labels, "tResLog_Mask", 'Events', 'NN - photek', arange=arange, bins=nBinsReg, doLog=True)
-        self.plot2DVar(name="tNN_Photek_Mask", binxl=timeRange[0], binxh=timeRange[1], numbin=nBinsReg, xIn=t_Train[maskTrain], yIn=t_Train_true[maskTrain], nbiny=nBinsReg)
-
-
-        self.plot1D([self.trainData["time3"][:,0] - t_Train_true], colors, labels, "tResTime3ROOT", 'Events', 'time3 - photek', arange=(-14,-6), bins=nBinsReg, doLog=True)
-        
+        self.timePlots(t_Train, t_Val, t_Train_true, t_Val_true, time3Train, colors, labels)
+        self.timePlots(t_Train[maskTrain], t_Val[maskVal], t_Train_true[maskTrain], t_Val_true[maskVal], time3Train[maskTrain], colors, labels, suffix = "_Mask")
 
         # Plot Acc vs Epoch
         self.plotAccVsEpoch('loss', 'val_loss', 'model loss', 'loss_train_val')

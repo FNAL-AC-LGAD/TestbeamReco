@@ -68,8 +68,8 @@ class Train:
         main_input = K.layers.Input(shape=(trainData["data"].shape[1],), name='main_input')
         # Set the rescale inputs to have unit variance centered at 0 between -1 and 1
         layerLambda = K.layers.Lambda(lambda x: (x - K.backend.constant(trainData["mean"])) * K.backend.constant(trainData["scale"]), name='normalizeData')(main_input)
-        #layerSplit = K.layers.Dense(config["nNodesX"], activation='relu')(layerLambda)
-        layerSplit = layerLambda
+        layerSplit = K.layers.Dense(config["nNodesX"], activation='relu')(layerLambda)
+        #layerSplit = layerLambda
 
         layer = layerSplit
         for n in n_hidden_layers_X:
@@ -78,11 +78,12 @@ class Train:
         first_output = K.layers.Dense(trainData["targetX"].shape[1], activation=None, name='first_output')(layer)
 
         #layer = K.layers.Dense(config["nNodesT"], activation='relu')(layerSplit)
-        #layer = K.layers.concatenate([layer, layerLambda], name='concat_layer')
+        #layer = K.layers.concatenate([first_output, layerSplit], name='concat_layer')
+        #layer = main_input
         layer = layerSplit
         for n in n_hidden_layers_T:
-            layer = K.layers.Dense(n, activation='linear')(layer)
-        #layer = K.layers.Dropout(config["drop_out"],seed=config["seed"])(layer)
+            layer = K.layers.Dense(n, activation='relu')(layer)
+        layer = K.layers.Dropout(config["drop_out"],seed=config["seed"])(layer)
         second_output = K.layers.Dense(trainData["targetT"].shape[1], activation=None, name='second_output')(layer)
 
         model = K.models.Model(inputs=main_input, outputs=[first_output, second_output], name='model')
@@ -91,8 +92,8 @@ class Train:
 
     def make_model_reg(self, trainData):
         model, optimizer = self.model_reg(self.config, trainData)
-        model.compile(loss=[K.losses.MeanSquaredError(), K.losses.MeanSquaredError()], optimizer=optimizer)
-        #model.compile(loss=[self.make_loss_MSE(c=1.0)], optimizer=optimizer)
+        #model.compile(loss=[K.losses.MeanSquaredError(), K.losses.MeanSquaredError()], optimizer=optimizer)
+        model.compile(loss=[self.make_loss_MSE(c=1.0), self.make_loss_MSE(c=10.0)], optimizer=optimizer)
         #model.compile(loss=[self.make_loss_MAPE(c=1.0)], optimizer=optimizer)
         
         return model
@@ -156,8 +157,9 @@ class Train:
         self.config["allVars"] = [
             "amp1","amp2","amp3","amp4","amp5","amp6",
             "time1","time2","time3","time4","time5","time6",
-            #"amp2","amp3","amp4",
-            #"time2","time3","time4",
+            #"timePhotek",
+            #"amp2","amp3","amp4","amp5",
+            #"time2","time3","time4","time5",
         ]
 
     def importData(self):
@@ -240,7 +242,8 @@ if __name__ == '__main__':
         with open(str(args.json), "r") as f:
             hyperconfig = json.load(f)
     else: 
-        hyperconfig = {"atag" : "GoldenTEST", "nNodesX":100, "nHLayersX":3, "nNodesT":100, "nHLayersT":2, "drop_out":0.3, "batch_size":5000, "epochs":200, "lr":0.001}
+        hyperconfig = {"atag" : "GoldenTEST", "nNodesX":24, "nHLayersX":1, "nNodesT":24, "nHLayersT":1, "drop_out":0.3, "batch_size":5000, "epochs":3000, "lr":0.001}
+        #hyperconfig = {"atag" : "GoldenTEST", "nNodesX":50, "nHLayersX":1, "nNodesT":50, "nHLayersT":1, "drop_out":0.3, "batch_size":5000, "epochs":100, "lr":0.001}
 
     t = Train(USER, masterSeed, args.saveAndPrint, hyperconfig, args.quickVal, args.reweight, model=args.model, tree=args.tree)
     t.train()
