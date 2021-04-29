@@ -51,17 +51,33 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
         tr.createDerivedVar<double>("amp5",ampLGAD[0][4]);
         tr.createDerivedVar<double>("amp6",ampLGAD[0][5]);
 
+        //Correct for jitter in trigger time
         const auto& LP2_20 = tr.getVec<float>("LP2_20");
-        const auto& timeLGAD = utility::remapToLGADgeometry(tr, LP2_20, "timeLGAD");
-        tr.createDerivedVar<double>("time1",timeLGAD[0][0]*1e9 + 201.8);
-        tr.createDerivedVar<double>("time2",timeLGAD[0][1]*1e9 + 201.8);
-        tr.createDerivedVar<double>("time3",timeLGAD[0][2]*1e9 + 201.8);
-        tr.createDerivedVar<double>("time4",timeLGAD[0][3]*1e9 + 201.8);
-        tr.createDerivedVar<double>("time5",timeLGAD[0][4]*1e9 + 201.8);
-        tr.createDerivedVar<double>("time6",timeLGAD[0][5]*1e9 + 201.8);
-
         const auto& photekIndex = tr.getVar<int>("photekIndex");
-        tr.createDerivedVar<double>("timePhotek",LP2_20[photekIndex]*1e9 + 201.8);
+        double timeShift = 201.8;
+        double rawPhotekTime = LP2_20[photekIndex]*1e9 + timeShift;
+        if(rawPhotekTime < -4.2)
+        {
+            timeShift += 6.0889;
+        }
+        else if(-4.2 <= rawPhotekTime && rawPhotekTime < -1.0)
+        {
+            timeShift += 3.066;
+        }
+        else if(rawPhotekTime > 2.5)
+        {
+            timeShift += -2.941;
+        }
+
+        const auto& timeLGAD = utility::remapToLGADgeometry(tr, LP2_20, "timeLGAD");
+        tr.createDerivedVar<double>("time1",timeLGAD[0][0]*1e9 + timeShift + 10.53);
+        tr.createDerivedVar<double>("time2",timeLGAD[0][1]*1e9 + timeShift + 10.60);
+        tr.createDerivedVar<double>("time3",timeLGAD[0][2]*1e9 + timeShift + 10.60);
+        tr.createDerivedVar<double>("time4",timeLGAD[0][3]*1e9 + timeShift + 10.57);
+        tr.createDerivedVar<double>("time5",timeLGAD[0][4]*1e9 + timeShift + 10.56);
+        tr.createDerivedVar<double>("time6",timeLGAD[0][5]*1e9 + timeShift + 10.08);
+
+        tr.createDerivedVar<double>("timePhotek",LP2_20[photekIndex]*1e9 + timeShift);
         const auto& amp = tr.getVec<float>("amp");
         tr.createDerivedVar<double>("ampPhotek",amp[photekIndex]);
 
@@ -103,19 +119,21 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
         const auto& timePhotek = tr.getVar<double>("timePhotek");
         //bool hitMidStrips = 0.23 < x && x < 0.53;
         bool hitMidStrips = true;
-        bool passAmpCut = (20.0 < ampLGAD[0][1] && 20.0 < ampLGAD[0][2]                         && ampLGAD[0][1] > ampLGAD[0][2]) ||
-                          (20.0 < ampLGAD[0][1] && 20.0 < ampLGAD[0][2] && 20.0 < ampLGAD[0][3] && ampLGAD[0][2] > ampLGAD[0][1] && ampLGAD[0][2] > ampLGAD[0][3]) ||
-                          (20.0 < ampLGAD[0][2] && 20.0 < ampLGAD[0][3] && 20.0 < ampLGAD[0][4] && ampLGAD[0][3] > ampLGAD[0][2] && ampLGAD[0][3] > ampLGAD[0][4]) ||
-                          (20.0 < ampLGAD[0][3] && 20.0 < ampLGAD[0][4]                         && ampLGAD[0][4] > ampLGAD[0][3]);
+        //bool passAmpCut = (20.0 < ampLGAD[0][1] && 20.0 < ampLGAD[0][2]                         && ampLGAD[0][1] > ampLGAD[0][2]) ||
+        //                  (20.0 < ampLGAD[0][1] && 20.0 < ampLGAD[0][2] && 20.0 < ampLGAD[0][3] && ampLGAD[0][2] > ampLGAD[0][1] && ampLGAD[0][2] > ampLGAD[0][3]) ||
+        //                  (20.0 < ampLGAD[0][2] && 20.0 < ampLGAD[0][3] && 20.0 < ampLGAD[0][4] && ampLGAD[0][3] > ampLGAD[0][2] && ampLGAD[0][3] > ampLGAD[0][4]) ||
+        //                  (20.0 < ampLGAD[0][3] && 20.0 < ampLGAD[0][4]                         && ampLGAD[0][4] > ampLGAD[0][3]);
         //bool passAmpCut = (20.0 < ampLGAD[0][1] && 20.0 < ampLGAD[0][2] && 20.0 < ampLGAD[0][3] && ampLGAD[0][2] > ampLGAD[0][1] && ampLGAD[0][2] > ampLGAD[0][3]);
-        bool passTimeCut = timeLGAD[0][1] != 0 && timeLGAD[0][2] != 0 && timeLGAD[0][3] != 0;
+        bool passAmpCut = (30.0 < ampLGAD[0][1] || 30.0 < ampLGAD[0][2] || 30.0 < ampLGAD[0][3] || 30.0 < ampLGAD[0][4]);
+        //bool passTimeCut = timeLGAD[0][1] != 0 && timeLGAD[0][2] != 0 && timeLGAD[0][3] != 0;
+        bool passTimeCut = true;
 
         auto maxAmpIter = std::max_element(ampLGAD[0].begin(), ampLGAD[0].end());
         int d = std::distance(ampLGAD[0].begin(), maxAmpIter);
         bool passMaxFourInnerStrips = 0 < d && d < 5;
                                                   
-        if ( ntracks==1 && nplanes>10 && npix>0 && hitSensor && 
-             passAmpCut && hitMidStrips && passMaxFourInnerStrips && timePhotek != 0 && passTimeCut)
+        if ( ntracks==1 && nplanes>10 && npix>0 && hitSensor && timePhotek > -2.0 &&
+             passAmpCut && hitMidStrips && passMaxFourInnerStrips && LP2_20[photekIndex] != 0 && passTimeCut)
         {
             int mod = count % 10;
             if(mod < 8)
