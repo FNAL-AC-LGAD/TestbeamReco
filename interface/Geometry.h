@@ -12,6 +12,8 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}};
+    std::map<int, double> stripCenterXPosition = {{0,0.0}};
+
     int numLGADchannels = 0;
     int photekIndex = 7;
     std::map<std::string,double> sensorConfigMap = {
@@ -23,6 +25,7 @@ public:
         {"photekSignalThreshold", 50.0}, //in mV
         {"noiseAmpThreshold", 10.0},      //in mV
         {"signalAmpThreshold", 30.0},    //in mV        
+        {"enablePositionReconstruction", 0.0},   
     };   
     std::vector<std::vector<double>> sensorEdges = {
         {-999.9, 999.9},
@@ -93,6 +96,17 @@ public:
         {7,0.0},        
     };
 
+    std::vector<double> stripCenterXPosition = {
+      0.0,
+      0.635,
+      0.535,
+      0.435,
+      0.335,
+      0.235,
+      0.135,
+      0.0,        
+    };
+
     int numLGADchannels = 6;
 
     std::map<std::string,double> sensorConfigMap = {
@@ -105,6 +119,12 @@ public:
 	{"photekSignalThreshold", 50.0},
      	{"noiseAmpThreshold", 10.0},
 	{"signalAmpThreshold", 30.0},
+	{"enablePositionReconstruction", 1.0},   
+	{"positionRecoPar0", 0.8129},
+	{"positionRecoPar1", -3.599},
+	{"positionRecoPar2", 5.735},
+	{"positionRecoPar3", -3.166},
+
     };
 
     std::vector<std::vector<double>> sensorEdges = {
