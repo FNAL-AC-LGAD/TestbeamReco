@@ -66,8 +66,12 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
     my_2d_histos.emplace( "efficiency_vs_xy_lowThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_lowThreshold_numerator", "efficiency_vs_xy_lowThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_denominator", std::make_shared<TH2D>( "efficiency_vs_xy_denominator", "efficiency_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "clusterSize_vs_x", std::make_shared<TH2D>( "clusterSize_vs_x", "clusterSize_vs_x; X [mm]; Cluster Size", (xmax-xmin)/0.02,xmin,xmax, 20,-0.5,19.5 ) );
-    my_2d_histos.emplace( "Amp1OverAmp1and2_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp1and2_vs_deltaXmax", "Amp1OverAmp1and2_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / Amp_{2}", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp1and2_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp1and2_vs_deltaXmax", "Amp1OverAmp1and2_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp123_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp123_vs_deltaXmax", "Amp1OverAmp123_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp2OverAmp2and3_vs_deltaXmax", std::make_shared<TH2D>( "Amp2OverAmp2and3_vs_deltaXmax", "Amp2OverAmp2and3_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{2} / (Amp_{2} + Amp{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+
     my_2d_histos.emplace( "deltaX_vs_Xtrack", std::make_shared<TH2D>( "deltaX_vs_Xtrack", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
+    my_2d_histos.emplace( "deltaX_vs_Xtrack_A1OverA12Above0p75", std::make_shared<TH2D>( "deltaX_vs_Xtrack_A1OverA12Above0p75", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
     my_2d_histos.emplace( "Xreco_vs_Xtrack", std::make_shared<TH2D>( "Xreco_vs_Xtrack", "Xreco_vs_Xtrack; X_{track} [mm]; #X_{reco} [mm]", (xmax-xmin)/0.005,xmin,xmax, (xmax-xmin)/0.005,xmin,xmax ) );
 
  
@@ -122,7 +126,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
         bool pass = ntracks==1 && nplanes>10 && npix>0 && hitSensor;
 
-	//Find max channel and 2nd channel
+	//Find max channel and 2nd,3rd channels
         auto maxAmpIter = std::max_element(ampLGAD[0].begin(),ampLGAD[0].end());
         int maxAmpIndex = std::distance(ampLGAD[0].begin(), maxAmpIter);
 	//find channel with 2nd largest element
@@ -132,16 +136,29 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	  if (i==maxAmpIndex) continue; //skip the max channel
 	  if (ampLGAD[0][i] > tmpAmp2) { Amp2Index = i; tmpAmp2 = ampLGAD[0][i]; }
 	}
+	int Amp3Index = -1;
+	//channel3 is defined as the strip on the other side of max strip across from strip 2.
+	if (maxAmpIndex == Amp2Index + 1) Amp3Index = maxAmpIndex + 1;
+	else if (maxAmpIndex == Amp2Index - 1) Amp3Index = maxAmpIndex - 1;
+
 
 	//Compute position-sensitive variables
 	double xCenterMaxStrip = 0;
 	double xCenterStrip2 = 0;
+	double xCenterStrip3 = 0;
 	double Amp1OverAmp1and2 = 0;
+	double Amp1OverAmp123 = 0;
+	double Amp2OverAmp2and3 = 0;
 	double deltaXmax = -999;
 	if (maxAmpIndex >= 0 && Amp2Index>=0) {
 	  xCenterMaxStrip = stripCenterXPositionLGAD[0][maxAmpIndex];
 	  xCenterStrip2 = stripCenterXPositionLGAD[0][Amp2Index];
 	  Amp1OverAmp1and2 = ampLGAD[0][maxAmpIndex] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index]);
+	  if (Amp3Index >= 0) {
+	    xCenterStrip3 = stripCenterXPositionLGAD[0][Amp3Index];
+	    Amp2OverAmp2and3= ampLGAD[0][Amp2Index] / (ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
+	    Amp1OverAmp123 = ampLGAD[0][maxAmpIndex] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
+	  }
 	  deltaXmax = x - xCenterMaxStrip;
 	}
 
@@ -183,6 +200,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	    //only fill the global a1/(a1+a2) if the max amp strip is not one of the edge strips
 	    if (maxAmpIndex >= 1 && maxAmpIndex <= 4) {
 	      my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax"]->Fill(fabs(deltaXmax), Amp1OverAmp1and2);
+	      my_2d_histos["Amp1OverAmp123_vs_deltaXmax"]->Fill(fabs(deltaXmax), Amp1OverAmp123);
 	    }
         }
 
@@ -197,7 +215,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	double positionRecoCutFitCutOffPoint = 0.735;
 	double x1 = 0;
 	double x2 = 0;
-	if (sensorConfigMap.at("enablePositionReconstruction") >= 1.0) 
+	if (sensorConfigMap.at("enablePositionReconstruction") >= 1.0
+	    && ampLGAD[0][maxAmpIndex] > sensorConfigMap.at("signalAmpThreshold")
+	    ) 
         {
 	  positionRecoPar0 = sensorConfigMap.at("positionRecoPar0");
 	  positionRecoPar1 = sensorConfigMap.at("positionRecoPar1");
@@ -219,6 +239,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	      //interpolate to (Amp1OverAmp1and2=0.75,dX=0.0) point
 	      if (Amp1OverAmp1and2 > 0.75) {
 		dX = 0.0;
+
+		my_2d_histos["Amp2OverAmp2and3_vs_deltaXmax"]->Fill(deltaXmax, Amp2OverAmp2and3);
+
 	      } else if (Amp1OverAmp1and2 > positionRecoCutFitCutOffPoint) {
 		double dX_atCutOffPoint = positionRecoPar0 + positionRecoPar1*positionRecoCutFitCutOffPoint + positionRecoPar2*pow(positionRecoCutFitCutOffPoint,2) + positionRecoPar3*pow(positionRecoCutFitCutOffPoint,3);
 		dX = dX_atCutOffPoint + ((0.0 - dX_atCutOffPoint)/(0.75 - positionRecoCutFitCutOffPoint))*(Amp1OverAmp1and2-0.75);
@@ -249,6 +272,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	      //fill position reco residual
 	      my_2d_histos["deltaX_vs_Xtrack"]->Fill(x, x_reco-x);
 	      my_2d_histos["Xreco_vs_Xtrack"]->Fill(x, x_reco);
+	      if (Amp1OverAmp1and2>=0.75) { my_2d_histos["deltaX_vs_Xtrack_A1OverA12Above0p75"]->Fill(x, x_reco-x);}
 	    
 	    } //if max strip is index 1-4
 	  } //if passes good event selection
