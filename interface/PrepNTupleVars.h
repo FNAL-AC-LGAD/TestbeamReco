@@ -41,6 +41,14 @@ private:
 	const auto& y_dut = tr.getVec<float>("y_dut");
 	Rotate(tr, x_dut[0], y_dut[0], angle);
 	ApplyAmplitudeCorrection(tr);
+
+
+        // Cut to get hits that only go through active sensor
+	const auto& x = tr.getVar<double>("x");
+	const auto& y = tr.getVar<double>("y");
+        const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
+        bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
+        tr.registerDerivedVar<bool>("hitSensor", hitSensor);
     }
 
 public:

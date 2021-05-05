@@ -56,6 +56,7 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
 	my_2d_histos.emplace( ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
 	my_2d_histos.emplace( ("relFrac_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_x_channel"+r+s).c_str(), ("relFrac_vs_x_channel"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
 	my_2d_histos.emplace( ("relFrac_vs_y_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_y_channel"+r+s).c_str(), ("relFrac_vs_y_channel"+r+s+"; Y [mm]; relFrac").c_str(), (ymax-ymin)/0.1,ymin,ymax, 100,0.0,1.0 ) );
+	my_2d_histos.emplace( ("Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s).c_str(), std::make_shared<TH2D>( ("Amp1OverAmp1and2_vs_deltaXmax"+r+s).c_str(), ("Amp1OverAmp1and2_vs_deltaXmax"+r+s+"; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / Amp_{2}").c_str(), 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
       }
       rowIndex++;
     }
@@ -65,8 +66,16 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
     my_2d_histos.emplace( "efficiency_vs_xy_lowThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_lowThreshold_numerator", "efficiency_vs_xy_lowThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_denominator", std::make_shared<TH2D>( "efficiency_vs_xy_denominator", "efficiency_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "clusterSize_vs_x", std::make_shared<TH2D>( "clusterSize_vs_x", "clusterSize_vs_x; X [mm]; Cluster Size", (xmax-xmin)/0.02,xmin,xmax, 20,-0.5,19.5 ) );
+    my_2d_histos.emplace( "Amp1OverAmp1and2_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp1and2_vs_deltaXmax", "Amp1OverAmp1and2_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp123_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp123_vs_deltaXmax", "Amp1OverAmp123_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp2OverAmp2and3_vs_deltaXmax", std::make_shared<TH2D>( "Amp2OverAmp2and3_vs_deltaXmax", "Amp2OverAmp2and3_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{2} / (Amp_{2} + Amp{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
 
+    my_2d_histos.emplace( "deltaX_vs_Xtrack", std::make_shared<TH2D>( "deltaX_vs_Xtrack", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
+    my_2d_histos.emplace( "deltaX_vs_Xtrack_A1OverA12Above0p75", std::make_shared<TH2D>( "deltaX_vs_Xtrack_A1OverA12Above0p75", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
+    my_2d_histos.emplace( "Xreco_vs_Xtrack", std::make_shared<TH2D>( "Xreco_vs_Xtrack", "Xreco_vs_Xtrack; X_{track} [mm]; #X_{reco} [mm]", (xmax-xmin)/0.005,xmin,xmax, (xmax-xmin)/0.005,xmin,xmax ) );
 
+ 
+  
     //Define 3D histograms
     rowIndex = 0;
     for(const auto& row : geometry) {
@@ -74,7 +83,7 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
       for(unsigned int i = 0; i < row.size(); i++) {
    	const auto& r = std::to_string(rowIndex);
    	const auto& s = std::to_string(i);            
-   	my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax, 500,0,500 ) );	
+   	my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.01,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax, 500,0,500 ) );	
       }
       rowIndex++;
     }
@@ -89,6 +98,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& sensorConfigMap = tr.getVar<std::map<std::string,double>>("sensorConfigMap");
+    const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
     InitHistos(geometry, sensorConfigMap);
 
     while( tr.getNextEvent() )
@@ -105,9 +115,52 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //const auto& run = tr.getVar<int>("run");
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");        
+	const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");        
 
+        //Get variables that you want to cut on
+        const auto& ntracks = tr.getVar<int>("ntracks");
+        const auto& nplanes = tr.getVar<int>("nplanes");
+        const auto& npix = tr.getVar<int>("npix");
+        const auto& x = tr.getVar<double>("x");
+        const auto& y = tr.getVar<double>("y");
+        const auto& hitSensor = tr.getVar<bool>("hitSensor");
+        bool pass = ntracks==1 && nplanes>10 && npix>0 && hitSensor;
+
+	//Find max channel and 2nd,3rd channels
         auto maxAmpIter = std::max_element(ampLGAD[0].begin(),ampLGAD[0].end());
         int maxAmpIndex = std::distance(ampLGAD[0].begin(), maxAmpIter);
+	//find channel with 2nd largest element
+	int Amp2Index = -1;
+	double tmpAmp2 = -1.0;
+	for(unsigned int i = 0; i < ampLGAD[0].size(); i++) {
+	  if (i==maxAmpIndex) continue; //skip the max channel
+	  if (ampLGAD[0][i] > tmpAmp2) { Amp2Index = i; tmpAmp2 = ampLGAD[0][i]; }
+	}
+	int Amp3Index = -1;
+	//channel3 is defined as the strip on the other side of max strip across from strip 2.
+	if (maxAmpIndex == Amp2Index + 1) Amp3Index = maxAmpIndex + 1;
+	else if (maxAmpIndex == Amp2Index - 1) Amp3Index = maxAmpIndex - 1;
+
+
+	//Compute position-sensitive variables
+	double xCenterMaxStrip = 0;
+	double xCenterStrip2 = 0;
+	double xCenterStrip3 = 0;
+	double Amp1OverAmp1and2 = 0;
+	double Amp1OverAmp123 = 0;
+	double Amp2OverAmp2and3 = 0;
+	double deltaXmax = -999;
+	if (maxAmpIndex >= 0 && Amp2Index>=0) {
+	  xCenterMaxStrip = stripCenterXPositionLGAD[0][maxAmpIndex];
+	  xCenterStrip2 = stripCenterXPositionLGAD[0][Amp2Index];
+	  Amp1OverAmp1and2 = ampLGAD[0][maxAmpIndex] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index]);
+	  if (Amp3Index >= 0) {
+	    xCenterStrip3 = stripCenterXPositionLGAD[0][Amp3Index];
+	    Amp2OverAmp2and3= ampLGAD[0][Amp2Index] / (ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
+	    Amp1OverAmp123 = ampLGAD[0][maxAmpIndex] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
+	  }
+	  deltaXmax = x - xCenterMaxStrip;
+	}
 
         double totAmp = 0.0;
         for(auto i : ampLGAD[0]) totAmp +=i;
@@ -118,15 +171,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //const auto& channel = tr.getVecVec<float>("channel");
         //std::cout<<"channel: "<<channel.size()<<" "<<channel[0].size()<<" "<<channel[0][0]<<" "<<channel[1][0]<<" "<<channel[0][1]<<std::endl;
 
-        //Get variables that you want to cut on
-        const auto& ntracks = tr.getVar<int>("ntracks");
-        const auto& nplanes = tr.getVar<int>("nplanes");
-        const auto& npix = tr.getVar<int>("npix");
-        const auto& x = tr.getVar<double>("x");
-        const auto& y = tr.getVar<double>("y");
-                                  
+   
         //Make cuts and fill histograms here
-        if( ntracks==1 && nplanes>10 && npix>0 ) 
+        if(pass) 
         {
             int rowIndex = 0;
             for(const auto& row : ampLGAD)
@@ -140,15 +187,101 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                     my_histos["relFrac"+r+s]->Fill(relFrac[i], 1.0);
                     my_2d_histos["relFrac_vs_x_channel"+r+s]->Fill(x, relFrac[i]);
                     my_2d_histos["relFrac_vs_y_channel"+r+s]->Fill(y, relFrac[i]);
+
+		    //reconstruction position
+		 
+		    
+		    if (maxAmpIndex== int(i)) {
+		      my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s]->Fill(deltaXmax, Amp1OverAmp1and2);
+		    }
                 }
                 rowIndex++;
             }
+	    //only fill the global a1/(a1+a2) if the max amp strip is not one of the edge strips
+	    if (maxAmpIndex >= 1 && maxAmpIndex <= 4) {
+	      my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax"]->Fill(fabs(deltaXmax), Amp1OverAmp1and2);
+	      my_2d_histos["Amp1OverAmp123_vs_deltaXmax"]->Fill(fabs(deltaXmax), Amp1OverAmp123);
+	    }
         }
+
+	//******************************************************************
+	//X-Position Reconstruction
+	//******************************************************************
+	double x_reco = 0;
+	double positionRecoPar0 = 0;
+	double positionRecoPar1 = 0;
+	double positionRecoPar2 = 0;
+	double positionRecoPar3 = 0;
+	double positionRecoCutFitCutOffPoint = 0.735;
+	double x1 = 0;
+	double x2 = 0;
+	if (sensorConfigMap.at("enablePositionReconstruction") >= 1.0
+	    && ampLGAD[0][maxAmpIndex] > sensorConfigMap.at("signalAmpThreshold")
+	    ) 
+        {
+	  positionRecoPar0 = sensorConfigMap.at("positionRecoPar0");
+	  positionRecoPar1 = sensorConfigMap.at("positionRecoPar1");
+	  positionRecoPar2 = sensorConfigMap.at("positionRecoPar2");
+	  positionRecoPar3 = sensorConfigMap.at("positionRecoPar3");
+	  
+	  if (pass) 
+	  {
+	    if (maxAmpIndex >= 1 && maxAmpIndex <= 4) {
+	      assert(Amp1OverAmp1and2 >= 0); //make sure a1/(a1+a2) is a sensible number
+	      assert(Amp1OverAmp1and2 <= 1);
+	      x1 = stripCenterXPositionLGAD[0][maxAmpIndex];
+	      x2 = stripCenterXPositionLGAD[0][Amp2Index];
+	    
+	      //use the poly fit function
+	      double dX = positionRecoPar0 + positionRecoPar1*Amp1OverAmp1and2 + positionRecoPar2*pow(Amp1OverAmp1and2,2) + positionRecoPar3*pow(Amp1OverAmp1and2,3);
+	    
+	      //After the "cut-off" point of the fit, then linearly 
+	      //interpolate to (Amp1OverAmp1and2=0.75,dX=0.0) point
+	      if (Amp1OverAmp1and2 > 0.75) {
+		dX = 0.0;
+
+		my_2d_histos["Amp2OverAmp2and3_vs_deltaXmax"]->Fill(deltaXmax, Amp2OverAmp2and3);
+
+	      } else if (Amp1OverAmp1and2 > positionRecoCutFitCutOffPoint) {
+		double dX_atCutOffPoint = positionRecoPar0 + positionRecoPar1*positionRecoCutFitCutOffPoint + positionRecoPar2*pow(positionRecoCutFitCutOffPoint,2) + positionRecoPar3*pow(positionRecoCutFitCutOffPoint,3);
+		dX = dX_atCutOffPoint + ((0.0 - dX_atCutOffPoint)/(0.75 - positionRecoCutFitCutOffPoint))*(Amp1OverAmp1and2-0.75);
+	      }
+	    
+	      //if dX is larger than 0.5, then just use the midpoint between the strips
+	      //not sure why the profile wants to "over-shoot"
+	      //if (dX >= 0.5) dX = 0.5;
+	    
+	      if (x2>x1) {
+		x_reco = x1 + dX; 
+	      } else {
+		x_reco = x1 - dX; 
+	      }
+	    
+	      // if (x < 0.2) {
+	      // 	std::cout << "x = " << x << "\n";
+	      // 	std::cout << "strip1,2 = " << maxAmpIndex << " , " << Amp2Index
+	      // 	     << " at " << x1 << " , " << x2 << "\n";
+	      // 	std::cout << "a1/(a1+a2) = " << Amp1OverAmp1and2 << "\n";
+	      // 	std::cout << "normal dX = " << positionRecoPar0 + positionRecoPar1*Amp1OverAmp1and2 + positionRecoPar2*pow(Amp1OverAmp1and2,2) + positionRecoPar3*pow(Amp1OverAmp1and2,3) << "\n";
+	      // 	std::cout << "positionRecoCutFitCutOffPoint = " << positionRecoCutFitCutOffPoint << "\n";
+	      // 	std::cout << "dX_atCutOffPoint = " << positionRecoPar0 + positionRecoPar1*positionRecoCutFitCutOffPoint + positionRecoPar2*pow(positionRecoCutFitCutOffPoint,2) + positionRecoPar3*pow(positionRecoCutFitCutOffPoint,3) << "\n";
+	      // 	std::cout << "dX = " << dX << "\n";
+	      // 	std::cout << "x_reco = " << x_reco << "\n\n\n";		
+	      // }
+
+	      //fill position reco residual
+	      my_2d_histos["deltaX_vs_Xtrack"]->Fill(x, x_reco-x);
+	      my_2d_histos["Xreco_vs_Xtrack"]->Fill(x, x_reco);
+	      if (Amp1OverAmp1and2>=0.75) { my_2d_histos["deltaX_vs_Xtrack_A1OverA12Above0p75"]->Fill(x, x_reco-x);}
+	    
+	    } //if max strip is index 1-4
+	  } //if passes good event selection
+	} //if enabled position reconstruction
 
 	//******************************************************************
 	//Time Resolution
 	//******************************************************************
-	if( ntracks==1 && nplanes>10 && npix>0 ) 
+	if(pass) 
         {
             const auto& LP2_20 = tr.getVec<float>("LP2_20");
             const auto& photekIndex = tr.getVar<int>("photekIndex");
@@ -168,7 +301,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	//******************************************************************
 
 	//Make cuts and fill histograms here
-	if( ntracks==1 && nplanes>10 && npix>0 ) {
+	if(pass) {
 
 	  //Require at least 50 mV signal on Photek
 	  const auto& photekIndex = tr.getVar<int>("photekIndex");

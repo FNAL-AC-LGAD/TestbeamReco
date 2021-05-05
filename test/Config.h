@@ -31,8 +31,10 @@ private:
         tr.registerDerivedVar("numLGADchannels", g.numLGADchannels);
         tr.registerDerivedVar("sensorConfigMap", g.sensorConfigMap);
         tr.registerDerivedVar("amplitudeCorrectionFactor", g.amplitudeCorrectionFactor);
+        tr.registerDerivedVar("stripCenterXPosition", g.stripCenterXPosition);
         tr.registerDerivedVar("timeCalibrationCorrection", g.timeCalibrationCorrection);
         tr.registerDerivedVar("photekIndex", g.photekIndex);
+        tr.registerDerivedVar("sensorEdges", g.sensorEdges);
     }
 
     int getVoltage(std::string name) const
