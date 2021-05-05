@@ -6,7 +6,7 @@
 class SpatialReconstruction
 {
 private:
-    void spatialReconstruction(NTupleReader& tr)
+    void spatialReconstruction([[maybe_unused]] NTupleReader& tr)
     {
         // Add code here: will process this function per event
         // Make variables that you want to run in other parts of the code/Fill into histograms
