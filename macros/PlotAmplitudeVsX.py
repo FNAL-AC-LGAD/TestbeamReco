@@ -18,10 +18,9 @@ if args['run'] == 'true':
      
 
 if (RunFits):
-    
-    inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/myoutputfile.root")
+
     #inputfile = TFile("/uscms/home/sxie/work/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V_output.root")
-    #inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210405.root")
+    inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210405.root")
 
     #Get 3D histograms 
     th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
