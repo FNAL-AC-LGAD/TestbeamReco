@@ -86,35 +86,35 @@ public:
         
         if(filetag.find("BNL2020") != std::string::npos)
         {
-            registerGeometry(tr, BNL2020Geometry());
+            registerGeometry(tr, BNL2020Geometry(voltage));
         }
         else if(filetag.find("BNL2021") != std::string::npos)
         {
-            registerGeometry(tr, BNL2021Geometry());
+            registerGeometry(tr, BNL2021Geometry(voltage));
         }
         else if(filetag.find("HPK_pad_C2") != std::string::npos)
         {
-            registerGeometry(tr, HPKPadC2Geometry());
+            registerGeometry(tr, HPKPadC2Geometry(voltage));
         }
         else if(filetag.find("HPK_pad_B2") != std::string::npos)
         {
-            registerGeometry(tr, HPKPadB2Geometry());
+            registerGeometry(tr, HPKPadB2Geometry(voltage));
         }
         else if(filetag.find("HPK_strips") != std::string::npos)
         {
-            registerGeometry(tr, HPKStripsC2WideMetalGeometry());
+            registerGeometry(tr, HPKStripsC2WideMetalGeometry(voltage));
         }
         else if(filetag.find("Ron_wide") != std::string::npos)
         {
-            registerGeometry(tr, RonStripsGeometry());
+            registerGeometry(tr, RonStripsGeometry(voltage));
         }
         else if(filetag.find("BNL2021_quadpix") != std::string::npos)
         {
-            registerGeometry(tr, BNLPixelHexGeometry());
+            registerGeometry(tr, BNLPixelHexGeometry(voltage));
         }
         else
         {
-            registerGeometry(tr, DefaultGeometry());
+            registerGeometry(tr, DefaultGeometry(voltage));
             std::cout<<"Warning: Using DefaultGeometry, odds are this is not what you want"<<std::endl;
         }
 
