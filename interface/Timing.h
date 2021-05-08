@@ -6,7 +6,7 @@
 class Timing
 {
 private:
-    void timing(NTupleReader& tr)
+    void timing([[maybe_unused]] NTupleReader& tr)
     {
         // Add code here: will process this function per event
         // Make variables that you want to run in other parts of the code/Fill into histograms

@@ -6,6 +6,7 @@
 class DefaultGeometry
 {
 public:
+    DefaultGeometry(const int v=0) : voltage(v){}
     virtual ~DefaultGeometry() = default;
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}};
     std::vector<std::vector<int>> geometry = {{0}};
@@ -16,6 +17,7 @@ public:
 
     int numLGADchannels = 0;
     int photekIndex = 7;
+    const int voltage;
     std::map<std::string,double> sensorConfigMap = {
         {"angle", -1},
         {"xmin",  -1},
@@ -38,7 +40,7 @@ class BNL2020Geometry : public DefaultGeometry
 public:
     // BNL 2020 Mapping
     // Used lecroy scope channels 0-7
-    // scope channel 0 was DC ring, scope channel 1-6 was AC strips, and scope channel 7 was the photok
+    // scope channel 0 was DC ring, scope channel 1-6 was AC strips, and scope channel 7 was the photek
     // -----------------
     // |000000000000000|
     // |0 1 2 3 4 5 6 0|             -----
@@ -46,6 +48,8 @@ public:
     // |0 1 2 3 4 5 6 0|             |777|
     // |000000000000000|             -----
     // -----------------
+    BNL2020Geometry(const int v=0) : voltage(v){}
+    const int voltage;
     std::map<int, std::vector<int>> indexToGeometryMap = {
         {0,{0,0}},
         {1,{1,0}},
@@ -108,7 +112,21 @@ public:
     };
 
     int numLGADchannels = 6;
-
+   
+    class VoltageDependence
+    {
+    public:
+        double noiseAmpThreshold;
+        double signalAmpThreshold;
+    };
+ 
+    std::map<int,VoltageDependence> voltageDependenceMap = {
+        {200,{0.0,0.0}},
+        {210,{0.0,0.0}},
+        {220,{10.0,30.0}},
+        {225,{15.0,45.0}},
+    };
+ 
     std::map<std::string,double> sensorConfigMap = {
         //{"angle", 12.6},
         {"angle", 1.5},
@@ -117,8 +135,8 @@ public:
         {"ymin",  9.5},
         {"ymax", 12.0}, 
 	{"photekSignalThreshold", 50.0},
-     	{"noiseAmpThreshold", 10.0},
-	{"signalAmpThreshold", 30.0},
+     	{"noiseAmpThreshold", voltageDependenceMap[voltage].noiseAmpThreshold},
+	{"signalAmpThreshold", voltageDependenceMap[voltage].signalAmpThreshold},
 	{"enablePositionReconstruction", 1.0},   
 	{"positionRecoPar0", 0.8129},
 	{"positionRecoPar1", -3.599},
@@ -146,6 +164,8 @@ public:
     // |0 1 2 3 4 5 6 0|             |777|
     // |000000000000000|             -----
     // -----------------
+    BNL2021Geometry(const int v=0) : voltage(v){}
+    const int voltage;
 
     std::map<int, double> amplitudeCorrectionFactor = {
         {0,1.0},
@@ -193,6 +213,8 @@ public:
     // |0 4 3 0|             |777|
     // |0000000|             -----
     // ----------
+    HPKPadC2Geometry(const int v=0) : voltage(v){}
+    const int voltage;
     std::map<int, std::vector<int>> indexToGeometryMap = {
         {0,{0,0}},
         {1,{1,0}},
@@ -263,6 +285,8 @@ public:
     // |0 4 3 0|             |777|
     // |0000000|             -----
     // ----------
+    HPKPadB2Geometry(const int v=0) : voltage(v){}
+    const int voltage;
 
    std::map<int, double> amplitudeCorrectionFactor = {
         {0,1.0},
@@ -310,6 +334,8 @@ public:
     // |0 6 6 6 6 6 0|
     // |0000000000000|
     // ----------
+    HPKStripsC2WideMetalGeometry(const int v=0) : voltage(v){}
+    const int voltage;
     std::map<int, double> amplitudeCorrectionFactor = {
         {0,1.0},
         {1,1.0},
@@ -360,6 +386,8 @@ public:
     // |0 1 1 1 1 1 0|
     // |0000000000000|
     // ----------
+    HPKStripsC2NarrowMetalGeometry(const int v=0) : voltage(v){}
+    const int voltage;
     std::map<int, std::vector<int>> indexToGeometryMap = {
         {0,{0,0}},
         {1,{1,5}},
@@ -437,6 +465,8 @@ public:
     // |0 1 2 3 4 5 6 0|             |777|
     // |000000000000000|             -----
     // -----------------
+    RonStripsGeometry(const int v=0) : voltage(v){}
+    const int voltage;
     std::map<int, double> amplitudeCorrectionFactor = {
         {0,1.0},
         {1,1.0},
@@ -482,6 +512,8 @@ public:
     // |0  6  3|             |777|
     // |  5  4 |             |777|
     // ----------            -----
+    BNLPixelHexGeometry(const int v=0) : voltage(v){}
+    const int voltage;
     std::map<int, std::vector<int>> indexToGeometryMap = {
         {1,{0,0}},
         {2,{0,1}},
