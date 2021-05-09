@@ -122,7 +122,7 @@ public:
  
     std::map<int,VoltageDependence> voltageDependenceMap = {
         {200,{0.0,0.0}},
-        {210,{0.0,0.0}},
+        {210,{3.5,20.0}},
         {220,{10.0,30.0}},
         {225,{15.0,45.0}},
     };
