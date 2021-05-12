@@ -242,10 +242,12 @@ public:
 
    std::map<int, double> amplitudeCorrectionFactor = {
         {0,1.0},
-        {1,1/1.043},
-        {2,1/1.000},
-        {3,1/1.078},
-        {4,1/1.084},       
+        {1,1.0},
+        {2,1.0},
+        {3,1.0},
+        {4,1.0},       
+        {5,1.0},        
+        {6,1.0},        
         {7,1.0},        
     };
 
@@ -258,18 +260,41 @@ public:
         {7,0.0},        
     };
 
+       std::vector<double> stripCenterXPosition = {
+      0.0,
+      0.635,
+      0.535,
+      0.435,
+      0.335,
+      0.0,        
+    };
+
+    std::vector<std::vector<double>> ySlices = {
+        {10.05, 10.35},
+        {10.55, 10.85},
+    };
+
+    std::vector<std::vector<double>> xSlices = {
+        {-6.1, -5.8},
+        {-5.6, -5.3}
+    };
 
     int numLGADchannels = 4;
 
     std::map<std::string,double> sensorConfigMap = {
-        {"angle", 1.5},
-        {"xmin", -0.5},
-        {"xmax",  1.5},
+        {"angle", 0},
+        {"xmin", -7},
+        {"xmax",  -4},
         {"ymin",  9.5},
         {"ymax", 12.0}, 
 	{"photekSignalThreshold", 50.0},
-     	{"noiseAmpThreshold", 10.0},
-	{"signalAmpThreshold", 30.0},
+     	{"noiseAmpThreshold", 20.0},
+	{"signalAmpThreshold", 90.0},
+        {"enablePositionReconstruction", 0.0},   
+    {"positionRecoPar0", 0.8129}, //hack from BNL for now
+    {"positionRecoPar1", -3.599},
+    {"positionRecoPar2", 5.735},
+    {"positionRecoPar3", -3.166},
     };
 };
 
