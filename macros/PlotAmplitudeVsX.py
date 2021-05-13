@@ -20,8 +20,8 @@ if args['run'] == 'true':
      
 
 if (RunFits):
-    inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/myoutputfile.root")    
-    #inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210405.root")            
+    #inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/myoutputfile.root")    
+    inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210405.root")            
 
     #Get 3D histograms 
     th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
@@ -86,7 +86,7 @@ if (RunFits):
 
         for i in range(1, list_amplitude_vs_x[channel].GetXaxis().GetNbins()):
 
-            ##print ("Bin " + str(i))
+            print ("Bin " + str(i))
 
             ##For Debugging
             #if not (i==46 and j==5):
@@ -114,8 +114,8 @@ if (RunFits):
             if (tmpHist.GetEntries() == 0 or not (value == value)):
                value = 0
 
-            ##print ("Bin : " + str(i) + " -> " + str(value))
-            print(value)
+            print ("Bin : " + str(i) + " -> " + str(value))
+
             list_amplitude_vs_x[channel].SetBinContent(i,value)
             
             
@@ -145,7 +145,7 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
 #Do zero suppression
 for channel in range(0, len(plotList_amplitude_vs_x)):
     for i in range(1, plotList_amplitude_vs_x[channel].GetXaxis().GetNbins()+1):
-        if plotList_amplitude_vs_x[channel].GetBinContent(i) < 20:
+        if plotList_amplitude_vs_x[channel].GetBinContent(i) < 18:
                 plotList_amplitude_vs_x[channel].SetBinContent(i,0)
 
 
