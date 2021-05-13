@@ -109,7 +109,7 @@ if (RunFits):
             ##For Debugging
             tmpHist.Draw("hist")
             myLanGausFunction.Draw("same")
-            ##canvas.SaveAs("q_"+str(i)+".gif")
+            canvas.SaveAs("q_"+str(i)+".gif")
 
             if (tmpHist.GetEntries() == 0 or not (value == value)):
                value = 0
