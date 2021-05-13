@@ -30,8 +30,8 @@ public:
         {"enablePositionReconstruction", 0.0},   
     };   
     std::vector<std::vector<double>> sensorEdges = {
-        {-999.9, 999.9},
-        {-999.9, 999.9},
+        {-999.9, -999.9},
+        {999.9, 999.9},
     };
 };
 
@@ -121,8 +121,8 @@ public:
     };
  
     std::map<int,VoltageDependence> voltageDependenceMap = {
-        {200,{0.0,0.0}},
-        {210,{0.0,0.0}},
+        {200,{2.0,8.0}},
+        {210,{3.5,20.0}},
         {220,{10.0,30.0}},
         {225,{15.0,45.0}},
     };
@@ -136,12 +136,12 @@ public:
         {"ymax", 12.0}, 
 	{"photekSignalThreshold", 50.0},
      	{"noiseAmpThreshold", voltageDependenceMap[voltage].noiseAmpThreshold},
-	{"signalAmpThreshold", voltageDependenceMap[voltage].signalAmpThreshold},
-	{"enablePositionReconstruction", 1.0},   
+	{"signalAmpThreshold", voltageDependenceMap[voltage].signalAmpThreshold}, 
+        {"enablePositionReconstruction", 1.0},   
 	{"positionRecoPar0", 0.8129},
 	{"positionRecoPar1", -3.599},
 	{"positionRecoPar2", 5.735},
-	{"positionRecoPar3", -3.166},
+	{"positionRecoPar3", -3.166}, 
 
     };
 
@@ -167,6 +167,35 @@ public:
     BNL2021Geometry(const int v=0) : voltage(v){}
     const int voltage;
 
+    std::map<int, std::vector<int>> indexToGeometryMap = {
+        {0,{0,0}},
+        {1,{1,0}},
+        {2,{1,1}},
+        {3,{1,2}},
+        {4,{1,3}},
+        {5,{1,4}},
+        {6,{1,5}},
+        {7,{2,0}},
+    };
+    
+    std::vector<std::vector<int>> geometry = {
+        {0},
+        {1,2,3,4,5,6},
+        {7},
+    };
+
+    std::map<int, bool> acLGADChannelMap = {
+        {0,false},
+        {1,true},
+        {2,true},
+        {3,true},
+        {4,true},
+        {5,true},
+        {6,true},
+        {7,false},        
+    };
+
+
     std::map<int, double> amplitudeCorrectionFactor = {
         {0,1.0},
         {1,1.0},
@@ -188,17 +217,41 @@ public:
         {6,0.0},
         {7,0.0},        
     };
+    
+    std::vector<double> stripCenterXPosition = {
+      0.0,
+      0.635,
+      0.535,
+      0.435,
+      0.335,
+      0.235,
+      0.135,
+      0.0,        
+    };
+
+    int numLGADchannels = 6;
 
     std::map<std::string,double> sensorConfigMap = {
         {"angle", 1.5},
-        {"xmin", -0.5},
-        {"xmax",  1.5},
-        {"ymin",  9.5},
-        {"ymax", 12.0}, 
+        {"xmin", -8},
+        {"xmax",  -2},
+        {"ymin",  8},
+        {"ymax", 13.0}, 
 	{"photekSignalThreshold", 50.0},
      	{"noiseAmpThreshold", 10.0},
 	{"signalAmpThreshold", 30.0},
+        {"enablePositionReconstruction", 0.0},   
+	{"positionRecoPar0", 0.8129},
+	{"positionRecoPar1", -3.599},
+	{"positionRecoPar2", 5.735},
+	{"positionRecoPar3", -3.166}, 
     };
+
+    std::vector<std::vector<double>> sensorEdges = {
+        {-999.9, -999.9},
+        {999.9, 999.9},
+    };
+
 };
 
 class HPKPadC2Geometry : public DefaultGeometry
