@@ -86,7 +86,7 @@ if (RunFits):
 
         for i in range(1, list_amplitude_vs_x[channel].GetXaxis().GetNbins()):
 
-            print ("Bin " + str(i))
+            ##print ("Bin " + str(i))
 
             ##For Debugging
             #if not (i==46 and j==5):
@@ -106,16 +106,16 @@ if (RunFits):
             myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-1*myRMS,myMean+3*myRMS))
             myMPV = myLanGausFunction.GetParameter(1)
             value = myMPV
-
             ##For Debugging
             tmpHist.Draw("hist")
             myLanGausFunction.Draw("same")
-            canvas.SaveAs("q_"+str(i)+".gif")
+            ##canvas.SaveAs("q_"+str(i)+".gif")
 
             if (tmpHist.GetEntries() == 0 or not (value == value)):
                value = 0
 
-            print ("Bin : " + str(i) + " -> " + str(value))
+            ##print ("Bin : " + str(i) + " -> " + str(value))
+            print(value)
             list_amplitude_vs_x[channel].SetBinContent(i,value)
             
             
@@ -145,7 +145,7 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
 #Do zero suppression
 for channel in range(0, len(plotList_amplitude_vs_x)):
     for i in range(1, plotList_amplitude_vs_x[channel].GetXaxis().GetNbins()+1):
-        if plotList_amplitude_vs_x[channel].GetBinContent(i) < 18:
+        if plotList_amplitude_vs_x[channel].GetBinContent(i) < 20:
                 plotList_amplitude_vs_x[channel].SetBinContent(i,0)
 
 

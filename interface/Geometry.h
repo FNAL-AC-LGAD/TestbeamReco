@@ -121,7 +121,7 @@ public:
     };
  
     std::map<int,VoltageDependence> voltageDependenceMap = {
-        {200,{0.0,0.0}},
+        {200,{2.0,8.0}},
         {210,{3.5,20.0}},
         {220,{10.0,30.0}},
         {225,{15.0,45.0}},
@@ -136,12 +136,12 @@ public:
         {"ymax", 12.0}, 
 	{"photekSignalThreshold", 50.0},
      	{"noiseAmpThreshold", voltageDependenceMap[voltage].noiseAmpThreshold},
-	{"signalAmpThreshold", voltageDependenceMap[voltage].signalAmpThreshold},
-	{"enablePositionReconstruction", 1.0},   
+	{"signalAmpThreshold", voltageDependenceMap[voltage].signalAmpThreshold}, 
+        {"enablePositionReconstruction", 1.0},   
 	{"positionRecoPar0", 0.8129},
 	{"positionRecoPar1", -3.599},
 	{"positionRecoPar2", 5.735},
-	{"positionRecoPar3", -3.166},
+	{"positionRecoPar3", -3.166}, 
 
     };
 
@@ -198,6 +198,11 @@ public:
 	{"photekSignalThreshold", 50.0},
      	{"noiseAmpThreshold", 10.0},
 	{"signalAmpThreshold", 30.0},
+        {"enablePositionReconstruction", 1.0},
+        {"positionRecoPar0", 0.0},
+	{"positionRecoPar1", 0.0},
+	{"positionRecoPar2", 0.0},
+	{"positionRecoPar3", 0.0}, 
     };
 };
 
