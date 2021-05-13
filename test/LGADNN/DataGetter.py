@@ -107,8 +107,9 @@ class DataGetter:
         npyAmp2 = data[["amp2"]].values
         npyAmp3 = data[["amp3"]].values
         npyAmp4 = data[["amp4"]].values
+        npyY = data[["y"]].values
 
-        return {"data":npyInputData, "labels":npyInputAnswers, "targetX":npyInputTargetX, "targetT":npyInputTargetT, "time3":npyTime3, "amp2":npyAmp2, "amp3":npyAmp3, "amp4":npyAmp4}
+        return {"data":npyInputData, "labels":npyInputAnswers, "targetX":npyInputTargetX, "targetT":npyInputTargetT, "time3":npyTime3, "amp2":npyAmp2, "amp3":npyAmp3, "amp4":npyAmp4, "y":npyY}
 
 if __name__ == '__main__':
     config = {}
