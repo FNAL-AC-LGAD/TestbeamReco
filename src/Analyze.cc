@@ -50,6 +50,7 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
         }
         rowIndex++;
     }
+    my_histos.emplace( "deltaX", std::make_shared<TH1D>( "deltaX", "deltaX; #X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5 ) );
 
     //Define 2D histograms
 
@@ -83,8 +84,9 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
     my_2d_histos.emplace( "deltaX_vs_Xtrack", std::make_shared<TH2D>( "deltaX_vs_Xtrack", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
     my_2d_histos.emplace( "deltaX_vs_Xtrack_A1OverA12Above0p75", std::make_shared<TH2D>( "deltaX_vs_Xtrack_A1OverA12Above0p75", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
     my_2d_histos.emplace( "Xreco_vs_Xtrack", std::make_shared<TH2D>( "Xreco_vs_Xtrack", "Xreco_vs_Xtrack; X_{track} [mm]; #X_{reco} [mm]", (xmax-xmin)/0.005,xmin,xmax, (xmax-xmin)/0.005,xmin,xmax ) );
-
- 
+    my_2d_histos.emplace( "Xtrack_vs_Amp1OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp1OverAmp123", "Xtrack_vs_Amp1OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
+    my_2d_histos.emplace( "Xtrack_vs_Amp2OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp2OverAmp123", "Xtrack_vs_Amp2OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
+    my_2d_histos.emplace( "Xtrack_vs_Amp3OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp3OverAmp123", "Xtrack_vs_Amp3OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
   
     //Define 3D histograms
     rowIndex = 0;
@@ -98,8 +100,14 @@ void Analyze::InitHistos(const std::vector<std::vector<int>>& geometry, const st
       rowIndex++;
     }
 
+    //Define 2d prof
     my_2d_prof.emplace("efficiency_vs_xy_DCRing", std::make_shared<TProfile2D>("efficiency_vs_xy_DCRing", "efficiency_vs_xy_DCRing; X [mm]; Y [mm]", xbins,xminProf,xmaxProf, ybins,yminProf,ymaxProf ) );	
     my_2d_prof.emplace("efficiency_vs_xy_Strip2or5", std::make_shared<TProfile2D>("efficiency_vs_xy_Strip2or5", "efficiency_vs_xy_Strip2or5; X [mm]; Y [mm]", xbins,xminProf,xmaxProf, ybins,yminProf,ymaxProf ) );	
+
+    //Define 1d prof
+    my_1d_prof.emplace("Xtrack_vs_Amp1OverAmp123_prof", std::make_shared<TProfile>( "Xtrack_vs_Amp1OverAmp123_prof", "Xtrack_vs_Amp1OverAmp123_prof; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax));
+    my_1d_prof.emplace("Xtrack_vs_Amp2OverAmp123_prof", std::make_shared<TProfile>( "Xtrack_vs_Amp2OverAmp123_prof", "Xtrack_vs_Amp2OverAmp123_prof; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax));
+    my_1d_prof.emplace("Xtrack_vs_Amp3OverAmp123_prof", std::make_shared<TProfile>( "Xtrack_vs_Amp3OverAmp123_prof", "Xtrack_vs_Amp3OverAmp123_prof; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax));
     
     //Define TEfficiencies if you are doing trigger studies (for proper error bars) or cut flow charts.
     my_efficiencies.emplace("event_sel_weight", std::make_shared<TEfficiency>("event_sel_weight","event_sel_weight",9,0,9));
@@ -165,18 +173,24 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	double xCenterMaxStrip = 0;
 	double xCenterStrip2 = 0;
 	double xCenterStrip3 = 0;
+        double Amp1 = 0.0, Amp2 = 0.0, Amp3 = 0.0;
 	double Amp1OverAmp1and2 = 0;
-	double Amp1OverAmp123 = 0;
+	double Amp1OverAmp123 = 0, Amp2OverAmp123 = 0, Amp3OverAmp123 = 0;
 	double Amp2OverAmp2and3 = 0;
 	double deltaXmax = -999;
 	if (maxAmpIndex >= 0 && Amp2Index>=0) {
+          Amp1 = ampLGAD[0][maxAmpIndex];
+          Amp2 = ampLGAD[0][Amp2Index];
 	  xCenterMaxStrip = stripCenterXPositionLGAD[0][maxAmpIndex];
 	  xCenterStrip2 = stripCenterXPositionLGAD[0][Amp2Index];
 	  Amp1OverAmp1and2 = ampLGAD[0][maxAmpIndex] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index]);
 	  if (Amp3Index >= 0) {
+            Amp3 = ampLGAD[0][Amp3Index];
 	    xCenterStrip3 = stripCenterXPositionLGAD[0][Amp3Index];
 	    Amp2OverAmp2and3= ampLGAD[0][Amp2Index] / (ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
 	    Amp1OverAmp123 = ampLGAD[0][maxAmpIndex] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
+	    Amp2OverAmp123 = ampLGAD[0][Amp2Index] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
+	    Amp3OverAmp123 = ampLGAD[0][Amp3Index] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
 	  }
 	  deltaXmax = x - xCenterMaxStrip;
 	}
@@ -220,6 +234,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	    if (maxAmpIndex >= 1 && maxAmpIndex <= 4) {
 	      my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax"]->Fill(fabs(deltaXmax), Amp1OverAmp1and2);
 	      my_2d_histos["Amp1OverAmp123_vs_deltaXmax"]->Fill(fabs(deltaXmax), Amp1OverAmp123);
+              my_2d_histos["Xtrack_vs_Amp1OverAmp123"]->Fill(x, Amp1OverAmp123);
+              my_2d_histos["Xtrack_vs_Amp2OverAmp123"]->Fill(x, Amp2OverAmp123);
+              my_2d_histos["Xtrack_vs_Amp3OverAmp123"]->Fill(x, Amp3OverAmp123);
+              my_1d_prof["Xtrack_vs_Amp1OverAmp123_prof"]->Fill(x, Amp1OverAmp123);
+              my_1d_prof["Xtrack_vs_Amp2OverAmp123_prof"]->Fill(x, Amp2OverAmp123);
+              my_1d_prof["Xtrack_vs_Amp3OverAmp123_prof"]->Fill(x, Amp3OverAmp123);
 	    }
         }
 
@@ -250,21 +270,26 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	      assert(Amp1OverAmp1and2 <= 1);
 	      x1 = stripCenterXPositionLGAD[0][maxAmpIndex];
 	      x2 = stripCenterXPositionLGAD[0][Amp2Index];
+
+              //double xSin = 1/62.0*(asin((Amp1OverAmp123 - 0.55)/0.059) + 0.124);
 	    
 	      //use the poly fit function
 	      double dX = positionRecoPar0 + positionRecoPar1*Amp1OverAmp1and2 + positionRecoPar2*pow(Amp1OverAmp1and2,2) + positionRecoPar3*pow(Amp1OverAmp1and2,3);
 	    
 	      //After the "cut-off" point of the fit, then linearly 
 	      //interpolate to (Amp1OverAmp1and2=0.75,dX=0.0) point
-	      if (Amp1OverAmp1and2 > 0.75) {
-		dX = 0.0;
-
-		my_2d_histos["Amp2OverAmp2and3_vs_deltaXmax"]->Fill(deltaXmax, Amp2OverAmp2and3);
-
-	      } else if (Amp1OverAmp1and2 > positionRecoCutFitCutOffPoint) {
-		double dX_atCutOffPoint = positionRecoPar0 + positionRecoPar1*positionRecoCutFitCutOffPoint + positionRecoPar2*pow(positionRecoCutFitCutOffPoint,2) + positionRecoPar3*pow(positionRecoCutFitCutOffPoint,3);
-		dX = dX_atCutOffPoint + ((0.0 - dX_atCutOffPoint)/(0.75 - positionRecoCutFitCutOffPoint))*(Amp1OverAmp1and2-0.75);
-	      }
+	      //if (Amp1OverAmp1and2 > 0.75) {
+	      //  dX = 0.0;
+              //  
+              //  std::cout<<"Amp1: "<<Amp1<<" Amp2: "<<Amp2<<" Amp3: "<<Amp3<<" Amp1OverAmp1and2:"<<Amp1OverAmp1and2<<std::endl;
+              //
+	      //  my_2d_histos["Amp2OverAmp2and3_vs_deltaXmax"]->Fill(deltaXmax, Amp2OverAmp2and3);
+              //
+	      //} else if (Amp1OverAmp1and2 > positionRecoCutFitCutOffPoint) {
+	      //  double dX_atCutOffPoint = positionRecoPar0 + positionRecoPar1*positionRecoCutFitCutOffPoint + positionRecoPar2*pow(positionRecoCutFitCutOffPoint,2) + positionRecoPar3*pow(positionRecoCutFitCutOffPoint,3);
+	      //  dX = dX_atCutOffPoint + ((0.0 - dX_atCutOffPoint)/(0.75 - positionRecoCutFitCutOffPoint))*(Amp1OverAmp1and2-0.75);
+	      //}
+              if(dX < 0.0) dX = 0.0;
 	    
 	      //if dX is larger than 0.5, then just use the midpoint between the strips
 	      //not sure why the profile wants to "over-shoot"
@@ -275,7 +300,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	      } else {
 		x_reco = x1 - dX; 
 	      }
-	    
+
 	      // if (x < 0.2) {
 	      // 	std::cout << "x = " << x << "\n";
 	      // 	std::cout << "strip1,2 = " << maxAmpIndex << " , " << Amp2Index
@@ -289,6 +314,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	      // }
 
 	      //fill position reco residual
+              my_histos["deltaX"]->Fill(x_reco-x);
 	      my_2d_histos["deltaX_vs_Xtrack"]->Fill(x, x_reco-x);
 	      my_2d_histos["Xreco_vs_Xtrack"]->Fill(x, x_reco);
 	      if (Amp1OverAmp1and2>=0.75) { my_2d_histos["deltaX_vs_Xtrack_A1OverA12Above0p75"]->Fill(x, x_reco-x);}
@@ -422,6 +448,10 @@ void Analyze::WriteHistos(TFile* outfile)
     }
     
     for (const auto &p : my_2d_prof) {
+        p.second->Write();
+    }
+
+    for (const auto &p : my_1d_prof) {
         p.second->Write();
     }
 
