@@ -24,7 +24,7 @@ public:
     ~Analyze(){};
     
     void Loop(NTupleReader& tr, int maxevents = -1);
-    void InitHistos(const std::vector<std::vector<int>>& geometry, const std::map<std::string,double>& sensorConfigMap);
+    void InitHistos(const std::vector<std::vector<int>>& geometry, const std::map<std::string,double>& sensorConfigMap,const std::vector<std::vector<double>>&boxes_XY );
     void WriteHistos(TFile* outfile);
     std::pair<double,double> Rotate(double x0, double y0, double angle);
     std::map<std::string, double> GetSensorConfigMap(std::string sensorName);

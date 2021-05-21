@@ -35,6 +35,9 @@ private:
         tr.registerDerivedVar("timeCalibrationCorrection", g.timeCalibrationCorrection);
         tr.registerDerivedVar("photekIndex", g.photekIndex);
         tr.registerDerivedVar("sensorEdges", g.sensorEdges);
+        tr.registerDerivedVar("xSlices", g.xSlices);
+        tr.registerDerivedVar("ySlices", g.ySlices);
+        tr.registerDerivedVar("boxes_XY", g.boxes_XY);
     }
 
     int getVoltage(std::string name) const
