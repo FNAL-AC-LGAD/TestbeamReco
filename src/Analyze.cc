@@ -71,7 +71,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             my_2d_histos.emplace( ("relFrac_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_x_channel"+r+s).c_str(), ("relFrac_vs_x_channel"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
             my_2d_histos.emplace( ("relFrac_vs_x_channel_top"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_x_channel_top"+r+s).c_str(), ("relFrac_vs_x_channel_top"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
             my_2d_histos.emplace( ("delay_vs_x_channel_top"+r+s).c_str(), std::make_shared<TH2D>( ("delay_vs_x_channel_top"+r+s).c_str(), ("delay_vs_x_channel_top"+r+s+"; X [mm]; Arrival time [ns]").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,-11,-10 ) );
-            my_2d_histos.emplace( "relFracDC_vs_x_channel_top", std::make_shared<TH2D>( "relFracDC_vs_x_channel_top", "relFracDC_vs_x_channel_top; X [mm]; relFrac", (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
+            my_2d_histos.emplace( ("relFracDC_vs_x_channel_top"+r+s).c_str(), std::make_shared<TH2D>( ("relFracDC_vs_x_channel_top"+r+s).c_str(), ("relFracDC_vs_x_channel_top"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
             my_2d_histos.emplace( ("relFrac_vs_x_channel_bottom"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_x_channel_bottom"+r+s).c_str(), ("relFrac_vs_x_channel_bottom"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
             my_2d_histos.emplace( ("relFrac_vs_y_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_y_channel"+r+s).c_str(), ("relFrac_vs_y_channel"+r+s+"; Y [mm]; relFrac").c_str(), (ymax-ymin)/0.1,ymin,ymax, 100,0.0,1.0 ) );
             my_2d_histos.emplace( ("relFrac_vs_y_channel_left"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_y_channel_left"+r+s).c_str(), ("relFrac_vs_y_channel_left"+r+s+"; Y [mm]; relFrac").c_str(), (ymax-ymin)/0.1,ymin,ymax, 100,0.0,1.0 ) );
@@ -93,7 +93,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_2d_prof.emplace( "efficiency_vs_xy_highThreshold_prof", std::make_shared<TProfile2D>( "efficiency_vs_xy_highThreshold_prof_channel", "efficiency_vs_xy_highThreshold_prof_channel; X [mm]; Y [mm]", xbins,xminProf,xmaxProf, ybins,yminProf,ymaxProf ) );
     my_2d_histos.emplace( "efficiency_vs_xy_lowThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_lowThreshold_numerator", "efficiency_vs_xy_lowThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_denominator", std::make_shared<TH2D>( "efficiency_vs_xy_denominator", "efficiency_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
-    // my_2d_histos.emplace( "efficiencyDC_vs_xy_denominator", std::make_shared<TH2D>( "efficiencyDC_vs_xy_denominator", "efficiencyDC_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
+     my_2d_histos.emplace( "efficiencyDC_vs_xy_denominator", std::make_shared<TH2D>( "efficiencyDC_vs_xy_denominator", "efficiencyDC_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiencyDC_vs_xy_numerator", std::make_shared<TH2D>( "efficiencyDC_vs_xy_numerator", "efficiencyDC_vs_xy_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "clusterSize_vs_x", std::make_shared<TH2D>( "clusterSize_vs_x", "clusterSize_vs_x; X [mm]; Cluster Size", (xmax-xmin)/0.02,xmin,xmax, 20,-0.5,19.5 ) );
     my_2d_histos.emplace( "Amp1OverAmp1and2_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp1and2_vs_deltaXmax", "Amp1OverAmp1and2_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
@@ -108,7 +108,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_2d_histos.emplace( "Xtrack_vs_Amp3OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp3OverAmp123", "Xtrack_vs_Amp3OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
 
     ///average waveforms  
-    for(int iw=0;iw < boxes_XY.size();iw++)
+    for(unsigned int iw = 0; iw < boxes_XY.size(); iw++)
     {
         rowIndex = 0;
     	for(const auto& row : geometry) 
@@ -156,7 +156,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
-    const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
     const auto& enablePositionReconstruction = tr.getVar<double>("enablePositionReconstruction");
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& positionRecoPar0 = tr.getVar<double>("positionRecoPar0");
@@ -165,8 +164,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& positionRecoPar3 = tr.getVar<double>("positionRecoPar3");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
     const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
-    const auto& xSlices = tr.getVec<std::vector<double>>("xSlices");
-    const auto& ySlices = tr.getVec<std::vector<double>>("ySlices");
+    //const auto& xSlices = tr.getVec<std::vector<double>>("xSlices");
+    const auto& ySlices = tr.getVar<std::vector<std::vector<double>>>("ySlices");
     const auto& doSlices = true;
     InitHistos(tr, geometry);
 
@@ -186,6 +185,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& amp = tr.getVec<float>("amp");
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
+        const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
         const auto& LP2_20 = tr.getVec<float>("LP2_20");
         const auto& timeLGAD = utility::remapToLGADgeometry(tr, LP2_20, "timeLGAD");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
@@ -197,10 +197,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& chi2 = tr.getVar<float>("chi2");
         const auto& x = tr.getVar<double>("x");
         const auto& y = tr.getVar<double>("y");
-        const auto& chi2 = tr.getVar<float>("chi2");
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
-        const auto& channel = tr.getVecVec<float>("channel");
-        const auto& time = tr.getVecVec<float>("time");
+        //const auto& channel = tr.getVecVec<float>("channel");
+        //const auto& time = tr.getVecVec<float>("time");
         bool passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         bool pass = passTrigger && hitSensor;
 
@@ -302,7 +301,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                             my_histos["relFrac_top"+r+s]->Fill(relFrac[LGAD_index], 1.0);
                             my_2d_histos["relFrac_vs_x_channel_top"+r+s]->Fill(x, relFrac[LGAD_index]);
                             my_2d_histos["amp_vs_x_channel_top"+r+s]->Fill(x, ampLGAD[rowIndex][i]);
-                            my_2d_histos["relFracDC_vs_x_channel_top"]->Fill(x, relFracDC);
+                            my_2d_histos["relFracDC_vs_x_channel_top"+r+s]->Fill(x, relFracDC);
                             const auto& LP2_20 = tr.getVec<float>("LP2_20");
                             if(timeLGAD[rowIndex][i]!=0 && LP2_20[photekIndex]!=0) my_2d_histos["delay_vs_x_channel_top"+r+s]->Fill(x, 1e9*(timeLGAD[rowIndex][i] - LP2_20[photekIndex]));                            
                     	}
