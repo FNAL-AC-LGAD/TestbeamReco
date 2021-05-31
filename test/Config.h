@@ -29,12 +29,24 @@ private:
         tr.registerDerivedVar("geometry", g.geometry);
         tr.registerDerivedVar("acLGADChannelMap", g.acLGADChannelMap);
         tr.registerDerivedVar("numLGADchannels", g.numLGADchannels);
-        tr.registerDerivedVar("sensorConfigMap", g.sensorConfigMap);
         tr.registerDerivedVar("amplitudeCorrectionFactor", g.amplitudeCorrectionFactor);
         tr.registerDerivedVar("stripCenterXPosition", g.stripCenterXPosition);
         tr.registerDerivedVar("timeCalibrationCorrection", g.timeCalibrationCorrection);
         tr.registerDerivedVar("photekIndex", g.photekIndex);
         tr.registerDerivedVar("sensorEdges", g.sensorEdges);
+        tr.registerDerivedVar("angle", g.angle);
+        tr.registerDerivedVar("xmin", g.xmin);
+        tr.registerDerivedVar("xmax", g.xmax);
+        tr.registerDerivedVar("ymin", g.ymin);
+        tr.registerDerivedVar("ymax", g.ymax);
+        tr.registerDerivedVar("photekSignalThreshold", g.photekSignalThreshold);
+        tr.registerDerivedVar("noiseAmpThreshold", g.noiseAmpThreshold);
+        tr.registerDerivedVar("signalAmpThreshold", g.signalAmpThreshold);
+        tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
+        tr.registerDerivedVar("positionRecoPar0", g.positionRecoPar0);
+        tr.registerDerivedVar("positionRecoPar1", g.positionRecoPar1);
+        tr.registerDerivedVar("positionRecoPar2", g.positionRecoPar2);
+        tr.registerDerivedVar("positionRecoPar3", g.positionRecoPar3);
     }
 
     int getVoltage(std::string name) const

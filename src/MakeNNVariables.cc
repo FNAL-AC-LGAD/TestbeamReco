@@ -30,7 +30,7 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
 
     while( tr.getNextEvent() )
     {
-        const auto& eventCounter = tr.getVar<int>("eventCounter");
+        //const auto& eventCounter = tr.getVar<int>("eventCounter");
         const auto& filetag      = tr.getVar<std::string>("filetag");
        
         //------------------------------------
@@ -113,9 +113,9 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
         const auto& nplanes = tr.getVar<int>("nplanes");
         const auto& npix = tr.getVar<int>("npix");
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
-        const auto& chi2 = tr.getVar<float>("chi2");
-        const auto& x = tr.getVar<double>("x");
-        const auto& ampPhotek = tr.getVar<double>("ampPhotek");
+        //const auto& chi2 = tr.getVar<float>("chi2");
+        //const auto& x = tr.getVar<double>("x");
+        //const auto& ampPhotek = tr.getVar<double>("ampPhotek");
         const auto& timePhotek = tr.getVar<double>("timePhotek");
         //bool hitMidStrips = 0.23 < x && x < 0.53;
         bool hitMidStrips = true;
