@@ -35,8 +35,7 @@ private:
         tr.registerDerivedVar<int>("eventCounter",w);        
 
         // Correct the rotation angle for the x and y measurment
-        const auto& sensorConfigMap = tr.getVar<std::map<std::string,double>>("sensorConfigMap");
-        const auto  angle = sensorConfigMap.at("angle");
+        const auto& angle = tr.getVar<double>("angle");
 	const auto& x_dut = tr.getVec<float>("x_dut");
 	const auto& y_dut = tr.getVec<float>("y_dut");
 	Rotate(tr, x_dut[0], y_dut[0], angle);
