@@ -3,6 +3,7 @@ import os
 import EfficiencyUtils
 import langaus
 import argparse
+import time
 
 gROOT.SetBatch( True )
 
@@ -20,8 +21,8 @@ if args['run'] == 'true':
      
 
 if (RunFits):
-    #inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/myoutputfile.root")    
-    inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210405.root")            
+    inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/BNL2021_narrow_285V.root")    
+    #inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210405.root")            
 
     #Get 3D histograms 
     th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
@@ -86,17 +87,18 @@ if (RunFits):
 
         for i in range(1, list_amplitude_vs_x[channel].GetXaxis().GetNbins()):
 
-            print ("Bin " + str(i))
+            #print ("Bin " + str(i))
 
             ##For Debugging
             #if not (i==46 and j==5):
             #    continue
 
             tmpHist = list_th2_amplitude_vs_x[channel].ProjectionY("py",i,i)
+            myTotalEvents=tmpHist.Integral()
             myMean = tmpHist.GetMean()
             myRMS = tmpHist.GetRMS()
-            value = myMean
-                
+            value = myMean            
+
             #use coarser bins when the signal is bigger
             if (myMean > 50) :
                 tmpHist.Rebin(10)
@@ -109,11 +111,11 @@ if (RunFits):
             ##For Debugging
             tmpHist.Draw("hist")
             myLanGausFunction.Draw("same")
-            canvas.SaveAs("q_"+str(i)+".gif")
+            #canvas.SaveAs("q_"+str(i)+".gif")
 
-            if (tmpHist.GetEntries() == 0 or not (value == value)):
+            if (tmpHist.GetEntries() == 0 or not (value == value) or myTotalEvents<200):
                value = 0
-
+            print(myTotalEvents)
             print ("Bin : " + str(i) + " -> " + str(value))
 
             list_amplitude_vs_x[channel].SetBinContent(i,value)
@@ -143,17 +145,17 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
 
   
 #Do zero suppression
-for channel in range(0, len(plotList_amplitude_vs_x)):
-    for i in range(1, plotList_amplitude_vs_x[channel].GetXaxis().GetNbins()+1):
-        if plotList_amplitude_vs_x[channel].GetBinContent(i) < 18:
-                plotList_amplitude_vs_x[channel].SetBinContent(i,0)
+#for channel in range(0, len(plotList_amplitude_vs_x)):
+#    for i in range(1, plotList_amplitude_vs_x[channel].GetXaxis().GetNbins()+1):
+#        if plotList_amplitude_vs_x[channel].GetBinContent(i) < 18:
+#                plotList_amplitude_vs_x[channel].SetBinContent(i,0)
 
 
 canvas = TCanvas("cv","cv",800,800)
 canvas.SetLeftMargin(0.12)
-plotList_amplitude_vs_x[0].Draw("hist")
-plotList_amplitude_vs_x[0].SetStats(0)
-plotList_amplitude_vs_x[0].SetTitle("")
+plotList_amplitude_vs_x[5].Draw("hist")
+plotList_amplitude_vs_x[5].SetStats(0)
+plotList_amplitude_vs_x[5].SetTitle("")
 
 plotList_amplitude_vs_x[0].GetYaxis().SetTitle("Signal MPV Amplitude [mV]")
 plotList_amplitude_vs_x[0].GetYaxis().SetTitleSize(0.05)
@@ -175,6 +177,7 @@ plotList_amplitude_vs_x[2].SetLineColor(600) #kBlue
 plotList_amplitude_vs_x[3].SetLineColor(880) #kViolet
 plotList_amplitude_vs_x[4].SetLineColor(632) #kRed
 plotList_amplitude_vs_x[5].SetLineColor(400+2) #kYellow
+plotList_amplitude_vs_x[0].Draw("histsame")
 plotList_amplitude_vs_x[1].Draw("histsame")
 plotList_amplitude_vs_x[2].Draw("histsame")
 plotList_amplitude_vs_x[3].Draw("histsame")
@@ -307,4 +310,5 @@ legend.AddEntry(plotList_amplitudeFraction_vs_x[5], "Strip 6")
 legend.Draw();
 
 canvas.SaveAs("AmplitudeFraction_vs_x.gif")
+
 
