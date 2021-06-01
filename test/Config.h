@@ -47,6 +47,9 @@ private:
         tr.registerDerivedVar("positionRecoPar1", g.positionRecoPar1);
         tr.registerDerivedVar("positionRecoPar2", g.positionRecoPar2);
         tr.registerDerivedVar("positionRecoPar3", g.positionRecoPar3);
+        tr.registerDerivedVar("xSlices", g.xSlices);
+        tr.registerDerivedVar("ySlices", g.ySlices);
+        tr.registerDerivedVar("boxes_XY", g.boxes_XY);
     }
 
     int getVoltage(std::string name) const

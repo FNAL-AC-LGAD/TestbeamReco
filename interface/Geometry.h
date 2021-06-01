@@ -37,7 +37,10 @@ public:
     double positionRecoPar1 = -1;
     double positionRecoPar2 = -1;
     double positionRecoPar3 = -1;
-    std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};
+    std::vector<std::vector<double>> sensorEdges = {{-999.9, 999.9}, {-999.9, 999.9}};
+    std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
+    std::vector<std::vector<double>> xSlices = {{-999.9, 999.9}, {-999.9, 999.9}};
+    std::vector<std::vector<double>> boxes_XY = {{-999.9, -999.9,-999.9, -999.9}};
 };
 
 class BNL2020Geometry : public DefaultGeometry
@@ -137,8 +140,6 @@ public:
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.0};
-    std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
-    std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
     int numLGADchannels = 4;
     double angle = 0;
     double xmin = -7;
@@ -153,9 +154,13 @@ public:
     double positionRecoPar1 = -3.599;
     double positionRecoPar2 = 5.735;
     double positionRecoPar3 = -3.166;
+    std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.}};
+    std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
+    std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
+    std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
 };
 
-class HPKPadB2Geometry : public HPKPadC2Geometry
+class HPKPadB2Geometry : public DefaultGeometry
 {
 public:
     // HPK 2021 Mapping set
@@ -169,16 +174,30 @@ public:
     // ----------
     HPKPadB2Geometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {7,0.0}};
-    double angle = 1.5;
-    double xmin = -0.5;
-    double xmax =  1.5;
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{2,0}}, {4,{2,1}}, {7,{3,0}}};    
+    std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
+    std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.0};
+    int numLGADchannels = 4;
+    double angle = 0;
+    double xmin = -6.;
+    double xmax =  -3.2;
     double ymin =  9.5;
-    double ymax = 12.0; 
+    double ymax = 11.5; 
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 30.0;
+    double noiseAmpThreshold = 20.0;
+    double signalAmpThreshold = 50.0;
+    double enablePositionReconstruction = 0.0;   
+    double positionRecoPar0 = 0.8129; //hack from BNL for now
+    double positionRecoPar1 = -3.599;
+    double positionRecoPar2 = 5.735;
+    double positionRecoPar3 = -3.166;
+    std::vector<std::vector<double>> sensorEdges = {{-5.7 , 9.7}, { -4.65, 10.85}};
+    std::vector<std::vector<double>> ySlices = {{9.85, 10.15}, {10.35, 10.65}};
+    std::vector<std::vector<double>> xSlices = {{-5.55, -5.25}, {-5.05, -4.75}};
+    std::vector<std::vector<double>> boxes_XY = { {-6.1, -5.8,10.05, 10.35}}; 
 };
 
 class HPKStripsC2WideMetalGeometry : public BNL2020Geometry
