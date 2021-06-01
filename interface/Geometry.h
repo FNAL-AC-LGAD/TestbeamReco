@@ -24,7 +24,7 @@ public:
     std::map<int, double> stripCenterXPosition = {{0,0.0}};
     int numLGADchannels = 0;
     int photekIndex = 7;
-    double angle = -1;
+    double angle =  0;
     double xmin =  -1;
     double xmax =  -1;
     double ymin =  -1;
@@ -104,11 +104,11 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.235, 0.135, 0.0};
     int numLGADchannels = 6;
-    double angle = 1.5;
-    double xmin = -8;
-    double xmax =  -2;
-    double ymin =  8;
-    double ymax = 13.0; 
+    double angle = 10.0;
+    double xmin = -10.0;
+    double xmax =   0.0;
+    double ymin =   6.0;
+    double ymax =  14.0; 
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
