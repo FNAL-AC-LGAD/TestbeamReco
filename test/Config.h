@@ -103,9 +103,17 @@ public:
         {
             registerGeometry(tr, BNL2020Geometry(voltage));
         }
-        else if(filetag.find("BNL2021") != std::string::npos)
+        else if(filetag.find("BNL2021_wide") != std::string::npos)
         {
-            registerGeometry(tr, BNL2021Geometry(voltage));
+            registerGeometry(tr, BNL2021WideGeometry(voltage));
+        }
+        else if(filetag.find("BNL2021_medium") != std::string::npos)
+        {
+            registerGeometry(tr, BNL2021MediumGeometry(voltage));
+        }
+        else if(filetag.find("BNL2021_narrow") != std::string::npos)
+        {
+            registerGeometry(tr, BNL2021NarrowGeometry(voltage));
         }
         else if(filetag.find("HPK_pad_C2") != std::string::npos)
         {
@@ -115,15 +123,19 @@ public:
         {
             registerGeometry(tr, HPKPadB2Geometry(voltage));
         }
-        else if(filetag.find("HPK_strips") != std::string::npos)
+        else if(filetag.find("HPK_strips_C2_45um") != std::string::npos)
         {
             registerGeometry(tr, HPKStripsC2WideMetalGeometry(voltage));
+        }
+        else if(filetag.find("HPK_strips_C2_30um") != std::string::npos)
+        {
+            registerGeometry(tr, HPKStripsC2NarrowMetalGeometry(voltage));
         }
         else if(filetag.find("Ron_wide") != std::string::npos)
         {
             registerGeometry(tr, RonStripsGeometry(voltage));
         }
-        else if(filetag.find("BNL2021_quadpix") != std::string::npos)
+        else if(filetag.find("BNL2021_hexpix") != std::string::npos)
         {
             registerGeometry(tr, BNLPixelHexGeometry(voltage));
         }
