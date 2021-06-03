@@ -55,6 +55,8 @@ namespace utility
         std::sort(vecInfo.begin(), vecInfo.end(), [](TPL v1, TPL v2){return std::get<0>(v1) > std::get<0>(v2);} );
         return std::make_pair<int,int>( int(std::get<1>(vecInfo[rank-1])), int(std::get<2>(vecInfo[rank-1])) );
     }
+
+    template<typename T, typename... Args> void fillHisto(const bool pass, T& histo, Args... args) { if(pass) histo->Fill(args...); }
 }
 
 #endif
