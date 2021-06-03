@@ -226,7 +226,7 @@ public:
     double ymax = 11.0; 
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 20.0;
-    double signalAmpThreshold = 90.0;
+    double signalAmpThreshold = 30.0;
     double enablePositionReconstruction = 0.0;   
     double positionRecoPar0 = -1.0; //hack from BNL for now
     double positionRecoPar1 = -1.0;
@@ -267,7 +267,7 @@ public:
     double ymax = 10.8; 
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 20.0;
-    double signalAmpThreshold = 50.0;
+    double signalAmpThreshold = 30.0;
     double enablePositionReconstruction = 0.0;   
     double positionRecoPar0 = -1.0; //hack from BNL for now
     double positionRecoPar1 = -1.0;
