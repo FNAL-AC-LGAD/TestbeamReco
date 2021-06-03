@@ -1,6 +1,7 @@
 #ifndef PREPNTUPLEVARS_H
 #define PREPNTUPLEVARS_H
 
+#include <numeric>
 #include "TestbeamReco/interface/Utility.h"
 
 class PrepNTupleVars
@@ -17,15 +18,15 @@ private:
 
     void ApplyAmplitudeCorrection(NTupleReader& tr) const
     {     
-      const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
-      auto& corrAmp = tr.createDerivedVec<double>("corrAmp");
-      const auto& amp = tr.getVec<float>("amp");
-      int counter = 0;
-      for(auto thisAmp : amp) 
-      {
-	corrAmp.emplace_back(thisAmp*ampCorrectionFactors.at(counter));
-	counter++;
-      }      
+        const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
+        auto& corrAmp = tr.createDerivedVec<double>("corrAmp");
+        const auto& amp = tr.getVec<float>("amp");
+        int counter = 0;
+        for(auto thisAmp : amp) 
+        {
+            corrAmp.emplace_back(thisAmp*ampCorrectionFactors.at(counter));
+            counter++;
+        }      
     }
 
     void prepNTupleVars(NTupleReader& tr)
@@ -40,7 +41,6 @@ private:
 	const auto& y_dut = tr.getVec<float>("y_dut");
 	Rotate(tr, x_dut[0], y_dut[0], angle);
 	ApplyAmplitudeCorrection(tr);
-
 
         // Cut to get hits that only go through active sensor
 	const auto& x = tr.getVar<double>("x");
