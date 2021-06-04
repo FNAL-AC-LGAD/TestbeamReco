@@ -21,9 +21,9 @@ if args['run'] == 'true':
      
 
 if (RunFits):
-    inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/BNL2021_narrow_285V.root")    
+    inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/myoutputfile.root")    
     #inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210405.root")            
-
+    
     #Get 3D histograms 
     th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
     th3_amplitude_vs_xy_channel01 = inputfile.Get("amplitude_vs_xy_channel01")
@@ -31,13 +31,18 @@ if (RunFits):
     th3_amplitude_vs_xy_channel03 = inputfile.Get("amplitude_vs_xy_channel03")
     th3_amplitude_vs_xy_channel04 = inputfile.Get("amplitude_vs_xy_channel04")
     th3_amplitude_vs_xy_channel05 = inputfile.Get("amplitude_vs_xy_channel05")
-    list_th3_amplitude_vs_xy = []
-    list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel00)
-    list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel01)
-    list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel02)
-    list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel03)
-    list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel04)
-    list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel05)
+    
+    th3_amplitude_vs_xy_channelall = inputfile.Get("totamplitude_vs_xy_channel")    
+
+    #list_th3_amplitude_vs_xy = []
+    #list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel00)
+    #list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel01)
+    #list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel02)
+    #list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel03)
+    #list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel04)
+    #list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel05)
+
+    #list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channelall)
     
     
     #Build 2D amp vs x histograms
@@ -47,6 +52,8 @@ if (RunFits):
     amplitude_vs_x_channel03 = th3_amplitude_vs_xy_channel03.Project3D("zx")
     amplitude_vs_x_channel04 = th3_amplitude_vs_xy_channel04.Project3D("zx")
     amplitude_vs_x_channel05 = th3_amplitude_vs_xy_channel05.Project3D("zx")
+
+    amplitude_vs_x_channelall= th3_amplitude_vs_xy_channelall.Project3D("zx")
     
     list_th2_amplitude_vs_x = []
     list_th2_amplitude_vs_x.append(amplitude_vs_x_channel00)
@@ -55,6 +62,8 @@ if (RunFits):
     list_th2_amplitude_vs_x.append(amplitude_vs_x_channel03)
     list_th2_amplitude_vs_x.append(amplitude_vs_x_channel04)
     list_th2_amplitude_vs_x.append(amplitude_vs_x_channel05)
+
+    list_th2_amplitude_vs_x.append(amplitude_vs_x_channelall)
     
 
     #Build amplitude histograms
@@ -65,6 +74,8 @@ if (RunFits):
     amplitude_vs_x_channel03 = amplitude_vs_x.Clone("amplitude_vs_x_channel03")
     amplitude_vs_x_channel04 = amplitude_vs_x.Clone("amplitude_vs_x_channel04")
     amplitude_vs_x_channel05 = amplitude_vs_x.Clone("amplitude_vs_x_channel05")
+ 
+    amplitude_vs_x_channelall = amplitude_vs_x.Clone("amplitude_vs_x_channelall")
     
     print ("Amplitude vs X: " + str(amplitude_vs_x.GetXaxis().GetBinLowEdge(1)) + " -> " + str(amplitude_vs_x.GetXaxis().GetBinUpEdge(amplitude_vs_x.GetXaxis().GetNbins())))
     
@@ -76,6 +87,8 @@ if (RunFits):
     list_amplitude_vs_x.append(amplitude_vs_x_channel03)
     list_amplitude_vs_x.append(amplitude_vs_x_channel04)
     list_amplitude_vs_x.append(amplitude_vs_x_channel05)
+
+    list_amplitude_vs_x.append(amplitude_vs_x_channelall)
     
     fit = langaus.LanGausFit()
     canvas = TCanvas("cv","cv",800,800)
@@ -108,14 +121,15 @@ if (RunFits):
             myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-1*myRMS,myMean+3*myRMS))
             myMPV = myLanGausFunction.GetParameter(1)
             value = myMPV
+            print(value)
             ##For Debugging
             tmpHist.Draw("hist")
             myLanGausFunction.Draw("same")
-            #canvas.SaveAs("q_"+str(i)+".gif")
+            #canvas.SaveAs("q_"+str(i)+"_"+channel+".gif")
 
-            if (tmpHist.GetEntries() == 0 or not (value == value) or myTotalEvents<200):
+            if (tmpHist.GetEntries() == 0 or not (value == value) or value<0 or value>1000): #or myTotalEvents<200):
                value = 0
-            print(myTotalEvents)
+            #print(myTotalEvents)
             print ("Bin : " + str(i) + " -> " + str(value))
 
             list_amplitude_vs_x[channel].SetBinContent(i,value)
@@ -142,6 +156,8 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel02"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel03"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel04"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
+
+plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channelall"))
 
   
 #Do zero suppression
@@ -202,13 +218,14 @@ canvas.SaveAs("Amplitude_vs_x.gif")
 
 
 
-totalAmplitude_vs_x = plotList_amplitude_vs_x[0].Clone("totalAmplitude_vs_x")
-for i in range(1, totalAmplitude_vs_x.GetXaxis().GetNbins()+1):
-    totalAmp = plotList_amplitude_vs_x[0].GetBinContent(i) + plotList_amplitude_vs_x[1].GetBinContent(i) + plotList_amplitude_vs_x[2].GetBinContent(i) + plotList_amplitude_vs_x[3].GetBinContent(i) + plotList_amplitude_vs_x[4].GetBinContent(i) + plotList_amplitude_vs_x[5].GetBinContent(i)
-    totalAmplitude_vs_x.SetBinContent(i,totalAmp)
+#totalAmplitude_vs_x = plotList_amplitude_vs_x[0].Clone("totalAmplitude_vs_x")
+#for i in range(1, totalAmplitude_vs_x.GetXaxis().GetNbins()+1):
+#    totalAmp = plotList_amplitude_vs_x[0].GetBinContent(i) + plotList_amplitude_vs_x[1].GetBinContent(i) + plotList_amplitude_vs_x[2].GetBinContent(i) + plotList_amplitude_vs_x[3].GetBinContent(i) + plotList_amplitude_vs_x[4].GetBinContent(i) + plotList_amplitude_vs_x[5].GetBinContent(i)
+#    totalAmplitude_vs_x.SetBinContent(i,totalAmp)
 
 canvas = TCanvas("cv","cv",800,800)
 canvas.SetLeftMargin(0.12)
+totalAmplitude_vs_x=plotList_amplitude_vs_x[6]
 totalAmplitude_vs_x.Draw("hist")
 totalAmplitude_vs_x.SetStats(0)
 totalAmplitude_vs_x.SetTitle("")
@@ -255,7 +272,7 @@ plotList_amplitudeFraction_vs_x.append(plotList_amplitude_vs_x[0].Clone("amplitu
 plotList_amplitudeFraction_vs_x.append(plotList_amplitude_vs_x[0].Clone("amplitudeFraction_vs_x_channel04"))
 plotList_amplitudeFraction_vs_x.append(plotList_amplitude_vs_x[0].Clone("amplitudeFraction_vs_x_channel05"))
 
-for channel in range(0, len(plotList_amplitude_vs_x)):
+for channel in range(0, (len(plotList_amplitude_vs_x)-1)):
     for i in range(1, plotList_amplitude_vs_x[channel].GetXaxis().GetNbins()+1):
          totalAmp = plotList_amplitude_vs_x[0].GetBinContent(i) + plotList_amplitude_vs_x[1].GetBinContent(i) + plotList_amplitude_vs_x[2].GetBinContent(i) + plotList_amplitude_vs_x[3].GetBinContent(i) + plotList_amplitude_vs_x[4].GetBinContent(i) + plotList_amplitude_vs_x[5].GetBinContent(i)
          if (totalAmp > 0):

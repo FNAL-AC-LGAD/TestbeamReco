@@ -8,7 +8,6 @@
 #include <TEfficiency.h>
 #include <TFile.h>
 #include <iostream>
-#include <numeric>
 
 Analyze::Analyze()
 {
@@ -48,22 +47,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             my_histos.emplace( ("relFrac_bottom"+r+s).c_str(), std::make_shared<TH1D>( ("relFrac_bottom"+r+s).c_str(), ("relFrac_bottom"+r+s).c_str(), 100, 0.0, 1.0 ) ) ;
             my_histos.emplace( ("relFrac_left"+r+s).c_str(), std::make_shared<TH1D>( ("relFrac_left"+r+s).c_str(), ("relFrac_left"+r+s).c_str(), 100, 0.0, 1.0 ) ) ;
             my_histos.emplace( ("relFrac_right"+r+s).c_str(), std::make_shared<TH1D>( ("relFrac_right"+r+s).c_str(), ("relFrac_right"+r+s).c_str(), 100, 0.0, 1.0 ) ) ;
-        }
-        rowIndex++;
-    }
-    my_histos.emplace( "deltaX", std::make_shared<TH1D>( "deltaX", "deltaX; #X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5 ) );
 
-    //Per Channel 2D efficiencies
-    my_2d_histos.emplace( "relFracDC_vs_x_channel_top", std::make_shared<TH2D>( "relFracDC_vs_x_channel_top", "relFracDC_vs_x_channel_top; X [mm]; relFrac", (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
-
-    rowIndex = 0;
-    for(const auto& row : geometry) 
-    {
-        if(row.size()<2) continue;
-        for(unsigned int i = 0; i < row.size(); i++) 
-        {
-            const auto& r = std::to_string(rowIndex);
-            const auto& s = std::to_string(i);            
             my_2d_histos.emplace( ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
             my_2d_prof.emplace( ("efficiency_vs_xy_highThreshold_prof_channel"+r+s).c_str(), std::make_shared<TProfile2D>( ("efficiency_vs_xy_highThreshold_prof_channel"+r+s).c_str(), ("efficiency_vs_xy_highThreshold_prof_channel"+r+s+"; X [mm]; Y [mm]").c_str(), xbins,xmin,xmax, ybins,ymin,ymax ) );
             my_2d_histos.emplace( ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
@@ -79,16 +63,23 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             my_2d_histos.emplace( ("amp_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel"+r+s).c_str(), ("amp_vs_x_channel"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("amp_vs_x_channel_top"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_top"+r+s).c_str(), ("amp_vs_x_channel_top"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("amp_vs_x_channel_bottom"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_bottom"+r+s).c_str(), ("amp_vs_x_channel_bottom"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
-            my_2d_histos.emplace( ("amp_vs_y_channel"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_y_channel"+r+s).c_str(), ("amp_vs_y_channel"+r+s+"; Y [mm]; amp").c_str(), (ymax-ymin)/0.1,ymin,ymax, 250,0.0,500) );
-            my_2d_histos.emplace( ("amp_vs_y_channel_left"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_y_channel_left"+r+s).c_str(), ("amp_vs_y_channel_left"+r+s+"; Y [mm]; amp").c_str(), (ymax-ymin)/0.1,ymin,ymax, 250,0.0,500) );
-            my_2d_histos.emplace( ("amp_vs_y_channel_right"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_y_channel_right"+r+s).c_str(), ("amp_vs_y_channel_right"+r+s+"; Y [mm]; amp").c_str(), (ymax-ymin)/0.1,ymin,ymax, 250,0.0,500) );            
+            //my_2d_histos.emplace( ("amp_vs_y_channel"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_y_channel"+r+s).c_str(), ("amp_vs_y_channel"+r+s+"; Y [mm]; amp").c_str(), (ymax-ymin)/0.1,ymin,ymax, 250,0.0,500) );
+            //my_2d_histos.emplace( ("amp_vs_y_channel_left"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_y_channel_left"+r+s).c_str(), ("amp_vs_y_channel_left"+r+s+"; Y [mm]; amp").c_str(), (ymax-ymin)/0.1,ymin,ymax, 250,0.0,500) );
+            //my_2d_histos.emplace( ("amp_vs_y_channel_right"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_y_channel_right"+r+s).c_str(), ("amp_vs_y_channel_right"+r+s+"; Y [mm]; amp").c_str(), (ymax-ymin)/0.1,ymin,ymax, 250,0.0,500) );            
+
+            //Define 3D histograms
+            my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
         }
         rowIndex++;
     }
-    
+    my_histos.emplace( "deltaX", std::make_shared<TH1D>( "deltaX", "deltaX; #X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5 ) );
+
+    //Global 2D efficiencies
+    my_2d_histos.emplace( "relFracDC_vs_x_channel_top", std::make_shared<TH2D>( "relFracDC_vs_x_channel_top", "relFracDC_vs_x_channel_top; X [mm]; relFrac", (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
+
     //Global 2D efficiencies
     my_2d_histos.emplace( "efficiency_vs_xy_highThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_highThreshold_numerator", "efficiency_vs_xy_highThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
-    my_2d_prof.emplace( "efficiency_vs_xy_highThreshold_prof", std::make_shared<TProfile2D>( "efficiency_vs_xy_highThreshold_prof_channel", "efficiency_vs_xy_highThreshold_prof_channel; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax ) );
+    my_2d_prof.emplace( "efficiency_vs_xy_highThreshold_prof", std::make_shared<TProfile2D>( "efficiency_vs_xy_highThreshold_prof", "efficiency_vs_xy_highThreshold_prof; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_lowThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_lowThreshold_numerator", "efficiency_vs_xy_lowThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_denominator", std::make_shared<TH2D>( "efficiency_vs_xy_denominator", "efficiency_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "efficiencyDC_vs_xy_denominator", std::make_shared<TH2D>( "efficiencyDC_vs_xy_denominator", "efficiencyDC_vs_xy_denominator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
@@ -105,6 +96,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_2d_histos.emplace( "Xtrack_vs_Amp2OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp2OverAmp123", "Xtrack_vs_Amp2OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
     my_2d_histos.emplace( "Xtrack_vs_Amp3OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp3OverAmp123", "Xtrack_vs_Amp3OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
 
+    my_3d_histos.emplace( "totamplitude_vs_xy_channel", std::make_shared<TH3D>( "totamplitude_vs_xy_channel", "totamplitude_vs_xy_channel; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
+
     ///average waveforms  
     for(unsigned int iw = 0; iw < boxes_XY.size(); iw++)
     {
@@ -116,26 +109,12 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             {
     		const auto& r = std::to_string(rowIndex);
     		const auto& s = std::to_string(i);   
-    		my_2d_histos.emplace( ("avg_wave"+r+s).c_str(), std::make_shared<TH2D>( ("avg_wave"+r+s).c_str(), ("avg_wave"+r+s+"; t[ns]; V[mV]").c_str(), 2000,-230,-180, 100,50,-450 ) );
+                my_2d_histos.emplace( ("avg_wave"+r+s).c_str(), std::make_shared<TH2D>( ("avg_wave"+r+s).c_str(), ("avg_wave"+r+s+"; t[ns]; V[mV]").c_str(), 2000,-230,-180, 100,50,-450 ) );
             }
             rowIndex++;
         }
     }
   
-    //Define 3D histograms
-    rowIndex = 0;
-    for(const auto& row : geometry) 
-    {
-        if(row.size()<2) continue;
-        for(unsigned int i = 0; i < row.size(); i++) 
-        {
-            const auto& r = std::to_string(rowIndex);
-            const auto& s = std::to_string(i);            
-            my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.03,xmin,xmax, (ymax-ymin)/0.03,ymin,ymax, 500,0,500 ) );	
-        }
-        rowIndex++;
-    }
-
     //Define 2d prof
     my_2d_prof.emplace("efficiency_vs_xy_DCRing", std::make_shared<TProfile2D>("efficiency_vs_xy_DCRing", "efficiency_vs_xy_DCRing; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax ) );	
     my_2d_prof.emplace("efficiency_vs_xy_Strip2or5", std::make_shared<TProfile2D>("efficiency_vs_xy_Strip2or5", "efficiency_vs_xy_Strip2or5; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax ) );	
@@ -182,7 +161,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //const auto& run = tr.getVar<int>("run");
         const auto& amp = tr.getVec<float>("amp");
         const auto& corrAmp = tr.getVec<double>("corrAmp");
-        const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
+        const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
         const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
         const auto& LP2_20 = tr.getVec<float>("LP2_20");
         const auto& timeLGAD = utility::remapToLGADgeometry(tr, LP2_20, "timeLGAD");
@@ -198,25 +177,21 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
         //const auto& channel = tr.getVecVec<float>("channel");
         //const auto& time = tr.getVecVec<float>("time");
-        bool passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
-        bool pass = passTrigger && hitSensor;
+        const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
+        const auto& amp2Indexes = tr.getVar<std::pair<int,int>>("amp2Indexes");
+        const auto& amp3Indexes = tr.getVar<std::pair<int,int>>("amp3Indexes");
+        const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
+        const auto& relFracDC = tr.getVar<double>("relFracDC");
+        const auto& relFrac = tr.getVec<double>("relFrac");
+        const auto& totGoodAmpLGAD = tr.getVar<double>("totGoodAmpLGAD");
 
-	//Find max channel and 2nd,3rd channels
-        const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1);
-        const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, 2);
-        const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, 3);
-        double maxAmpLGAD = ampLGAD[amp1Indexes.first][amp1Indexes.second];
-        double totAmp = 0.0;
-        for(auto row : ampLGAD) totAmp += std::accumulate(row.begin(), row.end(), 0.0);
-        double relFracDC = corrAmp[0]/totAmp;
-        std::vector<double> relFrac;
-        for(auto row : ampLGAD){ for(auto i : row) relFrac.emplace_back(i/totAmp);}
+        //Define selection bools
+        bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
+        bool passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
+        bool pass = passTrigger && hitSensor && goodPhotek;
 
 	//Compute position-sensitive variables
-        //Only good for strip sensors currently
 	double xCenterMaxStrip = 0;
-	double xCenterStrip2 = 0;
-	double xCenterStrip3 = 0;
         double Amp1 = 0.0, Amp2 = 0.0, Amp3 = 0.0;
 	double Amp1OverAmp1and2 = 0;
 	double Amp1OverAmp123 = 0, Amp2OverAmp123 = 0, Amp3OverAmp123 = 0;
@@ -227,21 +202,19 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         int Amp3Index = amp3Indexes.second;
 	if (maxAmpIndex >= 0 && Amp2Index>=0) 
         {
-            Amp1 = ampLGAD[0][maxAmpIndex];
-            Amp2 = ampLGAD[0][Amp2Index];
-            xCenterMaxStrip = stripCenterXPositionLGAD[0][maxAmpIndex];
-            xCenterStrip2 = stripCenterXPositionLGAD[0][Amp2Index];
-            Amp1OverAmp1and2 = ampLGAD[0][maxAmpIndex] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index]);
+            Amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
+            Amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
+            Amp1OverAmp1and2 = Amp1 / (Amp1 + Amp2);
+            xCenterMaxStrip = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
+            deltaXmax = x - xCenterMaxStrip;
             if (Amp3Index >= 0) 
             {
-                Amp3 = ampLGAD[0][Amp3Index];
-                xCenterStrip3 = stripCenterXPositionLGAD[0][Amp3Index];
-                Amp2OverAmp2and3= ampLGAD[0][Amp2Index] / (ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
-                Amp1OverAmp123 = ampLGAD[0][maxAmpIndex] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
-                Amp2OverAmp123 = ampLGAD[0][Amp2Index] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
-                Amp3OverAmp123 = ampLGAD[0][Amp3Index] / (ampLGAD[0][maxAmpIndex] + ampLGAD[0][Amp2Index] + ampLGAD[0][Amp3Index]);
+                Amp3 = ampLGAD[amp3Indexes.first][amp3Indexes.second];
+                Amp2OverAmp2and3 = Amp2 / (Amp2 + Amp3);
+                Amp1OverAmp123 = Amp1 / (Amp1 + Amp2 + Amp3);
+                Amp2OverAmp123 = Amp2 / (Amp1 + Amp2 + Amp3);
+                Amp3OverAmp123 = Amp3 / (Amp1 + Amp2 + Amp3);
             }
-            deltaXmax = x - xCenterMaxStrip;
 	}
 
 	//******************************************************************
@@ -304,173 +277,173 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 	//******************************************************************
         //Make cuts and fill histograms here
 	//******************************************************************
-        if(pass && maxAmpLGAD > 50) 
+        utility::fillHisto(pass, my_2d_histos["relFracDC_vs_x_channel_top"], x,relFracDC);
+        utility::fillHisto(pass, my_2d_histos["efficiency_vs_xy_denominator"], x,y);
+
+        utility::fillHisto(passTrigger, my_2d_prof["efficiency_vs_xy_DCRing"], x,y,amp[0]>30);
+
+        //only fill the global a1/(a1+a2) if the max amp strip is not one of the edge strips
+        bool notEdgeScript = maxAmpIndex >= 1 && maxAmpIndex <= 4;
+        utility::fillHisto(pass && notEdgeScript, my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax"], fabs(deltaXmax), Amp1OverAmp1and2);
+        utility::fillHisto(pass && notEdgeScript, my_2d_histos["Amp1OverAmp123_vs_deltaXmax"], fabs(deltaXmax), Amp1OverAmp123);
+        utility::fillHisto(pass && notEdgeScript, my_2d_histos["Xtrack_vs_Amp1OverAmp123"], x, Amp1OverAmp123);
+        utility::fillHisto(pass && notEdgeScript, my_2d_histos["Xtrack_vs_Amp2OverAmp123"], x, Amp2OverAmp123);
+        utility::fillHisto(pass && notEdgeScript, my_2d_histos["Xtrack_vs_Amp3OverAmp123"], x, Amp3OverAmp123);
+        utility::fillHisto(pass && notEdgeScript, my_1d_prof["Xtrack_vs_Amp1OverAmp123_prof"], x, Amp1OverAmp123);
+        utility::fillHisto(pass && notEdgeScript, my_1d_prof["Xtrack_vs_Amp2OverAmp123_prof"], x, Amp2OverAmp123);
+        utility::fillHisto(pass && notEdgeScript, my_1d_prof["Xtrack_vs_Amp3OverAmp123_prof"], x, Amp3OverAmp123);
+
+        utility::fillHisto(pass && (maxAmpLGAD > 50), my_3d_histos["totamplitude_vs_xy_channel"], x,y,totGoodAmpLGAD);
+
+        //Loop over each channel in each sensor
+        int rowIndex = 0;
+        for(const auto& row : ampLGAD)
         {
-            my_2d_histos["relFracDC_vs_x_channel_top"]->Fill(x, relFracDC);
-
-            int rowIndex = 0;
-            for(const auto& row : ampLGAD)
+            bool goodHitGlobal = false;
+            for(unsigned int i = 0; i < row.size(); i++)
             {
-                for(unsigned int i = 0; i < row.size(); i++)
+                const auto& r = std::to_string(rowIndex);
+                const auto& s = std::to_string(i);
+                double time = timeLGAD[rowIndex][i]*10e9;
+                double photekTime = LP2_20[photekIndex]*10e9;
+
+                int LGAD_index = rowIndex*row.size()+i; //geometry[rowIndex][i]-1;
+                utility::fillHisto(pass, my_histos["amp"+r+s], ampLGAD[rowIndex][i]);
+                utility::fillHisto(pass, my_histos["relFrac"+r+s], relFrac[LGAD_index]);
+                utility::fillHisto(pass, my_2d_histos["relFrac_vs_x_channel"+r+s], x,relFrac[LGAD_index]);
+                utility::fillHisto(pass, my_2d_histos["relFrac_vs_y_channel"+r+s], y,relFrac[LGAD_index]);
+                utility::fillHisto(pass, my_2d_histos["amp_vs_x_channel"+r+s], x,ampLGAD[rowIndex][i]);
+                //utility::fillHisto(pass, , );
+
+	        //reconstruction position		 
+                //Only works for strips 
+                utility::fillHisto(pass && maxAmpIndex == int(i), my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s], deltaXmax, Amp1OverAmp1and2);
+                utility::fillHisto(pass && maxAmpIndex == int(i), my_histos["ampMax"+r+s], ampLGAD[rowIndex][i]);
+
+                auto ampLeft = (i != 0) ? ampLGAD[rowIndex][i-1] : 0.0;
+                auto ampRight = (i != row.size()-1) ? ampLGAD[rowIndex][i+1] : 0.0;
+                bool goodHit = ampLGAD[rowIndex][i] > 50.0 && ampLGAD[rowIndex][i] > ampLeft && ampLGAD[rowIndex][i] > ampRight;
+                if(i==1 || i==4) goodHitGlobal = goodHitGlobal || goodHit;
+                utility::fillHisto(passTrigger && maxAmpIndex == int(i), my_2d_prof["efficiency_vs_xy_highThreshold_prof"], x,y,goodHit);
+                utility::fillHisto(passTrigger && ampLGAD[rowIndex][i] > 30.0 && maxAmpIndex == int(i), my_histos["timeDiff_channel"+r+s], time-photekTime);
+
+                if(doSlices)
                 {
-                    const auto& r = std::to_string(rowIndex);
-                    const auto& s = std::to_string(i);
-                    int LGAD_index = rowIndex*row.size()+i; //geometry[rowIndex][i]-1;
+                    //in bottom row
+                    bool inBottomRow = pass && y>ySlices[0][0] && y<ySlices[0][1];
+                    utility::fillHisto(inBottomRow, my_histos["relFrac_bottom"+r+s], relFrac[LGAD_index]);
+                    utility::fillHisto(inBottomRow, my_2d_histos["relFrac_vs_x_channel_bottom"+r+s], x, relFrac[LGAD_index]);
+                    utility::fillHisto(inBottomRow, my_2d_histos["amp_vs_x_channel_bottom"+r+s], x, ampLGAD[rowIndex][i]);
 
-                    my_histos["amp"+r+s]->Fill(ampLGAD[rowIndex][i], 1.0);
-                    if(maxAmpIndex == int(i)) my_histos["ampMax"+r+s]->Fill(ampLGAD[rowIndex][i], 1.0); /// This only works for single row sensors...
-                    my_histos["relFrac"+r+s]->Fill(relFrac[LGAD_index], 1.0);
-                    my_2d_histos["relFrac_vs_x_channel"+r+s]->Fill(x, relFrac[LGAD_index]);
-                    my_2d_histos["relFrac_vs_y_channel"+r+s]->Fill(y, relFrac[LGAD_index]);
-                    if(doSlices)
-                    {
-                    	//in bottom row
-                    	if(y > ySlices[0][0] && y<ySlices[0][1])
-                        {
-                            my_histos["relFrac_bottom"+r+s]->Fill(relFrac[LGAD_index], 1.0);
-                            my_2d_histos["relFrac_vs_x_channel_bottom"+r+s]->Fill(x, relFrac[LGAD_index]);
-                            my_2d_histos["amp_vs_x_channel_bottom"+r+s]->Fill(x, ampLGAD[rowIndex][i]);
-                        }
-                    	//in top row
-                    	if(y > ySlices[1][0] && y<ySlices[1][1])
-                        {
-                            my_histos["relFrac_top"+r+s]->Fill(relFrac[LGAD_index], 1.0);
-                            my_2d_histos["relFrac_vs_x_channel_top"+r+s]->Fill(x, relFrac[LGAD_index]);
-                            my_2d_histos["amp_vs_x_channel_top"+r+s]->Fill(x, ampLGAD[rowIndex][i]);
-                            const auto& LP2_20 = tr.getVec<float>("LP2_20");
-                            if(timeLGAD[rowIndex][i]!=0 && LP2_20[photekIndex]!=0) my_2d_histos["delay_vs_x_channel_top"+r+s]->Fill(x, 1e9*(timeLGAD[rowIndex][i] - LP2_20[photekIndex]));                            
-                    	}
-                    }
-
-		    //reconstruction position		 
-		    
-		    if (maxAmpIndex== int(i)) 
-                    {
-                        my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s]->Fill(deltaXmax, Amp1OverAmp1and2);
-		    }
+                    //in top row
+                    bool inTopRow = pass && y>ySlices[1][0] && y<ySlices[1][1];
+                    utility::fillHisto(inTopRow, my_histos["relFrac_top"+r+s], relFrac[LGAD_index]);
+                    utility::fillHisto(inTopRow, my_2d_histos["relFrac_vs_x_channel_top"+r+s], x, relFrac[LGAD_index]);
+                    utility::fillHisto(inTopRow, my_2d_histos["amp_vs_x_channel_top"+r+s], x, ampLGAD[rowIndex][i]);
+                    utility::fillHisto(inTopRow && timeLGAD[rowIndex][i]!=0 && LP2_20[photekIndex]!=0, my_2d_histos["delay_vs_x_channel_top"+r+s], x, 1e9*(timeLGAD[rowIndex][i] - LP2_20[photekIndex]));
                 }
-                rowIndex++;
             }
-	    //only fill the global a1/(a1+a2) if the max amp strip is not one of the edge strips
-	    if (maxAmpIndex >= 1 && maxAmpIndex <= 4) 
-            {
-                my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax"]->Fill(fabs(deltaXmax), Amp1OverAmp1and2);
-                my_2d_histos["Amp1OverAmp123_vs_deltaXmax"]->Fill(fabs(deltaXmax), Amp1OverAmp123);
-                my_2d_histos["Xtrack_vs_Amp1OverAmp123"]->Fill(x, Amp1OverAmp123);
-                my_2d_histos["Xtrack_vs_Amp2OverAmp123"]->Fill(x, Amp2OverAmp123);
-                my_2d_histos["Xtrack_vs_Amp3OverAmp123"]->Fill(x, Amp3OverAmp123);
-                my_1d_prof["Xtrack_vs_Amp1OverAmp123_prof"]->Fill(x, Amp1OverAmp123);
-                my_1d_prof["Xtrack_vs_Amp2OverAmp123_prof"]->Fill(x, Amp2OverAmp123);
-                my_1d_prof["Xtrack_vs_Amp3OverAmp123_prof"]->Fill(x, Amp3OverAmp123);
-	    }
+            utility::fillHisto(passTrigger, my_2d_prof["efficiency_vs_xy_Strip2or5"], x,y,goodHitGlobal);
+            rowIndex++;
         }
 
 	//******************************************************************
 	//Efficiency
 	//******************************************************************
-
-        if(passTrigger) 
-        {
-            my_2d_prof["efficiency_vs_xy_DCRing"]->Fill(x,y,amp[0]>30);
-
-	    for(const auto& row : ampLGAD)  
-            {
-                int rowIndex = 0;
-                auto maxAmpRowIter = std::max_element(ampLGAD[rowIndex].begin(),ampLGAD[rowIndex].end());
-                int maxAmpRowIndex = std::distance(ampLGAD[rowIndex].begin(), maxAmpRowIter);
-                bool goodHitGlobal = false;
-                for(unsigned int i = 0; i < row.size(); i++)  
-                {
-                    const auto& r = std::to_string(rowIndex);
-                    const auto& s = std::to_string(i);
-
-                    auto ampLeft = (i != 0) ? ampLGAD[rowIndex][i-1] : 0.0;
-                    auto ampRight = (i != row.size()-1) ? ampLGAD[rowIndex][i+1] : 0.0;
-
-                    bool goodHit = ampLGAD[rowIndex][i] > 50.0 && ampLGAD[rowIndex][i] > ampLeft && ampLGAD[rowIndex][i] > ampRight;
-                    my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s]->Fill(x,y,goodHit);
-
-                    double time = timeLGAD[rowIndex][i]*10e9;
-                    double photekTime = LP2_20[photekIndex]*10e9;
-
-                    if(i==1 || i==4) goodHitGlobal = goodHitGlobal || goodHit;
-                    if(int(i)==maxAmpRowIndex)
-                    {
-                        my_2d_prof["efficiency_vs_xy_highThreshold_prof"]->Fill(x,y,goodHit);
-                        if(ampLGAD[rowIndex][i] > 30.0) my_histos["timeDiff_channel"+r+s]->Fill(time-photekTime);
-                    }
-                }
-                my_2d_prof["efficiency_vs_xy_Strip2or5"]->Fill(x,y,goodHitGlobal);
-                rowIndex++;
-            }
-        }
+        //if(passTrigger) 
+        //{
+	//    for(const auto& row : ampLGAD)  
+        //    {
+        //        //int rowIndex = 0;
+        //        //auto maxAmpRowIter = std::max_element(ampLGAD[rowIndex].begin(),ampLGAD[rowIndex].end());
+        //        //int maxAmpRowIndex = std::distance(ampLGAD[rowIndex].begin(), maxAmpRowIter);
+        //        //bool goodHitGlobal = false;
+        //        for(unsigned int i = 0; i < row.size(); i++)  
+        //        {
+        //            const auto& r = std::to_string(rowIndex);
+        //            const auto& s = std::to_string(i);
+        //
+        //            auto ampLeft = (i != 0) ? ampLGAD[rowIndex][i-1] : 0.0;
+        //            auto ampRight = (i != row.size()-1) ? ampLGAD[rowIndex][i+1] : 0.0;
+        //
+        //            bool goodHit = ampLGAD[rowIndex][i] > 50.0 && ampLGAD[rowIndex][i] > ampLeft && ampLGAD[rowIndex][i] > ampRight;
+        //            //my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s]->Fill(x,y,goodHit);
+        //
+        //            double time = timeLGAD[rowIndex][i]*10e9;
+        //            double photekTime = LP2_20[photekIndex]*10e9;
+        //
+        //            if(i==1 || i==4) goodHitGlobal = goodHitGlobal || goodHit;
+        //            if(int(i)==maxAmpRowIndex)
+        //            {
+        //                my_2d_prof["efficiency_vs_xy_highThreshold_prof"]->Fill(x,y,goodHit);
+        //                if(ampLGAD[rowIndex][i] > 30.0) my_histos["timeDiff_channel"+r+s]->Fill(time-photekTime);
+        //            }
+        //        }
+        //        my_2d_prof["efficiency_vs_xy_Strip2or5"]->Fill(x,y,goodHitGlobal);
+        //        rowIndex++;
+        //    }
+        //}
 
 	//******************************************************************
 	//Make cuts and fill histograms here
 	//******************************************************************
 	if(pass) 
         {
-            //Require at least 50 mV signal on Photek
-            if (corrAmp[photekIndex] > photekSignalThreshold) 
+            bool hasGlobalSignal_highThreshold = false;
+            bool hasGlobalSignal_lowThreshold = false;
+            int clusterSize = 0;
+            int rowIndex = 0;
+
+            if(corrAmp[0] > signalAmpThreshold)
             {
-                my_2d_histos["efficiency_vs_xy_denominator"]->Fill(x,y);
-
-                bool hasGlobalSignal_highThreshold = false;
-                bool hasGlobalSignal_lowThreshold = false;
-                int clusterSize = 0;
-                int rowIndex = 0;
-
-                if(corrAmp[0] > signalAmpThreshold)
+                my_2d_histos["efficiencyDC_vs_xy_numerator"]->Fill(x,y);
+	    }
+            for(const auto& row : ampLGAD)  
+            {	      
+                for(unsigned int i = 0; i < row.size(); i++)
                 {
-                    my_2d_histos["efficiencyDC_vs_xy_numerator"]->Fill(x,y);
-		}
-                for(const auto& row : ampLGAD)  
-                {	      
-                    for(unsigned int i = 0; i < row.size(); i++)
+                    const auto& r = std::to_string(rowIndex);
+                    const auto& s = std::to_string(i);
+
+                    my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i] > signalAmpThreshold);
+
+                    if (ampLGAD[rowIndex][i] > noiseAmpThreshold) 
                     {
-                        const auto& r = std::to_string(rowIndex);
-                        const auto& s = std::to_string(i);
-
-                        if (ampLGAD[rowIndex][i] > noiseAmpThreshold) 
-                        {
-                            hasGlobalSignal_lowThreshold = true; 
-                            clusterSize++;
-                            if (maxAmpLGAD > 50) my_3d_histos["amplitude_vs_xy_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
-                            my_2d_histos["efficiency_vs_xy_lowThreshold_numerator_channel"+r+s]->Fill(x,y);		  
-                        }
-				
-                        if (ampLGAD[rowIndex][i] > signalAmpThreshold) 
-                        {
-                            hasGlobalSignal_highThreshold = true; 
-                            my_2d_histos["efficiency_vs_xy_highThreshold_numerator_channel"+r+s]->Fill(x,y);
-                            my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i] > signalAmpThreshold);
-                        }
+                        hasGlobalSignal_lowThreshold = true; 
+                        clusterSize++;
+                        if (maxAmpLGAD > 50) my_3d_histos["amplitude_vs_xy_channel"+r+s]->Fill(x,y,ampLGAD[rowIndex][i]);
+                        my_2d_histos["efficiency_vs_xy_lowThreshold_numerator_channel"+r+s]->Fill(x,y);		  
                     }
-                    rowIndex++;
+	    		
+                    if (ampLGAD[rowIndex][i] > signalAmpThreshold) 
+                    {
+                        hasGlobalSignal_highThreshold = true; 
+                        my_2d_histos["efficiency_vs_xy_highThreshold_numerator_channel"+r+s]->Fill(x,y);
+                    }
                 }
+                rowIndex++;
+            }
 
-                if (hasGlobalSignal_lowThreshold) my_2d_histos["efficiency_vs_xy_lowThreshold_numerator"]->Fill(x,y);
-                if (hasGlobalSignal_highThreshold) 
-                {
-                    my_2d_histos["efficiency_vs_xy_highThreshold_numerator"]->Fill(x,y);
-                    my_2d_histos["clusterSize_vs_x"]->Fill(x,clusterSize);
-                }
+            if (hasGlobalSignal_lowThreshold) my_2d_histos["efficiency_vs_xy_lowThreshold_numerator"]->Fill(x,y);
+            if (hasGlobalSignal_highThreshold) 
+            {
+                my_2d_histos["efficiency_vs_xy_highThreshold_numerator"]->Fill(x,y);
+                my_2d_histos["clusterSize_vs_x"]->Fill(x,clusterSize);
+            }
 
-                // for(const auto box : boxes_XY){
-                // 	if(box.size()==4){
-                // 	if(x > box[0] && x < box[1] && y>box[2] && y<box[3]){
-                // 		for(uint isam=0; isam < channel[0].size();isam++){
-                // 			// printf("%0.2f %0.2f \n",channel[1][isam],time[0][isam]);
-                // 			my_2d_histos["avg_wave00"]->Fill(1e9*time[0][isam],channel[1][isam]);
-                // 			my_2d_histos["avg_wave01"]->Fill(1e9*time[0][isam],channel[2][isam]);
-                // 			my_2d_histos["avg_wave10"]->Fill(1e9*time[0][isam],channel[3][isam]);
-                // 			my_2d_histos["avg_wave11"]->Fill(1e9*time[0][isam],channel[4][isam]);
-                // 		}
-                // 	}
-                // 	}
-                // }
-
-            } //if it passes Photek threshold
+            // for(const auto box : boxes_XY){
+            // 	if(box.size()==4){
+            // 	if(x > box[0] && x < box[1] && y>box[2] && y<box[3]){
+            // 		for(uint isam=0; isam < channel[0].size();isam++){
+            // 			// printf("%0.2f %0.2f \n",channel[1][isam],time[0][isam]);
+            // 			my_2d_histos["avg_wave00"]->Fill(1e9*time[0][isam],channel[1][isam]);
+            // 			my_2d_histos["avg_wave01"]->Fill(1e9*time[0][isam],channel[2][isam]);
+            // 			my_2d_histos["avg_wave10"]->Fill(1e9*time[0][isam],channel[3][isam]);
+            // 			my_2d_histos["avg_wave11"]->Fill(1e9*time[0][isam],channel[4][isam]);
+            // 		}
+            // 	}
+            // 	}
+            // }
         } //if there's a valid track
 	//******************************************************************
 

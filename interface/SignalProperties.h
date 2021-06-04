@@ -8,18 +8,43 @@ class SignalProperties
 private:
     void signalProperties([[maybe_unused]] NTupleReader& tr)
     {
-        // Add code here: will process this function per event
-        // Make variables that you want to run in other parts of the code/Fill into histograms
+        const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");        
+        const auto& corrAmp = tr.getVec<double>("corrAmp");
+        const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
 
-        // Example of getting variables from the TTree
-        // const auto& run = tr.getVar<int>("run");
-        // const auto& amp = tr.getVec<float>("amp");
+	//Find max channel and 2nd,3rd channels
+        const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1);
+        const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, 2);
+        const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, 3);
+        tr.registerDerivedVar("amp1Indexes", amp1Indexes);
+        tr.registerDerivedVar("amp2Indexes", amp2Indexes);
+        tr.registerDerivedVar("amp3Indexes", amp3Indexes);
 
-        // Example of adding variables on-the-fly
-        // double x = 100;
-        // tr.registerDerivedVar("keyName", x);
-        // auto& x = tr.createDerivedVec<double>("keyName");
-        // x = {100, 100};
+        //Find max LGAD amp
+        double maxAmpLGAD = ampLGAD[amp1Indexes.first][amp1Indexes.second];
+        tr.registerDerivedVar("maxAmpLGAD", maxAmpLGAD);
+        
+        //Find total amplatude
+        double totAmpLGAD = 0.0;
+        double totGoodAmpLGAD = 0.0;
+        for(auto row : ampLGAD)
+        {
+            totAmpLGAD += std::accumulate(row.begin(), row.end(), 0.0);
+            for(auto amp : row)
+            {
+                if(amp > signalAmpThreshold) totGoodAmpLGAD += amp;
+            }
+        }
+        tr.registerDerivedVar("totAmpLGAD", totAmpLGAD);
+        tr.registerDerivedVar("totGoodAmpLGAD", totGoodAmpLGAD);
+
+        //Find rel fraction of all LGADS
+        auto& relFrac = tr.createDerivedVec<double>("relFrac");
+        for(auto row : ampLGAD){ for(auto i : row) relFrac.emplace_back(i/totAmpLGAD);}
+
+        //Find rel fraction of DC amp vs. LGAD amp
+        tr.registerDerivedVar("relFracDC", corrAmp[0]/totAmpLGAD);
+
     }
 public:
     SignalProperties()
