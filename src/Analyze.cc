@@ -62,7 +62,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             my_2d_histos.emplace( ("amp_vs_x_channel_bottom"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_bottom"+r+s).c_str(), ("amp_vs_x_channel_bottom"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
 
             //Define 3D histograms
-            my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.3,xmin,xmax, (ymax-ymin)/0.3,ymin,ymax, 500,0,500 ) );	
+            my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
         }
         rowIndex++;
     }
@@ -90,7 +90,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_2d_histos.emplace( "Xtrack_vs_Amp2OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp2OverAmp123", "Xtrack_vs_Amp2OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
     my_2d_histos.emplace( "Xtrack_vs_Amp3OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp3OverAmp123", "Xtrack_vs_Amp3OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
 
-    my_3d_histos.emplace( "totamplitude_vs_xy_channel", std::make_shared<TH3D>( "totamplitude_vs_xy_channel", "totamplitude_vs_xy_channel; X [mm]; Y [mm]", (xmax-xmin)/0.3,xmin,xmax, (ymax-ymin)/0.3,ymin,ymax, 500,0,500 ) );	
+    my_3d_histos.emplace( "totamplitude_vs_xy_channel", std::make_shared<TH3D>( "totamplitude_vs_xy_channel", "totamplitude_vs_xy_channel; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
 
     /////average waveforms  
     //for(unsigned int iw = 0; iw < boxes_XY.size(); iw++)
