@@ -11,6 +11,9 @@ private:
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");        
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
+        const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
+        const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
+        const auto& x = tr.getVar<double>("x");
 
 	//Find max channel and 2nd,3rd channels
         const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1);
@@ -45,6 +48,40 @@ private:
         //Find rel fraction of DC amp vs. LGAD amp
         tr.registerDerivedVar("relFracDC", corrAmp[0]/totAmpLGAD);
 
+        //Compute position-sensitive variables
+	double xCenterMaxStrip = 0;
+        double Amp1 = 0.0, Amp2 = 0.0, Amp3 = 0.0;
+	double Amp1OverAmp1and2 = 0;
+	double Amp1OverAmp123 = 0, Amp2OverAmp123 = 0, Amp3OverAmp123 = 0;
+	double Amp2OverAmp2and3 = 0;
+	double deltaXmax = -999;
+        int maxAmpIndex = amp1Indexes.second;
+        int Amp2Index = amp2Indexes.second;
+        int Amp3Index = amp3Indexes.second;
+	if (maxAmpIndex >= 0 && Amp2Index>=0) 
+        {
+            Amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
+            Amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
+            Amp1OverAmp1and2 = Amp1 / (Amp1 + Amp2);
+            xCenterMaxStrip = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
+            deltaXmax = x - xCenterMaxStrip;
+            if (Amp3Index >= 0) 
+            {
+                Amp3 = ampLGAD[amp3Indexes.first][amp3Indexes.second];
+                Amp2OverAmp2and3 = Amp2 / (Amp2 + Amp3);
+                Amp1OverAmp123 = Amp1 / (Amp1 + Amp2 + Amp3);
+                Amp2OverAmp123 = Amp2 / (Amp1 + Amp2 + Amp3);
+                Amp3OverAmp123 = Amp3 / (Amp1 + Amp2 + Amp3);
+            }
+	}
+        tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
+        tr.registerDerivedVar("Amp2Index", Amp2Index);
+        tr.registerDerivedVar("deltaXmax", deltaXmax);
+        tr.registerDerivedVar("Amp1OverAmp1and2", Amp1OverAmp1and2);
+        tr.registerDerivedVar("Amp2OverAmp2and3", Amp2OverAmp2and3);
+        tr.registerDerivedVar("Amp1OverAmp123", Amp1OverAmp123);
+        tr.registerDerivedVar("Amp2OverAmp123", Amp2OverAmp123);
+        tr.registerDerivedVar("Amp3OverAmp123", Amp3OverAmp123);
     }
 public:
     SignalProperties()
