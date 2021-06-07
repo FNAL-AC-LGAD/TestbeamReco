@@ -8,6 +8,7 @@ class SignalProperties
 private:
     void signalProperties([[maybe_unused]] NTupleReader& tr)
     {
+        const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");        
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
@@ -27,19 +28,35 @@ private:
         double maxAmpLGAD = ampLGAD[amp1Indexes.first][amp1Indexes.second];
         tr.registerDerivedVar("maxAmpLGAD", maxAmpLGAD);
         
-        //Find total amplatude
+        //Find  amplatude related variables
         double totAmpLGAD = 0.0;
         double totGoodAmpLGAD = 0.0;
+        bool hasGlobalSignal_highThreshold = false;
+        bool hasGlobalSignal_lowThreshold = false;
+        int clusterSize = 0;
         for(auto row : ampLGAD)
         {
             totAmpLGAD += std::accumulate(row.begin(), row.end(), 0.0);
             for(auto amp : row)
             {
-                if(amp > signalAmpThreshold) totGoodAmpLGAD += amp;
+                if(amp > signalAmpThreshold)
+                {
+                    hasGlobalSignal_highThreshold = true;
+                    totGoodAmpLGAD += amp;
+                }
+
+                if(amp > noiseAmpThreshold) 
+                {
+                    hasGlobalSignal_lowThreshold = true; 
+                    clusterSize++;
+                }
             }
         }
         tr.registerDerivedVar("totAmpLGAD", totAmpLGAD);
         tr.registerDerivedVar("totGoodAmpLGAD", totGoodAmpLGAD);
+        tr.registerDerivedVar("hasGlobalSignal_highThreshold", hasGlobalSignal_highThreshold);
+        tr.registerDerivedVar("hasGlobalSignal_lowThreshold", hasGlobalSignal_lowThreshold);
+        tr.registerDerivedVar("clusterSize", clusterSize);
 
         //Find rel fraction of all LGADS
         auto& relFrac = tr.createDerivedVec<double>("relFrac");

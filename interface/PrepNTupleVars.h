@@ -48,6 +48,10 @@ private:
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
         tr.registerDerivedVar<bool>("hitSensor", hitSensor);
+
+        // Define useful time var
+        const auto& LP2_20 = tr.getVec<float>("LP2_20");
+        utility::remapToLGADgeometry(tr, LP2_20, "timeLGAD");
     }
 
 public:
