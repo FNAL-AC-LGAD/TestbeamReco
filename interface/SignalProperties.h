@@ -79,7 +79,10 @@ private:
         {
             Amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
             Amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
+            Amp1 = (Amp1 > 0.0) ? Amp1 : 0.0;
+            Amp2 = (Amp2 > 0.0) ? Amp2 : 0.0;
             Amp1OverAmp1and2 = Amp1 / (Amp1 + Amp2);
+            Amp1OverAmp1and2 = (Amp1OverAmp1and2 > 0.0) ? Amp1OverAmp1and2 : 0.0;
             xCenterMaxStrip = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
             deltaXmax = x - xCenterMaxStrip;
             if (Amp3Index >= 0) 
