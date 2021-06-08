@@ -48,6 +48,20 @@ private:
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
         tr.registerDerivedVar<bool>("hitSensor", hitSensor);
+
+        // Correct the time variable
+        const auto& LP2_20 = tr.getVec<float>("LP2_20");
+        const auto& timeCalibrationCorrection = tr.getVar<std::map<int,double>>("timeCalibrationCorrection");
+        auto& corrTime = tr.createDerivedVec<double>("corrTime");
+        int counter = 0;
+        for(auto thisTime : LP2_20)
+        {
+            double corr = timeCalibrationCorrection.at(counter);
+            if(thisTime == 0.0) corr = 0.0;
+            corrTime.emplace_back(1e9*thisTime + corr);
+            counter++;
+        }
+        utility::remapToLGADgeometry(tr, corrTime, "timeLGAD");
     }
 
 public:
