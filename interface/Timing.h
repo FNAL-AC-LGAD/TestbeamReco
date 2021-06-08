@@ -10,7 +10,7 @@ private:
     {
         //const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
-        const auto& timeLGAD = tr.getVec<std::vector<float>>("timeLGAD");
+        const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
 
         //-------------------------------------------------------
         //Code from https://github.com/cmorgoth/AC_LGAD_Timing 
@@ -38,7 +38,7 @@ private:
             {
                 const auto& amp = ampLGAD[rowIndex][i];
                 const auto& time = timeLGAD[rowIndex][i];
-                if(sum_amp > 110 && (time != 0.0) )
+                if(time != 0.0)
                 {
                     auto amp_frac = amp/sum_amp;
                     weighted_time += amp_frac*time;
