@@ -33,11 +33,8 @@ public:
     double photekSignalThreshold = 50.0; //in mV
     double noiseAmpThreshold = 10.0;      //in mV
     double signalAmpThreshold = 30.0;    //in mV        
-    double enablePositionReconstruction = 0.0;   
-    double positionRecoPar0 = -1;
-    double positionRecoPar1 = -1;
-    double positionRecoPar2 = -1;
-    double positionRecoPar3 = -1;
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {-1};
     std::vector<std::vector<double>> sensorEdges = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> xSlices = {{-999.9, 999.9}, {-999.9, 999.9}};
@@ -76,10 +73,7 @@ public:
     double noiseAmpThreshold = voltageDependenceMap[voltage].noiseAmpThreshold;
     double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold; 
     double enablePositionReconstruction = 1.0;   
-    double positionRecoPar0 = 0.8129;
-    double positionRecoPar1 = -3.599;
-    double positionRecoPar2 = 5.735;
-    double positionRecoPar3 = -3.166; 
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-0.1, 9.8}, { 0.8, 11.6}};
 };
 
@@ -113,11 +107,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;  
-    double positionRecoPar0 = 0.8129;
-    double positionRecoPar1 = -3.599;
-    double positionRecoPar2 = 5.735;
-    double positionRecoPar3 = -3.166; 
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-6.39, 9.14}, {-3.21, 12.20}};
 };
 
@@ -151,11 +142,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;      
-    double positionRecoPar0 = 0.8129;
-    double positionRecoPar1 = -3.599;
-    double positionRecoPar2 = 5.735;
-    double positionRecoPar3 = -3.166; 
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-6.89, 9.14}, {-3.73, 12.20}};
 };
 
@@ -189,11 +177,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;      
-    double positionRecoPar0 = 0.8129;
-    double positionRecoPar1 = -3.599;
-    double positionRecoPar2 = 5.735;
-    double positionRecoPar3 = -3.166; 
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-7.29, 9.18}, {-4.24, 12.25}};
 };
 
@@ -227,11 +212,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 90.0;
-    double enablePositionReconstruction = 0.0;   
-    double positionRecoPar0 = -1.0; //hack from BNL for now
-    double positionRecoPar1 = -1.0;
-    double positionRecoPar2 = -1.0;
-    double positionRecoPar3 = -1.0;
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.}};
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
     std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
@@ -268,11 +250,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;   
-    double positionRecoPar0 = -1.0; //hack from BNL for now
-    double positionRecoPar1 = -1.0;
-    double positionRecoPar2 = -1.0;
-    double positionRecoPar3 = -1.0;
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-5.7 , 9.7}, { -4.65, 10.85}};
     std::vector<std::vector<double>> ySlices = {{9.85, 10.15}, {10.35, 10.65}};
     std::vector<std::vector<double>> xSlices = {{-5.55, -5.25}, {-5.05, -4.75}};
@@ -313,11 +292,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;   
-    double positionRecoPar0 = -1.0;
-    double positionRecoPar1 = -1.0;
-    double positionRecoPar2 = -1.0;
-    double positionRecoPar3 = -1.0; 
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-4.33, -0.41}, {-0.11, 1.10}};
 
 };
@@ -356,11 +332,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;   
-    double positionRecoPar0 = -1.0;
-    double positionRecoPar1 = -1.0;
-    double positionRecoPar2 = -1.0;
-    double positionRecoPar3 = -1.0; 
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-4.45, 0.16}, {-0.01, 1.58}};
 
 };
@@ -395,11 +368,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;   
-    double positionRecoPar0 = -1.0;
-    double positionRecoPar1 = -1.0;
-    double positionRecoPar2 = -1.0;
-    double positionRecoPar3 = -1.0; 
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-6.60, 9.40}, {-4.44, 11.51}};
 };
 
@@ -432,11 +402,8 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;   
-    double positionRecoPar0 = -1.0;
-    double positionRecoPar1 = -1.0;
-    double positionRecoPar2 = -1.0;
-    double positionRecoPar3 = -1.0; 
+    double enablePositionReconstruction = 0.0;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};    
 };
 
