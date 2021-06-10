@@ -102,8 +102,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_2d_histos.emplace( "Xtrack_vs_Amp2OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp2OverAmp123", "Xtrack_vs_Amp2OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
     my_2d_histos.emplace( "Xtrack_vs_Amp3OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp3OverAmp123", "Xtrack_vs_Amp3OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
 
-    my_3d_histos.emplace( "totgoodamplitude_vs_xy_channel", std::make_shared<TH3D>( "totgoodamplitude_vs_xy_channel", "totgoodamplitude_vs_xy_channel; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
-    my_3d_histos.emplace( "totamplitude_vs_xy_channel", std::make_shared<TH3D>( "totamplitude_vs_xy_channel", "totamplitude_vs_xy_channel; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
+    my_3d_histos.emplace( "totgoodamplitude_vs_xy", std::make_shared<TH3D>( "totgoodamplitude_vs_xy", "totgoodamplitude_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
+    my_3d_histos.emplace( "totamplitude_vs_xy", std::make_shared<TH3D>( "totamplitude_vs_xy", "totamplitude_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
+    my_3d_histos.emplace( "amp123_vs_xy", std::make_shared<TH3D>( "amp123_vs_xy", "amp123_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );
+    my_3d_histos.emplace( "amp12_vs_xy", std::make_shared<TH3D>( "amp12_vs_xy", "amp12_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
     my_3d_histos.emplace( "timeDiff_vs_xy", std::make_shared<TH3D>( "timeDiff_vs_xy", "timeDiff_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
     my_3d_histos.emplace( "weighted_timeDiff_vs_xy", std::make_shared<TH3D>( "weighted_timeDiff_vs_xy", "weighted_timeDiff_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
 
@@ -180,6 +182,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& relFrac = tr.getVec<double>("relFrac");
         const auto& totAmpLGAD = tr.getVar<double>("totAmpLGAD");
         const auto& totGoodAmpLGAD = tr.getVar<double>("totGoodAmpLGAD");
+        const auto& Amp123 = tr.getVar<double>("Amp123");
+        const auto& Amp12 = tr.getVar<double>("Amp12");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
         const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
         const auto& deltaXmax = tr.getVar<double>("deltaXmax");
@@ -225,8 +229,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && notEdgeStrip && goodMaxLGADAmp, my_2d_histos["Xreco_vs_Xtrack"], x,x_reco);
         utility::fillHisto(pass && highRelAmp1, my_2d_histos["deltaX_vs_Xtrack_A1OverA12Above0p75"], x,x_reco-x);	    
         utility::fillHisto(pass && highRelAmp1, my_2d_histos["Amp2OverAmp2and3_vs_deltaXmax"], deltaXmax,Amp2OverAmp2and3);
-        utility::fillHisto(pass && goodMaxLGADAmp, my_3d_histos["totgoodamplitude_vs_xy_channel"], x,y,totGoodAmpLGAD);
-        utility::fillHisto(pass && goodMaxLGADAmp, my_3d_histos["totamplitude_vs_xy_channel"], x,y,totAmpLGAD);
+        utility::fillHisto(pass && goodMaxLGADAmp, my_3d_histos["totgoodamplitude_vs_xy"], x,y,totGoodAmpLGAD);
+        utility::fillHisto(pass && goodMaxLGADAmp, my_3d_histos["totamplitude_vs_xy"], x,y,totAmpLGAD);
+        utility::fillHisto(pass && goodMaxLGADAmp, my_3d_histos["amp123_vs_xy"], x,y, Amp123);
+        utility::fillHisto(pass && goodMaxLGADAmp, my_3d_histos["amp12_vs_xy"], x,y, Amp12);
         utility::fillHisto(pass && goodDCAmp, my_2d_histos["efficiencyDC_vs_xy_numerator"], x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold, my_2d_histos["efficiency_vs_xy_lowThreshold_numerator"], x,y);
         utility::fillHisto(pass && hasGlobalSignal_highThreshold, my_2d_histos["efficiency_vs_xy_highThreshold_numerator"], x,y);
