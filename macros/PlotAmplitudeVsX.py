@@ -32,7 +32,7 @@ if (RunFits):
     th3_amplitude_vs_xy_channel04 = inputfile.Get("amplitude_vs_xy_channel04")
     th3_amplitude_vs_xy_channel05 = inputfile.Get("amplitude_vs_xy_channel05")
     
-    th3_amplitude_vs_xy_channelall = inputfile.Get("totamplitude_vs_xy_channel")    
+    th3_amplitude_vs_xy_channelall = inputfile.Get("amp123_vs_xy")    
 
     #list_th3_amplitude_vs_xy = []
     #list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel00)
@@ -125,9 +125,9 @@ if (RunFits):
             ##For Debugging
             tmpHist.Draw("hist")
             myLanGausFunction.Draw("same")
-            #canvas.SaveAs("q_"+str(i)+"_"+channel+".gif")
+            #canvas.SaveAs("q_"+str(i)+"_"+str(channel)+".gif")
 
-            if (tmpHist.GetEntries() == 0 or not (value == value) or value<0 or value>1000): #or myTotalEvents<200):
+            if (tmpHist.GetEntries() == 0 or not (value == value) or value<0): # or value>1000): #or myTotalEvents<200):
                value = 0
             #print(myTotalEvents)
             print ("Bin : " + str(i) + " -> " + str(value))

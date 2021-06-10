@@ -71,6 +71,8 @@ private:
 	double Amp1OverAmp1and2 = 0;
 	double Amp1OverAmp123 = 0, Amp2OverAmp123 = 0, Amp3OverAmp123 = 0;
 	double Amp2OverAmp2and3 = 0;
+        double Amp12=0;
+        double Amp123 = 0;
 	double deltaXmax = -999;
         int maxAmpIndex = amp1Indexes.second;
         int Amp2Index = amp2Indexes.second;
@@ -88,10 +90,12 @@ private:
             if (Amp3Index >= 0) 
             {
                 Amp3 = ampLGAD[amp3Indexes.first][amp3Indexes.second];
-                Amp2OverAmp2and3 = Amp2 / (Amp2 + Amp3);
-                Amp1OverAmp123 = Amp1 / (Amp1 + Amp2 + Amp3);
-                Amp2OverAmp123 = Amp2 / (Amp1 + Amp2 + Amp3);
-                Amp3OverAmp123 = Amp3 / (Amp1 + Amp2 + Amp3);
+                Amp12 = Amp1 + Amp2;
+                Amp123 = Amp1 + Amp2 + Amp3;
+                Amp2OverAmp2and3 = Amp2 / Amp12;
+                Amp1OverAmp123 = Amp1 / Amp123;
+                Amp2OverAmp123 = Amp2 / Amp123;
+                Amp3OverAmp123 = Amp3 / Amp123;
             }
 	}
         tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
@@ -102,6 +106,8 @@ private:
         tr.registerDerivedVar("Amp1OverAmp123", Amp1OverAmp123);
         tr.registerDerivedVar("Amp2OverAmp123", Amp2OverAmp123);
         tr.registerDerivedVar("Amp3OverAmp123", Amp3OverAmp123);
+        tr.registerDerivedVar("Amp12", Amp12);
+        tr.registerDerivedVar("Amp123", Amp123);
     }
 public:
     SignalProperties()
