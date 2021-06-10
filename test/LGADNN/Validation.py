@@ -111,10 +111,15 @@ class Validation:
             h.Draw("he sames")
             plotMax = h.GetMaximum()
 
-            fit = ROOT.TF1("fit", "gaus")    
+            myMean = h.GetMean()
+            myRMS = h.GetRMS()
+            fitlow = myMean - 1.2*myRMS
+            fithigh = myMean + myRMS
+
+            fit = ROOT.TF1("fit", "gaus", fitlow, fithigh)    
             fit.SetLineColor(ROOT.kRed)
             fit.Draw("same")    
-            h.Fit(fit)
+            h.Fit(fit,"Q", "", fitlow, fithigh)
             fit.Draw("same")    
 
         hdummy.SetMaximum(plotMax*1.1)
