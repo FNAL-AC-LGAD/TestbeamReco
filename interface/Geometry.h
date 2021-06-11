@@ -96,7 +96,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};    
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.570712}, {2,10.601730}, {3,10.589803}, {4,10.526534}, {5,10.596760}, {6,10.578494}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, -4.68, 4.85, -5.02, -5.20, -5.40, -5.72, 0.0};
     int numLGADchannels = 6;
     double angle = 1.3;
@@ -131,7 +131,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};    
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.102707}, {2,10.026717}, {3,10.232438}, {4,10.357673}, {5,10.544784}, {6,10.526426}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.74, -4.91, -5.06, -5.20, -5.38, 0.0};
     int numLGADchannels = 6;
     double angle =  1.3;
@@ -166,7 +166,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};    
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.007110}, {2,10.348299}, {3,10.365704}, {4,10.390483}, {5,10.374036}, {6,10.417291}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, -4.58, -4.72, -4.80, -4.89, -5.00, -5.14, 0.0};
     int numLGADchannels = 6;
     double angle = 1.3;
@@ -200,7 +200,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.421985}, {2,10.454729}, {3,10.396641}, {4,10.386091}, {5,0.0}, {6,0.0}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, -5.50, -6.00, -6.00, -5.50,  0.0};
     std::vector<double> stripCenterYPosition = {0.0, 10.57, 10.57, 10.11, 10.11, 0.0};
     int numLGADchannels = 4;
@@ -238,7 +238,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.354758}, {2,10.415612}, {3,10.323457}, {4,10.325366}, {5,0.0}, {6,0.0}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}; //will fix this later but code for pad efficiency plots is not fully working
     int numLGADchannels = 4;
@@ -280,7 +280,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};    
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.476853}, {2,10.328344}, {3,10.477243}, {4,10.328026}, {5,10.494593}, {6,10.401719}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 0.941, 0.890, 0.822, 0.722, 0.621, 0.544, 0.0};
     int numLGADchannels = 6;
@@ -320,7 +320,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {6,5,4,3,2,1}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.363155}, {2,10.446376}, {3,10.280995}, {4,10.397997}, {5,10.286721}, {6,10.419460}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 0.701, 0.599, 0.524, 0.434, 0.351, 0.290, 0.0};
     int numLGADchannels = 6;
