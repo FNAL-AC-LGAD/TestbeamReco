@@ -60,7 +60,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1/1.043}, {2,1/1.000}, {3,1/1.078}, {4,1/1.084}, {5,1/1.067}, {6,1/1.017}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.517951}, {2,10.610938}, {3,10.586828}, {4,10.533996}, {5,10.566337}, {6,10.582618}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.555185226}, {2,10.659094357}, {3,10.647274798}, {4,10.607507832}, {5,10.643264564}, {6,10.662114527}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.235, 0.135, 0.0};
     int numLGADchannels = 6;
     std::map<int,VoltageDependence> voltageDependenceMap = {{200,{2.0,8.0}}, {210,{3.5,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
@@ -73,7 +73,7 @@ public:
     double noiseAmpThreshold = voltageDependenceMap[voltage].noiseAmpThreshold;
     double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold; 
     double enablePositionReconstruction = 1.0;   
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
+    std::vector<double> positionRecoPar = {51.8472, -484.776, 1878.16, -3849.65, 4395.84, -2647.04,  655.29};
     std::vector<std::vector<double>> sensorEdges = {{-0.1, 9.8}, { 0.8, 11.6}};
 };
 
