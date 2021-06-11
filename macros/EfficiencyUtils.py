@@ -158,7 +158,7 @@ def Plot1DEfficiencyWithFit( tree, plotname, topTitle, xAxisTitle, xAxisRangeLow
 
         n1 = int(num.GetBinContent(b+1));
         n2 = int(den.GetBinContent(b+1));
-        print ("numerator: " + str(n1) + " and denominator: " + str(n2))
+        #print ("numerator: " + str(n1) + " and denominator: " + str(n2))
         if (n1 > n2):
             n1 = n2;
 
@@ -170,12 +170,12 @@ def Plot1DEfficiencyWithFit( tree, plotname, topTitle, xAxisTitle, xAxisRangeLow
           errHigh = TEfficiency.ClopperPearson(n2, n1, 0.68269, True) - ratio;
     
 
-        print (" done bin " + str(b) + " " + str(xtemp) + " : " + str(n1) + "(" + str(num.GetBinContent(b+1)) + ")" + " / " + str(n2) + "(" + str(den.GetBinContent(b+1)) + ")" + " = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
+        #print (" done bin " + str(b) + " " + str(xtemp) + " : " + str(n1) + "(" + str(num.GetBinContent(b+1)) + ")" + " / " + str(n2) + "(" + str(den.GetBinContent(b+1)) + ")" + " = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
         ytemp = ratio
         yerrlowtemp = errLow
         yerrhightemp = errHigh
       
-        print ("x: " + str(xtemp) + " and y: " + str(ytemp))
+        #print ("x: " + str(xtemp) + " and y: " + str(ytemp))
 
         x.append(xtemp);  
         y.append(ytemp); 
@@ -290,7 +290,7 @@ def Plot1DEfficiencyWithBkgSubtraction( tree, num, den, axis, pixel, plotname, t
             xPositionSelection = " && x_dut[2] > 19.5 && x_dut[2] < 20.5 "
             yPositionSelection = " && y_dut[2] > 23.0 && y_dut[2] < 23.5 "
 
-        print ("noise selection = " + noiseSelection + " " + str(noiseSelectionCRFraction))
+        #print ("noise selection = " + noiseSelection + " " + str(noiseSelectionCRFraction))
 
         positionSelectionString = ""
         if (axis == "x"):
@@ -299,7 +299,7 @@ def Plot1DEfficiencyWithBkgSubtraction( tree, num, den, axis, pixel, plotname, t
             positionSelectionString = xPositionSelection + " && y_dut[2] > "+str(num.GetXaxis().GetBinLowEdge(b+1))+ " && y_dut[2] < " + str(num.GetXaxis().GetBinUpEdge(b+1)) + " "
 
 
-        print ("numerator: " + "ntracks==1 && y_dut[0] > 0 && npix>0 && nback>0 " + positionSelectionString + " && ((t_peak[3] - t_peak[0])*1e9 > 6 && (t_peak[3] - t_peak[0])*1e9  < 16)")
+        #print ("numerator: " + "ntracks==1 && y_dut[0] > 0 && npix>0 && nback>0 " + positionSelectionString + " && ((t_peak[3] - t_peak[0])*1e9 > 6 && (t_peak[3] - t_peak[0])*1e9  < 16)")
 
 
         ampHist = TH1F("ampHist"+"_"+str(b),";Amplitude [mV]; Number of Events", 25,0,50)
@@ -308,7 +308,7 @@ def Plot1DEfficiencyWithBkgSubtraction( tree, num, den, axis, pixel, plotname, t
         tmpNumeratorNoiseControlRegionCount = tree.GetEntries("ntracks==1 && y_dut[0] > 0 && npix>0 && nback>0 " + positionSelectionString + " && ((t_peak[3] - t_peak[0])*1e9 > 6 && (t_peak[3] - t_peak[0])*1e9  < 16) " + noiseSelection)
         tmpNumeratorSignalCount = tmpNumeratorTotalCount - tmpNumeratorNoiseControlRegionCount / noiseSelectionCRFraction
 
-        print ("ntracks==1 && y_dut[0] > 0 && npix>0 && nback>0 " + positionSelectionString + " && ((t_peak[3] - t_peak[0])*1e9 > 6 && (t_peak[3] - t_peak[0])*1e9  < 16) " + noiseSelection)
+        #print ("ntracks==1 && y_dut[0] > 0 && npix>0 && nback>0 " + positionSelectionString + " && ((t_peak[3] - t_peak[0])*1e9 > 6 && (t_peak[3] - t_peak[0])*1e9  < 16) " + noiseSelection)
 
         ratio = 0
         errLow = 0
@@ -316,7 +316,7 @@ def Plot1DEfficiencyWithBkgSubtraction( tree, num, den, axis, pixel, plotname, t
 
         n1 = int(tmpNumeratorSignalCount);
         n2 = int(denominatorCount);
-        print ("numerator: " + str(n1) + " and denominator: " + str(n2))
+        #print ("numerator: " + str(n1) + " and denominator: " + str(n2))
         if (n1 > n2):
             n1 = n2;
 
@@ -328,14 +328,14 @@ def Plot1DEfficiencyWithBkgSubtraction( tree, num, den, axis, pixel, plotname, t
           errHigh = TEfficiency.ClopperPearson(n2, n1, 0.68269, True) - ratio;
     
 
-        print (" done bin " + str(b) + " : " + str(num.GetXaxis().GetBinLowEdge(b+1)) + " - " + str(num.GetXaxis().GetBinUpEdge(b+1)))
-        print (" num = " + str(n1)+" = " + str(tmpNumeratorTotalCount) + " - " + str(tmpNumeratorNoiseControlRegionCount) + " / " + str(noiseSelectionCRFraction) + " | den = " + str(n2) )
-        print ("ratio = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
+        #print (" done bin " + str(b) + " : " + str(num.GetXaxis().GetBinLowEdge(b+1)) + " - " + str(num.GetXaxis().GetBinUpEdge(b+1)))
+        #print (" num = " + str(n1)+" = " + str(tmpNumeratorTotalCount) + " - " + str(tmpNumeratorNoiseControlRegionCount) + " / " + str(noiseSelectionCRFraction) + " | den = " + str(n2) )
+        #print ("ratio = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
         ytemp = ratio / timeWindowCutEfficiency #here we correct for the time window cut inefficiency
         yerrlowtemp = errLow
         yerrhightemp = errHigh
       
-        print ("x: " + str(xtemp) + " and y: " + str(ytemp))
+        #print ("x: " + str(xtemp) + " and y: " + str(ytemp))
 
         x.append(xtemp);  
         y.append(ytemp); 
@@ -404,7 +404,7 @@ def Plot1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
 
         n1 = int(num.GetBinContent(b+1));
         n2 = int(den.GetBinContent(b+1));
-        print ("numerator: " + str(n1) + " and denominator: " + str(n2))
+        #print ("numerator: " + str(n1) + " and denominator: " + str(n2))
         if (n1 > n2):
             n1 = n2;
 
@@ -416,12 +416,12 @@ def Plot1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
           errHigh = TEfficiency.ClopperPearson(n2, n1, 0.68269, True) - ratio;
     
 
-        print (" done bin " + str(b) + " " + str(xtemp) + " : " + str(n1) + "(" + str(num.GetBinContent(b+1)) + ")" + " / " + str(n2) + "(" + str(den.GetBinContent(b+1)) + ")" + " = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
+        #print (" done bin " + str(b) + " " + str(xtemp) + " : " + str(n1) + "(" + str(num.GetBinContent(b+1)) + ")" + " / " + str(n2) + "(" + str(den.GetBinContent(b+1)) + ")" + " = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
         ytemp = ratio
         yerrlowtemp = errLow
         yerrhightemp = errHigh
       
-        print ("x: " + str(xtemp) + " and y: " + str(ytemp))
+        #print ("x: " + str(xtemp) + " and y: " + str(ytemp))
 
         x.append(xtemp);  
         y.append(ytemp); 
@@ -484,7 +484,7 @@ def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
 
         n1 = int(num.GetBinContent(b+1));
         n2 = int(den.GetBinContent(b+1));
-        print ("numerator: " + str(n1) + " and denominator: " + str(n2))
+        #print ("numerator: " + str(n1) + " and denominator: " + str(n2))
         if (n1 > n2):
             n1 = n2;
 
@@ -496,12 +496,12 @@ def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
           errHigh = TEfficiency.ClopperPearson(n2, n1, 0.68269, True) - ratio;
     
 
-        print (" done bin " + str(b) + " " + str(xtemp) + " : " + str(n1) + "(" + str(num.GetBinContent(b+1)) + ")" + " / " + str(n2) + "(" + str(den.GetBinContent(b+1)) + ")" + " = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
+        #print (" done bin " + str(b) + " " + str(xtemp) + " : " + str(n1) + "(" + str(num.GetBinContent(b+1)) + ")" + " / " + str(n2) + "(" + str(den.GetBinContent(b+1)) + ")" + " = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
         ytemp = ratio
         yerrlowtemp = errLow
         yerrhightemp = errHigh
       
-        print ("x: " + str(xtemp) + " and y: " + str(ytemp))
+        #print ("x: " + str(xtemp) + " and y: " + str(ytemp))
 
         x.append(xtemp);  
         y.append(ytemp); 

@@ -20,3 +20,15 @@ source setup.sh
 
 Can find all dataset options in the `sampleCollections.cfg` and  `sampleSets.cfg ` inside the `test` directory
 
+Recipe to make plots
+```
+cd <WorkingArea>/TestbeamReco/test
+./MyAnalysis -A Analyze -H myoutputfile.root -D BNL2020_220V
+cd ../macros
+python DoPositionRecoFit.py
+python plot1DRes.py
+python PlotAmplitudeVsX.py
+python PlotEfficiency.py
+python PlotTimeDiffVsXY.py
+```
+

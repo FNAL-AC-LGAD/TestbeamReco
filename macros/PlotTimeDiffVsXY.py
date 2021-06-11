@@ -39,8 +39,7 @@ names = [
 ]
 
 #Build timeDiff histograms
-efficiency_vs_xy_numerator = inputfile.Get("efficiency_vs_xy_highThreshold_numerator")
-timeDiff_vs_xy = efficiency_vs_xy_numerator.Clone("timeDiff_vs_xy_channel")
+timeDiff_vs_xy = th3_timeDiff.Project3D("yx").Clone("timeDiff_vs_xy_channel")
 timeDiff_vs_xy_channel00 = timeDiff_vs_xy.Clone("timeDiff_vs_xy_channel00")
 timeDiff_vs_xy_channel01 = timeDiff_vs_xy.Clone("timeDiff_vs_xy_channel01")
 timeDiff_vs_xy_channel02 = timeDiff_vs_xy.Clone("timeDiff_vs_xy_channel02")

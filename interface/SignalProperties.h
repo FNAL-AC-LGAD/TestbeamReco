@@ -6,6 +6,11 @@
 class SignalProperties
 {
 private:
+    template<typename T> inline T stayPositive(const T value) const
+    {
+        return (value > 0.0) ? value : 0.0;
+    }    
+    
     void signalProperties([[maybe_unused]] NTupleReader& tr)
     {
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
@@ -66,38 +71,20 @@ private:
         tr.registerDerivedVar("relFracDC", corrAmp[0]/totAmpLGAD);
 
         //Compute position-sensitive variables
-	double xCenterMaxStrip = 0;
-        double Amp1 = 0.0, Amp2 = 0.0, Amp3 = 0.0;
-	double Amp1OverAmp1and2 = 0;
-	double Amp1OverAmp123 = 0, Amp2OverAmp123 = 0, Amp3OverAmp123 = 0;
-	double Amp2OverAmp2and3 = 0;
-        double Amp12=0;
-        double Amp123 = 0;
-	double deltaXmax = -999;
         int maxAmpIndex = amp1Indexes.second;
         int Amp2Index = amp2Indexes.second;
-        int Amp3Index = amp3Indexes.second;
-	if (maxAmpIndex >= 0 && Amp2Index>=0) 
-        {
-            Amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
-            Amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
-            Amp1 = (Amp1 > 0.0) ? Amp1 : 0.0;
-            Amp2 = (Amp2 > 0.0) ? Amp2 : 0.0;
-            Amp1OverAmp1and2 = Amp1 / (Amp1 + Amp2);
-            Amp1OverAmp1and2 = (Amp1OverAmp1and2 > 0.0) ? Amp1OverAmp1and2 : 0.0;
-            xCenterMaxStrip = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
-            deltaXmax = x - xCenterMaxStrip;
-            if (Amp3Index >= 0) 
-            {
-                Amp3 = ampLGAD[amp3Indexes.first][amp3Indexes.second];
-                Amp12 = Amp1 + Amp2;
-                Amp123 = Amp1 + Amp2 + Amp3;
-                Amp2OverAmp2and3 = Amp2 / Amp12;
-                Amp1OverAmp123 = Amp1 / Amp123;
-                Amp2OverAmp123 = Amp2 / Amp123;
-                Amp3OverAmp123 = Amp3 / Amp123;
-            }
-	}
+        double Amp1 = stayPositive(ampLGAD[amp1Indexes.first][amp1Indexes.second]);
+        double Amp2 = stayPositive(ampLGAD[amp2Indexes.first][amp2Indexes.second]);
+        double Amp3 = stayPositive(ampLGAD[amp3Indexes.first][amp3Indexes.second]);
+        double Amp12 = stayPositive(Amp1 + Amp2);
+        double Amp123 = stayPositive(Amp1 + Amp2 + Amp3);
+        double Amp1OverAmp1and2 = stayPositive(Amp1 / Amp12);
+        double Amp2OverAmp2and3 = stayPositive(Amp2 / Amp12);
+        double Amp1OverAmp123 = stayPositive(Amp1 / Amp123);
+        double Amp2OverAmp123 = stayPositive(Amp2 / Amp123);
+        double Amp3OverAmp123 = stayPositive(Amp3 / Amp123);
+        double xCenterMaxStrip = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
+        double deltaXmax = x - xCenterMaxStrip;
         tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
         tr.registerDerivedVar("Amp2Index", Amp2Index);
         tr.registerDerivedVar("deltaXmax", deltaXmax);

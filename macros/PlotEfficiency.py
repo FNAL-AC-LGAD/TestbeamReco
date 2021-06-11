@@ -6,7 +6,8 @@ gROOT.SetBatch( True )
 
 
 #inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210412.root")
-inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/myoutputfile.root")    
+#inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/myoutputfile.root")    
+inputfile = TFile("../test/myoutputfile.root")    
 
 
 efficiency_lowThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_lowThreshold_numerator")

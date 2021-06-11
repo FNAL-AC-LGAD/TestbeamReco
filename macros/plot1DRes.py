@@ -10,7 +10,7 @@ def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
         ROOT.gPad.SetBottomMargin(0.12)
         ROOT.gPad.SetTicks(1,1)
         ROOT.TH1.SetDefaultSumw2()
-        ROOT.gPad.SetLogy()
+        #ROOT.gPad.SetLogy()
 
         h = hists[0]
         h.GetXaxis().SetTitle(ylab)

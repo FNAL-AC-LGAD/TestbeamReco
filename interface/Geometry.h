@@ -73,8 +73,6 @@ public:
     double noiseAmpThreshold = voltageDependenceMap[voltage].noiseAmpThreshold;
     double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold; 
     double enablePositionReconstruction = 1.0;   
-    //std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
-    //std::vector<double> positionRecoPar = {16.5899,  -137.526,  458.012, -762.665,  634.212, -210.681};
     std::vector<double> positionRecoPar = {51.8472, -484.776, 1878.16, -3849.65, 4395.84, -2647.04,  655.29};
     std::vector<std::vector<double>> sensorEdges = {{-0.1, 9.8}, { 0.8, 11.6}};
 };

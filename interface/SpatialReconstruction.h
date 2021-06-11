@@ -33,7 +33,6 @@ private:
 
 	double x_reco = 0;
         double positionRecoMaxPoint = 0.75;
-	double positionRecoCutFitCutOffPoint = 0.735;
 	double x1 = 0;
 	double x2 = 0;
 	if (enablePositionReconstruction >= 1.0)
@@ -45,17 +44,7 @@ private:
             
             //use the poly fit function
             auto dX = getDX(positionRecoPar, Amp1OverAmp1and2);
-
-            //After the "cut-off" point of the fit, then linearly 
-            //interpolate to (Amp1OverAmp1and2=0.75,dX=0.0) point
-            if (Amp1OverAmp1and2 > positionRecoMaxPoint) 
-            {
-                dX = 0.0;                
-            }
-            //else if (Amp1OverAmp1and2 > positionRecoCutFitCutOffPoint) {
-            //    auto dX_atCutOffPoint = getDX(positionRecoPar, positionRecoCutFitCutOffPoint);
-            //    dX = dX_atCutOffPoint + ((0.0 - dX_atCutOffPoint)/(positionRecoMaxPoint - positionRecoCutFitCutOffPoint))*(Amp1OverAmp1and2 - positionRecoMaxPoint);
-            //}
+            dX = (Amp1OverAmp1and2 > positionRecoMaxPoint) ? 0.0 : dX;
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 	} //if enabled position reconstruction
