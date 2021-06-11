@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gROOT,gPad
+from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1
 import os
 import EfficiencyUtils
 import langaus
@@ -67,12 +67,12 @@ gPad.SetRightMargin(0.15)
 gPad.SetTopMargin(0.08)
 gPad.SetBottomMargin(0.12)
 gPad.SetTicks(1,1)
-fit = langaus.LanGausFit()
+#fit = langaus.LanGausFit()
 print("Finished setting up langaus fit class")
 
 #loop over X,Y bins
-for i in range(1, timeDiff_vs_xy.GetXaxis().GetNbins()):
-    for j in range(1, timeDiff_vs_xy.GetYaxis().GetNbins()):
+for i in range(0, timeDiff_vs_xy.GetXaxis().GetNbins()+1):
+    for j in range(0, timeDiff_vs_xy.GetYaxis().GetNbins()+1):
 
         ##For Debugging
         #if not (i==46 and j==5):
@@ -83,21 +83,28 @@ for i in range(1, timeDiff_vs_xy.GetXaxis().GetNbins()):
             myMean = tmpHist.GetMean()
             myRMS = tmpHist.GetRMS()
             nEvents = tmpHist.GetEntries()
+            fitlow = myMean - 1.5*myRMS
+            fithigh = myMean + 1.5*myRMS
             value = myRMS
 
             #Do Langaus fit if histogram mean is larger than 10
             #and mean is larger than RMS (a clear peak away from noise)
-            if (value > 0.0 and nEvents > 50):
-                tmpHist.Rebin(2)
+            if(nEvents > 50):
+                tmpHist.Rebin(4)
 
-                myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-2*myRMS,myMean+3*myRMS))
-                myMPV = myLanGausFunction.GetParameter(1)
-                mySigma = myLanGausFunction.GetParameter(3)
+                #myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-2*myRMS,myMean+3*myRMS))
+                fit = TF1('fit','gaus',fitlow,fithigh)
+                tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
+                #myMPV = myLanGausFunction.GetParameter(1)
+                #mySigma = myLanGausFunction.GetParameter(3)
+                myMPV = fit.GetParameter(1)
+                mySigma = fit.GetParameter(2)
                 value = 1000.0*mySigma
             
                 ##For Debugging
                 #tmpHist.Draw("hist")
-                #myLanGausFunction.Draw("same")
+                ##myLanGausFunction.Draw("same")
+                #fit.Draw("same")
                 #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
                 #
                 #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
@@ -113,7 +120,7 @@ for channel in range(0, len(list_timeDiff_vs_xy)):
     list_timeDiff_vs_xy[channel].SetStats(0)
     list_timeDiff_vs_xy[channel].SetTitle(names[channel])
     list_timeDiff_vs_xy[channel].SetMinimum(0.0)
-    list_timeDiff_vs_xy[channel].SetMaximum(50.0)
+    list_timeDiff_vs_xy[channel].SetMaximum(100.0)
 
     canvas.SaveAs("TimeRes_vs_xy_"+names[channel]+".gif")
     canvas.SaveAs("TimeRes_vs_xy_"+names[channel]+".pdf")

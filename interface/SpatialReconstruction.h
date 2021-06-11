@@ -52,10 +52,10 @@ private:
             {
                 dX = 0.0;                
             }
-            else if (Amp1OverAmp1and2 > positionRecoCutFitCutOffPoint) {
-                auto dX_atCutOffPoint = getDX(positionRecoPar, positionRecoCutFitCutOffPoint);
-                dX = dX_atCutOffPoint + ((0.0 - dX_atCutOffPoint)/(positionRecoMaxPoint - positionRecoCutFitCutOffPoint))*(Amp1OverAmp1and2 - positionRecoMaxPoint);
-            }
+            //else if (Amp1OverAmp1and2 > positionRecoCutFitCutOffPoint) {
+            //    auto dX_atCutOffPoint = getDX(positionRecoPar, positionRecoCutFitCutOffPoint);
+            //    dX = dX_atCutOffPoint + ((0.0 - dX_atCutOffPoint)/(positionRecoMaxPoint - positionRecoCutFitCutOffPoint))*(Amp1OverAmp1and2 - positionRecoMaxPoint);
+            //}
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 	} //if enabled position reconstruction

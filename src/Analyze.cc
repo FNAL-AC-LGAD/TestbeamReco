@@ -108,7 +108,6 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_3d_histos.emplace( "amp123_vs_xy", std::make_shared<TH3D>( "amp123_vs_xy", "amp123_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );
     my_3d_histos.emplace( "amp12_vs_xy", std::make_shared<TH3D>( "amp12_vs_xy", "amp12_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
     my_3d_histos.emplace( "timeDiff_vs_xy", std::make_shared<TH3D>( "timeDiff_vs_xy", "timeDiff_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
-    my_3d_histos.emplace( "weighted_timeDiff_vs_xy", std::make_shared<TH3D>( "weighted_timeDiff_vs_xy", "weighted_timeDiff_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
     my_3d_histos.emplace( "weighted_timeDiff_vs_xy", std::make_shared<TH3D>( "weighted_timeDiff_vs_xy", "weighted_timeDiff_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
 
     /////average waveforms  
