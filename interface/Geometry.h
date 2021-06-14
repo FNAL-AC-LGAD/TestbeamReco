@@ -30,10 +30,11 @@ public:
     double xmax =  -1;
     double ymin =  -1;
     double ymax =  -1; 
+    double positionRecoMaxPoint = 1.0;
     double photekSignalThreshold = 50.0; //in mV
     double noiseAmpThreshold = 10.0;      //in mV
     double signalAmpThreshold = 30.0;    //in mV        
-    double enablePositionReconstruction = 0.0;
+    bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {-1};
     std::vector<std::vector<double>> sensorEdges = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
@@ -69,10 +70,11 @@ public:
     double xmax =  1.5;
     double ymin =  9.5;
     double ymax = 12.0; 
+    double positionRecoMaxPoint = 0.75;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = voltageDependenceMap[voltage].noiseAmpThreshold;
     double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold; 
-    double enablePositionReconstruction = 1.0;   
+    bool enablePositionReconstruction = true;   
     std::vector<double> positionRecoPar = {51.8472, -484.776, 1878.16, -3849.65, 4395.84, -2647.04,  655.29};
     std::vector<std::vector<double>> sensorEdges = {{-0.1, 9.8}, { 0.8, 11.6}};
 };
@@ -100,15 +102,16 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, -4.68, 4.85, -5.02, -5.20, -5.40, -5.72, 0.0};
     int numLGADchannels = 6;
     double angle = 1.3;
-    double xmin = -8.0;
-    double xmax = -2.5;
-    double ymin =  8.0;
-    double ymax =  13.0; 
+    double xmin = -6.2;
+    double xmax = -4.4;
+    double ymin =  9.0;
+    double ymax =  12.5; 
+    double positionRecoMaxPoint = 0.85;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = {-10.1932, 82.0107, -254.384, 386.131, -288.176, 84.6899};
     std::vector<std::vector<double>> sensorEdges = {{-6.39, 9.14}, {-3.21, 12.20}};
 };
 
@@ -135,15 +138,16 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.74, -4.91, -5.06, -5.20, -5.38, 0.0};
     int numLGADchannels = 6;
     double angle =  1.3;
-    double xmin =  -7.5;
-    double xmax =  -3.0;
-    double ymin =   8.0;
-    double ymax =  13.0; 
+    double xmin =  -5.7;
+    double xmax =  -4.3;
+    double ymin =   9.0;
+    double ymax =  12.5;
+    double positionRecoMaxPoint = 0.8;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = { 7.35671, -59.0054, 191.994, -312.627, 254.084, -82.4947};
     std::vector<std::vector<double>> sensorEdges = {{-6.89, 9.14}, {-3.73, 12.20}};
 };
 
@@ -170,15 +174,16 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, -4.58, -4.72, -4.80, -4.89, -5.00, -5.14, 0.0};
     int numLGADchannels = 6;
     double angle = 1.3;
-    double xmin = -7.5;
-    double xmax = -3.0;
-    double ymin =  8.0;
-    double ymax =  13.0; 
+    double xmin = -5.4;
+    double xmax = -4.3;
+    double ymin =  9.0;
+    double ymax =  12.5;
+    double positionRecoMaxPoint = 0.73;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = {0.475097, -2.10666, 3.63713, -2.24911};
     std::vector<std::vector<double>> sensorEdges = {{-7.29, 9.18}, {-4.24, 12.25}};
 };
 
@@ -212,7 +217,7 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 90.0;
-    double enablePositionReconstruction = 0.0;
+    bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.}};
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
@@ -250,7 +255,7 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;
+    bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-5.7 , 9.7}, { -4.65, 10.85}};
     std::vector<std::vector<double>> ySlices = {{9.85, 10.15}, {10.35, 10.65}};
@@ -284,18 +289,17 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 0.941, 0.890, 0.822, 0.722, 0.621, 0.544, 0.0};
     int numLGADchannels = 6;
-    double angle = -0.2;
-    double xmin =  -4.5;
-    double xmax =   0.0;
-    double ymin =  -3.0;
-    double ymax =   3.0; 
+    double angle = -0.2 + 90.0;
+    double xmin =   0.2;
+    double xmax =   1.2;
+    double ymin =   0.0;
+    double ymax =   4.3;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;
+    double signalAmpThreshold = 30.0;//17.0;
+    bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
-    std::vector<std::vector<double>> sensorEdges = {{-4.33, -0.41}, {-0.11, 1.10}};
-
+    std::vector<std::vector<double>> sensorEdges = {{0.4, 0.5}, {1.0, 4.0}};
 };
 
 class HPKStripsC2NarrowMetalGeometry : public DefaultGeometry
@@ -324,7 +328,7 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 0.701, 0.599, 0.524, 0.434, 0.351, 0.290, 0.0};
     int numLGADchannels = 6;
-    double angle = -0.2;
+    double angle = -0.2 - 90.0;
     double xmin =  -4.5;
     double xmax =   0.0;
     double ymin =  -3.0;
@@ -332,7 +336,7 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;
+    bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-4.45, 0.16}, {-0.01, 1.58}};
 
@@ -361,15 +365,16 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, -4.785, -4.985, -5.192, -5.412, -5.586, -5.787, 0.0};
     int numLGADchannels = 6;
     double angle = 0.2;
-    double xmin = -8.0;
-    double xmax = -3.0;
-    double ymin =  8.0;
-    double ymax =  13.0; 
+    double xmin = -6.0;
+    double xmax = -4.5;
+    double ymin =  9.4;
+    double ymax =  11.4;
+    double positionRecoMaxPoint = 0.79;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
+    double noiseAmpThreshold = 8.0;
+    double signalAmpThreshold = 10.0;
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = {-0.0254199, 1.50893, -3.51021, 2.08929};
     std::vector<std::vector<double>> sensorEdges = {{-6.60, 9.40}, {-4.44, 11.51}};
 };
 
@@ -402,7 +407,7 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    double enablePositionReconstruction = 0.0;
+    bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};    
 };
