@@ -39,6 +39,7 @@ private:
         tr.registerDerivedVar("xmax", g.xmax);
         tr.registerDerivedVar("ymin", g.ymin);
         tr.registerDerivedVar("ymax", g.ymax);
+        tr.registerDerivedVar("positionRecoMaxPoint", g.positionRecoMaxPoint);
         tr.registerDerivedVar("photekSignalThreshold", g.photekSignalThreshold);
         tr.registerDerivedVar("noiseAmpThreshold", g.noiseAmpThreshold);
         tr.registerDerivedVar("signalAmpThreshold", g.signalAmpThreshold);

@@ -24,18 +24,16 @@ private:
 	//******************************************************************
 	//X-Position Reconstruction
 	//******************************************************************
-        const auto& enablePositionReconstruction = tr.getVar<double>("enablePositionReconstruction");
+        const auto& enablePositionReconstruction = tr.getVar<bool>("enablePositionReconstruction");
         const auto& positionRecoPar = tr.getVar<std::vector<double>>("positionRecoPar");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
         const auto& Amp2Index = tr.getVar<int>("Amp2Index");        
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
+        const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
 
-	double x_reco = 0;
-        double positionRecoMaxPoint = 0.75;
-	double x1 = 0;
-	double x2 = 0;
-	if (enablePositionReconstruction >= 1.0)
+	double x_reco = 0.0, x1 = 0.0, x2 = 0.0;
+	if(enablePositionReconstruction)
         {	  
             assert(Amp1OverAmp1and2 >= 0); //make sure a1/(a1+a2) is a sensible number
             assert(Amp1OverAmp1and2 <= 1);
