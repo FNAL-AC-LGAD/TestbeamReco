@@ -95,7 +95,7 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.968607463}, {2,1/1.0}, {3,1/0.999778063}, {4,1/1.083394557}, {5,1/1.077968592}, {6,1/1.05618820}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.570712}, {2,10.601730}, {3,10.589803}, {4,10.526534}, {5,10.596760}, {6,10.578494}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, -4.68, 4.85, -5.02, -5.20, -5.40, -5.72, 0.0};
     int numLGADchannels = 6;
@@ -130,7 +130,7 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.844395944}, {2,1.0/1.0}, {3,1.0/0.97974079}, {4,1.0/0.945585703}, {5,1.0/0.93672097}, {6,1.0/0.9387476}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.102707}, {2,10.026717}, {3,10.232438}, {4,10.357673}, {5,10.544784}, {6,10.526426}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.74, -4.91, -5.06, -5.20, -5.38, 0.0};
     int numLGADchannels = 6;
@@ -165,7 +165,7 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.021296378}, {2,1.0/1.0}, {3,1.0/0.990261996}, {4,1.0/1.013760435}, {5,1.0/1.055697466}, {6,1.0/1.127465085}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.007110}, {2,10.348299}, {3,10.365704}, {4,10.390483}, {5,10.374036}, {6,10.417291}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, -4.58, -4.72, -4.80, -4.89, -5.00, -5.14, 0.0};
     int numLGADchannels = 6;
@@ -279,7 +279,7 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.977824376}, {2,1.0/1.0}, {3,1.0/1.00937988}, {4,1.0/0.983872366}, {5,1.0/0.944341699}, {6,1.0/0.88594604}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.476853}, {2,10.328344}, {3,10.477243}, {4,10.328026}, {5,10.494593}, {6,10.401719}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 0.941, 0.890, 0.822, 0.722, 0.621, 0.544, 0.0};
@@ -319,7 +319,7 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,5}}, {2,{1,4}}, {3,{1,3}}, {4,{1,2}}, {5,{1,1}}, {6,{1,0}}, {7,{2,0}}};    
     std::vector<std::vector<int>> geometry = {{0}, {6,5,4,3,2,1}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.020824163}, {2,1.0/1.0}, {3,1.0/0.98984712}, {4,1.0/1.012187369}, {5,1.0/1.056183182}, {6,1.0/1.125062355}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.363155}, {2,10.446376}, {3,10.280995}, {4,10.397997}, {5,10.286721}, {6,10.419460}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 0.701, 0.599, 0.524, 0.434, 0.351, 0.290, 0.0};
@@ -356,7 +356,7 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.014141505}, {2,1.0/1.0}, {3,1.0/0.98719996}, {4,1.0/1.018744019}, {5,1.0/0.947666048}, {6,1.0/0.991277675}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.575768}, {2,10.483311}, {3,10.550070}, {4,10.571403}, {5,10.565505}, {6,10.531885}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, -4.785, -4.985, -5.192, -5.412, -5.586, -5.787, 0.0};
     int numLGADchannels = 6;
