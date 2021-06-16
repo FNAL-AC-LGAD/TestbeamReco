@@ -16,6 +16,8 @@ th3_timeDiff_vs_xy_channel03 = inputfile.Get("timeDiff_vs_xy_channel03")
 th3_timeDiff_vs_xy_channel04 = inputfile.Get("timeDiff_vs_xy_channel04")
 th3_timeDiff_vs_xy_channel05 = inputfile.Get("timeDiff_vs_xy_channel05")
 th3_timeDiff = inputfile.Get("timeDiff_vs_xy")
+th3_timeDiff_amp2 = inputfile.Get("timeDiff_vs_xy_amp2")
+th3_timeDiff_amp3 = inputfile.Get("timeDiff_vs_xy_amp3")
 th3_weighted_timeDiff = inputfile.Get("weighted_timeDiff_vs_xy")
 
 #Build 2D timeDiff vs x histograms
@@ -26,6 +28,8 @@ th2_timeDiff_vs_x_channel03 = th3_timeDiff_vs_xy_channel03.Project3D("zx")
 th2_timeDiff_vs_x_channel04 = th3_timeDiff_vs_xy_channel04.Project3D("zx")
 th2_timeDiff_vs_x_channel05 = th3_timeDiff_vs_xy_channel05.Project3D("zx")
 th2_timeDiff = th3_timeDiff.Project3D("zx")
+th2_timeDiff_amp2 = th3_timeDiff_amp2.Project3D("zx")
+th2_timeDiff_amp3 = th3_timeDiff_amp3.Project3D("zx")
 th2_weighted_timeDiff = th3_weighted_timeDiff.Project3D("zx")
 
 list_th2_timeDiff_vs_x = []
@@ -36,6 +40,8 @@ list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel03)
 list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel04)
 list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel05)
 list_th2_timeDiff_vs_x.append(th2_timeDiff)
+list_th2_timeDiff_vs_x.append(th2_timeDiff_amp2)
+list_th2_timeDiff_vs_x.append(th2_timeDiff_amp3)
 list_th2_timeDiff_vs_x.append(th2_weighted_timeDiff)
 
 names = [
@@ -46,6 +52,8 @@ names = [
     "channel_5",
     "channel_6",
     "time_diff",
+    "time_diff_amp2",
+    "time_diff_amp3",
     "weighted_time_diff",
 ]
 
@@ -58,6 +66,8 @@ timeDiff_vs_x_channel03 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel03")
 timeDiff_vs_x_channel04 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel04")
 timeDiff_vs_x_channel05 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel05")
 timeDiff_vs_x_timeDiff = timeDiff_vs_x.Clone("timeDiff")
+timeDiff_vs_x_timeDiff_amp2 = timeDiff_vs_x.Clone("timeDiff_amp2")
+timeDiff_vs_x_timeDiff_amp3 = timeDiff_vs_x.Clone("timeDiff_amp3")
 timeDiff_vs_x_weighted_timeDiff = timeDiff_vs_x.Clone("weighted_timeDiff")
 
 list_timeDiff_vs_x = []
@@ -68,6 +78,8 @@ list_timeDiff_vs_x.append(timeDiff_vs_x_channel03)
 list_timeDiff_vs_x.append(timeDiff_vs_x_channel04)
 list_timeDiff_vs_x.append(timeDiff_vs_x_channel05)
 list_timeDiff_vs_x.append(timeDiff_vs_x_timeDiff)
+list_timeDiff_vs_x.append(timeDiff_vs_x_timeDiff_amp2)
+list_timeDiff_vs_x.append(timeDiff_vs_x_timeDiff_amp3)
 list_timeDiff_vs_x.append(timeDiff_vs_x_weighted_timeDiff)
 print("Finished cloning histograms")
 
