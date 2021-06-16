@@ -56,7 +56,7 @@ xmax=0.75
 
 gStyle.SetOptFit(1011)
 fit = TF1("mainFit","pol6",xmin,xmax)
-Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.07)
+Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.17)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMinimum(0.00)
 Amp1OverAmp1and2_vs_deltaXmax_profile.GetXaxis().SetRangeUser(xmin,xmax)
 Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"","",xmin,xmax)
