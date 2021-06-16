@@ -78,6 +78,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_histos.emplace( "deltaX", std::make_shared<TH1D>( "deltaX", "deltaX; #X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5 ) );
     my_histos.emplace( "timePhotek", std::make_shared<TH1D>( "timePhotek", "timePhotek", 500, -225.0, -175.0 ) ) ;
     my_histos.emplace( "timeDiff", std::make_shared<TH1D>("timeDiff", "timeDiff", timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
+    my_histos.emplace( "timeDiff_amp2", std::make_shared<TH1D>("timeDiff_amp2", "timeDiff_amp2", timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
+    my_histos.emplace( "timeDiff_amp3", std::make_shared<TH1D>("timeDiff_amp3", "timeDiff_amp3", timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
     my_histos.emplace( "weighted_timeDiff", std::make_shared<TH1D>("weighted_timeDiff", "weighted_timeDiff", timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
 
     //Global 2D efficiencies
@@ -109,6 +111,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_3d_histos.emplace( "amp123_vs_xy", std::make_shared<TH3D>( "amp123_vs_xy", "amp123_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );
     my_3d_histos.emplace( "amp12_vs_xy", std::make_shared<TH3D>( "amp12_vs_xy", "amp12_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
     my_3d_histos.emplace( "timeDiff_vs_xy", std::make_shared<TH3D>( "timeDiff_vs_xy", "timeDiff_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
+    my_3d_histos.emplace( "timeDiff_vs_xy_amp2", std::make_shared<TH3D>( "timeDiff_vs_xy_amp2", "timeDiff_vs_xy_amp2; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
+    my_3d_histos.emplace( "timeDiff_vs_xy_amp3", std::make_shared<TH3D>( "timeDiff_vs_xy_amp3", "timeDiff_vs_xy_amp3; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
     my_3d_histos.emplace( "weighted_timeDiff_vs_xy", std::make_shared<TH3D>( "weighted_timeDiff_vs_xy", "weighted_timeDiff_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
 
     //Define 2d prof
@@ -169,6 +173,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& Amp12 = tr.getVar<double>("Amp12");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
         const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
+        const auto& amp2Indexes = tr.getVar<std::pair<int,int>>("amp2Indexes");
+        const auto& amp3Indexes = tr.getVar<std::pair<int,int>>("amp3Indexes");
         const auto& deltaXmax = tr.getVar<double>("deltaXmax");
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
         const auto& Amp2OverAmp2and3 = tr.getVar<double>("Amp2OverAmp2and3");
@@ -191,6 +197,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool highRelAmp1 = Amp1OverAmp1and2>=0.75;
         double photekTime = corrTime[photekIndex];
         double maxAmpTime = timeLGAD[amp1Indexes.first][amp1Indexes.second];
+        double amp2Time = timeLGAD[amp2Indexes.first][amp2Indexes.second];
+        double amp3Time = timeLGAD[amp3Indexes.first][amp3Indexes.second];
 
 	//******************************************************************
         //Make cuts and fill histograms here
@@ -244,6 +252,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass,                                         my_histos["timePhotek"],photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_histos["deltaX"], x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_histos["timeDiff"], maxAmpTime-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_histos["timeDiff_amp2"], amp2Time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_histos["timeDiff_amp3"], amp3Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_histos["weighted_timeDiff"], weighted_time-photekTime);
         utility::fillHisto(pass,                                         my_2d_histos["relFracDC_vs_x_channel_top"], x,relFracDC);
         utility::fillHisto(pass,                                         my_2d_histos["efficiency_vs_xy_denominator"], x,y);
@@ -266,6 +276,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                       my_3d_histos["amp123_vs_xy"], x,y, Amp123);
         utility::fillHisto(pass && goodMaxLGADAmp,                       my_3d_histos["amp12_vs_xy"], x,y, Amp12);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_3d_histos["timeDiff_vs_xy"], x,y,maxAmpTime-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_3d_histos["timeDiff_vs_xy_amp2"], x,y,amp2Time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_3d_histos["timeDiff_vs_xy_amp3"], x,y,amp3Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_3d_histos["weighted_timeDiff_vs_xy"], x,y,weighted_time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_1d_prof["Xtrack_vs_Amp1OverAmp123_prof"], x,Amp1OverAmp123);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_1d_prof["Xtrack_vs_Amp2OverAmp123_prof"], x,Amp2OverAmp123);

@@ -34,7 +34,7 @@ f = ROOT.TFile('../test/myoutputfile.root')
 
 hists = list(('weighted_timeDiff_channel0{}'.format(i),'weightedTime','photek') for i in range(0,5+1))
 hists += list(('timeDiff_channel0{}'.format(i),'time','photek') for i in range(0,5+1))
-hists += [("weighted_timeDiff", "weightedTime","photek"), ("timeDiff", "time","photek"), ('deltaX','deltaX',"tracker")]
+hists += [("weighted_timeDiff","weightedTime","photek"), ("timeDiff","time","photek"), ("timeDiff_amp2","time","photek"), ("timeDiff_amp3","time","photek"),('deltaX','deltaX',"tracker")]
 
 for t in hists:
 	h = f.Get(t[0])
