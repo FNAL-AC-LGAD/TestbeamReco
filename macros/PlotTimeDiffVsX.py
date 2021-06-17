@@ -1,7 +1,6 @@
-from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle
+from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack
 import os
-#import EfficiencyUtils
-#import langaus
+from stripBox import getStripBox
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -145,6 +144,15 @@ for channel in range(0, len(list_timeDiff_vs_x)):
     list_timeDiff_vs_x[channel].SetTitle(names[channel])
     list_timeDiff_vs_x[channel].SetMinimum(0.0)
     list_timeDiff_vs_x[channel].SetMaximum(100.0)
+    list_timeDiff_vs_x[channel].SetLineColor(kBlack)
+
+    ymin = list_timeDiff_vs_x[channel].GetMinimum()
+    ymax = list_timeDiff_vs_x[channel].GetMaximum()
+    boxes = getStripBox(inputfile,ymin,ymax)
+    for box in boxes:
+        box.Draw()
+    list_timeDiff_vs_x[channel].Draw("AXIS same")
+    list_timeDiff_vs_x[channel].Draw("hist e same")
 
     canvas.SaveAs("TimeRes_vs_x_"+names[channel]+".gif")
     canvas.SaveAs("TimeRes_vs_x_"+names[channel]+".pdf")

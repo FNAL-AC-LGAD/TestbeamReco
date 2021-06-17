@@ -21,8 +21,9 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}};
-    std::map<int, double> stripCenterXPosition = {{0,0.0}};
-    std::map<int, double> stripCenterYPosition = {{0,0.0}};
+    double stripWidth = 0.08;
+    std::vector<double> stripCenterXPosition = {{0,0.0}};
+    std::vector<double> stripCenterYPosition = {{0,0.0}};
     int numLGADchannels = 0;
     int photekIndex = 7;
     double angle =  0.0;

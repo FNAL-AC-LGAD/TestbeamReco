@@ -30,6 +30,7 @@ private:
         tr.registerDerivedVar("acLGADChannelMap", g.acLGADChannelMap);
         tr.registerDerivedVar("numLGADchannels", g.numLGADchannels);
         tr.registerDerivedVar("amplitudeCorrectionFactor", g.amplitudeCorrectionFactor);
+        tr.registerDerivedVar("stripWidth",g.stripWidth);
         tr.registerDerivedVar("stripCenterXPosition", g.stripCenterXPosition);
         tr.registerDerivedVar("timeCalibrationCorrection", g.timeCalibrationCorrection);
         tr.registerDerivedVar("photekIndex", g.photekIndex);

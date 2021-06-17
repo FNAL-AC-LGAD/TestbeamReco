@@ -68,6 +68,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             my_2d_histos.emplace( ("amp_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel"+r+s).c_str(), ("amp_vs_x_channel"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("amp_vs_x_channel_top"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_top"+r+s).c_str(), ("amp_vs_x_channel_top"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("amp_vs_x_channel_bottom"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_bottom"+r+s).c_str(), ("amp_vs_x_channel_bottom"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
+            my_2d_histos.emplace( ("stripBoxInfo"+r+s).c_str(), std::make_shared<TH2D>( ("stripBoxInfo"+r+s).c_str(), ("stripBoxInfo"+r+s).c_str(), 1,-9999.0,9999.0, 1,-9999.9,9999.9));
+            
 
             //Define 3D histograms
             my_3d_histos.emplace( ("amplitude_vs_xy_channel"+r+s).c_str(), std::make_shared<TH3D>( ("amplitude_vs_xy_channel"+r+s).c_str(), ("amplitude_vs_xy_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );
@@ -184,6 +186,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& hasGlobalSignal_lowThreshold = tr.getVar<bool>("hasGlobalSignal_lowThreshold");
         const auto& hasGlobalSignal_highThreshold = tr.getVar<bool>("hasGlobalSignal_highThreshold");
         const auto& clusterSize = tr.getVar<int>("clusterSize");
+        const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
+        const auto& stripWidth = tr.getVar<double>("stripWidth");
 
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
@@ -199,6 +203,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         double maxAmpTime = timeLGAD[amp1Indexes.first][amp1Indexes.second];
         double amp2Time = timeLGAD[amp2Indexes.first][amp2Indexes.second];
         double amp3Time = timeLGAD[amp3Indexes.first][amp3Indexes.second];
+        double firstEvent = tr.isFirstEvent();
 
 	//******************************************************************
         //Make cuts and fill histograms here
@@ -220,7 +225,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 bool goodHit = goodNoiseAmp && goodMaxLGADAmp;
                 if(i==1 || i==4) goodHitGlobal2and5 = goodHitGlobal2and5 || (isMaxChannel && goodHit);
                 int LGAD_index = rowIndex*row.size()+i;
-        
                 utility::fillHisto(pass,                                                    my_histos["amp"+r+s], ampChannel);
                 utility::fillHisto(pass && isMaxChannel,                                    my_histos["ampMax"+r+s], ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_histos["relFrac"+r+s], relFrac[LGAD_index]);
@@ -242,6 +246,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && inTopRow,                             my_2d_histos["relFrac_vs_x_channel_top"+r+s], x, relFrac[LGAD_index]);
                 utility::fillHisto(pass && goodHit && inTopRow,                             my_2d_histos["amp_vs_x_channel_top"+r+s], x, ampChannel);
                 utility::fillHisto(pass && goodHit && inTopRow && time!=0 && photekTime!=0, my_2d_histos["delay_vs_x_channel_top"+r+s], x, timeLGAD[rowIndex][i] - photekTime);
+                utility::fillHisto(firstEvent,                                              my_2d_histos["stripBoxInfo"+r+s], stripCenterXPositionLGAD[rowIndex][i],stripWidth);
                 utility::fillHisto(pass && goodHit,                                         my_3d_histos["amplitude_vs_xy_channel"+r+s], x,y,ampChannel);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["timeDiff_vs_xy_channel"+r+s], x,y,time-photekTime);
                 utility::fillHisto(passTrigger,                                             my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s], x,y,ampChannel > signalAmpThreshold);

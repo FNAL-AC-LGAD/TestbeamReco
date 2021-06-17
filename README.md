@@ -27,9 +27,10 @@ cd <WorkingArea>/TestbeamReco/test
 cd ../macros
 python DoPositionRecoFit.py 
 python plot1DRes.py
-python PlotAmplitudeVsX.py --run=true
+python PlotAmplitudeVsX.py --run true
 python PlotEfficiency.py
 python PlotTimeDiffVsXY.py
 python PlotTimeDiffVsX.py
+python PlotXRecoDiffVsX.py
 ```
 
