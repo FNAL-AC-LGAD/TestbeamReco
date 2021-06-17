@@ -4,6 +4,7 @@ import EfficiencyUtils
 import langaus
 import argparse
 import time
+from stripBox import getStripBox
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -19,12 +20,9 @@ args = vars(ap.parse_args())
 RunFits = False
 if args['run'] == 'true':
    RunFits = True
-     
-if (RunFits):
-    #inputfile = TFile("/uscms/home/amolnar/work/TestbeamReco/test/myoutputfile.root")    
-    inputfile = TFile("../test/myoutputfile.root")
-    #inputfile = TFile("/afs/cern.ch/work/s/sixie/public/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V.20210405.root")            
-    
+
+inputfile = TFile("../test/myoutputfile.root")     
+if (RunFits):    
     #Get 3D histograms 
     th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
     th3_amplitude_vs_xy_channel01 = inputfile.Get("amplitude_vs_xy_channel01")
@@ -154,6 +152,14 @@ plotList_amplitude_vs_x[5].Draw("hist")
 plotList_amplitude_vs_x[5].SetStats(0)
 plotList_amplitude_vs_x[5].SetTitle("")
 
+ymin = plotList_amplitude_vs_x[5].GetMinimum()
+ymax = plotList_amplitude_vs_x[5].GetMaximum()
+boxes = getStripBox(inputfile,ymin,ymax)
+for box in boxes:
+   box.Draw()
+plotList_amplitude_vs_x[5].Draw("AXIS same")
+plotList_amplitude_vs_x[5].Draw("hist same")
+
 plotList_amplitude_vs_x[0].GetYaxis().SetTitle("Signal MPV Amplitude [mV]")
 plotList_amplitude_vs_x[0].GetYaxis().SetTitleSize(0.05)
 plotList_amplitude_vs_x[0].GetYaxis().SetLabelSize(0.035)
@@ -216,6 +222,14 @@ totalAmplitude_vs_x.GetXaxis().SetTitleOffset(0.95)
 totalAmplitude_vs_x.SetLineWidth(2)
 totalAmplitude_vs_x.SetLineColor(1) #kBlack
 
+ymin = totalAmplitude_vs_x.GetMinimum()
+ymax = totalAmplitude_vs_x.GetMaximum()
+boxes = getStripBox(inputfile,ymin,ymax)
+for box in boxes:
+   box.Draw()
+totalAmplitude_vs_x.Draw("AXIS same")
+totalAmplitude_vs_x.Draw("hist same")
+
 plotList_amplitude_vs_x[0].Draw("histsame")
 plotList_amplitude_vs_x[1].Draw("histsame")
 plotList_amplitude_vs_x[2].Draw("histsame")
@@ -262,6 +276,14 @@ plotList_amplitudeFraction_vs_x[0].SetStats(0)
 plotList_amplitudeFraction_vs_x[0].SetTitle("")
 plotList_amplitudeFraction_vs_x[0].GetXaxis().SetRangeUser(0.16,0.62)
 plotList_amplitudeFraction_vs_x[0].SetMaximum(1.0)
+
+ymin = plotList_amplitudeFraction_vs_x[0].GetMinimum()
+ymax = plotList_amplitudeFraction_vs_x[0].GetMaximum()
+boxes = getStripBox(inputfile,ymin,ymax)
+for box in boxes:
+   box.Draw()
+plotList_amplitudeFraction_vs_x[0].Draw("AXIS same")
+plotList_amplitudeFraction_vs_x[0].Draw("hist same")
 
 plotList_amplitudeFraction_vs_x[0].GetYaxis().SetTitle("Signal Amplitude Fraction")
 plotList_amplitudeFraction_vs_x[0].GetYaxis().SetTitleSize(0.05)

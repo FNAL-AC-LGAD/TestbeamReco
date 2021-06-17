@@ -28,6 +28,7 @@ def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
         fit.Draw("same")    
 
         c.Print("%s.png"%(name))
+        c.Print("%s.gif"%(name))
 
 
 f = ROOT.TFile('../test/myoutputfile.root')
