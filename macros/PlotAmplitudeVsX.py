@@ -32,7 +32,7 @@ if (RunFits):
     th3_amplitude_vs_xy_channel03 = inputfile.Get("amplitude_vs_xy_channel03")
     th3_amplitude_vs_xy_channel04 = inputfile.Get("amplitude_vs_xy_channel04")
     th3_amplitude_vs_xy_channel05 = inputfile.Get("amplitude_vs_xy_channel05")
-    th3_amplitude_vs_xy_channelall = inputfile.Get("amp123_vs_xy")    
+    th3_amplitude_vs_xy_channelall = inputfile.Get("totamplitude_vs_xy")    
     
     #Build 2D amp vs x histograms
     amplitude_vs_x_channel00 = th3_amplitude_vs_xy_channel00.Project3D("zx")
@@ -181,7 +181,7 @@ plotList_amplitude_vs_x[3].Draw("histsame")
 plotList_amplitude_vs_x[4].Draw("histsame")
 plotList_amplitude_vs_x[5].Draw("histsame")
 
-legend = TLegend(0.65,0.55,0.9,0.8);
+legend = TLegend(0.15,0.65,0.25,0.85);
 legend.SetBorderSize(0)
 legend.SetTextSize(0.04)
 legend.AddEntry(plotList_amplitude_vs_x[0], "Strip 1")
@@ -223,7 +223,7 @@ plotList_amplitude_vs_x[3].Draw("histsame")
 plotList_amplitude_vs_x[4].Draw("histsame")
 plotList_amplitude_vs_x[5].Draw("histsame")
 
-legend = TLegend(0.65,0.55,0.9,0.8);
+legend = TLegend(0.15,0.65,0.25,0.85);
 legend.SetBorderSize(0)
 legend.SetTextSize(0.04)
 legend.AddEntry(totalAmplitude_vs_x, "Total")

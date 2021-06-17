@@ -61,7 +61,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1/1.043}, {2,1/1.000}, {3,1/1.078}, {4,1/1.084}, {5,1/1.067}, {6,1/1.017}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.555185226}, {2,10.659094357}, {3,10.647274798}, {4,10.607507832}, {5,10.643264564}, {6,10.662114527}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.5553183648148}, {2,10.6590122524753}, {3,10.6470996902006}, {4,10.6075997712141}, {5,10.6432860123283}, {6,10.6622858488865}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.235, 0.135, 0.0};
     int numLGADchannels = 6;
     std::map<int,VoltageDependence> voltageDependenceMap = {{200,{2.0,8.0}}, {210,{3.5,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
@@ -76,7 +76,7 @@ public:
     double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold; 
     bool enablePositionReconstruction = true;   
     std::vector<double> positionRecoPar = {51.8472, -484.776, 1878.16, -3849.65, 4395.84, -2647.04,  655.29};
-    std::vector<std::vector<double>> sensorEdges = {{-0.1, 9.8}, { 0.8, 11.6}};
+    std::vector<std::vector<double>> sensorEdges = {{-0.06, 9.8}, { 0.8, 11.6}};
 };
 
 class BNL2021WideGeometry : public DefaultGeometry
@@ -97,9 +97,9 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.968607463}, {2,1/1.0}, {3,1/0.999778063}, {4,1/1.083394557}, {5,1/1.077968592}, {6,1/1.05618820}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.570712}, {2,10.601730}, {3,10.589803}, {4,10.526534}, {5,10.596760}, {6,10.578494}, {7,0.0}};    
-    std::vector<double> stripCenterXPosition = {0.0, -4.68, 4.85, -5.02, -5.20, -5.40, -5.72, 0.0};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.981967886}, {2,1/1.0}, {3,1/1.003679233}, {4,1/1.097286663}, {5,1/1.098247136}, {6,1/1.073809284}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6646501756637}, {2,10.67112230944859}, {3,10.65231275084190}, {4,10.5912852140283}, {5,10.6752360435417}, {6,10.6188857394863}, {7,0.0}};    
+    std::vector<double> stripCenterXPosition = {0.0, -4.68, 4.85, -5.02, -5.20, -5.40, -5.61, 0.0};
     int numLGADchannels = 6;
     double angle = 1.3;
     double xmin = -6.2;
@@ -108,11 +108,11 @@ public:
     double ymax =  12.5; 
     double positionRecoMaxPoint = 0.85;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 30.0;
+    double noiseAmpThreshold = 20.0;
+    double signalAmpThreshold = 40.0;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {-10.1932, 82.0107, -254.384, 386.131, -288.176, 84.6899};
-    std::vector<std::vector<double>> sensorEdges = {{-6.39, 9.14}, {-3.21, 12.20}};
+    std::vector<std::vector<double>> sensorEdges = {{-5.8484, 9.30}, {-4.48058, 12.05}};
 };
 
 class BNL2021MediumGeometry : public DefaultGeometry
@@ -133,8 +133,8 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.844395944}, {2,1.0/1.0}, {3,1.0/0.97974079}, {4,1.0/0.945585703}, {5,1.0/0.93672097}, {6,1.0/0.9387476}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.102707}, {2,10.026717}, {3,10.232438}, {4,10.357673}, {5,10.544784}, {6,10.526426}, {7,0.0}};    
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.842511076}, {2,1.0/1.0}, {3,1.0/0.981178291}, {4,1.0/0.948043281}, {5,1.0/0.939793252}, {6,1.0/0.938756674}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6222952064563}, {2,10.6341462404406}, {3,10.61543585391420}, {4,10.58663873896650}, {5,10.67386990876170}, {6,10.63764448498840}, {7,0.0}};    
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.74, -4.91, -5.06, -5.20, -5.38, 0.0};
     int numLGADchannels = 6;
     double angle =  1.3;
@@ -144,11 +144,11 @@ public:
     double ymax =  12.5;
     double positionRecoMaxPoint = 0.8;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 30.0;
+    double noiseAmpThreshold = 20.0;
+    double signalAmpThreshold = 40.0;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = { 7.35671, -59.0054, 191.994, -312.627, 254.084, -82.4947};
-    std::vector<std::vector<double>> sensorEdges = {{-6.89, 9.14}, {-3.73, 12.20}};
+    std::vector<std::vector<double>> sensorEdges = {{-5.625, 9.272}, {-4.403, 12.067}};
 };
 
 class BNL2021NarrowGeometry : public DefaultGeometry
@@ -169,9 +169,9 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.021296378}, {2,1.0/1.0}, {3,1.0/0.990261996}, {4,1.0/1.013760435}, {5,1.0/1.055697466}, {6,1.0/1.127465085}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.007110}, {2,10.348299}, {3,10.365704}, {4,10.390483}, {5,10.374036}, {6,10.417291}, {7,0.0}};    
-    std::vector<double> stripCenterXPosition = {0.0, -4.58, -4.72, -4.80, -4.89, -5.00, -5.14, 0.0};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.021167748}, {2,1.0/1.0}, {3,1.0/0.988320568}, {4,1.0/1.012814117}, {5,1.0/1.053555184}, {6,1.0/1.126057654}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4299204909350}, {2,10.5485097838644}, {3,10.5073049422881}, {4,10.5344490021019}, {5,10.5361014348539}, {6,10.6153329754486}, {7,0.0}};    
+    std::vector<double> stripCenterXPosition = {0.0, -4.597, -4.696, -4.80, -4.89, -5.00, -5.114, 0.0};
     int numLGADchannels = 6;
     double angle = 1.3;
     double xmin = -5.4;
@@ -180,11 +180,11 @@ public:
     double ymax =  12.5;
     double positionRecoMaxPoint = 0.73;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 30.0;
+    double noiseAmpThreshold = 20.0;
+    double signalAmpThreshold = 40.0;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.475097, -2.10666, 3.63713, -2.24911};
-    std::vector<std::vector<double>> sensorEdges = {{-7.29, 9.18}, {-4.24, 12.25}};
+    std::vector<std::vector<double>> sensorEdges = {{-5.253, 9.278}, {-4.474, 12.079}};
 };
 
 class HPKPadC2Geometry : public DefaultGeometry
@@ -284,22 +284,21 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.476853}, {2,10.328344}, {3,10.477243}, {4,10.328026}, {5,10.494593}, {6,10.401719}, {7,0.0}};    
-    std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    std::vector<double> stripCenterYPosition = {0.0, 0.941, 0.890, 0.822, 0.722, 0.621, 0.544, 0.0};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.979851466}, {2,1.0/1.0}, {3,1.0/0.983149499}, {4,1.0/0.977206933}, {5,1.0/0.985974202}, {6,1.0/1.098791332}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6798182741841}, {2,10.4423181134130}, {3,10.6384131291640}, {4,10.4103620415613}, {5,10.6007257972181}, {6,10.4517801214152}, {7,0.0}};    
+    std::vector<double> stripCenterXPosition = {0.0, 0.9429, 0.8712, 0.7889, 0.7076, 0.6297, 0.5486, 0.0};
     int numLGADchannels = 6;
     double angle = -0.2 + 90.0;
-    double xmin =   0.2;
-    double xmax =   1.2;
-    double ymin =   0.0;
-    double ymax =   4.3;
+    double xmin =   -1.0;
+    double xmax =    2.5;
+    double ymin =    0.0;
+    double ymax =    4.2;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 30.0;//17.0;
-    bool enablePositionReconstruction = false;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
-    std::vector<std::vector<double>> sensorEdges = {{0.4, 0.5}, {1.0, 4.0}};
+    double noiseAmpThreshold = 4.0;
+    double signalAmpThreshold = 30.0;
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166}; 
+    std::vector<std::vector<double>> sensorEdges = {{0.2329, 0.260}, {1.005, 4.106}};
 };
 
 class HPKStripsC2NarrowMetalGeometry : public DefaultGeometry
@@ -323,22 +322,21 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,5}}, {2,{1,4}}, {3,{1,3}}, {4,{1,2}}, {5,{1,1}}, {6,{1,0}}, {7,{2,0}}};    
     std::vector<std::vector<int>> geometry = {{0}, {6,5,4,3,2,1}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.363155}, {2,10.446376}, {3,10.280995}, {4,10.397997}, {5,10.286721}, {6,10.419460}, {7,0.0}};
-    std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    std::vector<double> stripCenterYPosition = {0.0, 0.701, 0.599, 0.524, 0.434, 0.351, 0.290, 0.0};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.026449161}, {2,1.0/1.048446448}, {3,1.0/1.039418742}, {4,1.0/1.026293328}, {5,1.0/1.0}, {6,1.0/1.130503306}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.63158422778770}, {2,10.40489295380600}, {3,10.57580707002640}, {4,10.38063146228080}, {5,10.57271716853830}, {6,10.42845270625820}, {7,0.0}};
+    std::vector<double> stripCenterXPosition = {0.0, 0.2792, 0.3495, 0.4361, 0.5153, 0.5974, 0.6899, 0.0}; 
     int numLGADchannels = 6;
-    double angle = -0.2 - 90.0;
-    double xmin =  -4.5;
-    double xmax =   0.0;
-    double ymin =  -3.0;
-    double ymax =   3.0; 
+    double angle = -0.2 + 90.0;
+    double xmin =  -1.2;
+    double xmax =   2.5;
+    double ymin =   0.0;
+    double ymax =   4.3; 
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 30.0;
-    bool enablePositionReconstruction = false;
+    double noiseAmpThreshold = 4.0;
+    double signalAmpThreshold = 27.0;
+    bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
-    std::vector<std::vector<double>> sensorEdges = {{-4.45, 0.16}, {-0.01, 1.58}};
+    std::vector<std::vector<double>> sensorEdges = {{0.221252, 0.32692}, {0.832446, 4.03807}};
 
 };
 
@@ -360,12 +358,12 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.014141505}, {2,1.0/1.0}, {3,1.0/0.98719996}, {4,1.0/1.018744019}, {5,1.0/0.947666048}, {6,1.0/0.991277675}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.575768}, {2,10.483311}, {3,10.550070}, {4,10.571403}, {5,10.565505}, {6,10.531885}, {7,0.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.981074198}, {2,1.0/1.0}, {3,1.0/1.033255985}, {4,1.0/0.978685834}, {5,1.0/1.031778822}, {6,1.0/1.04870677}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.510402741525}, {2,10.5446584367218}, {3,10.5986852805641}, {4,10.5781494107524}, {5,10.6004686623480}, {6,10.5716321601745}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, -4.785, -4.985, -5.192, -5.412, -5.586, -5.787, 0.0};
     int numLGADchannels = 6;
     double angle = 0.2;
-    double xmin = -6.0;
+    double xmin = -6.2;
     double xmax = -4.5;
     double ymin =  9.4;
     double ymax =  11.4;
@@ -375,7 +373,7 @@ public:
     double signalAmpThreshold = 10.0;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {-0.0254199, 1.50893, -3.51021, 2.08929};
-    std::vector<std::vector<double>> sensorEdges = {{-6.60, 9.40}, {-4.44, 11.51}};
+    std::vector<std::vector<double>> sensorEdges = {{-6.0, 9.621}, {-4.652, 11.267}};
 };
 
 class BNLPixelHexGeometry : public DefaultGeometry

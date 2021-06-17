@@ -25,9 +25,9 @@ Recipe to make plots
 cd <WorkingArea>/TestbeamReco/test
 ./MyAnalysis -A Analyze -H myoutputfile.root -D BNL2020_220V
 cd ../macros
-python DoPositionRecoFit.py --run true
+python DoPositionRecoFit.py 
 python plot1DRes.py
-python PlotAmplitudeVsX.py
+python PlotAmplitudeVsX.py --run=true
 python PlotEfficiency.py
 python PlotTimeDiffVsXY.py
 python PlotTimeDiffVsX.py
