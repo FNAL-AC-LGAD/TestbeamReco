@@ -146,7 +146,7 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channelall"))
 #                plotList_amplitude_vs_x[channel].SetBinContent(i,0)
 
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cvv","cvv",800,800)
 canvas.SetLeftMargin(0.12)
 plotList_amplitude_vs_x[5].Draw("hist")
 plotList_amplitude_vs_x[5].SetStats(0)
@@ -154,7 +154,9 @@ plotList_amplitude_vs_x[5].SetTitle("")
 
 ymin = plotList_amplitude_vs_x[5].GetMinimum()
 ymax = plotList_amplitude_vs_x[5].GetMaximum()
-boxes = getStripBox(inputfile,ymin,ymax)
+plotList_amplitude_vs_x[5].SetMaximum(ymax*1.05)
+
+boxes = getStripBox(inputfile,ymin,ymax*1.04)
 for box in boxes:
    box.Draw()
 plotList_amplitude_vs_x[5].Draw("AXIS same")
@@ -206,7 +208,7 @@ canvas.SaveAs("Amplitude_vs_x.gif")
 #    totalAmp = plotList_amplitude_vs_x[0].GetBinContent(i) + plotList_amplitude_vs_x[1].GetBinContent(i) + plotList_amplitude_vs_x[2].GetBinContent(i) + plotList_amplitude_vs_x[3].GetBinContent(i) + plotList_amplitude_vs_x[4].GetBinContent(i) + plotList_amplitude_vs_x[5].GetBinContent(i)
 #    totalAmplitude_vs_x.SetBinContent(i,totalAmp)
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cv2","cv2",800,800)
 canvas.SetLeftMargin(0.12)
 totalAmplitude_vs_x=plotList_amplitude_vs_x[6]
 totalAmplitude_vs_x.Draw("hist")
@@ -224,7 +226,9 @@ totalAmplitude_vs_x.SetLineColor(1) #kBlack
 
 ymin = totalAmplitude_vs_x.GetMinimum()
 ymax = totalAmplitude_vs_x.GetMaximum()
-boxes = getStripBox(inputfile,ymin,ymax)
+totalAmplitude_vs_x.SetMaximum(ymax*1.05)
+
+boxes = getStripBox(inputfile,ymin,ymax*1.04)
 for box in boxes:
    box.Draw()
 totalAmplitude_vs_x.Draw("AXIS same")
@@ -261,7 +265,7 @@ plotList_amplitudeFraction_vs_x.append(plotList_amplitude_vs_x[0].Clone("amplitu
 plotList_amplitudeFraction_vs_x.append(plotList_amplitude_vs_x[0].Clone("amplitudeFraction_vs_x_channel05"))
 
 for channel in range(0, (len(plotList_amplitude_vs_x)-1)):
-    for i in range(1, plotList_amplitude_vs_x[channel].GetXaxis().GetNbins()+1):
+    for i in range(0, plotList_amplitude_vs_x[channel].GetXaxis().GetNbins()+1):
          totalAmp = plotList_amplitude_vs_x[0].GetBinContent(i) + plotList_amplitude_vs_x[1].GetBinContent(i) + plotList_amplitude_vs_x[2].GetBinContent(i) + plotList_amplitude_vs_x[3].GetBinContent(i) + plotList_amplitude_vs_x[4].GetBinContent(i) + plotList_amplitude_vs_x[5].GetBinContent(i)
          if (totalAmp > 0):
              plotList_amplitudeFraction_vs_x[channel].SetBinContent(i,plotList_amplitude_vs_x[channel].GetBinContent(i)/totalAmp)
@@ -269,16 +273,17 @@ for channel in range(0, (len(plotList_amplitude_vs_x)-1)):
              plotList_amplitudeFraction_vs_x[channel].SetBinContent(i,0)
 
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("c","c",800,800)
 canvas.SetLeftMargin(0.12)
 plotList_amplitudeFraction_vs_x[0].Draw("hist")
 plotList_amplitudeFraction_vs_x[0].SetStats(0)
 plotList_amplitudeFraction_vs_x[0].SetTitle("")
-plotList_amplitudeFraction_vs_x[0].GetXaxis().SetRangeUser(0.16,0.62)
-plotList_amplitudeFraction_vs_x[0].SetMaximum(1.0)
+#plotList_amplitudeFraction_vs_x[0].GetXaxis().SetRangeUser(0.16,0.62)
+plotList_amplitudeFraction_vs_x[0].SetMaximum(1.05)
 
 ymin = plotList_amplitudeFraction_vs_x[0].GetMinimum()
-ymax = plotList_amplitudeFraction_vs_x[0].GetMaximum()
+#ymax = plotList_amplitudeFraction_vs_x[0].GetMaximum()
+ymax = 1.0
 boxes = getStripBox(inputfile,ymin,ymax)
 for box in boxes:
    box.Draw()
@@ -322,6 +327,8 @@ legend.AddEntry(plotList_amplitudeFraction_vs_x[4], "Strip 5")
 legend.AddEntry(plotList_amplitudeFraction_vs_x[5], "Strip 6")
 legend.Draw();
 
+plotList_amplitudeFraction_vs_x[0].Draw("AXIS same")
+plotList_amplitudeFraction_vs_x[0].Draw("hist same")
 canvas.SaveAs("AmplitudeFraction_vs_x.gif")
 
 

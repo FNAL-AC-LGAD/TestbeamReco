@@ -188,12 +188,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& clusterSize = tr.getVar<int>("clusterSize");
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& stripWidth = tr.getVar<double>("stripWidth");
+        const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
 
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
         bool passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         bool pass = passTrigger && hitSensor && goodPhotek;
-        bool maxAmpNotEdgeStrip = maxAmpIndex >= 1 && maxAmpIndex <= 4;
+        bool maxAmpNotEdgeStrip = maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= 4;
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
         bool inTopRow = y>ySlices[1][0] && y<ySlices[1][1];
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
