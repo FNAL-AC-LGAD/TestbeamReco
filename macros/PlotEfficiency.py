@@ -1,6 +1,7 @@
 from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT
 import os
 import EfficiencyUtils
+from stripBox import getStripBox
 
 gROOT.SetBatch( True )
 
@@ -142,6 +143,7 @@ legend.AddEntry(efficiency_vs_x_lowThreshold_channel04, "Strip 5")
 legend.AddEntry(efficiency_vs_x_lowThreshold_channel05, "Strip 6")
 legend.Draw();
 
+efficiency_vs_x_lowThreshold_global.Draw("LP same")
 canvas.SaveAs("Efficiency_LowThreshold_vs_x.gif")
 
 
@@ -151,6 +153,14 @@ canvas.SaveAs("Efficiency_LowThreshold_vs_x.gif")
 canvas = TCanvas("cv","cv",800,800)
 canvas.SetLeftMargin(0.12)
 efficiency_vs_x_highThreshold_global.Draw("ALP")
+
+
+#ymin = efficiency_vs_x_highThreshold_global.GetMinimum()
+#ymax = efficiency_vs_x_highThreshold_global.GetMaximum()
+boxes = getStripBox(inputfile,0.0,1.0)
+for box in boxes:
+    box.Draw()
+
 efficiency_vs_x_highThreshold_channel00.Draw("LPsame")
 efficiency_vs_x_highThreshold_channel01.Draw("LPsame")
 efficiency_vs_x_highThreshold_channel02.Draw("LPsame")
@@ -191,6 +201,7 @@ legend.AddEntry(efficiency_vs_x_highThreshold_channel04, "Strip 5")
 legend.AddEntry(efficiency_vs_x_highThreshold_channel05, "Strip 6")
 legend.Draw();
 
+efficiency_vs_x_highThreshold_global.Draw("LP same")
 canvas.SaveAs("Efficiency_HighThreshold_vs_x.gif")
 
 
