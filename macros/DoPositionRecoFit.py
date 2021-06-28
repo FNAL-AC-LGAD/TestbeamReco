@@ -63,6 +63,11 @@ Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"","",xmin,xmax)
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw()
 fit.Draw("same")
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same")
+
+line = TF1("line","0.0",xmin,1.0)
+line.SetLineColor(ROOT.kBlack)
+line.Draw("same")
+
 canvas.SaveAs("PositionFit.gif")
 Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
 fit.Write()

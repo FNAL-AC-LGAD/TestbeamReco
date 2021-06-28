@@ -5,82 +5,36 @@ from stripBox import getStripBox
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 
+class HistoInfo:
+    def __init__(self, inHistoName, f, outHistoName):
+        self.inHistoName = inHistoName
+        self.f = f
+        self.outHistoName = outHistoName
+        self.th2 = self.getTH2(f, inHistoName)
+        self.th1 = self.getTH1(self.th2, outHistoName)
+
+    def getTH2(self, f, name, axis='zx'):
+        th3 = f.Get(name)
+        th2 = th3.Project3D(axis)
+        return th2
+
+    def getTH1(self, th2, name):
+        return th2.ProjectionX().Clone(name)
+
 inputfile = TFile("../test/myoutputfile.root")
 
-#Get 3D histograms 
-th3_timeDiff_vs_xy_channel00 = inputfile.Get("timeDiff_vs_xy_channel00")
-th3_timeDiff_vs_xy_channel01 = inputfile.Get("timeDiff_vs_xy_channel01")
-th3_timeDiff_vs_xy_channel02 = inputfile.Get("timeDiff_vs_xy_channel02")
-th3_timeDiff_vs_xy_channel03 = inputfile.Get("timeDiff_vs_xy_channel03")
-th3_timeDiff_vs_xy_channel04 = inputfile.Get("timeDiff_vs_xy_channel04")
-th3_timeDiff_vs_xy_channel05 = inputfile.Get("timeDiff_vs_xy_channel05")
-th3_timeDiff = inputfile.Get("timeDiff_vs_xy")
-th3_timeDiff_amp2 = inputfile.Get("timeDiff_vs_xy_amp2")
-th3_timeDiff_amp3 = inputfile.Get("timeDiff_vs_xy_amp3")
-th3_weighted_timeDiff = inputfile.Get("weighted_timeDiff_vs_xy")
-
-#Build 2D timeDiff vs x histograms
-th2_timeDiff_vs_x_channel00 = th3_timeDiff_vs_xy_channel00.Project3D("zx")
-th2_timeDiff_vs_x_channel01 = th3_timeDiff_vs_xy_channel01.Project3D("zx")
-th2_timeDiff_vs_x_channel02 = th3_timeDiff_vs_xy_channel02.Project3D("zx")
-th2_timeDiff_vs_x_channel03 = th3_timeDiff_vs_xy_channel03.Project3D("zx")
-th2_timeDiff_vs_x_channel04 = th3_timeDiff_vs_xy_channel04.Project3D("zx")
-th2_timeDiff_vs_x_channel05 = th3_timeDiff_vs_xy_channel05.Project3D("zx")
-th2_timeDiff = th3_timeDiff.Project3D("zx")
-th2_timeDiff_amp2 = th3_timeDiff_amp2.Project3D("zx")
-th2_timeDiff_amp3 = th3_timeDiff_amp3.Project3D("zx")
-th2_weighted_timeDiff = th3_weighted_timeDiff.Project3D("zx")
-
-list_th2_timeDiff_vs_x = []
-list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel00)
-list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel01)
-list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel02)
-list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel03)
-list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel04)
-list_th2_timeDiff_vs_x.append(th2_timeDiff_vs_x_channel05)
-list_th2_timeDiff_vs_x.append(th2_timeDiff)
-list_th2_timeDiff_vs_x.append(th2_timeDiff_amp2)
-list_th2_timeDiff_vs_x.append(th2_timeDiff_amp3)
-list_th2_timeDiff_vs_x.append(th2_weighted_timeDiff)
-
-names = [
-    "channel_1",
-    "channel_2",
-    "channel_3",
-    "channel_4",
-    "channel_5",
-    "channel_6",
-    "time_diff",
-    "time_diff_amp2",
-    "time_diff_amp3",
-    "weighted_time_diff",
+all_histoInfos = [
+    HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
+    HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
+    HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
+    HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
+    HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
+    HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
+    HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
+    HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
+    HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
+    HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
 ]
-
-#Build timeDiff histograms
-timeDiff_vs_x = th3_timeDiff.ProjectionX().Clone("timeDiff_vs_x_channel")
-timeDiff_vs_x_channel00 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel00")
-timeDiff_vs_x_channel01 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel01")
-timeDiff_vs_x_channel02 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel02")
-timeDiff_vs_x_channel03 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel03")
-timeDiff_vs_x_channel04 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel04")
-timeDiff_vs_x_channel05 = timeDiff_vs_x.Clone("timeDiff_vs_x_channel05")
-timeDiff_vs_x_timeDiff = timeDiff_vs_x.Clone("timeDiff")
-timeDiff_vs_x_timeDiff_amp2 = timeDiff_vs_x.Clone("timeDiff_amp2")
-timeDiff_vs_x_timeDiff_amp3 = timeDiff_vs_x.Clone("timeDiff_amp3")
-timeDiff_vs_x_weighted_timeDiff = timeDiff_vs_x.Clone("weighted_timeDiff")
-
-list_timeDiff_vs_x = []
-list_timeDiff_vs_x.append(timeDiff_vs_x_channel00)
-list_timeDiff_vs_x.append(timeDiff_vs_x_channel01)
-list_timeDiff_vs_x.append(timeDiff_vs_x_channel02)
-list_timeDiff_vs_x.append(timeDiff_vs_x_channel03)
-list_timeDiff_vs_x.append(timeDiff_vs_x_channel04)
-list_timeDiff_vs_x.append(timeDiff_vs_x_channel05)
-list_timeDiff_vs_x.append(timeDiff_vs_x_timeDiff)
-list_timeDiff_vs_x.append(timeDiff_vs_x_timeDiff_amp2)
-list_timeDiff_vs_x.append(timeDiff_vs_x_timeDiff_amp3)
-list_timeDiff_vs_x.append(timeDiff_vs_x_weighted_timeDiff)
-print("Finished cloning histograms")
 
 canvas = TCanvas("cv","cv",800,800)
 gPad.SetLeftMargin(0.12)
@@ -88,17 +42,16 @@ gPad.SetRightMargin(0.15)
 gPad.SetTopMargin(0.08)
 gPad.SetBottomMargin(0.12)
 gPad.SetTicks(1,1)
-#fit = langaus.LanGausFit()
 print("Finished setting up langaus fit class")
 
 #loop over X bins
-for i in range(0, timeDiff_vs_x.GetXaxis().GetNbins()+1):
+for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
     ##For Debugging
     #if not (i==46 and j==5):
     #    continue
 
-    for channel in range(0, len(list_timeDiff_vs_x)):
-        tmpHist = list_th2_timeDiff_vs_x[channel].ProjectionY("py",i,i)
+    for info in all_histoInfos:
+        tmpHist = info.th2.ProjectionY("py",i,i)
         myMean = tmpHist.GetMean()
         myRMS = tmpHist.GetRMS()
         nEvents = tmpHist.GetEntries()
@@ -107,16 +60,12 @@ for i in range(0, timeDiff_vs_x.GetXaxis().GetNbins()+1):
         value = myRMS
         error = 0.0
 
-        #Do Langaus fit if histogram mean is larger than 10
-        #and mean is larger than RMS (a clear peak away from noise)
+        #Do fit 
         if(nEvents > 50):
             tmpHist.Rebin(4)
 
-            #myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-2*myRMS,myMean+3*myRMS))
             fit = TF1('fit','gaus',fitlow,fithigh)
             tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
-            #myMPV = myLanGausFunction.GetParameter(1)
-            #mySigma = myLanGausFunction.GetParameter(3)
             myMPV = fit.GetParameter(1)
             mySigma = fit.GetParameter(2)
             mySigmaError = fit.GetParError(2)
@@ -125,7 +74,6 @@ for i in range(0, timeDiff_vs_x.GetXaxis().GetNbins()+1):
             
             ##For Debugging
             #tmpHist.Draw("hist")
-            ##myLanGausFunction.Draw("same")
             #fit.Draw("same")
             #canvas.SaveAs("q_"+str(i)+".gif")
             #
@@ -133,31 +81,30 @@ for i in range(0, timeDiff_vs_x.GetXaxis().GetNbins()+1):
         else:
             value = 0.0            
 
-        list_timeDiff_vs_x[channel].SetBinContent(i,value)
-        list_timeDiff_vs_x[channel].SetBinError(i,error)
+        info.th1.SetBinContent(i,value)
+        info.th1.SetBinError(i,error)
                         
 # Plot 2D histograms
 outputfile = TFile("plots.root","RECREATE")
-for channel in range(0, len(list_timeDiff_vs_x)):
-    list_timeDiff_vs_x[channel].Draw("hist e")
-    list_timeDiff_vs_x[channel].SetStats(0)
-    list_timeDiff_vs_x[channel].SetTitle(names[channel])
-    list_timeDiff_vs_x[channel].SetMinimum(0.0)
-    list_timeDiff_vs_x[channel].SetMaximum(100.0)
-    list_timeDiff_vs_x[channel].SetLineColor(kBlack)
+for info in all_histoInfos:
+    info.th1.Draw("hist e")
+    info.th1.SetStats(0)
+    info.th1.SetTitle(info.outHistoName)
+    info.th1.SetMinimum(0.0)
+    info.th1.SetMaximum(100.0)
+    info.th1.SetLineColor(kBlack)
 
-    ymin = list_timeDiff_vs_x[channel].GetMinimum()
-    ymax = list_timeDiff_vs_x[channel].GetMaximum()
+    ymin = info.th1.GetMinimum()
+    ymax = info.th1.GetMaximum()
     boxes = getStripBox(inputfile,ymin,ymax)
     for box in boxes:
         box.Draw()
-    list_timeDiff_vs_x[channel].Draw("AXIS same")
-    list_timeDiff_vs_x[channel].Draw("hist e same")
+    info.th1.Draw("AXIS same")
+    info.th1.Draw("hist e same")
 
-    canvas.SaveAs("TimeRes_vs_x_"+names[channel]+".gif")
-    canvas.SaveAs("TimeRes_vs_x_"+names[channel]+".pdf")
-
-    list_timeDiff_vs_x[channel].Write()
+    canvas.SaveAs("TimeRes_vs_x_"+info.outHistoName+".gif")
+    canvas.SaveAs("TimeRes_vs_x_"+info.outHistoName+".pdf")
+    info.th1.Write()
 
 outputfile.Close()
 
