@@ -156,13 +156,8 @@ class Train:
     def defineVars(self):
         self.config["allVars"] = [
             "amp1","amp2","amp3","amp4","amp5","amp6",
-            "relamp",
-            "ampLow","ampMid","ampHigh",
+            "Amp1OverAmp123","Amp2OverAmp123","Amp3OverAmp123",
             "time1","time2","time3","time4","time5","time6",
-            "timeLow","timeMid","timeHigh",
-            #"timePhotek",
-            #"amp2","amp3","amp4",
-            #"time2","time3","time4",
         ]
 
     def importData(self):
@@ -245,7 +240,6 @@ if __name__ == '__main__':
         with open(str(args.json), "r") as f:
             hyperconfig = json.load(f)
     else: 
-        #hyperconfig = {"atag" : "GoldenTEST", "nNodesX":24, "nHLayersX":1, "nNodesT":24, "nHLayersT":1, "drop_out":0.3, "batch_size":5000, "epochs":500, "lr":0.001}
         hyperconfig = {"atag" : "GoldenTEST", "nNodesX":100, "nHLayersX":2, "nNodesT":100, "nHLayersT":2, "drop_out":0.5, "batch_size":5000, "epochs":2000, "lr":0.001}
 
     t = Train(USER, masterSeed, args.saveAndPrint, hyperconfig, args.quickVal, args.reweight, model=args.model, tree=args.tree)

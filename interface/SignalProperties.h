@@ -88,6 +88,7 @@ private:
         tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
         tr.registerDerivedVar("Amp2Index", Amp2Index);
         tr.registerDerivedVar("deltaXmax", deltaXmax);
+        tr.registerDerivedVar("xCenterMaxStrip", xCenterMaxStrip);
         tr.registerDerivedVar("Amp1OverAmp1and2", Amp1OverAmp1and2);
         tr.registerDerivedVar("Amp2OverAmp2and3", Amp2OverAmp2and3);
         tr.registerDerivedVar("Amp1OverAmp123", Amp1OverAmp123);

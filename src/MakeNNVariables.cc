@@ -12,8 +12,6 @@
 #include <TRandom3.h>
 #include <iostream>
 #include <stdio.h> 
-//#include <fstream>
-//#include <cstdio>
 
 MakeNNVariables::MakeNNVariables()
 {
@@ -42,8 +40,7 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
         //-----------------------------------
         //  Initialize the tree
         //-----------------------------------       
-        const auto& corrAmp = tr.getVec<double>("corrAmp");
-        const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
+        const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
         tr.createDerivedVar<double>("amp1",ampLGAD[0][0]);
         tr.createDerivedVar<double>("amp2",ampLGAD[0][1]);
         tr.createDerivedVar<double>("amp3",ampLGAD[0][2]);
@@ -51,11 +48,15 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
         tr.createDerivedVar<double>("amp5",ampLGAD[0][4]);
         tr.createDerivedVar<double>("amp6",ampLGAD[0][5]);
 
-        //Correct for jitter in trigger time
-        const auto& LP2_20 = tr.getVec<float>("LP2_20");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
+        const auto& corrAmp = tr.getVec<double>("corrAmp");
+        tr.createDerivedVar<double>("ampPhotek",corrAmp[photekIndex]);
+
+        //Correct for jitter in trigger time
+        const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
+        const auto& corrTime = tr.getVec<double>("corrTime");
         double timeShift = 201.8;
-        double rawPhotekTime = LP2_20[photekIndex]*1e9 + timeShift;
+        double rawPhotekTime = corrTime[photekIndex] + timeShift;
         if(rawPhotekTime < -4.2)
         {
             timeShift += 6.0889;
@@ -68,26 +69,32 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
         {
             timeShift += -2.941;
         }
-
-        const auto& timeLGAD = utility::remapToLGADgeometry(tr, LP2_20, "timeLGAD");
-        tr.createDerivedVar<double>("time1",timeLGAD[0][0]*1e9 + timeShift + 10.53);
-        tr.createDerivedVar<double>("time2",timeLGAD[0][1]*1e9 + timeShift + 10.60);
-        tr.createDerivedVar<double>("time3",timeLGAD[0][2]*1e9 + timeShift + 10.60);
-        tr.createDerivedVar<double>("time4",timeLGAD[0][3]*1e9 + timeShift + 10.57);
-        tr.createDerivedVar<double>("time5",timeLGAD[0][4]*1e9 + timeShift + 10.56);
-        tr.createDerivedVar<double>("time6",timeLGAD[0][5]*1e9 + timeShift + 10.08);
-
-        tr.createDerivedVar<double>("timePhotek",LP2_20[photekIndex]*1e9 + timeShift);
-        const auto& amp = tr.getVec<float>("amp");
-        tr.createDerivedVar<double>("ampPhotek",amp[photekIndex]);
+        tr.createDerivedVar<double>("time1",(timeLGAD[0][0] != 0) ? timeLGAD[0][0] + timeShift : -10.0);
+        tr.createDerivedVar<double>("time2",(timeLGAD[0][1] != 0) ? timeLGAD[0][1] + timeShift : -10.0);
+        tr.createDerivedVar<double>("time3",(timeLGAD[0][2] != 0) ? timeLGAD[0][2] + timeShift : -10.0);
+        tr.createDerivedVar<double>("time4",(timeLGAD[0][3] != 0) ? timeLGAD[0][3] + timeShift : -10.0);
+        tr.createDerivedVar<double>("time5",(timeLGAD[0][4] != 0) ? timeLGAD[0][4] + timeShift : -10.0);
+        tr.createDerivedVar<double>("time6",(timeLGAD[0][5] != 0) ? timeLGAD[0][5] + timeShift : -10.0);
+        tr.createDerivedVar<double>("timePhotek",corrTime[photekIndex] + timeShift);
+        
+        //const auto& timeLGAD = utility::remapToLGADgeometry(tr, LP2_20, "timeLGAD");
+        //tr.createDerivedVar<double>("time1",timeLGAD[0][0]*1e9 + timeShift + 10.53);
+        //tr.createDerivedVar<double>("time2",timeLGAD[0][1]*1e9 + timeShift + 10.60);
+        //tr.createDerivedVar<double>("time3",timeLGAD[0][2]*1e9 + timeShift + 10.60);
+        //tr.createDerivedVar<double>("time4",timeLGAD[0][3]*1e9 + timeShift + 10.57);
+        //tr.createDerivedVar<double>("time5",timeLGAD[0][4]*1e9 + timeShift + 10.56);
+        //tr.createDerivedVar<double>("time6",timeLGAD[0][5]*1e9 + timeShift + 10.08);
+        //tr.createDerivedVar<double>("timePhotek",LP2_20[photekIndex]*1e9 + timeShift);
 
         std::set<std::string> varGeneral = 
         {
-            "x",
+            "x","deltaXmax","xCenterMaxStrip",
             "y",
             "ampPhotek","timePhotek",            
             "amp1","amp2","amp3","amp4","amp5","amp6",
             "time1","time2","time3","time4","time5","time6",
+            "weighted_time",
+            "Amp1OverAmp1and2","Amp2OverAmp2and3","Amp1OverAmp123","Amp2OverAmp123","Amp3OverAmp123",
         };
         
         if( tr.isFirstEvent() ) 
@@ -108,32 +115,25 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
         
         //-----------------------------------
         //-- Fill Histograms Below
-        //-----------------------------------
+        //-----------------------------------                                                  
+        const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& nplanes = tr.getVar<int>("nplanes");
         const auto& npix = tr.getVar<int>("npix");
+        const auto& chi2 = tr.getVar<float>("chi2");
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
-        //const auto& chi2 = tr.getVar<float>("chi2");
-        //const auto& x = tr.getVar<double>("x");
-        //const auto& ampPhotek = tr.getVar<double>("ampPhotek");
-        const auto& timePhotek = tr.getVar<double>("timePhotek");
-        //bool hitMidStrips = 0.23 < x && x < 0.53;
-        bool hitMidStrips = true;
-        //bool passAmpCut = (20.0 < ampLGAD[0][1] && 20.0 < ampLGAD[0][2]                         && ampLGAD[0][1] > ampLGAD[0][2]) ||
-        //                  (20.0 < ampLGAD[0][1] && 20.0 < ampLGAD[0][2] && 20.0 < ampLGAD[0][3] && ampLGAD[0][2] > ampLGAD[0][1] && ampLGAD[0][2] > ampLGAD[0][3]) ||
-        //                  (20.0 < ampLGAD[0][2] && 20.0 < ampLGAD[0][3] && 20.0 < ampLGAD[0][4] && ampLGAD[0][3] > ampLGAD[0][2] && ampLGAD[0][3] > ampLGAD[0][4]) ||
-        //                  (20.0 < ampLGAD[0][3] && 20.0 < ampLGAD[0][4]                         && ampLGAD[0][4] > ampLGAD[0][3]);
-        //bool passAmpCut = (20.0 < ampLGAD[0][1] && 20.0 < ampLGAD[0][2] && 20.0 < ampLGAD[0][3] && ampLGAD[0][2] > ampLGAD[0][1] && ampLGAD[0][2] > ampLGAD[0][3]);
-        bool passAmpCut = (30.0 < ampLGAD[0][1] || 30.0 < ampLGAD[0][2] || 30.0 < ampLGAD[0][3] || 30.0 < ampLGAD[0][4]);
-        //bool passTimeCut = timeLGAD[0][1] != 0 && timeLGAD[0][2] != 0 && timeLGAD[0][3] != 0;
-        bool passTimeCut = true;
+        const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
+        const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
+        const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
+        const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
 
-        auto maxAmpIter = std::max_element(ampLGAD[0].begin(), ampLGAD[0].end());
-        int d = std::distance(ampLGAD[0].begin(), maxAmpIter);
-        bool passMaxFourInnerStrips = 0 < d && d < 5;
-                                                  
-        if ( ntracks==1 && nplanes>10 && npix>0 && hitSensor && timePhotek > -2.0 &&
-             passAmpCut && hitMidStrips && passMaxFourInnerStrips && LP2_20[photekIndex] != 0 && passTimeCut)
+        bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
+        bool passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
+        bool pass = passTrigger && hitSensor && goodPhotek;
+        bool maxAmpNotEdgeStrip = maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= 4;
+        bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
+
+        if(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && corrTime[photekIndex] != 0)
         {
             int mod = count % 10;
             if(mod < 8)
