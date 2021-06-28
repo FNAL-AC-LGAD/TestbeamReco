@@ -52,7 +52,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             my_histos.emplace( ("weighted_time-time_channel"+r+s).c_str(), std::make_shared<TH1D>( ("weighted_time-time_channel"+r+s).c_str(), ("weighted_time-time_channel"+r+s).c_str(), timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
             my_histos.emplace( ("relFrac_top"+r+s).c_str(), std::make_shared<TH1D>( ("relFrac_top"+r+s).c_str(), ("relFrac_top"+r+s).c_str(), 100, 0.0, 1.0 ) ) ;
             my_histos.emplace( ("relFrac_bottom"+r+s).c_str(), std::make_shared<TH1D>( ("relFrac_bottom"+r+s).c_str(), ("relFrac_bottom"+r+s).c_str(), 100, 0.0, 1.0 ) ) ;
-
+            
             my_2d_histos.emplace( ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_highThreshold_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
             my_2d_prof.emplace( ("efficiency_vs_xy_highThreshold_prof_channel"+r+s).c_str(), std::make_shared<TProfile2D>( ("efficiency_vs_xy_highThreshold_prof_channel"+r+s).c_str(), ("efficiency_vs_xy_highThreshold_prof_channel"+r+s+"; X [mm]; Y [mm]").c_str(), xbins,xmin,xmax, ybins,ymin,ymax ) );
             my_2d_histos.emplace( ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s).c_str(), std::make_shared<TH2D>( ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s).c_str(), ("efficiency_vs_xy_lowThreshold_numerator_channel"+r+s+"; X [mm]; Y [mm]").c_str(), (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
@@ -63,9 +63,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             my_2d_histos.emplace( ("relFrac_vs_x_channel_bottom"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_x_channel_bottom"+r+s).c_str(), ("relFrac_vs_x_channel_bottom"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
             my_2d_histos.emplace( ("relFrac_vs_y_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_y_channel"+r+s).c_str(), ("relFrac_vs_y_channel"+r+s+"; Y [mm]; relFrac").c_str(), (ymax-ymin)/0.1,ymin,ymax, 100,0.0,1.0 ) );
 
-            my_2d_histos.emplace( ("Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s).c_str(), std::make_shared<TH2D>( ("Amp1OverAmp1and2_vs_deltaXmax"+r+s).c_str(), ("Amp1OverAmp1and2_vs_deltaXmax"+r+s+"; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / Amp_{Max} + Amp_{2}").c_str(), 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+            my_2d_histos.emplace( ("Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s).c_str(), std::make_shared<TH2D>( ("Amp1OverAmp1and2_vs_deltaXmax"+r+s).c_str(), ("Amp1OverAmp1and2_vs_deltaXmax"+r+s+"; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / Amp_{Max} + Amp_{2}").c_str(), 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );            
             
-            my_2d_histos.emplace( ("amp_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel"+r+s).c_str(), ("amp_vs_x_channel"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("amp_vs_x_channel_top"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_top"+r+s).c_str(), ("amp_vs_x_channel_top"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("amp_vs_x_channel_bottom"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_bottom"+r+s).c_str(), ("amp_vs_x_channel_bottom"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("stripBoxInfo"+r+s).c_str(), std::make_shared<TH2D>( ("stripBoxInfo"+r+s).c_str(), ("stripBoxInfo"+r+s).c_str(), 1,-9999.0,9999.0, 1,-9999.9,9999.9));
@@ -83,11 +82,11 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_histos.emplace( "timeDiff_amp2", std::make_shared<TH1D>("timeDiff_amp2", "timeDiff_amp2", timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
     my_histos.emplace( "timeDiff_amp3", std::make_shared<TH1D>("timeDiff_amp3", "timeDiff_amp3", timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
     my_histos.emplace( "weighted_timeDiff", std::make_shared<TH1D>("weighted_timeDiff", "weighted_timeDiff", timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
-
+    
     //Global 2D efficiencies
     my_2d_histos.emplace( "relFracDC_vs_x_channel_top", std::make_shared<TH2D>( "relFracDC_vs_x_channel_top", "relFracDC_vs_x_channel_top; X [mm]; relFrac", (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
     my_2d_histos.emplace( "weighted_timeDiff_vs_x", std::make_shared<TH2D>( "weighted_timeDiff_vs_x", "weighted_timeDiff_vs_x", (xmax-xmin)/0.02,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
-
+    
     //Global 2D efficiencies
     //my_2d_histos.emplace( "efficiency_vs_xy_highThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_highThreshold_numerator", "efficiency_vs_xy_highThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax ) );
     my_2d_histos.emplace( "efficiency_vs_xy_highThreshold_numerator", std::make_shared<TH2D>( "efficiency_vs_xy_highThreshold_numerator", "efficiency_vs_xy_highThreshold_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
@@ -104,14 +103,16 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_2d_histos.emplace( "Amp1OverAmp1andBotPad4_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp1andBotPad4_vs_deltaXmax", "Amp1OverAmp1andBotPad4_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Bot})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
     my_2d_histos.emplace( "Amp1OverAmp123_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp123_vs_deltaXmax", "Amp1OverAmp123_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
     my_2d_histos.emplace( "Amp2OverAmp2and3_vs_deltaXmax", std::make_shared<TH2D>( "Amp2OverAmp2and3_vs_deltaXmax", "Amp2OverAmp2and3_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{2} / (Amp_{2} + Amp{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
-
+    
     my_2d_histos.emplace( "deltaX_vs_Xtrack", std::make_shared<TH2D>( "deltaX_vs_Xtrack", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
+    my_2d_histos.emplace( "deltaX_vs_Xreco", std::make_shared<TH2D>( "deltaX_vs_Xreco", "deltaX_vs_Xreco; X_{reco} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
+    my_2d_histos.emplace( "deltaXmax_vs_Xtrack", std::make_shared<TH2D>( "deltaXmax_vs_Xtrack", "deltaXmax_vs_Xtrack; X_{track} [mm]; #X_{max} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
     my_2d_histos.emplace( "deltaX_vs_Xtrack_A1OverA12Above0p75", std::make_shared<TH2D>( "deltaX_vs_Xtrack_A1OverA12Above0p75", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5 ) );
     my_2d_histos.emplace( "Xreco_vs_Xtrack", std::make_shared<TH2D>( "Xreco_vs_Xtrack", "Xreco_vs_Xtrack; X_{track} [mm]; #X_{reco} [mm]", (xmax-xmin)/0.005,xmin,xmax, (xmax-xmin)/0.005,xmin,xmax ) );
     my_2d_histos.emplace( "Xtrack_vs_Amp1OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp1OverAmp123", "Xtrack_vs_Amp1OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
     my_2d_histos.emplace( "Xtrack_vs_Amp2OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp2OverAmp123", "Xtrack_vs_Amp2OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
     my_2d_histos.emplace( "Xtrack_vs_Amp3OverAmp123", std::make_shared<TH2D>( "Xtrack_vs_Amp3OverAmp123", "Xtrack_vs_Amp3OverAmp123; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax, 100,0.0,1.0) );
-
+    
     my_3d_histos.emplace( "totgoodamplitude_vs_xy", std::make_shared<TH3D>( "totgoodamplitude_vs_xy", "totgoodamplitude_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );	
     my_3d_histos.emplace( "totamplitude_vs_xy", std::make_shared<TH3D>( "totamplitude_vs_xy", "totamplitude_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );
     my_3d_histos.emplace( "amp123_vs_xy", std::make_shared<TH3D>( "amp123_vs_xy", "amp123_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 ) );
@@ -120,11 +121,11 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_3d_histos.emplace( "timeDiff_vs_xy_amp2", std::make_shared<TH3D>( "timeDiff_vs_xy_amp2", "timeDiff_vs_xy_amp2; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
     my_3d_histos.emplace( "timeDiff_vs_xy_amp3", std::make_shared<TH3D>( "timeDiff_vs_xy_amp3", "timeDiff_vs_xy_amp3; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
     my_3d_histos.emplace( "weighted_timeDiff_vs_xy", std::make_shared<TH3D>( "weighted_timeDiff_vs_xy", "weighted_timeDiff_vs_xy; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
-
+    
     //Define 2d prof
     my_2d_prof.emplace("efficiency_vs_xy_DCRing", std::make_shared<TProfile2D>("efficiency_vs_xy_DCRing", "efficiency_vs_xy_DCRing; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax ) );	
     my_2d_prof.emplace("efficiency_vs_xy_Strip2or5", std::make_shared<TProfile2D>("efficiency_vs_xy_Strip2or5", "efficiency_vs_xy_Strip2or5; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax ) );	
-
+    
     //Define 1d prof
     my_1d_prof.emplace("Xtrack_vs_Amp1OverAmp123_prof", std::make_shared<TProfile>( "Xtrack_vs_Amp1OverAmp123_prof", "Xtrack_vs_Amp1OverAmp123_prof; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax));
     my_1d_prof.emplace("Xtrack_vs_Amp2OverAmp123_prof", std::make_shared<TProfile>( "Xtrack_vs_Amp2OverAmp123_prof", "Xtrack_vs_Amp2OverAmp123_prof; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/0.01,xmin,xmax));
@@ -283,7 +284,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Xtrack_vs_Amp2OverAmp123"], x,Amp2OverAmp123);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Xtrack_vs_Amp3OverAmp123"], x,Amp3OverAmp123);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_2d_histos["deltaX_vs_Xtrack"], x,x_reco-x);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_2d_histos["weighted_timeDiff_vs_x"], x,weighted_time-photekTime); 
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_2d_histos["deltaX_vs_Xreco"], x_reco,x_reco-x);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_2d_histos["deltaXmax_vs_Xtrack"], x,deltaXmax);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_2d_histos["weighted_timeDiff_vs_x"], x,weighted_time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_2d_histos["Xreco_vs_Xtrack"], x,x_reco);
         utility::fillHisto(pass && highRelAmp1,                          my_2d_histos["deltaX_vs_Xtrack_A1OverA12Above0p75"], x,x_reco-x);	    
         utility::fillHisto(pass && highRelAmp1,                          my_2d_histos["Amp2OverAmp2and3_vs_deltaXmax"], deltaXmax,Amp2OverAmp2and3);
@@ -304,7 +307,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_1d_prof["Xtrack_vs_Amp3OverAmp123_prof"], x,Amp3OverAmp123);
         utility::fillHisto(passTrigger,                                  my_2d_prof["efficiency_vs_xy_Strip2or5"], x,y,goodHitGlobal2and5);
         utility::fillHisto(passTrigger,                                  my_2d_prof["efficiency_vs_xy_DCRing"], x,y,goodDCAmp);
-
+        
 	// Example Fill event selection efficiencies
 	my_efficiencies["event_sel_weight"]->SetUseWeightedEvents();
 	my_efficiencies["event_sel_weight"]->FillWeighted(true,1.0,0);

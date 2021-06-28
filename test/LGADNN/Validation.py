@@ -283,7 +283,27 @@ class Validation:
                
         for key in self.metric:
             print(key, self.metric[key])
-        
+
+        # Make Plots for time resolutin plots
+        xmin=-0.15
+        xmax=0.85
+        recoHisto = ROOT.TH2D( "deltaX_vs_Xtrack", "deltaX_vs_Xtrack; X_{track} [mm]; #X_{reco} - X_{track} [mm]", int((xmax-xmin)/0.01),xmin,xmax, 200,-0.5,0.5 )
+
+        allData = get_data(["BNL2020_220V_272.root"], self.config)
+        output_all = self.model.predict(allData["data"])
+        x_all = self.getResults(output_all, outputNum=0, columnNum=0)
+        t_all = self.getResults(output_all, outputNum=1, columnNum=0)
+        x_all_true = allData["targetX"][:,0]
+        t_all_true = allData["targetT"][:,0]
+
+        for i in range(0, len(x_all)):
+            recoHisto.Fill( x_all_true[i],  x_all_true[i]-x_all[i])
+
+        fOut = ROOT.TFile.Open("NN_Output.root", "RECREATE")
+        fOut.cd()
+        recoHisto.Write()
+        fOut.Close()
+
         self.config["metric"] = self.metric
         with open(self.config["outputDir"]+"/config.json",'w') as configFile:
             json.dump(self.config, configFile, indent=4, sort_keys=True)
