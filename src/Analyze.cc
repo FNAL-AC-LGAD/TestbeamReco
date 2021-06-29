@@ -286,8 +286,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpinPad2,                         my_2d_histos["Amp1OverAmp1andTopPad2_vs_deltaXmaxneg"], deltaXmaxneg,Amp1OverAmp1andTop); 
         utility::fillHisto(pass && maxAmpinPad3,                         my_2d_histos["Amp1OverAmp1andBotPad3_vs_deltaXmaxneg"], deltaXmaxneg,Amp1OverAmp1andBot);    
         utility::fillHisto(pass && maxAmpinPad4,                         my_2d_histos["Amp1OverAmp1andBotPad4_vs_deltaXmaxpos"], deltaXmaxpos,Amp1OverAmp1andBot);  
-        utility::fillHisto(pass && (maxAmpinPad1 || maxAmpinPad2),       my_2d_histos["Amp1OverAmp1andTop_vs_deltaXmaxTopPad"], deltaXmaxTopPad,Amp1OverAmp1andTop);
-        utility::fillHisto(pass && (maxAmpinPad3 || maxAmpinPad4),       my_2d_histos["Amp1OverAmp1andBot_vs_deltaXmaxBotPad"], deltaXmaxBotPad,Amp1OverAmp1andBot);
+        utility::fillHisto(pass && (maxAmpinPad1 || maxAmpinPad2),       my_2d_histos["Amp1OverAmp1andTop_vs_deltaXmaxTopPad"], fabs(deltaXmaxTopPad),Amp1OverAmp1andTop);
+        utility::fillHisto(pass && (maxAmpinPad3 || maxAmpinPad4),       my_2d_histos["Amp1OverAmp1andBot_vs_deltaXmaxBotPad"], fabs(deltaXmaxBotPad),Amp1OverAmp1andBot);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Amp1OverAmp123_vs_deltaXmax"], fabs(deltaXmax),Amp1OverAmp123);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Xtrack_vs_Amp1OverAmp123"], x,Amp1OverAmp123);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Xtrack_vs_Amp2OverAmp123"], x,Amp2OverAmp123);
