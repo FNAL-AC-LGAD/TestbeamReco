@@ -29,6 +29,26 @@ private:
         tr.registerDerivedVar("amp2Indexes", amp2Indexes);
         tr.registerDerivedVar("amp3Indexes", amp3Indexes);
 
+	std::pair<int,int> ampIndexesTop;
+	if(amp1Indexes.first == 0 && amp1Indexes.second == 0)
+	{
+	    ampIndexesTop = std::make_pair<int,int>(0,1);
+        }
+	else if(amp1Indexes.first == 0  && amp1Indexes.second == 1)
+        {		
+	    ampIndexesTop = std::make_pair<int,int>(0,0);
+        }
+
+        std::pair<int,int> ampIndexesBot;
+	if(amp1Indexes.first == 1 && amp1Indexes.second == 0)
+	{
+	    ampIndexesBot = std::make_pair<int,int>(1,1);
+        }
+	else if(amp1Indexes.first == 1  && amp1Indexes.second == 1)
+        {		
+	    ampIndexesBot = std::make_pair<int,int>(1,0);
+        }
+
         //Find max LGAD amp
         double maxAmpLGAD = ampLGAD[amp1Indexes.first][amp1Indexes.second];
         tr.registerDerivedVar("maxAmpLGAD", maxAmpLGAD);
@@ -76,24 +96,69 @@ private:
         double Amp1 = stayPositive(ampLGAD[amp1Indexes.first][amp1Indexes.second]);
         double Amp2 = stayPositive(ampLGAD[amp2Indexes.first][amp2Indexes.second]);
         double Amp3 = stayPositive(ampLGAD[amp3Indexes.first][amp3Indexes.second]);
+        double AmpTop = stayPositive(ampLGAD[ampIndexesTop.first][ampIndexesTop.second]);
+        double AmpBot = stayPositive(ampLGAD[ampIndexesBot.first][ampIndexesBot.second]); 
         double Amp12 = stayPositive(Amp1 + Amp2);
         double Amp123 = stayPositive(Amp1 + Amp2 + Amp3);
+        double Amp1Top = stayPositive(Amp1 + AmpTop);
+        double Amp1Bot = stayPositive(Amp1 + AmpBot);
         double Amp1OverAmp1and2 = stayPositive(Amp1 / Amp12);
+        double Amp1OverAmp1andTop = stayPositive(Amp1 / Amp1Top);
+        double Amp1OverAmp1andBot = stayPositive(Amp1 / Amp1Bot);
         double Amp2OverAmp2and3 = stayPositive(Amp2 / Amp12);
         double Amp1OverAmp123 = stayPositive(Amp1 / Amp123);
         double Amp2OverAmp123 = stayPositive(Amp2 / Amp123);
         double Amp3OverAmp123 = stayPositive(Amp3 / Amp123);
         double xCenterMaxStrip = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
         double deltaXmax = x - xCenterMaxStrip;
+        double deltaXmaxpos = -1;
+        double deltaXmaxneg = -1;
+        double deltaXmaxTopPad = 0;
+        double deltaXmaxBotPad = 0; 
+
+        if (deltaXmax >= 0)
+        {   
+            deltaXmaxpos = deltaXmax;
+        }
+        else
+        {
+            deltaXmaxneg = deltaXmax;
+        }   
+      
+ 
+        if (amp1Indexes.first==0 && amp1Indexes.second==0)
+        {
+            deltaXmaxTopPad = deltaXmaxpos;
+        }
+        else if (amp1Indexes.first==0 && amp1Indexes.second==1)
+        {
+            deltaXmaxTopPad = deltaXmaxneg;
+        }
+        
+         if (amp1Indexes.first==1 && amp1Indexes.second==0)
+        {
+            deltaXmaxBotPad = deltaXmaxpos;
+        }
+        else if (amp1Indexes.first==1 && amp1Indexes.second==1)
+        {
+            deltaXmaxBotPad = deltaXmaxneg;
+        }   
+        
         tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
         tr.registerDerivedVar("Amp2Index", Amp2Index);
         tr.registerDerivedVar("deltaXmax", deltaXmax);
+        tr.registerDerivedVar("deltaXmaxpos", deltaXmaxpos);
+        tr.registerDerivedVar("deltaXmaxneg", deltaXmaxneg);
+        tr.registerDerivedVar("deltaXmaxTopPad", deltaXmaxTopPad);
+        tr.registerDerivedVar("deltaXmaxBotPad", deltaXmaxBotPad);
         tr.registerDerivedVar("xCenterMaxStrip", xCenterMaxStrip);
         tr.registerDerivedVar("Amp1OverAmp1and2", Amp1OverAmp1and2);
         tr.registerDerivedVar("Amp2OverAmp2and3", Amp2OverAmp2and3);
         tr.registerDerivedVar("Amp1OverAmp123", Amp1OverAmp123);
         tr.registerDerivedVar("Amp2OverAmp123", Amp2OverAmp123);
         tr.registerDerivedVar("Amp3OverAmp123", Amp3OverAmp123);
+        tr.registerDerivedVar("Amp1OverAmp1andTop", Amp1OverAmp1andTop);
+        tr.registerDerivedVar("Amp1OverAmp1andBot", Amp1OverAmp1andBot);
         tr.registerDerivedVar("Amp12", Amp12);
         tr.registerDerivedVar("Amp123", Amp123);
     }
