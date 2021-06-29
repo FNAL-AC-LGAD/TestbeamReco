@@ -111,9 +111,46 @@ private:
         double Amp3OverAmp123 = stayPositive(Amp3 / Amp123);
         double xCenterMaxStrip = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
         double deltaXmax = x - xCenterMaxStrip;
+        double deltaXmaxpos = -1;
+        double deltaXmaxneg = -1;
+        double deltaXmaxTopPad = 0;
+        double deltaXmaxBotPad = 0; 
+
+        if (deltaXmax >= 0)
+        {   
+            deltaXmaxpos = deltaXmax;
+        }
+        else
+        {
+            deltaXmaxneg = deltaXmax;
+        }   
+      
+ 
+        if (amp1Indexes.first==0 && amp1Indexes.second==0)
+        {
+            deltaXmaxTopPad = deltaXmaxpos;
+        }
+        else if (amp1Indexes.first==0 && amp1Indexes.second==1)
+        {
+            deltaXmaxTopPad = deltaXmaxneg;
+        }
+        
+         if (amp1Indexes.first==1 && amp1Indexes.second==0)
+        {
+            deltaXmaxBotPad = deltaXmaxpos;
+        }
+        else if (amp1Indexes.first==1 && amp1Indexes.second==1)
+        {
+            deltaXmaxBotPad = deltaXmaxneg;
+        }   
+        
         tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
         tr.registerDerivedVar("Amp2Index", Amp2Index);
         tr.registerDerivedVar("deltaXmax", deltaXmax);
+        tr.registerDerivedVar("deltaXmaxpos", deltaXmaxpos);
+        tr.registerDerivedVar("deltaXmaxneg", deltaXmaxneg);
+        tr.registerDerivedVar("deltaXmaxTopPad", deltaXmaxTopPad);
+        tr.registerDerivedVar("deltaXmaxBotPad", deltaXmaxBotPad);
         tr.registerDerivedVar("xCenterMaxStrip", xCenterMaxStrip);
         tr.registerDerivedVar("Amp1OverAmp1and2", Amp1OverAmp1and2);
         tr.registerDerivedVar("Amp2OverAmp2and3", Amp2OverAmp2and3);
