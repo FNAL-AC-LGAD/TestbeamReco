@@ -62,10 +62,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             my_2d_histos.emplace( ("timeDiff_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("timeDiff_vs_x_channel"+r+s).c_str(), ("timeDiff_vs_x_channel"+r+s).c_str(), (xmax-xmin)/0.02,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh ) ) ;
             my_2d_histos.emplace( ("relFrac_vs_x_channel_bottom"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_x_channel_bottom"+r+s).c_str(), ("relFrac_vs_x_channel_bottom"+r+s+"; X [mm]; relFrac").c_str(), (xmax-xmin)/0.02,xmin,xmax, 100,0.0,1.0 ) );
             my_2d_histos.emplace( ("relFrac_vs_y_channel"+r+s).c_str(), std::make_shared<TH2D>( ("relFrac_vs_y_channel"+r+s).c_str(), ("relFrac_vs_y_channel"+r+s+"; Y [mm]; relFrac").c_str(), (ymax-ymin)/0.1,ymin,ymax, 100,0.0,1.0 ) );
-            
-            my_2d_histos.emplace( ("Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s).c_str(), std::make_shared<TH2D>( ("Amp1OverAmp1and2_vs_deltaXmax"+r+s).c_str(), ("Amp1OverAmp1and2_vs_deltaXmax"+r+s+"; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / Amp_{2}").c_str(), 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
-            
-            my_2d_histos.emplace( ("amp_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel"+r+s).c_str(), ("amp_vs_x_channel"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
+
+            my_2d_histos.emplace( ("Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s).c_str(), std::make_shared<TH2D>( ("Amp1OverAmp1and2_vs_deltaXmax"+r+s).c_str(), ("Amp1OverAmp1and2_vs_deltaXmax"+r+s+"; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / Amp_{Max} + Amp_{2}").c_str(), 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );            
+           
+            my_2d_histos.emplace( ("amp_vs_x_channel"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel"+r+s).c_str(), ("amp_vs_x_channel"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) ); 
             my_2d_histos.emplace( ("amp_vs_x_channel_top"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_top"+r+s).c_str(), ("amp_vs_x_channel_top"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("amp_vs_x_channel_bottom"+r+s).c_str(), std::make_shared<TH2D>( ("amp_vs_x_channel_bottom"+r+s).c_str(), ("amp_vs_x_channel_bottom"+r+s+"; X [mm]; amp").c_str(), (xmax-xmin)/0.02,xmin,xmax, 250,0.0,500) );
             my_2d_histos.emplace( ("stripBoxInfo"+r+s).c_str(), std::make_shared<TH2D>( ("stripBoxInfo"+r+s).c_str(), ("stripBoxInfo"+r+s).c_str(), 1,-9999.0,9999.0, 1,-9999.9,9999.9));
@@ -98,6 +98,12 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     my_2d_histos.emplace( "efficiencyDC_vs_xy_numerator", std::make_shared<TH2D>( "efficiencyDC_vs_xy_numerator", "efficiencyDC_vs_xy_numerator; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax ) );
     my_2d_histos.emplace( "clusterSize_vs_x", std::make_shared<TH2D>( "clusterSize_vs_x", "clusterSize_vs_x; X [mm]; Cluster Size", (xmax-xmin)/0.02,xmin,xmax, 20,-0.5,19.5 ) );
     my_2d_histos.emplace( "Amp1OverAmp1and2_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp1and2_vs_deltaXmax", "Amp1OverAmp1and2_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp1andTopPad1_vs_deltaXmaxpos", std::make_shared<TH2D>( "Amp1OverAmp1andTopPad1_vs_deltaXmaxpos", "Amp1OverAmp1andTopPad1_vs_deltaXmaxpos; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Top})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp1andTopPad2_vs_deltaXmaxneg", std::make_shared<TH2D>( "Amp1OverAmp1andTopPad2_vs_deltaXmaxneg", "Amp1OverAmp1andTopPad2_vs_deltaXmaxneg; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Top})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp1andBotPad3_vs_deltaXmaxneg", std::make_shared<TH2D>( "Amp1OverAmp1andBotPad3_vs_deltaXmaxneg", "Amp1OverAmp1andBotPad3_vs_deltaXmaxneg; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Bot})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp1andBotPad4_vs_deltaXmaxpos", std::make_shared<TH2D>( "Amp1OverAmp1andBotPad4_vs_deltaXmaxpos", "Amp1OverAmp1andBotPad4_vs_deltaXmaxpos; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Bot})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp1andTop_vs_deltaXmaxTopPad", std::make_shared<TH2D>( "Amp1OverAmp1andTop_vs_deltaXmaxTopPad", "Amp1OverAmp1andTop_vs_deltaXmaxTopPad; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Top})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
+    my_2d_histos.emplace( "Amp1OverAmp1andBot_vs_deltaXmaxBotPad", std::make_shared<TH2D>( "Amp1OverAmp1andBot_vs_deltaXmaxBotPad", "Amp1OverAmp1andBot_vs_deltaXmaxBotPad; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Bot})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
     my_2d_histos.emplace( "Amp1OverAmp123_vs_deltaXmax", std::make_shared<TH2D>( "Amp1OverAmp123_vs_deltaXmax", "Amp1OverAmp123_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
     my_2d_histos.emplace( "Amp2OverAmp2and3_vs_deltaXmax", std::make_shared<TH2D>( "Amp2OverAmp2and3_vs_deltaXmax", "Amp2OverAmp2and3_vs_deltaXmax; #X_{track} - X_{Max Strip} [mm]; Amp_{2} / (Amp_{2} + Amp{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0 ) );
     
@@ -180,7 +186,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& amp2Indexes = tr.getVar<std::pair<int,int>>("amp2Indexes");
         const auto& amp3Indexes = tr.getVar<std::pair<int,int>>("amp3Indexes");
         const auto& deltaXmax = tr.getVar<double>("deltaXmax");
+        const auto& deltaXmaxpos = tr.getVar<double>("deltaXmaxpos");
+        const auto& deltaXmaxneg = tr.getVar<double>("deltaXmaxneg"); 
+        const auto& deltaXmaxTopPad = tr.getVar<double>("deltaXmaxTopPad"); 
+        const auto& deltaXmaxBotPad = tr.getVar<double>("deltaXmaxBotPad"); 
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
+        const auto& Amp1OverAmp1andTop = tr.getVar<double>("Amp1OverAmp1andTop");
+        const auto& Amp1OverAmp1andBot = tr.getVar<double>("Amp1OverAmp1andBot");
         const auto& Amp2OverAmp2and3 = tr.getVar<double>("Amp2OverAmp2and3");
         const auto& Amp1OverAmp123 = tr.getVar<double>("Amp1OverAmp123");
         const auto& Amp2OverAmp123 = tr.getVar<double>("Amp2OverAmp123");
@@ -199,6 +211,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool maxAmpNotEdgeStrip = maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= 4;
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
         bool inTopRow = y>ySlices[1][0] && y<ySlices[1][1];
+        bool maxAmpinPad1 = amp1Indexes.first==0 && amp1Indexes.second==0;
+        bool maxAmpinPad2 = amp1Indexes.first==0 && amp1Indexes.second==1;
+        bool maxAmpinPad3 = amp1Indexes.first==1 && amp1Indexes.second==1;
+        bool maxAmpinPad4 = amp1Indexes.first==1 && amp1Indexes.second==0;
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
         bool goodDCAmp = corrAmp[0]>signalAmpThreshold;
         bool highRelAmp1 = Amp1OverAmp1and2>=0.75;
@@ -208,7 +224,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         double amp3Time = timeLGAD[amp3Indexes.first][amp3Indexes.second];
         double firstEvent = tr.isFirstEvent();
 
-	//******************************************************************
+        //******************************************************************
         //Make cuts and fill histograms here
 	//******************************************************************        
         //Loop over each channel in each sensor
@@ -266,6 +282,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass,                                         my_2d_histos["relFracDC_vs_x_channel_top"], x,relFracDC);
         utility::fillHisto(pass,                                         my_2d_histos["efficiency_vs_xy_denominator"], x,y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax"], fabs(deltaXmax),Amp1OverAmp1and2);
+        utility::fillHisto(pass && maxAmpinPad1,                         my_2d_histos["Amp1OverAmp1andTopPad1_vs_deltaXmaxpos"], deltaXmaxpos,Amp1OverAmp1andTop);
+        utility::fillHisto(pass && maxAmpinPad2,                         my_2d_histos["Amp1OverAmp1andTopPad2_vs_deltaXmaxneg"], deltaXmaxneg,Amp1OverAmp1andTop); 
+        utility::fillHisto(pass && maxAmpinPad3,                         my_2d_histos["Amp1OverAmp1andBotPad3_vs_deltaXmaxneg"], deltaXmaxneg,Amp1OverAmp1andBot);    
+        utility::fillHisto(pass && maxAmpinPad4,                         my_2d_histos["Amp1OverAmp1andBotPad4_vs_deltaXmaxpos"], deltaXmaxpos,Amp1OverAmp1andBot);  
+        utility::fillHisto(pass && (maxAmpinPad1 || maxAmpinPad2),       my_2d_histos["Amp1OverAmp1andTop_vs_deltaXmaxTopPad"], deltaXmaxTopPad,Amp1OverAmp1andTop);
+        utility::fillHisto(pass && (maxAmpinPad3 || maxAmpinPad4),       my_2d_histos["Amp1OverAmp1andBot_vs_deltaXmaxBotPad"], deltaXmaxBotPad,Amp1OverAmp1andBot);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Amp1OverAmp123_vs_deltaXmax"], fabs(deltaXmax),Amp1OverAmp123);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Xtrack_vs_Amp1OverAmp123"], x,Amp1OverAmp123);
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                   my_2d_histos["Xtrack_vs_Amp2OverAmp123"], x,Amp2OverAmp123);
