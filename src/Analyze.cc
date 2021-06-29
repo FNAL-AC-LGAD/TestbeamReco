@@ -99,15 +99,15 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_denominator", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_numerator", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax);
     utility::makeHisto(my_2d_histos,"clusterSize_vs_x", "; X [mm]; Cluster Size", (xmax-xmin)/0.02,xmin,xmax, 20,-0.5,19.5);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax", "; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad1_vs_deltaXmaxpos","; X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Top})",0.50/0.002,-0.25,0.25, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad2_vs_deltaXmaxneg","; X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Top})",0.50/0.002,-0.25,0.25, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad3_vs_deltaXmaxneg","; X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Bot})",0.50/0.002,-0.25,0.25, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad4_vs_deltaXmaxpos","; X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Bot})",0.50/0.002,-0.25,0.25, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTop_vs_deltaXmaxTopPad","; X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Top})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBot_vs_deltaXmaxBotPad","; X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{Bot})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp123_vs_deltaXmax", "; #X_{track} - X_{Max Strip} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} +Amp_{3})",  0.50/0.002,-0.25,0.25, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp2OverAmp2and3_vs_deltaXmax", "; #X_{track} - X_{Max Strip} [mm]; Amp_{2} / (Amp_{2} + Amp{3})", 0.50/0.002,-0.25,0.25, 100,0.0,1.0);    
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax", "", stripWidth/0.002,-stripWidth/2,stripWidth/2, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad1_vs_deltaXmaxpos","",stripWidth/0.002,-stripWidth/2.0,stripWidth/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad2_vs_deltaXmaxneg","",stripWidth/0.002,-stripWidth/2.0,stripWidth/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad3_vs_deltaXmaxneg","",stripWidth/0.002,-stripWidth/2.0,stripWidth/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad4_vs_deltaXmaxpos","",stripWidth/0.002,-stripWidth/2.0,stripWidth/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTop_vs_deltaXmaxTopPad","", stripWidth/0.002,-stripWidth/2.0,stripWidth/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBot_vs_deltaXmaxBotPad","", stripWidth/0.002,-stripWidth/2.0,stripWidth/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp123_vs_deltaXmax",          "", stripWidth/0.002,-stripWidth/2.0,stripWidth/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp2OverAmp2and3_vs_deltaXmax",        "", stripWidth/0.002,-stripWidth/2.0,stripWidth/2.0, 100,0.0,1.0);    
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xreco", "; X_{reco} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaXmax_vs_Xtrack", "; X_{track} [mm]; #X_{max} - X_{track} [mm]", (xmax-xmin)/0.01,xmin,xmax, 200,-0.5,0.5);
@@ -123,12 +123,12 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"amp123_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500);
     utility::makeHisto(my_3d_histos,"amp12_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500);	
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp2", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,imeDiffHigh) ;
-    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp3", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffow,timeDiffHigh) ;
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffow,timeDiffHigh) ;
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDifLow,timeDiffHigh) ;
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,tmeDiffHigh) ;
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,imeDiffHigh) ;
+    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp2", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp3", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]",(xmax-xmin)/0.02,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     
     //Define 2d prof
     utility::makeHisto(my_2d_prof,"efficiency_vs_xy_DCRing", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);	
