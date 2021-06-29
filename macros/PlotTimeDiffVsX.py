@@ -34,6 +34,9 @@ all_histoInfos = [
     HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
     HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
     HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
+    HistoInfo("weighted2_timeDiff_vs_xy", inputfile, "weighted2_time_diff"),
+    HistoInfo("weighted_timeDiff_goodSig_vs_xy", inputfile, "weighted_time_goodSig"),
+    HistoInfo("weighted2_timeDiff_goodSig_vs_xy", inputfile, "weighted2_time_goodSig"),
 ]
 
 canvas = TCanvas("cv","cv",800,800)
