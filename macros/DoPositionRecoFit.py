@@ -1,4 +1,5 @@
 from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,TF1,gStyle,gROOT
+import ROOT
 import os
 
 gROOT.SetBatch( True )

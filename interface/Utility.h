@@ -57,6 +57,10 @@ namespace utility
     }
 
     template<typename T, typename... Args> void fillHisto(const bool pass, T& histo, Args... args) { if(pass) histo->Fill(args...); }
+    template<typename T, typename... Args> void makeHisto(std::map<std::string, std::shared_ptr<T>>& map, const std::string& name, const std::string& hName, Args... args)
+    {
+        map.emplace(name.c_str(), std::make_shared<T>(name.c_str(), (name+hName).c_str(), args...) ) ;
+    }
 }
 
 #endif
