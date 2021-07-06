@@ -20,6 +20,7 @@ private:
         const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
         const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
         const auto& x = tr.getVar<double>("x");
+        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
 
 	//Find max channel and 2nd,3rd channels
         const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1);
@@ -48,6 +49,17 @@ private:
         {		
 	    ampIndexesBot = std::make_pair<int,int>(1,0);
         }
+
+        std::pair<int,int> ampIndexesAdjPad;
+        if (amp1Indexes.first == 0)
+        {
+            ampIndexesAdjPad = ampIndexesTop; 
+        }
+        else if (amp1Indexes.first == 1)
+        {
+            ampIndexesAdjPad = ampIndexesBot;
+        }
+
 
         //Find max LGAD amp
         double maxAmpLGAD = ampLGAD[amp1Indexes.first][amp1Indexes.second];
@@ -90,7 +102,32 @@ private:
         //Find rel fraction of DC amp vs. LGAD amp
         tr.registerDerivedVar("relFracDC", corrAmp[0]/totAmpLGAD);
 
-        //Compute position-sensitive variables
+        //Compute position-sensitive variablei
+        double padx = 0;
+        int maxAmpPadIndex = -1;
+
+        if (amp1Indexes.first == 0 && amp1Indexes.second == 0)
+        {
+            maxAmpPadIndex = 1;
+            padx = x-sensorCenter; 
+            
+        }
+        else if (amp1Indexes.first == 0 && amp1Indexes.second == 1)
+        {
+            maxAmpPadIndex = 2; 
+            padx = -(x-sensorCenter);      
+        }
+        else if (amp1Indexes.first == 1 && amp1Indexes.second == 1)
+        {
+            maxAmpPadIndex = 3;
+            padx = x-sensorCenter; 
+        }
+        else if (amp1Indexes.first == 1 && amp1Indexes.second == 0)
+        {
+            maxAmpPadIndex = 4;
+            padx = -(x-sensorCenter);
+        }
+        
         int maxAmpIndex = amp1Indexes.second;
         int Amp2Index = amp2Indexes.second;
         double Amp1 = stayPositive(ampLGAD[amp1Indexes.first][amp1Indexes.second]);
@@ -98,23 +135,27 @@ private:
         double Amp3 = stayPositive(ampLGAD[amp3Indexes.first][amp3Indexes.second]);
         double AmpTop = stayPositive(ampLGAD[ampIndexesTop.first][ampIndexesTop.second]);
         double AmpBot = stayPositive(ampLGAD[ampIndexesBot.first][ampIndexesBot.second]); 
+        double AmpAdjPad =  stayPositive(ampLGAD[ampIndexesAdjPad.first][ampIndexesAdjPad.second]);
         double Amp12 = stayPositive(Amp1 + Amp2);
         double Amp123 = stayPositive(Amp1 + Amp2 + Amp3);
         double Amp1Top = stayPositive(Amp1 + AmpTop);
         double Amp1Bot = stayPositive(Amp1 + AmpBot);
+        double Amp1AdjPad = stayPositive(Amp1 +AmpAdjPad);
         double Amp1OverAmp1and2 = stayPositive(Amp1 / Amp12);
         double Amp1OverAmp1andTop = stayPositive(Amp1 / Amp1Top);
         double Amp1OverAmp1andBot = stayPositive(Amp1 / Amp1Bot);
+        double Amp1OverAmp1andAdjPad = stayPositive(Amp1 / Amp1AdjPad);
         double Amp2OverAmp2and3 = stayPositive(Amp2 / Amp12);
         double Amp1OverAmp123 = stayPositive(Amp1 / Amp123);
         double Amp2OverAmp123 = stayPositive(Amp2 / Amp123);
         double Amp3OverAmp123 = stayPositive(Amp3 / Amp123);
         double xCenterMaxStrip = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
         double deltaXmax = x - xCenterMaxStrip;
-        double deltaXmaxpos = -1;
-        double deltaXmaxneg = -1;
+        double deltaXmaxpos = -999;
+        double deltaXmaxneg = -999;
         double deltaXmaxTopPad = 0;
-        double deltaXmaxBotPad = 0; 
+        double deltaXmaxBotPad = 0;
+        double deltaXmaxAdjPad = 0; 
 
         if (deltaXmax >= 0)
         {   
@@ -128,29 +169,41 @@ private:
  
         if (amp1Indexes.first==0 && amp1Indexes.second==0)
         {
-            deltaXmaxTopPad = deltaXmaxpos;
+            deltaXmaxTopPad = deltaXmaxneg;
         }
         else if (amp1Indexes.first==0 && amp1Indexes.second==1)
         {
-            deltaXmaxTopPad = deltaXmaxneg;
+            deltaXmaxTopPad = deltaXmaxpos;
         }
         
          if (amp1Indexes.first==1 && amp1Indexes.second==0)
         {
-            deltaXmaxBotPad = deltaXmaxpos;
+            deltaXmaxBotPad = deltaXmaxneg;
         }
         else if (amp1Indexes.first==1 && amp1Indexes.second==1)
         {
-            deltaXmaxBotPad = deltaXmaxneg;
-        }   
-        
+            deltaXmaxBotPad = deltaXmaxpos;
+        } 
+
+        if (amp1Indexes.first==0)
+        {
+            deltaXmaxAdjPad = deltaXmaxTopPad; 
+        } 
+        else if (amp1Indexes.first==1)
+        { 
+            deltaXmaxAdjPad = deltaXmaxBotPad;
+        }
+       
+        tr.registerDerivedVar("maxAmpPadIndex", maxAmpPadIndex); 
         tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
+        tr.registerDerivedVar("padx", padx);
         tr.registerDerivedVar("Amp2Index", Amp2Index);
         tr.registerDerivedVar("deltaXmax", deltaXmax);
         tr.registerDerivedVar("deltaXmaxpos", deltaXmaxpos);
         tr.registerDerivedVar("deltaXmaxneg", deltaXmaxneg);
         tr.registerDerivedVar("deltaXmaxTopPad", deltaXmaxTopPad);
         tr.registerDerivedVar("deltaXmaxBotPad", deltaXmaxBotPad);
+        tr.registerDerivedVar("deltaXmaxAdjPad", deltaXmaxAdjPad);
         tr.registerDerivedVar("xCenterMaxStrip", xCenterMaxStrip);
         tr.registerDerivedVar("Amp1OverAmp1and2", Amp1OverAmp1and2);
         tr.registerDerivedVar("Amp2OverAmp2and3", Amp2OverAmp2and3);
@@ -159,6 +212,7 @@ private:
         tr.registerDerivedVar("Amp3OverAmp123", Amp3OverAmp123);
         tr.registerDerivedVar("Amp1OverAmp1andTop", Amp1OverAmp1andTop);
         tr.registerDerivedVar("Amp1OverAmp1andBot", Amp1OverAmp1andBot);
+        tr.registerDerivedVar("Amp1OverAmp1andAdjPad", Amp1OverAmp1andAdjPad);
         tr.registerDerivedVar("Amp12", Amp12);
         tr.registerDerivedVar("Amp123", Amp123);
     }
