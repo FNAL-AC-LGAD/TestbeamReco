@@ -141,6 +141,10 @@ public:
         {
             registerGeometry(tr, BNLPixelHexGeometry(voltage));
         }
+        else if(filetag.find("HPK2_DCLGAD_220V") != std::string::npos)
+        {
+            registerGeometry(tr, HPK2DCLGADGeometry(voltage));
+        }
         else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
