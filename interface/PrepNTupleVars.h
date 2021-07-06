@@ -40,7 +40,11 @@ private:
 	const auto& x_dut = tr.getVec<float>("x_dut");
 	const auto& y_dut = tr.getVec<float>("y_dut");
 	Rotate(tr, x_dut[0], y_dut[0], angle);
+
+        // Correct amp and map raw amplitude
 	ApplyAmplitudeCorrection(tr);
+        const auto& amp = tr.getVec<float>("amp");
+        utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
 
         // Cut to get hits that only go through active sensor
 	const auto& x = tr.getVar<double>("x");
