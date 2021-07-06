@@ -38,7 +38,7 @@ public:
     double signalAmpThreshold = 30.0;    //in mV        
     bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {-1};
-    std::vector<std::vector<double>> sensorEdges = {{-999.9, 999.9}, {-999.9, 999.9}};
+    std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};
     std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> xSlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> boxes_XY = {{-999.9, -999.9,-999.9, -999.9}};
@@ -414,6 +414,42 @@ public:
     bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};    
+};
+
+class HPK2DCLGADGeometry : public DefaultGeometry
+{
+public:
+    // HPK2 DC LGAD Mapping set
+    // Used lecroy scope channels 0-7
+    // scope channel 0,1,2,4 went to sensor pads, channels 5,6 went to BNL 2020 strips, and scope channel 3,7 went to the photok
+    // -------             -----
+    // | 0 1 |             |777|
+    // | 4 2 |             |777|
+    // -------             -----
+    HPK2DCLGADGeometry(const int v=0) : voltage(v){}
+    const int voltage;
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {4,{1,0}}, {2,{1,1}}, {7,{2,0}}};    
+    std::vector<std::vector<int>> geometry = {{0,1}, {4,2}, {7}};
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {4,true}, {7,false}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::vector<double> stripCenterXPosition = {-5.50, -6.00, -6.00, -5.50,  0.0};
+    std::vector<double> stripCenterYPosition = {10.57, 10.57, 10.11, 10.11, 0.0};
+    int numLGADchannels = 4;
+    double angle = 0.284886; 
+    double xmin = -3.0;
+    double xmax =  3.0;
+    double ymin =  8.0;
+    double ymax =  13.0; 
+    double photekSignalThreshold = 50.0;
+    double noiseAmpThreshold = 15.0;
+    double signalAmpThreshold = 80.0;
+    bool enablePositionReconstruction = false;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
+    std::vector<std::vector<double>> sensorEdges = {{-2.0 , 9.0}, { 2.0, 13.0}};
+    std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
+    std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
+    std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
 };
 
 #endif
