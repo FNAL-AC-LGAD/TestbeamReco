@@ -60,12 +60,12 @@ private:
             ampIndexesAdjPad = ampIndexesBot;
         }
 
-
+        tr.registerDerivedVar("ampIndexesAdjPad", ampIndexesAdjPad);
         //Find max LGAD amp
         double maxAmpLGAD = ampLGAD[amp1Indexes.first][amp1Indexes.second];
         tr.registerDerivedVar("maxAmpLGAD", maxAmpLGAD);
         
-        //Find  amplatude related variables
+        //Find  amplitude related variables
         double totAmpLGAD = 0.0;
         double totGoodAmpLGAD = 0.0;
         bool hasGlobalSignal_highThreshold = false;
@@ -96,36 +96,36 @@ private:
         tr.registerDerivedVar("clusterSize", clusterSize);
 
         //Find rel fraction of all LGADS
-        auto& relFrac = tr.createDerivedVec<double>("relFrac");
-        for(auto row : ampLGAD){ for(auto i : row) relFrac.emplace_back(i/totAmpLGAD);}
+        auto& relFrac = tr.createDerivedVec<std::vector<double>>("relFrac", ampLGAD);
+        for(auto& row : relFrac){ for(auto& amp : row) amp /= totAmpLGAD;}
 
+   
         //Find rel fraction of DC amp vs. LGAD amp
         tr.registerDerivedVar("relFracDC", corrAmp[0]/totAmpLGAD);
 
         //Compute position-sensitive variablei
         double padx = 0;
-        int maxAmpPadIndex = -1;
-
+        double padxAdj = 0;
+        
         if (amp1Indexes.first == 0 && amp1Indexes.second == 0)
         {
-            maxAmpPadIndex = 1;
-            padx = x-sensorCenter; 
-            
+            padx = x-sensorCenter;
+            padxAdj =  -(x-sensorCenter);    
         }
         else if (amp1Indexes.first == 0 && amp1Indexes.second == 1)
         {
-            maxAmpPadIndex = 2; 
-            padx = -(x-sensorCenter);      
+            padx = -(x-sensorCenter);   
+            padxAdj = x-sensorCenter;   
         }
         else if (amp1Indexes.first == 1 && amp1Indexes.second == 1)
         {
-            maxAmpPadIndex = 3;
-            padx = x-sensorCenter; 
+            padx = -(x-sensorCenter);
+            padxAdj = x-sensorCenter; 
         }
         else if (amp1Indexes.first == 1 && amp1Indexes.second == 0)
         {
-            maxAmpPadIndex = 4;
-            padx = -(x-sensorCenter);
+            padx = x-sensorCenter;
+            padxAdj = -(x-sensorCenter);
         }
         
         int maxAmpIndex = amp1Indexes.second;
@@ -194,9 +194,9 @@ private:
             deltaXmaxAdjPad = deltaXmaxBotPad;
         }
        
-        tr.registerDerivedVar("maxAmpPadIndex", maxAmpPadIndex); 
         tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
         tr.registerDerivedVar("padx", padx);
+        tr.registerDerivedVar("padxAdj", padxAdj);
         tr.registerDerivedVar("Amp2Index", Amp2Index);
         tr.registerDerivedVar("deltaXmax", deltaXmax);
         tr.registerDerivedVar("deltaXmaxpos", deltaXmaxpos);

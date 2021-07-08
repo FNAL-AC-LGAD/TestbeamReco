@@ -48,6 +48,7 @@ private:
         tr.registerDerivedVar("noiseAmpThreshold", g.noiseAmpThreshold);
         tr.registerDerivedVar("signalAmpThreshold", g.signalAmpThreshold);
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
+        tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
         tr.registerDerivedVar("positionRecoPar", g.positionRecoPar);
         tr.registerDerivedVar("xSlices", g.xSlices);
         tr.registerDerivedVar("ySlices", g.ySlices);

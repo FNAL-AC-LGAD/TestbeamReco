@@ -39,6 +39,7 @@ public:
     double noiseAmpThreshold = 10.0;      //in mV
     double signalAmpThreshold = 30.0;    //in mV        
     bool enablePositionReconstruction = false;
+    bool enablePositionReconstructionPad = false;
     std::vector<double> positionRecoPar = {-1};
     std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};
     std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
@@ -229,7 +230,8 @@ public:
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 80.0;
     bool enablePositionReconstruction = false;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
+    bool enablePositionReconstructionPad = true;
+    std::vector<double> positionRecoPar = {3.03422, -87.4417, 918.191, -4937.33, 15016.4, -26054.4, 24035.7, -9144.29};
     std::vector<std::vector<double>> sensorEdges = {{-6.00 , 10.10}, { -5.50, 10.8}};
     //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}};
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
