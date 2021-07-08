@@ -17,6 +17,9 @@ private:
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
         const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
+        const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
+        //auto amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
+        auto time1 = timeLGAD[amp1Indexes.first][amp1Indexes.second];
 
         //-------------------------------------------------------
         //Code from https://github.com/cmorgoth/AC_LGAD_Timing 
@@ -29,17 +32,19 @@ private:
             {
                 const auto& amp = ampLGAD[i][j];
                 const auto& time = timeLGAD[i][j];
-                sum_amp       += getValue(time!=0.0, amp);
-                weighted_time += getValue(time!=0.0, amp*time);
+                auto similarTime = abs(100.0*(time - time1)/time1) < 1.0;
 
-                sum_amp_goodSig       += getValue(time!=0.0 && amp > signalAmpThreshold, amp);
-                weighted_time_goodSig += getValue(time!=0.0 && amp > signalAmpThreshold, amp*time);
+                sum_amp       += getValue(similarTime && time!=0.0, amp);
+                weighted_time += getValue(similarTime && time!=0.0, amp*time);
+
+                sum_amp_goodSig       += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp);
+                weighted_time_goodSig += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*time);
                 
-                sum_amp2       += getValue(time!=0.0, amp*amp);
-                weighted2_time += getValue(time!=0.0, amp*amp*time);
+                sum_amp2       += getValue(similarTime && time!=0.0, amp*amp);
+                weighted2_time += getValue(similarTime && time!=0.0, amp*amp*time);
 
-                sum_amp2_goodSig       += getValue(time!=0.0 && amp > signalAmpThreshold, amp*amp);
-                weighted2_time_goodSig += getValue(time!=0.0 && amp > signalAmpThreshold, amp*amp*time);
+                sum_amp2_goodSig       += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*amp);
+                weighted2_time_goodSig += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*amp*time);
             }
         }
         tr.registerDerivedVar("weighted_time", weighted_time/sum_amp);
