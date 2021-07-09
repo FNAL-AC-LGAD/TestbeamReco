@@ -29,6 +29,7 @@ public:
     int numLGADchannels = 0;
     int photekIndex = 7;
     int lowGoodStripIndex = 1;
+    int highGoodStripIndex = 4;
     double angle =  0.0;
     double xmin =  -1;
     double xmax =  -1;
@@ -67,6 +68,7 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1/1.043}, {2,1/1.000}, {3,1/1.078}, {4,1/1.084}, {5,1/1.067}, {6,1/1.017}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.5553183648148}, {2,10.6590122524753}, {3,10.6470996902006}, {4,10.6075997712141}, {5,10.6432860123283}, {6,10.6622858488865}, {7,0.0}};
+    double stripWidth = 0.08;
     double pitch = 0.1;
     std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.235, 0.135, 0.0};
     int numLGADchannels = 6;
@@ -103,12 +105,14 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0/0.91469191}, {4,1.0/1.0}, {5,1/1.000875317}, {6,1/0.978604152}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6646501756637}, {2,10.67112230944859}, {3,10.65231275084190}, {4,10.5912852140283}, {5,10.6752360435417}, {6,10.6188857394863}, {7,0.0}};   
-    double pitch = 0.2; 
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,0.0}, {2,0.0}, {3,1.0/0.91469191}, {4,1.0/1.0}, {5,1/1.000875317}, {6,1/0.978604152}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6646501756637}, {2,10.67112230944859}, {3,10.65231275084190}, {4,10.5912852140283}, {5,10.6752360435417}, {6,10.6188857394863}, {7,0.0}};    
+    double stripWidth = 0.08;
+    double pitch = 0.20;
     std::vector<double> stripCenterXPosition = {0.0, -4.70, -4.85, -5.00, -5.20, -5.40, -5.60, 0.0};
     int numLGADchannels = 6;
     int lowGoodStripIndex = 3;
+    int highGoodStripIndex = 4;
     double angle = 1.3;
     double xmin = -6.2;
     double xmax = -4.4;
@@ -119,7 +123,7 @@ public:
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 40.0;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {6.70327, -52.1034, 165.54, -263.412, 208.919, -66.0566};
+    std::vector<double> positionRecoPar = { 7.60466, -58.6979, 184.75, -291.268, 229.024, -71.8358};
     std::vector<std::vector<double>> sensorEdges = {{-5.8484, 9.30}, {-4.48058, 12.05}};
 };
 
@@ -142,8 +146,9 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.888684191}, {2,1.0/1.054804164}, {3,1.0/1.034950947}, {4,1.0/1.0}, {5,1.0/0.991297836}, {6,1.0/0.990204448}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6222952064563}, {2,10.6341462404406}, {3,10.61543585391420}, {4,10.58663873896650}, {5,10.67386990876170}, {6,10.63764448498840}, {7,0.0}};   
-    double pitch = 0.15; 
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6222952064563}, {2,10.6341462404406}, {3,10.61543585391420}, {4,10.58663873896650}, {5,10.67386990876170}, {6,10.63764448498840}, {7,0.0}};    
+    double stripWidth = 0.08;
+    double pitch = 0.15;
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.75, -4.90, -5.05, -5.20, -5.35, 0.0};
     int numLGADchannels = 6;
     double angle =  1.3;
@@ -156,7 +161,7 @@ public:
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 40.0;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {13.5251, -108.559, 350.157, -563.373, 451.546, -144.289};
+    std::vector<double> positionRecoPar = {22.3638, -175.945, 554.309, -870.555, 681.108, -212.461};
     std::vector<std::vector<double>> sensorEdges = {{-5.625, 9.272}, {-4.403, 12.067}};
 };
 
@@ -178,11 +183,14 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.021167748}, {2,1.0/1.0}, {3,1.0/0.988320568}, {4,1.0/1.012814117}, {5,1.0/1.053555184}, {6,1.0/1.126057654}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4299204909350}, {2,10.5485097838644}, {3,10.5073049422881}, {4,10.5344490021019}, {5,10.5361014348539}, {6,10.6153329754486}, {7,0.0}};   
-    double pitch = 0.1; 
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,0.0}, {2,1.0/1.0}, {3,1.0/0.988320568}, {4,1.0/1.012814117}, {5,1.0/1.053555184}, {6,1.0/1.126057654}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4299204909350}, {2,10.5485097838644}, {3,10.5073049422881}, {4,10.5344490021019}, {5,10.5361014348539}, {6,10.6153329754486}, {7,0.0}};    
+    double stripWidth = 0.08;
+    double pitch = 0.10;
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.70, -4.80, -4.90, -5.00, -5.10, 0.0};
     int numLGADchannels = 6;
+    int lowGoodStripIndex = 2;
+    int highGoodStripIndex = 4;
     double angle = 1.3;
     double xmin = -5.4;
     double xmax = -4.3;
@@ -193,7 +201,7 @@ public:
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 40.0;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.793794, -3.7261, 6.36191, -3.76035};
+    std::vector<double> positionRecoPar = {1.60162, -7.61103, 12.5737, -7.06231};
     std::vector<std::vector<double>> sensorEdges = {{-5.253, 9.278}, {-4.474, 12.079}};
 };
 

@@ -1,10 +1,14 @@
 from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,TF1,gStyle,gROOT
 import ROOT
 import os
+import optparse
 
 gROOT.SetBatch( True )
 
-#inputfile = TFile("/uscms/home/sxie/work/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V_output.root")
+parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('--xmax', dest='xmax', type='float', default = 0.75, help="Set the xmax for the final histogram")
+options, args = parser.parse_args()
+
 inputfile = TFile("../test/myoutputfile.root")
 
 #Get dX vs a1/(a1+a2) hist
@@ -53,10 +57,10 @@ outputfile = TFile("positionRecoFitPlots.root","RECREATE")
 #outputfile.Close()
 
 xmin=0.50
-xmax=0.75
+xmax=options.xmax
 
 gStyle.SetOptFit(1011)
-fit = TF1("mainFit","pol6",xmin,xmax)
+fit = TF1("mainFit","pol3",xmin,xmax)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.17)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMinimum(0.00)
 Amp1OverAmp1and2_vs_deltaXmax_profile.GetXaxis().SetRangeUser(xmin,xmax)
