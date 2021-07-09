@@ -46,8 +46,28 @@ private:
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 	} //if enabled position reconstruction
+        
+        const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
+        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
+        const auto& relFrac = tr.getVec<std::vector<double>>("relFrac"); 
+          	
+        if(enablePositionReconstructionPad)
+        {	  
+            x1 = sensorCenter;
+            
+            //use the poly fit function
+            auto dX = getDX(positionRecoPar, relFrac[amp1Indexes.first][amp1Indexes.second]);
+            //dX = (Amp1OverAmp1and2 > positionRecoMaxPoint) ? 0.0 : dX;
+            
+            x_reco = (amp1Indexes.second ==0) ? x1 + dX : x1 - dX;
+             
+	} //if enabled position reconstruction
 
         tr.registerDerivedVar("x_reco", x_reco);
+
+        
+
     }
 public:
     SpatialReconstruction()

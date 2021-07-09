@@ -1,4 +1,5 @@
 import ROOT
+import optparse
 ROOT.gROOT.SetBatch(True)
 
 def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
@@ -31,10 +32,17 @@ def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
         c.Print("%s.gif"%(name))
 
 
+# Construct the argument parser
+parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('--runPad', dest='runPad', action='store_true', default = False, help="run fits or not")
+options, args = parser.parse_args()
+
 f = ROOT.TFile('../test/myoutputfile.root')
 
-hists = list(('weighted_timeDiff_channel0{}'.format(i),'weightedTime','photek') for i in range(0,5+1))
-hists += list(('timeDiff_channel0{}'.format(i),'time','photek') for i in range(0,5+1))
+channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
+
+hists = list(('weighted_timeDiff_channel{0}{1}'.format(t[0],t[1]),'weightedTime','photek') for t in channelMap)
+hists += list(('timeDiff_channel{0}{1}'.format(t[0],t[1]),'time','photek') for t in channelMap)
 hists += [("weighted_timeDiff","weightedTime","photek"), ("timeDiff","time","photek"), ("timeDiff_amp2","time","photek"), ("timeDiff_amp3","time","photek"),('deltaX','deltaX',"tracker")]
 hists += [("weighted2_timeDiff","weighted2Time","photek"), ("weighted_timeDiff_goodSig","weighted_goodSig","photek"), ("weighted2_timeDiff_goodSig","weighted2_goodSig","photek")]
 
