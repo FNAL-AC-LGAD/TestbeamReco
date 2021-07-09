@@ -268,7 +268,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 const auto& ampChannel = ampLGAD[rowIndex][i];
                 const auto& relFracChannel = relFrac[rowIndex][i];
                 const auto& rawAmpChannel = rawAmpLGAD[rowIndex][i];
-                const auto& rms = baselineRMS[rowIndex][i]; 
+                const auto& noise = baselineRMS[rowIndex][i]; 
                 bool goodNoiseAmp = ampChannel>noiseAmpThreshold;
                 bool goodSignalAmp = ampChannel>signalAmpThreshold;
                 double time = timeLGAD[rowIndex][i];
@@ -282,7 +282,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && (maxAmpinPad3 || maxAmpinPad4),       my_histos["relFrac_top"+r+s], relFracChannel);
                 utility::fillHisto(pass,                                                    my_histos["time"+r+s], time);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["timeDiff_channel"+r+s], time-photekTime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["baselineRMS"+r+s], rms);
+                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["baselineRMS"+r+s], noise);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted_timeDiff_channel"+r+s], weighted_time-photekTime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted_time-time_channel"+r+s], weighted_time-time);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos["amp_vs_x_channel"+r+s], x,ampChannel);
