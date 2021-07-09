@@ -65,7 +65,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
 
         #Do fit 
         if(nEvents > 50):
-            tmpHist.Rebin(4)
+            tmpHist.Rebin(2)
 
             fit = TF1('fit','gaus',fitlow,fithigh)
             tmpHist.Fit(fit,"Q", "", fitlow, fithigh)

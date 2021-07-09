@@ -1,16 +1,15 @@
 import ROOT
 import numpy as np
 
-bias = np.array([260,265,275,285,290])
-timingres = np.array([37.7,36.1,33.0,31.0,31.7])
-positionres = np.array([16.9,18.4,17.5,17.9,17.2])
-timingweightres= np.array([37.8,36.5,33.3,35.2,36.4])
+empty = np.array([0,0,0,0,0,0])
+bias = np.array([260,265,275,280,285,290])
+timingres = np.array([37.65, 36.07, 32.99, 32.55, 30.99, 31.32])
+positionres = np.array([14.91, 16.07, 15.11, 15.28, 15.5, 14.73])
+timingweightres= np.array([35.19, 34.3, 30.93, 31.12, 30.16, 30.97])
 
-empty = np.array([0,0,0,0,0])
-
-timingresuncert = np.array([1.0,0.4,1.0,0.33,0.34])
-positionresuncert = np.array([0.3,0.13,0.12,0.14,0.13])
-timingweightresuncert = np.array([0.13,0.30,0.25,0.17,0.22 ])
+timingresuncert = np.array([1.01, 0.4, 0.29, 0.36, 0.33, 0.4])
+positionresuncert = np.array([0.23, 0.11, 0.08, 0.10, 0.10, 0.09])
+timingweightresuncert = np.array([1.0, 0.3, 0.29, 0.31, 0.25, 0.32])
 
 position_graph = ROOT.TGraphErrors(bias.size ,bias.astype(np.double), positionres.astype(np.double), empty.astype(np.double), positionresuncert.astype(np.double))
 time_graph = ROOT.TGraphErrors(bias.size , bias.astype(np.double), timingres.astype(np.double), empty.astype(np.double), timingresuncert.astype(np.double))
@@ -48,7 +47,7 @@ hdummy.SetMinimum(0.0)
 hdummy.Draw()
 
 
-leg = ROOT.TLegend(0.6, 0.65, 0.9, 0.88)
+leg = ROOT.TLegend(0.4, 0.65, 0.8, 0.88)
 leg.SetFillStyle(0)
 leg.SetBorderSize(0)
 leg.SetLineWidth(1)

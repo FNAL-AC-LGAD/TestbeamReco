@@ -2,7 +2,7 @@ from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAs
 import os
 import EfficiencyUtils
 import langaus
-import argparse
+import optparse
 import time
 from stripBox import getStripBox
 
@@ -10,27 +10,35 @@ gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 
 # Construct the argument parser
-ap = argparse.ArgumentParser()
+parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('--run', dest='run', action='store_true', default = False, help="run fits or not")
+parser.add_option('-t', dest='UseRawHistos', action='store_true', default = False, help="Use nominal amp or raw histograms")
+options, args = parser.parse_args()
 
-# Add the arguments to the parser
-ap.add_argument("-r", "--run", required=False,
-   help="run fits or not")
-args = vars(ap.parse_args())
-
-RunFits = False
-if args['run'] == 'true':
-   RunFits = True
+RunFits = options.run
+UseRawHistos = options.UseRawHistos
+suffex = "_raw" if UseRawHistos else ""
 
 inputfile = TFile("../test/myoutputfile.root")     
-if (RunFits):    
+if (RunFits):
+    #Define histo names
+    GoodHistos = not UseRawHistos
+    h00 = "amplitude_vs_xy_channel00" if GoodHistos else "raw_amp_vs_xy_channel00"
+    h01 = "amplitude_vs_xy_channel01" if GoodHistos else "raw_amp_vs_xy_channel01"
+    h02 = "amplitude_vs_xy_channel02" if GoodHistos else "raw_amp_vs_xy_channel02"
+    h03 = "amplitude_vs_xy_channel03" if GoodHistos else "raw_amp_vs_xy_channel03"
+    h04 = "amplitude_vs_xy_channel04" if GoodHistos else "raw_amp_vs_xy_channel04"
+    h05 = "amplitude_vs_xy_channel05" if GoodHistos else "raw_amp_vs_xy_channel05"
+    htot = "totamplitude_vs_xy" if GoodHistos else "totrawamplitude_vs_xy"
+
     #Get 3D histograms 
-    th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
-    th3_amplitude_vs_xy_channel01 = inputfile.Get("amplitude_vs_xy_channel01")
-    th3_amplitude_vs_xy_channel02 = inputfile.Get("amplitude_vs_xy_channel02")
-    th3_amplitude_vs_xy_channel03 = inputfile.Get("amplitude_vs_xy_channel03")
-    th3_amplitude_vs_xy_channel04 = inputfile.Get("amplitude_vs_xy_channel04")
-    th3_amplitude_vs_xy_channel05 = inputfile.Get("amplitude_vs_xy_channel05")
-    th3_amplitude_vs_xy_channelall = inputfile.Get("totamplitude_vs_xy")    
+    th3_amplitude_vs_xy_channel00 = inputfile.Get(h00)
+    th3_amplitude_vs_xy_channel01 = inputfile.Get(h01)
+    th3_amplitude_vs_xy_channel02 = inputfile.Get(h02)
+    th3_amplitude_vs_xy_channel03 = inputfile.Get(h03)
+    th3_amplitude_vs_xy_channel04 = inputfile.Get(h04)
+    th3_amplitude_vs_xy_channel05 = inputfile.Get(h05)
+    th3_amplitude_vs_xy_channelall = inputfile.Get(htot)    
     
     #Build 2D amp vs x histograms
     amplitude_vs_x_channel00 = th3_amplitude_vs_xy_channel00.Project3D("zx")
@@ -126,8 +134,6 @@ if (RunFits):
 
 
 #Make final plots
-
-
 plotfile = TFile("plots.root","READ")
 plotList_amplitude_vs_x  = []
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel00"))
@@ -200,7 +206,7 @@ legend.AddEntry(plotList_amplitude_vs_x[4], "Strip 5")
 legend.AddEntry(plotList_amplitude_vs_x[5], "Strip 6")
 legend.Draw();
 
-canvas.SaveAs("Amplitude_vs_x.gif")
+canvas.SaveAs("Amplitude_vs_x"+suffex+".gif")
 
 
 #totalAmplitude_vs_x = plotList_amplitude_vs_x[0].Clone("totalAmplitude_vs_x")
@@ -253,7 +259,7 @@ legend.AddEntry(plotList_amplitude_vs_x[4], "Strip 5")
 legend.AddEntry(plotList_amplitude_vs_x[5], "Strip 6")
 legend.Draw();
 
-canvas.SaveAs("TotalAmplitude_vs_x.gif")
+canvas.SaveAs("TotalAmplitude_vs_x"+suffex+".gif")
 
 
 plotList_amplitudeFraction_vs_x  = []
@@ -329,6 +335,6 @@ legend.Draw();
 
 plotList_amplitudeFraction_vs_x[0].Draw("AXIS same")
 plotList_amplitudeFraction_vs_x[0].Draw("hist same")
-canvas.SaveAs("AmplitudeFraction_vs_x.gif")
+canvas.SaveAs("AmplitudeFraction_vs_x"+suffex+".gif")
 
 

@@ -44,14 +44,17 @@ private:
         // Correct amp and map raw amplitude
 	ApplyAmplitudeCorrection(tr);
         const auto& amp = tr.getVec<float>("amp");
-        utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
+        const auto& rawAmpLGAD = utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
+        double totRawAmpLGAD = 0.0;
+        for(auto row : rawAmpLGAD){totRawAmpLGAD += std::accumulate(row.begin(), row.end(), 0.0);}
+        tr.registerDerivedVar("totRawAmpLGAD", totRawAmpLGAD);
 
         // Cut to get hits that only go through active sensor
 	const auto& x = tr.getVar<double>("x");
 	const auto& y = tr.getVar<double>("y");
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
-        tr.registerDerivedVar<bool>("hitSensor", hitSensor);
+        tr.registerDerivedVar("hitSensor", hitSensor);
 
         // Correct the time variable
         const auto& LP2_20 = tr.getVec<float>("LP2_20");
@@ -66,6 +69,10 @@ private:
             counter++;
         }
         utility::remapToLGADgeometry(tr, corrTime, "timeLGAD");
+
+        // Baseline RMS
+        const auto& baselineRMS = tr.getVec<float>("baseline_RMS");
+        utility::remapToLGADgeometry(tr, baselineRMS, "baselineRMS");
     }
 
 public:
