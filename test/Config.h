@@ -31,6 +31,8 @@ private:
         tr.registerDerivedVar("numLGADchannels", g.numLGADchannels);
         tr.registerDerivedVar("amplitudeCorrectionFactor", g.amplitudeCorrectionFactor);
         tr.registerDerivedVar("stripWidth",g.stripWidth);
+        tr.registerDerivedVar("sensorCenter",g.sensorCenter); 
+        tr.registerDerivedVar("pitch",g.pitch); 
         tr.registerDerivedVar("stripCenterXPosition", g.stripCenterXPosition);
         tr.registerDerivedVar("timeCalibrationCorrection", g.timeCalibrationCorrection);
         tr.registerDerivedVar("photekIndex", g.photekIndex);
@@ -46,6 +48,7 @@ private:
         tr.registerDerivedVar("noiseAmpThreshold", g.noiseAmpThreshold);
         tr.registerDerivedVar("signalAmpThreshold", g.signalAmpThreshold);
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
+        tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
         tr.registerDerivedVar("positionRecoPar", g.positionRecoPar);
         tr.registerDerivedVar("xSlices", g.xSlices);
         tr.registerDerivedVar("ySlices", g.ySlices);
