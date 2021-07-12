@@ -301,7 +301,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && inTopRow,                             my_2d_histos["amp_vs_x_channel_top"+r+s], x, ampChannel);
                 utility::fillHisto(pass && goodHit && inTopRow && time!=0 && photekTime!=0, my_2d_histos["delay_vs_x_channel_top"+r+s], x, timeLGAD[rowIndex][i] - photekTime);
                 utility::fillHisto(firstEvent,                                              my_2d_histos["stripBoxInfo"+r+s], stripCenterXPositionLGAD[rowIndex][i],stripWidth);
-                utility::fillHisto(pass && goodHit,                                         my_3d_histos["baselineRMS_vs_xy_channel"+r+s], x,y,noise);
+                utility::fillHisto(pass,                                                    my_3d_histos["baselineRMS_vs_xy_channel"+r+s], x,y,noise);
                 utility::fillHisto(pass && goodHit,                                         my_3d_histos["amplitude_vs_xy_channel"+r+s], x,y,ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_3d_histos["raw_amp_vs_xy_channel"+r+s], x,y,rawAmpChannel);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["timeDiff_vs_xy_channel"+r+s], x,y,time-photekTime);
