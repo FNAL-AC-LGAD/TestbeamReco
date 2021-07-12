@@ -223,7 +223,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.421985}, {2,10.454729}, {3,10.396641}, {4,10.386091}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4743827945337}, {2,10.510743069680100}, {3,10.4499172847976}, {4,10.4609478307382}, {5,0.0}, {6,0.0}, {7,0.0}};
     double pitch = 0.5;
     double sensorCenter =-5.77;
     std::vector<double> stripCenterXPosition = {0.0, -5.50, -6.00, -6.00, -5.50,  0.0};
