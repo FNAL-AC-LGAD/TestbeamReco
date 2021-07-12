@@ -6,13 +6,13 @@
 class SpatialReconstruction
 {
 private:
-    double getDX(const std::vector<double>& coeffs, const double x)
+    double getDX(const std::vector<double>& coeffs, const double x, const double shift = 0.0)
     {
         double dX = 0.0;
         int index = 0;
         for(const auto& coeff : coeffs)
         {
-            dX += coeff*pow(x,index);
+            dX += coeff*pow(x - shift,index);
             index++;
         }
         return dX;
@@ -41,7 +41,7 @@ private:
             x2 = stripCenterXPositionLGAD[0][Amp2Index];
             
             //use the poly fit function
-            auto dX = getDX(positionRecoPar, Amp1OverAmp1and2);
+            auto dX = getDX(positionRecoPar, Amp1OverAmp1and2, 0.5);
             dX = (Amp1OverAmp1and2 > positionRecoMaxPoint) ? 0.0 : dX;
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;

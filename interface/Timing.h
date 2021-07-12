@@ -32,7 +32,7 @@ private:
             {
                 const auto& amp = ampLGAD[i][j];
                 const auto& time = timeLGAD[i][j];
-                auto similarTime = abs(100.0*(time - time1)/time1) < 1.0;
+                auto similarTime = abs(time - time1) < 1.0;
 
                 sum_amp       += getValue(similarTime && time!=0.0, amp);
                 weighted_time += getValue(similarTime && time!=0.0, amp*time);
