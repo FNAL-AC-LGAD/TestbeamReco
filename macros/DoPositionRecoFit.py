@@ -5,8 +5,17 @@ import optparse
 
 gROOT.SetBatch( True )
 
+def getFitFunction(fitOrder):
+    assert(fitOrder >= 1)
+    fitFunction = "[0]"
+    for i in range(fitOrder):
+        fitFunction += " + [{0}]*pow(x - 0.5, {0})".format(i+1)
+    return fitFunction
+
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('--xmax', dest='xmax', type='float', default = 0.75, help="Set the xmax for the final histogram")
+parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
+parser.add_option('--fitOrder', dest='fitOrder', type='int', default = 4, help="Set the poly order for the fit")
 options, args = parser.parse_args()
 
 inputfile = TFile("../test/myoutputfile.root")
@@ -58,13 +67,22 @@ outputfile = TFile("positionRecoFitPlots.root","RECREATE")
 
 xmin=0.50
 xmax=options.xmax
+pitch = 0.001*options.pitch
+fitOrder = options.fitOrder
+fitFunction = getFitFunction(fitOrder)
+print(fitFunction)
 
 gStyle.SetOptFit(1011)
-fit = TF1("mainFit","pol3",xmin,xmax)
+#fit = TF1("mainFit","pol3",xmin,xmax)
+fit = TF1("mainFit",fitFunction,xmin,xmax)
+fit.FixParameter(0, 0.5*pitch)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.17)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMinimum(0.00)
 Amp1OverAmp1and2_vs_deltaXmax_profile.GetXaxis().SetRangeUser(xmin,xmax)
-Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"","",xmin,xmax)
+results = Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"SQ","",xmin,xmax)
+results.Print("V")
+
+
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw()
 fit.Draw("same")
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same")

@@ -83,7 +83,7 @@ public:
     double noiseAmpThreshold = voltageDependenceMap[voltage].noiseAmpThreshold;
     double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold; 
     bool enablePositionReconstruction = true;   
-    std::vector<double> positionRecoPar = {51.8472, -484.776, 1878.16, -3849.65, 4395.84, -2647.04,  655.29};
+    std::vector<double> positionRecoPar = {0.05, -0.138697, -0.74681, 7.53487, -21.4647};
     std::vector<std::vector<double>> sensorEdges = {{-0.06, 9.8}, { 0.8, 11.6}};
 };
 
@@ -105,14 +105,14 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,0.0}, {2,0.0}, {3,1.0/0.91469191}, {4,1.0/1.0}, {5,1/1.000875317}, {6,1/0.978604152}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,0.0}, {2,0.0}, {3,1.0/0.91469191}, {4,1.0/1.0}, {5,1/1.000875317}, {6,0.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6646501756637}, {2,10.67112230944859}, {3,10.65231275084190}, {4,10.5912852140283}, {5,10.6752360435417}, {6,10.6188857394863}, {7,0.0}};    
     double stripWidth = 0.08;
     double pitch = 0.20;
     std::vector<double> stripCenterXPosition = {0.0, -4.70, -4.85, -5.00, -5.20, -5.40, -5.60, 0.0};
     int numLGADchannels = 6;
     int lowGoodStripIndex = 3;
-    int highGoodStripIndex = 4;
+    int highGoodStripIndex = 3;
     double angle = 1.3;
     double xmin = -6.2;
     double xmax = -4.4;
@@ -123,7 +123,7 @@ public:
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 40.0;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = { 7.60466, -58.6979, 184.75, -291.268, 229.024, -71.8358};
+    std::vector<double> positionRecoPar = {0.1, -0.0906283, -2.09241, 10.5532, -17.5042};
     std::vector<std::vector<double>> sensorEdges = {{-5.8484, 9.30}, {-4.48058, 12.05}};
 };
 
@@ -156,12 +156,12 @@ public:
     double xmax =  -4.3;
     double ymin =   9.0;
     double ymax =  12.5;
-    double positionRecoMaxPoint = 0.8;
+    double positionRecoMaxPoint = 0.81;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 40.0;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {22.3638, -175.945, 554.309, -870.555, 681.108, -212.461};
+    std::vector<double> positionRecoPar = {0.075, -0.140285, -0.774667, 5.65837, -13.5359};
     std::vector<std::vector<double>> sensorEdges = {{-5.625, 9.272}, {-4.403, 12.067}};
 };
 
