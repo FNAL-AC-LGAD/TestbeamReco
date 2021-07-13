@@ -183,7 +183,7 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,0.0}, {2,1.0/1.0}, {3,1.0/0.988320568}, {4,1.0/1.012814117}, {5,1.0/1.053555184}, {6,1.0/1.126057654}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,0.0}, {2,1.0/1.011817453}, {3,1.0}, {4,1.0/1.024783}, {5,1.0/1.066005523}, {6,1.0/1.139364787}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4299204909350}, {2,10.5485097838644}, {3,10.5073049422881}, {4,10.5344490021019}, {5,10.5361014348539}, {6,10.6153329754486}, {7,0.0}};    
     double stripWidth = 0.08;
     double pitch = 0.10;
@@ -223,7 +223,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.421985}, {2,10.454729}, {3,10.396641}, {4,10.386091}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4743827945337}, {2,10.510743069680100}, {3,10.4499172847976}, {4,10.4609478307382}, {5,0.0}, {6,0.0}, {7,0.0}};
     double pitch = 0.5;
     double sensorCenter =-5.77;
     std::vector<double> stripCenterXPosition = {0.0, -5.50, -6.00, -6.00, -5.50,  0.0};
