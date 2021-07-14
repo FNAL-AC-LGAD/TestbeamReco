@@ -34,6 +34,7 @@ private:
         tr.registerDerivedVar("sensorCenter",g.sensorCenter); 
         tr.registerDerivedVar("pitch",g.pitch); 
         tr.registerDerivedVar("stripCenterXPosition", g.stripCenterXPosition);
+        tr.registerDerivedVar("stripCenterYPosition", g.stripCenterYPosition);
         tr.registerDerivedVar("timeCalibrationCorrection", g.timeCalibrationCorrection);
         tr.registerDerivedVar("photekIndex", g.photekIndex);
         tr.registerDerivedVar("lowGoodStripIndex", g.lowGoodStripIndex);

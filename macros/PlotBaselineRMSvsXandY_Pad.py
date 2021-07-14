@@ -11,11 +11,11 @@ gStyle.SetOptFit(1011)
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('--run', dest='run', action='store_true', default = False, help="run fits or not")
+parser.add_option('--plotsonly', dest='plotsonly', action='store_false', default = True, help="run fits or not")
 parser.add_option('-t', dest='UseRawHistos', action='store_true', default = False, help="Use nominal amp or raw histograms")
 options, args = parser.parse_args()
 
-RunFits = options.run
+RunFits = options.plotsonly
 UseRawHistos = options.UseRawHistos
 suffex = "_raw" if UseRawHistos else ""
 
@@ -138,9 +138,9 @@ for i in range(0,2) :
     ymax = plotList_baselineRMS_vs_x[3].GetMaximum()
     plotList_baselineRMS_vs_x[3].SetMaximum(ymax*1.05)
     
-    #boxes = getStripBox(inputfile,ymin,ymax*1.04)
-    #for box in boxes:
-    #   box.Draw()
+    boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+    for box in boxes:
+        box.Draw()
     plotList_baselineRMS_vs_x[3].Draw("AXIS same")
     plotList_baselineRMS_vs_x[3].Draw("hist same")
     

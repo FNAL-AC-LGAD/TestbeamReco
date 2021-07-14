@@ -1,13 +1,21 @@
 import ROOT
 
-def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18):
-    boxesInfo = []
-    boxesInfo.append(f.Get("stripBoxInfo00"))
-    boxesInfo.append(f.Get("stripBoxInfo01"))
-    boxesInfo.append(f.Get("stripBoxInfo02"))
-    boxesInfo.append(f.Get("stripBoxInfo03"))
-    boxesInfo.append(f.Get("stripBoxInfo04"))
-    boxesInfo.append(f.Get("stripBoxInfo05"))
+def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True):
+    
+    if strips == True :
+        boxesInfo = []
+        boxesInfo.append(f.Get("stripBoxInfo00"))
+        boxesInfo.append(f.Get("stripBoxInfo01"))
+        boxesInfo.append(f.Get("stripBoxInfo02"))
+        boxesInfo.append(f.Get("stripBoxInfo03"))
+        boxesInfo.append(f.Get("stripBoxInfo04"))
+        boxesInfo.append(f.Get("stripBoxInfo05"))
+    else :
+        boxesInfo = []
+        boxesInfo.append(f.Get("stripBoxInfo00"))
+        boxesInfo.append(f.Get("stripBoxInfo01"))
+        boxesInfo.append(f.Get("stripBoxInfo10"))
+        boxesInfo.append(f.Get("stripBoxInfo11"))
 
     widthPercent = 0.001 if getCenter else 0.5
 

@@ -222,11 +222,12 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{2,1}}, {4,{2,0}}, {7,{3,0}}};    
     std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.003642783}, {2,1.0}, {3,1.0/1.035044020}, {4,1.0/0.964843779}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4743827945337}, {2,10.510743069680100}, {3,10.4499172847976}, {4,10.4609478307382}, {5,0.0}, {6,0.0}, {7,0.0}};
+    double stripWidth = 0.45; 
     double pitch = 0.5;
     double sensorCenter =-5.77;
-    std::vector<double> stripCenterXPosition = {0.0, -5.50, -6.00, -6.00, -5.50,  0.0};
+    std::vector<double> stripCenterXPosition = {0.0, -5.53, -6.03, -6.03, -5.53,  0.0};
     std::vector<double> stripCenterYPosition = {0.0, 10.60, 10.60, 10.10, 10.10, 0.0};
     int numLGADchannels = 4;
     double angle = -0.5; 
