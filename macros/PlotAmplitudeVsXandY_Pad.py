@@ -4,7 +4,7 @@ import EfficiencyUtils
 import langaus
 import optparse
 import time
-from stripBox import getStripBox
+from stripBox import getStripBox,getStripBoxY
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -162,7 +162,10 @@ for l in range(0,2) :
     ymax = plotList_amplitude_vs_x[3].GetMaximum()
     plotList_amplitude_vs_x[3].SetMaximum(ymax*1.05)
   
-    boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+    if (l==0) :
+        boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+    else : 
+        boxes = getStripBoxY(inputfile,ymin,ymax*1.04,False,18)
     for box in boxes:
        box.Draw()
     plotList_amplitude_vs_x[3].Draw("AXIS same")
@@ -227,8 +230,11 @@ for l in range(0,2) :
     ymin = totalAmplitude_vs_x.GetMinimum()
     ymax = totalAmplitude_vs_x.GetMaximum()
     totalAmplitude_vs_x.SetMaximum(ymax*1.05)
-    
-    boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+   
+    if (l==0) :
+        boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+    else : 
+        boxes = getStripBoxY(inputfile,ymin,ymax*1.04,False,18)
     for box in boxes:
        box.Draw() 
     totalAmplitude_vs_x.Draw("AXIS same")
@@ -282,7 +288,11 @@ for l in range(0,2) :
     #ymax = plotList_amplitudeFraction_vs_x[0].GetMaximum()
     ymax = 1.0
 
-    boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+    if (l==0) :
+        boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+    else : 
+        boxes = getStripBoxY(inputfile,ymin,ymax*1.04,False,18)
+    
     for box in boxes:
        box.Draw()
     plotList_amplitudeFraction_vs_x[0].Draw("AXIS same")

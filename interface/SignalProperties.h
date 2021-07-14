@@ -18,7 +18,7 @@ private:
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
         const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
-        const auto& stripCenterYPosition = tr.getVar<std::vector<double>>("stripCenterYPosition");
+        const auto& stripCenterYPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
         const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
         const auto& stripCenterYPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterYPosition, "stripCenterYPositionLGAD");
         const auto& x = tr.getVar<double>("x");

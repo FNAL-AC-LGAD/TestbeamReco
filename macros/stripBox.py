@@ -14,9 +14,7 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True)
         boxesInfo = []
         boxesInfo.append(f.Get("stripBoxInfo00"))
         boxesInfo.append(f.Get("stripBoxInfo01"))
-        boxesInfo.append(f.Get("stripBoxInfo10"))
-        boxesInfo.append(f.Get("stripBoxInfo11"))
-
+        
     widthPercent = 0.001 if getCenter else 0.5
 
     boxes = []
@@ -26,6 +24,27 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True)
         xmin = xCenter - (widthPercent*width)
         xmax = xCenter + (widthPercent*width)
         b = ROOT.TBox(xmin,ymin, xmax,ymax)
+        b.SetFillColor(color)
+        boxes.append(b)
+
+    return boxes
+
+
+def getStripBoxY(f, yampmin=0.0, yampmax=100.0, getCenter=False, color=18):
+    
+    boxesInfo = []
+    boxesInfo.append(f.Get("stripBoxInfoY00"))
+    boxesInfo.append(f.Get("stripBoxInfoY01"))
+
+    widthPercent = 0.001 if getCenter else 0.5
+
+    boxes = []
+    for box in boxesInfo:
+        yCenter = box.GetMean(1)
+        width = box.GetMean(2)
+        ymin = yCenter - (widthPercent*width)
+        ymax = yCenter + (widthPercent*width)
+        b = ROOT.TBox(ymin,yampmin, ymax,yampmax)
         b.SetFillColor(color)
         boxes.append(b)
 
