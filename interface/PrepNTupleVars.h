@@ -39,7 +39,7 @@ private:
         const auto& angle = tr.getVar<double>("angle");
 	const auto& x_dut = tr.getVec<float>("x_dut");
 	const auto& y_dut = tr.getVec<float>("y_dut");
-	Rotate(tr, x_dut[0], y_dut[0], angle);
+	Rotate(tr, x_dut[10], y_dut[10], angle);
 
         // Correct amp and map raw amplitude
 	ApplyAmplitudeCorrection(tr);
