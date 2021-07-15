@@ -228,7 +228,7 @@ public:
     double pitch = 0.5;
     double sensorCenter =-5.77;
     std::vector<double> stripCenterXPosition = {0.0, -5.53, -6.03, -6.03, -5.53,  0.0};
-    std::vector<double> stripCenterYPosition = {0.0, 10.60, 10.60, 10.10, 10.10, 0.0};
+    std::vector<double> stripCenterYPosition = {0.0, 10.64, 10.64, 10.14, 10.14, 0.0};
     int numLGADchannels = 4;
     double angle = -0.5; 
     double xmin = -6.6;
@@ -240,7 +240,7 @@ public:
     double signalAmpThreshold = 80.0;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoPar = {3.03422, -87.4417, 918.191, -4937.33, 15016.4, -26054.4, 24035.7, -9144.29};
+    std::vector<double> positionRecoPar = {-0.784185, 7.01298, -29.3836, 69.6177, -82.4235, 38.7852};
     std::vector<std::vector<double>> sensorEdges = {{-6.00 , 10.10}, { -5.50, 10.8}};
     //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}};
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};

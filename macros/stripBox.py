@@ -34,7 +34,7 @@ def getStripBoxY(f, yampmin=0.0, yampmax=100.0, getCenter=False, color=18):
     
     boxesInfo = []
     boxesInfo.append(f.Get("stripBoxInfoY00"))
-    boxesInfo.append(f.Get("stripBoxInfoY01"))
+    boxesInfo.append(f.Get("stripBoxInfoY10"))
 
     widthPercent = 0.001 if getCenter else 0.5
 

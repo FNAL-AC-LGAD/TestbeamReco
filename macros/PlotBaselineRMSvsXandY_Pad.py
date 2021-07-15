@@ -4,7 +4,7 @@ import EfficiencyUtils
 import langaus
 import optparse
 import time
-from stripBox import getStripBox
+from stripBox import getStripBox,getStripBoxY
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -21,7 +21,7 @@ suffex = "_raw" if UseRawHistos else ""
 
 projection = ["zx", "zy"]
 
-for i in range(0,2) : 
+for l in range(len(projection)) : 
 
     inputfile = TFile("../test/myoutputfile.root")     
     if (RunFits):
@@ -39,11 +39,11 @@ for i in range(0,2) :
         th3_baselineRMS_vs_xy_channel11 = inputfile.Get(h03)
         
         #Build 2D amp vs x histograms
-        baselineRMS_vs_x_channel00 = th3_baselineRMS_vs_xy_channel00.Project3D(projection[i])
-        baselineRMS_vs_x_channel01 = th3_baselineRMS_vs_xy_channel01.Project3D(projection[i])
-        baselineRMS_vs_x_channel10 = th3_baselineRMS_vs_xy_channel10.Project3D(projection[i])
-        baselineRMS_vs_x_channel11 = th3_baselineRMS_vs_xy_channel11.Project3D(projection[i])
-            
+        baselineRMS_vs_x_channel00 = th3_baselineRMS_vs_xy_channel00.Project3D(projection[l])
+        baselineRMS_vs_x_channel01 = th3_baselineRMS_vs_xy_channel01.Project3D(projection[l])
+        baselineRMS_vs_x_channel10 = th3_baselineRMS_vs_xy_channel10.Project3D(projection[l])
+        baselineRMS_vs_x_channel11 = th3_baselineRMS_vs_xy_channel11.Project3D(projection[l])
+                
         list_th2_baselineRMS_vs_x = []
         list_th2_baselineRMS_vs_x.append(baselineRMS_vs_x_channel00)
         list_th2_baselineRMS_vs_x.append(baselineRMS_vs_x_channel01)
@@ -51,14 +51,19 @@ for i in range(0,2) :
         list_th2_baselineRMS_vs_x.append(baselineRMS_vs_x_channel11)
            
         #Build baselineRMS histograms
-        baselineRMS_vs_x = th3_baselineRMS_vs_xy_channel00.ProjectionX().Clone("baselineRMS_vs_x")
+  
+        if l==0 :
+            baselineRMS_vs_x = th3_baselineRMS_vs_xy_channel00.ProjectionX().Clone("baselineRMS_vs_x") 
+        else :
+            baselineRMS_vs_x = th3_baselineRMS_vs_xy_channel00.ProjectionY().Clone("baselineRMS_vs_x")            
+                  
         baselineRMS_vs_x_channel00 = baselineRMS_vs_x.Clone("baselineRMS_vs_x_channel00")
         baselineRMS_vs_x_channel01 = baselineRMS_vs_x.Clone("baselineRMS_vs_x_channel01")
         baselineRMS_vs_x_channel10 = baselineRMS_vs_x.Clone("baselineRMS_vs_x_channel10")
         baselineRMS_vs_x_channel11 = baselineRMS_vs_x.Clone("baselineRMS_vs_x_channel11")
         
         print ("Noise vs X: " + str(baselineRMS_vs_x.GetXaxis().GetBinLowEdge(1)) + " -> " + str(baselineRMS_vs_x.GetXaxis().GetBinUpEdge(baselineRMS_vs_x.GetXaxis().GetNbins())))
-        
+ 
         list_baselineRMS_vs_x = []
         list_baselineRMS_vs_x.append(baselineRMS_vs_x_channel00)
         list_baselineRMS_vs_x.append(baselineRMS_vs_x_channel01)
@@ -86,25 +91,7 @@ for i in range(0,2) :
                 myRMS = tmpHist.GetRMS()
                 value = myMean            
                 nEvents = tmpHist.GetEntries()
-    
-                #if(nEvents > 50):
-                    #use coarser bins when the signal is bigger
-                #    if (myMean > 50) :
-                #        tmpHist.Rebin(5)
-                #    else :
-                #        tmpHist.Rebin(10)
-                #    
-                #    myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-1*myRMS,myMean+3*myRMS))
-                #    myMPV = myLanGausFunction.GetParameter(1)
-                #    value = myMPV
-    
-                    ##For Debugging
-                    #tmpHist.Draw("hist")
-                    #myLanGausFunction.Draw("same")
-                    #canvas.SaveAs("q_"+str(i)+"_"+str(channel)+".gif")
-                #else:
-                #   value = 0.0
-    
+   
                 value = value if(value>0.0) else 0.0
     
                 #print(myTotalEvents)
@@ -118,7 +105,7 @@ for i in range(0,2) :
             list_baselineRMS_vs_x[channel].Write()
         outputfile.Close()
     
-    
+     
     #Make final plots
     plotfile = TFile("plots.root","READ")
     plotList_baselineRMS_vs_x  = []
@@ -138,7 +125,11 @@ for i in range(0,2) :
     ymax = plotList_baselineRMS_vs_x[3].GetMaximum()
     plotList_baselineRMS_vs_x[3].SetMaximum(ymax*1.05)
     
-    boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+    if (l==0) :
+        boxes = getStripBox(inputfile,ymin,ymax*1.04,False,18,False)
+    else : 
+        boxes = getStripBoxY(inputfile,ymin,ymax*1.04,False,18)
+    
     for box in boxes:
         box.Draw()
     plotList_baselineRMS_vs_x[3].Draw("AXIS same")
@@ -174,8 +165,8 @@ for i in range(0,2) :
     legend.AddEntry(plotList_baselineRMS_vs_x[3], "Pad 11")
     legend.Draw();
        
-    if i==0 : 
+    if l==0 : 
        canvas.SaveAs("BaselineRMS_vs_x"+suffex+".gif")
     else :
        canvas.SaveAs("BaselineRMS_vs_y"+suffex+".gif") 
-
+    

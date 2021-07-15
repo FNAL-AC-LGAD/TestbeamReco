@@ -21,7 +21,7 @@ suffex = "_raw" if UseRawHistos else ""
 
 projection = ["zx", "zy"]
 
-for l in range(0,2) : 
+for l in range(len(projection)) : 
         
     inputfile = TFile("../test/myoutputfile.root")     
     if (RunFits):
@@ -64,7 +64,12 @@ for l in range(0,2) :
         list_th2_amplitude_vs_x.append(amplitude_vs_x_channelall)
         
         #Build amplitude histograms
-        amplitude_vs_x = th3_amplitude_vs_xy_channel00.ProjectionX().Clone("amplitude_vs_x")
+
+        if l==0 :
+            amplitude_vs_x = th3_amplitude_vs_xy_channel00.ProjectionX().Clone("amplitude_vs_x")
+        else :
+            amplitude_vs_x = th3_amplitude_vs_xy_channel00.ProjectionY().Clone("amplitude_vs_x")
+       
         amplitude_vs_x_channel00 = amplitude_vs_x.Clone("amplitude_vs_x_channel00")
         amplitude_vs_x_channel01 = amplitude_vs_x.Clone("amplitude_vs_x_channel01")
         amplitude_vs_x_channel10 = amplitude_vs_x.Clone("amplitude_vs_x_channel10")
@@ -154,6 +159,7 @@ for l in range(0,2) :
     
     canvas = TCanvas("cvv","cvv",800,800)
     canvas.SetLeftMargin(0.12)
+    plotList_amplitude_vs_x[0].GetYaxis().SetRangeUser(0,150)
     plotList_amplitude_vs_x[0].Draw("hist")
     plotList_amplitude_vs_x[0].SetStats(0)
     plotList_amplitude_vs_x[0].SetTitle("")
