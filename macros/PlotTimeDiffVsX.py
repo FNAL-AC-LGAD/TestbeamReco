@@ -79,7 +79,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             mySigmaError = fit.GetParError(2)
             value = 1000.0*mySigma
             error = 1000.0*mySigmaError
-            valueMean = 1000.0*myFitMean
+            valueMean = abs(1000.0*myFitMean)
             errorMean = 1000.0*myFitMeanError
 
             ##For Debugging
