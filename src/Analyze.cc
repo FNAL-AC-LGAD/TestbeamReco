@@ -34,8 +34,9 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     int timeDiffNbin = 200;
     double timeDiffLow = -1.0;
     double timeDiffHigh = 1.0;
-    int timeDiffYnbin = 10;
+    int timeDiffYnbin = 50;
 
+    
     int rowIndex = 0;
     for(const auto& row : geometry)
     {
