@@ -4,12 +4,12 @@ import numpy as np
 empty = np.array([0,0,0,0,0,0])
 bias = np.array([260,265,275,280,285,290])
 timingres = np.array([37.65, 36.07, 32.99, 32.55, 30.99, 31.32])
-positionres = np.array([14.91, 16.07, 15.11, 15.28, 15.5, 14.73])
-timingweightres= np.array([35.19, 34.3, 30.93, 31.12, 30.16, 30.97])
+positionres = np.array([14.83, 16.0, 14.99, 15.21, 15.41, 14.62])
+timingweightres= np.array([35.19, 34.16, 30.91, 31.13, 30.09, 30.94])
 
 timingresuncert = np.array([1.01, 0.4, 0.29, 0.36, 0.33, 0.4])
-positionresuncert = np.array([0.23, 0.11, 0.08, 0.10, 0.10, 0.09])
-timingweightresuncert = np.array([1.0, 0.3, 0.29, 0.31, 0.25, 0.32])
+positionresuncert = np.array([0.22, 0.5, 0.08, 0.10, 0.10, 0.09])
+timingweightresuncert = np.array([1.01, 0.34, 0.29, 0.31, 0.25, 0.31])
 
 position_graph = ROOT.TGraphErrors(bias.size ,bias.astype(np.double), positionres.astype(np.double), empty.astype(np.double), positionresuncert.astype(np.double))
 time_graph = ROOT.TGraphErrors(bias.size , bias.astype(np.double), timingres.astype(np.double), empty.astype(np.double), timingresuncert.astype(np.double))

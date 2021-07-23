@@ -2,15 +2,15 @@ import ROOT
 import numpy as np
 
 bias = np.array([200,210,220,225])
-timingres = np.array([41.0,36.0,32.6,33.0])
-positionres = np.array([13.4,12.3,11.6,13.5])
-timingresweighted = np.array([40.0,35.4,33.5,36.0])
+timingres = np.array([41.04, 35.97, 32.56, 33.01])
+positionres = np.array([13.37, 12.4, 11.66, 13.55])
+timingresweighted = np.array([37.91, 33.59, 29.81, 30.68])
 
 empty = np.array([0,0,0,0])
 
-timingresuncert = np.array([0.5,0.4,0.27,0.29])
-positionresuncert = np.array([0.08,0.11,0.06,0.07])
-timingresweighteduncert = np.array([0.47,0.35,0.17,0.25])
+timingresuncert = np.array([0.50, 0.43,0.27, 0.29])
+positionresuncert = np.array([0.08, 0.1, 0.07, 0.07])
+timingresweighteduncert = np.array([0.47, 0.36, 0.25, 0.28])
 
 position_graph = ROOT.TGraphErrors(bias.size ,bias.astype(np.double), positionres.astype(np.double), empty.astype(np.double), positionresuncert.astype(np.double))
 time_graph = ROOT.TGraphErrors(bias.size , bias.astype(np.double), timingres.astype(np.double), empty.astype(np.double), timingresuncert.astype(np.double))
@@ -49,7 +49,7 @@ hdummy.SetMinimum(0.0)
 hdummy.Draw()
 
 
-leg = ROOT.TLegend(0.6, 0.65, 0.9, 0.88)
+leg = ROOT.TLegend(0.4, 0.65, 0.8, 0.88)
 leg.SetFillStyle(0)
 leg.SetBorderSize(0)
 leg.SetLineWidth(1)
