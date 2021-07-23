@@ -7,70 +7,90 @@ gROOT.SetBatch( True )
 #inputfile = TFile("/uscms/home/sxie/work/releases/testbeam/CMSSW_11_2_0_pre5/src/TestbeamReco/test/BNL2020_220V_output.root")
 inputfile = TFile("../test/myoutputfile.root")
 
-#Get dX vs a1/(a1+a2) hist
-Amp1OverAmp1and2_vs_deltaXmax = inputfile.Get("relFracTot_vs_x")
-  
+    #Get x vs aleft/(aleft+aright) hist
+AmpLeftOverAmpLeftandRightTop_vs_x = inputfile.Get("AmpLeftOverAmpLeftandRightTop_vs_x")
+AmpLeftOverAmpLeftandRightBot_vs_x = inputfile.Get("AmpLeftOverAmpLeftandRightBot_vs_x")
+
+AmpLeftOverAmpLeftandRight_vs_x_list = [AmpLeftOverAmpLeftandRightTop_vs_x,AmpLeftOverAmpLeftandRightBot_vs_x]     
+
 #Define profile hist
-Amp1OverAmp1and2_vs_deltaXmax_profile = Amp1OverAmp1and2_vs_deltaXmax.ProjectionY().Clone("Amp1OverAmp1and2_vs_deltaXmax_profile")
+AmpLeftOverAmpLeftandRightTop_vs_x_profile = AmpLeftOverAmpLeftandRightTop_vs_x.ProjectionY().Clone("AmpLeftOverAmpLeftandRightTop_vs_x_profile")
+AmpLeftOverAmpLeftandRightBot_vs_x_profile = AmpLeftOverAmpLeftandRightBot_vs_x.ProjectionY().Clone("AmpLeftOverAmpLeftandRightBot_vs_x_profile")
 
-canvas = TCanvas("cv","cv",800,800)
+AmpLeftOverAmpLeftandRight_vs_x_profile_list = [AmpLeftOverAmpLeftandRightTop_vs_x_profile,AmpLeftOverAmpLeftandRightBot_vs_x_profile]   
 
-#loop over  Amp1OverAmp1and2 bins
-for i in range(0, Amp1OverAmp1and2_vs_deltaXmax.GetYaxis().GetNbins() + 1):
-    #print ("Bin " + str(i))
+for l in range(len(AmpLeftOverAmpLeftandRight_vs_x_list)) : 
 
-    ##For Debugging
-    #if not (i==46 and j==5):
-    #    continue
-
-    tmpHist = Amp1OverAmp1and2_vs_deltaXmax.ProjectionX("px",i,i)
-    myMean = tmpHist.GetMean()
-    myRMS = tmpHist.GetRMS()
-    nEntries = tmpHist.GetEntries()
+    AmpLeftOverAmpLeftandRight_vs_x = AmpLeftOverAmpLeftandRight_vs_x_list[l]
+    AmpLeftOverAmpLeftandRight_vs_x_profile = AmpLeftOverAmpLeftandRight_vs_x_profile_list[l]
     
-    if(nEntries > 0.0):
-        myGausFunction = TF1("mygaus","gaus(0)",-0.4,0.4);
-        tmpHist.Fit(myGausFunction,"Q","",-0.4,0.4);
-        mean = myGausFunction.GetParameter(1)
-        meanErr = myGausFunction.GetParError(1)
-        sigma = myGausFunction.GetParameter(2)
+    canvas = TCanvas("cv","cv",800,800)
+    
+    #loop over  Amp1OverAmp1and2 bins
+    for i in range(0, AmpLeftOverAmpLeftandRight_vs_x.GetYaxis().GetNbins() + 1):
+        #print ("Bin " + str(i))
+    
+        ##For Debugging
+        #if not (i==46 and j==5):
+        #    continue
+    
+        tmpHist = AmpLeftOverAmpLeftandRight_vs_x.ProjectionX("px",i,i)
+        myMean = tmpHist.GetMean()
+        myRMS = tmpHist.GetRMS()
+        nEntries = tmpHist.GetEntries()
         
-        ###For Debugging
-        #tmpHist.Draw("hist")
-        #myGausFunction.Draw("same")
-        canvas.SaveAs("q_"+str(i)+".gif")
-        #print ("Bin : " + str(i) + " -> " + str(mean))
-    else:
-        mean=0.0
-        meanErr=0.0
-       
-    Amp1OverAmp1and2_vs_deltaXmax_profile.SetBinContent(i,mean)
-    Amp1OverAmp1and2_vs_deltaXmax_profile.SetBinError(i,meanErr)           
-        
-# Save amplitude histograms
-outputfile = TFile("positionRecoFitPlots.root","RECREATE")   
-#Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
-#outputfile.Close()
+        if(nEntries > 0.0):
+            myGausFunction = TF1("mygaus","gaus(0)",-0.4,0.4);
+            tmpHist.Fit(myGausFunction,"Q","",-0.4,0.4);
+            mean = myGausFunction.GetParameter(1)
+            meanErr = myGausFunction.GetParError(1)
+            sigma = myGausFunction.GetParameter(2)
+            
+            ###For Debugging
+            #tmpHist.Draw("hist")
+            #myGausFunction.Draw("same")
+            #canvas.SaveAs("q_"+str(l)+"_"+str(i)+".gif")
+            #print ("Bin : " + str(i) + " -> " + str(mean))
+        else:
+            mean=0.0
+            meanErr=0.0
+           
+        AmpLeftOverAmpLeftandRight_vs_x_profile.SetBinContent(i,mean)
+        AmpLeftOverAmpLeftandRight_vs_x_profile.SetBinError(i,meanErr)           
+            
+    # Save amplitude histograms
 
-xmin=0.115
-xmax=0.62
+    if (l==0) :
+        outputfile = TFile("positionRecoFitPlotsTop.root","RECREATE")   
+    else :
+        outputfile = TFile("positionRecoFitPlotsBot.root","RECREATE")   
 
-gStyle.SetOptFit(1011)
-fit = TF1("mainFit","pol5",xmin,xmax)
-Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.3)
-Amp1OverAmp1and2_vs_deltaXmax_profile.SetMinimum(-0.3)
-Amp1OverAmp1and2_vs_deltaXmax_profile.GetXaxis().SetRangeUser(xmin,xmax)
-Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"","",xmin,xmax)
-Amp1OverAmp1and2_vs_deltaXmax_profile.Draw()
-fit.Draw("same")
-Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same")
+    #AmpLeftOverAmpLeftandRight_vs_x_profile.Write()
+    #outputfile.Close()
+    
+    xmin=0.18
+    xmax=0.83
+    
+    gStyle.SetOptFit(1011)
+    fit = TF1("mainFit","pol5",xmin,xmax)
+    AmpLeftOverAmpLeftandRight_vs_x_profile.SetMaximum(0.3)
+    AmpLeftOverAmpLeftandRight_vs_x_profile.SetMinimum(-0.3)
+    AmpLeftOverAmpLeftandRight_vs_x_profile.GetXaxis().SetRangeUser(xmin,xmax)
+    AmpLeftOverAmpLeftandRight_vs_x_profile.Fit(fit,"","",xmin,xmax)
+    AmpLeftOverAmpLeftandRight_vs_x_profile.Draw()
+    fit.Draw("same")
+    AmpLeftOverAmpLeftandRight_vs_x_profile.Draw("same")
+    
+    line = TF1("line","0.0",xmin,1.0)
+    line.SetLineColor(ROOT.kBlack)
+    line.Draw("same")
+   
+    if (l==0) : 
+        canvas.SaveAs("PositionFitTop.gif")
+    else :
+        canvas.SaveAs("PositionFitBot.gif")
 
-line = TF1("line","0.0",xmin,1.0)
-line.SetLineColor(ROOT.kBlack)
-line.Draw("same")
-
-canvas.SaveAs("PositionFit.gif")
-Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
-fit.Write()
-outputfile.Close()
-
+    AmpLeftOverAmpLeftandRight_vs_x_profile.Write()
+    fit.Write()
+    outputfile.Close()
+    

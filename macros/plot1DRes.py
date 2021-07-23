@@ -2,7 +2,7 @@ import ROOT
 import optparse
 ROOT.gROOT.SetBatch(True)
 
-def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
+def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange=(0,1)):
         ROOT.gStyle.SetOptFit(1)
         c = ROOT.TCanvas("c","c",1000,1000)
         ROOT.gPad.SetLeftMargin(0.12)
@@ -19,9 +19,15 @@ def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
         h.Draw('hists e')
         myMean = h.GetMean()
         myRMS = h.GetRMS()
-        fitlow = myMean - 1.2*myRMS
-        fithigh = myMean + myRMS
+        if ((pads==True) and (name=="deltaX")):
+            fitlow = myMean - myRMS
+            fithigh = myMean + myRMS*0.55
+        else :
+           fitlow = myMean - 1.2*myRMS
+           fithigh = myMean + myRMS
 
+    
+            
         fit = ROOT.TF1("fit", "gaus", fitlow, fithigh)    
         fit.SetLineColor(ROOT.kRed)
         #fit.Draw("same")
@@ -47,6 +53,8 @@ hists += [("weighted_timeDiff","weightedTime","photek"), ("timeDiff","time","pho
 hists += [("weighted2_timeDiff","weighted2Time","photek"), ("weighted_timeDiff_goodSig","weighted_goodSig","photek"), ("weighted2_timeDiff_goodSig","weighted2_goodSig","photek")]
 
 for t in hists:
-	h = f.Get(t[0])
-	plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2])
+    h = f.Get(t[0])
+    plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2], True) if options.runPad else plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2])
+
+        
 

@@ -19,7 +19,7 @@ RunFits = options.plotsonly
 UseRawHistos = options.UseRawHistos
 suffex = "_raw" if UseRawHistos else ""
 
-projection = ["zx", "zy"]
+projection = ["zx","zy"]
 
 for l in range(len(projection)) : 
         

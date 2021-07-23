@@ -47,20 +47,24 @@ private:
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 	} //if enabled position reconstruction
         
+        const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
+        const auto& positionRecoParBot = tr.getVar<std::vector<double>>("positionRecoParBot");
         const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
         const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
-        const auto& relFrac = tr.getVec<std::vector<double>>("relFrac"); 
+        const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
+        const auto& AmpLeftOverAmpLeftandRightBot = tr.getVar<double>("AmpLeftOverAmpLeftandRightBot");
           	
         if(enablePositionReconstructionPad)
         {	  
             x1 = sensorCenter;
             
             //use the poly fit function
-            auto dX = getDX(positionRecoPar, relFrac[amp1Indexes.first][amp1Indexes.second]);
-            //dX = (Amp1OverAmp1and2 > positionRecoMaxPoint) ? 0.0 : dX;
+            auto dXTop = getDX(positionRecoParTop, AmpLeftOverAmpLeftandRightTop);
+            auto dXBot = getDX(positionRecoParBot, AmpLeftOverAmpLeftandRightBot);
+            auto dX = (amp1Indexes.first ==0) ? dXTop : dXBot;
             
-            x_reco = (amp1Indexes.second ==0) ? x1 + dX : x1 - dX;
+            x_reco = x1 + dX;
              
 	} //if enabled position reconstruction
 

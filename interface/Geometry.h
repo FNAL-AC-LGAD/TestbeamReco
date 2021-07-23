@@ -42,6 +42,8 @@ public:
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = false;
     std::vector<double> positionRecoPar = {-1};
+    std::vector<double> positionRecoParTop = {-1};
+    std::vector<double> positionRecoParBot = {-1}; 
     std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};
     std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> xSlices = {{-999.9, 999.9}, {-999.9, 999.9}};
@@ -222,8 +224,8 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{2,1}}, {4,{2,0}}, {7,{3,0}}};    
     std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.003642783}, {2,1.0}, {3,1.0/1.035044020}, {4,1.0/0.964843779}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4743827945337}, {2,10.510743069680100}, {3,10.4499172847976}, {4,10.4609478307382}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.976153420}, {2,1.0}, {3,1.0/0.973048202}, {4,1.0/1.014545890}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4773186157277}, {2,10.5108367623671}, {3,10.4493102770996}, {4,10.4646033696504}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.45; 
     double pitch = 0.5;
     double sensorCenter =-5.77;
@@ -237,11 +239,12 @@ public:
     double ymax = 11.0; 
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 80.0;
+    double signalAmpThreshold = 50.0;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoPar = {-0.784185, 7.01298, -29.3836, 69.6177, -82.4235, 38.7852};
-    std::vector<std::vector<double>> sensorEdges = {{-6.00 , 10.10}, { -5.50, 10.8}};
+    std::vector<double> positionRecoParTop = {-0.769147, 3.80879, -6.46516, 2.52433, 3.80156, -2.35997};
+    std::vector<double> positionRecoParBot = {-1.00216, 6.766, -20.4776, 33.6453, -28.8294, 10.6723};
+    std::vector<std::vector<double>> sensorEdges = {{-6.03 , 9.94}, { -5.53, 10.84}};
     //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}};
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
     std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
