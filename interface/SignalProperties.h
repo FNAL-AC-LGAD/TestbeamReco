@@ -14,7 +14,8 @@ private:
     void signalProperties([[maybe_unused]] NTupleReader& tr)
     {
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
-        const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");        
+        const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");       
+        const auto& isPadSensor = tr.getVar<bool>("isPadSensor"); 
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
         const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
@@ -138,10 +139,17 @@ private:
         double AmpTop = stayPositive(ampLGAD[ampIndexesTop.first][ampIndexesTop.second]);
         double AmpBot = stayPositive(ampLGAD[ampIndexesBot.first][ampIndexesBot.second]); 
         double AmpAdjPad =  stayPositive(ampLGAD[ampIndexesAdjPad.first][ampIndexesAdjPad.second]);
-        double AmpLeftTop = stayPositive(ampLGAD[0][0]);
-        double AmpLeftBot = stayPositive(ampLGAD[1][0]);
-        double AmpRightTop = stayPositive(ampLGAD[0][1]);
-        double AmpRightBot = stayPositive(ampLGAD[1][1]);
+        double AmpLeftTop = 0;         
+        double AmpLeftBot = 0; 
+        double AmpRightTop = 0;
+        double AmpRightBot = 0;
+        if (isPadSensor)
+        {
+            AmpLeftTop = stayPositive(ampLGAD[0][0]);
+            AmpLeftBot = stayPositive(ampLGAD[1][0]);
+            AmpRightTop = stayPositive(ampLGAD[0][1]);
+            AmpRightBot = stayPositive(ampLGAD[1][1]);
+        }   
         double AmpLeftOverAmpLeftandRightTop = stayPositive(AmpLeftTop / (AmpLeftTop + AmpRightTop));
         double AmpLeftOverAmpLeftandRightBot = stayPositive(AmpLeftBot / (AmpLeftBot + AmpRightBot));
         double AmpTopOverAmpTopandBotLeft = stayPositive(AmpLeftTop/ (AmpLeftTop + AmpLeftBot));

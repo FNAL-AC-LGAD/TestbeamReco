@@ -39,7 +39,8 @@ public:
     double positionRecoMaxPoint = 1.0;
     double photekSignalThreshold = 50.0; //in mV
     double noiseAmpThreshold = 10.0;      //in mV
-    double signalAmpThreshold = 30.0;    //in mV        
+    double signalAmpThreshold = 30.0;    //in mV       
+    bool isPadSensor = false; 
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = false;
     std::vector<double> positionRecoPar = {-1};
@@ -241,7 +242,8 @@ public:
     double ymax = 11.0; 
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 50.0;
+    double signalAmpThreshold = 50.0; 
+    bool isPadSensor = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<double> positionRecoParTop = {-0.769147, 3.80879, -6.46516, 2.52433, 3.80156, -2.35997};
