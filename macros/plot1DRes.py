@@ -19,12 +19,12 @@ def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange
         h.Draw('hists e')
         myMean = h.GetMean()
         myRMS = h.GetRMS()
-        if ((pads==True) and (name=="deltaX")):
+        if ((pads==True) and ((name=="deltaX") or (name=="deltaX_TopRow") or (name=="deltaX_BotRow"))):
             fitlow = myMean - myRMS
             fithigh = myMean + myRMS*0.55
         else :
-           fitlow = myMean - 1.2*myRMS
-           fithigh = myMean + myRMS
+            fitlow = myMean - 1.2*myRMS
+            fithigh = myMean + myRMS
 
     
             
@@ -50,6 +50,7 @@ channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2)
 hists = list(('weighted_timeDiff_channel{0}{1}'.format(t[0],t[1]),'weightedTime','photek') for t in channelMap)
 hists += list(('timeDiff_channel{0}{1}'.format(t[0],t[1]),'time','photek') for t in channelMap)
 hists += [("weighted_timeDiff","weightedTime","photek"), ("timeDiff","time","photek"), ("timeDiff_amp2","time","photek"), ("timeDiff_amp3","time","photek"),('deltaX','deltaX',"tracker")]
+hists += [('deltaX_TopRow','deltaX_TopRow',"tracker"),('deltaX_BotRow','deltaX_BotRow',"tracker")] 
 hists += [("weighted2_timeDiff","weighted2Time","photek"), ("weighted_timeDiff_goodSig","weighted_goodSig","photek"), ("weighted2_timeDiff_goodSig","weighted2_goodSig","photek")]
 
 for t in hists:

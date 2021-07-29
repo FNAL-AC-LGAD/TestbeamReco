@@ -32,6 +32,7 @@ private:
         tr.registerDerivedVar("amplitudeCorrectionFactor", g.amplitudeCorrectionFactor);
         tr.registerDerivedVar("stripWidth",g.stripWidth);
         tr.registerDerivedVar("sensorCenter",g.sensorCenter); 
+        tr.registerDerivedVar("sensorCenterY",g.sensorCenterY); 
         tr.registerDerivedVar("pitch",g.pitch); 
         tr.registerDerivedVar("stripCenterXPosition", g.stripCenterXPosition);
         tr.registerDerivedVar("stripCenterYPosition", g.stripCenterYPosition);

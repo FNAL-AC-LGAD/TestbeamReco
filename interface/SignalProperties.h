@@ -144,6 +144,8 @@ private:
         double AmpRightBot = stayPositive(ampLGAD[1][1]);
         double AmpLeftOverAmpLeftandRightTop = stayPositive(AmpLeftTop / (AmpLeftTop + AmpRightTop));
         double AmpLeftOverAmpLeftandRightBot = stayPositive(AmpLeftBot / (AmpLeftBot + AmpRightBot));
+        double AmpTopOverAmpTopandBotLeft = stayPositive(AmpLeftTop/ (AmpLeftTop + AmpLeftBot));
+        double AmpTopOverAmpTopandBotRight = stayPositive(AmpRightTop/ (AmpRightTop + AmpRightBot));
         double Amp12 = stayPositive(Amp1 + Amp2);
         double Amp123 = stayPositive(Amp1 + Amp2 + Amp3);
         double Amp1Top = stayPositive(Amp1 + AmpTop);
@@ -215,6 +217,8 @@ private:
         tr.registerDerivedVar("xCenterMaxStrip", xCenterMaxStrip);
         tr.registerDerivedVar("AmpLeftOverAmpLeftandRightTop", AmpLeftOverAmpLeftandRightTop);
         tr.registerDerivedVar("AmpLeftOverAmpLeftandRightBot", AmpLeftOverAmpLeftandRightBot);
+        tr.registerDerivedVar("AmpTopOverAmpTopandBotRight", AmpTopOverAmpTopandBotRight);
+        tr.registerDerivedVar("AmpTopOverAmpTopandBotLeft", AmpTopOverAmpTopandBotLeft);
         tr.registerDerivedVar("Amp1OverAmp1and2", Amp1OverAmp1and2);
         tr.registerDerivedVar("Amp2OverAmp2and3", Amp2OverAmp2and3);
         tr.registerDerivedVar("Amp1OverAmp123", Amp1OverAmp123);

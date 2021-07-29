@@ -2,6 +2,9 @@ from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAs
 import ROOT
 import os
 from stripBox import getStripBox
+import optparse
+ROOT.gROOT.SetBatch(True)
+
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -25,9 +28,14 @@ class HistoInfo:
 
 inputfile = TFile("../test/myoutputfile.root")
 
+# Construct the argument parser
+parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('--runPad', dest='runPad', action='store_true', default = False, help="run macro for pads")
+options, args = parser.parse_args()
+
 all_histoInfos = [
-    HistoInfo("deltaX_vs_Xtrack",inputfile, "deltaX_vs_x"),
-    HistoInfo("deltaX_vs_Xreco",inputfile, "deltaX_vs_xreco"),
+    HistoInfo("deltaX_vs_Xtrack",inputfile, "deltaX_vs_x", True, 80.0),
+    HistoInfo("deltaX_vs_Xreco",inputfile, "deltaX_vs_xreco", True, 80.0),
     HistoInfo("deltaXmax_vs_Xtrack",inputfile, "deltaXmax_vs_x", False, 70.0),
 ]
 
@@ -94,13 +102,14 @@ for info in all_histoInfos:
 
     ymin = info.th1.GetMinimum()
     ymax = info.th1.GetMaximum()
-    boxes = getStripBox(inputfile,ymin,ymax)
+    boxes = getStripBox(inputfile,ymin,ymax,False,18,False) if options.runPad else getStripBox(inputfile,ymin,ymax)
     for box in boxes:
         box.Draw()
 
     ymin = info.th1.GetMinimum()
     ymax = info.th1.GetMaximum()
-    boxes2 = getStripBox(inputfile,ymin,ymax, True, ROOT.kRed)
+   
+    boxes2 = getStripBox(inputfile,ymin,ymax,True,ROOT.kRed,False) if options.runPad else getStripBox(inputfile,ymin,ymax,True,ROOT.kRed)
     for box in boxes2:
         box.Draw("same")
 

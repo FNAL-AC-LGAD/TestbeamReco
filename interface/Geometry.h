@@ -24,6 +24,7 @@ public:
     double stripWidth = 0.08;
     double pitch = 999;
     double sensorCenter = 999;
+    double sensorCenterY = 999;
     std::vector<double> stripCenterXPosition = {{0,0.0}};
     std::vector<double> stripCenterYPosition = {{0,0.0}};
     int numLGADchannels = 0;
@@ -229,6 +230,7 @@ public:
     double stripWidth = 0.45; 
     double pitch = 0.5;
     double sensorCenter =-5.77;
+    double sensorCenterY = 10.38; 
     std::vector<double> stripCenterXPosition = {0.0, -5.53, -6.03, -6.03, -5.53,  0.0};
     std::vector<double> stripCenterYPosition = {0.0, 10.64, 10.64, 10.14, 10.14, 0.0};
     int numLGADchannels = 4;
@@ -244,8 +246,12 @@ public:
     bool enablePositionReconstructionPad = true;
     std::vector<double> positionRecoParTop = {-0.769147, 3.80879, -6.46516, 2.52433, 3.80156, -2.35997};
     std::vector<double> positionRecoParBot = {-1.00216, 6.766, -20.4776, 33.6453, -28.8294, 10.6723};
-    std::vector<std::vector<double>> sensorEdges = {{-6.03 , 9.94}, { -5.53, 10.84}};
-    //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}};
+    //std::vector<double> positionRecoParTop = {-0.137164, -0.126798, 1.18544,  -0.775188}; //100 microns around center
+    //std::vector<double> positionRecoParBot = {-0.0409756, -0.748701, 2.46567, -1.61481}; // 100 microns around center
+    //std::vector<std::vector<double>> sensorEdges = {{-5.87 , 9.94}, { -5.67, 10.84}}; //100 microns from center
+    std::vector<std::vector<double>> sensorEdges = {{-6.03 , 10.04}, { -5.53, 10.74}}; //current version for best x and y recoo
+    //std::vector<std::vector<double>> sensorEdges = {{-6.03 , 9.94}, { -5.53, 10.84}};  //older version for best x reco
+    //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}}; //original version whole sensor
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
     std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
     std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
