@@ -84,6 +84,16 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     }
     //Global 1D histograms
     utility::makeHisto(my_histos,"deltaX", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+    utility::makeHisto(my_histos,"ntracks_alt", "; ntracks_alt; Events", 10,0,10);
+    utility::makeHisto(my_histos,"chi2", "; Track chi2/ndf; Events", 60,0,30);
+    utility::makeHisto(my_histos,"nplanes", "; nplanes; Events", 20,0,20);
+    utility::makeHisto(my_histos,"npix", "; npix; Events", 4,0,4);
+    utility::makeHisto(my_histos,"monicelli_err", "; Track expected error; Events", 100,0,15);
+    utility::makeHisto(my_histos,"slopeX", "; Track X slope [mm per mm]; Events", 100,-0.001,0.001);
+    int nvar=35;
+    for(int ivar=0;ivar<nvar;ivar++){
+        utility::makeHisto(my_histos,"deltaX_var"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+    }
     utility::makeHisto(my_histos,"timePhotek", "", 500, -225.0, -175.0);
     utility::makeHisto(my_histos,"timeDiff", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"timeDiff_amp2", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -185,12 +195,16 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& baselineRMS = tr.getVec<std::vector<float>>("baselineRMS");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
+        const auto& ntracks_alt = tr.getVar<int>("ntracks_alt");
         const auto& nplanes = tr.getVar<int>("nplanes");
         const auto& npix = tr.getVar<int>("npix");
         const auto& chi2 = tr.getVar<float>("chi2");
-        //const auto& xSlope = tr.getVar<float>("xSlope");
+        const auto& xSlope = tr.getVar<float>("xSlope");
         const auto& x = tr.getVar<double>("x");
         const auto& y = tr.getVar<double>("y");
+        const auto& xErrDUT = tr.getVar<float>("xErrDUT");
+        const auto& x_var = tr.getVec<float>("x_var");
+        const auto& y_var = tr.getVec<float>("y_var");
         const auto& padx = tr.getVar<double>("padx");
         const auto& padxAdj = tr.getVar<double>("padxAdj");
         const auto& x_reco = tr.getVar<double>("x_reco");
@@ -236,7 +250,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
-        bool passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
+        bool passTrigger = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         bool pass = passTrigger && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex;
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
@@ -314,6 +328,16 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         }
         utility::fillHisto(pass,                                                       my_histos["timePhotek"],photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["deltaX"], x_reco-x);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["chi2"], chi2);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["ntracks_alt"], ntracks_alt);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["nplanes"], nplanes);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["npix"], npix);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["monicelli_err"], xErrDUT);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["slopeX"], xSlope);
+        int nvar=35;
+        for(int ivar=0;ivar<nvar;ivar++){
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["deltaX_var"+std::to_string(ivar)], x_reco-x_var[ivar]);
+        }
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["timeDiff"], maxAmpTime-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["timeDiff_amp2"], amp2Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,               my_histos["timeDiff_amp3"], amp3Time-photekTime);

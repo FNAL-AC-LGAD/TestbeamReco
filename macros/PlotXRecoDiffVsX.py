@@ -31,7 +31,7 @@ all_histoInfos = [
     HistoInfo("deltaXmax_vs_Xtrack",inputfile, "deltaXmax_vs_x", False, 70.0),
 ]
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cv","cv",1000,600)
 gPad.SetLeftMargin(0.12)
 gPad.SetRightMargin(0.15)
 gPad.SetTopMargin(0.08)
