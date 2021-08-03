@@ -251,7 +251,8 @@ public:
     //std::vector<double> positionRecoParTop = {-0.137164, -0.126798, 1.18544,  -0.775188}; //100 microns around center
     //std::vector<double> positionRecoParBot = {-0.0409756, -0.748701, 2.46567, -1.61481}; // 100 microns around center
     //std::vector<std::vector<double>> sensorEdges = {{-5.87 , 9.94}, { -5.67, 10.84}}; //100 microns from center
-    std::vector<std::vector<double>> sensorEdges = {{-6.03 , 10.04}, { -5.53, 10.74}}; //current version for best x and y recoo
+    std::vector<std::vector<double>> sensorEdges = {{-6.03 , 10.14}, { -5.53, 10.64}};
+    //std::vector<std::vector<double>> sensorEdges = {{-6.03 , 10.04}, { -5.53, 10.74}}; //current version for best x and y reco
     //std::vector<std::vector<double>> sensorEdges = {{-6.03 , 9.94}, { -5.53, 10.84}};  //older version for best x reco
     //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}}; //original version whole sensor
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};

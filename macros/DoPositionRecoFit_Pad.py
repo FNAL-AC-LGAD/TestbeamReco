@@ -50,7 +50,7 @@ for l in range(len(AmpRatio_list)) :
         if (l==2 or l==3) :
             tmpHist.Rebin(2)
         
-        if(nEntries > 0.0):
+        if(nEntries > 10.0):
             myGausFunction = TF1("mygaus","gaus(0)",-0.5,0.5);
             tmpHist.Fit(myGausFunction,"Q","",-0.5,0.5);
             mean = myGausFunction.GetParameter(1)
