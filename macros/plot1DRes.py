@@ -19,12 +19,8 @@ def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange
         h.Draw('hists e')
         myMean = h.GetMean()
         myRMS = h.GetRMS()
-        if ((pads==True) and ((name=="deltaX") or (name=="deltaX_TopRow") or (name=="deltaX_BotRow"))):
-            fitlow = myMean - myRMS
-            fithigh = myMean + myRMS*0.55
-        else :
-            fitlow = myMean - 1.2*myRMS
-            fithigh = myMean + myRMS
+        fitlow = myMean - 1.2*myRMS
+        fithigh = myMean + myRMS
 
     
             

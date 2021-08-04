@@ -121,14 +121,14 @@ if (RunFits):
             list_baselineRMS_vs_x[channel].SetBinContent(i,value)
                      
     # Save baselineRMS histograms
-    outputfile = TFile("plots.root","RECREATE")
+    outputfile = TFile("plotsNoise.root","RECREATE")
     for channel in range(0, len(list_baselineRMS_vs_x)):
         list_baselineRMS_vs_x[channel].Write()
     outputfile.Close()
 
 
 #Make final plots
-plotfile = TFile("plots.root","READ")
+plotfile = TFile("plotsNoise.root","READ")
 plotList_baselineRMS_vs_x  = []
 plotList_baselineRMS_vs_x.append(plotfile.Get("baselineRMS_vs_x_channel00"))
 plotList_baselineRMS_vs_x.append(plotfile.Get("baselineRMS_vs_x_channel01"))

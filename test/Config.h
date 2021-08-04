@@ -54,6 +54,8 @@ private:
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
         tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
         tr.registerDerivedVar("positionRecoPar", g.positionRecoPar);
+        tr.registerDerivedVar("positionRecoParRight", g.positionRecoParRight);
+        tr.registerDerivedVar("positionRecoParLeft", g.positionRecoParLeft);
         tr.registerDerivedVar("positionRecoParTop", g.positionRecoParTop);
         tr.registerDerivedVar("positionRecoParBot", g.positionRecoParBot);
         tr.registerDerivedVar("xSlices", g.xSlices);

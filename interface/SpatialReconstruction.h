@@ -32,7 +32,7 @@ private:
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
         const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
 
-	double x_reco = 0.0, x1 = 0.0, x2 = 0.0;
+	double y_reco=0.0, x_reco = 0.0, x1 = 0.0, y1 = 0.0, x2 = 0.0;
 	if(enablePositionReconstruction)
         {	  
             assert(Amp1OverAmp1and2 >= 0); //make sure a1/(a1+a2) is a sensible number
@@ -47,11 +47,16 @@ private:
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 	} //if enabled position reconstruction
         
+        const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
+        const auto& positionRecoParLeft = tr.getVar<std::vector<double>>("positionRecoParLeft");
         const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
         const auto& positionRecoParBot = tr.getVar<std::vector<double>>("positionRecoParBot");
         const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
         const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
+        const auto& AmpTopOverAmpTopandBotRight = tr.getVar<double>("AmpTopOverAmpTopandBotRight");
+        const auto& AmpTopOverAmpTopandBotLeft = tr.getVar<double>("AmpTopOverAmpTopandBotLeft");
         const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
         const auto& AmpLeftOverAmpLeftandRightBot = tr.getVar<double>("AmpLeftOverAmpLeftandRightBot");
           	
@@ -65,11 +70,19 @@ private:
             auto dX = (amp1Indexes.first ==0) ? dXTop : dXBot;
             
             x_reco = x1 + dX;
+           
+            y1 = sensorCenterY;
+            auto dYRight = getDX(positionRecoParRight, AmpTopOverAmpTopandBotRight);
+            auto dYLeft = getDX(positionRecoParLeft, AmpTopOverAmpTopandBotLeft);
+            auto dY = (amp1Indexes.second == 0) ? dYLeft : dYRight;
+            
+            y_reco = dY + y1;
+                                
              
 	} //if enabled position reconstruction
 
         tr.registerDerivedVar("x_reco", x_reco);
-
+        tr.registerDerivedVar("y_reco", y_reco);
         
 
     }
