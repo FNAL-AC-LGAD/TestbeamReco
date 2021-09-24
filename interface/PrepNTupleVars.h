@@ -16,7 +16,7 @@ private:
         tr.registerDerivedVar("y", y_rot);
     }
 
-    void RotateVec(NTupleReader& tr, std::vector<float> vx, std::vector<float> vy, double angle) const
+    void RotateVec(NTupleReader& tr, const std::vector<float>& vx, const std::vector<float>& vy, double angle) const
     {
         int nvar=35;
         auto& vec_x = tr.createDerivedVec<float>("x_var");
@@ -26,8 +26,8 @@ private:
             vec_x.push_back(vx[i]*cos(rad_angle) + vy[i]*sin(rad_angle));
             vec_y.push_back(vy[i]*cos(rad_angle) - vx[i]*sin(rad_angle));
         }
-
     }
+
     void ApplyAmplitudeCorrection(NTupleReader& tr) const
     {     
         const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
@@ -52,8 +52,7 @@ private:
     	const auto& x_dut = tr.getVec<float>("x_dut");
     	const auto& y_dut = tr.getVec<float>("y_dut");
     	Rotate(tr, x_dut[21], y_dut[21], angle);
-        RotateVec(tr,x_dut,y_dut,angle);
-
+        RotateVec(tr, x_dut, y_dut, angle);
 
         // Correct amp and map raw amplitude
 	ApplyAmplitudeCorrection(tr);

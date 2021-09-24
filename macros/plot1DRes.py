@@ -30,6 +30,7 @@ def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
 
         c.Print("%s.png"%(name))
         c.Print("%s.gif"%(name))
+        c.Print("%s.pdf"%(name))
 
 
 # Construct the argument parser

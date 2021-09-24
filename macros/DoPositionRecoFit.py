@@ -92,6 +92,7 @@ line.SetLineColor(ROOT.kBlack)
 line.Draw("same")
 
 canvas.SaveAs("PositionFit.gif")
+canvas.SaveAs("PositionFit.pdf")
 Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
 fit.Write()
 outputfile.Close()
