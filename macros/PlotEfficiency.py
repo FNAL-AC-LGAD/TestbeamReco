@@ -145,6 +145,7 @@ legend.Draw();
 
 efficiency_vs_x_lowThreshold_global.Draw("LP same")
 canvas.SaveAs("Efficiency_LowThreshold_vs_x.gif")
+canvas.SaveAs("Efficiency_LowThreshold_vs_x.pdf")
 
 
 
@@ -203,6 +204,7 @@ legend.Draw();
 
 efficiency_vs_x_highThreshold_global.Draw("LP same")
 canvas.SaveAs("Efficiency_HighThreshold_vs_x.gif")
+canvas.SaveAs("Efficiency_HighThreshold_vs_x.pdf")
 
 
 

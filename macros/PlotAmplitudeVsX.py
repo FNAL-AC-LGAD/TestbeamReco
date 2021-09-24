@@ -207,6 +207,7 @@ legend.AddEntry(plotList_amplitude_vs_x[5], "Strip 6")
 legend.Draw();
 
 canvas.SaveAs("Amplitude_vs_x"+suffex+".gif")
+canvas.SaveAs("Amplitude_vs_x"+suffex+".pdf")
 
 
 #totalAmplitude_vs_x = plotList_amplitude_vs_x[0].Clone("totalAmplitude_vs_x")
@@ -260,6 +261,7 @@ legend.AddEntry(plotList_amplitude_vs_x[5], "Strip 6")
 legend.Draw();
 
 canvas.SaveAs("TotalAmplitude_vs_x"+suffex+".gif")
+canvas.SaveAs("TotalAmplitude_vs_x"+suffex+".pdf")
 
 
 plotList_amplitudeFraction_vs_x  = []
@@ -336,5 +338,6 @@ legend.Draw();
 plotList_amplitudeFraction_vs_x[0].Draw("AXIS same")
 plotList_amplitudeFraction_vs_x[0].Draw("hist same")
 canvas.SaveAs("AmplitudeFraction_vs_x"+suffex+".gif")
+canvas.SaveAs("AmplitudeFraction_vs_x"+suffex+".pdf")
 
 
