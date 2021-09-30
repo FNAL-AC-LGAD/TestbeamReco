@@ -19,8 +19,8 @@ def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange
         h.Draw('hists e')
         myMean = h.GetMean()
         myRMS = h.GetRMS()
-        fitlow = myMean - 1.2*myRMS
-        fithigh = myMean + myRMS
+        fitlow = myMean - 0.65*myRMS
+        fithigh = myMean + 0.6*myRMS
 
     
             
@@ -45,8 +45,8 @@ channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2)
 
 hists = list(('weighted_timeDiff_channel{0}{1}'.format(t[0],t[1]),'weightedTime','photek') for t in channelMap)
 hists += list(('timeDiff_channel{0}{1}'.format(t[0],t[1]),'time','photek') for t in channelMap)
-hists += [("weighted_timeDiff","weightedTime","photek"), ("timeDiff","time","photek"), ("timeDiff_amp2","time","photek"), ("timeDiff_amp3","time","photek"),('deltaX','deltaX',"tracker")]
-hists += [('deltaX_TopRow','deltaX_TopRow',"tracker"),('deltaX_BotRow','deltaX_BotRow',"tracker")] 
+hists += [("weighted_timeDiff","weightedTime","photek"), ("timeDiff","time","photek"), ("timeDiff_amp2","time","photek"), ("timeDiff_amp3","time","photek"),('deltaX','deltaX',"tracker"),('deltaY','deltaY',"tracker")]
+hists += [('deltaX_TopRow','deltaX_TopRow',"tracker"),('deltaX_BotRow','deltaX_BotRow',"tracker"),('deltaY_RightCol','deltaY_RightCol',"tracker"),('deltaY_LeftCol','deltaY_LeftCol',"tracker")] 
 hists += [("weighted2_timeDiff","weighted2Time","photek"), ("weighted_timeDiff_goodSig","weighted_goodSig","photek"), ("weighted2_timeDiff_goodSig","weighted2_goodSig","photek")]
 
 for t in hists:
