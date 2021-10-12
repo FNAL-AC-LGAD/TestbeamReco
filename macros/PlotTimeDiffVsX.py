@@ -6,10 +6,12 @@ gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName):
+    def __init__(self, inHistoName, f, outHistoName, xlabel="Tracker Position [mm]", ylabel="Resolution [ps]"):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
+        self.xlabel = xlabel
+        self.ylabel = ylabel
         self.th2 = self.getTH2(f, inHistoName)
         self.th1 = self.getTH1(self.th2, outHistoName)
         self.th1Mean = self.getTH1(self.th2, outHistoName)
@@ -102,9 +104,12 @@ outputfile = TFile("plots.root","RECREATE")
 for info in all_histoInfos:
     info.th1.Draw("hist e")
     info.th1.SetStats(0)
-    info.th1.SetTitle(info.outHistoName)
+    #info.th1.SetTitle(info.outHistoName)
+    info.th1.SetTitle("Amplitude Weighted Reconstructed Time")
+    info.th1.GetXaxis().SetTitle(info.xlabel)
+    info.th1.GetYaxis().SetTitle(info.ylabel)
     info.th1.SetMinimum(0.0)
-    info.th1.SetMaximum(100.0)
+    info.th1.SetMaximum(50.0)
     info.th1.SetLineColor(kBlack)
 
     ymin = info.th1.GetMinimum()
@@ -114,7 +119,7 @@ for info in all_histoInfos:
         box.Draw()
 
     info.th1Mean.SetLineColor(kRed)
-    info.th1Mean.Draw("hist e same")
+    #info.th1Mean.Draw("hist e same")
     info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
 

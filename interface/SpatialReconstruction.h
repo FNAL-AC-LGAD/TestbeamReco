@@ -83,8 +83,6 @@ private:
 
         tr.registerDerivedVar("x_reco", x_reco);
         tr.registerDerivedVar("y_reco", y_reco);
-        
-
     }
 public:
     SpatialReconstruction()
