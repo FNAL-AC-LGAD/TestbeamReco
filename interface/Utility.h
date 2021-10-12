@@ -41,7 +41,7 @@ namespace utility
         return vecvec;
     }
 
-    template<typename T> std::pair<int,int> findNthRankChannel(const std::vector<std::vector<T>>& channels, const int rank)
+    template<typename T> std::pair<int,int> findNthRankChannel(const std::vector<std::vector<T>>& channels, unsigned int rank)
     {
         typedef std::tuple<T,int,int> TPL;
         std::vector<TPL> vecInfo;
@@ -53,6 +53,7 @@ namespace utility
             }
         }
         std::sort(vecInfo.begin(), vecInfo.end(), [](TPL v1, TPL v2){return std::get<0>(v1) > std::get<0>(v2);} );
+        rank = (rank > vecInfo.size()) ? 1 : rank;
         return std::make_pair<int,int>( int(std::get<1>(vecInfo[rank-1])), int(std::get<2>(vecInfo[rank-1])) );
     }
 

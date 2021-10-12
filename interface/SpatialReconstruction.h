@@ -65,9 +65,7 @@ private:
 	} //if enabled position reconstruction
 
         tr.registerDerivedVar("x_reco", x_reco);
-
-        
-
+      
     }
 public:
     SpatialReconstruction()

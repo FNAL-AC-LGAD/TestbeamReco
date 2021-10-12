@@ -18,11 +18,11 @@ private:
 
     void RotateVec(NTupleReader& tr, const std::vector<float>& vx, const std::vector<float>& vy, double angle) const
     {
-        int nvar=35;
         auto& vec_x = tr.createDerivedVec<float>("x_var");
         auto& vec_y = tr.createDerivedVec<float>("y_var");
         double rad_angle = angle*3.14159/180.;
-        for(int i=0;i<nvar;i++){
+        for(unsigned int i=0; i < vec_x.size() ;i++)
+        {
             vec_x.push_back(vx[i]*cos(rad_angle) + vy[i]*sin(rad_angle));
             vec_y.push_back(vy[i]*cos(rad_angle) - vx[i]*sin(rad_angle));
         }

@@ -26,9 +26,15 @@ private:
         const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1);
         const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, 2);
         const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, 3);
+        const auto amp4Indexes = utility::findNthRankChannel(ampLGAD, 4);
+        const auto amp5Indexes = utility::findNthRankChannel(ampLGAD, 5);
+        const auto amp6Indexes = utility::findNthRankChannel(ampLGAD, 6);
         tr.registerDerivedVar("amp1Indexes", amp1Indexes);
         tr.registerDerivedVar("amp2Indexes", amp2Indexes);
         tr.registerDerivedVar("amp3Indexes", amp3Indexes);
+        tr.registerDerivedVar("amp4Indexes", amp4Indexes);
+        tr.registerDerivedVar("amp5Indexes", amp5Indexes);
+        tr.registerDerivedVar("amp6Indexes", amp6Indexes);
 
 	std::pair<int,int> ampIndexesTop;
 	if(amp1Indexes.first == 0 && amp1Indexes.second == 0)
