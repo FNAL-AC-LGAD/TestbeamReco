@@ -14,11 +14,14 @@ private:
     void signalProperties([[maybe_unused]] NTupleReader& tr)
     {
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
-        const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");        
+        const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");       
+        const auto& isPadSensor = tr.getVar<bool>("isPadSensor"); 
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
         const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
+        const auto& stripCenterYPosition = tr.getVar<std::vector<double>>("stripCenterYPosition");
         const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
+        const auto& stripCenterYPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterYPosition, "stripCenterYPositionLGAD");
         const auto& x = tr.getVar<double>("x");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
 
@@ -133,7 +136,7 @@ private:
             padx = x-sensorCenter;
             padxAdj = -(x-sensorCenter);
         }
-        
+    
         int maxAmpIndex = amp1Indexes.second;
         int Amp2Index = amp2Indexes.second;
         double Amp1 = stayPositive(ampLGAD[amp1Indexes.first][amp1Indexes.second]);
@@ -142,6 +145,21 @@ private:
         double AmpTop = stayPositive(ampLGAD[ampIndexesTop.first][ampIndexesTop.second]);
         double AmpBot = stayPositive(ampLGAD[ampIndexesBot.first][ampIndexesBot.second]); 
         double AmpAdjPad =  stayPositive(ampLGAD[ampIndexesAdjPad.first][ampIndexesAdjPad.second]);
+        double AmpLeftTop = 0;         
+        double AmpLeftBot = 0; 
+        double AmpRightTop = 0;
+        double AmpRightBot = 0;
+        if (isPadSensor)
+        {
+            AmpLeftTop = stayPositive(ampLGAD[0][0]);
+            AmpLeftBot = stayPositive(ampLGAD[1][0]);
+            AmpRightTop = stayPositive(ampLGAD[0][1]);
+            AmpRightBot = stayPositive(ampLGAD[1][1]);
+        }   
+        double AmpLeftOverAmpLeftandRightTop = stayPositive(AmpLeftTop / (AmpLeftTop + AmpRightTop));
+        double AmpLeftOverAmpLeftandRightBot = stayPositive(AmpLeftBot / (AmpLeftBot + AmpRightBot));
+        double AmpTopOverAmpTopandBotLeft = stayPositive(AmpLeftTop/ (AmpLeftTop + AmpLeftBot));
+        double AmpTopOverAmpTopandBotRight = stayPositive(AmpRightTop/ (AmpRightTop + AmpRightBot));
         double Amp12 = stayPositive(Amp1 + Amp2);
         double Amp123 = stayPositive(Amp1 + Amp2 + Amp3);
         double Amp1Top = stayPositive(Amp1 + AmpTop);
@@ -211,6 +229,10 @@ private:
         tr.registerDerivedVar("deltaXmaxBotPad", deltaXmaxBotPad);
         tr.registerDerivedVar("deltaXmaxAdjPad", deltaXmaxAdjPad);
         tr.registerDerivedVar("xCenterMaxStrip", xCenterMaxStrip);
+        tr.registerDerivedVar("AmpLeftOverAmpLeftandRightTop", AmpLeftOverAmpLeftandRightTop);
+        tr.registerDerivedVar("AmpLeftOverAmpLeftandRightBot", AmpLeftOverAmpLeftandRightBot);
+        tr.registerDerivedVar("AmpTopOverAmpTopandBotRight", AmpTopOverAmpTopandBotRight);
+        tr.registerDerivedVar("AmpTopOverAmpTopandBotLeft", AmpTopOverAmpTopandBotLeft);
         tr.registerDerivedVar("Amp1OverAmp1and2", Amp1OverAmp1and2);
         tr.registerDerivedVar("Amp2OverAmp2and3", Amp2OverAmp2and3);
         tr.registerDerivedVar("Amp1OverAmp123", Amp1OverAmp123);

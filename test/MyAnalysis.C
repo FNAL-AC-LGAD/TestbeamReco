@@ -59,7 +59,6 @@ template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf
         // Loop over all of the events and fill histos
         std::cout << "Starting event loop (in run)" << std::endl;
         a.Loop(tr, maxEvts);
-
         // Cleaning up dynamic memory
         delete ch;            
     }
