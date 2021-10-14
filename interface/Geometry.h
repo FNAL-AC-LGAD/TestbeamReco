@@ -325,7 +325,8 @@ public:
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.979851466}, {2,1.0/1.0}, {3,1.0/0.983149499}, {4,1.0/0.977206933}, {5,1.0/0.985974202}, {6,1.0/1.098791332}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6798182741841}, {2,10.4423181134130}, {3,10.6384131291640}, {4,10.4103620415613}, {5,10.6007257972181}, {6,10.4517801214152}, {7,0.0}};    
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.6798182741841}, {2,10.4423181134130}, {3,10.6384131291640}, {4,10.4103620415613}, {5,10.6007257972181}, {6,10.4517801214152}, {7,0.0}};
+    double pitch = 0.08;
     std::vector<double> stripCenterXPosition = {0.0, 0.9429, 0.8712, 0.7889, 0.7076, 0.6297, 0.5486, 0.0};
     int numLGADchannels = 6;
     double angle = -0.2 + 90.0;
@@ -364,6 +365,7 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.026449161}, {2,1.0/1.048446448}, {3,1.0/1.039418742}, {4,1.0/1.026293328}, {5,1.0/1.0}, {6,1.0/1.130503306}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.63158422778770}, {2,10.40489295380600}, {3,10.57580707002640}, {4,10.38063146228080}, {5,10.57271716853830}, {6,10.42845270625820}, {7,0.0}};
+    double pitch = 0.08;
     std::vector<double> stripCenterXPosition = {0.0, 0.2792, 0.3495, 0.4361, 0.5153, 0.5974, 0.6899, 0.0}; 
     int numLGADchannels = 6;
     double angle = -0.2 + 90.0;
