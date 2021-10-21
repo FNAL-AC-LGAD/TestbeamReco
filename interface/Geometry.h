@@ -248,10 +248,10 @@ public:
     bool isPadSensor = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParTop = {-0.769147, 3.80879, -6.46516, 2.52433, 3.80156, -2.35997};
-    std::vector<double> positionRecoParBot = {-1.00216, 6.766, -20.4776, 33.6453, -28.8294, 10.6723};
-    std::vector<double> positionRecoParRight = {-0.105272, -2.95747, 20.3663, -49.265, 52.7062, -20.4475};
-    std::vector<double> positionRecoParLeft = {-0.107856, -2.78021, 18.5387, -43.3612, 44.9737, -16.855};
+    std::vector<double> positionRecoParTop = {-0.165952, -3.14901, 23.9181, -60.7498, 67.2535, -27.0394};
+    std::vector<double> positionRecoParBot = {-0.374341, -0.733795, 13.4814, -39.8056, 47.5845, -20.0329};
+    std::vector<double> positionRecoParRight = {0.110915, -5.80318, 33.5458, -76.5066, 78.2624, -29.2427};
+    std::vector<double> positionRecoParLeft = {-0.433258, 1.38842, -1.76038, 3.92058, -7.91336, 5.93861};
     //std::vector<double> positionRecoParTop = {-0.137164, -0.126798, 1.18544,  -0.775188}; //100 microns around center
     //std::vector<double> positionRecoParBot = {-0.0409756, -0.748701, 2.46567, -1.61481}; // 100 microns around center
     //std::vector<std::vector<double>> sensorEdges = {{-5.87 , 9.94}, { -5.67, 10.84}}; //100 microns from center

@@ -34,4 +34,18 @@ python PlotTimeDiffVsXY.py
 python PlotTimeDiffVsX.py
 python PlotXRecoDiffVsX.py
 ```
+For Pads
+```
+cd <WorkingArea>/TestbeamReco/test
+./MyAnalysis -A Analyze -H myoutputfile.root -D HPK_pad_C2_180V 
+cd ../macros
+python DoPositionRecoFit_Pad.py
+python plot1DRes.py --runPad 
+python PlotBaselineRMSvsXandY_Pad.py 
+python PlotAmplitudeVsXandY_Pad.py 
+python PlotAmplitudeVsXandY_Pad.py -t
+python PlotTimeDiffVsXandY_Pad.py
+python PlotXRecoDiffVsX.py --runPad 
+python PlotYRecoDiffVsY.py
+```
 

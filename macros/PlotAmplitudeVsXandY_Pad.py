@@ -201,16 +201,16 @@ for l in range(len(projection)) :
     legend = TLegend(0.15,0.65,0.25,0.85);
     legend.SetBorderSize(0)
     legend.SetTextSize(0.04)
-    legend.AddEntry(plotList_amplitude_vs_x[0], "Strip 1")
-    legend.AddEntry(plotList_amplitude_vs_x[1], "Strip 2")
-    legend.AddEntry(plotList_amplitude_vs_x[2], "Strip 3")
-    legend.AddEntry(plotList_amplitude_vs_x[3], "Strip 4")
+    legend.AddEntry(plotList_amplitude_vs_x[0], "Pad 00")
+    legend.AddEntry(plotList_amplitude_vs_x[1], "Pad 01")
+    legend.AddEntry(plotList_amplitude_vs_x[2], "Pad 10")
+    legend.AddEntry(plotList_amplitude_vs_x[3], "Pad 11")
     legend.Draw();
    
     if l==0 :
-        canvas.SaveAs("Amplitude_vs_x"+suffex+".gif")
+        canvas.SaveAs("Amplitude_vs_x"+suffex+".pdf")
     else :
-        canvas.SaveAs("Amplitude_vs_y"+suffex+".gif")
+        canvas.SaveAs("Amplitude_vs_y"+suffex+".pdf")
          
     #totalAmplitude_vs_x = plotList_amplitude_vs_x[0].Clone("totalAmplitude_vs_x")
     #for i in range(1, totalAmplitude_vs_x.GetXaxis().GetNbins()+1):
@@ -260,11 +260,11 @@ for l in range(len(projection)) :
     legend.AddEntry(plotList_amplitude_vs_x[2], "Pad 10")
     legend.AddEntry(plotList_amplitude_vs_x[3], "Pad 11")
     legend.Draw();
-   
+ 
     if l==0 : 
-        canvas.SaveAs("TotalAmplitude_vs_x"+suffex+".gif")
+        canvas.SaveAs("TotalAmplitude_vs_x"+suffex+".pdf")
     else :
-        canvas.SaveAs("TotalAmplitude_vs_y"+suffex+".gif")
+        canvas.SaveAs("TotalAmplitude_vs_y"+suffex+".pdf")
  
         
     
@@ -337,7 +337,7 @@ for l in range(len(projection)) :
     plotList_amplitudeFraction_vs_x[0].Draw("hist same")
   
     if l==0 : 
-        canvas.SaveAs("AmplitudeFraction_vs_x"+suffex+".gif")
+        canvas.SaveAs("AmplitudeFraction_vs_x"+suffex+".pdf")
     else :
-        canvas.SaveAs("AmplitudeFraction_vs_y"+suffex+".gif")
+        canvas.SaveAs("AmplitudeFraction_vs_y"+suffex+".pdf")
 
