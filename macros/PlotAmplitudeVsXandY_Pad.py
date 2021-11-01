@@ -250,6 +250,8 @@ for l in range(len(projection)) :
     plotList_amplitude_vs_x[1].Draw("histsame")
     plotList_amplitude_vs_x[2].Draw("histsame")
     plotList_amplitude_vs_x[3].Draw("histsame")
+    plotList_amplitude_vs_x[4].Draw("histsame")
+
     
     legend = TLegend(0.15,0.65,0.25,0.85);
     legend.SetBorderSize(0)
