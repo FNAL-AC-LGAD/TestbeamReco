@@ -84,7 +84,7 @@ for l in range(len(AmpRatio_list)) :
     xmax=0.83
    
     gStyle.SetOptFit(1011)
-    fit = TF1("mainFit","pol5",xmin,xmax)
+    fit = TF1("mainFit","pol3",xmin,xmax)
     AmpRatio_profile.SetMaximum(0.3)
     AmpRatio_profile.SetMinimum(-0.3)
     AmpRatio_profile.GetXaxis().SetRangeUser(xmin,xmax)

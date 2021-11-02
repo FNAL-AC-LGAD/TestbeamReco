@@ -27,10 +27,13 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     const auto& xmin = tr.getVar<double>("xmin");
     const auto& xmax = tr.getVar<double>("xmax");
     double xBinSize = 0.016;
+    double xBinSizePad = 0.025;
+    double yBinSizePad = 0.025;
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
     int xbins = 175;
     int ybins = 175;
+
 
     int timeDiffNbin = 200;
     double timeDiffLow = -1.0;
@@ -81,10 +84,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             //Define 3D histograms
             utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 );
             utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeTop_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeBot_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeTop_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeBot_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
             utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 );
             utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
         }
@@ -171,6 +174,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     //Define 3D histograms
     utility::makeHisto(my_3d_histos,"totgoodamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500);	
     utility::makeHisto(my_3d_histos,"totamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500);
+    utility::makeHisto(my_3d_histos,"totamplitudePad_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500);
     utility::makeHisto(my_3d_histos,"totrawamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500);
     utility::makeHisto(my_3d_histos,"amp123_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500);
     utility::makeHisto(my_3d_histos,"amp12_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500);	
@@ -446,6 +450,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && hasGlobalSignal_highThreshold,                                          my_2d_histos["clusterSize_vs_x"], x,clusterSize);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["totgoodamplitude_vs_xy"], x,y,totGoodAmpLGAD);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["totamplitude_vs_xy"], x,y,totAmpLGAD);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["totamplitudePad_vs_xy"], x,y,totAmpLGAD);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["totrawamplitude_vs_xy"], x,y,totRawAmpLGAD);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["amp123_vs_xy"], x,y, Amp123);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["amp12_vs_xy"], x,y, Amp12);

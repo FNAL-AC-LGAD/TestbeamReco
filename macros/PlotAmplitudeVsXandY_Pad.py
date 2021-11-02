@@ -33,13 +33,13 @@ for l in range(len(projection)) :
             h01 = "amplitudeTop_vs_xy_channel01" if GoodHistos else "raw_amp_vs_xy_channel01"
             h10 = "amplitudeBot_vs_xy_channel10" if GoodHistos else "raw_amp_vs_xy_channel10"
             h11 = "amplitudeBot_vs_xy_channel11" if GoodHistos else "raw_amp_vs_xy_channel11"
-            htot = "totamplitude_vs_xy" if GoodHistos else "totrawamplitude_vs_xy"
+            htot = "totamplitudePad_vs_xy" if GoodHistos else "totrawamplitude_vs_xy"
         else :
             h00 = "amplitudeLeft_vs_xy_channel00" if GoodHistos else "raw_amp_vs_xy_channel00"
             h01 = "amplitudeRight_vs_xy_channel01" if GoodHistos else "raw_amp_vs_xy_channel01"
             h10 = "amplitudeLeft_vs_xy_channel10" if GoodHistos else "raw_amp_vs_xy_channel10"
             h11 = "amplitudeRight_vs_xy_channel11" if GoodHistos else "raw_amp_vs_xy_channel11"
-            htot = "totamplitude_vs_xy" if GoodHistos else "totrawamplitude_vs_xy"
+            htot = "totamplitudePad_vs_xy" if GoodHistos else "totrawamplitude_vs_xy"
 
     
         #Get 3D histograms 
