@@ -344,8 +344,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass,                                                    my_histos["amp"+r+s], ampChannel);
                 utility::fillHisto(pass && isMaxChannel,                                    my_histos["ampMax"+r+s], ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_histos["relFrac"+r+s], relFracChannel);
-                utility::fillHisto(pass && goodHit && (maxAmpinPad1 || maxAmpinPad2),       my_histos["relFrac_bottom"+r+s], relFracChannel);
-                utility::fillHisto(pass && goodHit && (maxAmpinPad3 || maxAmpinPad4),       my_histos["relFrac_top"+r+s], relFracChannel);
+                utility::fillHisto(pass && goodHit && (maxAmpinPad3 || maxAmpinPad4),       my_histos["relFrac_bottom"+r+s], relFracChannel);
+                utility::fillHisto(pass && goodHit && (maxAmpinPad1 || maxAmpinPad2),       my_histos["relFrac_top"+r+s], relFracChannel);
                 utility::fillHisto(pass,                                                    my_histos["time"+r+s], time);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["timeDiff_channel"+r+s], time-photekTime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["baselineRMS"+r+s], noise);
