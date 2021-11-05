@@ -166,7 +166,7 @@ for l in range(len(projection)) :
     legend.Draw();
        
     if l==0 : 
-       canvas.SaveAs("BaselineRMS_vs_x"+suffex+".gif")
+       canvas.SaveAs("BaselineRMS_vs_x"+suffex+".pdf")
     else :
-       canvas.SaveAs("BaselineRMS_vs_y"+suffex+".gif") 
+       canvas.SaveAs("BaselineRMS_vs_y"+suffex+".pdf") 
     

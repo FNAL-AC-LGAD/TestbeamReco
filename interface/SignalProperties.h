@@ -21,7 +21,8 @@ private:
         const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
         const auto& stripCenterYPosition = tr.getVar<std::vector<double>>("stripCenterYPosition");
         const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
-        const auto& stripCenterYPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterYPosition, "stripCenterYPositionLGAD");
+        //const auto& stripCenterYPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterYPosition, "stripCenterYPositionLGAD");
+        utility::remapToLGADgeometry(tr, stripCenterYPosition, "stripCenterYPositionLGAD");
         const auto& x = tr.getVar<double>("x");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
 
@@ -94,8 +95,10 @@ private:
                 if(amp > noiseAmpThreshold) 
                 {
                     hasGlobalSignal_lowThreshold = true; 
-                    clusterSize++;
+                    //clusterSize++;
                 }
+
+                if(amp > 50.0) clusterSize++; // 50.0 mV == 10 fC 
             }
         }
         tr.registerDerivedVar("totAmpLGAD", totAmpLGAD);

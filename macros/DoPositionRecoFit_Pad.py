@@ -47,8 +47,8 @@ for l in range(len(AmpRatio_list)) :
         myRMS = tmpHist.GetRMS()
         nEntries = tmpHist.GetEntries()
         
-        if (l==2 or l==3) :
-            tmpHist.Rebin(2)
+        #if (l==2 or l==3) :
+        #    tmpHist.Rebin(2)
         
         if(nEntries > 10.0):
             myGausFunction = TF1("mygaus","gaus(0)",-0.5,0.5);
@@ -84,7 +84,7 @@ for l in range(len(AmpRatio_list)) :
     xmax=0.83
    
     gStyle.SetOptFit(1011)
-    fit = TF1("mainFit","pol5",xmin,xmax)
+    fit = TF1("mainFit","pol3",xmin,xmax)
     AmpRatio_profile.SetMaximum(0.3)
     AmpRatio_profile.SetMinimum(-0.3)
     AmpRatio_profile.GetXaxis().SetRangeUser(xmin,xmax)
@@ -98,13 +98,13 @@ for l in range(len(AmpRatio_list)) :
     #line.Draw("same")
    
     if (l==0) : 
-        canvas.SaveAs("PositionFitTop.gif")
+        canvas.SaveAs("PositionFitTop.pdf")
     elif (l==1)  :
-        canvas.SaveAs("PositionFitBot.gif")
+        canvas.SaveAs("PositionFitBot.pdf")
     elif (l==2) :
-        canvas.SaveAs("PositionFitRight.gif")
+        canvas.SaveAs("PositionFitRight.pdf")
     else :
-        canvas.SaveAs("PositionFitLeft.gif")
+        canvas.SaveAs("PositionFitLeft.pdf")
 
     AmpRatio_Gaus_list[l] = AmpRatio_profile   
     AmpRatio_Fit_list[l] = fit 
@@ -158,7 +158,7 @@ leg.AddEntry(AmpRatio_Gaus_list[3], "AmpTop/(AmpTop+AmpBottom)_Left", "pl")
 leg.Draw("same")
 
 
-canvas2.SaveAs("PositionFitAll.gif")
+canvas2.SaveAs("PositionFitAll.pdf")
 
 canvas2.Write()
 outputfile.Close()
