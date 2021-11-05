@@ -58,6 +58,11 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_histos,"relFrac_top"+r+s, "", 100, 0.0, 1.0 );
             utility::makeHisto(my_histos,"relFrac_bottom"+r+s, "", 100, 0.0, 1.0);
             utility::makeHisto(my_histos,"baselineRMS"+r+s,"", 200,-10.0,10.0);
+            for (unsigned int ch = 0; ch < row.size(); ch++)
+            {
+                const auto& c = std::to_string(ch);
+                utility::makeHisto(my_histos,"amp"+r+s+"From"+c,"", 405,-5.0,400.0);
+            }
             
             //Define 2D histograms
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highThreshold_numerator_channel"+r+s,"; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.1,ymin,ymax);
@@ -75,8 +80,13 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_2d_histos,"amp_vs_x_channel_top"+r+s, "; X [mm]; amp", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
             utility::makeHisto(my_2d_histos,"amp_vs_x_channel_bottom"+r+s, "; X [mm]; amp", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
             utility::makeHisto(my_2d_histos,"stripBoxInfo"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);            
-            utility::makeHisto(my_2d_histos,"stripBoxInfoY"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);            
-
+            utility::makeHisto(my_2d_histos,"stripBoxInfoY"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);  
+            /*for (unsigned int ch = 0; ch < row.size(); ch++)
+            {
+                const auto& c = std::to_string(ch);
+                utility::makeHisto(my_2d_histos,"wave"+r+s+"From"+c+"","", timeDiffNbin,-5.,5.,100,-85,15);
+                utility::makeHisto(my_2d_histos,"wave"+r+s+"From"+c+"goodHit","", timeDiffNbin,-5.,5.,100,-85,15);
+            }*/
 
             //Define 3D histograms
             utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/0.02,ymin,ymax, 500,0,500 );
@@ -97,6 +107,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"npix", "; npix; Events", 4,0,4);
     utility::makeHisto(my_histos,"monicelli_err", "; Track expected error; Events", 100,0,15);
     utility::makeHisto(my_histos,"slopeX", "; Track X slope [mm per mm]; Events", 100,-0.001,0.001);
+    utility::makeHisto(my_histos,"slopeY", "; Track Y slope [mm per mm]; Events", 100,-0.001,0.001);
     utility::makeHisto(my_histos,"ampRank1", "", 450, -50.0, 400.0);
     utility::makeHisto(my_histos,"ampRank2", "", 450, -50.0, 400.0);
     utility::makeHisto(my_histos,"ampRank3", "", 450, -50.0, 400.0);
@@ -208,6 +219,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     //const auto& xSlices = tr.getVar<std::vector<std::vector<double>>>("xSlices");
     const auto& ySlices = tr.getVar<std::vector<std::vector<double>>>("ySlices");
     const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
+    // const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
     bool plotWaveForm = true;
     InitHistos(tr, geometry);
 
@@ -222,6 +234,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         if( tr.getEvtNum() % 100000 == 0 ) printf( " Event %i\n", tr.getEvtNum() );
                        
         //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
+        /*const auto& channel = tr.getVecVec<float>("channel");
+        const auto& time_real = tr.getVecVec<float>("time");*/
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
         const auto& rawAmpLGAD = tr.getVec<std::vector<float>>("rawAmpLGAD");
@@ -235,6 +249,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& npix = tr.getVar<int>("npix");
         const auto& chi2 = tr.getVar<float>("chi2");
         const auto& xSlope = tr.getVar<float>("xSlope");
+        const auto& ySlope = tr.getVar<float>("ySlope");
         const auto& x = tr.getVar<double>("x");
         const auto& y = tr.getVar<double>("y");
         const auto& xErrDUT = tr.getVar<float>("xErrDUT");
@@ -296,7 +311,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
-        bool passTrigger = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
+        // passTrigger edited for HPK strips. ySlope mean: narrow (30): -0.0001415; wide (45): -0.0001454 (May be implemented in Geometry?)
+        // Default: bool passTrigger = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;
+        bool passTrigger = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 40 && ySlope+0.0001415<0.0001 && ySlope+0.0001415>-0.0001;// && ntracks_alt==1;
         bool pass = passTrigger && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex) || (isPadSensor == true));
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
@@ -317,7 +334,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
         //******************************************************************
         //Make cuts and fill histograms here
-	//******************************************************************        
+    	//******************************************************************        
         //Loop over each channel in each sensor
         bool goodHitGlobal2and5 = false;
         int rowIndex = 0;
@@ -327,6 +344,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
             {
                 const auto& r = std::to_string(rowIndex);
                 const auto& s = std::to_string(i);
+                const auto& maxAmpStr = std::to_string(maxAmpIndex);
                 const auto& ampChannel = ampLGAD[rowIndex][i];
                 const auto& relFracChannel = relFrac[rowIndex][i];
                 const auto& rawAmpChannel = rawAmpLGAD[rowIndex][i];
@@ -338,6 +356,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 bool goodHit = goodNoiseAmp && goodMaxLGADAmp;
                 if(i==1 || i==4) goodHitGlobal2and5 = goodHitGlobal2and5 || (isMaxChannel && goodHit);
                 utility::fillHisto(pass,                                                    my_histos["amp"+r+s], ampChannel);
+                utility::fillHisto(pass,                                                    my_histos["amp"+r+s+"From"+maxAmpStr], ampChannel);
                 utility::fillHisto(pass && isMaxChannel,                                    my_histos["ampMax"+r+s], ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_histos["relFrac"+r+s], relFracChannel);
                 utility::fillHisto(pass && goodHit && (maxAmpinPad1 || maxAmpinPad2),       my_histos["relFrac_bottom"+r+s], relFracChannel);
@@ -362,6 +381,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && inTopRow && time!=0 && photekTime!=0, my_2d_histos["delay_vs_x_channel_top"+r+s], x, timeLGAD[rowIndex][i] - photekTime);
                 utility::fillHisto(firstEvent,                                              my_2d_histos["stripBoxInfo"+r+s], stripCenterXPositionLGAD[rowIndex][i],stripWidth);
                 utility::fillHisto(firstEvent,                                              my_2d_histos["stripBoxInfoY"+r+s], stripCenterYPositionLGAD[rowIndex][i],stripWidth);
+                /*for (unsigned int j = 0; j < channel[geometry[1][i]].size(); j++)
+                {
+                    auto signal = channel[geometry[1][i]][j];
+                    auto time_channel = 1e+9*time_real[0][j]+timeCalibrationCorrection.at(geometry[1][i]);
+                    utility::fillHisto(pass,      my_2d_histos["wave"+r+s+"From"+maxAmpStr+""], time_channel-photekTime, signal);
+                    utility::fillHisto(pass && goodHit,      my_2d_histos["wave"+r+s+"From"+maxAmpStr+"goodHit"], time_channel-photekTime, signal);
+                }*/
                 utility::fillHisto(pass,                                                    my_3d_histos["baselineRMS_vs_xy_channel"+r+s], x,y,noise);
                 utility::fillHisto(pass && goodHit,                                         my_3d_histos["amplitude_vs_xy_channel"+r+s], x,y,ampChannel);
                 utility::fillHisto(pass && goodHit && (maxAmpinPad1 || maxAmpinPad2),       my_3d_histos["amplitudeTop_vs_xy_channel"+r+s], x,y,ampChannel);
@@ -390,6 +416,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["npix"], npix);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["monicelli_err"], xErrDUT);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["slopeX"], xSlope);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["slopeY"], ySlope);
         for(unsigned int ivar=0; ivar < x_var.size(); ivar++)
         {
             utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                               my_histos["deltaX_var"+std::to_string(ivar)], x_reco-x_var[ivar]);
