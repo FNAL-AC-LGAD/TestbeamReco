@@ -302,9 +302,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
-        bool passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
+        bool passTrigger = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
+        if(isPadSensor) passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         bool pass = passTrigger && hitSensor && goodPhotek;
-        bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex) || (isPadSensor == true));
+        bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex) || isPadSensor);
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
         bool inTopRow = y>ySlices[1][0] && y<ySlices[1][1];
         bool maxAmpinPad1 = amp1Indexes.first==0 && amp1Indexes.second==0;
