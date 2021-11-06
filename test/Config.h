@@ -51,6 +51,7 @@ private:
         tr.registerDerivedVar("noiseAmpThreshold", g.noiseAmpThreshold);
         tr.registerDerivedVar("signalAmpThreshold", g.signalAmpThreshold);
         tr.registerDerivedVar("isPadSensor", g.isPadSensor);
+        tr.registerDerivedVar("isHPKStrips", g.isHPKStrips);
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
         tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
         tr.registerDerivedVar("positionRecoPar", g.positionRecoPar);
