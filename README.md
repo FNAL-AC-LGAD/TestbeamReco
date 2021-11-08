@@ -20,7 +20,8 @@ source setup.sh
 
 Can find all dataset options in the `sampleCollections.cfg` and  `sampleSets.cfg ` inside the `test` directory
 
-Recipe to make plots
+Recipe to make plots for:
+* BNL strip sensor
 ```
 cd <WorkingArea>/TestbeamReco/test
 ./MyAnalysis -A Analyze -H myoutputfile.root -D BNL2020_220V
@@ -34,7 +35,7 @@ python PlotTimeDiffVsXY.py
 python PlotTimeDiffVsX.py
 python PlotXRecoDiffVsX.py
 ```
-For Pads
+* HPK pad sensor
 ```
 cd <WorkingArea>/TestbeamReco/test
 ./MyAnalysis -A Analyze -H myoutputfile.root -D HPK_pad_C2_180V 
@@ -48,4 +49,13 @@ python PlotTimeDiffVsXandY_Pad.py
 python PlotXRecoDiffVsX.py --runPad 
 python PlotYRecoDiffVsY.py
 ```
-
+* HPK strip sensor
+```
+cd <WorkingArea>/TestbeamReco/test
+./MyAnalysis -A Analyze -H myoutputfile.root -D HPK_strips_C2_45um_170V 
+cd ../macros
+python PlotAmplitudeFromOtherCh.py -f <file_name_from_/test/>
+python plot1DRes.py
+python PlotAmplitudeVsX.py --run
+python PlotAmplitudeVsX.py --run -t
+```
