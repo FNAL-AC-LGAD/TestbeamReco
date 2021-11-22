@@ -244,7 +244,7 @@ public:
     double ymax = 11.0; 
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 50.0; 
+    double signalAmpThreshold = 10.0; //nominal is 50.0 
     bool isPadSensor = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
@@ -297,7 +297,7 @@ public:
     double ymax = 10.8;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 60.0;
+    double signalAmpThreshold = 10.0;
     bool isPadSensor = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
