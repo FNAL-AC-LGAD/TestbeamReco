@@ -75,6 +75,9 @@ for l in range(len(projection)) :
         print("Setup Langaus")
         canvas = TCanvas("cv","cv",800,800)
     
+        nEntries = 0
+        BaselineMPV = 0
+
         #loop over X,Y bins
         for channel in range(0, len(list_baselineRMS_vs_x)):
             print("Channel : " + str(channel))
@@ -96,9 +99,14 @@ for l in range(len(projection)) :
     
                 #print(myTotalEvents)
                 #print ("Bin : " + str(i) + " -> " + str(value))
-    
+                
+                if value!=0.0:
+                    BaselineMPV+=value
+                    nEntries+=1
+
                 list_baselineRMS_vs_x[channel].SetBinContent(i,value)
-                         
+        
+        print("Number of entries: " + str(nEntries) + "; BaselineMPV = " + str(BaselineMPV/nEntries))
         # Save baselineRMS histograms
         outputfile = TFile("plots.root","RECREATE")
         for channel in range(0, len(list_baselineRMS_vs_x)):
