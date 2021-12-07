@@ -1,6 +1,6 @@
 import ROOT
 
-def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True):
+def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True, shift=0.0):
     
     if strips == True :
         boxesInfo = []
@@ -19,7 +19,7 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True)
 
     boxes = []
     for box in boxesInfo:
-        xCenter = box.GetMean(1)
+        xCenter = box.GetMean(1) - shift
         width = box.GetMean(2)
         xmin = xCenter - (widthPercent*width)
         xmax = xCenter + (widthPercent*width)
@@ -30,7 +30,7 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True)
     return boxes
 
 
-def getStripBoxY(f, yampmin=0.0, yampmax=100.0, getCenter=False, color=18):
+def getStripBoxY(f, yampmin=0.0, yampmax=100.0, getCenter=False, color=18, shift=0.0):
     
     boxesInfo = []
     boxesInfo.append(f.Get("stripBoxInfoY00"))
@@ -40,7 +40,7 @@ def getStripBoxY(f, yampmin=0.0, yampmax=100.0, getCenter=False, color=18):
 
     boxes = []
     for box in boxesInfo:
-        yCenter = box.GetMean(1)
+        yCenter = box.GetMean(1) - shift
         width = box.GetMean(2)
         ymin = yCenter - (widthPercent*width)
         ymax = yCenter + (widthPercent*width)

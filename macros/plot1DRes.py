@@ -19,6 +19,7 @@ def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange
         h.Draw('hists e')
         myMean = h.GetMean()
         myRMS = h.GetRMS()
+        # fitlow = myMean - 0.8*myRMS
         fitlow = myMean - 0.65*myRMS
         fithigh = myMean + 0.6*myRMS
 
