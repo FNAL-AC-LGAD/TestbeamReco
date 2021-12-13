@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TH1D,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kRed
+from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TH1D,TLatex,TMath,TColor,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kRed,kWhite
 import os
 import optparse
 from stripBox import getStripBox,getStripBoxY
@@ -218,7 +218,7 @@ for info in all_histoInfos:
     info.th1.SetMaximum(60.0)
     info.th1.SetLineColor(kBlack)
     info.th1.GetXaxis().SetTitle("Relative X position [mm]")
-    info.th1.GetXaxis().SetRangeUser(-0.63, 0.63)
+    info.th1.GetXaxis().SetRangeUser(-0.6, 0.6)
     info.th1.GetYaxis().SetTitle("Resolution [ps]")
 
     ymin = info.th1.GetMinimum()
@@ -242,38 +242,70 @@ for info in all_histoInfos:
     canvas.SaveAs("TimeRes_vs_x_"+info.outHistoName+".pdf")
     info.th1.Write()
 
-###y direction
-for info in all_histoInfos:
-    info.th1Y.Draw("hist e")
-    info.th1Y.SetStats(0)
-    info.th1Y.SetTitle(info.outHistoName)
-    info.th1Y.SetMinimum(0.0001)
-    info.th1Y.SetMaximum(60.0)
-    info.th1Y.SetLineColor(kBlack)
-    info.th1Y.GetXaxis().SetTitle("Relative X position [mm]")
-    info.th1Y.GetXaxis().SetRangeUser(-0.63, 0.63)
-    info.th1Y.GetYaxis().SetTitle("Resolution [ps]")
+hTimeRes = all_histoInfos[4].th1
+hTimeResW2 = all_histoInfos[6].th1
+hTimeRes.SetLineColor(kBlack)
+hTimeResW2.SetLineColor(TColor.GetColor(136,34,85))
 
-    ymin = info.th1Y.GetMinimum()
-    ymax = info.th1Y.GetMaximum()
-    boxes = getStripBoxY(inputfile,ymin,ymax,False,18,info.shiftY())
-    for box in boxes:
-        box.Draw()
+hTimeRes.SetMinimum(0.0001)
+hTimeRes.SetMaximum(70.0)
+hTimeRes.Draw("hist e")
 
-    boxes2 = getStripBoxY(inputfile,ymin,ymax,True,kRed,info.shiftY())
-    for box in boxes2:
-        box.Draw()
+ymin = hTimeRes.GetMinimum()
+ymax = hTimeRes.GetMaximum()
+boxes = getStripBox(inputfile,ymin,ymax,False,18,False,all_histoInfos[4].shift())
+for box in boxes:
+    box.Draw()
 
-    gPad.RedrawAxis("g")
+gPad.RedrawAxis("g")
 
-    # info.th1MeanY.SetLineColor(kRed)
-    # info.th1MeanY.Draw("hist e same")
-    info.th1Y.Draw("AXIS same")
-    info.th1Y.Draw("hist e same")
+hTimeRes.Draw("hist e same")
+hTimeRes.Draw("AXIS same")
+hTimeResW2.Draw("hist e same")
 
-    canvas.SaveAs("TimeRes_vs_y_"+info.outHistoName+".gif")
-    canvas.SaveAs("TimeRes_vs_y_"+info.outHistoName+".pdf")
-    info.th1Y.Write()
+legend = TLegend(0.30,0.72,0.70,0.92)
+legend.SetBorderSize(0)
+legend.SetFillColorAlpha(kWhite,0.75)
+#legend.SetFillStyle(4050)
+legend.AddEntry(hTimeRes, "Single-channel timestamp")
+legend.AddEntry(hTimeResW2, "Multi-channel timestamp")
+legend.Draw();
+
+canvas.SaveAs("TimeRes_vs_x_BothMethods.gif")
+canvas.SaveAs("TimeRes_vs_x_BothMethods.pdf")
+
+####y direction
+# for info in all_histoInfos:
+#     info.th1Y.Draw("hist e")
+#     info.th1Y.SetStats(0)
+#     info.th1Y.SetTitle(info.outHistoName)
+#     info.th1Y.SetMinimum(0.0001)
+#     info.th1Y.SetMaximum(60.0)
+#     info.th1Y.SetLineColor(kBlack)
+#     info.th1Y.GetXaxis().SetTitle("Relative X position [mm]")
+#     info.th1Y.GetXaxis().SetRangeUser(-0.63, 0.63)
+#     info.th1Y.GetYaxis().SetTitle("Resolution [ps]")
+
+#     ymin = info.th1Y.GetMinimum()
+#     ymax = info.th1Y.GetMaximum()
+#     boxes = getStripBoxY(inputfile,ymin,ymax,False,18,info.shiftY())
+#     for box in boxes:
+#         box.Draw()
+
+#     boxes2 = getStripBoxY(inputfile,ymin,ymax,True,kRed,info.shiftY())
+#     for box in boxes2:
+#         box.Draw()
+
+#     gPad.RedrawAxis("g")
+
+#     # info.th1MeanY.SetLineColor(kRed)
+#     # info.th1MeanY.Draw("hist e same")
+#     info.th1Y.Draw("AXIS same")
+#     info.th1Y.Draw("hist e same")
+
+#     canvas.SaveAs("TimeRes_vs_y_"+info.outHistoName+".gif")
+#     canvas.SaveAs("TimeRes_vs_y_"+info.outHistoName+".pdf")
+#     info.th1Y.Write()
 
 outputfile.Close()
 

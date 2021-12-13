@@ -13,13 +13,15 @@ gStyle.SetOptFit(1011)
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('--run', dest='run', action='store_true', default = False, help="run fits or not")
 parser.add_option('-t', dest='UseRawHistos', action='store_true', default = False, help="Use nominal amp or raw histograms")
+parser.add_option('-f','--file', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
 options, args = parser.parse_args()
 
 RunFits = options.run
 UseRawHistos = options.UseRawHistos
+file = options.file
 suffex = "_raw" if UseRawHistos else ""
 
-inputfile = TFile("../test/myoutputfile.root")     
+inputfile = TFile("../test/"+file,"READ")
 if (RunFits):
     #Define histo names
     h00 = "baselineRMS_vs_xy_channel00" 
@@ -78,6 +80,9 @@ if (RunFits):
     print("Setup Langaus")
     canvas = TCanvas("cv","cv",800,800)
 
+    nEntries = 0
+    BaselineMPV = 0
+
     #loop over X,Y bins
     for channel in range(0, len(list_baselineRMS_vs_x)):
         print("Channel : " + str(channel))
@@ -115,11 +120,16 @@ if (RunFits):
 
             value = value if(value>0.0) else 0.0
 
+            if value!=0.0:
+                    BaselineMPV+=value
+                    nEntries+=1
+
             #print(myTotalEvents)
             #print ("Bin : " + str(i) + " -> " + str(value))
 
             list_baselineRMS_vs_x[channel].SetBinContent(i,value)
                      
+    print("Number of entries: " + str(nEntries) + "; BaselineMPV = " + str(BaselineMPV/nEntries))
     # Save baselineRMS histograms
     outputfile = TFile("plotsNoise.root","RECREATE")
     for channel in range(0, len(list_baselineRMS_vs_x)):
