@@ -334,6 +334,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
         bool goodDCAmp = corrAmp[0]>signalAmpThreshold;
         bool highRelAmp1 = Amp1OverAmp1and2>=0.75;
+        bool twoGoodHits = ampLGAD[amp1Indexes.first][amp1Indexes.second] > noiseAmpThreshold && ampLGAD[amp2Indexes.first][amp2Indexes.second] > noiseAmpThreshold;
         double photekTime = corrTime[photekIndex];
         double maxAmpTime = timeLGAD[amp1Indexes.first][amp1Indexes.second];
         double amp2Time = timeLGAD[amp2Indexes.first][amp2Indexes.second];
@@ -479,7 +480,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && highRelAmp1,                                                            my_2d_histos["Amp2OverAmp2and3_vs_deltaXmax"], deltaXmax,Amp2OverAmp2and3);
         utility::fillHisto(pass && goodDCAmp,                                                              my_2d_histos["efficiencyDC_vs_xy_numerator"], x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold,                                           my_2d_histos["efficiency_vs_xy_lowThreshold_numerator"], x,y);
-        utility::fillHisto(pass && hasGlobalSignal_highThreshold,                                          my_2d_histos["efficiency_vs_xy_highThreshold_numerator"], x,y);
+        utility::fillHisto(pass && hasGlobalSignal_highThreshold && twoGoodHits,                           my_2d_histos["efficiency_vs_xy_highThreshold_numerator"], x,y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos["clusterSize_vs_x"], x,clusterSize);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["totgoodamplitude_vs_xy"], x,y,totGoodAmpLGAD);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["totamplitude_vs_xy"], x,y,totAmpLGAD);

@@ -3,7 +3,8 @@ import ROOT
 ## Define global variables
 marg=0.05
 font=43 # Helvetica
-tsize=32
+# tsize=32
+tsize=38 #35
 
 def ForceStyle():
     ## Defining Style
@@ -48,14 +49,14 @@ def ForceStyle():
 
 def BeamInfo():
     text = ROOT.TLatex()
-    text.SetTextSize(tsize)
-    text.DrawLatexNDC(2*marg+0.01,1-marg+0.01,"#bf{FNAL 120 GeV proton beam}")
+    text.SetTextSize(tsize-4)
+    text.DrawLatexNDC(2*marg+0.005,1-marg+0.01,"#bf{FNAL 120 GeV proton beam}")
 
 def SensorInfo(sensor="Name", bias_voltage="X"):
     text = ROOT.TLatex()
-    text.SetTextSize(tsize)
+    text.SetTextSize(tsize-4)
     text.SetTextAlign(31)
-    text.DrawLatexNDC(1-marg-0.01,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
+    text.DrawLatexNDC(1-marg,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
 
 def GetMargin():
     return marg
