@@ -38,9 +38,11 @@ def ForceStyle():
     ROOT.gStyle.SetLegendFillColor(0)
 
     ROOT.gStyle.SetTitleXOffset(1.0)
-    ROOT.gStyle.SetTitleYOffset(1.1)
+    ROOT.gStyle.SetTitleYOffset(1.0)
     ROOT.gStyle.SetOptTitle(0)
     # ROOT.gStyle.SetOptStat(0)
+
+    ROOT.gStyle.SetHistLineWidth(4)
 
     ROOT.gStyle.SetGridColor(921)
     ROOT.gStyle.SetGridStyle()
@@ -52,11 +54,12 @@ def BeamInfo():
     text.SetTextSize(tsize-4)
     text.DrawLatexNDC(2*marg+0.005,1-marg+0.01,"#bf{FNAL 120 GeV proton beam}")
 
-def SensorInfo(sensor="Name", bias_voltage="X"):
+def SensorInfo(sensor="Name", bias_voltage="X", write_bv=True):
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
     text.SetTextAlign(31)
-    text.DrawLatexNDC(1-marg,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
+    if write_bv: text.DrawLatexNDC(1-marg,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
+    else: text.DrawLatexNDC(1-marg,1-marg+0.01,"#bf{"+str(sensor)+"}")
 
 def GetMargin():
     return marg

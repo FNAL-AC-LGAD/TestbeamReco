@@ -12,7 +12,7 @@ gStyle.SetOptFit(1011)
 
 ## Defining Style
 myStyle.ForceStyle()
-gStyle.SetTitleYOffset(1.25)
+# gStyle.SetTitleYOffset(1.25)
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -97,11 +97,13 @@ for l in range(len(projection)) :
     print("Setting up Langaus")
     fit = langaus.LanGausFit()
     print("Setup Langaus")
-    canvas = TCanvas("cv","cv",800,800)
+    canvas = TCanvas("cv","cv",1000,800)
 
+    maxAmpALL = 0
     #loop over X,Y bins
     for channel in range(0, len(list_amplitude_vs_x)):
         print("Channel : " + str(channel))
+        maxAmp = [0,0,0]
         for i in range(1, list_amplitude_vs_x[channel].GetXaxis().GetNbins()):
             #print ("Bin " + str(i))
 
@@ -136,10 +138,24 @@ for l in range(len(projection)) :
 
             value = value if(value>0.0) else 0.0
 
+            if channel!=(len(list_amplitude_vs_x)-1):
+                for j in range(3):
+                    if value>maxAmp[j]:
+                        for j2 in range(2,j-1,-1):
+                            if j2!=j: maxAmp[j2] = maxAmp[j2-1]
+                            else: maxAmp[j2] = value
+                        break
+
             #print(myTotalEvents)
             #print ("Bin : " + str(i) + " -> " + str(value))
 
             list_amplitude_vs_x[channel].SetBinContent(i,value)
+        
+        if channel!=(len(list_amplitude_vs_x)-1):
+            print("Amp1 = "+str(maxAmp[0])+"; Amp2 = "+str(maxAmp[1])+"; Amp3 = "+str(maxAmp[2]))
+            print("Average Amp = " + str((maxAmp[0]+maxAmp[1]+maxAmp[2])/3))
+            maxAmpALL+=(maxAmp[0]+maxAmp[1]+maxAmp[2])/3
+    print("Total Average amp = "+str(maxAmpALL/4))
     
     for b in range(1, list_amplitude_vs_x[0].GetXaxis().GetNbins()):
         for ch in range(0, len(list_amplitude_vs_x)):
@@ -171,10 +187,10 @@ for l in range(len(projection)) :
     #                plotList_amplitude_vs_x[channel].SetBinContent(i,0)
 
     
-    plotList_amplitude_vs_x[0].SetLineWidth(2)
-    plotList_amplitude_vs_x[1].SetLineWidth(2)
-    plotList_amplitude_vs_x[2].SetLineWidth(2)
-    plotList_amplitude_vs_x[3].SetLineWidth(2)
+    # plotList_amplitude_vs_x[0].SetLineWidth(2)
+    # plotList_amplitude_vs_x[1].SetLineWidth(2)
+    # plotList_amplitude_vs_x[2].SetLineWidth(2)
+    # plotList_amplitude_vs_x[3].SetLineWidth(2)
     plotList_amplitude_vs_x[0].SetLineColor(416+2) #kGreen+2
     plotList_amplitude_vs_x[1].SetLineColor(432+2) #kCyan+2
     plotList_amplitude_vs_x[2].SetLineColor(600) #kBlue
@@ -184,7 +200,7 @@ for l in range(len(projection)) :
     # plotList_amplitude_vs_x[2].Draw("histsame")
     # plotList_amplitude_vs_x[3].Draw("histsame")
     
-    canvas = TCanvas("cv2","cv2",800,800)
+    canvas = TCanvas("cv2","cv2",1000,800)
     #totalAmplitude_vs_x=plotList_amplitude_vs_x[0]
     totalAmplitude_vs_x=TH1F("htemp","",1,-0.52, 0.52)
     totalAmplitude_vs_x.Draw("hist")

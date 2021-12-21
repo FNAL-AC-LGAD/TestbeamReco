@@ -34,7 +34,7 @@ Amp1OverAmp1and2_vs_deltaXmax = inputfile.Get("Amp1OverAmp1and2_vs_deltaXmax")
 #Define profile hist
 Amp1OverAmp1and2_vs_deltaXmax_profile = Amp1OverAmp1and2_vs_deltaXmax.ProjectionY().Clone("Amp1OverAmp1and2_vs_deltaXmax_profile")
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cv","cv",1000,800)
 
 #loop over  Amp1OverAmp1and2 bins
 for i in range(0, Amp1OverAmp1and2_vs_deltaXmax.GetYaxis().GetNbins() + 1):

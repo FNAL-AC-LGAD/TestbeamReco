@@ -48,7 +48,7 @@ for l in range(len(AmpRatio_list)) :
     AmpRatio = AmpRatio_list[l]
     AmpRatio_profile = AmpRatio_profile_list[l]
     
-    canvas = TCanvas("cv"+str(l),"cv",800,800)
+    canvas = TCanvas("cv"+str(l),"cv",1000,800)
     
     #loop over  Amp1OverAmp1and2 bins
     for i in range(0, AmpRatio.GetYaxis().GetNbins() + 1):
@@ -157,59 +157,4 @@ for l in range(len(AmpRatio_list)) :
     AmpRatio_profile.Write()
     fit.Write()
     outputfile.Close()
-
-# #Graphing all four fit functioonss 
-# canvas2 = TCanvas("cv2","cv2",800,800)
-
-# xmin=0.18
-# xmax=0.83
-
-# outputfile = TFile("positionRecoFitPlotsAll.root","RECREATE")   
-
-# AmpRatio_Gaus_list[0].SetMaximum(0.3)
-# AmpRatio_Gaus_list[0].SetMinimum(-0.3)
-# AmpRatio_Gaus_list[0].GetXaxis().SetRangeUser(xmin,xmax)
-# AmpRatio_Gaus_list[0].SetLineColor(ROOT.kBlack)
-# AmpRatio_Fit_list[0].SetLineColor(ROOT.kBlack)
-# AmpRatio_Gaus_list[0].Draw()
-# AmpRatio_Fit_list[0].Draw("same")
-
-
-# AmpRatio_Gaus_list[1].SetLineColor(ROOT.kRed)
-# AmpRatio_Fit_list[1].SetLineColor(ROOT.kRed)
-# AmpRatio_Gaus_list[1].Draw("same")
-# AmpRatio_Fit_list[1].Draw("same")
-
-# AmpRatio_Gaus_list[2].SetLineColor(ROOT.kMagenta)
-# AmpRatio_Fit_list[2].SetLineColor(ROOT.kMagenta)
-# AmpRatio_Gaus_list[2].Draw("same")
-# AmpRatio_Fit_list[2].Draw("same")
-
-# AmpRatio_Gaus_list[3].SetLineColor(ROOT.kTeal-7)
-# AmpRatio_Fit_list[3].SetLineColor(ROOT.kTeal-7)
-# AmpRatio_Gaus_list[3].Draw("same")
-# AmpRatio_Fit_list[3].Draw("same")
-
-# leg = ROOT.TLegend(0.28, 0.2, 0.6, 0.3)
-# leg.SetFillStyle(0)
-# leg.SetBorderSize(0)
-# leg.SetLineWidth(1)
-# leg.SetNColumns(1)
-# #leg.SetTextFont(42)
-# leg.SetTextFont(font)
-# leg.SetTextSize(tsize)
-# leg.AddEntry(AmpRatio_Gaus_list[0], "AmpRight/(AmpRight+AmpLeft)_Top", "pl")
-# leg.AddEntry(AmpRatio_Gaus_list[1], "AmpRight/(AmpRight+AmpLeft)_Bot", "pl")
-# leg.AddEntry(AmpRatio_Gaus_list[2], "AmpTop/(AmpTop+AmpBottom)_Right", "pl")
-# leg.AddEntry(AmpRatio_Gaus_list[3], "AmpTop/(AmpTop+AmpBottom)_Left", "pl")
-# leg.Draw("same")
-
-
-# canvas2.SaveAs("PositionFitAll.pdf")
-
-# canvas2.Write()
-# outputfile.Close()
-
-
-
 

@@ -12,7 +12,7 @@ gStyle.SetOptFit(1011)
 
 ## Defining Style
 myStyle.ForceStyle()
-gStyle.SetTitleYOffset(1.2)
+# gStyle.SetTitleYOffset(1.1)
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -89,9 +89,10 @@ list_amplitude_vs_x.append(amplitude_vs_x_channelall)
 print("Setting up Langaus")
 fit = langaus.LanGausFit()
 print("Setup Langaus")
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cv","cv",1000,800)
 
 maxAmpALL = 0
+n_channels = 0
 #loop over X,Y bins
 for channel in range(0, len(list_amplitude_vs_x)):
     # print("Channel : " + str(channel))
@@ -130,7 +131,9 @@ for channel in range(0, len(list_amplitude_vs_x)):
 
         value = value if(value>0.0) else 0.0
 
-        if value > maxAmp and channel!=(len(list_amplitude_vs_x)-1): maxAmp = value
+        if value > maxAmp and channel!=(len(list_amplitude_vs_x)-1):
+            maxAmp = value
+            n_channels+=1
 
         #print(myTotalEvents)
         #print ("Bin : " + str(i) + " -> " + str(value))
@@ -139,7 +142,7 @@ for channel in range(0, len(list_amplitude_vs_x)):
     print("Channel : " + str(channel) + "; Max Amplitude = " + str(maxAmp) + " [mV]")
     if channel!=(len(list_amplitude_vs_x)-1): maxAmpALL+=maxAmp
 
-print("Average Max Amplitude = " + str(maxAmpALL/6))
+print("Average Max Amplitude = " + str(maxAmpALL/n_channels) + "; N of non-empty channels: " + str(n_channels))
                     
 # Save amplitude histograms
 outputfile = TFile("PlotAmplitudeVsX.root","RECREATE")
@@ -159,12 +162,13 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel04"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
 # plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channelall"))
 
-plotList_amplitude_vs_x[0].SetLineWidth(2)
-plotList_amplitude_vs_x[1].SetLineWidth(2)
-plotList_amplitude_vs_x[2].SetLineWidth(2)
-plotList_amplitude_vs_x[3].SetLineWidth(2)
-plotList_amplitude_vs_x[4].SetLineWidth(2)
-plotList_amplitude_vs_x[5].SetLineWidth(2)
+# plotList_amplitude_vs_x[0].SetLineWidth(2)
+# plotList_amplitude_vs_x[1].SetLineWidth(2)
+# plotList_amplitude_vs_x[2].SetLineWidth(2)
+# plotList_amplitude_vs_x[3].SetLineWidth(2)
+# plotList_amplitude_vs_x[4].SetLineWidth(2)
+# plotList_amplitude_vs_x[5].SetLineWidth(2)
+
 plotList_amplitude_vs_x[0].SetLineColor(416+2) #kGreen+2
 plotList_amplitude_vs_x[1].SetLineColor(432+2) #kCyan+2
 plotList_amplitude_vs_x[2].SetLineColor(600) #kBlue

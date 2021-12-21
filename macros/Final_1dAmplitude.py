@@ -9,7 +9,8 @@ gStyle.SetOptFit(1011)
 
 ## Defining Style
 myStyle.ForceStyle()
-gStyle.SetTitleYOffset(1.25)
+# gStyle.SetTitleYOffset(1.1)
+gStyle.SetTitleXOffset(0.9)
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -43,24 +44,24 @@ gStyle.SetPadTickY(1)
 inputfile = TFile("../test/"+file,"READ")  
 for s in range(6):
     plotList_amplitude  = []
-    canvas = TCanvas("canv"+str(s),"canv"+str(s),900,800)
+    canvas = TCanvas("canv"+str(s),"canv"+str(s),1000,800)
     canvas.SetLogy()
     for ch in range(6):
         hamp = inputfile.Get("amp0"+str(s)+"From"+str(ch))
-        hamp.Rebin(5)
+        hamp.Rebin(6)
         hamp.Scale(1./hamp.Integral())
         hamp.SetLineColor(color_list[ch])
-        hamp.SetLineWidth(2)
-        if ch!=s:
-            hamp.SetLineStyle(3)
-            hamp.SetLineWidth(3)
+        # hamp.SetLineWidth(4)
+        # if ch!=s:
+        #     hamp.SetLineStyle(3)
+        #     hamp.SetLineWidth(3)
 
         hamp.SetStats(0)
         hamp.SetTitle("")
         # hamp.GetYaxis().SetTitleSize(0.05)
         # hamp.GetYaxis().SetLabelSize(0.035)
         # hamp.GetYaxis().SetTitleOffset(1.0)
-        hamp.GetYaxis().SetTitle("Event/Total events")
+        hamp.GetYaxis().SetTitle("A.U.")
         hamp.GetYaxis().SetRangeUser(0.0005,1.)
         # hamp.GetXaxis().SetTitleSize(0.05)
         # hamp.GetXaxis().SetLabelSize(0.035)
@@ -69,11 +70,8 @@ for s in range(6):
         hamp.GetXaxis().SetTitle("Signal amplitude [mV]")
         plotList_amplitude.append(hamp)
         hamp.Draw("hist same")
-    legend = TLegend(1-myStyle.GetMargin()-0.02-0.4,1-myStyle.GetMargin()-0.04-0.25,1-myStyle.GetMargin()-0.02,1-myStyle.GetMargin()-0.04)
+    legend = TLegend(1-myStyle.GetMargin()-0.02-0.4,1-myStyle.GetMargin()-0.02-0.25,1-myStyle.GetMargin()-0.02,1-myStyle.GetMargin()-0.02)
     legend.SetNColumns(2)
-    legend.SetBorderSize(0)
-    legend.SetFillStyle(0)
-    legend.SetTextSize(0.04)
     for n in range(0,len(plotList_amplitude)):
         legend.AddEntry(plotList_amplitude[n], "Strip "+str(n+1))
     legend.Draw();
