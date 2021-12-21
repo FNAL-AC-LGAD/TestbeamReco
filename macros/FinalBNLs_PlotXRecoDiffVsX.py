@@ -12,7 +12,7 @@ gStyle.SetOptFit(1011)
 myStyle.ForceStyle()
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="", ylabel="Resolution [#mum]"):
+    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="", ylabel="Position resolution [#mum]"):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
@@ -54,7 +54,7 @@ all_histoInfos = [
     HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True,  35.0, "", "Reconstructed x position [mm]"),
 ]
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
 # gPad.SetTicks(1,1)
 TH1.SetDefaultSumw2()
@@ -108,8 +108,8 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
 
         # Removing telescope contribution
         if value>7.0:
-            error = error*value/TMath.Sqrt(value*value - 7*7)
-            value = TMath.Sqrt(value*value - 7*7)
+            error = error*value/TMath.Sqrt(value*value - 6*6)
+            value = TMath.Sqrt(value*value - 6*6)
         else:
             value = 0.0 # 20.0 to check if there are strange resolution values
             error = 0.0
@@ -153,7 +153,7 @@ for info in all_histoInfos:
     default_res = ROOT.TLine(-0.32,100/TMath.Sqrt(12),0.32,100/TMath.Sqrt(12))
     default_res.SetLineWidth(4)
     default_res.SetLineStyle(9)
-    default_res.SetLineColor(TColor.GetColor(136,34,85))
+    default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
     default_res.Draw("same")
 
     gPad.RedrawAxis("g")

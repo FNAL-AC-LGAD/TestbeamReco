@@ -1,53 +1,18 @@
-from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TH1D,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,TH1
+from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TH1D,TLatex,TMath,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,TH1
 import ROOT
 import os
 from stripBox import getStripBox
 import optparse
-ROOT.gROOT.SetBatch(True)
-
+import myStyle
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 
 ## Defining Style
-gStyle.SetPadTopMargin(0.05)    #0.05
-gStyle.SetPadRightMargin(0.05)  #0.05
-gStyle.SetPadBottomMargin(0.1)  #0.16
-gStyle.SetPadLeftMargin(0.1)   #0.16
-
-gStyle.SetPadTickX(1)
-gStyle.SetPadTickY(1)
-
-font=43 # Helvetica
-tsize=28
-gStyle.SetTextFont(font)
-gStyle.SetLabelFont(font,"x")
-gStyle.SetTitleFont(font,"x")
-gStyle.SetLabelFont(font,"y")
-gStyle.SetTitleFont(font,"y")
-gStyle.SetLabelFont(font,"z")
-gStyle.SetTitleFont(font,"z")
-
-gStyle.SetTextSize(tsize)
-gStyle.SetLabelSize(tsize,"x")
-gStyle.SetTitleSize(tsize,"x")
-gStyle.SetLabelSize(tsize,"y")
-gStyle.SetTitleSize(tsize,"y")
-gStyle.SetLabelSize(tsize,"z")
-gStyle.SetTitleSize(tsize,"z")
-
-gStyle.SetTitleXOffset(1.0)
-gStyle.SetTitleYOffset(1.4)
-gStyle.SetOptTitle(0)
-gStyle.SetOptStat(0)
-
-gStyle.SetGridColor(921)
-gStyle.SetGridStyle()
-
-gROOT.ForceStyle()
+myStyle.ForceStyle()
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="AC-LGAD Reconstructed Postition [mm]", ylabel="Resolution [#mum]"):
+    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="AC-LGAD Reconstructed Postition [mm]", ylabel="Position resolution [#mum]"):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
@@ -74,18 +39,22 @@ class HistoInfo:
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-f','--file', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
+parser.add_option('-s','--sensor', dest='sensor', default = "HPK C2", help="Type of sensor (HPK C2, HPK B2, ...)")
+parser.add_option('-b','--biasvolt', dest='biasvolt', default = 180, help="Bias Voltage value in [V]")
 options, args = parser.parse_args()
 
 file = options.file
+sensor = options.sensor
+bias = options.biasvolt
 
 inputfile = TFile("../test/"+file)
 
-all_histoInfos = [
-    HistoInfo("deltaX_vs_Xtrack",    inputfile, "track",    True,  70.0, "AC-LGAD Reconstructed Position", "Relative X position [mm]"),
-    HistoInfo("deltaX_vs_Xreco",     inputfile, "reco",     True,  70.0, "AC-LGAD Reconstructed Position", "Reconstructed relative X position [mm]")
+all_histoInfos = [ # 60 or 155
+    HistoInfo("deltaX_vs_Xtrack",    inputfile, "track",    True,  155.0, "AC-LGAD Reconstructed Position", "Track x position [mm]"),
+    HistoInfo("deltaX_vs_Xreco",     inputfile, "reco",     True,  155.0, "AC-LGAD Reconstructed Position", "Reconstructed x position [mm]")
 ]
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
 # gPad.SetTicks(1,1)
 TH1.SetDefaultSumw2()
@@ -137,14 +106,14 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             value = 0.0
             error = 0.0
 
-        if i<=info.th1.FindBin(-0.25) or i>=info.th1.FindBin(0.25):
-            value = 0.0
-            error = 0.0
+        # if i<=info.th1.FindBin(-0.25) or i>=info.th1.FindBin(0.25):
+        #     value = 0.0
+        #     error = 0.0
 
         # Removing telescope contribution
         if value!=0.0:
-            error = error*value/TMath.Sqrt(value*value - 7*7)
-            value = TMath.Sqrt(value*value - 7*7)
+            error = error*value/TMath.Sqrt(value*value - 6*6)
+            value = TMath.Sqrt(value*value - 6*6)
 
         info.th1.SetBinContent(i,value)
         info.th1.SetBinError(i,error)
@@ -153,34 +122,60 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
 outputfile = TFile("xRecoDiffVsX.root","RECREATE")
 for info in all_histoInfos:
     #info.th1.Rebin(3)
-    info.th1.Draw("hist e")
+    htemp = TH1F("htemp","",1,-0.6,0.6)
+    # info.th1.Draw("hist e")
+    # info.th1.SetStats(0)
+    # info.th1.SetMinimum(0.0001)
+    # info.th1.SetMaximum(info.yMax)
+    # info.th1.SetLineColor(kBlack)
+    # info.th1.SetTitle(info.title)
+    # info.th1.GetXaxis().SetTitle(info.xlabel)
+    # info.th1.GetXaxis().SetRangeUser(-0.6, 0.6)
+    # info.th1.GetYaxis().SetTitle(info.ylabel)
+    htemp.SetStats(0)
+    htemp.SetMinimum(0.0001)
+    htemp.SetMaximum(info.yMax)
+    htemp.GetXaxis().SetTitle(info.xlabel)
+    htemp.GetYaxis().SetTitle(info.ylabel)
+    htemp.Draw("AXIS")
+
     info.th1.SetStats(0)
-    info.th1.SetMinimum(0.0001)
-    info.th1.SetMaximum(info.yMax)
     info.th1.SetLineColor(kBlack)
     info.th1.SetTitle(info.title)
-    info.th1.GetXaxis().SetTitle(info.xlabel)
-    info.th1.GetXaxis().SetRangeUser(-0.63, 0.63)
-    info.th1.GetYaxis().SetTitle(info.ylabel)
 
     ymin = info.th1.GetMinimum()
-    ymax = info.th1.GetMaximum()
+    ymax = info.yMax
     boxes = getStripBox(inputfile,ymin,ymax,False,18,False,info.shift())
     for box in boxes:
         box.Draw()
    
-    boxes2 = getStripBox(inputfile,ymin,ymax,True,ROOT.kRed,False,info.shift())
-    for box in boxes2:
-        box.Draw("same")
+    # boxes2 = getStripBox(inputfile,ymin,ymax,True,ROOT.kRed,False,info.shift())
+    # for box in boxes2:
+    #     box.Draw("same")
+
+    default_res = ROOT.TLine(-0.6,500/TMath.Sqrt(12),0.6,500/TMath.Sqrt(12))
+    default_res.SetLineWidth(4)
+    default_res.SetLineStyle(9)
+    default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
+    default_res.Draw("same")
 
     gPad.RedrawAxis("g")
     
     info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
 
+    legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.3-0.2,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.3)
+    legend.AddEntry(default_res, "Binary readout","l")
+    legend.AddEntry(info.th1, "Multi-channel reconstruction")
+    legend.Draw();
+
+    myStyle.BeamInfo()
+    myStyle.SensorInfo(sensor, bias)
+
     canvas.SaveAs("PositionRes_vs_x_"+info.outHistoName+".gif")
     canvas.SaveAs("PositionRes_vs_x_"+info.outHistoName+".pdf")
     info.th1.Write()
+    htemp.Delete()
 
 outputfile.Close()
 

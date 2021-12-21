@@ -2,46 +2,13 @@ from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TH1D,TLatex,TMath,TColor,TLegend,
 import os
 import optparse
 from stripBox import getStripBox,getStripBoxY
+import myStyle
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 
 ## Defining Style
-gStyle.SetPadTopMargin(0.05)    #0.05
-gStyle.SetPadRightMargin(0.05)  #0.05
-gStyle.SetPadBottomMargin(0.1)  #0.16
-gStyle.SetPadLeftMargin(0.1)   #0.16
-
-gStyle.SetPadTickX(1)
-gStyle.SetPadTickY(1)
-
-font=43 # Helvetica
-tsize=28
-gStyle.SetTextFont(font)
-gStyle.SetLabelFont(font,"x")
-gStyle.SetTitleFont(font,"x")
-gStyle.SetLabelFont(font,"y")
-gStyle.SetTitleFont(font,"y")
-gStyle.SetLabelFont(font,"z")
-gStyle.SetTitleFont(font,"z")
-
-gStyle.SetTextSize(tsize)
-gStyle.SetLabelSize(tsize,"x")
-gStyle.SetTitleSize(tsize,"x")
-gStyle.SetLabelSize(tsize,"y")
-gStyle.SetTitleSize(tsize,"y")
-gStyle.SetLabelSize(tsize,"z")
-gStyle.SetTitleSize(tsize,"z")
-
-gStyle.SetTitleXOffset(1.0)
-gStyle.SetTitleYOffset(1.4)
-gStyle.SetOptTitle(0)
-# gStyle.SetOptStat(0)
-
-gStyle.SetGridColor(921)
-gStyle.SetGridStyle()
-
-gROOT.ForceStyle()
+myStyle.ForceStyle()
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName):
@@ -75,9 +42,13 @@ class HistoInfo:
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-f','--file', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
+parser.add_option('-s','--sensor', dest='sensor', default = "HPK C2", help="Type of sensor (HPK C2, HPK B2, ...)")
+parser.add_option('-b','--biasvolt', dest='biasvolt', default = 180, help="Bias Voltage value in [V]")
 options, args = parser.parse_args()
 
 file = options.file
+sensor = options.sensor
+bias = options.biasvolt
 
 inputfile = TFile("../test/"+file)
 
@@ -95,7 +66,7 @@ all_histoInfos = [
     # HistoInfo("weighted2_timeDiff_goodSig_vs_xy", inputfile, "weighted2_time_goodSig"),
 ]
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
 print("Finished setting up langaus fit class")
 
@@ -156,58 +127,6 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
         # info.th1Mean.SetBinContent(i,valueMean)
         # info.th1Mean.SetBinError(i,errorMean)
 
-#loop over Y bins
-for i in range(0, all_histoInfos[0].th2Y.GetXaxis().GetNbins()+1):
-    ##For Debugging
-    #if not (i==46 and j==5):
-    #    continue
-
-    for info in all_histoInfos:
-        tmpHist = info.th2Y.ProjectionY("py",i,i)
-        myRMS = tmpHist.GetRMS()
-        myMean = tmpHist.GetMean()
-        nEvents = tmpHist.GetEntries()
-        fitlow = myMean - 1.5*myRMS
-        fithigh = myMean + 1.5*myRMS
-        value = myRMS
-        error = 0.0
-        valueMean = myMean
-        errorMean = 0.0
-
-        #Do fit 
-        if(nEvents > 50):
-            tmpHist.Rebin(2)
-
-            fit = TF1('fit','gaus',fitlow,fithigh)
-            tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
-            myFitMean = fit.GetParameter(1)
-            myFitMeanError = fit.GetParError(1)
-            mySigma = fit.GetParameter(2)
-            mySigmaError = fit.GetParError(2)
-            value = 1000.0*mySigma
-            error = 1000.0*mySigmaError
-            valueMean = abs(1000.0*myFitMean)
-            errorMean = 1000.0*myFitMeanError
-
-            ##For Debugging
-            #tmpHist.Draw("hist")
-            #fit.Draw("same")
-            #canvas.SaveAs("q_"+str(i)+".gif")
-            #
-            #print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
-        else:
-            value = 0.0
-            valueMean = 0.0
-
-        if i<=info.th1.FindBin(-0.25) or i>=info.th1.FindBin(0.25):
-            value = 0.0
-            error = 0.0
-
-        info.th1Y.SetBinContent(i,value)
-        info.th1Y.SetBinError(i,error)
-        # info.th1MeanY.SetBinContent(i,valueMean)
-        # info.th1MeanY.SetBinError(i,errorMean)
-
 # Plot 2D histograms
 outputfile = TFile("timeDiffVsXandY.root","RECREATE")
 for info in all_histoInfos:
@@ -215,11 +134,11 @@ for info in all_histoInfos:
     info.th1.SetStats(0)
     info.th1.SetTitle(info.outHistoName)
     info.th1.SetMinimum(0.0001)
-    info.th1.SetMaximum(60.0)
+    info.th1.SetMaximum(70.0)
     info.th1.SetLineColor(kBlack)
-    info.th1.GetXaxis().SetTitle("Relative X position [mm]")
-    info.th1.GetXaxis().SetRangeUser(-0.6, 0.6)
-    info.th1.GetYaxis().SetTitle("Resolution [ps]")
+    info.th1.GetXaxis().SetTitle("Track x position [mm]")
+    info.th1.GetXaxis().SetRangeUser(-0.55, 0.55)
+    info.th1.GetYaxis().SetTitle("Time resolution [ps]")
 
     ymin = info.th1.GetMinimum()
     ymax = info.th1.GetMaximum()
@@ -227,9 +146,9 @@ for info in all_histoInfos:
     for box in boxes:
         box.Draw()
 
-    boxes2 = getStripBox(inputfile,ymin,ymax,True,kRed,False,info.shift())
-    for box in boxes2:
-        box.Draw()
+    # boxes2 = getStripBox(inputfile,ymin,ymax,True,kRed,False,info.shift())
+    # for box in boxes2:
+    #     box.Draw()
     
     gPad.RedrawAxis("g")
 
@@ -238,6 +157,9 @@ for info in all_histoInfos:
     info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
 
+    myStyle.BeamInfo()
+    myStyle.SensorInfo(sensor, bias)
+
     canvas.SaveAs("TimeRes_vs_x_"+info.outHistoName+".gif")
     canvas.SaveAs("TimeRes_vs_x_"+info.outHistoName+".pdf")
     info.th1.Write()
@@ -245,7 +167,7 @@ for info in all_histoInfos:
 hTimeRes = all_histoInfos[4].th1
 hTimeResW2 = all_histoInfos[6].th1
 hTimeRes.SetLineColor(kBlack)
-hTimeResW2.SetLineColor(TColor.GetColor(136,34,85))
+hTimeResW2.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
 
 hTimeRes.SetMinimum(0.0001)
 hTimeRes.SetMaximum(70.0)
@@ -263,49 +185,17 @@ hTimeRes.Draw("hist e same")
 hTimeRes.Draw("AXIS same")
 hTimeResW2.Draw("hist e same")
 
-legend = TLegend(0.30,0.72,0.70,0.92)
-legend.SetBorderSize(0)
-legend.SetFillColorAlpha(kWhite,0.75)
-#legend.SetFillStyle(4050)
+legend = TLegend(myStyle.GetPadCenter()-0.33,0.70,myStyle.GetPadCenter()+0.33,0.90)
+legend.SetFillColor(kWhite)
 legend.AddEntry(hTimeRes, "Single-channel timestamp")
 legend.AddEntry(hTimeResW2, "Multi-channel timestamp")
 legend.Draw();
 
+myStyle.BeamInfo()
+myStyle.SensorInfo(sensor, bias)
+
 canvas.SaveAs("TimeRes_vs_x_BothMethods.gif")
 canvas.SaveAs("TimeRes_vs_x_BothMethods.pdf")
-
-####y direction
-# for info in all_histoInfos:
-#     info.th1Y.Draw("hist e")
-#     info.th1Y.SetStats(0)
-#     info.th1Y.SetTitle(info.outHistoName)
-#     info.th1Y.SetMinimum(0.0001)
-#     info.th1Y.SetMaximum(60.0)
-#     info.th1Y.SetLineColor(kBlack)
-#     info.th1Y.GetXaxis().SetTitle("Relative X position [mm]")
-#     info.th1Y.GetXaxis().SetRangeUser(-0.63, 0.63)
-#     info.th1Y.GetYaxis().SetTitle("Resolution [ps]")
-
-#     ymin = info.th1Y.GetMinimum()
-#     ymax = info.th1Y.GetMaximum()
-#     boxes = getStripBoxY(inputfile,ymin,ymax,False,18,info.shiftY())
-#     for box in boxes:
-#         box.Draw()
-
-#     boxes2 = getStripBoxY(inputfile,ymin,ymax,True,kRed,info.shiftY())
-#     for box in boxes2:
-#         box.Draw()
-
-#     gPad.RedrawAxis("g")
-
-#     # info.th1MeanY.SetLineColor(kRed)
-#     # info.th1MeanY.Draw("hist e same")
-#     info.th1Y.Draw("AXIS same")
-#     info.th1Y.Draw("hist e same")
-
-#     canvas.SaveAs("TimeRes_vs_y_"+info.outHistoName+".gif")
-#     canvas.SaveAs("TimeRes_vs_y_"+info.outHistoName+".pdf")
-#     info.th1Y.Write()
 
 outputfile.Close()
 

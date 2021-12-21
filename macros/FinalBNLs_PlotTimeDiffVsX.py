@@ -11,7 +11,7 @@ gStyle.SetOptFit(1011)
 myStyle.ForceStyle()
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName, xlabel="Tracker Position [mm]", ylabel="Resolution [ps]"):
+    def __init__(self, inHistoName, f, outHistoName, xlabel="Tracker Position [mm]", ylabel="Time resolution [ps]"):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
@@ -63,7 +63,7 @@ all_histoInfos = [
     # HistoInfo("weighted2_timeDiff_goodSig_vs_xy", inputfile, "weighted2_time_goodSig"),
 ]
 
-canvas = TCanvas("cv","cv",800,800)
+canvas = TCanvas("cv","cv",1000,800)
 # gPad.SetLeftMargin(0.12)
 # gPad.SetRightMargin(0.15)
 # gPad.SetTopMargin(0.08)
@@ -107,11 +107,11 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             errorMean = 1000.0*myFitMeanError
 
             ##For Debugging
-            #tmpHist.Draw("hist")
-            #fit.Draw("same")
-            #canvas.SaveAs("q_"+str(i)+".gif")
-            #
-            #print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
+            # tmpHist.Draw("hist")
+            # fit.Draw("same")
+            # canvas.SaveAs("q_"+str(i)+".gif")
+            
+            # print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
         else:
             value = 0.0
             valueMean = 0.0
@@ -134,12 +134,12 @@ for info in all_histoInfos:
     # info.th1.GetXaxis().SetTitle(info.xlabel)
     # info.th1.GetYaxis().SetTitle(info.ylabel)
     info.th1.SetMinimum(0.0001)
-    info.th1.SetMaximum(60.0)
+    info.th1.SetMaximum(70.0) # 70.0
     info.th1.SetLineColor(kBlack)
     info.th1.GetXaxis().SetTitle("Track x position [mm]")
-    # info.th1.GetXaxis().SetRangeUser(-0.43, 0.43)
-    info.th1.GetXaxis().SetRangeUser(-0.32, 0.32)
-    info.th1.GetYaxis().SetTitle("Resolution [ps]")
+    if sensor=="BNL2020": info.th1.GetXaxis().SetRangeUser(-0.32, 0.32)
+    else: info.th1.GetXaxis().SetRangeUser(-0.43, 0.43)
+    info.th1.GetYaxis().SetTitle("Time resolution [ps]")
 
     ymin = info.th1.GetMinimum()
     ymax = info.th1.GetMaximum()
@@ -162,7 +162,7 @@ for info in all_histoInfos:
 hTimeRes = all_histoInfos[6].th1
 hTimeResW2 = all_histoInfos[7].th1
 hTimeRes.SetLineColor(kBlack)
-hTimeResW2.SetLineColor(TColor.GetColor(136,34,85))
+hTimeResW2.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
 
 hTimeRes.Draw("hist e")
 
@@ -178,7 +178,7 @@ hTimeRes.Draw("hist e same")
 hTimeRes.Draw("AXIS same")
 hTimeResW2.Draw("hist e same")
 
-legend = TLegend(myStyle.GetPadCenter()-0.31,0.70,myStyle.GetPadCenter()+0.31,0.90)
+legend = TLegend(myStyle.GetPadCenter()-0.33,0.70,myStyle.GetPadCenter()+0.33,0.90)
 legend.SetFillColor(kWhite)
 #legend.SetFillStyle(4050)
 legend.AddEntry(hTimeRes, "Single-channel timestamp")
