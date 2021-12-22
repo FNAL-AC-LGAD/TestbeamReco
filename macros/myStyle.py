@@ -58,8 +58,8 @@ def SensorInfo(sensor="Name", bias_voltage="X", write_bv=True):
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
     text.SetTextAlign(31)
-    if write_bv: text.DrawLatexNDC(1-marg,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
-    else: text.DrawLatexNDC(1-marg,1-marg+0.01,"#bf{"+str(sensor)+"}")
+    if write_bv: text.DrawLatexNDC(1-marg-0.005,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
+    else: text.DrawLatexNDC(1-marg-0.005,1-marg+0.01,"#bf{"+str(sensor)+"}")
 
 def GetMargin():
     return marg

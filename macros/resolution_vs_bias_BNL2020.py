@@ -101,9 +101,7 @@ right_axis.SetLabelSize(myStyle.GetSize()-4)
 right_axis.SetTitleSize(myStyle.GetSize())
 right_axis.SetLabelFont(myStyle.GetFont())
 right_axis.SetTitleFont(myStyle.GetFont())
-
 right_axis.Draw()
-
 
 # leg = ROOT.TLegend(0.4, 0.65, 0.8, 0.88)
 leg = ROOT.TLegend(myStyle.GetPadCenter()-0.25, 1-myStyle.GetMargin()-0.01-0.30, myStyle.GetPadCenter()+0.25, 1-myStyle.GetMargin()-0.01)
@@ -121,7 +119,7 @@ myStyle.BeamInfo()
 text = ROOT.TLatex()
 text.SetTextSize(myStyle.GetSize()-4)
 text.SetTextAlign(31)
-text.DrawLatexNDC(1-2*myStyle.GetMargin(),1-myStyle.GetMargin()+0.01,"#bf{BNL2020}")
+text.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{BNL2020}")
 
 leg.Draw()
 position_graph.Draw("epl same")

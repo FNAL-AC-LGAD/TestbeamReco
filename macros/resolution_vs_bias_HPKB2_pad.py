@@ -71,11 +71,6 @@ print("For Nominal Voltage")
 print("Position resolution: "+"{:.1f}".format(positionres[2])+" #pm "+"{:.1f}".format(positionresuncert[2]))
 print("Time W2 resolution: "+"{:.1f}".format(timingresweighted2[2])+" #pm "+"{:.1f}".format(timingresweighted2uncert[2]))
 
-time_weight_graph.SetMarkerColor(ROOT.kBlue)
-time_weight_graph.SetMarkerStyle(20)
-time_weight_graph.SetMarkerSize(1)
-time_weight_graph.SetLineColor(ROOT.kBlue)
-
 position_graph.SetMarkerColor(ROOT.kRed)
 position_graph.SetMarkerStyle(20)
 position_graph.SetMarkerSize(1)
@@ -86,12 +81,17 @@ time_graph.SetMarkerStyle(20)
 time_graph.SetMarkerSize(1)
 time_graph.SetLineColor(ROOT.kBlack)
 
+time_weight_graph.SetMarkerColor(ROOT.kBlue)
+time_weight_graph.SetMarkerStyle(20)
+time_weight_graph.SetMarkerSize(1)
+time_weight_graph.SetLineColor(ROOT.kBlue)
+
 c1 = ROOT.TCanvas( "c1", "c1", 1000, 800)
 # ROOT.gPad.SetLeftMargin(0.12)
-# ROOT.gPad.SetRightMargin(0.15)
+ROOT.gPad.SetRightMargin(2*myStyle.GetMargin())
 # ROOT.gPad.SetTopMargin(0.08)
 # ROOT.gPad.SetBottomMargin(0.12)
-ROOT.gPad.SetTicks(1,1)
+ROOT.gPad.SetTicks(1,0)
 ROOT.gStyle.SetOptStat(0) 
 
 
@@ -109,6 +109,7 @@ right_axis.SetLabelSize(myStyle.GetSize()-4)
 right_axis.SetTitleSize(myStyle.GetSize())
 right_axis.SetLabelFont(myStyle.GetFont())
 right_axis.SetTitleFont(myStyle.GetFont())
+right_axis.Draw()
 
 
 leg = ROOT.TLegend(myStyle.GetPadCenter()-0.25, 1-myStyle.GetMargin()-0.01-0.30, myStyle.GetPadCenter()+0.25, 1-myStyle.GetMargin()-0.01)
@@ -122,7 +123,11 @@ leg.AddEntry(time_weight_graph, "#splitline{Multi-channel Time}{Resolution}", "p
 leg.AddEntry(position_graph, "Position Resolution", "pl")
 
 myStyle.BeamInfo()
-myStyle.SensorInfo("HPK B2", 230, False)
+# myStyle.SensorInfo("HPK B2", 230, False)
+text = ROOT.TLatex()
+text.SetTextSize(myStyle.GetSize()-4)
+text.SetTextAlign(31)
+text.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{HPK B2}")
 
 leg.Draw()
 position_graph.Draw("epl same")
