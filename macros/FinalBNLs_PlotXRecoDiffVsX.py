@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1D,TH1F,TH2F,TLatex,TMath,TColor,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kWhite,TH1
+from ROOT import TFile,TTree,TCanvas,TH1D,TH1F,TH2D,TH2F,TLatex,TMath,TColor,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kWhite,TH1
 import ROOT
 import os
 from stripBox import getStripBox
@@ -12,7 +12,7 @@ gStyle.SetOptFit(1011)
 myStyle.ForceStyle()
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="", ylabel="Position resolution [#mum]"):
+    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="", ylabel="Position resolution [#mum]", sensor=""):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
@@ -21,20 +21,30 @@ class HistoInfo:
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
-        self.th2 = self.getTH2(f, inHistoName)
-        self.th1 = self.getTH1(self.th2, outHistoName, self.shift())
+        self.th2 = self.getTH2(f, inHistoName, sensor)
+        self.th1 = self.getTH1(self.th2, outHistoName, self.shift(), self.fine_tuning(sensor))
+        # self.sensor = sensor
 
-    def getTH2(self, f, name):
+    def getTH2(self, f, name, sensor):
         th2 = f.Get(name)
-        th2.RebinX(3)
+        # th2_temp = TH2D(outHist,"",42,-0.210,0.210,th2.GetYaxis().GetNbins(),th2.GetYaxis().GetXmin(),th2.GetYaxis().GetXmax())
+        # for i in range(th2.GetXaxis().FindBin(-0.210+centerShift),th2.GetXaxis().FindBin(0.210+centerShift)+1,1):
+        #     th2_temp.Fill()
+        if sensor=="BNL2020": th2.RebinX(7)
+        elif sensor=="BNL2021": th2.RebinX(10)
         return th2
 
-    def getTH1(self, th2, name, centerShift):
-        th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-centerShift,th2.GetXaxis().GetXmax()-centerShift)
+    def getTH1(self, th2, name, centerShift, fine_value):
+        th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-centerShift-fine_value,th2.GetXaxis().GetXmax()-centerShift-fine_value)
         return th1_temp
 
     def shift(self):
         return (self.f.Get("stripBoxInfo02").GetMean(1)+self.f.Get("stripBoxInfo03").GetMean(1))/2.
+
+    def fine_tuning(self, sensor):
+        value = 0.0
+        if sensor=="BNL2020": value = 0.0075
+        return value
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -50,8 +60,8 @@ bias = options.biasvolt
 inputfile = TFile("../test/"+file,"READ")
 
 all_histoInfos = [
-    HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  35.0, "", "Track x position [mm]"),
-    HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True,  35.0, "", "Reconstructed x position [mm]"),
+    HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  35.0, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True,  35.0, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -107,11 +117,14 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             error = 0.0
 
         # Removing telescope contribution
-        if value>7.0:
+        if value>6.0:
             error = error*value/TMath.Sqrt(value*value - 6*6)
             value = TMath.Sqrt(value*value - 6*6)
         else:
             value = 0.0 # 20.0 to check if there are strange resolution values
+            error = 0.0
+        if i<=info.th1.FindBin(-0.2) and sensor=="BNL2020":
+            value = 0.0
             error = 0.0
 
         info.th1.SetBinContent(i,value)
@@ -120,13 +133,14 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
 # Plot 2D histograms
 outputfile = TFile("PlotXRecoDiffVsX.root","RECREATE")
 for info in all_histoInfos:
-    htemp = TH1F("htemp","",1,-0.32,0.32)
+    if sensor=="BNL2020": xlimit = 0.32
+    else: xlimit = 0.43
+    htemp = TH1F("htemp","",1,-xlimit,xlimit)
     htemp.SetStats(0)
     htemp.SetMinimum(0.0001)
     htemp.SetMaximum(info.yMax)
     # htemp.SetLineColor(kBlack)
     htemp.GetXaxis().SetTitle(info.xlabel)
-    htemp.GetXaxis().SetRangeUser(-0.32, 0.32)
     htemp.GetYaxis().SetTitle(info.ylabel)
     # info.th1.Draw("hist e")
     # info.th1.SetStats(0)
@@ -150,7 +164,7 @@ for info in all_histoInfos:
     # for box in boxes2:
     #     box.Draw("same")
 
-    default_res = ROOT.TLine(-0.32,100/TMath.Sqrt(12),0.32,100/TMath.Sqrt(12))
+    default_res = ROOT.TLine(-xlimit,100/TMath.Sqrt(12),xlimit,100/TMath.Sqrt(12))
     default_res.SetLineWidth(4)
     default_res.SetLineStyle(9)
     default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))

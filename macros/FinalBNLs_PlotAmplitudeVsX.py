@@ -45,6 +45,14 @@ th3_amplitude_vs_xy_channel04 = inputfile.Get(h04)
 th3_amplitude_vs_xy_channel05 = inputfile.Get(h05)
 th3_amplitude_vs_xy_channelall = inputfile.Get(htot)
 
+th3_amplitude_vs_xy_channel00.RebinX(3)
+th3_amplitude_vs_xy_channel01.RebinX(3)
+th3_amplitude_vs_xy_channel02.RebinX(3)
+th3_amplitude_vs_xy_channel03.RebinX(3)
+th3_amplitude_vs_xy_channel04.RebinX(3)
+th3_amplitude_vs_xy_channel05.RebinX(3)
+th3_amplitude_vs_xy_channelall.RebinX(3)
+
 shift = (inputfile.Get("stripBoxInfo02").GetMean(1)+inputfile.Get("stripBoxInfo03").GetMean(1))/2.
 
 #Build 2D amp vs x histograms
@@ -133,14 +141,15 @@ for channel in range(0, len(list_amplitude_vs_x)):
 
         if value > maxAmp and channel!=(len(list_amplitude_vs_x)-1):
             maxAmp = value
-            n_channels+=1
 
         #print(myTotalEvents)
         #print ("Bin : " + str(i) + " -> " + str(value))
 
         list_amplitude_vs_x[channel].SetBinContent(i,value)
     print("Channel : " + str(channel) + "; Max Amplitude = " + str(maxAmp) + " [mV]")
-    if channel!=(len(list_amplitude_vs_x)-1): maxAmpALL+=maxAmp
+    if channel!=(len(list_amplitude_vs_x)-1):
+        maxAmpALL+=maxAmp
+        if maxAmp!=0: n_channels+=1
 
 print("Average Max Amplitude = " + str(maxAmpALL/n_channels) + "; N of non-empty channels: " + str(n_channels))
                     
@@ -162,12 +171,12 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel04"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
 # plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channelall"))
 
-# plotList_amplitude_vs_x[0].SetLineWidth(2)
-# plotList_amplitude_vs_x[1].SetLineWidth(2)
-# plotList_amplitude_vs_x[2].SetLineWidth(2)
-# plotList_amplitude_vs_x[3].SetLineWidth(2)
-# plotList_amplitude_vs_x[4].SetLineWidth(2)
-# plotList_amplitude_vs_x[5].SetLineWidth(2)
+plotList_amplitude_vs_x[0].SetLineWidth(2)
+plotList_amplitude_vs_x[1].SetLineWidth(2)
+plotList_amplitude_vs_x[2].SetLineWidth(2)
+plotList_amplitude_vs_x[3].SetLineWidth(2)
+plotList_amplitude_vs_x[4].SetLineWidth(2)
+plotList_amplitude_vs_x[5].SetLineWidth(2)
 
 plotList_amplitude_vs_x[0].SetLineColor(416+2) #kGreen+2
 plotList_amplitude_vs_x[1].SetLineColor(432+2) #kCyan+2
@@ -183,7 +192,7 @@ totalAmplitude_vs_x.Draw("hist")
 totalAmplitude_vs_x.SetStats(0)
 totalAmplitude_vs_x.SetTitle("")
 totalAmplitude_vs_x.GetXaxis().SetTitle("Track x position [mm]")
-totalAmplitude_vs_x.GetYaxis().SetTitle("Signal MPV Amplitude [mV]")
+totalAmplitude_vs_x.GetYaxis().SetTitle("MPV signal amplitude [mV]")
 totalAmplitude_vs_x.SetLineWidth(2)
 #totalAmplitude_vs_x.SetLineColor(1) #kBlack
 

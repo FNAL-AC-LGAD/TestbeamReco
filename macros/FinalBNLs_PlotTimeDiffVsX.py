@@ -18,21 +18,27 @@ class HistoInfo:
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.th2 = self.getTH2(f, inHistoName)
-        self.th1 = self.getTH1(self.th2, outHistoName, self.shift())
+        self.th1 = self.getTH1(self.th2, outHistoName, self.shift(), self.fine_tuning(sensor))
         # self.th1Mean = self.getTH1(self.th2, outHistoName)
 
     def getTH2(self, f, name, axis='zx'):
         th3 = f.Get(name)
         th2 = th3.Project3D(axis)
-        th2.RebinX(2)
+        if sensor=="BNL2020": th2.RebinX(5)
+        elif sensor=="BNL2021": th2.RebinX(10)
         return th2
 
-    def getTH1(self, th2, name, centerShift):
-        th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-centerShift,th2.GetXaxis().GetXmax()-centerShift)
+    def getTH1(self, th2, name, centerShift, fine_value):
+        th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-centerShift-fine_value,th2.GetXaxis().GetXmax()-centerShift-fine_value)
         return th1_temp
     
     def shift(self):
         return (self.f.Get("stripBoxInfo02").GetMean(1)+self.f.Get("stripBoxInfo03").GetMean(1))/2.
+    
+    def fine_tuning(self, sensor):
+        value = 0.0
+        if sensor=="BNL2020": value = 0.0025
+        return value
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -48,12 +54,12 @@ bias = options.biasvolt
 inputfile = TFile("../test/"+file)
 
 all_histoInfos = [
-    HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
-    HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
-    HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
-    HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
-    HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
-    HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
+    # HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
+    # HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
+    # HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
+    # HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
+    # HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
+    # HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
     HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
     # HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
     # HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
@@ -109,7 +115,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             ##For Debugging
             # tmpHist.Draw("hist")
             # fit.Draw("same")
-            # canvas.SaveAs("q_"+str(i)+".gif")
+            # canvas.SaveAs("q"+info.outHistoName +"_"+str(i)+".gif")
             
             # print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
         else:
@@ -127,14 +133,14 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
         # info.th1Mean.SetBinError(i,errorMean)
                         
 # Plot 2D histograms
-outputfile = TFile("BNL_timeDiffVsXandY.root","RECREATE")
+outputfile = TFile("timeDiffVsXandY.root","RECREATE")
 for info in all_histoInfos:
     info.th1.Draw("hist e")
     info.th1.SetStats(0)
     # info.th1.GetXaxis().SetTitle(info.xlabel)
     # info.th1.GetYaxis().SetTitle(info.ylabel)
     info.th1.SetMinimum(0.0001)
-    info.th1.SetMaximum(70.0) # 70.0
+    info.th1.SetMaximum(70.0) # 70.0 # 110.0
     info.th1.SetLineColor(kBlack)
     info.th1.GetXaxis().SetTitle("Track x position [mm]")
     if sensor=="BNL2020": info.th1.GetXaxis().SetRangeUser(-0.32, 0.32)
@@ -159,8 +165,8 @@ for info in all_histoInfos:
     canvas.SaveAs("TimeRes_vs_x_"+info.outHistoName+".pdf")
     info.th1.Write()
 
-hTimeRes = all_histoInfos[6].th1
-hTimeResW2 = all_histoInfos[7].th1
+hTimeRes = all_histoInfos[0].th1 # 6
+hTimeResW2 = all_histoInfos[1].th1 #7
 hTimeRes.SetLineColor(kBlack)
 hTimeResW2.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
 
@@ -168,7 +174,7 @@ hTimeRes.Draw("hist e")
 
 ymin = hTimeRes.GetMinimum()
 ymax = hTimeRes.GetMaximum()
-boxes = getStripBox(inputfile,ymin,ymax,False,18,True,all_histoInfos[6].shift())
+boxes = getStripBox(inputfile,ymin,ymax,False,18,True,all_histoInfos[0].shift()) # 6
 for box in boxes:
     box.Draw()
 

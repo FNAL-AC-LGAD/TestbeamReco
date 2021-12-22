@@ -22,19 +22,24 @@ class HistoInfo:
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.th2 = self.getTH2(f, inHistoName)
-        self.th1 = self.getTH1(self.th2, outHistoName, self.shift())
+        self.th1 = self.getTH1(self.th2, outHistoName, self.shift(), self.fine_tuning(sensor))
 
     def getTH2(self, f, name):
         th2 = f.Get(name)
-        th2.RebinX(2)
+        th2.RebinX(10)
         return th2
 
-    def getTH1(self, th2, name, centerShift):
-        th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-centerShift,th2.GetXaxis().GetXmax()-centerShift)
+    def getTH1(self, th2, name, centerShift, fine_value):
+        th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-centerShift-fine_value,th2.GetXaxis().GetXmax()-centerShift-fine_value)
         return th1_temp
 
     def shift(self):
         return (self.f.Get("stripBoxInfo00").GetMean(1)+self.f.Get("stripBoxInfo01").GetMean(1))/2.
+
+    def fine_tuning(self, sensor):
+        value = 0.0
+        if sensor=="HPK B2": value = 0.0125
+        return value
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -122,7 +127,8 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
 outputfile = TFile("xRecoDiffVsX.root","RECREATE")
 for info in all_histoInfos:
     #info.th1.Rebin(3)
-    htemp = TH1F("htemp","",1,-0.6,0.6)
+    xlimit = 0.52
+    htemp = TH1F("htemp","",1,-xlimit,xlimit)
     # info.th1.Draw("hist e")
     # info.th1.SetStats(0)
     # info.th1.SetMinimum(0.0001)
@@ -153,7 +159,7 @@ for info in all_histoInfos:
     # for box in boxes2:
     #     box.Draw("same")
 
-    default_res = ROOT.TLine(-0.6,500/TMath.Sqrt(12),0.6,500/TMath.Sqrt(12))
+    default_res = ROOT.TLine(-xlimit,500/TMath.Sqrt(12),xlimit,500/TMath.Sqrt(12))
     default_res.SetLineWidth(4)
     default_res.SetLineStyle(9)
     default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
@@ -164,7 +170,7 @@ for info in all_histoInfos:
     info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
 
-    legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.3-0.2,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.3)
+    legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.2-0.2,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.2)
     legend.AddEntry(default_res, "Binary readout","l")
     legend.AddEntry(info.th1, "Multi-channel reconstruction")
     legend.Draw();

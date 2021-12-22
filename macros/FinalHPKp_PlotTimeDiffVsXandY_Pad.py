@@ -26,7 +26,7 @@ class HistoInfo:
     def getTH2(self, f, name, axis='zx'):
         th3 = f.Get(name)
         th2 = th3.Project3D(axis)
-        th2.RebinX(2)
+        th2.RebinX(10)
         return th2
 
     def getTH1(self, th2, name, centerShift):
@@ -53,15 +53,15 @@ bias = options.biasvolt
 inputfile = TFile("../test/"+file)
 
 all_histoInfos = [
-    HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_00"),
-    HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_01"),
-    HistoInfo("timeDiff_vs_xy_channel10",inputfile, "channel_10"),
-    HistoInfo("timeDiff_vs_xy_channel11",inputfile, "channel_11"),
+    # HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_00"),
+    # HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_01"),
+    # HistoInfo("timeDiff_vs_xy_channel10",inputfile, "channel_10"),
+    # HistoInfo("timeDiff_vs_xy_channel11",inputfile, "channel_11"),
     HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
     # HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
     # HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
-    HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
-    HistoInfo("weighted2_timeDiff_vs_xy", inputfile, "weighted2_time_diff"),
+    # HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
+    HistoInfo("weighted2_timeDiff_vs_xy", inputfile, "weighted2_time_diff")
     # HistoInfo("weighted_timeDiff_goodSig_vs_xy", inputfile, "weighted_time_goodSig"),
     # HistoInfo("weighted2_timeDiff_goodSig_vs_xy", inputfile, "weighted2_time_goodSig"),
 ]
@@ -104,18 +104,14 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             errorMean = 1000.0*myFitMeanError
 
             ##For Debugging
-            #tmpHist.Draw("hist")
-            #fit.Draw("same")
-            #canvas.SaveAs("q_"+str(i)+".gif")
-            #
-            #print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
+            # tmpHist.Draw("hist")
+            # fit.Draw("same")
+            # canvas.SaveAs("q_"+str(i)+".gif")
+
+            # print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
         else:
             value = 0.0
             valueMean = 0.0
-
-        if i<=info.th1.FindBin(-0.25) or i>=info.th1.FindBin(0.25):
-            value = 0.0
-            error = 0.0
 
         # Removing telescope contribution
         if value!=0.0:
@@ -137,7 +133,7 @@ for info in all_histoInfos:
     info.th1.SetMaximum(70.0)
     info.th1.SetLineColor(kBlack)
     info.th1.GetXaxis().SetTitle("Track x position [mm]")
-    info.th1.GetXaxis().SetRangeUser(-0.55, 0.55)
+    info.th1.GetXaxis().SetRangeUser(-0.52, 0.52)
     info.th1.GetYaxis().SetTitle("Time resolution [ps]")
 
     ymin = info.th1.GetMinimum()
@@ -164,8 +160,8 @@ for info in all_histoInfos:
     canvas.SaveAs("TimeRes_vs_x_"+info.outHistoName+".pdf")
     info.th1.Write()
 
-hTimeRes = all_histoInfos[4].th1
-hTimeResW2 = all_histoInfos[6].th1
+hTimeRes = all_histoInfos[0].th1
+hTimeResW2 = all_histoInfos[1].th1
 hTimeRes.SetLineColor(kBlack)
 hTimeResW2.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
 
@@ -175,7 +171,7 @@ hTimeRes.Draw("hist e")
 
 ymin = hTimeRes.GetMinimum()
 ymax = hTimeRes.GetMaximum()
-boxes = getStripBox(inputfile,ymin,ymax,False,18,False,all_histoInfos[4].shift())
+boxes = getStripBox(inputfile,ymin,ymax,False,18,False,all_histoInfos[0].shift())
 for box in boxes:
     box.Draw()
 

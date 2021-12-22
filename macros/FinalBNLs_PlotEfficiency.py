@@ -29,6 +29,10 @@ efficiency_lowThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_lowTh
 efficiency_highThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_highThreshold_numerator")
 efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator")
 
+efficiency_lowThreshold_numerator_global.RebinX(3)
+efficiency_highThreshold_numerator_global.RebinX(3)
+efficiency_denominator_global.RebinX(3)
+
 shift = (inputfile.Get("stripBoxInfo02").GetMean(1) + inputfile.Get("stripBoxInfo03").GetMean(1))/2.
 
 EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, "efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -0.5, 1.5, "Y [mm]" , 9.5, 12.0 , 0.0, 1.0 )
@@ -39,21 +43,27 @@ EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_global, eff
 
 
 efficiency_highThreshold_numerator_channel00 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel00")
+efficiency_highThreshold_numerator_channel00.RebinX(3)
 # EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel00, efficiency_denominator_global, "efficiency_channel00", "Efficiency Strip 0", "X [mm]", -0.5, 1.5, "Y [mm]" , 9.5, 12.0 , 0.0, 1.0 )
 
 efficiency_highThreshold_numerator_channel01 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel01")
+efficiency_highThreshold_numerator_channel01.RebinX(3)
 # EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel01, efficiency_denominator_global, "efficiency_channel01", "Efficiency Strip 1", "X [mm]", -0.5, 1.5, "Y [mm]" , 9.5, 12.0 , 0.0, 1.0 )
 
 efficiency_highThreshold_numerator_channel02 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel02")
+efficiency_highThreshold_numerator_channel02.RebinX(3)
 # EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel02, efficiency_denominator_global, "efficiency_channel02", "Efficiency Strip 2", "X [mm]", -0.5, 1.5, "Y [mm]" , 9.5, 12.0 , 0.0, 1.0 )
 
 efficiency_highThreshold_numerator_channel03 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel03")
+efficiency_highThreshold_numerator_channel03.RebinX(3)
 # EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel03, efficiency_denominator_global, "efficiency_channel03", "Efficiency Strip 3", "X [mm]", -0.5, 1.5, "Y [mm]" , 9.5, 12.0 , 0.0, 1.0 )
 
 efficiency_highThreshold_numerator_channel04 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel04")
+efficiency_highThreshold_numerator_channel04.RebinX(3)
 # EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel04, efficiency_denominator_global, "efficiency_channel04", "Efficiency Strip 4", "X [mm]", -0.5, 1.5, "Y [mm]" , 9.5, 12.0 , 0.0, 1.0 )
 
 efficiency_highThreshold_numerator_channel05 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel05")
+efficiency_highThreshold_numerator_channel05.RebinX(3)
 # EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel05, efficiency_denominator_global, "efficiency_channel05", "Efficiency Strip 5", "X [mm]", -0.5, 1.5, "Y [mm]" , 9.5, 12.0 , 0.0, 1.0 )
 
 

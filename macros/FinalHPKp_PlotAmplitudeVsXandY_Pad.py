@@ -187,10 +187,10 @@ for l in range(len(projection)) :
     #                plotList_amplitude_vs_x[channel].SetBinContent(i,0)
 
     
-    # plotList_amplitude_vs_x[0].SetLineWidth(2)
-    # plotList_amplitude_vs_x[1].SetLineWidth(2)
-    # plotList_amplitude_vs_x[2].SetLineWidth(2)
-    # plotList_amplitude_vs_x[3].SetLineWidth(2)
+    plotList_amplitude_vs_x[0].SetLineWidth(2)
+    plotList_amplitude_vs_x[1].SetLineWidth(2)
+    plotList_amplitude_vs_x[2].SetLineWidth(2)
+    plotList_amplitude_vs_x[3].SetLineWidth(2)
     plotList_amplitude_vs_x[0].SetLineColor(416+2) #kGreen+2
     plotList_amplitude_vs_x[1].SetLineColor(432+2) #kCyan+2
     plotList_amplitude_vs_x[2].SetLineColor(600) #kBlue
@@ -206,7 +206,7 @@ for l in range(len(projection)) :
     totalAmplitude_vs_x.Draw("hist")
     totalAmplitude_vs_x.SetStats(0)
     totalAmplitude_vs_x.SetTitle("")
-    totalAmplitude_vs_x.GetYaxis().SetTitle("Signal MPV Amplitude [mV]")
+    totalAmplitude_vs_x.GetYaxis().SetTitle("MPV signal amplitude [mV]")
     # totalAmplitude_vs_x.GetYaxis().SetTitleSize(0.035) #0.05
     # totalAmplitude_vs_x.GetYaxis().SetLabelSize(0.035)
     #totalAmplitude_vs_x.GetYaxis().SetTitleOffset(1.6) #0.95
