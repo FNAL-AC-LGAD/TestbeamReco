@@ -26,7 +26,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     const auto& pitch = tr.getVar<double>("pitch");
     const auto& xmin = tr.getVar<double>("xmin");
     const auto& xmax = tr.getVar<double>("xmax");
-    double xBinSize = 0.016;
+    double xBinSize = 0.005; // 0.016
     double xBinSizePad = 0.025;
     double yBinSizePad = 0.025;
     const auto& ymin = tr.getVar<double>("ymin");
@@ -35,7 +35,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     int ybins = 175;
 
 
-    int timeDiffNbin = 200;
+    int timeDiffNbin = 400; // 200
     double timeDiffLow = -1.0;
     double timeDiffHigh = 1.0;
     int timeDiffYnbin = 50;
