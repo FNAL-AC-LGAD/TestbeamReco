@@ -461,7 +461,7 @@ def Plot1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
     c.SaveAs(plotname+".gif")
 
 
-def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, xAxisRangeHigh ) :
+def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, xAxisRangeHigh, auto_titles=True, shift=0.0) :
 
     nbins = num.GetXaxis().GetNbins()
     x = list()
@@ -474,7 +474,7 @@ def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
 
     for b in range(1,nbins):
 
-        xtemp = num.GetXaxis().GetBinCenter(b+1)
+        xtemp = num.GetXaxis().GetBinCenter(b+1) - shift
         xerrlow =  num.GetXaxis().GetBinCenter(b+1) - num.GetXaxis().GetBinLowEdge(b+1)  
         xerrhigh = num.GetXaxis().GetBinUpEdge(b+1) - num.GetXaxis().GetBinCenter(b+1)  
 
@@ -523,16 +523,17 @@ def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
 
     effGraph = TGraphAsymmErrors(nbins-1, xArr, yArr, xErrLowArr, xErrHighArr, yErrLowArr,yErrHighArr );
     effGraph.Draw("APE")
-    effGraph.SetTitle("")
-    effGraph.GetXaxis().SetTitle(xAxisTitle)
-    effGraph.GetXaxis().SetTitleSize(0.05)
-    effGraph.GetXaxis().SetTitleOffset(0.90)
-    effGraph.GetXaxis().SetLabelSize(0.03)
-    effGraph.GetXaxis().SetRangeUser(xAxisRangeLow,xAxisRangeHigh)
-    effGraph.GetYaxis().SetTitle("Efficiency")
-    effGraph.GetYaxis().SetTitleSize(0.05)
-    effGraph.GetYaxis().SetTitleOffset(1.05)
-    effGraph.GetYaxis().SetLabelSize(0.03)
+    if auto_titles:
+        effGraph.SetTitle("")
+        effGraph.GetXaxis().SetTitle(xAxisTitle)
+        effGraph.GetXaxis().SetTitleSize(0.05)
+        effGraph.GetXaxis().SetTitleOffset(0.90)
+        effGraph.GetXaxis().SetLabelSize(0.03)
+        effGraph.GetXaxis().SetRangeUser(xAxisRangeLow,xAxisRangeHigh)
+        effGraph.GetYaxis().SetTitle("Efficiency")
+        effGraph.GetYaxis().SetTitleSize(0.05)
+        effGraph.GetYaxis().SetTitleOffset(1.05)
+        effGraph.GetYaxis().SetLabelSize(0.03)
 
     title = TLatex()
     title.SetTextSize(0.05);

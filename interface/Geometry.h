@@ -75,11 +75,13 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1/1.043}, {2,1/1.000}, {3,1/1.078}, {4,1/1.084}, {5,1/1.067}, {6,1/1.017}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.5553183648148}, {2,10.6590122524753}, {3,10.6470996902006}, {4,10.6075997712141}, {5,10.6432860123283}, {6,10.6622858488865}, {7,0.0}};
+    // std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.5553183648148+0.022066641}, {2,10.6590122524753+0.016205606}, {3,10.6470996902006+0.014540078}, {4,10.6075997712141+0.012709104}, {5,10.6432860123283+0.013754913}, {6,10.6622858488865+0.027125698}, {7,0.0}}; // Handmade for BNL2020 200V
     double stripWidth = 0.08;
     double pitch = 0.1;
     std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.235, 0.135, 0.0};
     int numLGADchannels = 6;
-    std::map<int,VoltageDependence> voltageDependenceMap = {{200,{2.0,8.0}}, {210,{3.5,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
+    // std::map<int,VoltageDependence> voltageDependenceMap = {{200,{2.0,8.0}}, {210,{3.5,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
+    std::map<int,VoltageDependence> voltageDependenceMap = {{200,{7.0,8.0}}, {210,{8,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
     double angle = 1.5;
     double xmin = -0.15;
     double xmax =  0.85;
