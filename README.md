@@ -65,8 +65,8 @@ python Final_1dAmplitude.py -f <file_name>.root -s 'HPK C2 45#mum' -b 170
 
 * Resolution summary plots
 ```
-python resolution_vs_bias_BNL2020.py
-python resolution_vs_bias_BNL2021.py
+python resolution_vs_bias.py -s BNL2020
+python resolution_vs_bias.py -s BNL2021
 python resolution_vs_bias_HPKB2_pad.py
 python resolution_vs_bias_HPKC2_pad.py
 ```
