@@ -52,8 +52,10 @@ for i in range(0,len(empty)):
     timingresuncert[i] = timingresuncert[i]*ROOT.TMath.Sqrt(timingres[i]*timingres[i]+100)/timingres[i]
     timingresweighted2uncert[i] = timingresweighted2uncert[i]*ROOT.TMath.Sqrt(timingresweighted2[i]*timingresweighted2[i]+100)/timingresweighted2[i]
 
+position_ymax = 30.0
+time_ymax = 70.0
 
-position_graph = ROOT.TGraphErrors(bias.size ,bias.astype(np.double), positionres.astype(np.double), empty.astype(np.double), positionresuncert.astype(np.double))
+position_graph = ROOT.TGraphErrors(bias.size ,bias.astype(np.double), (time_ymax/position_ymax)*positionres.astype(np.double), empty.astype(np.double), positionresuncert.astype(np.double))
 time_graph = ROOT.TGraphErrors(bias.size , bias.astype(np.double), timingres.astype(np.double), empty.astype(np.double), timingresuncert.astype(np.double))
 time_weight_graph = ROOT.TGraphErrors(bias.size , bias.astype(np.double), timingresweighted2.astype(np.double), empty.astype(np.double), timingresweighted2uncert.astype(np.double))
 
@@ -89,18 +91,19 @@ ROOT.gStyle.SetOptStat(0)
 # hdummy = ROOT.TH1D("","",1,bias.min()-10,bias.max()+10)
 hdummy = ROOT.TH1D("","",1,bias.min()-5,bias.max()+5)
 hdummy.GetXaxis().SetTitle("Bias Voltage [V]")
-hdummy.GetYaxis().SetTitle("Position resolution [#mum]")
-hdummy.SetMaximum(70.0)
+hdummy.GetYaxis().SetTitle("Time resolution [ps]")
+hdummy.SetMaximum(time_ymax)
 hdummy.SetMinimum(0.0001)
 hdummy.Draw("AXIS")
 
-right_axis = ROOT.TGaxis(bias.max()+5,0.0001,bias.max()+5,70.0,0.0001,70.0,510,"+L")
+right_axis = ROOT.TGaxis(bias.max()+5,0.0001,bias.max()+5,time_ymax,0.0001,position_ymax,510,"+L")
 right_axis.UseCurrentStyle()
-right_axis.SetTitle("Time resolution [ps]")
+right_axis.SetTitle("Position resolution [#mum]")
 right_axis.SetLabelSize(myStyle.GetSize()-4)
 right_axis.SetTitleSize(myStyle.GetSize())
 right_axis.SetLabelFont(myStyle.GetFont())
 right_axis.SetTitleFont(myStyle.GetFont())
+right_axis.SetLineColor(ROOT.kRed)
 right_axis.Draw()
 
 # leg = ROOT.TLegend(0.4, 0.65, 0.8, 0.88)

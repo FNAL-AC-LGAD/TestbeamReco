@@ -24,6 +24,7 @@ bias = options.biasvolt
 
 inputfile = TFile("../test/"+file)
 
+colors = myStyle.GetColors()
 
 efficiency_lowThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_lowThreshold_numerator")
 efficiency_highThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_highThreshold_numerator")
@@ -93,14 +94,9 @@ efficiency_vs_x_highThreshold_channel05 = EfficiencyUtils.Make1DEfficiency(effic
 
 
 canvas = TCanvas("cv","cv",1000,800)
-# canvas.SetLeftMargin(0.12)
 htemp = TH1F("htemp",";Track x position [mm];Efficiency",1,-0.65,0.65)
-# efficiency_vs_x_highThreshold_global.Draw("ALP")
 htemp.Draw()
 
-
-#ymin = efficiency_vs_x_highThreshold_global.GetMinimum()
-#ymax = efficiency_vs_x_highThreshold_global.GetMaximum()
 boxes = getStripBox(inputfile,0.0,1.0,False,18,True,shift)
 for box in boxes:
     box.Draw()
@@ -127,12 +123,12 @@ efficiency_vs_x_highThreshold_channel04.SetLineWidth(2)
 efficiency_vs_x_highThreshold_channel05.SetLineWidth(2)
 
 efficiency_vs_x_highThreshold_global.SetLineColor(1)
-efficiency_vs_x_highThreshold_channel00.SetLineColor(416+2) #kGreen+2
-efficiency_vs_x_highThreshold_channel01.SetLineColor(432+2) #kCyan+2
-efficiency_vs_x_highThreshold_channel02.SetLineColor(600) #kBlue
-efficiency_vs_x_highThreshold_channel03.SetLineColor(880) #kViolet
-efficiency_vs_x_highThreshold_channel04.SetLineColor(632) #kRed
-efficiency_vs_x_highThreshold_channel05.SetLineColor(400+2) #kYellow+2
+efficiency_vs_x_highThreshold_channel00.SetLineColor(colors[0])
+efficiency_vs_x_highThreshold_channel01.SetLineColor(colors[1])
+efficiency_vs_x_highThreshold_channel02.SetLineColor(colors[2])
+efficiency_vs_x_highThreshold_channel03.SetLineColor(colors[3])
+efficiency_vs_x_highThreshold_channel04.SetLineColor(colors[4])
+efficiency_vs_x_highThreshold_channel05.SetLineColor(colors[5])
 
 # legend = TLegend(0.4,0.69,0.7,0.92);
 legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.16,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.01);
@@ -153,13 +149,13 @@ myStyle.BeamInfo()
 myStyle.SensorInfo(sensor, bias)
 
 htemp.Draw("AXIS same")
-canvas.SaveAs("Efficiency_HighThreshold_vs_x.gif")
-canvas.SaveAs("Efficiency_HighThreshold_vs_x.pdf")
+canvas.SaveAs("Efficiency_HighThreshold_vs_x_"+sensor+".gif")
+canvas.SaveAs("Efficiency_HighThreshold_vs_x_"+sensor+".pdf")
 
 
 
 # Save efficiency plots
-outputfile = TFile("EfficiencyPlots.root","RECREATE")
+outputfile = TFile("EfficiencyPlots_"+sensor+".root","RECREATE")
 # efficiency_vs_x_highThreshold_global.Write("efficiency_vs_x_highThreshold_global")
 efficiency_vs_x_highThreshold_channel00.Write("efficiency_vs_x_highThreshold_channel00")
 efficiency_vs_x_highThreshold_channel01.Write("efficiency_vs_x_highThreshold_channel01")

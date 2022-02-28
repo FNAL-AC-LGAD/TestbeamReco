@@ -26,16 +26,18 @@ bias = options.biasvolt
 # color_RGB = [[0,119,187],[51,187,238],[0,153,136],[238,119,51],[204,51,17],[238,51,119]]
 # [blue, cyan, teal, orange, red, magenta]
 
-color_RGB = [[51,34,136],[51,187,238],[17,119,51],[153,153,51],[204,102,119],[136,34,85]]
-# [indigo, cyan, green, olive, rose, wine]
-color_list = []
+# color_RGB = [[51,34,136],[51,187,238],[17,119,51],[153,153,51],[204,102,119],[136,34,85]]
+# # [indigo, cyan, green, olive, rose, wine]
+# colors = []
 
-for i in range(0,len(color_RGB)):
-    c = TColor.GetColor(color_RGB[i][0],color_RGB[i][1],color_RGB[i][2])
-    color_list.append(c)
+# for i in range(0,len(color_RGB)):
+#     c = TColor.GetColor(color_RGB[i][0],color_RGB[i][1],color_RGB[i][2])
+#     colors.append(c)
 
 # color = [416+2, 432+2, 600, 880, 632, 400+2]
 # [kGreen+2, kCyan+2, kBlue, kViolet, kRed, kYellow]
+
+colors = myStyle.GetColors()
 
 gStyle.SetPadTickX(1)
 gStyle.SetPadTickY(1)
@@ -50,10 +52,10 @@ for s in range(6):
         hamp = inputfile.Get("amp0"+str(s)+"From"+str(ch))
         hamp.Rebin(6)
         hamp.Scale(1./hamp.Integral())
-        hamp.SetLineColor(color_list[ch])
+        hamp.SetLineColor(colors[ch])
         # hamp.SetLineWidth(4)
-        # if ch!=s:
-        #     hamp.SetLineStyle(3)
+        if ch==s:
+            hamp.SetLineStyle(7)
         #     hamp.SetLineWidth(3)
 
         hamp.SetStats(0)
@@ -77,6 +79,6 @@ for s in range(6):
     legend.Draw();
     myStyle.BeamInfo()
     myStyle.SensorInfo(sensor, bias)
-    canvas.SaveAs("ampOverCh"+str(s)+".gif")
-    canvas.SaveAs("ampOverCh"+str(s)+".pdf")
+    canvas.SaveAs("ampOverCh"+str(s)+"_"+sensor+".gif")
+    canvas.SaveAs("ampOverCh"+str(s)+"_"+sensor+".pdf")
 
