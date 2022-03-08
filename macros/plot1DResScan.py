@@ -35,7 +35,7 @@ def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
         h.Fit(fit,"Q", "", fitlow, fithigh)
         fit.Draw("same")    
 
-        c.Print("%s.png"%(name))
+        #c.Print("%s.png"%(name))
      #   c.Print("%s.gif"%(name))
         return 1000.*fit.GetParameter(2),1000.*fit.GetParError(2)
 
@@ -46,8 +46,8 @@ parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('--runPad', dest='runPad', action='store_true', default = False, help="run fits or not")
 options, args = parser.parse_args()
 
-f = ROOT.TFile('../test/myoutputfile_chi2lt3_newfitv2_nplanes14.root')
-f2 = ROOT.TFile('../test/myoutputfile_chi2lt3_newfitv2_nplanes14_slopelt0001.root')
+f = ROOT.TFile('../test/myoutputfile.root')
+#f2 = ROOT.TFile('../test/myoutputfile_chi2lt3_newfitv2_nplanes14_slopelt0001.root')
 
 channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
 
@@ -73,29 +73,29 @@ resolution_vs_z.SetTitle(";Assigned Z position [mm];Resolution [microns]")
 cosmetic_tgraph(resolution_vs_z)
 
 
-# c.Print("%s.pdf"%("scan_summary"))
+#c.Print("%s.pdf"%("scan_summary"))
 
-resolutions=[]
-res_errs=[]
-for ivar,t in enumerate(hists):
-        h = f2.Get(t[0])
-        resolution,error = plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2])
-        resolutions.append(resolution)
-        res_errs.append(error)
-        print("res:%0.2f, z: %0.f "%(resolutions[-1],z_values[ivar]))
-
-
-# z_values = [5.,4.5,4.,3.5,3.,2.5,2.,1.5,1.,0.5,0.,-0.5,-1.,-1.5,-2.,-2.5,-3.,-3.5,-4.,-4.5,-5.,-5.5,-6.]
-# z_values = [16., 14., 12., 10., 8., 6., 4., 2., 0., -2., -4., -6., -8., -10., -12., -14., -16., -18., -20., -22., -24.]
-resolution_vs_z_noslope = ROOT.TGraphErrors(len(z_values),array("d",z_values),array("d",resolutions),array("d",[0.01 for i in z_values]),array("d",res_errs))
-resolution_vs_z_noslope.SetTitle(";Assigned Z position [mm];Resolution [microns]")
-cosmetic_tgraph(resolution_vs_z_noslope)
-resolution_vs_z_noslope.SetMarkerColor(ROOT.kRed+1)
-resolution_vs_z_noslope.SetLineColor(ROOT.kRed+1)
+#resolutions=[]
+#res_errs=[]
+#for ivar,t in enumerate(hists):
+#        h = f2.Get(t[0])
+#        resolution,error = plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2])
+#        resolutions.append(resolution)
+#        res_errs.append(error)
+#        print("res:%0.2f, z: %0.f "%(resolutions[-1],z_values[ivar]))
+#
+#
+## z_values = [5.,4.5,4.,3.5,3.,2.5,2.,1.5,1.,0.5,0.,-0.5,-1.,-1.5,-2.,-2.5,-3.,-3.5,-4.,-4.5,-5.,-5.5,-6.]
+## z_values = [16., 14., 12., 10., 8., 6., 4., 2., 0., -2., -4., -6., -8., -10., -12., -14., -16., -18., -20., -22., -24.]
+#resolution_vs_z_noslope = ROOT.TGraphErrors(len(z_values),array("d",z_values),array("d",resolutions),array("d",[0.01 for i in z_values]),array("d",res_errs))
+#resolution_vs_z_noslope.SetTitle(";Assigned Z position [mm];Resolution [microns]")
+#cosmetic_tgraph(resolution_vs_z_noslope)
+#resolution_vs_z_noslope.SetMarkerColor(ROOT.kRed+1)
+#resolution_vs_z_noslope.SetLineColor(ROOT.kRed+1)
 c = ROOT.TCanvas("c","c",1000,600)
 
 resolution_vs_z.Draw("aep")
-resolution_vs_z_noslope.Draw("ep same")
-
+#resolution_vs_z_noslope.Draw("ep same")
+#
 c.Print("%s.pdf"%("scan_summary_overlay"))
 

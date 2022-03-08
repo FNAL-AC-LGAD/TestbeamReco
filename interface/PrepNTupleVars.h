@@ -21,7 +21,7 @@ private:
         auto& vec_x = tr.createDerivedVec<float>("x_var");
         auto& vec_y = tr.createDerivedVec<float>("y_var");
         double rad_angle = angle*3.14159/180.;
-        for(unsigned int i=0; i < vec_x.size() ;i++)
+        for(unsigned int i=0; i < vx.size() ;i++)
         {
             vec_x.push_back(vx[i]*cos(rad_angle) + vy[i]*sin(rad_angle));
             vec_y.push_back(vy[i]*cos(rad_angle) - vx[i]*sin(rad_angle));
