@@ -5,6 +5,7 @@
 #include "TestbeamReco/interface/MakeNNVariables.h"
 #include "TestbeamReco/interface/Utility.h"
 #include "TestbeamReco/interface/Analyze.h"
+#include "TestbeamReco/interface/Align.h"
 #include "Config.h"
 
 #include "TH1D.h"
@@ -141,6 +142,7 @@ int main(int argc, char *argv[])
 
     std::vector<std::pair<std::string, std::function<void(const std::set<AnaSamples::FileSummary>&,const int,const int,const int,TFile* const,const std::string&)>>> AnalyzerPairVec = {
         {"Analyze",             run<Analyze>},
+        {"Align",               run<Align>},
         {"MakeNNVariables",     run<MakeNNVariables>},
     }; 
 

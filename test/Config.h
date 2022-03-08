@@ -172,6 +172,16 @@ public:
             };
             registerModules(tr, std::move(modulesList));
         }
+        else if (analyzer=="Align")
+        {
+            const std::vector<std::string> modulesList = {
+                "PrepNTupleVars",
+                "SignalProperties",
+                "SpatialReconstruction",
+                "Timing",
+            };
+            registerModules(tr, std::move(modulesList));
+        }
         else
         {
             const std::vector<std::string> modulesList = {
