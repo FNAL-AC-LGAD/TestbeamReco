@@ -25,7 +25,9 @@ file = options.file
 sensor = options.sensor
 bias = options.biasvolt
 
-inputfile = TFile("../test/"+file,"READ")     
+inputfile = TFile("../test/"+file,"READ")
+
+colors = myStyle.GetColors()
 
 #Define histo names
 h00 = "amplitude_vs_xy_channel00"
@@ -178,15 +180,13 @@ plotList_amplitude_vs_x[3].SetLineWidth(2)
 plotList_amplitude_vs_x[4].SetLineWidth(2)
 plotList_amplitude_vs_x[5].SetLineWidth(2)
 
-plotList_amplitude_vs_x[0].SetLineColor(416+2) #kGreen+2
-plotList_amplitude_vs_x[1].SetLineColor(432+2) #kCyan+2
-plotList_amplitude_vs_x[2].SetLineColor(600) #kBlue
-plotList_amplitude_vs_x[3].SetLineColor(880) #kViolet
-plotList_amplitude_vs_x[4].SetLineColor(632) #kRed
-plotList_amplitude_vs_x[5].SetLineColor(400+2) #kYellow
+plotList_amplitude_vs_x[0].SetLineColor(colors[0])
+plotList_amplitude_vs_x[1].SetLineColor(colors[1])
+plotList_amplitude_vs_x[2].SetLineColor(colors[2])
+plotList_amplitude_vs_x[3].SetLineColor(colors[3])
+plotList_amplitude_vs_x[4].SetLineColor(colors[4])
+plotList_amplitude_vs_x[5].SetLineColor(colors[5])
 
-# canvas = TCanvas("cv2","cv2",800,800)
-#totalAmplitude_vs_x=plotList_amplitude_vs_x[0]
 totalAmplitude_vs_x = TH1F("htemp","",1,-0.63,0.63)
 totalAmplitude_vs_x.Draw("hist")
 totalAmplitude_vs_x.SetStats(0)
@@ -194,7 +194,6 @@ totalAmplitude_vs_x.SetTitle("")
 totalAmplitude_vs_x.GetXaxis().SetTitle("Track x position [mm]")
 totalAmplitude_vs_x.GetYaxis().SetTitle("MPV signal amplitude [mV]")
 totalAmplitude_vs_x.SetLineWidth(2)
-#totalAmplitude_vs_x.SetLineColor(1) #kBlack
 
 totalAmplitude_vs_x.SetMaximum(164)
 
@@ -211,19 +210,12 @@ plotList_amplitude_vs_x[3].Draw("histsame")
 plotList_amplitude_vs_x[4].Draw("histsame")
 plotList_amplitude_vs_x[5].Draw("histsame")
 
-# if sensor=="BNL2020":
-#     legend = TLegend(0.14,0.6,0.32,0.90)
-# else:
-#     legend = TLegend(0.12,0.6,0.3,0.90)
-# legend = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.02-0.3,2*myStyle.GetMargin()+0.02+0.18,1-myStyle.GetMargin()-0.02)
 legend = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.02-0.1,1-myStyle.GetMargin()-0.02,1-myStyle.GetMargin()-0.02)
 legend.SetNColumns(3)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize())
 legend.SetBorderSize(0)
-# legend.SetFillStyle(0)
 legend.SetFillColor(kWhite)
-#legend.AddEntry(totalAmplitude_vs_x, "Strip 1")
 legend.AddEntry(plotList_amplitude_vs_x[0], "Strip 1")
 legend.AddEntry(plotList_amplitude_vs_x[1], "Strip 2")
 legend.AddEntry(plotList_amplitude_vs_x[2], "Strip 3")
@@ -235,6 +227,6 @@ legend.Draw();
 myStyle.BeamInfo()
 myStyle.SensorInfo(sensor, bias)
 
-canvas.SaveAs("TotalAmplitude_vs_x.gif")
-canvas.SaveAs("TotalAmplitude_vs_x.pdf")
+canvas.SaveAs("TotalAmplitude_vs_x_"+sensor+".gif")
+canvas.SaveAs("TotalAmplitude_vs_x_"+sensor+".pdf")
 

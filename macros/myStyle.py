@@ -73,3 +73,14 @@ def GetSize():
 def GetPadCenter():
     return (1 + marg)/2
 
+def GetColors(color_blind = False):
+    strip_colors = [416+2, 432+2, 600, 880, 632, 400+2]
+    ## [#kGreen+2, #kCyan+2, #kBlue, #kViolet, #kRed, #kYellow+2]
+    if color_blind:
+        color_RGB = [[51,34,136],[51,187,238],[17,119,51],[153,153,51],[204,102,119],[136,34,85]]
+        # [indigo, cyan, green, olive, rose, wine]
+        
+        for i in range(0,len(strip_colors)):
+            strip_colors[i] = ROOT.TColor.GetColor(color_RGB[i][0],color_RGB[i][1],color_RGB[i][2])
+
+    return strip_colors
