@@ -108,6 +108,7 @@ fit = langaus.LanGausFit()
 print("Setup Langaus")
 canvas = TCanvas("cv","cv",1000,800)
 
+maxAmpChannels = []
 maxAmpALL = 0
 n_channels = 0
 #loop over X,Y bins
@@ -156,11 +157,18 @@ for channel in range(0, len(list_amplitude_vs_x)-1):
 
         list_amplitude_vs_x[channel].SetBinContent(i,value)
     print("Channel : " + str(channel) + "; Max Amplitude = " + str(maxAmp) + " [mV]")
+    maxAmpChannels.append(maxAmp)
     if channel!=(len(list_amplitude_vs_x)-1):
         maxAmpALL+=maxAmp
         if maxAmp!=0: n_channels+=1
 
-print("Average Max Amplitude = " + str(maxAmpALL/n_channels) + "; N of non-empty channels: " + str(n_channels))
+maxAmpAvg = maxAmpALL/n_channels
+print("Average Max Amplitude = " + str(maxAmpAvg) + "; N of non-empty channels: " + str(n_channels))
+
+# Define amplitude correction
+for i in range(0,len(maxAmpChannels)):
+    print("Channel number; {:0.2f}, Max Amp: {:0.2f}, Average Max Amplitude: {:0.2f}, Amp. Correction: {:0.4f}".format(i, maxAmpChannels[i], maxAmpAvg, maxAmpAvg/maxAmpChannels[i]))
+
                     
 # Save amplitude histograms
 outputfile = TFile("PlotAmplitudeVsX.root","RECREATE")
@@ -207,7 +215,7 @@ totalAmplitude_vs_x.SetLineWidth(2)
 
 totalAmplitude_vs_x.SetMaximum(80.0)
 
-boxes = getStripBox(inputfile,0,80,False, 18, True, shift)
+boxes = getStripBox(inputfile,0,60,False, 18, True, shift)
 for box in boxes:
    box.Draw()
 totalAmplitude_vs_x.Draw("AXIS same")
@@ -221,7 +229,7 @@ plotList_amplitude_vs_x[4].Draw("histsame")
 plotList_amplitude_vs_x[5].Draw("histsame")
 plotList_amplitude_vs_x[6].Draw("histsame")
 
-legend = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.02-0.1,1-myStyle.GetMargin()-0.02,1-myStyle.GetMargin()-0.02)
+legend = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.02-0.2,1-myStyle.GetMargin()-0.02,1-myStyle.GetMargin()-0.02)
 legend.SetNColumns(3)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize())
