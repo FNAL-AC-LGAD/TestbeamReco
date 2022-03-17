@@ -85,7 +85,7 @@ private:
     	const auto& x_dut = tr.getVec<float>("x_dut");
     	const auto& y_dut = tr.getVec<float>("y_dut");
 
-    	Rotate(tr, x_dut[21], y_dut[21], angle);
+    	Rotate(tr, x_dut[7], y_dut[7], angle);
         RotateVec(tr, x_dut, y_dut, angle);
 
         // New code to correct the sensor misalignment

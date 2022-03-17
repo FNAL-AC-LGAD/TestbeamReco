@@ -10,6 +10,7 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True,
         boxesInfo.append(f.Get("stripBoxInfo03"))
         boxesInfo.append(f.Get("stripBoxInfo04"))
         boxesInfo.append(f.Get("stripBoxInfo05"))
+        boxesInfo.append(f.Get("stripBoxInfo06"))
     else :
         boxesInfo = []
         boxesInfo.append(f.Get("stripBoxInfo00"))

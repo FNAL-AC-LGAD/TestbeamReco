@@ -55,6 +55,48 @@ public:
     std::vector<std::vector<double>> boxes_XY = {{-999.9, -999.9,-999.9, -999.9}};
 };
 
+class UIC1cmStripsGeometry : public DefaultGeometry
+{
+public:
+    // UIC W1 1cm long strips 500um pitch 300um gap size
+    // Used lecroy scope channels 0-7
+    // Scope channel 0-6 was AC channels, and scope channel 7 was the photok
+    // 
+    // |-----------|             -----
+    // | 0 0 0 0 0 |             |777|
+    // | 1 1 1 1 1 |             |777|
+    // | 2 2 2 2 2 |             -----
+    // | 3 3 3 3 3 |
+    // | 4 4 4 4 4 |
+    // | 5 5 5 5 5 |
+    // | 6 6 6 6 6 |
+    // |-----------|
+
+    UIC1cmStripsGeometry(const int v=0) : voltage(v){}
+    const int voltage;
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
+    double stripWidth = 0.200;
+    double pitch = 0.500;
+    std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
+    int numLGADchannels = 7;
+    double angle = 0.0 + 90.0;
+    double xmin =  -4.0;
+    double xmax =   2.0;
+    double ymin =  -3.0;
+    double ymax =   9.0;
+    double photekSignalThreshold = 50.0;
+    double noiseAmpThreshold = 2.0;
+    double signalAmpThreshold = 20.0;
+    bool isHPKStrips = true;
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166}; 
+    std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.1}, {1.1, 8.0}};
+};
+
 class BNL2020Geometry : public DefaultGeometry
 {
 public:
