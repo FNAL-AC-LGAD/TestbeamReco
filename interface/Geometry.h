@@ -38,8 +38,8 @@ public:
     double ymax =  -1; 
     double positionRecoMaxPoint = 1.0;
     double photekSignalThreshold = 50.0; //in mV
-    double noiseAmpThreshold = 10.0;      //in mV
-    double signalAmpThreshold = 30.0;    //in mV       
+    double noiseAmpThreshold = 15.0;      //in mV
+    double signalAmpThreshold = 15.0;    //in mV       
     bool isPadSensor = false; 
     bool isHPKStrips = false;
     bool enablePositionReconstruction = false;
