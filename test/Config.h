@@ -155,6 +155,10 @@ public:
         {
             registerGeometry(tr, HPK2DCLGADGeometry(voltage));
         }
+        else if(filetag.find("UIC_W1_1cm_255V") != std::string::npos)
+        {
+            registerGeometry(tr, UIC1cmStripsGeometry(voltage));
+        }
         else
         {
             registerGeometry(tr, DefaultGeometry(voltage));

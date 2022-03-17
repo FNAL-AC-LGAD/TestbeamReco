@@ -27,7 +27,7 @@ bias = options.biasvolt
 
 inputfile = TFile("../test/"+file,"READ")
 
-colors = myStyle.GetColors()
+colors = myStyle.GetColors(True)
 
 #Define histo names
 h00 = "amplitude_vs_xy_channel00"
@@ -36,6 +36,7 @@ h02 = "amplitude_vs_xy_channel02"
 h03 = "amplitude_vs_xy_channel03"
 h04 = "amplitude_vs_xy_channel04"
 h05 = "amplitude_vs_xy_channel05"
+h06 = "amplitude_vs_xy_channel06"
 htot = "totamplitude_vs_xy"
 
 #Get 3D histograms 
@@ -45,6 +46,7 @@ th3_amplitude_vs_xy_channel02 = inputfile.Get(h02)
 th3_amplitude_vs_xy_channel03 = inputfile.Get(h03)
 th3_amplitude_vs_xy_channel04 = inputfile.Get(h04)
 th3_amplitude_vs_xy_channel05 = inputfile.Get(h05)
+th3_amplitude_vs_xy_channel06 = inputfile.Get(h06)
 th3_amplitude_vs_xy_channelall = inputfile.Get(htot)
 
 th3_amplitude_vs_xy_channel00.RebinX(3)
@@ -53,6 +55,7 @@ th3_amplitude_vs_xy_channel02.RebinX(3)
 th3_amplitude_vs_xy_channel03.RebinX(3)
 th3_amplitude_vs_xy_channel04.RebinX(3)
 th3_amplitude_vs_xy_channel05.RebinX(3)
+th3_amplitude_vs_xy_channel06.RebinX(3)
 th3_amplitude_vs_xy_channelall.RebinX(3)
 
 shift = (inputfile.Get("stripBoxInfo02").GetMean(1)+inputfile.Get("stripBoxInfo03").GetMean(1))/2.
@@ -64,6 +67,7 @@ amplitude_vs_x_channel02 = th3_amplitude_vs_xy_channel02.Project3D("zx")
 amplitude_vs_x_channel03 = th3_amplitude_vs_xy_channel03.Project3D("zx")
 amplitude_vs_x_channel04 = th3_amplitude_vs_xy_channel04.Project3D("zx")
 amplitude_vs_x_channel05 = th3_amplitude_vs_xy_channel05.Project3D("zx")
+amplitude_vs_x_channel06 = th3_amplitude_vs_xy_channel06.Project3D("zx")
 amplitude_vs_x_channelall= th3_amplitude_vs_xy_channelall.Project3D("zx")
 
 list_th2_amplitude_vs_x = []
@@ -73,6 +77,7 @@ list_th2_amplitude_vs_x.append(amplitude_vs_x_channel02)
 list_th2_amplitude_vs_x.append(amplitude_vs_x_channel03)
 list_th2_amplitude_vs_x.append(amplitude_vs_x_channel04)
 list_th2_amplitude_vs_x.append(amplitude_vs_x_channel05)
+list_th2_amplitude_vs_x.append(amplitude_vs_x_channel06)
 list_th2_amplitude_vs_x.append(amplitude_vs_x_channelall)
 
 #Build amplitude histograms
@@ -83,6 +88,7 @@ amplitude_vs_x_channel02 = TH1F("amplitude_vs_x_channel02","",th1.GetXaxis().Get
 amplitude_vs_x_channel03 = TH1F("amplitude_vs_x_channel03","",th1.GetXaxis().GetNbins(),th1.GetXaxis().GetXmin()-shift,th1.GetXaxis().GetXmax()-shift)
 amplitude_vs_x_channel04 = TH1F("amplitude_vs_x_channel04","",th1.GetXaxis().GetNbins(),th1.GetXaxis().GetXmin()-shift,th1.GetXaxis().GetXmax()-shift)
 amplitude_vs_x_channel05 = TH1F("amplitude_vs_x_channel05","",th1.GetXaxis().GetNbins(),th1.GetXaxis().GetXmin()-shift,th1.GetXaxis().GetXmax()-shift)
+amplitude_vs_x_channel06 = TH1F("amplitude_vs_x_channel06","",th1.GetXaxis().GetNbins(),th1.GetXaxis().GetXmin()-shift,th1.GetXaxis().GetXmax()-shift)
 amplitude_vs_x_channelall = TH1F("amplitude_vs_x_channelall","",th1.GetXaxis().GetNbins(),th1.GetXaxis().GetXmin()-shift,th1.GetXaxis().GetXmax()-shift)
 
 print ("Amplitude vs X: " + str(th1.GetXaxis().GetBinLowEdge(1)-shift) + " -> " + str(th1.GetXaxis().GetBinUpEdge(th1.GetXaxis().GetNbins())-shift))
@@ -94,6 +100,7 @@ list_amplitude_vs_x.append(amplitude_vs_x_channel02)
 list_amplitude_vs_x.append(amplitude_vs_x_channel03)
 list_amplitude_vs_x.append(amplitude_vs_x_channel04)
 list_amplitude_vs_x.append(amplitude_vs_x_channel05)
+list_amplitude_vs_x.append(amplitude_vs_x_channel06)
 list_amplitude_vs_x.append(amplitude_vs_x_channelall)
 
 print("Setting up Langaus")
@@ -104,7 +111,7 @@ canvas = TCanvas("cv","cv",1000,800)
 maxAmpALL = 0
 n_channels = 0
 #loop over X,Y bins
-for channel in range(0, len(list_amplitude_vs_x)):
+for channel in range(0, len(list_amplitude_vs_x)-1):
     # print("Channel : " + str(channel))
     maxAmp = 0
     for i in range(1, list_amplitude_vs_x[channel].GetXaxis().GetNbins()):
@@ -171,6 +178,7 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel02"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel03"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel04"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
+plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel06"))
 # plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channelall"))
 
 plotList_amplitude_vs_x[0].SetLineWidth(2)
@@ -179,6 +187,7 @@ plotList_amplitude_vs_x[2].SetLineWidth(2)
 plotList_amplitude_vs_x[3].SetLineWidth(2)
 plotList_amplitude_vs_x[4].SetLineWidth(2)
 plotList_amplitude_vs_x[5].SetLineWidth(2)
+plotList_amplitude_vs_x[6].SetLineWidth(2)
 
 plotList_amplitude_vs_x[0].SetLineColor(colors[0])
 plotList_amplitude_vs_x[1].SetLineColor(colors[1])
@@ -186,8 +195,9 @@ plotList_amplitude_vs_x[2].SetLineColor(colors[2])
 plotList_amplitude_vs_x[3].SetLineColor(colors[3])
 plotList_amplitude_vs_x[4].SetLineColor(colors[4])
 plotList_amplitude_vs_x[5].SetLineColor(colors[5])
+plotList_amplitude_vs_x[6].SetLineColor(colors[6])
 
-totalAmplitude_vs_x = TH1F("htemp","",1,-0.63,0.63)
+totalAmplitude_vs_x = TH1F("htemp","",1,-4.0,4.0)
 totalAmplitude_vs_x.Draw("hist")
 totalAmplitude_vs_x.SetStats(0)
 totalAmplitude_vs_x.SetTitle("")
@@ -195,9 +205,9 @@ totalAmplitude_vs_x.GetXaxis().SetTitle("Track x position [mm]")
 totalAmplitude_vs_x.GetYaxis().SetTitle("MPV signal amplitude [mV]")
 totalAmplitude_vs_x.SetLineWidth(2)
 
-totalAmplitude_vs_x.SetMaximum(164)
+totalAmplitude_vs_x.SetMaximum(80.0)
 
-boxes = getStripBox(inputfile,0,140,False, 18, True, shift)
+boxes = getStripBox(inputfile,0,80,False, 18, True, shift)
 for box in boxes:
    box.Draw()
 totalAmplitude_vs_x.Draw("AXIS same")
@@ -209,6 +219,7 @@ plotList_amplitude_vs_x[2].Draw("histsame")
 plotList_amplitude_vs_x[3].Draw("histsame")
 plotList_amplitude_vs_x[4].Draw("histsame")
 plotList_amplitude_vs_x[5].Draw("histsame")
+plotList_amplitude_vs_x[6].Draw("histsame")
 
 legend = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.02-0.1,1-myStyle.GetMargin()-0.02,1-myStyle.GetMargin()-0.02)
 legend.SetNColumns(3)
@@ -222,6 +233,7 @@ legend.AddEntry(plotList_amplitude_vs_x[2], "Strip 3")
 legend.AddEntry(plotList_amplitude_vs_x[3], "Strip 4")
 legend.AddEntry(plotList_amplitude_vs_x[4], "Strip 5")
 legend.AddEntry(plotList_amplitude_vs_x[5], "Strip 6")
+legend.AddEntry(plotList_amplitude_vs_x[6], "Strip 7")
 legend.Draw();
 
 myStyle.BeamInfo()
