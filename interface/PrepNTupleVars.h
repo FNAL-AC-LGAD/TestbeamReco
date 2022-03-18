@@ -46,25 +46,25 @@ private:
         }      
     }
 
-    void getXYOnSensor(float& xFinal, float& yFinal, const float z=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0)
+    void getXYOnSensor(double& xFinal, double& yFinal, const float z=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0)
     {
         //Define intial x, y position based on fit from telescope reco
-        float x0 = xSlope_*z + xIntercept_;
-        float y0 = ySlope_*z + yIntercept_;
+        double x0 = xSlope_*z + xIntercept_;
+        double y0 = ySlope_*z + yIntercept_;
 
         //Correct for rotation in the plane of the sensor
-        float degreesToRad = 3.14159/180.0;
-        float gamma_rad = gamma*degreesToRad;
-        float x1 = x0*cos(gamma_rad) + y0*sin(gamma_rad);
-        float y1 = y0*cos(gamma_rad) - x0*sin(gamma_rad);
+        double degreesToRad = 3.14159/180.0;
+        double gamma_rad = gamma*degreesToRad;
+        double x1 = x0*cos(gamma_rad) + y0*sin(gamma_rad);
+        double y1 = y0*cos(gamma_rad) - x0*sin(gamma_rad);
 
         //Correct for z-x plane rotation
-        float alpha_rad = alpha*degreesToRad;
-        float x2 = x1 + x1*tan(alpha_rad);
+        double alpha_rad = alpha*degreesToRad;
+        double x2 = x1 + x1*tan(alpha_rad);
 
         //Correct for z-y plane rotation
-        float beta_rad = beta*degreesToRad;
-        float y2 = y1 + y1*tan(beta_rad);
+        double beta_rad = beta*degreesToRad;
+        double y2 = y1 + y1*tan(beta_rad);
 
         xFinal = x2;
         yFinal = y2;
@@ -81,22 +81,33 @@ private:
         ySlope_     = tr.getVar<float>("ySlope");
         xIntercept_ = tr.getVar<float>("xIntercept");
         yIntercept_ = tr.getVar<float>("yIntercept");
-        const auto& angle = tr.getVar<double>("angle");
-    	const auto& x_dut = tr.getVec<float>("x_dut");
-    	const auto& y_dut = tr.getVec<float>("y_dut");
+        const auto& alpha = tr.getVar<double>("alpha");
+        const auto& beta  = tr.getVar<double>("beta");
+        const auto& gamma = tr.getVar<double>("gamma");
+        const auto& z_dut = tr.getVar<double>("z_dut");
+    	//const auto& x_dut = tr.getVec<float>("x_dut");
+    	//const auto& y_dut = tr.getVec<float>("y_dut");
+        //
+    	//Rotate(tr, x_dut[7], y_dut[7], gamma);
+        //RotateVec(tr, x_dut, y_dut, gamma);
 
-    	Rotate(tr, x_dut[7], y_dut[7], angle);
-        RotateVec(tr, x_dut, y_dut, angle);
+        // Define final telescope hit location on DUT based on track lines and hard coded parameters
+        auto& x = tr.createDerivedVar<double>("x");
+        auto& y = tr.createDerivedVar<double>("y");
+        getXYOnSensor(x, y, z_dut, alpha, beta, gamma);
 
-        // New code to correct the sensor misalignment
-        const auto& z = -12.0; //tr.getVar<float>("z");
-        float alpha = 0.0;
-        float beta  = 0.0;
-        float gamma = angle;
-
-        float xFinal, yFinal;
-        getXYOnSensor(xFinal, yFinal, z, alpha, beta, gamma);
-
+        // Create vectors of possible x,y locations by varying hard coded parameters
+        int nvar = 35;
+        double step = 3.0; //mm
+        auto& x_var = tr.createDerivedVec<double>("x_var",nvar);
+        auto& y_var = tr.createDerivedVec<double>("y_var",nvar);
+        for(int i = 0; i < nvar; i++)
+        {
+            double zHypothesis = z_dut - step*i + step*17;
+            getXYOnSensor(x_var[i], y_var[i], zHypothesis, alpha, beta, gamma);
+            //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zHypothesis<<std::endl;
+        }
+        
         // Correct amp and map raw amplitude
 	ApplyAmplitudeCorrection(tr);
         const auto& amp = tr.getVec<float>("amp");
@@ -106,8 +117,6 @@ private:
         tr.registerDerivedVar("totRawAmpLGAD", totRawAmpLGAD);
 
         // Cut to get hits that only go through active sensor
-	const auto& x = tr.getVar<double>("x");
-	const auto& y = tr.getVar<double>("y");
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
         tr.registerDerivedVar("hitSensor", hitSensor);

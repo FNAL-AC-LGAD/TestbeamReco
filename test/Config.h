@@ -41,7 +41,10 @@ private:
         tr.registerDerivedVar("lowGoodStripIndex", g.lowGoodStripIndex);
         tr.registerDerivedVar("highGoodStripIndex", g.highGoodStripIndex);
         tr.registerDerivedVar("sensorEdges", g.sensorEdges);
-        tr.registerDerivedVar("angle", g.angle);
+        tr.registerDerivedVar("alpha", g.alpha);
+        tr.registerDerivedVar("beta",  g.beta);
+        tr.registerDerivedVar("gamma", g.gamma);
+        tr.registerDerivedVar("z_dut", g.z_dut);
         tr.registerDerivedVar("xmin", g.xmin);
         tr.registerDerivedVar("xmax", g.xmax);
         tr.registerDerivedVar("ymin", g.ymin);

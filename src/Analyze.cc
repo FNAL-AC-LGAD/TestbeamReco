@@ -263,8 +263,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& x = tr.getVar<double>("x");
         const auto& y = tr.getVar<double>("y");
         const auto& xErrDUT = tr.getVar<float>("xErrDUT");
-        const auto& x_var = tr.getVec<float>("x_var");
-        //const auto& y_var = tr.getVec<float>("y_var");
+        const auto& x_var = tr.getVec<double>("x_var");
+        //const auto& y_var = tr.getVec<double>("y_var");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
         const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
         const auto& padx = tr.getVar<double>("padx");
