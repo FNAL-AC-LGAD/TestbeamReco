@@ -30,8 +30,11 @@ public:
     int numLGADchannels = 0;
     int photekIndex = 7;
     int lowGoodStripIndex = 1;
-    int highGoodStripIndex = 4;
-    double angle =  0.0;
+    int highGoodStripIndex = 5;
+    double alpha = 0.0;
+    double beta  = 0.0;
+    double gamma =  0.0;
+    double z_dut = 0.0;
     double xmin =  -1;
     double xmax =  -1;
     double ymin =  -1;
@@ -83,7 +86,12 @@ public:
     double pitch = 0.500;
     std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
     int numLGADchannels = 7;
-    double angle = 0.0 + 90.0;
+    int lowGoodStripIndex = 2;
+    int highGoodStripIndex = 4;
+    double alpha = 0.0;
+    double beta  = 0.0;
+    double gamma = 0.0 + 90.0;
+    double z_dut = 0.0;
     double xmin =  -4.0;
     double xmax =   2.0;
     double ymin =  -3.0;
@@ -93,7 +101,7 @@ public:
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166}; 
+    std::vector<double> positionRecoPar = {0.25, -0.59975, 1.03135, -7.14292, 6.94975};
     std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.1}, {1.1, 8.0}};
 };
 
@@ -124,7 +132,7 @@ public:
     int numLGADchannels = 6;
     // std::map<int,VoltageDependence> voltageDependenceMap = {{200,{2.0,8.0}}, {210,{3.5,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
     std::map<int,VoltageDependence> voltageDependenceMap = {{200,{7.0,8.0}}, {210,{8,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
-    double angle = 1.5;
+    double gamma = 1.5;
     double xmin = -0.15;
     double xmax =  0.85;
     double ymin =  9.5;
@@ -164,7 +172,7 @@ public:
     int numLGADchannels = 6;
     int lowGoodStripIndex = 3;
     int highGoodStripIndex = 3;
-    double angle = 1.3;
+    double gamma = 1.3;
     double xmin = -6.2;
     double xmax = -4.4;
     double ymin =  9.0;
@@ -202,7 +210,7 @@ public:
     double pitch = 0.15;
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.75, -4.90, -5.05, -5.20, -5.35, 0.0};
     int numLGADchannels = 6;
-    double angle =  1.3;
+    double gamma =  1.3;
     double xmin =  -5.7;
     double xmax =  -4.3;
     double ymin =   9.0;
@@ -242,7 +250,7 @@ public:
     int numLGADchannels = 6;
     int lowGoodStripIndex = 3;
     int highGoodStripIndex = 4;
-    double angle = 1.3;
+    double gamma = 1.3;
     double xmin = -5.4;
     double xmax = -4.3;
     double ymin =  9.0;
@@ -282,7 +290,7 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, -6.023, -5.523, -5.523, -6.023,  0.0};
     std::vector<double> stripCenterYPosition = {0.0, 10.641, 10.641, 10.141, 10.141, 0.0};
     int numLGADchannels = 4;
-    double angle = -0.5; 
+    double gamma = -0.5; 
     double xmin = -6.6;
     double xmax = -5.0;
     double ymin =  9.6;
@@ -335,7 +343,7 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, -5.687, -5.187, -5.187, -5.687, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 10.382, 10.382, 9.882, 9.882, 0.0}; //will fix this later but code for pad efficiency plots is not fully working
     int numLGADchannels = 4;
-    double angle = -1.65;
+    double gamma = -1.65;
     double xmin = -6.1;
     double xmax =  -4.8;
     double ymin =  9.4;
@@ -383,7 +391,7 @@ public:
     double pitch = 0.080;
     std::vector<double> stripCenterXPosition = {0.0, 0.9429, 0.8712, 0.7889, 0.7076, 0.6297, 0.5486, 0.0};
     int numLGADchannels = 6;
-    double angle = -0.2 + 90.0;
+    double gamma = -0.2 + 90.0;
     double xmin =   -1.0;
     double xmax =    2.5;
     double ymin =    0.0;
@@ -425,7 +433,7 @@ public:
     double pitch = 0.080;
     std::vector<double> stripCenterXPosition = {0.0, 0.2792, 0.3495, 0.4361, 0.5153, 0.5974, 0.6899, 0.0}; 
     int numLGADchannels = 6;
-    double angle = -0.2 + 90.0;
+    double gamma = -0.2 + 90.0;
     double xmin =  -1.2;
     double xmax =   2.5;
     double ymin =   0.0;
@@ -466,7 +474,7 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, -4.792, -4.992, -5.192, -5.392, -5.592, -5.792, 0.0};
     int numLGADchannels = 6;
     int lowGoodStripIndex = 1;
-    double angle = 0.2;
+    double gamma = 0.2;
     double xmin = -6.2;
     double xmax = -4.5;
     double ymin =  9.4;
@@ -502,7 +510,7 @@ public:
     std::vector<double> stripCenterXPosition = {0.0, 0, 0, 0, 0, 0, 0, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 0, 0, 0, 0, 0, 0, 0.0}; 
     int numLGADchannels = 6;
-    double angle = 0.0;
+    double gamma = 0.0;
     double xmin = -5.0;
     double xmax =  5.0;
     double ymin = -5.0;
@@ -535,7 +543,7 @@ public:
     std::vector<double> stripCenterXPosition = {-5.50, -6.00, -6.00, -5.50,  0.0};
     std::vector<double> stripCenterYPosition = {10.57, 10.57, 10.11, 10.11, 0.0};
     int numLGADchannels = 4;
-    double angle = 0.284886; 
+    double gamma = 0.284886; 
     double xmin = -3.0;
     double xmax =  3.0;
     double ymin =  8.0;

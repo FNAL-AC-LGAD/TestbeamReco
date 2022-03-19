@@ -20,6 +20,13 @@ options, args = parser.parse_args()
 
 inputfile = TFile("../test/myoutputfile.root")
 
+xmin=0.50
+xmax=options.xmax
+pitch = 0.001*options.pitch
+fitOrder = options.fitOrder
+fitFunction = getFitFunction(fitOrder)
+print(fitFunction)
+
 #Get dX vs a1/(a1+a2) hist
 Amp1OverAmp1and2_vs_deltaXmax = inputfile.Get("Amp1OverAmp1and2_vs_deltaXmax")
   
@@ -42,13 +49,13 @@ for i in range(0, Amp1OverAmp1and2_vs_deltaXmax.GetYaxis().GetNbins() + 1):
     nEntries = tmpHist.GetEntries()
     
     if(nEntries > 0.0):
-        myGausFunction = TF1("mygaus","gaus(0)",0,0.1);
-        tmpHist.Fit(myGausFunction,"Q","",0,0.1);
+        myGausFunction = TF1("mygaus","gaus(0)",0, pitch);
+        tmpHist.Fit(myGausFunction,"Q","",0, pitch);
         mean = myGausFunction.GetParameter(1)
         meanErr = myGausFunction.GetParError(1)
         sigma = myGausFunction.GetParameter(2)
         
-        ###For Debugging
+        ##For Debugging
         #tmpHist.Draw("hist")
         #myGausFunction.Draw("same")
         #canvas.SaveAs("q_"+str(i)+".gif")
@@ -65,18 +72,11 @@ outputfile = TFile("positionRecoFitPlots.root","RECREATE")
 #Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
 #outputfile.Close()
 
-xmin=0.50
-xmax=options.xmax
-pitch = 0.001*options.pitch
-fitOrder = options.fitOrder
-fitFunction = getFitFunction(fitOrder)
-print(fitFunction)
-
 gStyle.SetOptFit(1011)
 #fit = TF1("mainFit","pol3",xmin,xmax)
 fit = TF1("mainFit",fitFunction,xmin,xmax)
 fit.FixParameter(0, 0.5*pitch)
-Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.17)
+Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.6*pitch)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMinimum(0.00)
 Amp1OverAmp1and2_vs_deltaXmax_profile.GetXaxis().SetRangeUser(xmin,xmax)
 results = Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"SQ","",xmin,xmax)
