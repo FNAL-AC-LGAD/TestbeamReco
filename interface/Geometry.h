@@ -30,7 +30,7 @@ public:
     int numLGADchannels = 0;
     int photekIndex = 7;
     int lowGoodStripIndex = 1;
-    int highGoodStripIndex = 4;
+    int highGoodStripIndex = 5;
     double alpha = 0.0;
     double beta  = 0.0;
     double gamma =  0.0;
@@ -86,6 +86,8 @@ public:
     double pitch = 0.500;
     std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
     int numLGADchannels = 7;
+    int lowGoodStripIndex = 2;
+    int highGoodStripIndex = 4;
     double alpha = 0.0;
     double beta  = 0.0;
     double gamma = 0.0 + 90.0;
@@ -99,7 +101,7 @@ public:
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166}; 
+    std::vector<double> positionRecoPar = {0.25, -0.59975, 1.03135, -7.14292, 6.94975};
     std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.1}, {1.1, 8.0}};
 };
 
