@@ -9,6 +9,9 @@
 #include "TestbeamReco/interface/Timing.h"
 #include "TestbeamReco/interface/Utility.h"
 
+#include <iostream>
+#include <fstream>
+
 class Config
 {
 private:
@@ -106,6 +109,7 @@ public:
         //Get and make needed info
         const auto& filetag = tr.getVar<std::string>("filetag");
         const auto& analyzer = tr.getVar<std::string>("analyzer");
+        const auto& firstFile = tr.getVar<bool>("firstFile");
 
         std::string runYear = "2021";
         tr.registerDerivedVar("runYear",runYear);
@@ -113,6 +117,25 @@ public:
         const auto voltage = getVoltage(filetag);
         tr.registerDerivedVar("voltage", voltage);
         std::cout<<"Voltage: "<<voltage<<std::endl;
+
+        double zMin = -50.0, zStep = 1.0;
+        unsigned int nZBins = 151;
+        std::vector<double> zScan(nZBins);
+        std::string pythonBins = "z_values = [";
+        for(unsigned int i = 0; i < nZBins; i++) 
+        {        
+            pythonBins += std::to_string(zMin) +  ",";
+            zScan[i]=zMin;
+            zMin+=zStep;
+        }
+        tr.registerDerivedVar<std::vector<double>>("zScan",zScan);
+        pythonBins+="]";
+        if(firstFile)
+        {
+            std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
+            overwriteFile << pythonBins << std::endl;
+            overwriteFile.close();
+        }
         
         if(filetag.find("BNL2020") != std::string::npos)
         {
@@ -158,9 +181,9 @@ public:
         {
             registerGeometry(tr, HPK2DCLGADGeometry(voltage));
         }
-        else if(filetag.find("UIC_W1_1cm_255V") != std::string::npos)
+        else if(filetag.find("EIC_W1_1cm_255V") != std::string::npos)
         {
-            registerGeometry(tr, UIC1cmStripsGeometry(voltage));
+            registerGeometry(tr, EIC1cmStripsGeometry(voltage));
         }
         else
         {
