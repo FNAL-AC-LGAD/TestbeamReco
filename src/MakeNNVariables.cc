@@ -22,7 +22,7 @@ void MakeNNVariables::InitHistos()
 {
 }//END of init histos
 
-void MakeNNVariables::Loop(NTupleReader& tr, int maxevents, bool firstFile)
+void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
 {
     int count = 0, numPassTrain = 0, numPassTest  = 0, numPassVal = 0;
 
