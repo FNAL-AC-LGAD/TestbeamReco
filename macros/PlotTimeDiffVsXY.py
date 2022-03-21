@@ -56,22 +56,22 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             nEvents = tmpHist.GetEntries()
             fitlow = myMean - 1.5*myRMS
             fithigh = myMean + 1.5*myRMS
-            value = myMean
+            value = myRMS
             error = 0.0
             
             #Do fit 
             if(nEvents > 50):
                 #tmpHist.Rebin(4)
                 
-                # fit = TF1('fit','gaus',fitlow,fithigh)
-                # tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
-                # myMean = fit.GetParameter(1)
-                # mySigma = fit.GetParameter(2)
-                # mySigmaError = fit.GetParError(2)
-                # #value = 1000.0*mySigma
-                # #error = 1000.0*mySigmaError
-                # value = 1000.0*myMean
-                # error = 0
+                fit = TF1('fit','gaus',fitlow,fithigh)
+                tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
+                myMean = fit.GetParameter(1)
+                mySigma = fit.GetParameter(2)
+                mySigmaError = fit.GetParError(2)
+                value = 1000.0*mySigma
+                #error = 1000.0*mySigmaError
+                #value = 1000.0*myMean
+                error = 0
                 
                 
                 
@@ -81,7 +81,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 #fit.Draw("same")
                 #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
                 #
-                print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
+                #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             else:
                 value = -100.0            
                 
@@ -96,12 +96,12 @@ for info in all_histoInfos:
     info.th2.Draw("colz")
     info.th2.SetStats(0)
     info.th2.SetTitle(info.outHistoName)
-    info.th2.SetMinimum(-1.2)
-    info.th2.SetMaximum(-0.5)
+    info.th2.SetMinimum(0.0)
+    info.th2.SetMaximum(100.0)
     info.th2.SetLineColor(kBlack)
 
-    canvas.SaveAs("TimeMean_vs_xy_"+info.outHistoName+".gif")
-    canvas.SaveAs("TimeMean_vs_xy_"+info.outHistoName+".pdf")
+    canvas.SaveAs("TimeRes_vs_xy_"+info.outHistoName+".gif")
+    canvas.SaveAs("TimeRes_vs_xy_"+info.outHistoName+".pdf")
     info.th2.Write()
 
 outputfile.Close()

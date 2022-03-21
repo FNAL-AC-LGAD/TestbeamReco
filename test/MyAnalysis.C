@@ -41,6 +41,7 @@ template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf
 {
     std::cout << "Initializing..." << std::endl;
     Analyze a;
+    bool firstFile = true;
     for(const auto& file : vvf)
     {
         // Define what is needed per sample set
@@ -50,6 +51,7 @@ template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf
         NTupleReader tr(ch, {"i_evt"});
         tr.registerDerivedVar("filetag",file.tag);
         tr.registerDerivedVar("analyzer",analyzer);
+        tr.registerDerivedVar("firstFile",firstFile);
 
         printf( "nFiles: %i startFile: %i maxEvts: %i \n",nFiles,startFile,maxEvts ); fflush( stdout );
 
@@ -61,7 +63,9 @@ template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf
         std::cout << "Starting event loop (in run)" << std::endl;
         a.Loop(tr, maxEvts);
         // Cleaning up dynamic memory
-        delete ch;            
+        delete ch;
+
+        firstFile = false;
     }
     std::cout << "Writing histograms..." << std::endl;
     a.WriteHistos(outfile);

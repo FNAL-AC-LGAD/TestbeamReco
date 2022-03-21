@@ -2,6 +2,7 @@ import ROOT
 import optparse
 ROOT.gROOT.SetBatch(True)
 from array import array
+from AlignBinning import z_values
 
 def cosmetic_tgraph(graph):
         # graph.SetLineColor(colors[colorindex])
@@ -47,14 +48,10 @@ parser.add_option('--runPad', dest='runPad', action='store_true', default = Fals
 options, args = parser.parse_args()
 
 f = ROOT.TFile('../test/myoutputfile.root')
-#f2 = ROOT.TFile('../test/myoutputfile_chi2lt3_newfitv2_nplanes14_slopelt0001.root')
-
-channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
 
 hists=[]
-for i in range(35):
+for i in range(len(z_values)):
         hists.append(('deltaX_var%i'%i,'deltaX_variant_%i'%i,"tracker"))
-z_values = [51., 48., 45., 42., 39., 36., 33., 30., 27., 24., 21., 18., 15., 12., 9., 6., 3., 0., -3., -6., -9., -12., -15., -18., -21., -24., -27., -30., -33., -36., -39., -42., -45., -48., -51.]
 
 resolutions=[]
 res_errs=[]
@@ -63,39 +60,32 @@ for ivar,t in enumerate(hists):
         resolution,error = plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2])
         resolutions.append(resolution)
         res_errs.append(error)
-        print("res:%0.2f, z: %0.f "%(resolutions[-1],z_values[ivar]))
+        #print("res:%0.2f, z: %0.f "%(resolutions[-1],z_values[ivar]))
 
 
-# z_values = [5.,4.5,4.,3.5,3.,2.5,2.,1.5,1.,0.5,0.,-0.5,-1.,-1.5,-2.,-2.5,-3.,-3.5,-4.,-4.5,-5.,-5.5,-6.]
-# z_values = [16., 14., 12., 10., 8., 6., 4., 2., 0., -2., -4., -6., -8., -10., -12., -14., -16., -18., -20., -22., -24.]
 resolution_vs_z = ROOT.TGraphErrors(len(z_values),array("d",z_values),array("d",resolutions),array("d",[0.01 for i in z_values]),array("d",res_errs))
 resolution_vs_z.SetTitle(";Assigned Z position [mm];Resolution [microns]")
 cosmetic_tgraph(resolution_vs_z)
 
 
-#c.Print("%s.pdf"%("scan_summary"))
-
-#resolutions=[]
-#res_errs=[]
-#for ivar,t in enumerate(hists):
-#        h = f2.Get(t[0])
-#        resolution,error = plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2])
-#        resolutions.append(resolution)
-#        res_errs.append(error)
-#        print("res:%0.2f, z: %0.f "%(resolutions[-1],z_values[ivar]))
-#
-#
-## z_values = [5.,4.5,4.,3.5,3.,2.5,2.,1.5,1.,0.5,0.,-0.5,-1.,-1.5,-2.,-2.5,-3.,-3.5,-4.,-4.5,-5.,-5.5,-6.]
-## z_values = [16., 14., 12., 10., 8., 6., 4., 2., 0., -2., -4., -6., -8., -10., -12., -14., -16., -18., -20., -22., -24.]
-#resolution_vs_z_noslope = ROOT.TGraphErrors(len(z_values),array("d",z_values),array("d",resolutions),array("d",[0.01 for i in z_values]),array("d",res_errs))
-#resolution_vs_z_noslope.SetTitle(";Assigned Z position [mm];Resolution [microns]")
-#cosmetic_tgraph(resolution_vs_z_noslope)
-#resolution_vs_z_noslope.SetMarkerColor(ROOT.kRed+1)
-#resolution_vs_z_noslope.SetLineColor(ROOT.kRed+1)
 c = ROOT.TCanvas("c","c",1000,600)
 
+fitFunc = ROOT.TF1("","pol2",z_values[0], z_values[-1]);
+results = resolution_vs_z.Fit(fitFunc,"Q","",z_values[0], z_values[-1]);
+#results.Print("V")
+a = fitFunc.GetParameter(2)
+b = fitFunc.GetParameter(1)
+print(a, b)
+print("Minimum at: {}".format(-(b)/(2*a)))
+
+
 resolution_vs_z.Draw("aep")
-#resolution_vs_z_noslope.Draw("ep same")
-#
+
+
+#mean = myGausFunction.GetParameter(1)
+#meanErr = myGausFunction.GetParError(1)
+#sigma = myGausFunction.GetParameter(2)
+fitFunc.Draw("same")
+
 c.Print("%s.pdf"%("scan_summary_overlay"))
 

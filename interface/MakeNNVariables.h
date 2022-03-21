@@ -22,7 +22,7 @@ public :
    MakeNNVariables();
    ~MakeNNVariables(){};
 
-   void     Loop(NTupleReader& tr, int maxevents = -1);
+   void     Loop(NTupleReader& tr, int maxevents = -1, bool firstFile = true);
    void     InitHistos();
    void     WriteHistos(TFile* outfile); 
 

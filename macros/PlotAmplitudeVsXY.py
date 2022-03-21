@@ -106,7 +106,7 @@ for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
                 #myLanGausFunction.Draw("same")
                 #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
 
-            print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
+            #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             list_amplitude_vs_xy[channel].SetBinContent(i,j,value)
             
             
@@ -121,7 +121,7 @@ for channel in range(0, len(list_amplitude_vs_xy)):
     list_amplitude_vs_xy[channel].SetStats(0)
     list_amplitude_vs_xy[channel].SetTitle("Channel "+str(channel))
     list_amplitude_vs_xy[channel].SetMinimum(0)
-    list_amplitude_vs_xy[channel].SetMaximum(150)
+    list_amplitude_vs_xy[channel].SetMaximum(100)
 
     canvas.SetRightMargin(0.18)
     canvas.SetLeftMargin(0.12)
