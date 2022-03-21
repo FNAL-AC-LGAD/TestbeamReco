@@ -97,15 +97,13 @@ private:
         getXYOnSensor(x, y, z_dut, alpha, beta, gamma);
 
         // Create vectors of possible x,y locations by varying hard coded parameters
-        int nvar = 35;
-        double step = 3.0; //mm
-        auto& x_var = tr.createDerivedVec<double>("x_var",nvar);
-        auto& y_var = tr.createDerivedVec<double>("y_var",nvar);
-        for(int i = 0; i < nvar; i++)
+        const auto& zScan = tr.getVar<std::vector<double>>("zScan");
+        auto& x_var = tr.createDerivedVec<double>("x_var",zScan.size());
+        auto& y_var = tr.createDerivedVec<double>("y_var",zScan.size());
+        for(unsigned int i = 0; i < zScan.size(); i++)
         {
-            double zHypothesis = z_dut - step*i + step*17;
-            getXYOnSensor(x_var[i], y_var[i], zHypothesis, alpha, beta, gamma);
-            //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zHypothesis<<std::endl;
+            getXYOnSensor(x_var[i], y_var[i], zScan[i], alpha, beta, gamma);
+            //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zScan[i]<<std::endl;
         }
         
         // Correct amp and map raw amplitude

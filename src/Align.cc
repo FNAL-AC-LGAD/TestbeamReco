@@ -8,6 +8,7 @@
 #include <TEfficiency.h>
 #include <TFile.h>
 #include <iostream>
+#include <fstream>
 
 Align::Align()
 {
@@ -22,8 +23,8 @@ void Align::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& ge
     //This event counter histogram is necessary so that we know that all the condor jobs ran successfully. If not, when you use the hadder script, you will see a discrepancy in red as the files are being hadded.
     my_histos.emplace( "EventCounter", std::make_shared<TH1D>( "EventCounter", "EventCounter", 2, -1.1, 1.1 ) ) ;
 
-    int nvar=35;
-    for(int ivar=0;ivar<nvar;ivar++)
+    const auto& zScan = tr.getVar<std::vector<double>>("zScan");
+    for(unsigned int ivar = 0; ivar<zScan.size(); ivar++)
     {
         utility::makeHisto(my_histos,"deltaX_var"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     }
@@ -40,8 +41,12 @@ void Align::Loop(NTupleReader& tr, int maxevents)
     const auto& isHPKStrips = tr.getVar<bool>("isHPKStrips");
     const auto& ySlices = tr.getVar<std::vector<std::vector<double>>>("ySlices");
     const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
-    InitHistos(tr, geometry);
-
+    const auto& firstFile = tr.getVar<bool>("firstFile");
+    if(firstFile)
+    {
+        InitHistos(tr, geometry);
+    }
+    
     while( tr.getNextEvent() )
     {
         //This is added to count the number of events- do not change the next two lines.
