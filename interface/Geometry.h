@@ -58,53 +58,6 @@ public:
     std::vector<std::vector<double>> boxes_XY = {{-999.9, -999.9,-999.9, -999.9}};
 };
 
-class EIC1cmStripsGeometry : public DefaultGeometry
-{
-public:
-    // EIC W1 1cm long strips 500um pitch 300um gap size
-    // Used lecroy scope channels 0-7
-    // Scope channel 0-6 was AC channels, and scope channel 7 was the photok
-    // 
-    // |-----------|             -----
-    // | 0 0 0 0 0 |             |777|
-    // | 1 1 1 1 1 |             |777|
-    // | 2 2 2 2 2 |             -----
-    // | 3 3 3 3 3 |
-    // | 4 4 4 4 4 |
-    // | 5 5 5 5 5 |
-    // | 6 6 6 6 6 |
-    // |-----------|
-
-    EIC1cmStripsGeometry(const int v=0) : voltage(v){}
-    const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
-    std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
-    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,0.9398}, {1,0.9619}, {2,0.9845}, {3,0.9794}, {4,1.0186}, {5,1.0318}, {6,1.1004}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,-0.94679459}, {1,-0.82059504}, {2,-0.92001622}, {3,-0.81254756}, {4,-0.88364704}, {5,-0.79850545}, {6,-0.93318906}, {7,0.0}};
-    double stripWidth = 0.200;
-    double pitch = 0.500;
-    std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
-    int numLGADchannels = 7;
-    int lowGoodStripIndex = 0;
-    int highGoodStripIndex = 6;
-    double alpha = 0.0;
-    double beta  = 0.0;
-    double gamma = 0.0 + 90.0;
-    double z_dut = 28.41878;
-    double xmin =  -4.0;
-    double xmax =   2.0;
-    double ymin =  -3.0;
-    double ymax =   9.0;
-    double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 2.0;
-    double signalAmpThreshold = 20.0;
-    bool isHPKStrips = true;
-    bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
-    std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.1}, {1.1, 8.0}};
-};
-
 class BNL2020Geometry : public DefaultGeometry
 {
 public:

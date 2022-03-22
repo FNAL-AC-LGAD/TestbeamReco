@@ -3,6 +3,7 @@
 
 #include "TestbeamReco/interface/NTupleReader.h"
 #include "TestbeamReco/interface/Geometry.h"
+#include "TestbeamReco/interface/Geometry2022.h"
 #include "TestbeamReco/interface/PrepNTupleVars.h"
 #include "TestbeamReco/interface/SignalProperties.h"
 #include "TestbeamReco/interface/SpatialReconstruction.h"
@@ -113,7 +114,8 @@ public:
 
         std::string runYear = "2021";
         tr.registerDerivedVar("runYear",runYear);
-
+        
+        //Define zScan values and save to a python file for later
         const auto voltage = getVoltage(filetag);
         tr.registerDerivedVar("voltage", voltage);
         std::cout<<"Voltage: "<<voltage<<std::endl;
@@ -136,55 +138,24 @@ public:
             overwriteFile << pythonBins << std::endl;
             overwriteFile.close();
         }
-        
-        if(filetag.find("BNL2020") != std::string::npos)
-        {
-            registerGeometry(tr, BNL2020Geometry(voltage));
-        }
-        else if(filetag.find("BNL2021_wide") != std::string::npos)
-        {
-            registerGeometry(tr, BNL2021WideGeometry(voltage));
-        }
-        else if(filetag.find("BNL2021_medium") != std::string::npos)
-        {
-            registerGeometry(tr, BNL2021MediumGeometry(voltage));
-        }
-        else if(filetag.find("BNL2021_narrow") != std::string::npos)
-        {
-            registerGeometry(tr, BNL2021NarrowGeometry(voltage));
-        }
-        else if(filetag.find("HPK_pad_C2") != std::string::npos)
-        {
-            registerGeometry(tr, HPKPadC2Geometry(voltage));
-        }
-        else if(filetag.find("HPK_pad_B2") != std::string::npos)
-        {
-            registerGeometry(tr, HPKPadB2Geometry(voltage));
-        }
-        else if(filetag.find("HPK_strips_C2_45um") != std::string::npos)
-        {
-            registerGeometry(tr, HPKStripsC2WideMetalGeometry(voltage));
-        }
-        else if(filetag.find("HPK_strips_C2_30um") != std::string::npos)
-        {
-            registerGeometry(tr, HPKStripsC2NarrowMetalGeometry(voltage));
-        }
-        else if(filetag.find("Ron_wide") != std::string::npos)
-        {
-            registerGeometry(tr, RonStripsGeometry(voltage));
-        }
-        else if(filetag.find("BNL2021_hexpix") != std::string::npos)
-        {
-            registerGeometry(tr, BNLPixelHexGeometry(voltage));
-        }
-        else if(filetag.find("HPK2_DCLGAD_220V") != std::string::npos)
-        {
-            registerGeometry(tr, HPK2DCLGADGeometry(voltage));
-        }
-        else if(filetag.find("EIC_W1_1cm_255V") != std::string::npos)
-        {
-            registerGeometry(tr, EIC1cmStripsGeometry(voltage));
-        }
+
+        //Setup Sensor Geometry 
+        if     (filetag.find("BNL2020")                        != std::string::npos) registerGeometry(tr, BNL2020Geometry(voltage));
+        else if(filetag.find("BNL2021_wide")                   != std::string::npos) registerGeometry(tr, BNL2021WideGeometry(voltage));
+        else if(filetag.find("BNL2021_medium")                 != std::string::npos) registerGeometry(tr, BNL2021MediumGeometry(voltage));
+        else if(filetag.find("BNL2021_narrow")                 != std::string::npos) registerGeometry(tr, BNL2021NarrowGeometry(voltage));
+        else if(filetag.find("HPK_pad_C2")                     != std::string::npos) registerGeometry(tr, HPKPadC2Geometry(voltage));
+        else if(filetag.find("HPK_pad_B2")                     != std::string::npos) registerGeometry(tr, HPKPadB2Geometry(voltage));
+        else if(filetag.find("HPK_strips_C2_45um")             != std::string::npos) registerGeometry(tr, HPKStripsC2WideMetalGeometry(voltage));
+        else if(filetag.find("HPK_strips_C2_30um")             != std::string::npos) registerGeometry(tr, HPKStripsC2NarrowMetalGeometry(voltage));
+        else if(filetag.find("Ron_wide")                       != std::string::npos) registerGeometry(tr, RonStripsGeometry(voltage));
+        else if(filetag.find("BNL2021_hexpix")                 != std::string::npos) registerGeometry(tr, BNLPixelHexGeometry(voltage));
+        else if(filetag.find("HPK2_DCLGAD_220V")               != std::string::npos) registerGeometry(tr, HPK2DCLGADGeometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_255V")                != std::string::npos) registerGeometry(tr, EIC1cmStripsGeometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_300_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips300Geometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_200_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips200Geometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_100_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips100Geometry(voltage));
+        else if(filetag.find("EIC_W1_2p5cm_UCSC_340V")         != std::string::npos) registerGeometry(tr, EIC2p5cmStripsUCSCGeometry(voltage));
         else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
