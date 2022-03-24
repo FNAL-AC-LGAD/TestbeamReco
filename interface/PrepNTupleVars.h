@@ -46,28 +46,41 @@ private:
         }      
     }
 
-    void getXYOnSensor(double& xFinal, double& yFinal, const float z=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0)
+    void getXYOnSensor(double& xFinal, double& yFinal, const float z_C=0.0, const float theta=0.0, const float phi=0.0, const float x_C=0.0, const float y_C=0.0)
     {
-        //Define intial x, y position based on fit from telescope reco
-        double x0 = xSlope_*z + xIntercept_;
-        double y0 = ySlope_*z + yIntercept_;
-
-        //Correct for rotation in the plane of the sensor
         double degreesToRad = 3.14159/180.0;
-        double gamma_rad = gamma*degreesToRad;
-        double x1 = x0*cos(gamma_rad) + y0*sin(gamma_rad);
-        double y1 = y0*cos(gamma_rad) - x0*sin(gamma_rad);
+        double theta_rad = theta*degreesToRad;
+        double phi_rad = phi*degreesToRad;
 
-        //Correct for z-x plane rotation
-        double alpha_rad = alpha*degreesToRad;
-        double x2 = x1 + x1*tan(alpha_rad);
+        double z_lab = (z_C - tan(theta_rad)*(cos(xIntercept_ - x_C) + sin(yIntercept_ - y_C))) / (1 + tan(theta_rad)*(cos(phi_rad)*xSlope_ + sin(phi_rad)*ySlope_));
 
-        //Correct for z-y plane rotation
-        double beta_rad = beta*degreesToRad;
-        double y2 = y1 + y1*tan(beta_rad);
+        double lx = xIntercept_ + z_lab*xSlope_ - x_C;
+        double ly = yIntercept_ + z_lab*ySlope_ - y_C;
+        double lz = z_lab - z_C;
 
-        xFinal = x2;
-        yFinal = y2;
+        xFinal = lx*(cos(phi_rad)*cos(theta_rad)) + ly*(sin(phi_rad)*cos(theta_rad)) + lz*(-sin(theta_rad));
+        yFinal = lx*(-sin(phi_rad)) + ly*(cos(phi_rad));
+
+        // //Define intial x, y position based on fit from telescope reco
+        // double x0 = xSlope_*z + xIntercept_;
+        // double y0 = ySlope_*z + yIntercept_;
+
+        // //Correct for rotation in the plane of the sensor
+        // double degreesToRad = 3.14159/180.0;
+        // double gamma_rad = gamma*degreesToRad;
+        // double x1 = x0*cos(gamma_rad) + y0*sin(gamma_rad);
+        // double y1 = y0*cos(gamma_rad) - x0*sin(gamma_rad);
+
+        // //Correct for z-x plane rotation
+        // double alpha_rad = alpha*degreesToRad;
+        // double x2 = x1 + x1*tan(alpha_rad);
+
+        // //Correct for z-y plane rotation
+        // double beta_rad = beta*degreesToRad;
+        // double y2 = y1 + y1*tan(beta_rad);
+
+        // xFinal = x2;
+        // yFinal = y2;
     }
 
     void prepNTupleVars(NTupleReader& tr)
@@ -81,6 +94,8 @@ private:
         ySlope_     = tr.getVar<float>("ySlope");
         xIntercept_ = tr.getVar<float>("xIntercept");
         yIntercept_ = tr.getVar<float>("yIntercept");
+        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
         const auto& alpha = tr.getVar<double>("alpha");
         const auto& beta  = tr.getVar<double>("beta");
         const auto& gamma = tr.getVar<double>("gamma");
@@ -94,20 +109,29 @@ private:
         // Define final telescope hit location on DUT based on track lines and hard coded parameters
         auto& x = tr.createDerivedVar<double>("x");
         auto& y = tr.createDerivedVar<double>("y");
-        getXYOnSensor(x, y, z_dut, alpha, beta, gamma);
+        getXYOnSensor(x, y, z_dut, alpha, beta, sensorCenter, sensorCenterY);
 
         // Create vectors of possible x,y locations by varying hard coded parameters
         const auto& zScan = tr.getVar<std::vector<double>>("zScan");
-        auto& x_var = tr.createDerivedVec<double>("x_var",zScan.size());
-        auto& y_var = tr.createDerivedVec<double>("y_var",zScan.size());
+        const auto& alphaScan = tr.getVar<std::vector<double>>("alphaScan");
+        const auto& betaScan = tr.getVar<std::vector<double>>("betaScan");
+        auto& x_var = tr.createDerivedVec<double>("x_var",zScan.size()*alphaScan.size()*betaScan.size());
+        auto& y_var = tr.createDerivedVec<double>("y_var",zScan.size()*alphaScan.size()*betaScan.size());
         for(unsigned int i = 0; i < zScan.size(); i++)
         {
-            getXYOnSensor(x_var[i], y_var[i], zScan[i], alpha, beta, gamma);
-            //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zScan[i]<<std::endl;
+            for(unsigned int j = 0; j < alphaScan.size(); j++)
+            {
+                for(unsigned int k = 0; k < betaScan.size(); k++)
+                {
+                    unsigned int i_var = k + j*betaScan.size() + i*betaScan.size()*alphaScan.size();
+                    getXYOnSensor(x_var[i_var], y_var[i_var], zScan[i], alphaScan[j], betaScan[k], sensorCenter, sensorCenterY);
+                    //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zScan[i]<<std::endl;
+                }
+            }
         }
         
         // Correct amp and map raw amplitude
-	ApplyAmplitudeCorrection(tr);
+	    ApplyAmplitudeCorrection(tr);
         const auto& amp = tr.getVec<float>("amp");
         const auto& rawAmpLGAD = utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
         double totRawAmpLGAD = 0.0;

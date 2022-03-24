@@ -24,9 +24,11 @@ void Align::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& ge
     my_histos.emplace( "EventCounter", std::make_shared<TH1D>( "EventCounter", "EventCounter", 2, -1.1, 1.1 ) ) ;
 
     const auto& zScan = tr.getVar<std::vector<double>>("zScan");
-    for(unsigned int ivar = 0; ivar<zScan.size(); ivar++)
+    const auto& alphaScan = tr.getVar<std::vector<double>>("alphaScan");
+    const auto& betaScan = tr.getVar<std::vector<double>>("betaScan");
+    for(unsigned int ivar = 0; ivar<(zScan.size()*alphaScan.size()*betaScan.size()); ivar++)
     {
-        utility::makeHisto(my_histos,"deltaX_var"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+        utility::makeHisto(my_histos,"deltaX_var"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 300,-0.75,0.75);
     }
     std::cout<<"Finished making histos"<<std::endl;
 }

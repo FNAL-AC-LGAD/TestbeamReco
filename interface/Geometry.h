@@ -81,22 +81,26 @@ public:
     // std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.5553183648148+0.022066641}, {2,10.6590122524753+0.016205606}, {3,10.6470996902006+0.014540078}, {4,10.6075997712141+0.012709104}, {5,10.6432860123283+0.013754913}, {6,10.6622858488865+0.027125698}, {7,0.0}}; // Handmade for BNL2020 200V
     double stripWidth = 0.08;
     double pitch = 0.1;
-    std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.235, 0.135, 0.0};
+    double sensorCenter = 0.385;
+    double sensorCenterY = 10.700;
+    std::vector<double> stripCenterXPosition = {0.0, 0.635-sensorCenter, 0.535-sensorCenter, 0.435-sensorCenter, 0.335-sensorCenter, 0.235-sensorCenter, 0.135-sensorCenter, 0.0};
     int numLGADchannels = 6;
     // std::map<int,VoltageDependence> voltageDependenceMap = {{200,{2.0,8.0}}, {210,{3.5,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
     std::map<int,VoltageDependence> voltageDependenceMap = {{200,{7.0,8.0}}, {210,{8,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
+    double alpha = 0.0;
+    double beta  = 0.0;
     double gamma = 1.5;
-    double xmin = -0.15;
-    double xmax =  0.85;
-    double ymin =  9.5;
-    double ymax = 12.0; 
+    double xmin = -0.15-sensorCenter;
+    double xmax =  0.85-sensorCenter;
+    double ymin =  9.5-sensorCenterY;
+    double ymax = 12.0-sensorCenterY; 
     double positionRecoMaxPoint = 0.75;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = voltageDependenceMap[voltage].noiseAmpThreshold;
     double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold; 
     bool enablePositionReconstruction = true;   
     std::vector<double> positionRecoPar = {0.05, -0.104407, -1.24925, 10.5174, -27.1884};
-    std::vector<std::vector<double>> sensorEdges = {{-0.06, 9.8}, { 0.8, 11.6}};
+    std::vector<std::vector<double>> sensorEdges = {{-0.06-sensorCenter, 9.8-sensorCenterY}, { 0.8-sensorCenter, 11.6-sensorCenterY}};
 };
 
 class BNL2021WideGeometry : public DefaultGeometry

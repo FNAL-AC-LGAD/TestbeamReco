@@ -120,8 +120,9 @@ public:
         tr.registerDerivedVar("voltage", voltage);
         std::cout<<"Voltage: "<<voltage<<std::endl;
 
-        double zMin = -50.0, zStep = 1.0;
-        unsigned int nZBins = 151;
+        //Define zScan // [-10.0, 10.0]
+        double zMin = -10.0, zStep = 1.0;
+        unsigned int nZBins = 21;
         std::vector<double> zScan(nZBins);
         std::string pythonBins = "z_values = [";
         for(unsigned int i = 0; i < nZBins; i++) 
@@ -131,7 +132,37 @@ public:
             zMin+=zStep;
         }
         tr.registerDerivedVar<std::vector<double>>("zScan",zScan);
+        pythonBins+="]\n";
+
+        //Define alphaScan
+        double alphaMin = -2.0, alphaStep = 0.5;
+        unsigned int nAlphaBins = 9;
+        std::vector<double> alphaScan(nAlphaBins);
+        pythonBins+="alpha_values = [";
+        for(unsigned int i = 0; i < nAlphaBins; i++) 
+        {        
+            pythonBins += std::to_string(alphaMin) +  ",";
+            alphaScan[i]=alphaMin;
+            alphaMin+=alphaStep;
+        }
+        tr.registerDerivedVar<std::vector<double>>("alphaScan",alphaScan);
+        pythonBins+="]\n";
+
+        //Define betaScan
+        double betaMin = -2.0, betaStep = 0.5;
+        unsigned int nbetaBins = 9;
+        std::vector<double> betaScan(nbetaBins);
+        pythonBins+="beta_values = [";
+        for(unsigned int i = 0; i < nbetaBins; i++) 
+        {        
+            pythonBins += std::to_string(betaMin) +  ",";
+            betaScan[i]=betaMin;
+            betaMin+=betaStep;
+        }
+        tr.registerDerivedVar<std::vector<double>>("betaScan",betaScan);
         pythonBins+="]";
+
+        //Save python file with for later
         if(firstFile)
         {
             std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
