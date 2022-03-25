@@ -285,4 +285,39 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-2.7, -1.75}, {-2.1, 8.1}};
 };
 
+class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
+{
+public:
+
+    EIC_W2_1cm_500um_400um_gap_StripsGeometry(const int v=0) : voltage(v){}
+    const int voltage;
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
+    double stripWidth = 0.100;
+    double pitch = 0.500;
+    std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
+    int numLGADchannels = 7;
+    int lowGoodStripIndex = 0;
+    int highGoodStripIndex = 6;
+    double alpha = 0.0;
+    double beta  = 0.0;
+    double gamma = 0.0 + 90.0;
+    double z_dut = 28.41878;
+    double xmin =  -5.0;
+    double xmax =   2.0;
+    double ymin =  -3.0;
+    double ymax =   9.0;
+    double positionRecoMaxPoint = 0.75;
+    double photekSignalThreshold = 50.0;
+    double noiseAmpThreshold = 10.0;
+    double signalAmpThreshold = 10.0;
+    bool isHPKStrips = true;
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = {0.25, -0.330948, -6.63994,  53.6787, -134.515};
+    std::vector<std::vector<double>> sensorEdges = {{-3.5, -2}, {0.9, 8.2}};
+};
+
 #endif
