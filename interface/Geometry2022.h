@@ -44,12 +44,12 @@ public:
     double ymax =   9.0;
     double positionRecoMaxPoint = 0.7;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 4.0;
-    double signalAmpThreshold = 15.0;
+    double noiseAmpThreshold = 10.0;
+    double signalAmpThreshold = 10.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.330948, -6.63994,  53.6787, -134.515};
-    std::vector<std::vector<double>> sensorEdges = {{-3.1, -1.9}, {1.1, 8.0}};
+    std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.5}, {1.1, 8.0}};
 };
 
 class EIC1cmStrips300Geometry : public DefaultGeometry
