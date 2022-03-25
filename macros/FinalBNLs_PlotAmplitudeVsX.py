@@ -49,16 +49,17 @@ th3_amplitude_vs_xy_channel05 = inputfile.Get(h05)
 th3_amplitude_vs_xy_channel06 = inputfile.Get(h06)
 th3_amplitude_vs_xy_channelall = inputfile.Get(htot)
 
-th3_amplitude_vs_xy_channel00.RebinX(3)
-th3_amplitude_vs_xy_channel01.RebinX(3)
-th3_amplitude_vs_xy_channel02.RebinX(3)
-th3_amplitude_vs_xy_channel03.RebinX(3)
-th3_amplitude_vs_xy_channel04.RebinX(3)
-th3_amplitude_vs_xy_channel05.RebinX(3)
-th3_amplitude_vs_xy_channel06.RebinX(3)
-th3_amplitude_vs_xy_channelall.RebinX(3)
+#th3_amplitude_vs_xy_channel00.RebinX(3)
+#th3_amplitude_vs_xy_channel01.RebinX(3)
+#th3_amplitude_vs_xy_channel02.RebinX(3)
+#th3_amplitude_vs_xy_channel03.RebinX(3)
+#th3_amplitude_vs_xy_channel04.RebinX(3)
+#th3_amplitude_vs_xy_channel05.RebinX(3)
+#th3_amplitude_vs_xy_channel06.RebinX(3)
+#th3_amplitude_vs_xy_channelall.RebinX(3)
 
-shift = (inputfile.Get("stripBoxInfo02").GetMean(1)+inputfile.Get("stripBoxInfo03").GetMean(1))/2.
+#shift = (inputfile.Get("stripBoxInfo02").GetMean(1)+inputfile.Get("stripBoxInfo03").GetMean(1))/2.
+shift = inputfile.Get("stripBoxInfo03").GetMean(1)
 
 #Build 2D amp vs x histograms
 amplitude_vs_x_channel00 = th3_amplitude_vs_xy_channel00.Project3D("zx")
@@ -205,7 +206,7 @@ plotList_amplitude_vs_x[4].SetLineColor(colors[4])
 plotList_amplitude_vs_x[5].SetLineColor(colors[5])
 plotList_amplitude_vs_x[6].SetLineColor(colors[6])
 
-totalAmplitude_vs_x = TH1F("htemp","",1,-4.0,4.0)
+totalAmplitude_vs_x = TH1F("htemp","",1,-2.5,2.5)
 totalAmplitude_vs_x.Draw("hist")
 totalAmplitude_vs_x.SetStats(0)
 totalAmplitude_vs_x.SetTitle("")

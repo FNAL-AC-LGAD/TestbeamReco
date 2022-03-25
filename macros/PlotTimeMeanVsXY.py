@@ -76,12 +76,12 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 
                 
                 
-                ##For Debugging
+                #For Debugging
                 #tmpHist.Draw("hist")
-                ##myLanGausFunction.Draw("same")
+                #myLanGausFunction.Draw("same")
                 #fit.Draw("same")
                 #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
-                #
+                
                 #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             else:
                 value = -100.0            
@@ -97,8 +97,10 @@ for info in all_histoInfos:
     info.th2.Draw("colz")
     info.th2.SetStats(0)
     info.th2.SetTitle(info.outHistoName)
-    info.th2.SetMinimum(-1.1)
-    info.th2.SetMaximum(-0.7)
+    #info.th2.SetMinimum(-1.1)
+    #info.th2.SetMaximum(-0.7)
+    info.th2.SetMinimum(-0.5)
+    info.th2.SetMaximum(0.5)
     info.th2.SetLineColor(kBlack)
 
     canvas.SaveAs("TimeMean_vs_xy_"+info.outHistoName+".gif")
