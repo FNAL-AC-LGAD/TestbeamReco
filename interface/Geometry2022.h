@@ -27,7 +27,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,0.9398}, {1,0.9619}, {2,0.9845}, {3,0.9794}, {4,1.0186}, {5,1.0318}, {6,1.1004}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,-0.94679459}, {1,-0.82059504}, {2,-0.92001622}, {3,-0.81254756}, {4,-0.88364704}, {5,-0.79850545}, {6,-0.93318906}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
     std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
@@ -42,13 +42,14 @@ public:
     double xmax =   2.0;
     double ymin =  -3.0;
     double ymax =   9.0;
+    double positionRecoMaxPoint = 0.7;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 2.0;
-    double signalAmpThreshold = 20.0;
+    double noiseAmpThreshold = 4.0;
+    double signalAmpThreshold = 15.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
-    std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.1}, {1.1, 8.0}};
+    std::vector<double> positionRecoPar = {0.25, -0.330948, -6.63994,  53.6787, -134.515};
+    std::vector<std::vector<double>> sensorEdges = {{-3.1, -1.9}, {1.1, 8.0}};
 };
 
 class EIC1cmStrips300Geometry : public DefaultGeometry
@@ -276,12 +277,12 @@ public:
     double ymin =  -2.5;
     double ymax =   8.5;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 4.0;
-    double signalAmpThreshold = 35.0;
+    double noiseAmpThreshold = 10.0;
+    double signalAmpThreshold = 40.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.04, -0.366344,  2.57686, -21.3209,  -115.69};
-    std::vector<std::vector<double>> sensorEdges = {{-5.5, -20.0}, {0.0, 20.0}};
+    std::vector<double> positionRecoPar = {0.04, -0.258847, -1.18947};
+    std::vector<std::vector<double>> sensorEdges = {{-2.7, -1.75}, {-2.1, 8.1}};
 };
 
 #endif

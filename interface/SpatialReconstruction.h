@@ -15,7 +15,7 @@ private:
             dX += coeff*pow(x - shift,index);
             index++;
         }
-        return dX;
+        return (dX >= 0.0) ? dX : 0.0;
     }
 
     void spatialReconstruction([[maybe_unused]] NTupleReader& tr)
