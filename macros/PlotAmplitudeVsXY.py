@@ -28,6 +28,7 @@ bias = options.biasvolt
 inputfile = TFile("../test/"+file)
 
 #Get 3D histograms 
+th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xy")
 th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
 th3_amplitude_vs_xy_channel01 = inputfile.Get("amplitude_vs_xy_channel01")
 th3_amplitude_vs_xy_channel02 = inputfile.Get("amplitude_vs_xy_channel02")
@@ -36,6 +37,7 @@ th3_amplitude_vs_xy_channel04 = inputfile.Get("amplitude_vs_xy_channel04")
 th3_amplitude_vs_xy_channel05 = inputfile.Get("amplitude_vs_xy_channel05")
 th3_amplitude_vs_xy_channel06 = inputfile.Get("amplitude_vs_xy_channel06")
 list_th3_amplitude_vs_xy = []
+list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy)
 list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel00)
 list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel01)
 list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel02)
@@ -47,18 +49,21 @@ list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel06)
 
 #Build amplitude histograms
 efficiency_vs_xy_denominator = inputfile.Get("efficiency_vs_xy_denominator")
-amplitude_vs_xy = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
-amplitude_vs_xy_channel00 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel00")
-amplitude_vs_xy_channel01 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel01")
-amplitude_vs_xy_channel02 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel02")
-amplitude_vs_xy_channel03 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel03")
-amplitude_vs_xy_channel04 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel04")
-amplitude_vs_xy_channel05 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel05")
-amplitude_vs_xy_channel06 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel06")
+amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
+
+amplitude_vs_xy = amplitude_vs_xy_temp.Clone("amplitude_vs_xy")
+amplitude_vs_xy_channel00 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel00")
+amplitude_vs_xy_channel01 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel01")
+amplitude_vs_xy_channel02 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel02")
+amplitude_vs_xy_channel03 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel03")
+amplitude_vs_xy_channel04 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel04")
+amplitude_vs_xy_channel05 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel05")
+amplitude_vs_xy_channel06 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel06")
 
 
 
 list_amplitude_vs_xy = []
+list_amplitude_vs_xy.append(amplitude_vs_xy)
 list_amplitude_vs_xy.append(amplitude_vs_xy_channel00)
 list_amplitude_vs_xy.append(amplitude_vs_xy_channel01)
 list_amplitude_vs_xy.append(amplitude_vs_xy_channel02)
@@ -120,14 +125,15 @@ for channel in range(0, len(list_amplitude_vs_xy)):
     list_amplitude_vs_xy[channel].Draw("colz")
     list_amplitude_vs_xy[channel].SetStats(0)
     list_amplitude_vs_xy[channel].SetTitle("Channel "+str(channel))
-    list_amplitude_vs_xy[channel].SetMinimum(0)
-    list_amplitude_vs_xy[channel].SetMaximum(100)
+    list_amplitude_vs_xy[channel].SetMinimum(15)
+    list_amplitude_vs_xy[channel].SetMaximum(90)
 
     canvas.SetRightMargin(0.18)
     canvas.SetLeftMargin(0.12)
 
-    canvas.SaveAs("Amplitude_vs_xy_channel"+str(channel)+".gif")
-    canvas.SaveAs("Amplitude_vs_xy_channel"+str(channel)+".pdf")
+    name = "Amplitude_vs_xy_channel"+str(channel) if channel != 0 else "Amplitude_vs_xy"
+    canvas.SaveAs(name+".gif")
+    canvas.SaveAs(name+".pdf")
 
     list_amplitude_vs_xy[channel].Write()
 

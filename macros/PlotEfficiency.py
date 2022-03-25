@@ -125,7 +125,7 @@ efficiency_vs_x_lowThreshold_channel04.Draw("LPsame")
 efficiency_vs_x_lowThreshold_channel05.Draw("LPsame")
 efficiency_vs_x_lowThreshold_channel06.Draw("LPsame")
 
-efficiency_vs_x_lowThreshold_global.GetXaxis().SetRangeUser(-0.2,1.0)
+efficiency_vs_x_lowThreshold_global.GetXaxis().SetRangeUser(-4.0,2.0)
 efficiency_vs_x_lowThreshold_global.GetYaxis().SetRangeUser(0.0,1.5)
 efficiency_vs_x_lowThreshold_global.GetYaxis().SetTitle("Efficiency @ 10mV Threshold")
 
@@ -188,7 +188,7 @@ efficiency_vs_x_highThreshold_channel04.Draw("LPsame")
 efficiency_vs_x_highThreshold_channel05.Draw("LPsame")
 efficiency_vs_x_highThreshold_channel06.Draw("LPsame")
 
-efficiency_vs_x_highThreshold_global.GetXaxis().SetRangeUser(-0.2,1.0)
+efficiency_vs_x_highThreshold_global.GetXaxis().SetRangeUser(-4.0,2.0)
 efficiency_vs_x_highThreshold_global.GetYaxis().SetRangeUser(0.0,1.5)
 efficiency_vs_x_highThreshold_global.GetYaxis().SetTitle("Efficiency @ 30mV Threshold")
 
