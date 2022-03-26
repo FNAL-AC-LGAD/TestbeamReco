@@ -7,10 +7,6 @@ import myStyle
 
 gROOT.SetBatch( True )
 
-## Defining Style
-myStyle.ForceStyle()
-gStyle.SetOptStat(0)
-
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-f','--file', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
@@ -30,11 +26,11 @@ efficiency_lowThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_lowTh
 efficiency_highThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_highThreshold_numerator")
 efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator")
 
-efficiency_lowThreshold_numerator_global.RebinX(3)
-efficiency_highThreshold_numerator_global.RebinX(3)
-efficiency_denominator_global.RebinX(3)
+#efficiency_lowThreshold_numerator_global.RebinX(3)
+#efficiency_highThreshold_numerator_global.RebinX(3)
+#efficiency_denominator_global.RebinX(3)
 
-shift = (inputfile.Get("stripBoxInfo02").GetMean(1) + inputfile.Get("stripBoxInfo03").GetMean(1))/2.
+shift = inputfile.Get("stripBoxInfo03").GetMean(1)
 
 EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, "efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -10, 10 , 0.0, 1.0 )
 EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, "efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -10, 10 , 0.0, 1.0 )
@@ -44,58 +40,57 @@ EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_global, eff
 
 
 efficiency_highThreshold_numerator_channel00 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel00")
-efficiency_highThreshold_numerator_channel00.RebinX(3)
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel00, efficiency_denominator_global, "efficiency_channel00", "Efficiency Strip 0", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-
 efficiency_highThreshold_numerator_channel01 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel01")
-efficiency_highThreshold_numerator_channel01.RebinX(3)
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel01, efficiency_denominator_global, "efficiency_channel01", "Efficiency Strip 1", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-
 efficiency_highThreshold_numerator_channel02 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel02")
-efficiency_highThreshold_numerator_channel02.RebinX(3)
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel02, efficiency_denominator_global, "efficiency_channel02", "Efficiency Strip 2", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-
 efficiency_highThreshold_numerator_channel03 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel03")
-efficiency_highThreshold_numerator_channel03.RebinX(3)
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel03, efficiency_denominator_global, "efficiency_channel03", "Efficiency Strip 3", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-
 efficiency_highThreshold_numerator_channel04 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel04")
-efficiency_highThreshold_numerator_channel04.RebinX(3)
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel04, efficiency_denominator_global, "efficiency_channel04", "Efficiency Strip 4", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-
 efficiency_highThreshold_numerator_channel05 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel05")
-efficiency_highThreshold_numerator_channel05.RebinX(3)
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel05, efficiency_denominator_global, "efficiency_channel05", "Efficiency Strip 5", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-
 efficiency_highThreshold_numerator_channel06 = inputfile.Get("efficiency_vs_xy_highThreshold_numerator_channel06")
-efficiency_highThreshold_numerator_channel06.RebinX(3)
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel06, efficiency_denominator_global, "efficiency_channel06", "Efficiency Strip 5", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
+
+#efficiency_highThreshold_numerator_channel00.RebinX(3)
+#efficiency_highThreshold_numerator_channel01.RebinX(3)
+#efficiency_highThreshold_numerator_channel02.RebinX(3)
+#efficiency_highThreshold_numerator_channel03.RebinX(3)
+#efficiency_highThreshold_numerator_channel04.RebinX(3)
+#efficiency_highThreshold_numerator_channel05.RebinX(3)
+#efficiency_highThreshold_numerator_channel06.RebinX(3)
+
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel00, efficiency_denominator_global, "efficiency_channel00", "Efficiency Strip 1", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel01, efficiency_denominator_global, "efficiency_channel01", "Efficiency Strip 2", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel02, efficiency_denominator_global, "efficiency_channel02", "Efficiency Strip 3", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel03, efficiency_denominator_global, "efficiency_channel03", "Efficiency Strip 4", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel04, efficiency_denominator_global, "efficiency_channel04", "Efficiency Strip 5", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel05, efficiency_denominator_global, "efficiency_channel05", "Efficiency Strip 6", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel06, efficiency_denominator_global, "efficiency_channel06", "Efficiency Strip 7", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
 
 
+# Defining Style
+myStyle.ForceStyle()
+gStyle.SetOptStat(0)
 
 #1D efficiency vs X
-binY_lowEdge = efficiency_denominator_global.GetYaxis().FindFixBin(-9)
-binY_highEdge = efficiency_denominator_global.GetYaxis().FindFixBin(3)
+#binY_lowEdge = efficiency_denominator_global.GetYaxis().FindFixBin(-9)
+#binY_highEdge = efficiency_denominator_global.GetYaxis().FindFixBin(3)
 
-efficiency_vs_x_denominator_global = efficiency_denominator_global.ProjectionX("efficiency_vs_x_denominator_global",binY_lowEdge,binY_highEdge)
-efficiency_vs_x_highThreshold_numerator_global = efficiency_highThreshold_numerator_global.ProjectionX("efficiency_vs_x_highThreshold_numerator_global",binY_lowEdge,binY_highEdge)
-efficiency_vs_x_highThreshold_numerator_channel00 = efficiency_highThreshold_numerator_channel00.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel00",binY_lowEdge,binY_highEdge)
-efficiency_vs_x_highThreshold_numerator_channel01 = efficiency_highThreshold_numerator_channel01.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel01",binY_lowEdge,binY_highEdge)
-efficiency_vs_x_highThreshold_numerator_channel02 = efficiency_highThreshold_numerator_channel02.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel02",binY_lowEdge,binY_highEdge)
-efficiency_vs_x_highThreshold_numerator_channel03 = efficiency_highThreshold_numerator_channel03.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel03",binY_lowEdge,binY_highEdge)
-efficiency_vs_x_highThreshold_numerator_channel04 = efficiency_highThreshold_numerator_channel04.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel04",binY_lowEdge,binY_highEdge)
-efficiency_vs_x_highThreshold_numerator_channel05 = efficiency_highThreshold_numerator_channel05.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel05",binY_lowEdge,binY_highEdge)
-efficiency_vs_x_highThreshold_numerator_channel06 = efficiency_highThreshold_numerator_channel06.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel06",binY_lowEdge,binY_highEdge)
+efficiency_vs_x_denominator_global = efficiency_denominator_global.ProjectionX("efficiency_vs_x_denominator_global")#,binY_lowEdge,binY_highEdge)
+efficiency_vs_x_highThreshold_numerator_global = efficiency_highThreshold_numerator_global.ProjectionX("efficiency_vs_x_highThreshold_numerator_global")#,binY_lowEdge,binY_highEdge)
+efficiency_vs_x_highThreshold_numerator_channel00 = efficiency_highThreshold_numerator_channel00.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel00")#,binY_lowEdge,binY_highEdge)
+efficiency_vs_x_highThreshold_numerator_channel01 = efficiency_highThreshold_numerator_channel01.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel01")#,binY_lowEdge,binY_highEdge)
+efficiency_vs_x_highThreshold_numerator_channel02 = efficiency_highThreshold_numerator_channel02.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel02")#,binY_lowEdge,binY_highEdge)
+efficiency_vs_x_highThreshold_numerator_channel03 = efficiency_highThreshold_numerator_channel03.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel03")#,binY_lowEdge,binY_highEdge)
+efficiency_vs_x_highThreshold_numerator_channel04 = efficiency_highThreshold_numerator_channel04.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel04")#,binY_lowEdge,binY_highEdge)
+efficiency_vs_x_highThreshold_numerator_channel05 = efficiency_highThreshold_numerator_channel05.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel05")#,binY_lowEdge,binY_highEdge)
+efficiency_vs_x_highThreshold_numerator_channel06 = efficiency_highThreshold_numerator_channel06.ProjectionX("efficiency_vs_x_highThreshold_numerator_channel06")#,binY_lowEdge,binY_highEdge)
 
 
 efficiency_vs_x_highThreshold_global = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_global, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_global", "Efficiency Global", "X [mm]", -3.0, 3.0, False, shift)
-efficiency_vs_x_highThreshold_channel00 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel00, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel00", "Efficiency Strip 0", "X [mm]", -3.0, 3.0, False, shift)
-efficiency_vs_x_highThreshold_channel01 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel01, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel01", "Efficiency Strip 0", "X [mm]", -3.0, 3.0, False, shift)
-efficiency_vs_x_highThreshold_channel02 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel02, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel02", "Efficiency Strip 0", "X [mm]", -3.0, 3.0, False, shift)
-efficiency_vs_x_highThreshold_channel03 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel03, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel03", "Efficiency Strip 0", "X [mm]", -3.0, 3.0, False, shift)
-efficiency_vs_x_highThreshold_channel04 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel04, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel04", "Efficiency Strip 0", "X [mm]", -3.0, 3.0, False, shift)
-efficiency_vs_x_highThreshold_channel05 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel05, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel05", "Efficiency Strip 0", "X [mm]", -3.0, 3.0, False, shift)
-efficiency_vs_x_highThreshold_channel06 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel06, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel06", "Efficiency Strip 0", "X [mm]", -3.0, 3.0, False, shift)
+efficiency_vs_x_highThreshold_channel00 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel00, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel00", "Efficiency Strip 1", "X [mm]", -3.0, 3.0, False, shift)
+efficiency_vs_x_highThreshold_channel01 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel01, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel01", "Efficiency Strip 2", "X [mm]", -3.0, 3.0, False, shift)
+efficiency_vs_x_highThreshold_channel02 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel02, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel02", "Efficiency Strip 3", "X [mm]", -3.0, 3.0, False, shift)
+efficiency_vs_x_highThreshold_channel03 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel03, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel03", "Efficiency Strip 4", "X [mm]", -3.0, 3.0, False, shift)
+efficiency_vs_x_highThreshold_channel04 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel04, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel04", "Efficiency Strip 5", "X [mm]", -3.0, 3.0, False, shift)
+efficiency_vs_x_highThreshold_channel05 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel05, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel05", "Efficiency Strip 6", "X [mm]", -3.0, 3.0, False, shift)
+efficiency_vs_x_highThreshold_channel06 = EfficiencyUtils.Make1DEfficiency(efficiency_vs_x_highThreshold_numerator_channel06, efficiency_vs_x_denominator_global, "efficiency_vs_x_highThreshold_channel06", "Efficiency Strip 7", "X [mm]", -3.0, 3.0, False, shift)
 
 
 
@@ -137,7 +132,7 @@ efficiency_vs_x_highThreshold_channel02.SetLineColor(colors[2])
 efficiency_vs_x_highThreshold_channel03.SetLineColor(colors[3])
 efficiency_vs_x_highThreshold_channel04.SetLineColor(colors[4])
 efficiency_vs_x_highThreshold_channel05.SetLineColor(colors[5])
-efficiency_vs_x_highThreshold_channel06.SetLineColor(colors[5])
+efficiency_vs_x_highThreshold_channel06.SetLineColor(colors[6])
 
 # legend = TLegend(0.4,0.69,0.7,0.92);
 legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.16,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.01);
@@ -161,8 +156,6 @@ myStyle.SensorInfo(sensor, bias)
 htemp.Draw("AXIS same")
 canvas.SaveAs("Efficiency_HighThreshold_vs_x_"+sensor+".gif")
 canvas.SaveAs("Efficiency_HighThreshold_vs_x_"+sensor+".pdf")
-
-
 
 # Save efficiency plots
 outputfile = TFile("EfficiencyPlots_"+sensor+".root","RECREATE")

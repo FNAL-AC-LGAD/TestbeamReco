@@ -11,7 +11,8 @@ def Plot2DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
     ratio = num.Clone("ratio")
     ratio.Divide(den)
 
-    ratio.SetTitle("")
+    ratio.SetTitle(topTitle)
+    ratio.SetTitleSize(0.05)
     ratio.Draw("colz")
     ratio.SetMaximum(effMax)
     ratio.SetMinimum(effMin)
@@ -33,10 +34,11 @@ def Plot2DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
     c.SetRightMargin(0.18)
     c.SetLeftMargin(0.12)
 
-    title = TLatex()
-    title.SetTextSize(0.05);
+    #title = TLatex()
+    #title.SetTextSize(0.05);
     #title.SetTextAlign(13);  
-    title.DrawLatexNDC(.2,.93,topTitle);
+    #title.DrawLatexNDC(.2,.93,topTitle);
+
     c.SaveAs(plotname+".gif")
 
 
