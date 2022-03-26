@@ -74,7 +74,7 @@ def GetPadCenter():
     return (1 + marg)/2
 
 def GetColors(color_blind = False):
-    strip_colors = [416+2, 432+2, 600, 880, 632, 400+2, 600-3]
+    strip_colors = [416+2, 432+2, 600, 880, 632, 400+2, 600-5]
     ## [#kGreen+2, #kCyan+2, #kBlue, #kViolet, #kRed, #kYellow+2, #kBlue-3]
     if color_blind:
         color_RGB = [[51,34,136],[51,187,238],[17,119,51],[153,153,51],[204,102,119],[136,34,85],[128,128,128]]

@@ -21,17 +21,7 @@ class HistoInfo:
 inputfile = TFile("../test/myoutputfile.root")
 
 all_histoInfos = [
-    HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
-    HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
-    HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
-    HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
-    HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
-    HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
-    HistoInfo("timeDiff_vs_xy_channel06",inputfile, "channel_7"),
-    HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
-    HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
-    HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
-    HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
+    HistoInfo("deltaX_vs_Xtrack_vs_Ytrack", inputfile, "PositionX_Resolution"),
 ]
 
 canvas = TCanvas("cv","cv",800,800)
@@ -97,11 +87,11 @@ for info in all_histoInfos:
     info.th2.SetStats(0)
     info.th2.SetTitle(info.outHistoName)
     info.th2.SetMinimum(0.0)
-    info.th2.SetMaximum(70.0)
+    info.th2.SetMaximum(100.0)
     info.th2.SetLineColor(kBlack)
 
-    canvas.SaveAs("TimeRes_vs_xy_"+info.outHistoName+".gif")
-    canvas.SaveAs("TimeRes_vs_xy_"+info.outHistoName+".pdf")
+    canvas.SaveAs("PosRes_vs_xy_"+info.outHistoName+".gif")
+    canvas.SaveAs("PosRes_vs_xy_"+info.outHistoName+".pdf")
     info.th2.Write()
 
 outputfile.Close()
