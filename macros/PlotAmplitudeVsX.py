@@ -5,21 +5,34 @@ import langaus
 import optparse
 import time
 from stripBox import getStripBox
+import myStyle
 
+organized_mode=True
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('--run', dest='run', action='store_true', default = False, help="run fits or not")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+
+parser.add_option('--run', dest='run', action='store_true', default = True, help="run fits or not")
 parser.add_option('-t', dest='UseRawHistos', action='store_true', default = False, help="Use nominal amp or raw histograms")
 options, args = parser.parse_args()
 
 RunFits = options.run
 UseRawHistos = options.UseRawHistos
 suffex = "_raw" if UseRawHistos else ""
+dataset = options.Dataset
 
-inputfile = TFile("../test/myoutputfile.root")     
+outdir=""
+if organized_mode: 
+    outdir = myStyle.getOutputDir(dataset)
+    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+else: 
+    # inputfile = TFile("../test/"+file)
+    inputfile = TFile("../test/myoutputfile.root")   
+
+
 if (RunFits):
     #Define histo names
     GoodHistos = not UseRawHistos
@@ -127,14 +140,15 @@ if (RunFits):
             list_amplitude_vs_x[channel].SetBinContent(i,value)
                      
     # Save amplitude histograms
-    outputfile = TFile("plots.root","RECREATE")
+    outputfile=TFile("%splotsAmplitudeVsX.root"%outdir,"RECREATE")
+
     for channel in range(0, len(list_amplitude_vs_x)):
         list_amplitude_vs_x[channel].Write()
     outputfile.Close()
 
 
 #Make final plots
-plotfile = TFile("plots.root","READ")
+plotfile = TFile("%splotsAmplitudeVsX.root"%outdir,"READ")
 plotList_amplitude_vs_x  = []
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel00"))
 plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel01"))
@@ -206,8 +220,8 @@ legend.AddEntry(plotList_amplitude_vs_x[4], "Strip 5")
 legend.AddEntry(plotList_amplitude_vs_x[5], "Strip 6")
 legend.Draw();
 
-canvas.SaveAs("Amplitude_vs_x"+suffex+".gif")
-canvas.SaveAs("Amplitude_vs_x"+suffex+".pdf")
+canvas.SaveAs(outdir+"Amplitude_vs_x"+suffex+".gif")
+canvas.SaveAs(outdir+"Amplitude_vs_x"+suffex+".pdf")
 
 
 #totalAmplitude_vs_x = plotList_amplitude_vs_x[0].Clone("totalAmplitude_vs_x")
@@ -260,8 +274,8 @@ legend.AddEntry(plotList_amplitude_vs_x[4], "Strip 5")
 legend.AddEntry(plotList_amplitude_vs_x[5], "Strip 6")
 legend.Draw();
 
-canvas.SaveAs("TotalAmplitude_vs_x"+suffex+".gif")
-canvas.SaveAs("TotalAmplitude_vs_x"+suffex+".pdf")
+canvas.SaveAs(outdir+"TotalAmplitude_vs_x"+suffex+".gif")
+canvas.SaveAs(outdir+"TotalAmplitude_vs_x"+suffex+".pdf")
 
 
 plotList_amplitudeFraction_vs_x  = []
@@ -337,7 +351,7 @@ legend.Draw();
 
 plotList_amplitudeFraction_vs_x[0].Draw("AXIS same")
 plotList_amplitudeFraction_vs_x[0].Draw("hist same")
-canvas.SaveAs("AmplitudeFraction_vs_x"+suffex+".gif")
-canvas.SaveAs("AmplitudeFraction_vs_x"+suffex+".pdf")
+canvas.SaveAs(outdir+"AmplitudeFraction_vs_x"+suffex+".gif")
+canvas.SaveAs(outdir+"AmplitudeFraction_vs_x"+suffex+".pdf")
 
 

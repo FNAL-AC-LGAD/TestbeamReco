@@ -137,6 +137,7 @@ int main(int argc, char *argv[])
     bool organized_mode = true;
     if(organized_mode){
         TString outDir = Form("../output/%s/",dataSets.c_str());
+        gSystem->mkdir("../output");
         gSystem->mkdir(outDir);
 
         char thistFile[128];

@@ -32,7 +32,7 @@ dataset = options.Dataset
 
 outdir=""
 if organized_mode: 
-    outdir = getOutputDir(dataset)
+    outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
     inputfile = TFile("../test/"+file)
