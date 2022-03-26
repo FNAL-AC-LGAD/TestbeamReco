@@ -9,6 +9,7 @@ import myStyle
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
+organized_mode=True
 
 ## Defining Style
 myStyle.ForceStyle()
@@ -16,6 +17,8 @@ myStyle.ForceStyle()
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+
 parser.add_option('-f', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
 parser.add_option('-s','--sensor', dest='sensor', default = "EIC W1-1cm", help="Type of sensor (BNL, HPK, ...)")
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 180, help="Bias Voltage value in [V]")
@@ -24,8 +27,16 @@ options, args = parser.parse_args()
 file = options.file
 sensor = options.sensor
 bias = options.biasvolt
+dataset = options.Dataset
 
-inputfile = TFile("../test/"+file)
+
+outdir=""
+if organized_mode: 
+    outdir = getOutputDir(dataset)
+    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+else: 
+    inputfile = TFile("../test/"+file)
+
 
 #Get 3D histograms 
 th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xy")
@@ -115,9 +126,8 @@ for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
             list_amplitude_vs_xy[channel].SetBinContent(i,j,value)
             
             
-            
-outputfile = TFile("plots.root","RECREATE")
 
+outputfile=TFile("%splots.root"%outdir,"RECREATE")
 
 # Plot 2D histograms
 for channel in range(0, len(list_amplitude_vs_xy)):
@@ -132,8 +142,8 @@ for channel in range(0, len(list_amplitude_vs_xy)):
     canvas.SetLeftMargin(0.12)
 
     name = "Amplitude_vs_xy_channel"+str(channel) if channel != 0 else "Amplitude_vs_xy"
-    canvas.SaveAs(name+".gif")
-    canvas.SaveAs(name+".pdf")
+    canvas.SaveAs(outdir+name+".gif")
+    canvas.SaveAs(outdir+name+".pdf")
 
     list_amplitude_vs_xy[channel].Write()
 
