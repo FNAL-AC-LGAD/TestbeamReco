@@ -1,5 +1,10 @@
 from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack
 import os
+import optparse
+import myStyle
+
+
+organized_mode=True
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -18,7 +23,22 @@ class HistoInfo:
     def getTH2(self, th3, name):
         return th3.Project3D("yx").Clone(name)
 
-inputfile = TFile("../test/myoutputfile.root")
+
+parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+
+options, args = parser.parse_args()
+dataset = options.Dataset
+
+outdir=""
+if organized_mode: 
+    outdir = myStyle.getOutputDir(dataset)
+    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+else: 
+    # inputfile = TFile("../test/"+file)
+    inputfile = TFile("../test/myoutputfile.root")   
+
+
 
 all_histoInfos = [
     HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
@@ -40,7 +60,6 @@ gPad.SetRightMargin(0.15)
 gPad.SetTopMargin(0.08)
 gPad.SetBottomMargin(0.12)
 gPad.SetTicks(1,1)
-print("Finished setting up langaus fit class")
 
 #loop over X bins
 for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
@@ -91,7 +110,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 
 
 # Plot 2D histograms
-outputfile = TFile("plots.root","RECREATE")
+outputfile = TFile("%splotsTimeDiffVsXY.root"%outdir,"RECREATE")
 for info in all_histoInfos:
     info.th2.Draw("colz")
     info.th2.SetStats(0)
@@ -100,8 +119,8 @@ for info in all_histoInfos:
     info.th2.SetMaximum(70.0)
     info.th2.SetLineColor(kBlack)
 
-    canvas.SaveAs("TimeRes_vs_xy_"+info.outHistoName+".gif")
-    canvas.SaveAs("TimeRes_vs_xy_"+info.outHistoName+".pdf")
+    canvas.SaveAs(outdir+"TimeRes_vs_xy_"+info.outHistoName+".gif")
+    canvas.SaveAs(outdir+"TimeRes_vs_xy_"+info.outHistoName+".pdf")
     info.th2.Write()
 
 outputfile.Close()
