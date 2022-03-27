@@ -7,7 +7,7 @@
 #include "TestbeamReco/interface/Analyze.h"
 #include "TestbeamReco/interface/Align.h"
 #include "Config.h"
-
+#include "TSystem.h"
 #include "TH1D.h"
 #include "TFile.h"
 #include "TChain.h"
@@ -132,6 +132,17 @@ int main(int argc, char *argv[])
             case 'M': startFile         = int(atoi(optarg)); break;
             case 'E': maxEvts           = int(atoi(optarg)); break;
         }
+    }
+
+    bool organized_mode = true;
+    if(organized_mode){
+        TString outDir = Form("../output/%s/",dataSets.c_str());
+        gSystem->mkdir("../output");
+        gSystem->mkdir(outDir);
+
+        char thistFile[128];
+        sprintf(thistFile, "../output/%s/%s_%s.root", dataSets.c_str(),dataSets.c_str(), analyzer.c_str());
+        histFile = thistFile;
     }
 
     if(runOnCondor)

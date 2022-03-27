@@ -6,6 +6,10 @@ font=43 # Helvetica
 # tsize=32
 tsize=38 #35
 
+def getOutputDir(dataset):
+    outdir = "../output/%s/" % dataset
+    return outdir
+
 def ForceStyle():
     ## Defining Style
     ROOT.gStyle.SetPadTopMargin(marg)    #0.05
