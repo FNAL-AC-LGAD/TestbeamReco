@@ -168,19 +168,19 @@ plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channelall"))
 
 canvas = TCanvas("cvv","cvv",800,800)
 canvas.SetLeftMargin(0.12)
-plotList_amplitude_vs_x[5].Draw("hist")
-plotList_amplitude_vs_x[5].SetStats(0)
-plotList_amplitude_vs_x[5].SetTitle("")
+plotList_amplitude_vs_x[6].Draw("hist")
+plotList_amplitude_vs_x[6].SetStats(0)
+plotList_amplitude_vs_x[6].SetTitle("")
 
-ymin = plotList_amplitude_vs_x[5].GetMinimum()
-ymax = plotList_amplitude_vs_x[5].GetMaximum()
-plotList_amplitude_vs_x[5].SetMaximum(ymax*1.05)
+ymin = plotList_amplitude_vs_x[6].GetMinimum()
+ymax = plotList_amplitude_vs_x[6].GetMaximum()
+plotList_amplitude_vs_x[6].SetMaximum(ymax*1.05)
 
 boxes = getStripBox(inputfile,ymin,ymax*1.04)
 for box in boxes:
    box.Draw()
-plotList_amplitude_vs_x[5].Draw("AXIS same")
-plotList_amplitude_vs_x[5].Draw("hist same")
+plotList_amplitude_vs_x[6].Draw("AXIS same")
+plotList_amplitude_vs_x[6].Draw("hist same")
 
 plotList_amplitude_vs_x[0].GetYaxis().SetTitle("Signal MPV Amplitude [mV]")
 plotList_amplitude_vs_x[0].GetYaxis().SetTitleSize(0.05)

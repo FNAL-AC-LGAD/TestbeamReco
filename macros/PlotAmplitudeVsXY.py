@@ -106,7 +106,8 @@ for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
             #Do Langaus fit if histogram mean is larger than 10
             #and mean is larger than RMS (a clear peak away from noise)
             if (myMean > 10 and myMean > 0.5*myRMS):                
-
+                # if channel==0: 
+                #     print(tmpHist.GetEntries(), myMean)
                 #use coarser bins when the signal is bigger
                 if (myMean > 50) :
                     tmpHist.Rebin(10)
@@ -123,11 +124,12 @@ for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
                 #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
 
             #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
+            # if tmpHist.GetEntries()>20: 
             list_amplitude_vs_xy[channel].SetBinContent(i,j,value)
             
             
 
-outputfile=TFile("%splots.root"%outdir,"RECREATE")
+outputfile=TFile("%splotsAmplitudevsXY.root"%outdir,"RECREATE")
 
 # Plot 2D histograms
 for channel in range(0, len(list_amplitude_vs_xy)):
@@ -136,7 +138,7 @@ for channel in range(0, len(list_amplitude_vs_xy)):
     list_amplitude_vs_xy[channel].SetStats(0)
     list_amplitude_vs_xy[channel].SetTitle("Channel "+str(channel))
     list_amplitude_vs_xy[channel].SetMinimum(15)
-    list_amplitude_vs_xy[channel].SetMaximum(90)
+    list_amplitude_vs_xy[channel].SetMaximum(150)
 
     canvas.SetRightMargin(0.18)
     canvas.SetLeftMargin(0.12)
