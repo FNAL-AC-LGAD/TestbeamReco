@@ -2,7 +2,9 @@ from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAs
 import ROOT
 import os
 import optparse
+import myStyle
 
+organized_mode=True
 gROOT.SetBatch( True )
 
 def getFitFunction(fitOrder):
@@ -16,9 +18,17 @@ parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('--xmax', dest='xmax', type='float', default = 0.75, help="Set the xmax for the final histogram")
 parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
 parser.add_option('--fitOrder', dest='fitOrder', type='int', default = 4, help="Set the poly order for the fit")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
 
-inputfile = TFile("../test/myoutputfile.root")
+dataset = options.Dataset
+outdir=""
+if organized_mode: 
+    outdir = myStyle.getOutputDir(dataset)
+    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+else: 
+    # inputfile = TFile("../test/"+file)
+    inputfile = TFile("../test/myoutputfile.root")   
 
 xmin=0.50
 xmax=options.xmax
@@ -26,6 +36,7 @@ pitch = 0.001*options.pitch
 fitOrder = options.fitOrder
 fitFunction = getFitFunction(fitOrder)
 print(fitFunction)
+
 
 #Get dX vs a1/(a1+a2) hist
 Amp1OverAmp1and2_vs_deltaXmax = inputfile.Get("Amp1OverAmp1and2_vs_deltaXmax")
@@ -68,7 +79,7 @@ for i in range(0, Amp1OverAmp1and2_vs_deltaXmax.GetYaxis().GetNbins() + 1):
     Amp1OverAmp1and2_vs_deltaXmax_profile.SetBinError(i,meanErr)           
         
 # Save amplitude histograms
-outputfile = TFile("positionRecoFitPlots.root","RECREATE")   
+outputfile = TFile(outdir+"positionRecoFitPlots.root","RECREATE")   
 #Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
 #outputfile.Close()
 
@@ -91,8 +102,8 @@ line = TF1("line","0.0",xmin,1.0)
 line.SetLineColor(ROOT.kBlack)
 line.Draw("same")
 
-canvas.SaveAs("PositionFit.gif")
-canvas.SaveAs("PositionFit.pdf")
+canvas.SaveAs(outdir+"PositionFit.gif")
+canvas.SaveAs(outdir+"PositionFit.pdf")
 Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
 fit.Write()
 outputfile.Close()

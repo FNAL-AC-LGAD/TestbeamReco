@@ -39,7 +39,7 @@ class HistoInfo:
         return th1_temp
 
     def shift(self):
-        return (self.f.Get("stripBoxInfo02").GetMean(1)+self.f.Get("stripBoxInfo03").GetMean(1))/2.
+        return self.f.Get("stripBoxInfo03").GetMean(1)
 
     def fine_tuning(self, sensor):
         value = 0.0

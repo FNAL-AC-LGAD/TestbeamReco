@@ -214,9 +214,9 @@ totalAmplitude_vs_x.GetXaxis().SetTitle("Track x position [mm]")
 totalAmplitude_vs_x.GetYaxis().SetTitle("MPV signal amplitude [mV]")
 totalAmplitude_vs_x.SetLineWidth(2)
 
-totalAmplitude_vs_x.SetMaximum(80.0)
+totalAmplitude_vs_x.SetMaximum(150.0)
 
-boxes = getStripBox(inputfile,0,60,False, 18, True, shift)
+boxes = getStripBox(inputfile,0,140,False, 18, True, shift)
 for box in boxes:
    box.Draw()
 totalAmplitude_vs_x.Draw("AXIS same")
