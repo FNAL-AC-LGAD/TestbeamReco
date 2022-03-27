@@ -155,11 +155,12 @@ public:
         else if(filetag.find("EIC_W1_1cm_300_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips300Geometry(voltage));
         else if(filetag.find("EIC_W1_1cm_200_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips200Geometry(voltage));
         else if(filetag.find("EIC_W1_1cm_100_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips100Geometry(voltage));
-        else if(filetag.find("EIC_W1_2p5cm_UCSC_340V")         != std::string::npos) registerGeometry(tr, EIC2p5cmStripsUCSCGeometry(voltage));
+        else if(filetag.find("EIC_W1_2p5cm_UCSC_330V")         != std::string::npos) registerGeometry(tr, EIC2p5cmStripsUCSCGeometry(voltage));
         else if(filetag.find("HPK_strips_Eb_45um_170V")        != std::string::npos) registerGeometry(tr, HPKStripsEbWideMetalGeometry(voltage));
         else if(filetag.find("EIC_W2_1cm_500um_400um_gap_220V")        != std::string::npos) registerGeometry(tr, EIC_W2_1cm_500um_400um_gap_StripsGeometry(voltage));
         else if(filetag.find("EIC_W1_0p5cm_500um_300um_gap_1_7_240V")        != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_7_StripsGeometry(voltage));
         else if(filetag.find("EIC_W1_0p5cm_500um_300um_gap_1_4_245V")        != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_4_StripsGeometry(voltage));
+        else if(filetag.find("BNL_500um_squares_175V")        != std::string::npos) registerGeometry(tr, BNL_500um_squares_Geometry(voltage));
         else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
