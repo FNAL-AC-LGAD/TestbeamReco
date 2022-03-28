@@ -20,95 +20,37 @@ source setup.sh
 
 Can find all dataset options in the [`sampleCollections.cfg`](./test/sampleCollections.cfg) and  [`sampleSets.cfg`](./test/sampleSets.cfg) inside the `test` directory.
 
-## Final plots
 
-Almost all of the 'Final' files have three common options:
-  - f : Input file name (**with** `.root` extension) from [test directory](./test/).
-  - s : Sensor name (BNL2020, 'HPK C2', ...) for the top header label.
-  - b : Bias voltage of the data set (220, 285, ...) for the top header label.
-
-Recreate final plots for:
-* BNL strip sensor
-```
-cd <WorkingArea>/TestbeamReco/test
-./MyAnalysis -A Analyze -H <file_name>.root -D BNL2020_220V
-cd ../macros
-python WavePlot.py -f <file_name>.root
-python plot1DRes.py -f <file_name>.root
-python Final_1dAmplitude.py -f <file_name>.root -s BNL2020 -b 220
-python FinalBNLs_PlotEfficiency.py -f <file_name>.root -s BNL2020 -b 220
-python FinalBNLs_PlotAmplitudeVsX.py -f <file_name>.root -s BNL2020 -b 220
-python FinalBNLs_DoPositionRecoFit.py -f <file_name>.root --xmax 0.77 --pitch 100 --fitOrder 4
-python FinalBNLs_PlotXRecoDiffVsX.py -f <file_name>.root -s BNL2020 -b 220
-python FinalBNLs_PlotTimeDiffVsX.py -f <file_name>.root -s BNL2020 -b 220
-```
-
-* HPK pad sensor
-```
-cd <WorkingArea>/TestbeamReco/test
-./MyAnalysis -A Analyze -H <file_name>.root -D HPK_pad_C2_180V 
-cd ../macros
-python plot1DRes.py -f <file_name>.root -m 0.7 -M 0.7
-python FinalHPKp_PlotAmplitudeVsXandY_Pad.py -f <file_name>.root -s 'HPK C2' -b 180
-python FinalHPKp_DoPositionRecoFit_Pad.py -f <file_name>.root -s 'HPK C2' -b 180
-python FinalHPKp_PlotXRecoDiffVsX.py -f <file_name>.root -s 'HPK C2' -b 180
-python FinalHPKp_PlotTimeDiffVsXandY_Pad.py -f <file_name>.root -s 'HPK C2' -b 180
-```
-
-* HPK strip sensor
-```
-cd <WorkingArea>/TestbeamReco/test
-./MyAnalysis -A Analyze -H <file_name>.root -D HPK_strips_C2_45um_170V 
-cd ../macros
-python Final_1dAmplitude.py -f <file_name>.root -s 'HPK C2 45#mum' -b 170
-```
-
-* Resolution summary plots
-```
-python resolution_vs_bias.py -s BNL2020
-python resolution_vs_bias.py -s BNL2021
-python resolution_vs_bias_HPKB2_pad.py
-python resolution_vs_bias_HPKC2_pad.py
-```
-
-## Old test plots
+## Example Code
 
 Recipe to make plots for:
-* BNL strip sensor
+* BNL 5mm long strip sensor
 ```
 cd <WorkingArea>/TestbeamReco/test
-./MyAnalysis -A Analyze -H myoutputfile.root -D BNL2020_220V
+./MyAnalysis -A Analyze -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V
 cd ../macros
-python DoPositionRecoFit.py --xmax 0.75 --pitch 100 --fitOrder 4
-python plot1DRes.py
-python PlotAmplitudeVsX.py --run
-python PlotAmplitudeVsX.py --run -t
-python PlotEfficiency.py
-python PlotTimeDiffVsXY.py
-python PlotTimeDiffVsX.py
-python PlotXRecoDiffVsX.py
+python DoPositionRecoFit.py -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V --xmax 0.85 --pitch 500 --fitOrder 7 
+python plot1DRes.py         -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V
+python PlotAmplitudeVsX.py  -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V -s EIC_W1_5mm -b 245 --xlength 4.0 --ylength 150.0
+python PlotAmplitudeVsXY.py -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V
+python PlotTimeDiffVsXY.py  -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V
+python PlotTimeMeanVsXY.py  -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V
+python PlotRecoDiffVsX.py   -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V -s EIC_W1_5mm -b 245 --pitch 500 --xlength 4.0 --ylength 150.0
+python PlotRecoDiffVsXY.py  -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V
+python PlotEfficiency.py    -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V -s EIC_W1_5mm -b 245 --xlength 4.0
 ```
-* HPK pad sensor
+* HPK Eb strip sensor
 ```
 cd <WorkingArea>/TestbeamReco/test
-./MyAnalysis -A Analyze -H myoutputfile.root -D HPK_pad_C2_180V 
+./MyAnalysis -A Analyze -D HPK_strips_Eb_45um_170V
 cd ../macros
-python DoPositionRecoFit_Pad.py
-python plot1DRes.py --runPad 
-python PlotBaselineRMSvsXandY_Pad.py 
-python PlotAmplitudeVsXandY_Pad.py 
-python PlotAmplitudeVsXandY_Pad.py -t
-python PlotTimeDiffVsXandY_Pad.py
-python PlotXRecoDiffVsX.py --runPad 
-python PlotYRecoDiffVsY.py
-```
-* HPK strip sensor
-```
-cd <WorkingArea>/TestbeamReco/test
-./MyAnalysis -A Analyze -H myoutputfile.root -D HPK_strips_C2_45um_170V 
-cd ../macros
-python Final_1dAmplitude.py
-python plot1DRes.py
-python PlotAmplitudeVsX.py --run
-python PlotAmplitudeVsX.py --run -t
+python DoPositionRecoFit.py -D HPK_strips_Eb_45um_170V --xmax 0.65 --pitch 80 --fitOrder 2 
+python plot1DRes.py         -D HPK_strips_Eb_45um_170V
+python PlotAmplitudeVsX.py  -D HPK_strips_Eb_45um_170V -s HPK_Eb -b 170 --xlength 0.5 --ylength 100.0
+python PlotAmplitudeVsXY.py -D HPK_strips_Eb_45um_170V
+python PlotTimeDiffVsXY.py  -D HPK_strips_Eb_45um_170V
+python PlotTimeMeanVsXY.py  -D HPK_strips_Eb_45um_170V
+python PlotRecoDiffVsX.py   -D HPK_strips_Eb_45um_170V -s HPK_Eb -b 170 --pitch 80 --xlength 0.5 --ylength 40.0
+python PlotRecoDiffVsXY.py  -D HPK_strips_Eb_45um_170V
+python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -s HPK_Eb -b 170 --xlength 0.5
 ```
