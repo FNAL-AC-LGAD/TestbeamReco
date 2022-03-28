@@ -1,8 +1,11 @@
 from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack
 import os
+import optparse
+import myStyle
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
+organized_mode=True
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName):
@@ -18,7 +21,18 @@ class HistoInfo:
     def getTH2(self, th3, name):
         return th3.Project3D("yx").Clone(name)
 
-inputfile = TFile("../test/myoutputfile.root")
+parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+options, args = parser.parse_args()
+
+
+dataset = options.Dataset
+outdir=""
+if organized_mode: 
+    outdir = myStyle.getOutputDir(dataset)
+    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+else: 
+    inputfile = TFile("../test/myoutputfile.root")   
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack_vs_Ytrack", inputfile, "PositionX_Resolution"),
@@ -69,7 +83,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 #tmpHist.Draw("hist")
                 ##myLanGausFunction.Draw("same")
                 #fit.Draw("same")
-                #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
+                #canvas.SaveAs(outdir+"q_"+str(i)+"_"+str(j)+".gif")
                 #
                 #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             else:
@@ -79,9 +93,8 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             info.th2.SetBinError(i,j,error)
             #print("Bin " + str(i) + " " + str(j) + " " + str(value))
                 
-
 # Plot 2D histograms
-outputfile = TFile("plots.root","RECREATE")
+outputfile = TFile(outdir+"plots_RecoDiff.root","RECREATE")
 for info in all_histoInfos:
     info.th2.Draw("colz")
     info.th2.SetStats(0)
@@ -90,8 +103,8 @@ for info in all_histoInfos:
     info.th2.SetMaximum(100.0)
     info.th2.SetLineColor(kBlack)
 
-    canvas.SaveAs("PosRes_vs_xy_"+info.outHistoName+".gif")
-    canvas.SaveAs("PosRes_vs_xy_"+info.outHistoName+".pdf")
+    canvas.SaveAs(outdir+"PosRes_vs_xy_"+info.outHistoName+".gif")
+    canvas.SaveAs(outdir+"PosRes_vs_xy_"+info.outHistoName+".pdf")
     info.th2.Write()
 
 outputfile.Close()
