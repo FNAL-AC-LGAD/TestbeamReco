@@ -24,21 +24,20 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 
     //Define 1D histograms
     const auto& pitch = tr.getVar<double>("pitch");
+    const auto& xBinSize = tr.getVar<double>("xBinSize");
+    const auto& yBinSize = tr.getVar<double>("yBinSize");
     const auto& xmin = tr.getVar<double>("xmin");
     const auto& xmax = tr.getVar<double>("xmax");
-    double xBinSize = 0.05;
-    double yBinSize = 0.05;
-    double xBinSizePad = 1.0;
-    double yBinSizePad = 1.0;
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
     int xbins = 175;
     int ybins = 175;
-
+    double xBinSizePad = 0.5;
+    double yBinSizePad = 0.5;
 
     int timeDiffNbin = 800; // 200
-    double timeDiffLow = -2.0;
-    double timeDiffHigh = 2.0;
+    double timeDiffLow = -1.0;
+    double timeDiffHigh = 1.0;
     int timeDiffYnbin = 50;
 
     int rowIndex = 0;
@@ -100,7 +99,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
             utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
             utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
         }
         rowIndex++;
     }

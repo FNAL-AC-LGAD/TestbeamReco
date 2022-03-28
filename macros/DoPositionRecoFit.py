@@ -27,7 +27,6 @@ if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
-    # inputfile = TFile("../test/"+file)
     inputfile = TFile("../test/myoutputfile.root")   
 
 xmin=0.50

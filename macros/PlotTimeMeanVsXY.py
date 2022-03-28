@@ -21,11 +21,7 @@ if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
-    # inputfile = TFile("../test/"+file)
     inputfile = TFile("../test/myoutputfile.root")   
-
-
-
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName):
