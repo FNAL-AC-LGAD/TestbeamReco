@@ -40,9 +40,9 @@ efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator")
 
 shift = inputfile.Get("stripBoxInfo03").GetMean(1)
 
-EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -10, 10 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -10, 10 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_highThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -10, 10 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_highThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
 #For some reason the first time I call this function, the z-axis is not plotted in the right place. 
 #So I call it twice.
 
@@ -63,13 +63,13 @@ efficiency_highThreshold_numerator_channel06 = inputfile.Get("efficiency_vs_xy_h
 #efficiency_highThreshold_numerator_channel05.RebinX(3)
 #efficiency_highThreshold_numerator_channel06.RebinX(3)
 
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel00, efficiency_denominator_global, outdir+"efficiency_channel00", "Efficiency Strip 1", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel01, efficiency_denominator_global, outdir+"efficiency_channel01", "Efficiency Strip 2", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel02, efficiency_denominator_global, outdir+"efficiency_channel02", "Efficiency Strip 3", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel03, efficiency_denominator_global, outdir+"efficiency_channel03", "Efficiency Strip 4", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel04, efficiency_denominator_global, outdir+"efficiency_channel04", "Efficiency Strip 5", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel05, efficiency_denominator_global, outdir+"efficiency_channel05", "Efficiency Strip 6", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel06, efficiency_denominator_global, outdir+"efficiency_channel06", "Efficiency Strip 7", "X [mm]", -10,10, "Y [mm]" , -10,10 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel00, efficiency_denominator_global, outdir+"efficiency_channel00", "Efficiency Strip 1", "X [mm]", -10,10, "Y [mm]" , -20,20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel01, efficiency_denominator_global, outdir+"efficiency_channel01", "Efficiency Strip 2", "X [mm]", -10,10, "Y [mm]" , -20,20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel02, efficiency_denominator_global, outdir+"efficiency_channel02", "Efficiency Strip 3", "X [mm]", -10,10, "Y [mm]" , -20,20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel03, efficiency_denominator_global, outdir+"efficiency_channel03", "Efficiency Strip 4", "X [mm]", -10,10, "Y [mm]" , -20,20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel04, efficiency_denominator_global, outdir+"efficiency_channel04", "Efficiency Strip 5", "X [mm]", -10,10, "Y [mm]" , -20,20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel05, efficiency_denominator_global, outdir+"efficiency_channel05", "Efficiency Strip 6", "X [mm]", -10,10, "Y [mm]" , -20,20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_channel06, efficiency_denominator_global, outdir+"efficiency_channel06", "Efficiency Strip 7", "X [mm]", -10,10, "Y [mm]" , -20,20 , 0.0, 1.0 )
 
 
 # Defining Style
