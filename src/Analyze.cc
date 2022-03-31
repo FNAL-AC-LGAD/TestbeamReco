@@ -60,6 +60,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_histos,"relFrac_top"+r+s, "", 100, 0.0, 1.0 );
             utility::makeHisto(my_histos,"relFrac_bottom"+r+s, "", 100, 0.0, 1.0);
             utility::makeHisto(my_histos,"baselineRMS"+r+s,"", 200,-10.0,10.0);
+            utility::makeHisto(my_histos,"risetime"+r+s,"", 500,0.0,1000.0);
             for (unsigned int ch = 0; ch < row.size(); ch++)
             {
                 const auto& c = std::to_string(ch);
@@ -249,6 +250,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& corrTime = tr.getVec<double>("corrTime");
         const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& baselineRMS = tr.getVec<std::vector<float>>("baselineRMS");
+        const auto& risetimeLGAD = tr.getVec<std::vector<double>>("risetimeLGAD");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& ntracks_alt = tr.getVar<int>("ntracks_alt");
@@ -318,7 +320,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
         bool passTrigger = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         if(isPadSensor)      passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
-        else if(isHPKStrips) passTrigger = ntracks==1 && nplanes>=5 && npix>=1 && chi2 < 40;
+        else if(isHPKStrips) passTrigger = ntracks==1 && nplanes>=5 && npix>=0 && chi2 < 40;
         bool pass = passTrigger && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex) || isPadSensor);
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
@@ -364,6 +366,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 const auto& relFracChannel = relFrac[rowIndex][i];
                 const auto& rawAmpChannel = rawAmpLGAD[rowIndex][i];
                 const auto& noise = baselineRMS[rowIndex][i]; 
+                const auto& risetime = risetimeLGAD[rowIndex][i];
                 bool goodNoiseAmp = ampChannel>noiseAmpThreshold;
                 bool goodSignalAmp = ampChannel>signalAmpThreshold;
                 double time = timeLGAD[rowIndex][i];
@@ -379,6 +382,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass,                                                    my_histos["time"+r+s], time);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["timeDiff_channel"+r+s], time-photekTime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["baselineRMS"+r+s], noise);
+                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["risetime"+r+s], risetime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted_timeDiff_channel"+r+s], weighted_time-photekTime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted_time-time_channel"+r+s], weighted_time-time);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos["baselineRMS_vs_x_channel"+r+s], x,noise);
