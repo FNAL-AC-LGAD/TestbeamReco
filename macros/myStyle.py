@@ -53,17 +53,44 @@ def ForceStyle():
 
     ROOT.gROOT.ForceStyle()
 
+
 def BeamInfo():
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
     text.DrawLatexNDC(2*marg+0.005,1-marg+0.01,"#bf{FNAL 120 GeV proton beam}")
 
-def SensorInfo(sensor="Name", bias_voltage="X", write_bv=True):
+def SensorInfo(sensor="Name", bias_voltage="X", write_bv=True,adjustleft=0):
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
     text.SetTextAlign(31)
-    if write_bv: text.DrawLatexNDC(1-marg-0.005,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
-    else: text.DrawLatexNDC(1-marg-0.005,1-marg+0.01,"#bf{"+str(sensor)+"}")
+    if write_bv: text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
+    else: text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor)+"}")
+
+def SensorInfoSmart(dataset):
+    sensor ="Not defined"
+    bias_voltage = "X"
+
+    if dataset=="EIC_W1_1cm_255V":
+        sensor = "EIC W1 1 cm, 300 um gaps"
+        bias_voltage = "255"
+
+    if dataset=="EIC_W1_0p5cm_500um_300um_gap_1_7_240V":
+        sensor = "EIC W1 0.5 cm, 300 um gaps (1_7)"
+        bias_voltage = "240"
+
+    if dataset=="EIC_W1_0p5cm_500um_300um_gap_1_4_245V":
+        sensor = "EIC W1 0.5 cm, 300 um gaps (1_4)"
+        bias_voltage = "245"
+
+    if dataset=="EIC_W1_2p5cm_UCSC_330V":
+        sensor = "EIC W1 2.5 cm, 300 um gaps, UCSC"
+        bias_voltage = "330"
+
+    if dataset=="EIC_W2_1cm_500um_400um_gap_220V":
+        sensor = "EIC W2 1 cm, 400 um gaps"
+        bias_voltage ="220"
+
+    SensorInfo(sensor,bias_voltage,True,0.08)
 
 def GetMargin():
     return marg
