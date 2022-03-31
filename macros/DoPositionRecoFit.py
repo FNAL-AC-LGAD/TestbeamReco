@@ -83,7 +83,6 @@ outputfile = TFile(outdir+"positionRecoFitPlots.root","RECREATE")
 #outputfile.Close()
 
 gStyle.SetOptFit(1011)
-#fit = TF1("mainFit","pol3",xmin,xmax)
 fit = TF1("mainFit",fitFunction,xmin,xmax)
 fit.FixParameter(0, 0.5*pitch)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.6*pitch)
