@@ -136,6 +136,16 @@ private:
         // Baseline RMS
         const auto& baselineRMS = tr.getVec<float>("baseline_RMS");
         utility::remapToLGADgeometry(tr, baselineRMS, "baselineRMS");
+
+        // Redefine Risetime
+        const auto& corrAmp = tr.getVec<double>("corrAmp");
+        const auto& risetime = tr.getVec<float>("risetime");
+        auto& corrRisetime = tr.createDerivedVec<double>("corrRisetime",risetime.size());
+        for(unsigned int i = 0; i < risetime.size(); i++)
+        {
+            corrRisetime[i] = 1e12*abs(0.8*corrAmp[i] / risetime[i]);
+        }
+        utility::remapToLGADgeometry(tr, corrRisetime, "risetimeLGAD");
     }
 
 public:

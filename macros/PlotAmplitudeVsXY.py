@@ -21,12 +21,16 @@ parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which deter
 parser.add_option('-f', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
 parser.add_option('-s','--sensor', dest='sensor', default = "EIC W1-1cm", help="Type of sensor (BNL, HPK, ...)")
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 180, help="Bias Voltage value in [V]")
+parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set zmin")
+parser.add_option('-Z','--zmax', dest='zmax', default = 120.0, help="Set zmax")
 options, args = parser.parse_args()
 
 file = options.file
 sensor = options.sensor
 bias = options.biasvolt
 dataset = options.Dataset
+zmin = float(options.zmin)
+zmax = float(options.zmax)
 
 
 outdir=""
@@ -136,8 +140,8 @@ for channel in range(0, len(list_amplitude_vs_xy)):
     list_amplitude_vs_xy[channel].Draw("colz")
     list_amplitude_vs_xy[channel].SetStats(0)
     list_amplitude_vs_xy[channel].SetTitle("Channel "+str(channel))
-    list_amplitude_vs_xy[channel].SetMinimum(15)
-    list_amplitude_vs_xy[channel].SetMaximum(120)
+    list_amplitude_vs_xy[channel].SetMinimum(zmin)
+    list_amplitude_vs_xy[channel].SetMaximum(zmax)
 
     canvas.SetRightMargin(0.18)
     canvas.SetLeftMargin(0.12)

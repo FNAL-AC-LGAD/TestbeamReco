@@ -128,15 +128,15 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             error = 0.0
 
         # Removing telescope contribution
-        if value>6.0:
-            error = error*value/TMath.Sqrt(value*value - 6*6)
-            value = TMath.Sqrt(value*value - 6*6)
-        else:
-            value = 0.0 # 20.0 to check if there are strange resolution values
-            error = 0.0
-        if i<=info.th1.FindBin(-0.2) and sensor=="BNL2020":
-            value = 0.0
-            error = 0.0
+        #if value>6.0:
+        #    error = error*value/TMath.Sqrt(value*value - 6*6)
+        #    value = TMath.Sqrt(value*value - 6*6)
+        #else:
+        #    value = 0.0 # 20.0 to check if there are strange resolution values
+        #    error = 0.0
+        #if i<=info.th1.FindBin(-0.2) and sensor=="BNL2020":
+        #    value = 0.0
+        #    error = 0.0
 
         info.th1.SetBinContent(i,value)
         info.th1.SetBinError(i,error)
