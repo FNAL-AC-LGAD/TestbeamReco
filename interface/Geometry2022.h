@@ -229,8 +229,8 @@ public:
     double z_dut = 28.41878;
     double xmin =  -5.5;
     double xmax =  -1.5;
-    double ymin =  -5.0;
-    double ymax =  15.0;
+    double ymin = -20.0;
+    double ymax =  20.0;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
@@ -272,19 +272,19 @@ public:
     double beta  = 0.0;
     double gamma = -0.719 + 90.0;
     double z_dut = 28.41878;
-    double xBinSize = 0.01;
-    double yBinSize = 0.02;
-    double xmin =  -2.8;
-    double xmax =  -2.0;
+    double xBinSize = 0.015;
+    double yBinSize = 0.05;
+    double xmin =  -2.80;
+    double xmax =  -2.05;
     double ymin =  -1.8;
     double ymax =   8.2;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 30.0;
-    double signalAmpThreshold = 30.0;
+    double noiseAmpThreshold = 20.0;
+    double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.04, -0.258847, -1.18947};
-    std::vector<std::vector<double>> sensorEdges = {{-2.7, -1.75}, {-2.1, 8.1}};
+    std::vector<double> positionRecoPar = {0.04, -0.268695, 0.462989, -12.2277};
+    std::vector<std::vector<double>> sensorEdges = {{-2.65, -1.75}, {-2.12, 8.10}};
 };
 
 class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
@@ -328,7 +328,6 @@ public:
 class EIC_W1_0p5cm_500um_300um_gap_1_7_StripsGeometry : public DefaultGeometry
 {
 public:
-
     EIC_W1_0p5cm_500um_300um_gap_1_7_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
@@ -403,11 +402,9 @@ public:
 
     BNL_500um_squares_Geometry(const int v=0) : voltage(v){}
     const int voltage;
-
-     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{1,0}}, {3,{1,1}}, {4,{2,0}},{5,{2,1}}, {7,{3,0}}};    
-    std::vector<std::vector<int>> geometry = {{0,1}, {2,3}, {4,5}, {7}};
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{1,0}}, {3,{1,1}}, {4,{2,0}},{5,{2,1}}, {7,{3,0}}};    
+    std::vector<std::vector<int>> geometry = {{0,1}, {2,3}, {4,5}, {6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true},{5,true},{6,false}, {7,false}};
-
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.1770}, {1,1.0961}, {2,1.0516}, {3,0.9551}, {4,0.9751}, {5,0.9202}, {6,0.8865}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.96398053}, {1,0.84198568}, {2,0.93964217}, {3,0.83790917}, {4,0.88894472}, {5,0.80036949}, {6,0.91889931}, {7,0.0}};
     double stripWidth = 0.100;
@@ -435,5 +432,41 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-2.7, 1.4}, {-1, 2.8}};
 };
 
+class BNL2021MediumV2Geometry : public DefaultGeometry
+{
+public:
+    BNL2021MediumV2Geometry(const int v=0) : voltage(v){}
+    const int voltage;
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0930}, {1,0.9213}, {2,0.9915}, {3,1.0095}, {4,0.9953}, {5,0.9988}, {6,1.0056}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.95666818}, {1,0.96263358}, {2,0.96177595}, {3,0.95310060}, {4,0.95760225}, {5,0.96902361}, {6,0.96389299}, {7,0.0}};    
+    double stripWidth = 0.08;
+    double pitch = 0.15;
+    std::vector<double> stripCenterXPosition = {-0.68, -0.83, -0.98, -1.13, -1.28, -1.43, -1.58, 0.0};
+    int numLGADchannels = 7;
+    int lowGoodStripIndex = 1;
+    int highGoodStripIndex = 5;
+    double alpha = 0.0;
+    double beta  = 0.0;
+    double gamma =  1.3;
+    double z_dut = 28.41878;
+    double xBinSize = 0.02;
+    double yBinSize = 0.05;
+    double xmin =  -1.8;
+    double xmax =  -0.4;
+    double ymin =  -3.7;
+    double ymax =  -0.8;
+    double positionRecoMaxPoint = 0.82;
+    double photekSignalThreshold = 50.0;
+    double noiseAmpThreshold = 20.0;
+    double signalAmpThreshold = 20.0;
+    bool isHPKStrips = true;
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = {0.075, -0.172763, 0.152945, -0.894909, 0.246914};
+    //std::vector<double> positionRecoPar = {0.075, -0.140285, -0.774667, 5.65837, -13.5359};
+    std::vector<std::vector<double>> sensorEdges = {{-1.62, -3.50}, {-0.64, -1.15}};
+};
 
 #endif
