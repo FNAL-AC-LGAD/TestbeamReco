@@ -333,7 +333,7 @@ public:
     double beta  = 0.0;
     double gamma = 0.0 + 90.0;
     double z_dut = 28.41878;
-    double xmin =  -5.0;
+    double xmin =  -4.0;
     double xmax =   2.0;
     double ymin =  -3.0;
     double ymax =   9.0;
@@ -347,7 +347,7 @@ public:
     //std::vector<double> positionRecoPar = {0.25, -0.323138, -9.25501,  71.6547, -170.496};
     std::vector<double> positionRecoPar = {0.25, -0.691307, 0.170215, -0.0131045, -5.13558};
     //std::vector<std::vector<double>> sensorEdges = {{-3.5, -2}, {0.9, 8.2}};
-    std::vector<std::vector<double>> sensorEdges = {{-3.0, -1.6}, {0.4, 7.8}};
+    std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
 };
 
 
