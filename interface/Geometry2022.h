@@ -28,7 +28,6 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     // std::map<int, double> amplitudeCorrectionFactor = {{0,0.9398}, {1,0.9619}, {2,0.9845}, {3,0.9794}, {4,1.0186}, {5,1.0318}, {6,1.1004}, {7,1.0}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
-
     std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
@@ -220,15 +219,15 @@ public:
     double yBinSize = 0.10;
     double xmin =  -5.5;
     double xmax =  -1.5;
-    double ymin = -20.0;
-    double ymax =  20.0;
+    double ymin = -15.0;
+    double ymax =  15.0;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 2.0;
+    double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
-    std::vector<std::vector<double>> sensorEdges = {{-5.5, -20.0}, {0.0, 20.0}};
+    std::vector<std::vector<double>> sensorEdges = {{-5.5, -15.0}, {0.0, 15.0}};
 };
 
 class EIC2p5cmStripsGeometry : public DefaultGeometry
@@ -243,7 +242,7 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
-    std::vector<double> stripCenterXPosition = {3.33, 3.33, 3.83, 2.33, 2.83, 1.33, 1.83, 0.0};
+    std::vector<double> stripCenterXPosition = {1.33, 1.33, 1.83, 0.33, 0.83, -1.33, -1.83, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
@@ -251,19 +250,19 @@ public:
     double beta  = 0.0;
     double gamma = 0.0 + 90.0;
     double z_dut = 28.41878;
-    double xBinSize = 0.05;
+    double xBinSize = 0.10;
     double yBinSize = 0.10;
-    double xmin =  0.5;
-    double xmax =  4.5;
-    double ymin = -20.0;
-    double ymax =  20.0;
+    double xmin = -3.2;
+    double xmax =  3.2;
+    double ymin = -15.0;
+    double ymax =  15.0;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 2.0;
-    double signalAmpThreshold = 20.0;
+    double noiseAmpThreshold = 5.0;
+    double signalAmpThreshold = 10.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
-    std::vector<std::vector<double>> sensorEdges = {{-2.5, -20.0}, {3.0, 20.0}};
+    std::vector<std::vector<double>> sensorEdges = {{-3.2, -15.0}, {3.2, 15.0}};
 };
 
 class HPKStripsEbWideMetalGeometry : public DefaultGeometry
