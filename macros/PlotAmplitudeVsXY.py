@@ -32,7 +32,6 @@ dataset = options.Dataset
 zmin = float(options.zmin)
 zmax = float(options.zmax)
 
-
 outdir=""
 if organized_mode: 
     outdir = myStyle.getOutputDir(dataset)

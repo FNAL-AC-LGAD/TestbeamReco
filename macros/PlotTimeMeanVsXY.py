@@ -12,9 +12,13 @@ gStyle.SetOptFit(1011)
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set zmin")
+parser.add_option('-Z','--zmax', dest='zmax', default = 120.0, help="Set zmax")
 
 options, args = parser.parse_args()
 dataset = options.Dataset
+zmin = float(options.zmin)
+zmax = float(options.zmax)
 
 outdir=""
 if organized_mode: 
@@ -115,10 +119,8 @@ for info in all_histoInfos:
     info.th2.Draw("colz")
     info.th2.SetStats(0)
     info.th2.SetTitle(info.outHistoName)
-    #info.th2.SetMinimum(-1.1)
-    #info.th2.SetMaximum(-0.7)
-    info.th2.SetMinimum(-0.5)
-    info.th2.SetMaximum(0.5)
+    info.th2.SetMinimum(zmin)
+    info.th2.SetMaximum(zmax)
     info.th2.SetLineColor(kBlack)
 
     canvas.SaveAs(outdir+"TimeMean_vs_xy_"+info.outHistoName+".gif")
