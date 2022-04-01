@@ -30,6 +30,8 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,-0.94679459}, {1,-0.82059504}, {2,-0.92001622}, {3,-0.81254756}, {4,-0.88364704}, {5,-0.79850545}, {6,-0.93318906}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
+    double sensorCenter = -1.0;
+    double sensorCenterY = 3.0;
     std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 0;
@@ -37,18 +39,20 @@ public:
     double alpha = 0.0;
     double beta  = 0.0;
     double gamma = 0.0 + 90.0;
-    double z_dut = 28.41878;
+    // double z_dut = 28.41878;
+    double z_dut = 28.0;
     double xmin =  -4.0;
     double xmax =   2.0;
     double ymin =  -3.0;
     double ymax =   9.0;
+    double positionRecoMaxPoint = 0.7;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 2.0;
-    double signalAmpThreshold = 20.0;
+    double noiseAmpThreshold = 10.0;
+    double signalAmpThreshold = 15.0;
     bool isHPKStrips = true;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
-    std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.1}, {1.1, 8.0}};
+    std::vector<double> positionRecoPar = {0.25, -0.330948, -6.63994,  53.6787, -134.515};
+    std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.5}, {1.1, 8.0}};
 };
 
 class EIC1cmStrips300Geometry : public DefaultGeometry

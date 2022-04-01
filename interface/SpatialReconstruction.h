@@ -32,8 +32,8 @@ private:
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
         const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
 
-	double y_reco=0.0, x_reco = 0.0, x1 = 0.0, y1 = 0.0, x2 = 0.0;
-	if(enablePositionReconstruction)
+        double y_reco=0.0, x_reco = 0.0, x1 = 0.0, y1 = 0.0, x2 = 0.0;
+        if(enablePositionReconstruction)
         {	  
             assert(Amp1OverAmp1and2 >= 0); //make sure a1/(a1+a2) is a sensible number
             assert(Amp1OverAmp1and2 <= 1);
@@ -45,7 +45,7 @@ private:
             dX = (Amp1OverAmp1and2 > positionRecoMaxPoint) ? 0.0 : dX;
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
-	} //if enabled position reconstruction
+	    } //if enabled position reconstruction
         
         const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
         const auto& positionRecoParLeft = tr.getVar<std::vector<double>>("positionRecoParLeft");
@@ -79,7 +79,7 @@ private:
             y_reco = dY + y1;
                                 
              
-	} //if enabled position reconstruction
+	    } //if enabled position reconstruction
 
         tr.registerDerivedVar("x_reco", x_reco);
         tr.registerDerivedVar("y_reco", y_reco);

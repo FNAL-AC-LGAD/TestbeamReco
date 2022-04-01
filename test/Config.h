@@ -120,46 +120,72 @@ public:
         tr.registerDerivedVar("voltage", voltage);
         std::cout<<"Voltage: "<<voltage<<std::endl;
 
-        //Define zScan // [-10.0, 10.0]
-        double zMin = -10.0, zStep = 1.0;
-        unsigned int nZBins = 21;
+        // FIND THE WAY TO ADD THESE VALUES TO IMPROVE THE SCAN!
+        // THIS DOESN'T WORK BECAUSE WE HAVEN'T DEFINED THE GEOMETRIES YET... CAN WE JUST MOVE THIS DEFINITION BELLOW?
+        // const auto& z_dut = tr.getVar<double>("z_dut");
+        // const auto& alpha = tr.getVar<double>("alpha");
+        // const auto& beta  = tr.getVar<double>("beta");
+        // const auto& gamma = tr.getVar<double>("gamma");
+
+        const auto& z_dut_def = 28.0;
+        const auto& alpha_def = 0.0;
+        const auto& beta_def  = 0.0;
+        const auto& gamma_def = 90.0;
+
+        //Define zScan // [-20.0, 20.0]
+        double zMin = -20.0, zStep = 1.0;
+        unsigned int nZBins = 41;
         std::vector<double> zScan(nZBins);
         std::string pythonBins = "z_values = [";
         for(unsigned int i = 0; i < nZBins; i++) 
         {        
-            pythonBins += std::to_string(zMin) +  ",";
-            zScan[i]=zMin;
+            pythonBins += std::to_string(z_dut_def + zMin) +  ",";
+            zScan[i]=z_dut_def + zMin;
             zMin+=zStep;
         }
         tr.registerDerivedVar<std::vector<double>>("zScan",zScan);
         pythonBins+="]\n";
 
-        //Define alphaScan
-        double alphaMin = -2.0, alphaStep = 0.5;
-        unsigned int nAlphaBins = 9;
+        //Define alphaScan // [-2.0, 2.0]
+        double alphaMin = -2.0, alphaStep = 0.1;
+        unsigned int nAlphaBins = 41;
         std::vector<double> alphaScan(nAlphaBins);
         pythonBins+="alpha_values = [";
         for(unsigned int i = 0; i < nAlphaBins; i++) 
         {        
-            pythonBins += std::to_string(alphaMin) +  ",";
-            alphaScan[i]=alphaMin;
+            pythonBins += std::to_string(alpha_def + alphaMin) +  ",";
+            alphaScan[i]=alpha_def + alphaMin;
             alphaMin+=alphaStep;
         }
         tr.registerDerivedVar<std::vector<double>>("alphaScan",alphaScan);
         pythonBins+="]\n";
 
-        //Define betaScan
-        double betaMin = -2.0, betaStep = 0.5;
-        unsigned int nbetaBins = 9;
+        //Define betaScan // [-2.0, 2.0]
+        double betaMin = -2.0, betaStep = 0.1;
+        unsigned int nbetaBins = 41;
         std::vector<double> betaScan(nbetaBins);
         pythonBins+="beta_values = [";
         for(unsigned int i = 0; i < nbetaBins; i++) 
         {        
-            pythonBins += std::to_string(betaMin) +  ",";
-            betaScan[i]=betaMin;
+            pythonBins += std::to_string(beta_def + betaMin) +  ",";
+            betaScan[i]=beta_def + betaMin;
             betaMin+=betaStep;
         }
         tr.registerDerivedVar<std::vector<double>>("betaScan",betaScan);
+        pythonBins+="]\n";
+
+        //Define gammaScan // [-2.0, 2.0]
+        double gammaMin = -2.0, gammaStep = 0.1;
+        unsigned int ngammaBins = 41;
+        std::vector<double> gammaScan(ngammaBins);
+        pythonBins+="gamma_values = [";
+        for(unsigned int i = 0; i < ngammaBins; i++) 
+        {        
+            pythonBins += std::to_string(gamma_def + gammaMin) +  ",";
+            gammaScan[i]=gamma_def + gammaMin;
+            gammaMin+=gammaStep;
+        }
+        tr.registerDerivedVar<std::vector<double>>("gammaScan",gammaScan);
         pythonBins+="]";
 
         //Save python file with for later

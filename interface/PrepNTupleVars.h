@@ -46,20 +46,30 @@ private:
         }      
     }
 
-    void getXYOnSensor(double& xFinal, double& yFinal, const float z_C=0.0, const float theta=0.0, const float phi=0.0, const float x_C=0.0, const float y_C=0.0)
+    void getXYOnSensor(double& xFinal, double& yFinal, const float z_C=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_C=0.0, const float y_C=0.0)
     {
+
+        // Maybe add a new element related to the strips direction: IsHorizontal = true (default: false)
+        double x_temp = x_C;
+        double xc = (gamma < -45 || 45 < gamma) ? -y_C : x_C;
+        double yc = (gamma < -45 || 45 < gamma) ? x_temp : y_C;
+        
         double degreesToRad = 3.14159/180.0;
-        double theta_rad = theta*degreesToRad;
-        double phi_rad = phi*degreesToRad;
+        double alpha_rad = alpha*degreesToRad;
+        double beta_rad = beta*degreesToRad;
+        double gamma_rad = gamma*degreesToRad;
 
-        double z_lab = (z_C - tan(theta_rad)*(cos(xIntercept_ - x_C) + sin(yIntercept_ - y_C))) / (1 + tan(theta_rad)*(cos(phi_rad)*xSlope_ + sin(phi_rad)*ySlope_));
+        double z_lab = (z_C - tan(alpha_rad)*(cos(beta_rad)*(xIntercept_ - xc) + sin(beta_rad)*(yIntercept_ - yc))) / (1 + tan(alpha_rad)*(cos(beta_rad)*xSlope_ + sin(beta_rad)*ySlope_));
 
-        double lx = xIntercept_ + z_lab*xSlope_ - x_C;
-        double ly = yIntercept_ + z_lab*ySlope_ - y_C;
+        double lx = xIntercept_ + z_lab*xSlope_ - xc;
+        double ly = yIntercept_ + z_lab*ySlope_ - yc;
         double lz = z_lab - z_C;
 
-        xFinal = lx*(cos(phi_rad)*cos(theta_rad)) + ly*(sin(phi_rad)*cos(theta_rad)) + lz*(-sin(theta_rad));
-        yFinal = lx*(-sin(phi_rad)) + ly*(cos(phi_rad));
+        double x_sensor = lx*(cos(beta_rad)*cos(alpha_rad)) + ly*(sin(beta_rad)*cos(alpha_rad)) + lz*(-sin(alpha_rad));
+        double y_sensor = lx*(-sin(beta_rad)) + ly*(cos(beta_rad));
+
+        xFinal = (xIntercept_!=0 && xSlope_!=0) ? x_sensor*cos(gamma_rad) + y_sensor*sin(gamma_rad) : 0;
+        yFinal = (yIntercept_!=0 && ySlope_!=0) ? y_sensor*cos(gamma_rad) - x_sensor*sin(gamma_rad) : 0;
 
         // //Define intial x, y position based on fit from telescope reco
         // double x0 = xSlope_*z + xIntercept_;
@@ -96,10 +106,10 @@ private:
         yIntercept_ = tr.getVar<float>("yIntercept");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
         const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
+        const auto& z_dut = tr.getVar<double>("z_dut");
         const auto& alpha = tr.getVar<double>("alpha");
         const auto& beta  = tr.getVar<double>("beta");
         const auto& gamma = tr.getVar<double>("gamma");
-        const auto& z_dut = tr.getVar<double>("z_dut");
     	//const auto& x_dut = tr.getVec<float>("x_dut");
     	//const auto& y_dut = tr.getVec<float>("y_dut");
         //
@@ -109,26 +119,51 @@ private:
         // Define final telescope hit location on DUT based on track lines and hard coded parameters
         auto& x = tr.createDerivedVar<double>("x");
         auto& y = tr.createDerivedVar<double>("y");
-        getXYOnSensor(x, y, z_dut, alpha, beta, sensorCenter, sensorCenterY);
+        getXYOnSensor(x, y, z_dut, alpha, beta, gamma, sensorCenter, sensorCenterY);
 
         // Create vectors of possible x,y locations by varying hard coded parameters
         const auto& zScan = tr.getVar<std::vector<double>>("zScan");
         const auto& alphaScan = tr.getVar<std::vector<double>>("alphaScan");
         const auto& betaScan = tr.getVar<std::vector<double>>("betaScan");
-        auto& x_var = tr.createDerivedVec<double>("x_var",zScan.size()*alphaScan.size()*betaScan.size());
-        auto& y_var = tr.createDerivedVec<double>("y_var",zScan.size()*alphaScan.size()*betaScan.size());
+        const auto& gammaScan = tr.getVar<std::vector<double>>("gammaScan");
+
+        auto& x_var = tr.createDerivedVec<double>("x_var",zScan.size());
+        auto& y_var = tr.createDerivedVec<double>("y_var",zScan.size());
+        auto& x_varA = tr.createDerivedVec<double>("x_varA",alphaScan.size());
+        auto& y_varA = tr.createDerivedVec<double>("y_varA",alphaScan.size());
+        auto& x_varB = tr.createDerivedVec<double>("x_varB",betaScan.size());
+        auto& y_varB = tr.createDerivedVec<double>("y_varB",betaScan.size());
+        auto& x_varC = tr.createDerivedVec<double>("x_varC",gammaScan.size());
+        auto& y_varC = tr.createDerivedVec<double>("y_varC",gammaScan.size());
         for(unsigned int i = 0; i < zScan.size(); i++)
         {
-            for(unsigned int j = 0; j < alphaScan.size(); j++)
-            {
-                for(unsigned int k = 0; k < betaScan.size(); k++)
-                {
-                    unsigned int i_var = k + j*betaScan.size() + i*betaScan.size()*alphaScan.size();
-                    getXYOnSensor(x_var[i_var], y_var[i_var], zScan[i], alphaScan[j], betaScan[k], sensorCenter, sensorCenterY);
-                    //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zScan[i]<<std::endl;
-                }
-            }
+            getXYOnSensor(x_var[i], y_var[i], zScan[i], alpha, beta, gamma, sensorCenter, sensorCenterY);
         }
+        for(unsigned int i = 0; i < alphaScan.size(); i++)
+        {
+            getXYOnSensor(x_varA[i], y_varA[i], z_dut, alphaScan[i], beta, gamma, sensorCenter, sensorCenterY);
+        }
+        for(unsigned int i = 0; i < betaScan.size(); i++)
+        {
+            getXYOnSensor(x_varB[i], y_varB[i], z_dut, alpha, betaScan[i], gamma, sensorCenter, sensorCenterY);
+        }
+        for(unsigned int i = 0; i < gammaScan.size(); i++)
+        {
+            getXYOnSensor(x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY);
+        }
+
+        //     for(unsigned int j = 0; j < alphaScan.size(); j++)
+        //     {
+        //         for(unsigned int k = 0; k < betaScan.size(); k++)
+        //         {
+        //             for(unsigned int l = 0; l < gammaScan.size(); l++)
+        //             {
+        //                 unsigned int i_var = l + k*gammaScan.size() + j*betaScan.size()*gammaScan.size() + i*betaScan.size()*alphaScan.size()*gammaScan.size();
+        //                 getXYOnSensor(x_var[i_var], y_var[i_var], zScan[i], alphaScan[j], betaScan[k], gammaScan[l], sensorCenter, sensorCenterY);
+        //                 //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zScan[i]<<std::endl;
+        //             }
+        //         }
+        //     }
         
         // Correct amp and map raw amplitude
 	    ApplyAmplitudeCorrection(tr);
@@ -140,8 +175,31 @@ private:
 
         // Cut to get hits that only go through active sensor
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
-        bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
+        bool hitSensor = sensorEdges[0][0]-sensorCenter < x && x < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y && y < sensorEdges[1][1]-sensorCenterY;
         tr.registerDerivedVar("hitSensor", hitSensor);
+
+        // Hit through active sensor for scan vars
+        auto& hitSensorZ = tr.createDerivedVec<bool>("hitSensorZ",zScan.size());
+        auto& hitSensorA = tr.createDerivedVec<bool>("hitSensorA",alphaScan.size());
+        auto& hitSensorB = tr.createDerivedVec<bool>("hitSensorB",betaScan.size());
+        auto& hitSensorC = tr.createDerivedVec<bool>("hitSensorC",gammaScan.size());
+
+        for(unsigned int i = 0; i < zScan.size(); i++)
+        {
+            hitSensorZ[i] = sensorEdges[0][0]-sensorCenter < x_var[i] && x_var[i] < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y_var[i] && y_var[i] < sensorEdges[1][1]-sensorCenterY;
+        }
+        for(unsigned int i = 0; i < alphaScan.size(); i++)
+        {
+            hitSensorA[i] = sensorEdges[0][0]-sensorCenter < x_varA[i] && x_varA[i] < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y_varA[i] && y_varA[i] < sensorEdges[1][1]-sensorCenterY;
+        }
+        for(unsigned int i = 0; i < betaScan.size(); i++)
+        {
+            hitSensorB[i] = sensorEdges[0][0]-sensorCenter < x_varB[i] && x_varB[i] < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y_varB[i] && y_varB[i] < sensorEdges[1][1]-sensorCenterY;
+        }
+        for(unsigned int i = 0; i < gammaScan.size(); i++)
+        {
+            hitSensorC[i] = sensorEdges[0][0]-sensorCenter < x_varC[i] && x_varC[i] < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y_varC[i] && y_varC[i] < sensorEdges[1][1]-sensorCenterY;
+        }
 
         // Correct the time variable
         const auto& LP2_20 = tr.getVec<float>("LP2_20");

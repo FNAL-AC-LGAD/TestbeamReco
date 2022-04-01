@@ -26,10 +26,52 @@ void Align::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& ge
     const auto& zScan = tr.getVar<std::vector<double>>("zScan");
     const auto& alphaScan = tr.getVar<std::vector<double>>("alphaScan");
     const auto& betaScan = tr.getVar<std::vector<double>>("betaScan");
-    for(unsigned int ivar = 0; ivar<(zScan.size()*alphaScan.size()*betaScan.size()); ivar++)
+    const auto& gammaScan = tr.getVar<std::vector<double>>("gammaScan");
+
+    // double xBinSize = 0.1;
+    // const auto& xmin = tr.getVar<double>("xmin");
+    // const auto& xmax = tr.getVar<double>("xmax");
+    // double yBinSize = 0.5;
+    // const auto& ymin = tr.getVar<double>("ymin");
+    // const auto& ymax = tr.getVar<double>("ymax");
+
+    // const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+    // const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
+
+    for(unsigned int ivar = 0; ivar<(zScan.size()); ivar++)
     {
-        utility::makeHisto(my_histos,"deltaX_var"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 300,-0.75,0.75);
+        utility::makeHisto(my_histos,"deltaX_varZ"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 400,-2.,2.); // 300,-0.75,0.75);
+        // utility::makeHisto(my_2d_histos,"xy_Z"+std::to_string(ivar),"; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-sensorCenter,xmax-sensorCenter, (ymax-ymin)/yBinSize,ymin-sensorCenterY,ymax-sensorCenterY);
     }
+    for(unsigned int ivar = 0; ivar<(alphaScan.size()); ivar++)
+    {
+        utility::makeHisto(my_histos,"deltaX_varA"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 400,-2.,2.); // 300,-0.75,0.75);
+    }
+    for(unsigned int ivar = 0; ivar<(betaScan.size()); ivar++)
+    {
+        utility::makeHisto(my_histos,"deltaX_varB"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 400,-2.,2.); // 300,-0.75,0.75);
+    }
+    for(unsigned int ivar = 0; ivar<(gammaScan.size()); ivar++)
+    {
+        utility::makeHisto(my_histos,"deltaX_varC"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 400,-2.,2.); // 300,-0.75,0.75);
+    }
+
+    // int rowIndex = 0;
+    // for(const auto& row : geometry)
+    // {
+    //     if(row.size()<2) continue;
+    //     for(unsigned int i = 0; i < row.size(); i++)
+    //     {
+    //         const auto& r = std::to_string(rowIndex);
+    //         const auto& s = std::to_string(i);
+    //         utility::makeHisto(my_2d_histos,"xy_channel"+r+s,"; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-sensorCenter,xmax-sensorCenter, (ymax-ymin)/yBinSize,ymin-sensorCenterY,ymax-sensorCenterY);
+    //     }
+    //     rowIndex++;
+    // }
+
+    // utility::makeHisto(my_2d_histos,"xy_total","; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-sensorCenter,xmax-sensorCenter, (ymax-ymin)/yBinSize,ymin-sensorCenterY,ymax-sensorCenterY);
+    // utility::makeHisto(my_2d_histos,"xy_denominator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-sensorCenter,xmax-sensorCenter, (ymax-ymin)/yBinSize,ymin-sensorCenterY,ymax-sensorCenterY);
+
     std::cout<<"Finished making histos"<<std::endl;
 }
 
@@ -69,20 +111,35 @@ void Align::Loop(NTupleReader& tr, int maxevents)
         const auto& nplanes = tr.getVar<int>("nplanes");
         const auto& npix = tr.getVar<int>("npix");
         const auto& chi2 = tr.getVar<float>("chi2");
+        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        // const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
         const auto& x_var = tr.getVec<double>("x_var");
-        //const auto& y_var = tr.getVec<double>("y_var");
+        const auto& y_var = tr.getVec<double>("y_var");
+        const auto& x_varA = tr.getVec<double>("x_varA");
+        //const auto& y_varA = tr.getVec<double>("y_varA");
+        const auto& x_varB = tr.getVec<double>("x_varB");
+        //const auto& y_varB = tr.getVec<double>("y_varB");
+        const auto& x_varC = tr.getVec<double>("x_varC");
+        //const auto& y_varC = tr.getVec<double>("y_varC");
         const auto& x_reco = tr.getVar<double>("x_reco");
         //const auto& y_reco = tr.getVar<double>("y_reco");
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
+
+        const auto& hitSensorZ = tr.getVec<bool>("hitSensorZ");
+        const auto& hitSensorA = tr.getVec<bool>("hitSensorA");
+        const auto& hitSensorB = tr.getVec<bool>("hitSensorB");
+        const auto& hitSensorC = tr.getVec<bool>("hitSensorC");
+
         const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
         const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
         const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
+        // const auto& hasGlobalSignal_highThreshold = tr.getVar<bool>("hasGlobalSignal_highThreshold");
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
         bool passTrigger = ntracks==1 && nplanes>=5 && npix>0;// && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
-        bool pass = passTrigger && hitSensor && goodPhotek;
+        bool pass = passTrigger && goodPhotek; // && hitSensor &&
         bool maxAmpNotEdgeStrip = (maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex);
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
 
@@ -92,8 +149,44 @@ void Align::Loop(NTupleReader& tr, int maxevents)
         //Loop over each channel in each sensor
         for(unsigned int ivar=0; ivar < x_var.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp, my_histos["deltaX_var"+std::to_string(ivar)], x_reco-x_var[ivar]);
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorZ[ivar], my_histos["deltaX_varZ"+std::to_string(ivar)], x_reco-(x_var[ivar]+sensorCenter));
+            // utility::fillHisto(pass && hasGlobalSignal_highThreshold && hitSensorZ[ivar],        my_2d_histos["xy_Z"+std::to_string(ivar)], x_var[ivar], y_var[ivar]);
         }
+
+        for(unsigned int ivar=0; ivar < x_varA.size(); ivar++)
+        {
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorA[ivar], my_histos["deltaX_varA"+std::to_string(ivar)], x_reco-(x_varA[ivar]+sensorCenter));
+        }
+
+        for(unsigned int ivar=0; ivar < x_varB.size(); ivar++)
+        {
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorB[ivar], my_histos["deltaX_varB"+std::to_string(ivar)], x_reco-(x_varB[ivar]+sensorCenter));
+        }
+
+        for(unsigned int ivar=0; ivar < x_varC.size(); ivar++)
+        {
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorC[ivar], my_histos["deltaX_varC"+std::to_string(ivar)], x_reco-(x_varC[ivar]+sensorCenter));
+        }
+
+        // int rowIndex = 0;
+        // for(const auto& row : geometry)
+        // {
+        //     if(row.size()<2) continue;
+        //     for(unsigned int i = 0; i < row.size(); i++)
+        //     {
+        //         const auto& r = std::to_string(rowIndex);
+        //         const auto& s = std::to_string(i);
+        //         const auto& ampChannel = ampLGAD[rowIndex][i];
+        //         bool goodSignalAmp = ampChannel>signalAmpThreshold;
+        //         utility::fillHisto(pass && goodSignalAmp  && hitSensorZ[20],                                   my_2d_histos["xy_channel"+r+s], x_var[20], y_var[20]); // Z = 28, alpha = beta = 0, gamma = 90
+        //     }
+        //     rowIndex++;
+        // }
+
+        // utility::fillHisto(pass && hasGlobalSignal_highThreshold && hitSensorZ[20],                           my_2d_histos["xy_total"], x_var[20], y_var[20]);
+        // utility::fillHisto(pass && hitSensorZ[20],                                                            my_2d_histos["xy_denominator"], x_var[20], y_var[20]);
+
+
     } //event loop
 }
 
