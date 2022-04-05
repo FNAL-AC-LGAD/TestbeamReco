@@ -86,9 +86,14 @@ def SensorInfoSmart(dataset):
         sensor = "EIC W1 2.5 cm, 300 um gaps, UCSC"
         bias_voltage = "330"
 
-    if dataset=="EIC_W2_1cm_500um_400um_gap_220V":
+    if dataset=="EIC_W2_1cm_500um_400um_gap_220V" or dataset=="EIC_W2_1cm_500um_400um_gap_220V_628":
         sensor = "EIC W2 1 cm, 400 um gaps"
         bias_voltage ="220"
+
+    if dataset=="EIC_W1_2p5cm_215V":
+        sensor = "EIC W1 2.5 cm, 300 um gaps"
+        bias_voltage = "215"
+
 
     SensorInfo(sensor,bias_voltage,True,0.08)
 

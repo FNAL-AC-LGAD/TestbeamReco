@@ -70,6 +70,7 @@ def printProjectionColZ(th3,variable_title,tag,zmin,zmax):
 
 
 
+
 printProjectionColZ(th3_amplitude_vs_xy,"Mean amplitude [mV]","amp",15,130)
 printProjectionColZ(th3_charge_vs_xy,"Mean charge [fC]","charge",2,30)
 printProjectionColZ(th3_risetime_vs_xy,"Mean risetime [ps]","risetime",400,700)
