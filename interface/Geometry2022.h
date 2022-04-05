@@ -48,7 +48,8 @@ public:
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
     bool isHPKStrips = true;
-    int minPixHits=1;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.491296, -6.05401,  138.371, -1348.62,  5868.35, -9488.04};
     std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.5}, {1.1, 8.0}};
@@ -96,6 +97,8 @@ public:
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-1.53, -2.7}, {0.40, 8.0}};
@@ -143,6 +146,8 @@ public:
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-2.32, -2.7}, {-0.82, 8.0}};
@@ -190,6 +195,8 @@ public:
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-2.9, -2.7}, {-1.85, 8.0}};
@@ -225,6 +232,8 @@ public:
     double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
+    int minPixHits = 0;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-5.5, -15.0}, {0.0, 15.0}};
@@ -260,6 +269,8 @@ public:
     double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 5.0;
     bool isHPKStrips = true;
+    int minPixHits = 0;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, 0.0262564, -8.09758,  12.3003, -11.0584};
     std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}};
@@ -307,8 +318,8 @@ public:
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
     bool isHPKStrips = true;
-    int minPixHits = 2;
-    int minStripHits = 5;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.04, -0.268695, 0.462989, -12.2277};
     std::vector<std::vector<double>> sensorEdges = {{-2.66, -1.75}, {-2.14, 8.09}};
@@ -344,11 +355,10 @@ public:
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
     bool isHPKStrips = true;
-    int minPixHits=1;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
-    //std::vector<double> positionRecoPar = {0.25, -0.323138, -9.25501,  71.6547, -170.496};
     std::vector<double> positionRecoPar = {0.25, -0.691307, 0.170215, -0.0131045, -5.13558};
-    //std::vector<std::vector<double>> sensorEdges = {{-3.5, -2}, {0.9, 8.2}};
     std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
 };
 
@@ -382,7 +392,8 @@ public:
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
     bool isHPKStrips = true;
-    int minPixHits=2;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.323138, -9.25501,  71.6547, -170.496};
     std::vector<std::vector<double>> sensorEdges = {{-3.7, 0.5}, {0, 4.8}};
@@ -399,8 +410,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     // std::map<int, double> amplitudeCorrectionFactor = {{0,1.1770}, {1,1.0961}, {2,1.0516}, {3,0.9551}, {4,0.9751}, {5,0.9202}, {6,0.8865}, {7,1.0}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
-
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.96398053}, {1,0.84198568}, {2,0.93964217}, {3,0.83790917}, {4,0.88894472}, {5,0.80036949}, {6,0.91889931}, {7,0.0}};
     double stripWidth = 0.100;
     double pitch = 0.500;
@@ -421,7 +431,8 @@ public:
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 10.0;
     bool isHPKStrips = true;
-    int minPixHits=2;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.682406,  12.6055, -257.771,   2476.2, -12142.6,  29452.7, -28032.3};
     std::vector<std::vector<double>> sensorEdges = {{-4.0, -1.0}, {0, 4.8}};
@@ -438,8 +449,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0,1}, {2,3}, {4,5}, {6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true},{5,true},{6,false}, {7,false}};
     // std::map<int, double> amplitudeCorrectionFactor = {{0,1.1770}, {1,1.0961}, {2,1.0516}, {3,0.9551}, {4,0.9751}, {5,0.9202}, {6,0.8865}, {7,1.0}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
-
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.96398053}, {1,0.84198568}, {2,0.93964217}, {3,0.83790917}, {4,0.88894472}, {5,0.80036949}, {6,0.91889931}, {7,0.0}};
     double stripWidth = 0.100;
     double pitch = 0.500;
@@ -461,6 +471,8 @@ public:
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 10.0;
     bool isHPKStrips = true;
+    int minPixHits = 0;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.25, -0.682406,  12.6055, -257.771,   2476.2, -12142.6,  29452.7, -28032.3};
     std::vector<std::vector<double>> sensorEdges = {{-2.7, 1.4}, {-1, 2.8}};
@@ -474,15 +486,15 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    // std::map<int, double> amplitudeCorrectionFactor = {{0,1.0930}, {1,0.9213}, {2,0.9915}, {3,1.0095}, {4,0.9953}, {5,0.9988}, {6,1.0056}, {7,1.0}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0930}, {1,0.9213}, {2,0.9915}, {3,1.0095}, {4,0.9953}, {5,0.9988}, {6,1.0056}, {7,1.0}};
+    //std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.99510831}, {1,0.9853243949}, {2,0.98366010}, {3,0.96532184}, {4,1.0512278}, {5,1.0261477}, {6,1.0349694}, {7,0.0}};    
     double stripWidth = 0.08;
     double pitch = 0.15;
     std::vector<double> stripCenterXPosition = {-0.68, -0.83, -0.98, -1.13, -1.28, -1.43, -1.58, 0.0};
     int numLGADchannels = 7;
-    int lowGoodStripIndex = 1;
-    int highGoodStripIndex = 5;
+    int lowGoodStripIndex = 0;
+    int highGoodStripIndex = 6;
     double alpha = 0.0;
     double beta  = 0.0;
     double gamma =  1.3;
@@ -498,9 +510,10 @@ public:
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
+    int minPixHits = 4;
+    int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.075, -0.172763, 0.152945, -0.894909, 0.246914};
-    //std::vector<double> positionRecoPar = {0.075, -0.140285, -0.774667, 5.65837, -13.5359};
     std::vector<std::vector<double>> sensorEdges = {{-1.62, -3.50}, {-0.64, -1.15}};
 };
 
