@@ -158,11 +158,6 @@ private:
         }
         utility::remapToLGADgeometry(tr, charge, "chargeLGAD");
         utility::remapToLGADgeometry(tr, AmpChargeRatio, "ampChargeRatioLGAD");
-
-
-
-
-
     }
 
 public:
