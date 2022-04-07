@@ -36,9 +36,9 @@ public:
     int numLGADchannels = 7;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
-    double alpha = 0.0;
-    double beta  = 0.0;
-    double gamma = 0.0 + 90.0;
+    double alpha = -0.04;
+    double beta  = -0.56;
+    double gamma = -0.86 + 90.0;
     // double z_dut = 28.41878;
     double z_dut = 28.0;
     double xmin =  -4.0;

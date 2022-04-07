@@ -68,8 +68,8 @@ private:
         double x_sensor = lx*(cos(beta_rad)*cos(alpha_rad)) + ly*(sin(beta_rad)*cos(alpha_rad)) + lz*(-sin(alpha_rad));
         double y_sensor = lx*(-sin(beta_rad)) + ly*(cos(beta_rad));
 
-        xFinal = (xIntercept_!=0 && xSlope_!=0) ? x_sensor*cos(gamma_rad) + y_sensor*sin(gamma_rad) : 0;
-        yFinal = (yIntercept_!=0 && ySlope_!=0) ? y_sensor*cos(gamma_rad) - x_sensor*sin(gamma_rad) : 0;
+        xFinal = (xIntercept_!=0 && xSlope_!=0) ? x_sensor*cos(gamma_rad) + y_sensor*sin(gamma_rad) : -9999;
+        yFinal = (yIntercept_!=0 && ySlope_!=0) ? y_sensor*cos(gamma_rad) - x_sensor*sin(gamma_rad) : -9999;
 
         // //Define intial x, y position based on fit from telescope reco
         // double x0 = xSlope_*z + xIntercept_;

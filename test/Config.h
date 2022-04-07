@@ -127,14 +127,42 @@ public:
         // const auto& beta  = tr.getVar<double>("beta");
         // const auto& gamma = tr.getVar<double>("gamma");
 
-        const auto& z_dut_def = 28.0;
-        const auto& alpha_def = 0.0;
-        const auto& beta_def  = 0.0;
-        const auto& gamma_def = 90.0;
+        //Setup Sensor Geometry 
+        if     (filetag.find("BNL2020")                        != std::string::npos) registerGeometry(tr, BNL2020Geometry(voltage));
+        else if(filetag.find("BNL2021_wide")                   != std::string::npos) registerGeometry(tr, BNL2021WideGeometry(voltage));
+        else if(filetag.find("BNL2021_medium")                 != std::string::npos) registerGeometry(tr, BNL2021MediumGeometry(voltage));
+        else if(filetag.find("BNL2021_narrow")                 != std::string::npos) registerGeometry(tr, BNL2021NarrowGeometry(voltage));
+        else if(filetag.find("HPK_pad_C2")                     != std::string::npos) registerGeometry(tr, HPKPadC2Geometry(voltage));
+        else if(filetag.find("HPK_pad_B2")                     != std::string::npos) registerGeometry(tr, HPKPadB2Geometry(voltage));
+        else if(filetag.find("HPK_strips_C2_45um")             != std::string::npos) registerGeometry(tr, HPKStripsC2WideMetalGeometry(voltage));
+        else if(filetag.find("HPK_strips_C2_30um")             != std::string::npos) registerGeometry(tr, HPKStripsC2NarrowMetalGeometry(voltage));
+        else if(filetag.find("Ron_wide")                       != std::string::npos) registerGeometry(tr, RonStripsGeometry(voltage));
+        else if(filetag.find("BNL2021_hexpix")                 != std::string::npos) registerGeometry(tr, BNLPixelHexGeometry(voltage));
+        else if(filetag.find("HPK2_DCLGAD_220V")               != std::string::npos) registerGeometry(tr, HPK2DCLGADGeometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_255V")                != std::string::npos) registerGeometry(tr, EIC1cmStripsGeometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_300_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips300Geometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_200_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips200Geometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_100_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips100Geometry(voltage));
+        else if(filetag.find("EIC_W1_2p5cm_UCSC_340V")         != std::string::npos) registerGeometry(tr, EIC2p5cmStripsUCSCGeometry(voltage));
+        else
+        {
+            registerGeometry(tr, DefaultGeometry(voltage));
+            std::cout<<"Warning: Using DefaultGeometry, odds are this is not what you want"<<std::endl;
+        }
 
-        //Define zScan // [-20.0, 20.0]
-        double zMin = -20.0, zStep = 1.0;
-        unsigned int nZBins = 41;
+        // TRY NEW POSITION
+        // const auto& z_dut_def = 28.0;
+        // const auto& alpha_def = 0.0;
+        // const auto& beta_def  = 0.0;
+        // const auto& gamma_def = 90.0;
+        const auto& z_dut_def = tr.getVar<double>("z_dut");
+        const auto& alpha_def = tr.getVar<double>("alpha");
+        const auto& beta_def  = tr.getVar<double>("beta");
+        const auto& gamma_def = tr.getVar<double>("gamma");
+
+        //Define zScan // [-40.0, 40.0]
+        double zMin = -60.0, zStep = 1.0;
+        unsigned int nZBins = 81;
         std::vector<double> zScan(nZBins);
         std::string pythonBins = "z_values = [";
         for(unsigned int i = 0; i < nZBins; i++) 
@@ -194,29 +222,6 @@ public:
             std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
             overwriteFile << pythonBins << std::endl;
             overwriteFile.close();
-        }
-
-        //Setup Sensor Geometry 
-        if     (filetag.find("BNL2020")                        != std::string::npos) registerGeometry(tr, BNL2020Geometry(voltage));
-        else if(filetag.find("BNL2021_wide")                   != std::string::npos) registerGeometry(tr, BNL2021WideGeometry(voltage));
-        else if(filetag.find("BNL2021_medium")                 != std::string::npos) registerGeometry(tr, BNL2021MediumGeometry(voltage));
-        else if(filetag.find("BNL2021_narrow")                 != std::string::npos) registerGeometry(tr, BNL2021NarrowGeometry(voltage));
-        else if(filetag.find("HPK_pad_C2")                     != std::string::npos) registerGeometry(tr, HPKPadC2Geometry(voltage));
-        else if(filetag.find("HPK_pad_B2")                     != std::string::npos) registerGeometry(tr, HPKPadB2Geometry(voltage));
-        else if(filetag.find("HPK_strips_C2_45um")             != std::string::npos) registerGeometry(tr, HPKStripsC2WideMetalGeometry(voltage));
-        else if(filetag.find("HPK_strips_C2_30um")             != std::string::npos) registerGeometry(tr, HPKStripsC2NarrowMetalGeometry(voltage));
-        else if(filetag.find("Ron_wide")                       != std::string::npos) registerGeometry(tr, RonStripsGeometry(voltage));
-        else if(filetag.find("BNL2021_hexpix")                 != std::string::npos) registerGeometry(tr, BNLPixelHexGeometry(voltage));
-        else if(filetag.find("HPK2_DCLGAD_220V")               != std::string::npos) registerGeometry(tr, HPK2DCLGADGeometry(voltage));
-        else if(filetag.find("EIC_W1_1cm_255V")                != std::string::npos) registerGeometry(tr, EIC1cmStripsGeometry(voltage));
-        else if(filetag.find("EIC_W1_1cm_300_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips300Geometry(voltage));
-        else if(filetag.find("EIC_W1_1cm_200_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips200Geometry(voltage));
-        else if(filetag.find("EIC_W1_1cm_100_multiPitch_240V") != std::string::npos) registerGeometry(tr, EIC1cmStrips100Geometry(voltage));
-        else if(filetag.find("EIC_W1_2p5cm_UCSC_340V")         != std::string::npos) registerGeometry(tr, EIC2p5cmStripsUCSCGeometry(voltage));
-        else
-        {
-            registerGeometry(tr, DefaultGeometry(voltage));
-            std::cout<<"Warning: Using DefaultGeometry, odds are this is not what you want"<<std::endl;
         }
 
         //Register Modules that are needed for each Analyzer
