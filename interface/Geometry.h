@@ -42,7 +42,8 @@ public:
     double ymin =  -1;
     double ymax =  -1; 
     double positionRecoMaxPoint = 1.0;
-    double photekSignalThreshold = 50.0; //in mV
+    double photekSignalThreshold = 200.0; //in mV
+    double photekSignalMax = 350.0; //in mV
     double noiseAmpThreshold = 15.0;      //in mV
     double signalAmpThreshold = 15.0;    //in mV       
     bool isPadSensor = false; 
