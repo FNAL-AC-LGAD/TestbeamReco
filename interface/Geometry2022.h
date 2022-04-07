@@ -31,7 +31,8 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
-    std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
+    // std::vector<double> stripCenterXPosition = {0.6, 0.1, -0.4, -0.9, -1.4, -1.9, -2.4, 0.0};
+    std::vector<double> stripCenterXPosition = {0.569, 0.065, -0.431, -0.932, -1.432, -1.931, -2.428, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
@@ -44,7 +45,7 @@ public:
     double ymin =  -3.0;
     double ymax =   9.0;
     double positionRecoMaxPoint = 0.76;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
     bool isHPKStrips = true;
@@ -93,7 +94,7 @@ public:
     double xmax =   1.0;
     double ymin =  -3.0;
     double ymax =   7.5;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
@@ -142,7 +143,7 @@ public:
     double xmax =   1.0;
     double ymin =  -3.0;
     double ymax =   7.5;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
@@ -191,7 +192,7 @@ public:
     double xmax =   1.0;
     double ymin =  -3.0;
     double ymax =   7.5;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
@@ -228,7 +229,7 @@ public:
     double xmax =  -1.5;
     double ymin = -15.0;
     double ymax =  15.0;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;
@@ -265,7 +266,7 @@ public:
     double xmax =  3.2;
     double ymin = -15.0;
     double ymax =  15.0;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 5.0;
     bool isHPKStrips = true;
@@ -314,7 +315,7 @@ public:
     double xmax =  -2.05;
     double ymin =  -1.8;
     double ymax =   8.2;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
     bool isHPKStrips = true;
@@ -351,7 +352,7 @@ public:
     double ymin =  -3.0;
     double ymax =   9.0;
     double positionRecoMaxPoint = 0.75;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
     bool isHPKStrips = true;
@@ -388,7 +389,7 @@ public:
     double ymin =  0.0;
     double ymax =   5.2;
     double positionRecoMaxPoint = 0.75;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
     bool isHPKStrips = true;
@@ -427,7 +428,7 @@ public:
     double ymin =  -1.0;
     double ymax =   5.2;
     double positionRecoMaxPoint = 0.85;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 10.0;
     bool isHPKStrips = true;
@@ -467,7 +468,7 @@ public:
     double ymin =  1.0;
     double ymax =   3.5;
     double positionRecoMaxPoint = 0.85;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 10.0;
     bool isHPKStrips = true;
@@ -506,7 +507,7 @@ public:
     double ymin =  -3.7;
     double ymax =  -0.8;
     double positionRecoMaxPoint = 0.82;
-    double photekSignalThreshold = 50.0;
+    double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 20.0;
     bool isHPKStrips = true;

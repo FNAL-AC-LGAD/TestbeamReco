@@ -57,6 +57,7 @@ private:
         tr.registerDerivedVar("ymax", g.ymax);
         tr.registerDerivedVar("positionRecoMaxPoint", g.positionRecoMaxPoint);
         tr.registerDerivedVar("photekSignalThreshold", g.photekSignalThreshold);
+        tr.registerDerivedVar("photekSignalMax", g.photekSignalMax);
         tr.registerDerivedVar("noiseAmpThreshold", g.noiseAmpThreshold);
         tr.registerDerivedVar("signalAmpThreshold", g.signalAmpThreshold);
         tr.registerDerivedVar("isPadSensor", g.isPadSensor);
@@ -198,6 +199,9 @@ public:
         {
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
+               "SignalProperties",
+                "Timing",
+
             };
             registerModules(tr, std::move(modulesList));
         }

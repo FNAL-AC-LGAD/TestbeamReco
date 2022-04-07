@@ -232,6 +232,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
+    const auto& photekSignalMax = tr.getVar<double>("photekSignalMax");
     const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
     const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
     const auto& isHPKStrips = tr.getVar<bool>("isHPKStrips");
@@ -333,7 +334,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
         
         //Define selection bools
-        bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
+        bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool passTrigger = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         if(isPadSensor)      passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips) passTrigger = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
