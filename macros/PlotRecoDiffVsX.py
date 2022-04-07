@@ -10,6 +10,7 @@ gStyle.SetOptFit(1011)
 
 ## Defining Style
 myStyle.ForceStyle()
+organized_mode=True
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="", ylabel="Position resolution [#mum]", sensor=""):
@@ -39,7 +40,7 @@ class HistoInfo:
         return th1_temp
 
     def shift(self):
-        return (self.f.Get("stripBoxInfo02").GetMean(1)+self.f.Get("stripBoxInfo03").GetMean(1))/2.
+        return self.f.Get("stripBoxInfo03").GetMean(1)
 
     def fine_tuning(self, sensor):
         value = 0.0
@@ -48,20 +49,30 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-f','--file', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
 parser.add_option('-s','--sensor', dest='sensor', default = "BNL2020", help="Type of sensor (BNL, HPK, ...)")
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias Voltage value in [V]")
+parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
+parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Bias Voltage value in [V]") 
+parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Bias Voltage value in [V]") 
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath") 
 options, args = parser.parse_args()
 
-file = options.file
 sensor = options.sensor
 bias = options.biasvolt
+xlength = float(options.xlength) 
+ylength = float(options.ylength) 
 
-inputfile = TFile("../test/"+file,"READ")
+dataset = options.Dataset
+outdir=""
+if organized_mode: 
+    outdir = myStyle.getOutputDir(dataset)
+    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+else: 
+    inputfile = TFile("../test/myoutputfile.root")   
 
 all_histoInfos = [
-    HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  35.0, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True,  35.0, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    #HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True,  35.0, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -103,10 +114,10 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 error = 1000.0*mySigmaError
             
                 ##For Debugging
-                # tmpHist.Draw("hist")
-                # fit.Draw("same")
-                # canvas.SetLogy()
-                # canvas.SaveAs("q_"+str(i)+".gif")
+                #tmpHist.Draw("hist")
+                #fit.Draw("same")
+                #canvas.SetLogy()
+                #canvas.SaveAs(outdir+"q_"+str(i)+".gif")
                 
                 #print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
             else:
@@ -117,25 +128,23 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             error = 0.0
 
         # Removing telescope contribution
-        if value>6.0:
-            error = error*value/TMath.Sqrt(value*value - 6*6)
-            value = TMath.Sqrt(value*value - 6*6)
-        else:
-            value = 0.0 # 20.0 to check if there are strange resolution values
-            error = 0.0
-        if i<=info.th1.FindBin(-0.2) and sensor=="BNL2020":
-            value = 0.0
-            error = 0.0
+        #if value>6.0:
+        #    error = error*value/TMath.Sqrt(value*value - 6*6)
+        #    value = TMath.Sqrt(value*value - 6*6)
+        #else:
+        #    value = 0.0 # 20.0 to check if there are strange resolution values
+        #    error = 0.0
+        #if i<=info.th1.FindBin(-0.2) and sensor=="BNL2020":
+        #    value = 0.0
+        #    error = 0.0
 
         info.th1.SetBinContent(i,value)
         info.th1.SetBinError(i,error)
                         
 # Plot 2D histograms
-outputfile = TFile("PlotXRecoDiffVsX.root","RECREATE")
+outputfile = TFile(outdir+"PlotRecoDiffVsX.root","RECREATE")
 for info in all_histoInfos:
-    if sensor=="BNL2020": xlimit = 0.32
-    else: xlimit = 0.43
-    htemp = TH1F("htemp","",1,-xlimit,xlimit)
+    htemp = TH1F("htemp","",1,-xlength,xlength)
     htemp.SetStats(0)
     htemp.SetMinimum(0.0001)
     htemp.SetMaximum(info.yMax)
@@ -164,7 +173,7 @@ for info in all_histoInfos:
     # for box in boxes2:
     #     box.Draw("same")
 
-    default_res = ROOT.TLine(-xlimit,100/TMath.Sqrt(12),xlimit,100/TMath.Sqrt(12))
+    default_res = ROOT.TLine(-xlength,options.pitch/TMath.Sqrt(12),xlength,options.pitch/TMath.Sqrt(12))
     default_res.SetLineWidth(4)
     default_res.SetLineStyle(9)
     default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
@@ -176,7 +185,7 @@ for info in all_histoInfos:
     # info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
 
-    legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.3-0.2,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.3)
+    legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.2,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.1)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
     # legend.SetTextFont(myStyle.GetFont())
@@ -189,8 +198,8 @@ for info in all_histoInfos:
     myStyle.BeamInfo()
     myStyle.SensorInfo(sensor, bias)
 
-    canvas.SaveAs("PositionRes_vs_x_"+info.outHistoName+".gif")
-    canvas.SaveAs("PositionRes_vs_x_"+info.outHistoName+".pdf")
+    canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".gif")
+    canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".pdf")
     info.th1.Write()
     htemp.Delete()
 

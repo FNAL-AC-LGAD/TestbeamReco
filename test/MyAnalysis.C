@@ -6,8 +6,9 @@
 #include "TestbeamReco/interface/Utility.h"
 #include "TestbeamReco/interface/Analyze.h"
 #include "TestbeamReco/interface/Align.h"
+#include "TestbeamReco/interface/InitialAnalyzer.h"
 #include "Config.h"
-
+#include "TSystem.h"
 #include "TH1D.h"
 #include "TFile.h"
 #include "TChain.h"
@@ -134,6 +135,17 @@ int main(int argc, char *argv[])
         }
     }
 
+    bool organized_mode = true;
+    if(organized_mode){
+        TString outDir = Form("../output/%s/",dataSets.c_str());
+        gSystem->mkdir("../output");
+        gSystem->mkdir(outDir);
+
+        char thistFile[128];
+        sprintf(thistFile, "../output/%s/%s_%s.root", dataSets.c_str(),dataSets.c_str(), analyzer.c_str());
+        histFile = thistFile;
+    }
+
     if(runOnCondor)
     {
         char thistFile[128];
@@ -147,6 +159,7 @@ int main(int argc, char *argv[])
     std::vector<std::pair<std::string, std::function<void(const std::set<AnaSamples::FileSummary>&,const int,const int,const int,TFile* const,const std::string&)>>> AnalyzerPairVec = {
         {"Analyze",             run<Analyze>},
         {"Align",               run<Align>},
+        {"InitialAnalyzer",     run<InitialAnalyzer>},
         {"MakeNNVariables",     run<MakeNNVariables>},
     }; 
 

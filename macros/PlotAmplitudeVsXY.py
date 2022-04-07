@@ -9,6 +9,7 @@ import myStyle
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
+organized_mode=True
 
 ## Defining Style
 myStyle.ForceStyle()
@@ -16,18 +17,31 @@ myStyle.ForceStyle()
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-f', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
 parser.add_option('-s','--sensor', dest='sensor', default = "EIC W1-1cm", help="Type of sensor (BNL, HPK, ...)")
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 180, help="Bias Voltage value in [V]")
+parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set zmin")
+parser.add_option('-Z','--zmax', dest='zmax', default = 120.0, help="Set zmax")
 options, args = parser.parse_args()
 
 file = options.file
 sensor = options.sensor
 bias = options.biasvolt
+dataset = options.Dataset
+zmin = float(options.zmin)
+zmax = float(options.zmax)
 
-inputfile = TFile("../test/"+file)
+outdir=""
+if organized_mode: 
+    outdir = myStyle.getOutputDir(dataset)
+    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+else: 
+    inputfile = TFile("../test/"+file)
+
 
 #Get 3D histograms 
+th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xy")
 th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
 th3_amplitude_vs_xy_channel01 = inputfile.Get("amplitude_vs_xy_channel01")
 th3_amplitude_vs_xy_channel02 = inputfile.Get("amplitude_vs_xy_channel02")
@@ -36,6 +50,7 @@ th3_amplitude_vs_xy_channel04 = inputfile.Get("amplitude_vs_xy_channel04")
 th3_amplitude_vs_xy_channel05 = inputfile.Get("amplitude_vs_xy_channel05")
 th3_amplitude_vs_xy_channel06 = inputfile.Get("amplitude_vs_xy_channel06")
 list_th3_amplitude_vs_xy = []
+list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy)
 list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel00)
 list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel01)
 list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel02)
@@ -47,18 +62,21 @@ list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel06)
 
 #Build amplitude histograms
 efficiency_vs_xy_denominator = inputfile.Get("efficiency_vs_xy_denominator")
-amplitude_vs_xy = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
-amplitude_vs_xy_channel00 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel00")
-amplitude_vs_xy_channel01 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel01")
-amplitude_vs_xy_channel02 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel02")
-amplitude_vs_xy_channel03 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel03")
-amplitude_vs_xy_channel04 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel04")
-amplitude_vs_xy_channel05 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel05")
-amplitude_vs_xy_channel06 = amplitude_vs_xy.Clone("amplitude_vs_xy_channel06")
+amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
+
+amplitude_vs_xy = amplitude_vs_xy_temp.Clone("amplitude_vs_xy")
+amplitude_vs_xy_channel00 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel00")
+amplitude_vs_xy_channel01 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel01")
+amplitude_vs_xy_channel02 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel02")
+amplitude_vs_xy_channel03 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel03")
+amplitude_vs_xy_channel04 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel04")
+amplitude_vs_xy_channel05 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel05")
+amplitude_vs_xy_channel06 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel06")
 
 
 
 list_amplitude_vs_xy = []
+list_amplitude_vs_xy.append(amplitude_vs_xy)
 list_amplitude_vs_xy.append(amplitude_vs_xy_channel00)
 list_amplitude_vs_xy.append(amplitude_vs_xy_channel01)
 list_amplitude_vs_xy.append(amplitude_vs_xy_channel02)
@@ -90,7 +108,8 @@ for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
             #Do Langaus fit if histogram mean is larger than 10
             #and mean is larger than RMS (a clear peak away from noise)
             if (myMean > 10 and myMean > 0.5*myRMS):                
-
+                # if channel==0: 
+                #     print(tmpHist.GetEntries(), myMean)
                 #use coarser bins when the signal is bigger
                 if (myMean > 50) :
                     tmpHist.Rebin(10)
@@ -107,12 +126,12 @@ for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
                 #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
 
             #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
+            # if tmpHist.GetEntries()>20: 
             list_amplitude_vs_xy[channel].SetBinContent(i,j,value)
             
             
-            
-outputfile = TFile("plots.root","RECREATE")
 
+outputfile=TFile("%splotsAmplitudevsXY.root"%outdir,"RECREATE")
 
 # Plot 2D histograms
 for channel in range(0, len(list_amplitude_vs_xy)):
@@ -120,14 +139,15 @@ for channel in range(0, len(list_amplitude_vs_xy)):
     list_amplitude_vs_xy[channel].Draw("colz")
     list_amplitude_vs_xy[channel].SetStats(0)
     list_amplitude_vs_xy[channel].SetTitle("Channel "+str(channel))
-    list_amplitude_vs_xy[channel].SetMinimum(0)
-    list_amplitude_vs_xy[channel].SetMaximum(100)
+    list_amplitude_vs_xy[channel].SetMinimum(zmin)
+    list_amplitude_vs_xy[channel].SetMaximum(zmax)
 
     canvas.SetRightMargin(0.18)
     canvas.SetLeftMargin(0.12)
 
-    canvas.SaveAs("Amplitude_vs_xy_channel"+str(channel)+".gif")
-    canvas.SaveAs("Amplitude_vs_xy_channel"+str(channel)+".pdf")
+    name = "Amplitude_vs_xy_channel"+str(channel) if channel != 0 else "Amplitude_vs_xy"
+    canvas.SaveAs(outdir+name+".gif")
+    canvas.SaveAs(outdir+name+".pdf")
 
     list_amplitude_vs_xy[channel].Write()
 

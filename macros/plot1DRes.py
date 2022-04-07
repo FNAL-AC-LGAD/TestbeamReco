@@ -1,6 +1,10 @@
 import ROOT
 import optparse
+import myStyle
+
 ROOT.gROOT.SetBatch(True)
+
+organized_mode=True
 
 def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange=(0,1), fmin=1, fmax=1):
         ROOT.gStyle.SetOptFit(1)
@@ -65,12 +69,18 @@ def getHisto(f, name, rebin, color):
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('--runPad', dest='runPad', action='store_true', default = False, help="Is pad (True) or strip (False). Needed when -a=True.")
 parser.add_option('-a', dest='plotAll', action='store_true', default = False, help="Draw all channels")
-parser.add_option('-f', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
-parser.add_option('-m', '--min', dest='min', default=1, type="float", help="Low limit of the fit (fmin): myMean - (fmin)*myRMS.")
-parser.add_option('-M', '--max', dest='max', default=1, type="float", help="High limit of the fit (fmax): myMean + (fmax)*myRMS.")
+parser.add_option('-m', '--min', dest='min', default=1.0, type="float", help="Low limit of the fit (fmin): myMean - (fmin)*myRMS.")
+parser.add_option('-M', '--max', dest='max', default=1.0, type="float", help="High limit of the fit (fmax): myMean + (fmax)*myRMS.")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
 
-f = ROOT.TFile('../test/'+options.file)
+dataset = options.Dataset
+outdir=""
+if organized_mode: 
+    outdir = myStyle.getOutputDir(dataset)
+    inputfile = ROOT.TFile("%s%s_Analyze.root"%(outdir,dataset))
+else: 
+    inputfile = ROOT.TFile("../test/myoutputfile.root")   
 
 channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
 
@@ -83,62 +93,11 @@ if options.plotAll:
         hists += [("weighted_timeDiff_goodSig","weighted_goodSig","photek"), ("weighted2_timeDiff_goodSig","weighted2_goodSig","photek")]
 
 for t in hists:
-    h = f.Get(t[0])
+    h = inputfile.Get(t[0])
     if options.runPad:
-        plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2], True, 100, (0,1), options.min, options.max)
+        plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], True, 100, (0,1), options.min, options.max)
     else:
-        plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2], False, 100, (0,1), options.min, options.max)
+        plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], False, 100, (0,1), options.min, options.max)
 
         
-
-
-# # Plot 1D of normalized amp
-# #ROOT.gStyle.SetOptFit(1)
-# c = ROOT.TCanvas("c","c",1000,1000)
-# ROOT.gPad.SetLeftMargin(0.12)
-# ROOT.gPad.SetRightMargin(0.05)
-# ROOT.gPad.SetTopMargin(0.05)
-# ROOT.gPad.SetBottomMargin(0.12)
-# ROOT.gPad.SetTicks(1,1)
-# ROOT.TH1.SetDefaultSumw2()
-# ROOT.gStyle.SetOptStat(0)
-# #ROOT.gPad.SetLogx()
-# ROOT.gPad.SetLogy()
-
-# h1 = getHisto(f, "ampRank1", 5, ROOT.kBlack)
-# h2 = getHisto(f, "ampRank2", 5, ROOT.kOrange+2)
-# h3 = getHisto(f, "ampRank3", 5, ROOT.kGreen+2)
-# h4 = getHisto(f, "ampRank4", 5, ROOT.kRed)
-# h5 = getHisto(f, "ampRank5", 5, ROOT.kBlue)
-# h6 = getHisto(f, "ampRank6", 5, ROOT.kGray+1)
-
-# #h6.Draw('hists')
-# h5.Draw('hists')
-# h4.Draw('hists same')
-# h3.Draw('hists same')
-# h2.Draw('hists same')
-# h1.Draw('hists same')
-
-# legend = ROOT.TLegend(0.6,0.65,0.9,0.88);
-# legend.SetBorderSize(0)
-# legend.SetTextSize(0.04)
-# legend.AddEntry(h1, "Strip Rank 1")
-# legend.AddEntry(h2, "Strip Rank 2")
-# legend.AddEntry(h3, "Strip Rank 3")
-# legend.AddEntry(h4, "Strip Rank 4")
-# legend.AddEntry(h5, "Strip Rank 5")
-# #legend.AddEntry(h6, "Strip Rank 6")
-# legend.Draw();
-
-# h5.SetTitle("")
-# h5.GetXaxis().SetTitle("Amplitude [mV]")
-# h5.GetYaxis().SetTitle("A.U.")
-# h5.SetMinimum(0.0005)
-# h5.GetXaxis().SetRangeUser(0.0,200.0)
-
-
-# name = "ampRankPlot"
-# c.Print("%s.png"%(name))
-# c.Print("%s.gif"%(name))
-# c.Print("%s.pdf"%(name))
 

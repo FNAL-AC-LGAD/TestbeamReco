@@ -218,6 +218,28 @@ private:
         // Baseline RMS
         const auto& baselineRMS = tr.getVec<float>("baseline_RMS");
         utility::remapToLGADgeometry(tr, baselineRMS, "baselineRMS");
+
+        // Redefine Risetime
+        const auto& corrAmp = tr.getVec<double>("corrAmp");
+        const auto& risetime = tr.getVec<float>("risetime");
+        auto& corrRisetime = tr.createDerivedVec<double>("corrRisetime",risetime.size());
+        for(unsigned int i = 0; i < risetime.size(); i++)
+        {
+            corrRisetime[i] = 1e12*abs(0.8*corrAmp[i] / risetime[i]);
+        }
+        utility::remapToLGADgeometry(tr, corrRisetime, "risetimeLGAD");
+
+        //Charge, amp/charge ratio
+        const auto& integral = tr.getVec<float>("integral");
+        auto& charge = tr.createDerivedVec<double>("charge",integral.size());
+        auto& AmpChargeRatio = tr.createDerivedVec<double>("AmpChargeRatio",integral.size());
+        for(unsigned int i = 0; i < integral.size(); i++)
+        {
+            charge[i] = -1000*integral[i]*1e9*50/4700;
+            AmpChargeRatio[i] = corrAmp[i]/charge[i];
+        }
+        utility::remapToLGADgeometry(tr, charge, "chargeLGAD");
+        utility::remapToLGADgeometry(tr, AmpChargeRatio, "ampChargeRatioLGAD");
     }
 
 public:
