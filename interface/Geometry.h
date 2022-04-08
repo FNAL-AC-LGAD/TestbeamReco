@@ -23,8 +23,8 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}};
     double stripWidth = 0.08;
     double pitch = 999;
-    double sensorCenter = 999;
-    double sensorCenterY = 999;
+    double sensorCenter = 0;
+    double sensorCenterY = 0;
     std::vector<double> stripCenterXPosition = {{0,0.0}};
     std::vector<double> stripCenterYPosition = {{0,0.0}};
     int numLGADchannels = 0;

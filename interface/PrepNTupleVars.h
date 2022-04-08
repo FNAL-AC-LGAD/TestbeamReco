@@ -71,26 +71,6 @@ private:
         xFinal = (xIntercept_!=0 && xSlope_!=0) ? x_sensor*cos(gamma_rad) + y_sensor*sin(gamma_rad) : -9999;
         yFinal = (yIntercept_!=0 && ySlope_!=0) ? y_sensor*cos(gamma_rad) - x_sensor*sin(gamma_rad) : -9999;
 
-        // //Define intial x, y position based on fit from telescope reco
-        // double x0 = xSlope_*z + xIntercept_;
-        // double y0 = ySlope_*z + yIntercept_;
-
-        // //Correct for rotation in the plane of the sensor
-        // double degreesToRad = 3.14159/180.0;
-        // double gamma_rad = gamma*degreesToRad;
-        // double x1 = x0*cos(gamma_rad) + y0*sin(gamma_rad);
-        // double y1 = y0*cos(gamma_rad) - x0*sin(gamma_rad);
-
-        // //Correct for z-x plane rotation
-        // double alpha_rad = alpha*degreesToRad;
-        // double x2 = x1 + x1*tan(alpha_rad);
-
-        // //Correct for z-y plane rotation
-        // double beta_rad = beta*degreesToRad;
-        // double y2 = y1 + y1*tan(beta_rad);
-
-        // xFinal = x2;
-        // yFinal = y2;
     }
 
     void prepNTupleVars(NTupleReader& tr)
