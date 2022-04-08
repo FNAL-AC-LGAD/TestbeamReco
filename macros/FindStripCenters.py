@@ -215,27 +215,27 @@ print("Average Max Amplitude = " + str(maxAmpAvg) + "; N of non-empty channels: 
 
 
 #Make final plots
-plotfile = TFile("PlotAmplitudeVsX.root","READ")
-plotList_amplitude_vs_x  = []
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel00"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel01"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel02"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel03"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel04"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel06"))
+# plotfile = TFile("PlotAmplitudeVsX.root","READ")
+# plotList_amplitude_vs_x  = []
+# plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel00"))
+# plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel01"))
+# plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel02"))
+# plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel03"))
+# plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel04"))
+# plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
+# plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel06"))
 # plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channelall"))
 
 list_of_fit_functions=[]
 
-ymax = plotList_amplitude_vs_x[0].GetMaximum()
+ymax = list_amplitude_vs_x[0].GetMaximum()
 for i in range(num_strips):
-    if plotList_amplitude_vs_x[i].GetMaximum()>ymax: ymax = plotList_amplitude_vs_x[i].GetMaximum()
+    if list_amplitude_vs_x[i].GetMaximum()>ymax: ymax = list_amplitude_vs_x[i].GetMaximum()
     
-    list_of_fit_functions.append(findCenter(plotList_amplitude_vs_x[i]))
+    list_of_fit_functions.append(findCenter(list_amplitude_vs_x[i]))
 
-    plotList_amplitude_vs_x[i].SetLineWidth(2)
-    plotList_amplitude_vs_x[i].SetLineColor(colors[i])
+    list_amplitude_vs_x[i].SetLineWidth(2)
+    list_amplitude_vs_x[i].SetLineColor(colors[i])
     list_of_fit_functions[i].SetLineColor(colors[i])
 
 
@@ -255,7 +255,7 @@ totalAmplitude_vs_x.SetMaximum(ymax*1.5)
 totalAmplitude_vs_x.Draw("AXIS same")
 totalAmplitude_vs_x.Draw("hist same")
 for i in range(num_strips):
-    plotList_amplitude_vs_x[i].Draw("histsame")
+    list_amplitude_vs_x[i].Draw("histsame")
     list_of_fit_functions[i].Draw("same")
 
 
@@ -266,7 +266,7 @@ legend.SetTextSize(myStyle.GetSize())
 legend.SetBorderSize(0)
 legend.SetFillColor(kWhite)
 for i in range(num_strips):
-    legend.AddEntry(plotList_amplitude_vs_x[i], "Strip %i"%(i+1))
+    legend.AddEntry(list_amplitude_vs_x[i], "Strip %i"%(i+1))
 
 legend.Draw();
 
