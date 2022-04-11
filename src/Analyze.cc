@@ -123,12 +123,14 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"ampRank4", "", 450, -50.0, 400.0);
     utility::makeHisto(my_histos,"ampRank5", "", 450, -50.0, 400.0);
     utility::makeHisto(my_histos,"ampRank6", "", 450, -50.0, 400.0);
+    utility::makeHisto(my_histos,"wave0", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_histos,"wave1", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_histos,"wave2", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_histos,"wave3", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_histos,"wave4", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_histos,"wave5", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_histos,"wave6", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
+    utility::makeHisto(my_histos,"wave7", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_histos,"deltaX", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaX_TopRow", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaX_BotRow", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
@@ -218,6 +220,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp2OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
     utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp3OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
     utility::makeHisto(my_1d_prof,"clusterSize_vs_x_prof", "; X [mm]; Cluster Size", (xmax-xmin)/xBinSize,xmin,xmax);
+    utility::makeHisto(my_1d_prof,"waveProf0", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf1", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf2", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf3", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
