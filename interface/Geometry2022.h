@@ -303,7 +303,8 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,1.0071012}, {1,0.87209195}, {2,0.97262569}, {3,0.87731328}, {4,1.0050380}, {5,0.92962715}, {6,0.90332001}, {7,0.0}};
     double stripWidth = 0.045;
     double pitch = 0.080;
-    std::vector<double> stripCenterXPosition = {-2.16, -2.24, -2.32, -2.40, -2.48, -2.56, -2.64, 0.0};
+    // std::vector<double> stripCenterXPosition = {-2.16, -2.24, -2.32, -2.40, -2.48, -2.56, -2.64, 0.0};
+    std::vector<double> stripCenterXPosition = {-2.163, -2.243, -2.322, -2.403, -2.483, -2.565, -2.645, 0.0};
     int numLGADchannels = 7;
     double alpha = 0.0;
     double beta  = 0.0;
