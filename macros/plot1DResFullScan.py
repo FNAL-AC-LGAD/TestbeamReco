@@ -100,30 +100,31 @@ def createTGraph(f, out, var_values, var):
 
         c = ROOT.TCanvas("c","c",1000,600)
 
-        # lmin = var_values[0]
-        # lmax = var_values[-1]
-        # if var in ["Z","A"]: lmin = var_values[0]
-        # if var=="C" and (var_values[0]<=90 and 90<=var_values[-1]):
-        #         lmin = var_values[0] #90
-        #         lmax = 89.4
-
         fit_limits = {
-                "Z": [var_values[0], var_values[-1]],
-                "A": [var_values[0], var_values[-1]],
-                "B": [var_values[0], var_values[-1]],
-                "C": [var_values[0], var_values[-1]],
+                "Z": [var_values[0], var_values[-1], -99, -99, -99],
+                "A": [var_values[0], var_values[-1], -99, -99, -99],
+                "B": [var_values[0], var_values[-1], -99, -99, -99],
+                "C": [var_values[0], var_values[-1], -99, -99, -99], # 50.0, 50.0, 20.0],
         }
 
 
         fitFunc = ROOT.TF1("","pol2",var_values[0], var_values[-1]);
 
-        # fitFunc.SetParLimits(2,0,10000)
+        # fitFunc.SetParLimits(0,0.0,1.e12)
+        fitFunc.SetParLimits(2,0.0,10000)
+        if fit_limits[var][2]!=-99: fitFunc.SetParameter(0,fit_limits[var][2])
+        if fit_limits[var][3]!=-99: fitFunc.SetParameter(1,fit_limits[var][3])
+        if fit_limits[var][4]!=-99: fitFunc.SetParameter(2,fit_limits[var][4])
+
         results = resolution_vs_var.Fit(fitFunc,"Q","",fit_limits[var][0], fit_limits[var][1]);
         #results.Print("V")
         a = fitFunc.GetParameter(2)
         b = fitFunc.GetParameter(1)
         print(a, b)
-        print("\tMinimum at: {}".format(-(b)/(2*a)))
+        if (a<=0.0):
+                print("Not quadratic: a = 0.0")
+        else:
+                print("\tMinimum at: {}".format(-(b)/(2*a)))
 
         resolution_vs_var.SetName("TGraph_%s"%var)
         resolution_vs_var.Draw("aep")
@@ -140,6 +141,12 @@ def createTGraph(f, out, var_values, var):
 
         c.SaveAs(outdir+"Scan_"+var+".gif")
         c.SaveAs(outdir+"Scan_"+var+".pdf")
+
+        # resolution_vs_var.GetYaxis().SetRangeUser(5.1, 20.9)
+        resolution_vs_var.GetYaxis().SetRangeUser(10.1, 49.9)
+        # resolution_vs_var.GetYaxis().SetRangeUser(15.1, 24.9)
+        c.SaveAs(outdir+"Scan_"+var+"_fixY.gif")
+        c.SaveAs(outdir+"Scan_"+var+"_fixY.pdf")
 
 
 createTGraph(inputfile, outputfile, z_values,       "Z")

@@ -3,6 +3,7 @@ import optparse
 ROOT.gROOT.SetBatch(True)
 from array import array
 from AlignBinning import z_values, alpha_values, beta_values
+import myStyle
 
 def cosmetic_tgraph(graph):
         # graph.SetLineColor(colors[colorindex])
@@ -44,16 +45,18 @@ def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('--runPad', dest='runPad', action='store_true', default = False, help="run fits or not")
 options, args = parser.parse_args()
+dataset = options.Dataset
 
-f = ROOT.TFile('../test/myout2.root')
+outdir=""
+outdir = myStyle.getOutputDir(dataset)
+f = ROOT.TFile("%s%s_Align.root"%(outdir,dataset))
 
 hists=[]
 for i in range(len(z_values)):
-        i_z = 4 + 4*9 + i*81
-        #if i%81 == 40:
-        hists.append(('deltaX_var%i'%i_z,'deltaX_variant_%i'%i_z,"tracker"))
+        hists.append(('deltaX_varZ%i'%i,'deltaX_variant_%i'%i,"tracker"))
 
 resolutions=[]
 res_errs=[]
@@ -62,7 +65,7 @@ for ivar,t in enumerate(hists):
         resolution,error = plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2])
         resolutions.append(resolution)
         res_errs.append(error)
-        print("res:%0.2f, z: %0.f "%(resolutions[-1],z_values[ivar]))
+        #print("res:%0.2f, z: %0.f "%(resolutions[-1],z_values[ivar]))
 
 
 resolution_vs_z = ROOT.TGraphErrors(len(z_values),array("d",z_values),array("d",resolutions),array("d",[0.01 for i in z_values]),array("d",res_errs))

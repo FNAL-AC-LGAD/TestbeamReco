@@ -125,13 +125,6 @@ public:
         tr.registerDerivedVar("voltage", voltage);
         std::cout<<"Voltage: "<<voltage<<std::endl;
 
-        // FIND THE WAY TO ADD THESE VALUES TO IMPROVE THE SCAN!
-        // THIS DOESN'T WORK BECAUSE WE HAVEN'T DEFINED THE GEOMETRIES YET... CAN WE JUST MOVE THIS DEFINITION BELLOW?
-        // const auto& z_dut = tr.getVar<double>("z_dut");
-        // const auto& alpha = tr.getVar<double>("alpha");
-        // const auto& beta  = tr.getVar<double>("beta");
-        // const auto& gamma = tr.getVar<double>("gamma");
-
         //Setup Sensor Geometry 
         if     (filetag.find("BNL2020")                        != std::string::npos) registerGeometry(tr, BNL2020Geometry(voltage));
         else if(filetag.find("BNL2021_wide")                   != std::string::npos) registerGeometry(tr, BNL2021WideGeometry(voltage));
@@ -162,19 +155,17 @@ public:
             std::cout<<"Warning: Using DefaultGeometry, odds are this is not what you want"<<std::endl;
         }
 
-        // TRY NEW POSITION
-        // const auto& z_dut_def = 28.0;
-        // const auto& alpha_def = 0.0;
-        // const auto& beta_def  = 0.0;
-        // const auto& gamma_def = 90.0;
+        // Setup multidimensional scan variables
         const auto& z_dut_def = tr.getVar<double>("z_dut");
         const auto& alpha_def = tr.getVar<double>("alpha");
         const auto& beta_def  = tr.getVar<double>("beta");
         const auto& gamma_def = tr.getVar<double>("gamma");
 
-        //Define zScan // [-40.0, 40.0]
+        //Define zScan
         double zMin = -60.0, zStep = 1.0;
         unsigned int nZBins = 81;
+        // double zMin = -10.0, zStep = 0.5;
+        // unsigned int nZBins = 41;
         std::vector<double> zScan(nZBins);
         std::string pythonBins = "z_values = [";
         for(unsigned int i = 0; i < nZBins; i++) 
@@ -186,9 +177,11 @@ public:
         tr.registerDerivedVar<std::vector<double>>("zScan",zScan);
         pythonBins+="]\n";
 
-        //Define alphaScan // [-2.0, 2.0]
-        double alphaMin = -2.0, alphaStep = 0.1;
-        unsigned int nAlphaBins = 41;
+        //Define alphaScan
+        double alphaMin = -3.0, alphaStep = 0.1;
+        unsigned int nAlphaBins = 61;
+        // double alphaMin = -2.0, alphaStep = 0.05;
+        // unsigned int nAlphaBins = 81;
         std::vector<double> alphaScan(nAlphaBins);
         pythonBins+="alpha_values = [";
         for(unsigned int i = 0; i < nAlphaBins; i++) 
@@ -200,9 +193,11 @@ public:
         tr.registerDerivedVar<std::vector<double>>("alphaScan",alphaScan);
         pythonBins+="]\n";
 
-        //Define betaScan // [-2.0, 2.0]
-        double betaMin = -2.0, betaStep = 0.1;
-        unsigned int nbetaBins = 41;
+        //Define betaScan
+        double betaMin = -3.0, betaStep = 0.1;
+        unsigned int nbetaBins = 61;
+        // double betaMin = -1.0, betaStep = 0.05;
+        // unsigned int nbetaBins = 41;
         std::vector<double> betaScan(nbetaBins);
         pythonBins+="beta_values = [";
         for(unsigned int i = 0; i < nbetaBins; i++) 
@@ -214,9 +209,11 @@ public:
         tr.registerDerivedVar<std::vector<double>>("betaScan",betaScan);
         pythonBins+="]\n";
 
-        //Define gammaScan // [-2.0, 2.0]
-        double gammaMin = -2.0, gammaStep = 0.1;
-        unsigned int ngammaBins = 41;
+        //Define gammaScan
+        double gammaMin = -3.0, gammaStep = 0.1;
+        unsigned int ngammaBins = 61;
+        // double gammaMin = -1.0, gammaStep = 0.05;
+        // unsigned int ngammaBins = 41;
         std::vector<double> gammaScan(ngammaBins);
         pythonBins+="gamma_values = [";
         for(unsigned int i = 0; i < ngammaBins; i++) 

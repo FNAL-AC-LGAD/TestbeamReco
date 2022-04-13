@@ -413,19 +413,20 @@ public:
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-    // std::map<int, double> amplitudeCorrectionFactor = {{0,1.1770}, {1,1.0961}, {2,1.0516}, {3,0.9551}, {4,0.9751}, {5,0.9202}, {6,0.8865}, {7,1.0}};
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.1770}, {1,1.0961}, {2,1.0516}, {3,0.9551}, {4,0.9751}, {5,0.9202}, {6,0.8865}, {7,1.0}};
+    // std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.96398053}, {1,0.84198568}, {2,0.93964217}, {3,0.83790917}, {4,0.88894472}, {5,0.80036949}, {6,0.91889931}, {7,0.0}};
     double stripWidth = 0.100;
     double pitch = 0.500;
-    std::vector<double> stripCenterXPosition = {-0.54, -1.04, -1.54, -2.04, -2.54, -3.04, -3.54, 0.0};
+    // std::vector<double> stripCenterXPosition = {-0.54, -1.04, -1.54, -2.04, -2.54, -3.04, -3.54, 0.0};
+    std::vector<double> stripCenterXPosition = {-0.525, -1.024, -1.519, -2.018, -2.516, -3.017, -3.515, 0.0};
     int numLGADchannels = 7;
-    int lowGoodStripIndex = 0;
-    int highGoodStripIndex = 6;
-    double alpha = 0.0;
-    double beta  = 0.0;
+    int lowGoodStripIndex = 1; // 0;
+    int highGoodStripIndex = 5; // 6;
+    double alpha = -1.0;
+    double beta  = -1.30;
     double gamma = 0.0 + 90.0;
-    double z_dut = 28.41878;
+    double z_dut = 5.57; // 4.46; // 21.33; // 28.41878;
     double xmin =  -4.2;
     double xmax =   0.5;
     double ymin =  -1.0;
@@ -438,8 +439,13 @@ public:
     int minPixHits = 4;
     int minStripHits = 6;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.25, -0.682406,  12.6055, -257.771,   2476.2, -12142.6,  29452.7, -28032.3};
+    // std::vector<double> positionRecoPar = {0.25, -0.682406,  12.6055, -257.771,   2476.2, -12142.6,  29452.7, -28032.3};
+    std::vector<double> positionRecoPar = {0.25, -0.411715,   -1.20881,  8.4184,  -17.3764};
     std::vector<std::vector<double>> sensorEdges = {{-4.0, -1.0}, {0, 4.8}};
+    // double sensorCenter  = 0.0;
+    // double sensorCenterY = 0.0;
+    double sensorCenter  = (sensorEdges[1][0] + sensorEdges[0][0])/2.0;
+    double sensorCenterY = (sensorEdges[1][1] + sensorEdges[0][1])/2.0;
 };
 
 
@@ -499,10 +505,10 @@ public:
     int numLGADchannels = 7;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
-    double alpha = 0.0;
-    double beta  = 0.0;
+    double alpha = 20.0;
+    double beta  = -0.02;
     double gamma =  1.3;
-    double z_dut = 28.41878;
+    double z_dut = -3.9; //28.41878;
     double xBinSize = 0.02;
     double yBinSize = 0.05;
     double xmin =  -1.8;
@@ -519,6 +525,8 @@ public:
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.075, -0.172763, 0.152945, -0.894909, 0.246914};
     std::vector<std::vector<double>> sensorEdges = {{-1.62, -3.50}, {-0.64, -1.15}};
+    double sensorCenter  = (sensorEdges[1][0] + sensorEdges[0][0])/2.0;
+    double sensorCenterY = (sensorEdges[1][1] + sensorEdges[0][1])/2.0;
 };
 
 #endif
