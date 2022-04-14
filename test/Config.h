@@ -66,6 +66,7 @@ private:
         tr.registerDerivedVar("minStripHits", g.minStripHits);
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
         tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
+        tr.registerDerivedVar("isHorizontal", g.isHorizontal);
         tr.registerDerivedVar("positionRecoPar", g.positionRecoPar);
         tr.registerDerivedVar("positionRecoParRight", g.positionRecoParRight);
         tr.registerDerivedVar("positionRecoParLeft", g.positionRecoParLeft);

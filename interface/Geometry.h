@@ -50,6 +50,7 @@ public:
     bool isHPKStrips = false;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = false;
+    bool isHorizontal = false;
     int minPixHits = 0;
     int minStripHits = 7;
     std::vector<double> positionRecoPar = {-1};

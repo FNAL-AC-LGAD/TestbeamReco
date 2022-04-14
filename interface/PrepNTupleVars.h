@@ -46,31 +46,75 @@ private:
         }      
     }
 
-    void getXYOnSensor(double& xFinal, double& yFinal, const float z_C=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_C=0.0, const float y_C=0.0)
+    void getXYOnSensor(double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
     {
+        double xI, yI, xS, yS;
 
-        // Maybe add a new element related to the strips direction: IsHorizontal = true (default: false)
-        double x_temp = x_C;
-        double xc = (gamma < -45 || 45 < gamma) ? -y_C : x_C;
-        double yc = (gamma < -45 || 45 < gamma) ? x_temp : y_C;
-        
+        if (isHorizontal){
+            xI = yIntercept_;
+            yI = -xIntercept_;
+            xS = ySlope_;
+            yS = -xSlope_;
+        }
+        else{
+            xI = xIntercept_;
+            yI = yIntercept_;
+            xS = xSlope_;
+            yS = ySlope_;
+        }
+
         double degreesToRad = 3.14159/180.0;
         double alpha_rad = alpha*degreesToRad;
         double beta_rad = beta*degreesToRad;
         double gamma_rad = gamma*degreesToRad;
 
-        double z_lab = (z_C - tan(alpha_rad)*(cos(beta_rad)*(xIntercept_ - xc) + sin(beta_rad)*(yIntercept_ - yc))) / (1 + tan(alpha_rad)*(cos(beta_rad)*xSlope_ + sin(beta_rad)*ySlope_));
+        double nx_nz = cos(alpha_rad)*tan(beta_rad) + sin(alpha_rad)*tan(gamma_rad)/cos(beta_rad);
+        double ny_nz = sin(alpha_rad)*tan(beta_rad) - cos(alpha_rad)*tan(gamma_rad)/cos(beta_rad);
 
-        double lx = xIntercept_ + z_lab*xSlope_ - xc;
-        double ly = yIntercept_ + z_lab*ySlope_ - yc;
-        double lz = z_lab - z_C;
+        double z_lab = (z_center - nx_nz*(xI - x_center) - ny_nz*(yI - y_center)) / (1 + nx_nz*xS + ny_nz*yS);
 
-        double x_sensor = lx*(cos(beta_rad)*cos(alpha_rad)) + ly*(sin(beta_rad)*cos(alpha_rad)) + lz*(-sin(alpha_rad));
-        double y_sensor = lx*(-sin(beta_rad)) + ly*(cos(beta_rad));
+        double lx = xI + z_lab*xS - x_center;
+        double ly = yI + z_lab*yS - y_center;
+        double lz = z_lab - z_center;
 
-        xFinal = (xIntercept_!=0 && xSlope_!=0) ? x_sensor*cos(gamma_rad) + y_sensor*sin(gamma_rad) : -9999;
-        yFinal = (yIntercept_!=0 && ySlope_!=0) ? y_sensor*cos(gamma_rad) - x_sensor*sin(gamma_rad) : -9999;
+        double x_r1 = cos(alpha_rad)*lx + sin(alpha_rad)*ly;
+        double y_r1 = -sin(alpha_rad)*lx + cos(alpha_rad)*ly;
+        double z_r1 = lz;
 
+        double x_r2 = cos(beta_rad)*x_r1 - sin(beta_rad)*z_r1;
+        double y_r2 = y_r1;
+        double z_r2 = sin(beta_rad)*x_r1 + cos(beta_rad)*z_r1;
+
+        double x_r3 = x_r2;
+        double y_r3 = cos(gamma_rad)*y_r2 + sin(gamma_rad)*z_r2;
+        // double z_r3 = -sin(gamma_rad)*y_r2 + cos(gamma_rad)*z_r2; // z_r3 = 0;
+
+        // double x_sensor = lx*(cos(alpha_rad)*cos(beta_rad)) + ly*(sin(alpha_rad)*cos(beta_rad)) + lz*(-sin(beta_rad));
+        // double y_sensor = lx*(cos(alpha_rad)*sin(beta_rad)*sin(gamma_rad) - sin(alpha_rad)*cos(gamma_rad)) + ly*(cos(alpha_rad)*cos(gamma_rad) + sin(alpha_rad)*sin(beta_rad)*sin(gamma_rad)) + lz*(cos(beta_rad)*sin(gamma_rad));
+
+        xFinal = (xI==0 && xS==0) ? -9999 : x_r3;
+        yFinal = (yI==0 && yS==0) ? -9999 : y_r3;
+
+        // OLD:
+        // double xC = (isHorizontal) ? -y_center : x_center;
+        // double yC = (isHorizontal) ? x_center : y_center;
+        
+        // double degreesToRad = 3.14159/180.0;
+        // double alpha_rad = alpha*degreesToRad;
+        // double beta_rad = beta*degreesToRad;
+        // double gamma_rad = gamma*degreesToRad;
+
+        // double z_lab = (z_center - tan(alpha_rad)*(cos(beta_rad)*(xIntercept_ - xC) + sin(beta_rad)*(yIntercept_ - yC))) / (1 + tan(alpha_rad)*(cos(beta_rad)*xSlope_ + sin(beta_rad)*ySlope_));
+
+        // double lx = xIntercept_ + z_lab*xSlope_ - xC;
+        // double ly = yIntercept_ + z_lab*ySlope_ - yC;
+        // double lz = z_lab - z_center;
+
+        // double x_sensor = lx*(cos(beta_rad)*cos(alpha_rad)) + ly*(sin(beta_rad)*cos(alpha_rad)) + lz*(-sin(alpha_rad));
+        // double y_sensor = lx*(-sin(beta_rad)) + ly*(cos(beta_rad));
+
+        // xFinal = (xIntercept_!=0 && xSlope_!=0) ? x_sensor*cos(gamma_rad) + y_sensor*sin(gamma_rad) : -9999;
+        // yFinal = (yIntercept_!=0 && ySlope_!=0) ? y_sensor*cos(gamma_rad) - x_sensor*sin(gamma_rad) : -9999;
     }
 
     void prepNTupleVars(NTupleReader& tr)
@@ -90,6 +134,7 @@ private:
         const auto& alpha = tr.getVar<double>("alpha");
         const auto& beta  = tr.getVar<double>("beta");
         const auto& gamma = tr.getVar<double>("gamma");
+        const auto& isHorizontal = tr.getVar<bool>("isHorizontal");
     	//const auto& x_dut = tr.getVec<float>("x_dut");
     	//const auto& y_dut = tr.getVec<float>("y_dut");
         //
@@ -99,7 +144,7 @@ private:
         // Define final telescope hit location on DUT based on track lines and hard coded parameters
         auto& x = tr.createDerivedVar<double>("x");
         auto& y = tr.createDerivedVar<double>("y");
-        getXYOnSensor(x, y, z_dut, alpha, beta, gamma, sensorCenter, sensorCenterY);
+        getXYOnSensor(x, y, z_dut, alpha, beta, gamma, sensorCenter, sensorCenterY, isHorizontal);
 
         // Create vectors of possible x,y locations by varying hard coded parameters
         const auto& zScan = tr.getVar<std::vector<double>>("zScan");
@@ -131,19 +176,6 @@ private:
         {
             getXYOnSensor(x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY);
         }
-
-        //     for(unsigned int j = 0; j < alphaScan.size(); j++)
-        //     {
-        //         for(unsigned int k = 0; k < betaScan.size(); k++)
-        //         {
-        //             for(unsigned int l = 0; l < gammaScan.size(); l++)
-        //             {
-        //                 unsigned int i_var = l + k*gammaScan.size() + j*betaScan.size()*gammaScan.size() + i*betaScan.size()*alphaScan.size()*gammaScan.size();
-        //                 getXYOnSensor(x_var[i_var], y_var[i_var], zScan[i], alphaScan[j], betaScan[k], gammaScan[l], sensorCenter, sensorCenterY);
-        //                 //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zScan[i]<<std::endl;
-        //             }
-        //         }
-        //     }
         
         // Correct amp and map raw amplitude
 	    ApplyAmplitudeCorrection(tr);

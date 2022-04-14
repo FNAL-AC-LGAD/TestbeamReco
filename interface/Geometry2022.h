@@ -425,7 +425,7 @@ public:
     int highGoodStripIndex = 5; // 6;
     double alpha = -1.0;
     double beta  = -1.30;
-    double gamma = 0.0 + 90.0;
+    double gamma = 0.0;
     double z_dut = 5.57; // 4.46; // 21.33; // 28.41878;
     double xmin =  -4.2;
     double xmax =   0.5;
@@ -439,6 +439,7 @@ public:
     int minPixHits = 4;
     int minStripHits = 6;
     bool enablePositionReconstruction = true;
+    bool isHorizontal = true;
     // std::vector<double> positionRecoPar = {0.25, -0.682406,  12.6055, -257.771,   2476.2, -12142.6,  29452.7, -28032.3};
     std::vector<double> positionRecoPar = {0.25, -0.411715,   -1.20881,  8.4184,  -17.3764};
     std::vector<std::vector<double>> sensorEdges = {{-4.0, -1.0}, {0, 4.8}};
@@ -505,10 +506,14 @@ public:
     int numLGADchannels = 7;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
-    double alpha = 20.0;
-    double beta  = -0.02;
-    double gamma =  1.3;
-    double z_dut = -3.9; //28.41878;
+    double alpha = 1.2; //0.0;
+    double beta  = 0.0;
+    double gamma =  0.0;
+    double z_dut = -4.0; //2.0; //28.41878;
+    // double alpha = 20.0;
+    // double beta  = -0.02;
+    // double gamma =  1.3;
+    // double z_dut = -3.9; //28.41878;
     double xBinSize = 0.02;
     double yBinSize = 0.05;
     double xmin =  -1.8;
