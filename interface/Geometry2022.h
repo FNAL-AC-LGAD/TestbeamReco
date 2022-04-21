@@ -506,10 +506,10 @@ public:
     int numLGADchannels = 7;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
-    double alpha = 1.2; //0.0;
-    double beta  = 0.0;
+    double alpha = 1.1; // 1.2; //0.0;
+    double beta  = -0.014;
     double gamma =  0.0;
-    double z_dut = -4.0; //2.0; //28.41878;
+    double z_dut = -4.4; // -4.0; //2.0; //28.41878;
     // double alpha = 20.0;
     // double beta  = -0.02;
     // double gamma =  1.3;

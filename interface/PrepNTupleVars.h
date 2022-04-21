@@ -46,7 +46,7 @@ private:
         }      
     }
 
-    void getXYOnSensor(double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
+    void getXYOnSensor(std::vector<double>& xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
     {
         double xI, yI, xS, yS;
 
@@ -94,6 +94,10 @@ private:
 
         xFinal = (xI==0 && xS==0) ? -9999 : x_r3;
         yFinal = (yI==0 && yS==0) ? -9999 : y_r3;
+
+        xyz_tracker[0] = (xI==0 && xS==0) ? -9999 : lx;
+        xyz_tracker[1] = (yI==0 && yS==0) ? -9999 : ly;
+        xyz_tracker[2] = (xI==0 && xS==0 && yI==0 && yS==0) ? -9999 : lz;
 
         // OLD:
         // double xC = (isHorizontal) ? -y_center : x_center;
@@ -144,7 +148,8 @@ private:
         // Define final telescope hit location on DUT based on track lines and hard coded parameters
         auto& x = tr.createDerivedVar<double>("x");
         auto& y = tr.createDerivedVar<double>("y");
-        getXYOnSensor(x, y, z_dut, alpha, beta, gamma, sensorCenter, sensorCenterY, isHorizontal);
+        auto& xyz_tracker = tr.createDerivedVec<double>("xyz_tracker",3);
+        getXYOnSensor(xyz_tracker, x, y, z_dut, alpha, beta, gamma, sensorCenter, sensorCenterY, isHorizontal);
 
         // Create vectors of possible x,y locations by varying hard coded parameters
         const auto& zScan = tr.getVar<std::vector<double>>("zScan");
@@ -160,23 +165,26 @@ private:
         auto& y_varB = tr.createDerivedVec<double>("y_varB",betaScan.size());
         auto& x_varC = tr.createDerivedVec<double>("x_varC",gammaScan.size());
         auto& y_varC = tr.createDerivedVec<double>("y_varC",gammaScan.size());
+
+        std::vector<double> vec_test(3);
         for(unsigned int i = 0; i < zScan.size(); i++)
         {
-            getXYOnSensor(x_var[i], y_var[i], zScan[i], alpha, beta, gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(vec_test, x_var[i], y_var[i], zScan[i], alpha, beta, gamma, sensorCenter, sensorCenterY);
         }
         for(unsigned int i = 0; i < alphaScan.size(); i++)
         {
-            getXYOnSensor(x_varA[i], y_varA[i], z_dut, alphaScan[i], beta, gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(vec_test, x_varA[i], y_varA[i], z_dut, alphaScan[i], beta, gamma, sensorCenter, sensorCenterY);
         }
         for(unsigned int i = 0; i < betaScan.size(); i++)
         {
-            getXYOnSensor(x_varB[i], y_varB[i], z_dut, alpha, betaScan[i], gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(vec_test, x_varB[i], y_varB[i], z_dut, alpha, betaScan[i], gamma, sensorCenter, sensorCenterY);
         }
         for(unsigned int i = 0; i < gammaScan.size(); i++)
         {
-            getXYOnSensor(x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY);
+            getXYOnSensor(vec_test, x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY);
         }
         
+        vec_test.clear();
         // Correct amp and map raw amplitude
 	    ApplyAmplitudeCorrection(tr);
         const auto& amp = tr.getVec<float>("amp");

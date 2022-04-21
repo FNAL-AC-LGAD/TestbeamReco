@@ -72,7 +72,7 @@ def plot1D(hists, colors, labels, name, ylab, xlab, bins=100, arange=(0,1)):
         fit.Draw("same")    
 
         #c.Print("%s.png"%(name))
-     #   c.Print("%s.gif"%(name))
+        #c.Print("%s.gif"%(name))
         return 1000.*fit.GetParameter(2),1000.*fit.GetParError(2)
 
 def createTGraph(f, out, var_values, var):
@@ -90,7 +90,7 @@ def createTGraph(f, out, var_values, var):
                 resolution,error = plot1D([h], [ROOT.kBlack], [t[1]], t[0], 'Events', t[1]+' - '+t[2])
                 resolutions.append(resolution)
                 res_errs.append(error)
-                print("\tres:%0.2f, %s: %0.1f "%(resolutions[-1],var,var_values[ivar]))
+                print("%i\tres:%0.2f, %s: %0.1f "%(ivar,resolutions[-1],var,var_values[ivar]))
                 # print("res:%0.2f, z: %0.2f, alpha: %0.2f, beta: %0.2f "%(resolutions[-1],z_values[ivar], alpha_values[], beta_values[]))
 
 
@@ -101,7 +101,7 @@ def createTGraph(f, out, var_values, var):
         c = ROOT.TCanvas("c","c",1000,600)
 
         fit_limits = {
-                "Z": [var_values[0], var_values[-1], -99, -99, -99],
+                "Z": [var_values[0], var_values[-1], -99, -99, -99], # -99, -99, -99],
                 "A": [var_values[0], var_values[-1], -99, -99, -99],
                 "B": [var_values[0], var_values[-1], -99, -99, -99],
                 "C": [var_values[0], var_values[-1], -99, -99, -99], # 50.0, 50.0, 20.0],
@@ -142,8 +142,8 @@ def createTGraph(f, out, var_values, var):
         c.SaveAs(outdir+"Scan_"+var+".gif")
         c.SaveAs(outdir+"Scan_"+var+".pdf")
 
-        # resolution_vs_var.GetYaxis().SetRangeUser(5.1, 20.9)
-        resolution_vs_var.GetYaxis().SetRangeUser(10.1, 49.9)
+        resolution_vs_var.GetYaxis().SetRangeUser(5.1, 20.9)
+        # resolution_vs_var.GetYaxis().SetRangeUser(10.1, 49.9)
         # resolution_vs_var.GetYaxis().SetRangeUser(15.1, 24.9)
         c.SaveAs(outdir+"Scan_"+var+"_fixY.gif")
         c.SaveAs(outdir+"Scan_"+var+"_fixY.pdf")
