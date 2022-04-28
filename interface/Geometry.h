@@ -173,7 +173,15 @@ public:
     double pitch = 0.15;
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.75, -4.90, -5.05, -5.20, -5.35, 0.0};
     int numLGADchannels = 6;
-    double gamma =  1.3;
+    int lowGoodStripIndex = 0;
+    int highGoodStripIndex = 6;
+    double alpha = 1.11;
+    double beta  = -0.04;
+    double gamma = 0.0;
+    double z_dut = -10.2;
+    // double gamma =  1.3;
+    double xBinSize = 0.02;
+    double yBinSize = 0.05;
     double xmin =  -5.7;
     double xmax =  -4.3;
     double ymin =   9.0;
@@ -182,9 +190,14 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 40.0;
+    // bool isHPKStrips = true;
+    // int minPixHits = 4;
+    // int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.075, -0.140285, -0.774667, 5.65837, -13.5359};
     std::vector<std::vector<double>> sensorEdges = {{-5.625, 9.272}, {-4.403, 12.067}};
+    double sensorCenter  = (sensorEdges[1][0] + sensorEdges[0][0])/2.0;
+    double sensorCenterY = (sensorEdges[1][1] + sensorEdges[0][1])/2.0;
 };
 
 class BNL2021NarrowGeometry : public DefaultGeometry

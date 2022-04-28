@@ -46,10 +46,13 @@ private:
         }      
     }
 
+    // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z -> Y -> X
+    // ** xyz_tracker gives the laboratory hit position projection over Z = 0
     void getXYOnSensor(std::vector<double>& xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
     {
         double xI, yI, xS, yS;
 
+        // Use correct track parameters, given the axes defined such that the strips are always perpendicular to the x-axis 
         if (isHorizontal){
             xI = yIntercept_;
             yI = -xIntercept_;
@@ -68,23 +71,29 @@ private:
         double beta_rad = beta*degreesToRad;
         double gamma_rad = gamma*degreesToRad;
 
+        // Define angles' dependent factors used in the next expression for the laboratory z position of the hit in the sensor
         double nx_nz = cos(alpha_rad)*tan(beta_rad) + sin(alpha_rad)*tan(gamma_rad)/cos(beta_rad);
         double ny_nz = sin(alpha_rad)*tan(beta_rad) - cos(alpha_rad)*tan(gamma_rad)/cos(beta_rad);
 
         double z_lab = (z_center - nx_nz*(xI - x_center) - ny_nz*(yI - y_center)) / (1 + nx_nz*xS + ny_nz*yS);
 
+        // Coordinates of the hit w.r.t. sensor's center in the lab frame
         double lx = xI + z_lab*xS - x_center;
         double ly = yI + z_lab*yS - y_center;
         double lz = z_lab - z_center;
 
+        // Express the hit position in the local/sensor's frame
+        // First rotation around z-lab axis
         double x_r1 = cos(alpha_rad)*lx + sin(alpha_rad)*ly;
         double y_r1 = -sin(alpha_rad)*lx + cos(alpha_rad)*ly;
         double z_r1 = lz;
 
+        // Second rotation around y-lab axis
         double x_r2 = cos(beta_rad)*x_r1 - sin(beta_rad)*z_r1;
         double y_r2 = y_r1;
         double z_r2 = sin(beta_rad)*x_r1 + cos(beta_rad)*z_r1;
 
+        // Third rotation around x-lab axis
         double x_r3 = x_r2;
         double y_r3 = cos(gamma_rad)*y_r2 + sin(gamma_rad)*z_r2;
         // double z_r3 = -sin(gamma_rad)*y_r2 + cos(gamma_rad)*z_r2; // z_r3 = 0;
@@ -92,6 +101,7 @@ private:
         // double x_sensor = lx*(cos(alpha_rad)*cos(beta_rad)) + ly*(sin(alpha_rad)*cos(beta_rad)) + lz*(-sin(beta_rad));
         // double y_sensor = lx*(cos(alpha_rad)*sin(beta_rad)*sin(gamma_rad) - sin(alpha_rad)*cos(gamma_rad)) + ly*(cos(alpha_rad)*cos(gamma_rad) + sin(alpha_rad)*sin(beta_rad)*sin(gamma_rad)) + lz*(cos(beta_rad)*sin(gamma_rad));
 
+        // Save local/sensor hit's position when the tracker worked (z component is always zero)
         xFinal = (xI==0 && xS==0) ? -9999 : x_r3;
         yFinal = (yI==0 && yS==0) ? -9999 : y_r3;
 

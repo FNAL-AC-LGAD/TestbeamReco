@@ -101,30 +101,33 @@ def createTGraph(f, out, var_values, var):
         c = ROOT.TCanvas("c","c",1000,600)
 
         fit_limits = {
-                "Z": [var_values[0], var_values[-1], -99, -99, -99], # -99, -99, -99],
-                "A": [var_values[0], var_values[-1], -99, -99, -99],
-                "B": [var_values[0], var_values[-1], -99, -99, -99],
-                "C": [var_values[0], var_values[-1], -99, -99, -99], # 50.0, 50.0, 20.0],
+                "Z": [var_values[0], var_values[-1], 17.5, -99, -99], # 9.3 # -99, -99, -99],
+                "A": [var_values[0], var_values[-1], 17, -99, -99],
+                "B": [var_values[0], var_values[-1], 9.23, -99, -99],
+                "C": [var_values[0], var_values[-1], 9.23, -99, -99], # 50.0, 50.0, 20.0],
         }
 
 
-        fitFunc = ROOT.TF1("","pol2",var_values[0], var_values[-1]);
+        fitFunc = ROOT.TF1("","pol6",var_values[0], var_values[-1]);
 
+        fitFunc.SetParLimits(0,0.0,50.0)
         # fitFunc.SetParLimits(0,0.0,1.e12)
-        fitFunc.SetParLimits(2,0.0,10000)
+        # fitFunc.SetParLimits(2,0.0,10000)
         if fit_limits[var][2]!=-99: fitFunc.SetParameter(0,fit_limits[var][2])
         if fit_limits[var][3]!=-99: fitFunc.SetParameter(1,fit_limits[var][3])
         if fit_limits[var][4]!=-99: fitFunc.SetParameter(2,fit_limits[var][4])
 
         results = resolution_vs_var.Fit(fitFunc,"Q","",fit_limits[var][0], fit_limits[var][1]);
         #results.Print("V")
-        a = fitFunc.GetParameter(2)
-        b = fitFunc.GetParameter(1)
-        print(a, b)
-        if (a<=0.0):
-                print("Not quadratic: a = 0.0")
-        else:
-                print("\tMinimum at: {}".format(-(b)/(2*a)))
+        # a = fitFunc.GetParameter(2)
+        # b = fitFunc.GetParameter(1)
+        # print(a, b)
+        # if (a<=0.0):
+        #         print("Not quadratic: a = 0.0")
+        # else:
+        #         print("\tMinimum at: {}".format(-(b)/(2*a)))
+
+        print("\tMinimum at: {}".format(fitFunc.GetMinimumX()))        
 
         resolution_vs_var.SetName("TGraph_%s"%var)
         resolution_vs_var.Draw("aep")

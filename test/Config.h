@@ -181,8 +181,8 @@ public:
         //Define alphaScan
         double alphaMin = -3.0, alphaStep = 0.1;
         unsigned int nAlphaBins = 61;
-        // double alphaMin = -2.0, alphaStep = 0.05;
-        // unsigned int nAlphaBins = 81;
+        // double alphaMin = -1.0, alphaStep = 0.05;
+        // unsigned int nAlphaBins = 41;
         std::vector<double> alphaScan(nAlphaBins);
         pythonBins+="alpha_values = [";
         for(unsigned int i = 0; i < nAlphaBins; i++) 

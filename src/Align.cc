@@ -61,7 +61,7 @@ void Align::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& ge
     utility::makeHisto(my_2d_histos,"hist_xy_denominator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-((xmax+xmin)/2.),xmax-((xmax+xmin)/2.), (ymax-ymin)/yBinSize,ymin-((ymax+ymin)/2.),ymax-((ymax+ymin)/2.));
     utility::makeHisto(my_2d_histos,"hist_xy_ch2","; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-((xmax+xmin)/2.),xmax-((xmax+xmin)/2.), (ymax-ymin)/yBinSize,ymin-((ymax+ymin)/2.),ymax-((ymax+ymin)/2.));
     
-    utility::makeHisto(my_3d_histos,"sensor_lab","; X_tracker [mm]; Y_tracker [mm]", (xmax-xmin)/xBinSize,xmin-((xmax+xmin)/2.),xmax-((xmax+xmin)/2.), (ymax-ymin)/yBinSize,ymin-((ymax+ymin)/2.),ymax-((ymax+ymin)/2.), 200,-0.01,0.01);
+    utility::makeHisto(my_3d_histos,"sensor_lab","; X_tracker [mm]; Y_tracker [mm]", (xmax-xmin)/xBinSize,xmin-((xmax+xmin)/2.),xmax-((xmax+xmin)/2.), (ymax-ymin)/yBinSize,ymin-((ymax+ymin)/2.),ymax-((ymax+ymin)/2.), 200,-0.005,0.005);
 
     // int rowIndex = 0;
     // for(const auto& row : geometry)
