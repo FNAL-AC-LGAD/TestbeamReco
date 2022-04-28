@@ -25,7 +25,7 @@ options, args = parser.parse_args()
 
 sensor = options.sensor
 bias = options.biasvolt
-pitch = options.pitch
+pitch = float(options.pitch)
 
 num_strips=7
 
@@ -55,60 +55,7 @@ def findCenter(hist):
 
 
 
-# #Define histo names
-# h00 = "amplitude_vs_xy_channel00"
-# h01 = "amplitude_vs_xy_channel01"
-# h02 = "amplitude_vs_xy_channel02"
-# h03 = "amplitude_vs_xy_channel03"
-# h04 = "amplitude_vs_xy_channel04"
-# h05 = "amplitude_vs_xy_channel05"
-# h06 = "amplitude_vs_xy_channel06"
-# htot = "totamplitude_vs_xy"
-
-# #Get 3D histograms 
-# th3_amplitude_vs_xy_channel00 = inputfile.Get(h00)
-# th3_amplitude_vs_xy_channel01 = inputfile.Get(h01)
-# th3_amplitude_vs_xy_channel02 = inputfile.Get(h02)
-# th3_amplitude_vs_xy_channel03 = inputfile.Get(h03)
-# th3_amplitude_vs_xy_channel04 = inputfile.Get(h04)
-# th3_amplitude_vs_xy_channel05 = inputfile.Get(h05)
-# th3_amplitude_vs_xy_channel06 = inputfile.Get(h06)
-
-
-
-# th3_amplitude_vs_xy_channelall = inputfile.Get(htot)
-
-#th3_amplitude_vs_xy_channel00.RebinX(3)
-#th3_amplitude_vs_xy_channel01.RebinX(3)
-#th3_amplitude_vs_xy_channel02.RebinX(3)
-#th3_amplitude_vs_xy_channel03.RebinX(3)
-#th3_amplitude_vs_xy_channel04.RebinX(3)
-#th3_amplitude_vs_xy_channel05.RebinX(3)
-#th3_amplitude_vs_xy_channel06.RebinX(3)
-#th3_amplitude_vs_xy_channelall.RebinX(3)
-
-#shift = (inputfile.Get("stripBoxInfo02").GetMean(1)+inputfile.Get("stripBoxInfo03").GetMean(1))/2.
-# shift = inputfile.Get("stripBoxInfo03").GetMean(1)
-
-#Build 2D amp vs x histograms
-# amplitude_vs_x_channel00 = th3_amplitude_vs_xy_channel00.Project3D("zx")
-# amplitude_vs_x_channel01 = th3_amplitude_vs_xy_channel01.Project3D("zx")
-# amplitude_vs_x_channel02 = th3_amplitude_vs_xy_channel02.Project3D("zx")
-# amplitude_vs_x_channel03 = th3_amplitude_vs_xy_channel03.Project3D("zx")
-# amplitude_vs_x_channel04 = th3_amplitude_vs_xy_channel04.Project3D("zx")
-# amplitude_vs_x_channel05 = th3_amplitude_vs_xy_channel05.Project3D("zx")
-# amplitude_vs_x_channel06 = th3_amplitude_vs_xy_channel06.Project3D("zx")
-# amplitude_vs_x_channelall= th3_amplitude_vs_xy_channelall.Project3D("zx")
-
 list_th2_amplitude_vs_x = []
-# list_th2_amplitude_vs_x.append(amplitude_vs_x_channel00)
-# list_th2_amplitude_vs_x.append(amplitude_vs_x_channel01)
-# list_th2_amplitude_vs_x.append(amplitude_vs_x_channel02)
-# list_th2_amplitude_vs_x.append(amplitude_vs_x_channel03)
-# list_th2_amplitude_vs_x.append(amplitude_vs_x_channel04)
-# list_th2_amplitude_vs_x.append(amplitude_vs_x_channel05)
-# list_th2_amplitude_vs_x.append(amplitude_vs_x_channel06)
-# list_th2_amplitude_vs_x.append(amplitude_vs_x_channelall)
 
 th3_amplitude_vs_xy_channels =[]
 for i in range(num_strips):
@@ -194,8 +141,6 @@ for channel in range(0, len(list_amplitude_vs_x)):
             maxAmp = value
             maxLoc = list_amplitude_vs_x[channel].GetXaxis().GetBinCenter(i)
 
-        #print(myTotalEvents)
-        #print ("Bin : " + str(i) + " -> " + str(value))
 
         list_amplitude_vs_x[channel].SetBinContent(i,value)
     print("Channel : %i; Max Amplitude = %0.2f mV; x-val of max: %0.4f mm" %(channel,maxAmp,maxLoc))
@@ -214,28 +159,16 @@ print("Average Max Amplitude = " + str(maxAmpAvg) + "; N of non-empty channels: 
                     
 
 
-#Make final plots
-plotfile = TFile("PlotAmplitudeVsX.root","READ")
-plotList_amplitude_vs_x  = []
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel00"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel01"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel02"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel03"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel04"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel05"))
-plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channel06"))
-# plotList_amplitude_vs_x.append(plotfile.Get("amplitude_vs_x_channelall"))
-
 list_of_fit_functions=[]
 
-ymax = plotList_amplitude_vs_x[0].GetMaximum()
+ymax = list_amplitude_vs_x[0].GetMaximum()
 for i in range(num_strips):
-    if plotList_amplitude_vs_x[i].GetMaximum()>ymax: ymax = plotList_amplitude_vs_x[i].GetMaximum()
+    if list_amplitude_vs_x[i].GetMaximum()>ymax: ymax = list_amplitude_vs_x[i].GetMaximum()
     
-    list_of_fit_functions.append(findCenter(plotList_amplitude_vs_x[i]))
+    list_of_fit_functions.append(findCenter(list_amplitude_vs_x[i]))
 
-    plotList_amplitude_vs_x[i].SetLineWidth(2)
-    plotList_amplitude_vs_x[i].SetLineColor(colors[i])
+    list_amplitude_vs_x[i].SetLineWidth(2)
+    list_amplitude_vs_x[i].SetLineColor(colors[i])
     list_of_fit_functions[i].SetLineColor(colors[i])
 
 
@@ -255,7 +188,7 @@ totalAmplitude_vs_x.SetMaximum(ymax*1.5)
 totalAmplitude_vs_x.Draw("AXIS same")
 totalAmplitude_vs_x.Draw("hist same")
 for i in range(num_strips):
-    plotList_amplitude_vs_x[i].Draw("histsame")
+    list_amplitude_vs_x[i].Draw("histsame")
     list_of_fit_functions[i].Draw("same")
 
 
@@ -266,7 +199,7 @@ legend.SetTextSize(myStyle.GetSize())
 legend.SetBorderSize(0)
 legend.SetFillColor(kWhite)
 for i in range(num_strips):
-    legend.AddEntry(plotList_amplitude_vs_x[i], "Strip %i"%(i+1))
+    legend.AddEntry(list_amplitude_vs_x[i], "Strip %i"%(i+1))
 
 legend.Draw();
 
@@ -283,8 +216,9 @@ for channel in range(num_strips):
     if channel>0:
         delta_center_list.append(center_list[channel]-center_list[channel-1])
 
-print("Centers, ", center_list)
-print("Deltas, ",delta_center_list)
+print("\n\nList of distance between centers [mm]:  ",delta_center_list)
+print("\n\n")
+print("vector for geometry file:")
 
 string_for_geo = "std::vector<double> stripCenterXPosition = {"
 for channel in range(8):
@@ -293,7 +227,7 @@ for channel in range(8):
     else:
          string_for_geo+= "0.0, "
          
-string_for_geo+="};"
+string_for_geo+="};\n\n"
 string_for_geo = string_for_geo.replace(", }","}")
 
 print(string_for_geo)
