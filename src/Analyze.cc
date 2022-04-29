@@ -246,6 +246,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
     const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
     const auto& isHPKStrips = tr.getVar<bool>("isHPKStrips");
+    const auto& uses2022Pix = tr.getVar<bool>("uses2022Pix");
     const auto& minPixHits = tr.getVar<int>("minPixHits");
     const auto& minStripHits = tr.getVar<int>("minStripHits");
     //const auto& xSlices = tr.getVar<std::vector<std::vector<double>>>("xSlices");
@@ -345,10 +346,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
-        bool passTrigger = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
-        if(isPadSensor)      passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
-        else if(isHPKStrips) passTrigger = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
-        bool pass = passTrigger && hitSensor && goodPhotek;
+        bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
+        if(isPadSensor)      goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
+        else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+        bool pass = goodTrack && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex) || isPadSensor);
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
         bool inTopRow = y>ySlices[1][0] && y<ySlices[1][1];
@@ -362,7 +363,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool highRelAmp1 = Amp1OverAmp1and2>=0.75;
         bool twoGoodHits = ampLGAD[amp1Indexes.first][amp1Indexes.second] > noiseAmpThreshold && ampLGAD[amp2Indexes.first][amp2Indexes.second] > noiseAmpThreshold;
 
-        if(isHPKStrips)
+        if(isHPKStrips || uses2022Pix)
         {
             twoGoodHits = false;
             if(amp1Indexes.second - 1 >= lowGoodStripIndex) twoGoodHits = twoGoodHits || ampLGAD[amp1Indexes.first][amp1Indexes.second-1] > noiseAmpThreshold;
@@ -452,8 +453,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["ampChargeRatio_vs_xy_channel"+r+s], x,y,ampChargeRatio);
                 utility::fillHisto(pass,                                                    my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s], x,y,ampChannel > signalAmpThreshold);
                 utility::fillHisto(pass && isMaxChannel,                                    my_2d_prof["efficiency_vs_xy_highThreshold_prof"], x,y,goodHit);
-                utility::fillHisto(passTrigger && isMaxChannel,                             my_efficiencies["efficiency_vs_x"], goodHit,x);
-                utility::fillHisto(passTrigger && isMaxChannel,                             my_efficiencies["efficiency_vs_xy"], goodHit,x,y);
+                utility::fillHisto(goodTrack && isMaxChannel,                               my_efficiencies["efficiency_vs_x"], goodHit,x);
+                utility::fillHisto(goodTrack && isMaxChannel,                               my_efficiencies["efficiency_vs_xy"], goodHit,x,y);
             }
             rowIndex++;
         }
@@ -551,8 +552,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                                                     my_1d_prof["Xtrack_vs_Amp3OverAmp123_prof"], x,Amp3OverAmp123);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_1d_prof["clusterSize_vs_x_prof"], x,clusterSize);
 
-        utility::fillHisto(passTrigger,                                                                    my_2d_prof["efficiency_vs_xy_Strip2or5"], x,y,goodHitGlobal2and5);
-        utility::fillHisto(passTrigger,                                                                    my_2d_prof["efficiency_vs_xy_DCRing"], x,y,goodDCAmp);
+        utility::fillHisto(goodTrack,                                                                      my_2d_prof["efficiency_vs_xy_Strip2or5"], x,y,goodHitGlobal2and5);
+        utility::fillHisto(goodTrack,                                                                      my_2d_prof["efficiency_vs_xy_DCRing"], x,y,goodDCAmp);
         
         // Fill wave form histos once
         bool maxAmpInCenter = maxAmpIndex == 2;// || maxAmpIndex == 3;

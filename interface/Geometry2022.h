@@ -55,7 +55,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
@@ -105,7 +105,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
@@ -155,7 +155,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
@@ -205,7 +205,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 2.0;
     double signalAmpThreshold = 20.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
@@ -243,7 +243,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 20.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 0;
@@ -281,7 +281,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 5.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 0;
@@ -332,7 +332,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
@@ -370,7 +370,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
@@ -408,7 +408,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
@@ -449,7 +449,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 10.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
@@ -495,7 +495,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 10.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 0;
@@ -539,7 +539,7 @@ public:
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 20.0;
-    bool isHPKStrips = true;
+    bool uses2022Pix = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;

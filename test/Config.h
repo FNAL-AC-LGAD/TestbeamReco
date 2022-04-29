@@ -62,11 +62,12 @@ private:
         tr.registerDerivedVar("signalAmpThreshold", g.signalAmpThreshold);
         tr.registerDerivedVar("isPadSensor", g.isPadSensor);
         tr.registerDerivedVar("isHPKStrips", g.isHPKStrips);
-        tr.registerDerivedVar("minPixHits", g.minPixHits);
-        tr.registerDerivedVar("minStripHits", g.minStripHits);
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
         tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
+        tr.registerDerivedVar("uses2022Pix", g.uses2022Pix);
         tr.registerDerivedVar("isHorizontal", g.isHorizontal);
+        tr.registerDerivedVar("minPixHits", g.minPixHits);
+        tr.registerDerivedVar("minStripHits", g.minStripHits);
         tr.registerDerivedVar("positionRecoPar", g.positionRecoPar);
         tr.registerDerivedVar("positionRecoParRight", g.positionRecoParRight);
         tr.registerDerivedVar("positionRecoParLeft", g.positionRecoParLeft);

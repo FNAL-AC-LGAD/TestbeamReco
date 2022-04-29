@@ -110,8 +110,8 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
-        bool passTrigger = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
-        bool pass = passTrigger && hitSensor && goodPhotek;
+        bool goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+        bool pass = goodTrack && hitSensor && goodPhotek;
 
         double photekTime = corrTime[photekIndex];
         const auto& x = tr.getVar<double>("x");

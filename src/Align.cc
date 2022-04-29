@@ -148,8 +148,8 @@ void Align::Loop(NTupleReader& tr, int maxevents)
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
-        bool passTrigger = ntracks==1 && nplanes>=5 && npix>0;// && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
-        bool pass = passTrigger && goodPhotek; // && hitSensor &&
+        bool goodTrack = ntracks==1 && nplanes>=5 && npix>0;// && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
+        bool pass = goodTrack && goodPhotek; // && hitSensor &&
         bool maxAmpNotEdgeStrip = (maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex);
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
         bool goodHitCh2 = goodMaxLGADAmp && maxAmpIndex==2;
