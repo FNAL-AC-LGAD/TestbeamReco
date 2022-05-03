@@ -58,22 +58,22 @@ for i in range(0, Amp1OverAmp1and2_vs_deltaXmax.GetYaxis().GetNbins() + 1):
     myRMS = tmpHist.GetRMS()
     nEntries = tmpHist.GetEntries()
     
-    if(nEntries > 0.0):
+    if(nEntries > 20.0):
         myGausFunction = TF1("mygaus","gaus(0)",0, pitch);
         tmpHist.Fit(myGausFunction,"Q","",0, pitch);
         mean = myGausFunction.GetParameter(1)
         meanErr = myGausFunction.GetParError(1)
         sigma = myGausFunction.GetParameter(2)
         
-        ##For Debugging
-        #tmpHist.Draw("hist")
-        #myGausFunction.Draw("same")
-        #canvas.SaveAs("q_"+str(i)+".gif")
-        #print ("Bin : " + str(i) + " -> " + str(mean))
+        # #For Debugging
+        # tmpHist.Draw("hist")
+        # myGausFunction.Draw("same")
+        # canvas.SaveAs("%sq_%i.gif"%(outdir,i))
+        # print ("Bin : " + str(i) + " -> " + str(mean))
     else:
         mean=0.0
         meanErr=0.0
-       
+
     Amp1OverAmp1and2_vs_deltaXmax_profile.SetBinContent(i,mean)
     Amp1OverAmp1and2_vs_deltaXmax_profile.SetBinError(i,meanErr)           
         
@@ -90,6 +90,15 @@ Amp1OverAmp1and2_vs_deltaXmax_profile.SetMinimum(0.00)
 Amp1OverAmp1and2_vs_deltaXmax_profile.GetXaxis().SetRangeUser(xmin,xmax)
 results = Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"SQ","",xmin,xmax)
 results.Print("V")
+
+string_for_geo = "\nstd::vector<double> positionRecoPar = {"
+for deg in range(fitOrder+1):
+    string_for_geo+= "%0.6f, "%fit.GetParameter(deg)
+
+string_for_geo+="};\n\n"
+string_for_geo = string_for_geo.replace(", }","}")
+
+print(string_for_geo)
 
 
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw()

@@ -46,8 +46,8 @@ private:
         }      
     }
 
-    // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z -> Y -> X
-    // ** xyz_tracker gives the laboratory hit position projection over Z = 0
+    // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z(alpha) -> Y(beta) -> X(gamma)
+    // * xyz_tracker gives the laboratory hit position relative to sensorCenter, sensorCenterY, z_center
     void getXYOnSensor(std::vector<double>& xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
     {
         double xI, yI, xS, yS;
@@ -108,27 +108,6 @@ private:
         xyz_tracker[0] = (xI==0 && xS==0) ? -9999 : lx;
         xyz_tracker[1] = (yI==0 && yS==0) ? -9999 : ly;
         xyz_tracker[2] = (xI==0 && xS==0 && yI==0 && yS==0) ? -9999 : lz;
-
-        // OLD:
-        // double xC = (isHorizontal) ? -y_center : x_center;
-        // double yC = (isHorizontal) ? x_center : y_center;
-        
-        // double degreesToRad = 3.14159/180.0;
-        // double alpha_rad = alpha*degreesToRad;
-        // double beta_rad = beta*degreesToRad;
-        // double gamma_rad = gamma*degreesToRad;
-
-        // double z_lab = (z_center - tan(alpha_rad)*(cos(beta_rad)*(xIntercept_ - xC) + sin(beta_rad)*(yIntercept_ - yC))) / (1 + tan(alpha_rad)*(cos(beta_rad)*xSlope_ + sin(beta_rad)*ySlope_));
-
-        // double lx = xIntercept_ + z_lab*xSlope_ - xC;
-        // double ly = yIntercept_ + z_lab*ySlope_ - yC;
-        // double lz = z_lab - z_center;
-
-        // double x_sensor = lx*(cos(beta_rad)*cos(alpha_rad)) + ly*(sin(beta_rad)*cos(alpha_rad)) + lz*(-sin(alpha_rad));
-        // double y_sensor = lx*(-sin(beta_rad)) + ly*(cos(beta_rad));
-
-        // xFinal = (xIntercept_!=0 && xSlope_!=0) ? x_sensor*cos(gamma_rad) + y_sensor*sin(gamma_rad) : -9999;
-        // yFinal = (yIntercept_!=0 && ySlope_!=0) ? y_sensor*cos(gamma_rad) - x_sensor*sin(gamma_rad) : -9999;
     }
 
     void prepNTupleVars(NTupleReader& tr)
@@ -205,7 +184,7 @@ private:
 
         // Cut to get hits that only go through active sensor
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
-        bool hitSensor = sensorEdges[0][0]-sensorCenter < x && x < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y && y < sensorEdges[1][1]-sensorCenterY;
+        bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
         tr.registerDerivedVar("hitSensor", hitSensor);
 
         // Hit through active sensor for scan vars
@@ -216,19 +195,19 @@ private:
 
         for(unsigned int i = 0; i < zScan.size(); i++)
         {
-            hitSensorZ[i] = sensorEdges[0][0]-sensorCenter < x_var[i] && x_var[i] < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y_var[i] && y_var[i] < sensorEdges[1][1]-sensorCenterY;
+            hitSensorZ[i] = sensorEdges[0][0] < x_var[i] && x_var[i] < sensorEdges[1][0] &&  sensorEdges[0][1] < y_var[i] && y_var[i] < sensorEdges[1][1];
         }
         for(unsigned int i = 0; i < alphaScan.size(); i++)
         {
-            hitSensorA[i] = sensorEdges[0][0]-sensorCenter < x_varA[i] && x_varA[i] < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y_varA[i] && y_varA[i] < sensorEdges[1][1]-sensorCenterY;
+            hitSensorA[i] = sensorEdges[0][0] < x_varA[i] && x_varA[i] < sensorEdges[1][0] &&  sensorEdges[0][1] < y_varA[i] && y_varA[i] < sensorEdges[1][1];
         }
         for(unsigned int i = 0; i < betaScan.size(); i++)
         {
-            hitSensorB[i] = sensorEdges[0][0]-sensorCenter < x_varB[i] && x_varB[i] < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y_varB[i] && y_varB[i] < sensorEdges[1][1]-sensorCenterY;
+            hitSensorB[i] = sensorEdges[0][0] < x_varB[i] && x_varB[i] < sensorEdges[1][0] &&  sensorEdges[0][1] < y_varB[i] && y_varB[i] < sensorEdges[1][1];
         }
         for(unsigned int i = 0; i < gammaScan.size(); i++)
         {
-            hitSensorC[i] = sensorEdges[0][0]-sensorCenter < x_varC[i] && x_varC[i] < sensorEdges[1][0]-sensorCenter &&  sensorEdges[0][1]-sensorCenterY < y_varC[i] && y_varC[i] < sensorEdges[1][1]-sensorCenterY;
+            hitSensorC[i] = sensorEdges[0][0] < x_varC[i] && x_varC[i] < sensorEdges[1][0] &&  sensorEdges[0][1] < y_varC[i] && y_varC[i] < sensorEdges[1][1];
         }
 
         // Correct the time variable

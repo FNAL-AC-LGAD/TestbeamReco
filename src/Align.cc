@@ -37,6 +37,8 @@ void Align::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& ge
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
 
+    const auto& z_dut_def = tr.getVar<double>("z_dut");
+
     // const auto& sensorCenter = tr.getVar<double>("sensorCenter");
     // const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
 
@@ -57,11 +59,11 @@ void Align::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& ge
         utility::makeHisto(my_histos,"deltaX_varC"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5); // 400,-2.,2.);
     }
 
-    utility::makeHisto(my_2d_histos,"hist_xy","; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-((xmax+xmin)/2.),xmax-((xmax+xmin)/2.), (ymax-ymin)/yBinSize,ymin-((ymax+ymin)/2.),ymax-((ymax+ymin)/2.));
-    utility::makeHisto(my_2d_histos,"hist_xy_denominator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-((xmax+xmin)/2.),xmax-((xmax+xmin)/2.), (ymax-ymin)/yBinSize,ymin-((ymax+ymin)/2.),ymax-((ymax+ymin)/2.));
-    utility::makeHisto(my_2d_histos,"hist_xy_ch2","; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin-((xmax+xmin)/2.),xmax-((xmax+xmin)/2.), (ymax-ymin)/yBinSize,ymin-((ymax+ymin)/2.),ymax-((ymax+ymin)/2.));
+    utility::makeHisto(my_2d_histos,"position_local","; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"position_local_denominator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"position_local_ch2","; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     
-    utility::makeHisto(my_3d_histos,"sensor_lab","; X_tracker [mm]; Y_tracker [mm]", (xmax-xmin)/xBinSize,xmin-((xmax+xmin)/2.),xmax-((xmax+xmin)/2.), (ymax-ymin)/yBinSize,ymin-((ymax+ymin)/2.),ymax-((ymax+ymin)/2.), 200,-0.005,0.005);
+    utility::makeHisto(my_3d_histos,"position_tracker","; X_tracker - X_C [mm]; Y_tracker - Y_C [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,z_dut_def-0.005,z_dut_def+0.005);
 
     // int rowIndex = 0;
     // for(const auto& row : geometry)
@@ -87,10 +89,10 @@ void Align::Loop(NTupleReader& tr, int maxevents)
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
-    const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
-    const auto& isHPKStrips = tr.getVar<bool>("isHPKStrips");
-    const auto& ySlices = tr.getVar<std::vector<std::vector<double>>>("ySlices");
-    const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
+    // const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
+    // const auto& isHPKStrips = tr.getVar<bool>("isHPKStrips");
+    // const auto& ySlices = tr.getVar<std::vector<std::vector<double>>>("ySlices");
+    // const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
     const auto& firstFile = tr.getVar<bool>("firstFile");
     if(firstFile)
     {
@@ -109,18 +111,18 @@ void Align::Loop(NTupleReader& tr, int maxevents)
                        
         //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
         const auto& corrAmp = tr.getVec<double>("corrAmp");
-        const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
-        const auto& corrTime = tr.getVec<double>("corrTime");
-        const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
+        // const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
+        // const auto& corrTime = tr.getVec<double>("corrTime");
+        // const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& nplanes = tr.getVar<int>("nplanes");
         const auto& npix = tr.getVar<int>("npix");
-        const auto& chi2 = tr.getVar<float>("chi2");
-        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        // const auto& chi2 = tr.getVar<float>("chi2");
+        // const auto& sensorCenter = tr.getVar<double>("sensorCenter");
         // const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
         const auto& x_var = tr.getVec<double>("x_var");
-        const auto& y_var = tr.getVec<double>("y_var");
+        // const auto& y_var = tr.getVec<double>("y_var");
         const auto& x_varA = tr.getVec<double>("x_varA");
         //const auto& y_varA = tr.getVec<double>("y_varA");
         const auto& x_varB = tr.getVec<double>("x_varB");
@@ -160,29 +162,29 @@ void Align::Loop(NTupleReader& tr, int maxevents)
         //Loop over each channel in each sensor
         for(unsigned int ivar=0; ivar < x_var.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorZ[ivar], my_histos["deltaX_varZ"+std::to_string(ivar)], x_reco-(x_var[ivar]+sensorCenter));
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorZ[ivar], my_histos["deltaX_varZ"+std::to_string(ivar)], x_reco-x_var[ivar]);
         }
 
         for(unsigned int ivar=0; ivar < x_varA.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorA[ivar], my_histos["deltaX_varA"+std::to_string(ivar)], x_reco-(x_varA[ivar]+sensorCenter));
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorA[ivar], my_histos["deltaX_varA"+std::to_string(ivar)], x_reco-x_varA[ivar]);
         }
 
         for(unsigned int ivar=0; ivar < x_varB.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorB[ivar], my_histos["deltaX_varB"+std::to_string(ivar)], x_reco-(x_varB[ivar]+sensorCenter));
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorB[ivar], my_histos["deltaX_varB"+std::to_string(ivar)], x_reco-x_varB[ivar]);
         }
 
         for(unsigned int ivar=0; ivar < x_varC.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorC[ivar], my_histos["deltaX_varC"+std::to_string(ivar)], x_reco-(x_varC[ivar]+sensorCenter));
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitSensorC[ivar], my_histos["deltaX_varC"+std::to_string(ivar)], x_reco-x_varC[ivar]);
         }
 
-        utility::fillHisto(pass && hasGlobalSignal_highThreshold && hitSensor,                  my_2d_histos["hist_xy"], x, y);
-        utility::fillHisto(pass && hitSensor,                                                   my_2d_histos["hist_xy_denominator"], x, y);
-        utility::fillHisto(pass && hasGlobalSignal_highThreshold && goodHitCh2 && hitSensor,    my_2d_histos["hist_xy_ch2"], x, y);
+        utility::fillHisto(pass && hasGlobalSignal_highThreshold && hitSensor,                  my_2d_histos["position_local"], x, y);
+        utility::fillHisto(pass && hitSensor,                                                   my_2d_histos["position_local_denominator"], x, y);
+        utility::fillHisto(pass && hasGlobalSignal_highThreshold && goodHitCh2 && hitSensor,    my_2d_histos["position_local_ch2"], x, y);
         
-        utility::fillHisto(pass && hasGlobalSignal_highThreshold && hitSensor,                  my_3d_histos["sensor_lab"], xyz_tracker[0], xyz_tracker[1], xyz_tracker[2]);
+        utility::fillHisto(pass && hasGlobalSignal_highThreshold && hitSensor,                  my_3d_histos["position_tracker"], xyz_tracker[0], xyz_tracker[1], xyz_tracker[2]);
 
         // int rowIndex = 0;
         // for(const auto& row : geometry)
