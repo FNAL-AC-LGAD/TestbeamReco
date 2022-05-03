@@ -41,12 +41,7 @@ public:
     double alpha = 0.0;
     double beta  = 0.0;
     double gamma = 0.0;
-    // OLD PARAMETERS
-    // double alpha = -0.04;
-    // double beta  = -0.56;
-    // double gamma = -0.86 + 90.0;
-    // double z_dut = 28.41878;
-    double z_dut = 28.0;
+    double z_dut = 0.0;
     double xmin =  -4.0;
     double xmax =   2.0;
     double ymin =  -3.0;
@@ -432,15 +427,17 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.96398053}, {1,0.84198568}, {2,0.93964217}, {3,0.83790917}, {4,0.88894472}, {5,0.80036949}, {6,0.91889931}, {7,0.0}};
     double stripWidth = 0.100;
     double pitch = 0.500;
+    double sensorCenter  = 0.0;
+    double sensorCenterY = 0.0;
     // std::vector<double> stripCenterXPosition = {-0.54, -1.04, -1.54, -2.04, -2.54, -3.04, -3.54, 0.0};
     std::vector<double> stripCenterXPosition = {-0.525, -1.024, -1.519, -2.018, -2.516, -3.017, -3.515, 0.0};
     int numLGADchannels = 7;
-    int lowGoodStripIndex = 1; // 0;
-    int highGoodStripIndex = 5; // 6;
+    int lowGoodStripIndex = 1;
+    int highGoodStripIndex = 5;
     double alpha = -1.0;
     double beta  = -1.30;
     double gamma = 0.0;
-    double z_dut = 5.57; // 4.46; // 21.33; // 28.41878;
+    double z_dut = 28.41878;
     double xmin =  -4.2;
     double xmax =   0.5;
     double ymin =  -1.0;
@@ -457,10 +454,6 @@ public:
     // std::vector<double> positionRecoPar = {0.25, -0.682406,  12.6055, -257.771,   2476.2, -12142.6,  29452.7, -28032.3};
     std::vector<double> positionRecoPar = {0.25, -0.411715,   -1.20881,  8.4184,  -17.3764};
     std::vector<std::vector<double>> sensorEdges = {{-4.0, -1.0}, {0, 4.8}};
-    // double sensorCenter  = 0.0;
-    // double sensorCenterY = 0.0;
-    double sensorCenter  = (sensorEdges[1][0] + sensorEdges[0][0])/2.0;
-    double sensorCenterY = (sensorEdges[1][1] + sensorEdges[0][1])/2.0;
 };
 
 
@@ -504,52 +497,7 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-2.7, 1.4}, {-1, 2.8}};
 };
 
-// class BNL2021MediumV2Geometry : public DefaultGeometry
-// {
-// public:
-//     BNL2021MediumV2Geometry(const int v=0) : voltage(v){}
-//     const int voltage;
-//     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
-//     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
-//     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
-//     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0930}, {1,0.9213}, {2,0.9915}, {3,1.0095}, {4,0.9953}, {5,0.9988}, {6,1.0056}, {7,1.0}};
-//     //std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-//     std::map<int, double> timeCalibrationCorrection = {{0,0.99510831}, {1,0.9853243949}, {2,0.98366010}, {3,0.96532184}, {4,1.0512278}, {5,1.0261477}, {6,1.0349694}, {7,0.0}};    
-//     double stripWidth = 0.08;
-//     double pitch = 0.15;
-//     std::vector<double> stripCenterXPosition = {-0.68, -0.83, -0.98, -1.13, -1.28, -1.43, -1.58, 0.0};
-//     int numLGADchannels = 7;
-//     int lowGoodStripIndex = 0;
-//     int highGoodStripIndex = 6;
-//     double alpha = 0.0;
-//     double beta  = 0.0;
-//     double gamma = 0.0;
-//     double z_dut = 0.0;
-//     // double alpha = 1.21;    // 1.21;   // 1.21; // 0.0;
-//     // double beta  =-0.01;    // 0.00;   // 0.00; // 0.0;
-//     // double gamma = 0.00;    // 0.00;   // 0.00; // 0.0;
-//     // double z_dut =-4.33;    //-4.33;   // 0.00; // 0.0;
-//     double xBinSize = 0.02;
-//     double yBinSize = 0.05;
-//     double xmin =  -1.8;
-//     double xmax =  -0.4;
-//     double ymin =  -3.7;
-//     double ymax =  -0.8;
-//     double positionRecoMaxPoint = 0.82;
-//     double photekSignalThreshold = 200.0;
-//     double noiseAmpThreshold = 20.0;
-//     double signalAmpThreshold = 20.0;
-//     bool uses2022Pix = true;
-//     bool enablePositionReconstruction = true;
-//     int minPixHits = 4;
-//     int minStripHits = 6;
-//     std::vector<double> positionRecoPar = {0.075, -0.172763, 0.152945, -0.894909, 0.246914};
-//     std::vector<std::vector<double>> sensorEdges = {{-1.62, -3.50}, {-0.64, -1.15}};
-//     double sensorCenter  = (sensorEdges[1][0] + sensorEdges[0][0])/2.0;
-//     double sensorCenterY = (sensorEdges[1][1] + sensorEdges[0][1])/2.0;
-// };
 
-//// NEW ALIGNMENT'S TEST
 class BNL2021MediumV2Geometry : public DefaultGeometry
 {
 public:
@@ -562,6 +510,8 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,0.0}}; // ???
     double stripWidth = 0.08;
     double pitch = 0.15;
+    double sensorCenter  = -1.075; // Lab-Tracker's frame
+    double sensorCenterY = -2.325; // Lab-Tracker's frame
     std::vector<double> stripCenterXPosition = {0.461, 0.313, 0.163, 0.011, -0.140, -0.294, -0.448, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex  = 1;
@@ -586,28 +536,7 @@ public:
     int minStripHits = 6;
     // std::vector<double> positionRecoPar = {0.075, -0.172763, 0.152945, -0.894909, 0.246914};
     std::vector<double> positionRecoPar = {0.075000, -0.126820, -0.546862, 2.919943, -6.478527}; // 2
-    // sensorEdges in lab frame:  // {{-1.65, -3.50}, {-0.50, -1.15}}; 
     std::vector<std::vector<double>> sensorEdges = {{-0.575, -1.175}, {0.575, 1.175}}; // 1 // Sensor's local frame
-    double sensorCenter  = -1.075; // Lab-Tracker's frame
-    double sensorCenterY = -2.325; // Lab-Tracker's frame
-
-
-    //std::map<int, double> amplitudeCorrectionFactor = {{0,1.0930}, {1,0.9213}, {2,0.9915}, {3,1.0095}, {4,0.9953}, {5,0.9988}, {6,1.0056}, {7,1.0}};
-    //std::map<int, double> timeCalibrationCorrection = {{0,0.99510831}, {1,0.9853243949}, {2,0.98366010}, {3,0.96532184}, {4,1.0512278}, {5,1.0261477}, {6,1.0349694}, {7,0.0}};
-    //std::vector<double> stripCenterXPosition = {-0.68, -0.83, -0.98, -1.13, -1.28, -1.43, -1.58, 0.0};
-    // double alpha = 1.21;    // 1.21;   // 1.21; // 0.0;
-    // double beta  =-0.01;    // 0.00;   // 0.00; // 0.0;
-    // double gamma = 0.00;    // 0.00;   // 0.00; // 0.0;
-    // double z_dut =-4.33;    //-4.33;   // 0.00; // 0.0;
-    // double xmin =  -1.8;
-    // double xmax =  -0.4;
-    // double ymin =  -3.7;
-    // double ymax =  -0.8;
-    //double positionRecoMaxPoint = 0.82;
-    //std::vector<double> positionRecoPar = {0.075, -0.172763, 0.152945, -0.894909, 0.246914};
-    // std::vector<std::vector<double>> sensorEdges = {{-1.62, -3.50}, {-0.64, -1.15}};
-    // double sensorCenter  = (sensorEdges[1][0] + sensorEdges[0][0])/2.0;
-    // double sensorCenterY = (sensorEdges[1][1] + sensorEdges[0][1])/2.0;
 };
 
 #endif
