@@ -88,8 +88,6 @@ public:
     // std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.5553183648148+0.022066641}, {2,10.6590122524753+0.016205606}, {3,10.6470996902006+0.014540078}, {4,10.6075997712141+0.012709104}, {5,10.6432860123283+0.013754913}, {6,10.6622858488865+0.027125698}, {7,0.0}}; // Handmade for BNL2020 200V
     double stripWidth = 0.08;
     double pitch = 0.1;
-    double sensorCenter = 0.385;
-    double sensorCenterY = 10.700;
     std::vector<double> stripCenterXPosition = {0.0, 0.635, 0.535, 0.435, 0.335, 0.235, 0.135, 0.0};
     int numLGADchannels = 6;
     // std::map<int,VoltageDependence> voltageDependenceMap = {{200,{2.0,8.0}}, {210,{3.5,20.0}}, {220,{10.0,30.0}}, {225,{15.0,45.0}}};
@@ -178,13 +176,10 @@ public:
     double pitch = 0.15;
     std::vector<double> stripCenterXPosition = {0.0, -4.60, -4.75, -4.90, -5.05, -5.20, -5.35, 0.0};
     int numLGADchannels = 6;
-    int lowGoodStripIndex = 0;
-    int highGoodStripIndex = 6;
-    double alpha = 1.11;
-    double beta  = -0.04;
+    double alpha = 1.3;
+    double beta  = 0.0;
     double gamma = 0.0;
-    double z_dut = -10.2;
-    // double gamma =  1.3;
+    double z_dut = 0.0;
     double xBinSize = 0.02;
     double yBinSize = 0.05;
     double xmin =  -5.7;
@@ -195,14 +190,9 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 20.0;
     double signalAmpThreshold = 40.0;
-    // bool isHPKStrips = true;
-    // int minPixHits = 4;
-    // int minStripHits = 6;
     bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.075, -0.140285, -0.774667, 5.65837, -13.5359};
     std::vector<std::vector<double>> sensorEdges = {{-5.625, 9.272}, {-4.403, 12.067}};
-    double sensorCenter  = (sensorEdges[1][0] + sensorEdges[0][0])/2.0;
-    double sensorCenterY = (sensorEdges[1][1] + sensorEdges[0][1])/2.0;
 };
 
 class BNL2021NarrowGeometry : public DefaultGeometry
@@ -381,7 +371,6 @@ public:
     double pitch = 0.080;
     std::vector<double> stripCenterXPosition = {0.0, 0.9429, 0.8712, 0.7889, 0.7076, 0.6297, 0.5486, 0.0};
     int numLGADchannels = 6;
-    // double gamma = -0.2 + 90.0;
     double alpha = -0.2;
     double beta  = 0.0;
     double gamma = 0.0;
@@ -428,7 +417,6 @@ public:
     double pitch = 0.080;
     std::vector<double> stripCenterXPosition = {0.0, 0.2792, 0.3495, 0.4361, 0.5153, 0.5974, 0.6899, 0.0}; 
     int numLGADchannels = 6;
-    // double gamma = -0.2 + 90.0;
     double alpha = -0.2;
     double beta  = 0.0;
     double gamma = 0.0;
