@@ -534,7 +534,6 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits   = 4;
     int minStripHits = 6;
-    // std::vector<double> positionRecoPar = {0.075, -0.172763, 0.152945, -0.894909, 0.246914};
     std::vector<double> positionRecoPar = {0.075000, -0.126820, -0.546862, 2.919943, -6.478527}; // 2
     std::vector<std::vector<double>> sensorEdges = {{-0.575, -1.175}, {0.575, 1.175}}; // 1 // Sensor's local frame
 };

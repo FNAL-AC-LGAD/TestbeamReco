@@ -12,28 +12,7 @@ private:
     float xIntercept_;
     float yIntercept_;
 
-    void Rotate(NTupleReader& tr, double x0, double y0, double angle) const
-    {
-        double rad_angle = angle*3.14159/180.;
-        double x_rot = x0*cos(rad_angle) + y0*sin(rad_angle);
-        double y_rot = y0*cos(rad_angle) - x0*sin(rad_angle);
-        tr.registerDerivedVar("x", x_rot);
-        tr.registerDerivedVar("y", y_rot);
-    }
-
-    void RotateVec(NTupleReader& tr, const std::vector<float>& vx, const std::vector<float>& vy, double angle) const
-    {
-        auto& vec_x = tr.createDerivedVec<float>("x_var");
-        auto& vec_y = tr.createDerivedVec<float>("y_var");
-        double rad_angle = angle*3.14159/180.;
-        for(unsigned int i=0; i < vx.size() ;i++)
-        {
-            vec_x.push_back(vx[i]*cos(rad_angle) + vy[i]*sin(rad_angle));
-            vec_y.push_back(vy[i]*cos(rad_angle) - vx[i]*sin(rad_angle));
-        }
-    }
-
-    void ApplyAmplitudeCorrection(NTupleReader& tr) const
+    void applyAmplitudeCorrection(NTupleReader& tr) const
     {     
         const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
         auto& corrAmp = tr.createDerivedVec<double>("corrAmp");
@@ -48,22 +27,17 @@ private:
 
     // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z(alpha) -> Y(beta) -> X(gamma)
     // * xyz_tracker gives the laboratory hit position relative to sensorCenter, sensorCenterY, z_center
-    void getXYOnSensor(std::vector<double>& xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
+    void getXYOnSensor(std::vector<double>* xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
     {
-        double xI, yI, xS, yS;
+        double xI=xIntercept_, yI=yIntercept_, xS=xSlope_, yS=ySlope_;
 
         // Use correct track parameters, given the axes defined such that the strips are always perpendicular to the x-axis 
-        if (isHorizontal){
+        if (isHorizontal)
+        {
             xI = yIntercept_;
             yI = -xIntercept_;
             xS = ySlope_;
             yS = -xSlope_;
-        }
-        else{
-            xI = xIntercept_;
-            yI = yIntercept_;
-            xS = xSlope_;
-            yS = ySlope_;
         }
 
         double degreesToRad = 3.14159/180.0;
@@ -98,16 +72,16 @@ private:
         double y_r3 = cos(gamma_rad)*y_r2 + sin(gamma_rad)*z_r2;
         // double z_r3 = -sin(gamma_rad)*y_r2 + cos(gamma_rad)*z_r2; // z_r3 = 0;
 
-        // double x_sensor = lx*(cos(alpha_rad)*cos(beta_rad)) + ly*(sin(alpha_rad)*cos(beta_rad)) + lz*(-sin(beta_rad));
-        // double y_sensor = lx*(cos(alpha_rad)*sin(beta_rad)*sin(gamma_rad) - sin(alpha_rad)*cos(gamma_rad)) + ly*(cos(alpha_rad)*cos(gamma_rad) + sin(alpha_rad)*sin(beta_rad)*sin(gamma_rad)) + lz*(cos(beta_rad)*sin(gamma_rad));
-
         // Save local/sensor hit's position when the tracker worked (z component is always zero)
         xFinal = (xI==0 && xS==0) ? -9999 : x_r3;
         yFinal = (yI==0 && yS==0) ? -9999 : y_r3;
 
-        xyz_tracker[0] = (xI==0 && xS==0) ? -9999 : lx;
-        xyz_tracker[1] = (yI==0 && yS==0) ? -9999 : ly;
-        xyz_tracker[2] = (xI==0 && xS==0 && yI==0 && yS==0) ? -9999 : lz;
+        if (xyz_tracker)
+        {
+            xyz_tracker->at(0) = (xI==0 && xS==0) ? -9999 : lx;
+            xyz_tracker->at(1) = (yI==0 && yS==0) ? -9999 : ly;
+            xyz_tracker->at(2) = (xI==0 && xS==0 && yI==0 && yS==0) ? -9999 : lz;
+        }
     }
 
     void prepNTupleVars(NTupleReader& tr)
@@ -128,17 +102,12 @@ private:
         const auto& beta  = tr.getVar<double>("beta");
         const auto& gamma = tr.getVar<double>("gamma");
         const auto& isHorizontal = tr.getVar<bool>("isHorizontal");
-    	//const auto& x_dut = tr.getVec<float>("x_dut");
-    	//const auto& y_dut = tr.getVec<float>("y_dut");
-        //
-    	//Rotate(tr, x_dut[7], y_dut[7], gamma);
-        //RotateVec(tr, x_dut, y_dut, gamma);
 
         // Define final telescope hit location on DUT based on track lines and hard coded parameters
         auto& x = tr.createDerivedVar<double>("x");
         auto& y = tr.createDerivedVar<double>("y");
         auto& xyz_tracker = tr.createDerivedVec<double>("xyz_tracker",3);
-        getXYOnSensor(xyz_tracker, x, y, z_dut, alpha, beta, gamma, sensorCenter, sensorCenterY, isHorizontal);
+        getXYOnSensor(&xyz_tracker, x, y, z_dut, alpha, beta, gamma, sensorCenter, sensorCenterY, isHorizontal);
 
         // Create vectors of possible x,y locations by varying hard coded parameters
         const auto& zScan = tr.getVar<std::vector<double>>("zScan");
@@ -155,27 +124,25 @@ private:
         auto& x_varC = tr.createDerivedVec<double>("x_varC",gammaScan.size());
         auto& y_varC = tr.createDerivedVec<double>("y_varC",gammaScan.size());
 
-        std::vector<double> vec_test(3);
         for(unsigned int i = 0; i < zScan.size(); i++)
         {
-            getXYOnSensor(vec_test, x_var[i], y_var[i], zScan[i], alpha, beta, gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(nullptr, x_var[i], y_var[i], zScan[i], alpha, beta, gamma, sensorCenter, sensorCenterY);
         }
         for(unsigned int i = 0; i < alphaScan.size(); i++)
         {
-            getXYOnSensor(vec_test, x_varA[i], y_varA[i], z_dut, alphaScan[i], beta, gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(nullptr, x_varA[i], y_varA[i], z_dut, alphaScan[i], beta, gamma, sensorCenter, sensorCenterY);
         }
         for(unsigned int i = 0; i < betaScan.size(); i++)
         {
-            getXYOnSensor(vec_test, x_varB[i], y_varB[i], z_dut, alpha, betaScan[i], gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(nullptr, x_varB[i], y_varB[i], z_dut, alpha, betaScan[i], gamma, sensorCenter, sensorCenterY);
         }
         for(unsigned int i = 0; i < gammaScan.size(); i++)
         {
-            getXYOnSensor(vec_test, x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY);
+            getXYOnSensor(nullptr, x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY);
         }
-        
-        vec_test.clear();
+
         // Correct amp and map raw amplitude
-	    ApplyAmplitudeCorrection(tr);
+	    applyAmplitudeCorrection(tr);
         const auto& amp = tr.getVec<float>("amp");
         const auto& rawAmpLGAD = utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
         double totRawAmpLGAD = 0.0;
