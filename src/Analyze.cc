@@ -256,7 +256,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
     // const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
     const auto& firstFile = tr.getVar<bool>("firstFile");
-    bool plotWaveForm = true;
+    bool plotWaveForm = false;
     if(firstFile) InitHistos(tr, geometry);
 
     while( tr.getNextEvent() )
