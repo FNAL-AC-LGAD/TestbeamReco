@@ -62,10 +62,12 @@ private:
         tr.registerDerivedVar("signalAmpThreshold", g.signalAmpThreshold);
         tr.registerDerivedVar("isPadSensor", g.isPadSensor);
         tr.registerDerivedVar("isHPKStrips", g.isHPKStrips);
-        tr.registerDerivedVar("minPixHits", g.minPixHits);
-        tr.registerDerivedVar("minStripHits", g.minStripHits);
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
         tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
+        tr.registerDerivedVar("uses2022Pix", g.uses2022Pix);
+        tr.registerDerivedVar("isHorizontal", g.isHorizontal);
+        tr.registerDerivedVar("minPixHits", g.minPixHits);
+        tr.registerDerivedVar("minStripHits", g.minStripHits);
         tr.registerDerivedVar("positionRecoPar", g.positionRecoPar);
         tr.registerDerivedVar("positionRecoParRight", g.positionRecoParRight);
         tr.registerDerivedVar("positionRecoParLeft", g.positionRecoParLeft);
@@ -125,25 +127,6 @@ public:
         tr.registerDerivedVar("voltage", voltage);
         std::cout<<"Voltage: "<<voltage<<std::endl;
 
-        double zMin = -50.0, zStep = 1.0;
-        unsigned int nZBins = 151;
-        std::vector<double> zScan(nZBins);
-        std::string pythonBins = "z_values = [";
-        for(unsigned int i = 0; i < nZBins; i++) 
-        {        
-            pythonBins += std::to_string(zMin) +  ",";
-            zScan[i]=zMin;
-            zMin+=zStep;
-        }
-        tr.registerDerivedVar<std::vector<double>>("zScan",zScan);
-        pythonBins+="]";
-        if(firstFile)
-        {
-            std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
-            overwriteFile << pythonBins << std::endl;
-            overwriteFile.close();
-        }
-
         //Setup Sensor Geometry 
         if     (filetag.find("BNL2020")                        != std::string::npos) registerGeometry(tr, BNL2020Geometry(voltage));
         else if(filetag.find("BNL2021_wide")                   != std::string::npos) registerGeometry(tr, BNL2021WideGeometry(voltage));
@@ -173,6 +156,111 @@ public:
         {
             registerGeometry(tr, DefaultGeometry(voltage));
             std::cout<<"Warning: Using DefaultGeometry, odds are this is not what you want"<<std::endl;
+        }
+
+        // Setup multidimensional scan variables
+        const auto& z_dut_def = tr.getVar<double>("z_dut");
+        const auto& alpha_def = tr.getVar<double>("alpha");
+        const auto& beta_def  = tr.getVar<double>("beta");
+        const auto& gamma_def = tr.getVar<double>("gamma");
+
+        //Define zScan
+        double zMin = -60.0, zStep = 1.0;
+        unsigned int nZBins = 81;
+        if (z_dut_def != 0.0)
+        {
+            zMin = -10.0, zStep = 0.5;
+            nZBins = 41;
+        }
+        std::vector<double> zScan(nZBins);
+        std::string pythonBins = "z_values = [";
+        for(unsigned int i = 0; i < nZBins; i++) 
+        {        
+            pythonBins += std::to_string(z_dut_def + zMin) +  ",";
+            zScan[i]=z_dut_def + zMin;
+            zMin+=zStep;
+        }
+        tr.registerDerivedVar<std::vector<double>>("zScan",zScan);
+        pythonBins+="]\n";
+
+        //Define alphaScan
+        double alphaMin = -3.0, alphaStep = 0.1;
+        unsigned int nAlphaBins = 61;
+        if (alpha_def != 0.0)
+        {
+            alphaMin = -1.0, alphaStep = 0.05;
+            nAlphaBins = 41;
+        }
+        std::vector<double> alphaScan(nAlphaBins);
+        pythonBins+="alpha_values = [";
+        for(unsigned int i = 0; i < nAlphaBins; i++) 
+        {        
+            pythonBins += std::to_string(alpha_def + alphaMin) +  ",";
+            alphaScan[i]=alpha_def + alphaMin;
+            alphaMin+=alphaStep;
+        }
+        tr.registerDerivedVar<std::vector<double>>("alphaScan",alphaScan);
+        pythonBins+="]\n";
+
+        //Define betaScan
+        double betaMin = -90.0, betaStep = 1.0;
+        unsigned int nbetaBins = 181;
+        if (alpha_def != 0.0)
+        {
+            betaMin = -10.0, betaStep = 0.5;
+            nbetaBins = 41;
+        }
+        if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        {
+            betaMin = -3.0, betaStep = 0.1;
+            nbetaBins = 61;
+        }
+        if (beta_def != 0.0)
+        {
+            betaMin = -1.0, betaStep = 0.05;
+            nbetaBins = 41;
+        }
+        std::vector<double> betaScan(nbetaBins);
+        pythonBins+="beta_values = [";
+        for(unsigned int i = 0; i < nbetaBins; i++) 
+        {        
+            pythonBins += std::to_string(beta_def + betaMin) +  ",";
+            betaScan[i]=beta_def + betaMin;
+            betaMin+=betaStep;
+        }
+        tr.registerDerivedVar<std::vector<double>>("betaScan",betaScan);
+        pythonBins+="]\n";
+
+        //Define gammaScan
+        double gammaMin = -90.0, gammaStep = 1.0;
+        unsigned int ngammaBins = 181;
+        if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        {
+            gammaMin = -3.0, gammaStep = 0.1;
+            ngammaBins = 61;
+        }
+        if (gamma_def != 0.0)
+        {
+            gammaMin = -1.0, gammaStep = 0.05;
+            ngammaBins = 41;
+        }
+        std::vector<double> gammaScan(ngammaBins);
+        pythonBins+="gamma_values = [";
+        for(unsigned int i = 0; i < ngammaBins; i++) 
+        {        
+            pythonBins += std::to_string(gamma_def + gammaMin) +  ",";
+            gammaScan[i]=gamma_def + gammaMin;
+            gammaMin+=gammaStep;
+        }
+        tr.registerDerivedVar<std::vector<double>>("gammaScan",gammaScan);
+        pythonBins+="]";
+
+        //Save python file with for later
+        if(firstFile)
+        {
+            std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
+            overwriteFile << pythonBins << std::endl;
+            overwriteFile.close();
         }
 
         //Register Modules that are needed for each Analyzer
