@@ -118,7 +118,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 # fit.Draw("same")
                 # canvas.SaveAs(outdir+"q_"+str(i)+".gif")
                 
-                print ("Bin : " + str(i) + "("+ str(info.th1.GetXaxis().GetBinCenter(i)) +")"+ " -> " + str(value) + " +/- " + str(error))
+                # print ("Bin : " + str(i) + "("+ str(info.th1.GetXaxis().GetBinCenter(i)) +")"+ " -> " + str(value) + " +/- " + str(error))
             else:
                 value *= 1000.0
                 error *= 1000.0
