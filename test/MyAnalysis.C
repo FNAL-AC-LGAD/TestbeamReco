@@ -38,7 +38,7 @@ const std::string getFullPath(const std::string& file)
 
 template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf, 
                                     const int startFile, const int nFiles, const int maxEvts, 
-                                    TFile* const outfile, const std::string& analyzer)
+                                    TFile* const outfile, const std::string& analyzer, const std::string& outpath)
 {
     std::cout << "Initializing..." << std::endl;
     Analyze a;
@@ -53,6 +53,7 @@ template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf
         tr.registerDerivedVar("filetag",file.tag);
         tr.registerDerivedVar("analyzer",analyzer);
         tr.registerDerivedVar("firstFile",firstFile);
+        tr.registerDerivedVar("outpath",outpath);
 
         printf( "nFiles: %i startFile: %i maxEvts: %i \n",nFiles,startFile,maxEvts ); fflush( stdout );
 
@@ -136,13 +137,17 @@ int main(int argc, char *argv[])
     }
 
     bool organized_mode = true;
+    std::string outpath = "";
     if(organized_mode){
         TString outDir = Form("../output/%s/",dataSets.c_str());
         gSystem->mkdir("../output");
         gSystem->mkdir(outDir);
-
+       
+        outpath=outDir.Data();
+       
         char thistFile[128];
-        sprintf(thistFile, "../output/%s/%s_%s.root", dataSets.c_str(),dataSets.c_str(), analyzer.c_str());
+        sprintf(thistFile, "%s%s_%s.root", outDir.Data(),dataSets.c_str(), analyzer.c_str());
+        
         histFile = thistFile;
     }
 
@@ -156,7 +161,7 @@ int main(int argc, char *argv[])
     std::set<AnaSamples::FileSummary> vvf = setFS(dataSets, runOnCondor); 
     TFile* outfile = TFile::Open(histFile.c_str(), "RECREATE");
 
-    std::vector<std::pair<std::string, std::function<void(const std::set<AnaSamples::FileSummary>&,const int,const int,const int,TFile* const,const std::string&)>>> AnalyzerPairVec = {
+    std::vector<std::pair<std::string, std::function<void(const std::set<AnaSamples::FileSummary>&,const int,const int,const int,TFile* const,const std::string&,const std::string&)>>> AnalyzerPairVec = {
         {"Analyze",             run<Analyze>},
         {"Align",               run<Align>},
         {"InitialAnalyzer",     run<InitialAnalyzer>},
@@ -171,7 +176,7 @@ int main(int argc, char *argv[])
             if(pair.first==analyzer) 
             {
                 std::cout<<"Running the " << analyzer << " Analyzer" <<std::endl;
-                pair.second(vvf,startFile,nFiles,maxEvts,outfile,analyzer); 
+                pair.second(vvf,startFile,nFiles,maxEvts,outfile,analyzer,outpath); 
                 foundAnalyzer = true;
             }
         }

@@ -11,7 +11,8 @@ private:
     float ySlope_;
     float xIntercept_;
     float yIntercept_;
-
+    std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel; 
+  
     void applyAmplitudeCorrection(NTupleReader& tr) const
     {     
         const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
@@ -181,15 +182,37 @@ private:
         const auto& LP2_20 = tr.getVec<float>("LP2_20");
         const auto& timeCalibrationCorrection = tr.getVar<std::map<int,double>>("timeCalibrationCorrection");
         auto& corrTime = tr.createDerivedVec<double>("corrTime");
-        int counter = 0;
+        auto& corrTimeTracker = tr.createDerivedVec<double>("corrTimeTracker");
+        uint counter = 0;
         for(auto thisTime : LP2_20)
         {
             double corr = timeCalibrationCorrection.at(counter);
             if(thisTime == 0.0) corr = 0.0;
             corrTime.emplace_back(1e9*thisTime + corr);
+
+            double tracker_corr=0;
+            if(v_timeDiff_coarse_vs_xy_channel.size()>0 && counter < v_timeDiff_coarse_vs_xy_channel.size())
+            {
+                int ibin = v_timeDiff_coarse_vs_xy_channel[counter]->FindBin(x,y);
+                int xbin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], x, "X");  
+                int ybin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], y, "Y"); 
+
+                tracker_corr = v_timeDiff_coarse_vs_xy_channel[counter]->GetBinContent(ibin);
+
+                if(tracker_corr==0.0 && xbin >0 && ybin>0)
+                {
+                    tracker_corr = v_timeDiff_coarse_vs_xy_channel[counter]->Interpolate(x,y);
+                }
+            }
+
+            corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr + corr);
+          
             counter++;
+
         }
+
         utility::remapToLGADgeometry(tr, corrTime, "timeLGAD");
+        utility::remapToLGADgeometry(tr, corrTimeTracker, "timeLGADTracker");
 
         // Baseline RMS
         const auto& baselineRMS = tr.getVec<float>("baseline_RMS");
@@ -219,8 +242,16 @@ private:
     }
 
 public:
-    PrepNTupleVars() : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0)
+    PrepNTupleVars(const std::string& filename, const int numChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0)
     {
+        TFile * delayCorrectionsFile = TFile::Open(filename.c_str(),"READ");
+        if (delayCorrectionsFile){
+            std::cout<<"Getting corrections."<<std::endl;
+            for (int ichan=0;ichan<numChans;ichan++){
+                TProfile2D * this_chan = (TProfile2D *) delayCorrectionsFile->Get(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
+                v_timeDiff_coarse_vs_xy_channel.emplace_back(this_chan);
+            }
+        }
     }
 
     void operator()(NTupleReader& tr)

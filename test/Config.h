@@ -20,7 +20,7 @@ private:
     {
         for(const auto& module : modules)
         {
-            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>();
+            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( tr.getVar<std::string>("outpath")+"/delayCorrections.root", tr.getVar<int>("numLGADchannels"));
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
             else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>();
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
