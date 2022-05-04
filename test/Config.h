@@ -51,6 +51,8 @@ private:
         tr.registerDerivedVar("z_dut", g.z_dut);
         tr.registerDerivedVar("xBinSize", g.xBinSize);
         tr.registerDerivedVar("yBinSize", g.yBinSize);
+        tr.registerDerivedVar("xBinSize_delay_corr", g.xBinSize_delay_corr);
+        tr.registerDerivedVar("yBinSize_delay_corr", g.yBinSize_delay_corr);
         tr.registerDerivedVar("xmin", g.xmin);
         tr.registerDerivedVar("xmax", g.xmax);
         tr.registerDerivedVar("ymin", g.ymin);

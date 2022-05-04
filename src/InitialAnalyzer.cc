@@ -27,10 +27,17 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
     // const auto& pitch = tr.getVar<double>("pitch");
     const auto& xBinSize = tr.getVar<double>("xBinSize");
     const auto& yBinSize = tr.getVar<double>("yBinSize");
+
+    const auto& xBinSize_delay_corr = tr.getVar<double>("xBinSize_delay_corr");
+    const auto& yBinSize_delay_corr = tr.getVar<double>("yBinSize_delay_corr");
+
     const auto& xmin = tr.getVar<double>("xmin");
     const auto& xmax = tr.getVar<double>("xmax");
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
+
+
+
 
     int timeDiffNbin = 800; // 200
     double timeDiffLow = -1.0;
@@ -49,7 +56,7 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
             const auto& r = std::to_string(rowIndex);
             const auto& s = std::to_string(i);
             utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_3d_histos,"timeDiff_coarse_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
         }
         rowIndex++;
     }
@@ -138,7 +145,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 double time = timeLGAD[rowIndex][i];
 
                 utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["amplitude_vs_xy_channel"+r+s], x,y,rawAmpChannel);
-                utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["timeDiff_vs_xy_channel"+r+s], x,y,time-photekTime);
+                utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["timeDiff_coarse_vs_xy_channel"+r+s], x,y,time-photekTime);
 
             }
             rowIndex++;
