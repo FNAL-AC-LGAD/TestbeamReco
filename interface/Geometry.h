@@ -37,6 +37,8 @@ public:
     double z_dut = 0.0;
     double xBinSize = 0.05;
     double yBinSize = 0.05;
+    double xBinSize_delay_corr = 0.05;
+    double yBinSize_delay_corr = 0.2;
     double xmin =  -1;
     double xmax =  -1;
     double ymin =  -1;

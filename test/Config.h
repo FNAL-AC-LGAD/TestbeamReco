@@ -20,7 +20,7 @@ private:
     {
         for(const auto& module : modules)
         {
-            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>();
+            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( tr.getVar<std::string>("outpath")+"/delayCorrections.root", tr.getVar<int>("numLGADchannels"));
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
             else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>();
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
@@ -51,6 +51,8 @@ private:
         tr.registerDerivedVar("z_dut", g.z_dut);
         tr.registerDerivedVar("xBinSize", g.xBinSize);
         tr.registerDerivedVar("yBinSize", g.yBinSize);
+        tr.registerDerivedVar("xBinSize_delay_corr", g.xBinSize_delay_corr);
+        tr.registerDerivedVar("yBinSize_delay_corr", g.yBinSize_delay_corr);
         tr.registerDerivedVar("xmin", g.xmin);
         tr.registerDerivedVar("xmax", g.xmax);
         tr.registerDerivedVar("ymin", g.ymin);

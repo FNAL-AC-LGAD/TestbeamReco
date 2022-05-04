@@ -62,6 +62,27 @@ namespace utility
     {
         map.emplace(name.c_str(), std::make_shared<T>(name.c_str(), (name+hName).c_str(), args...) ) ;
     }
+
+    template<typename Th, typename Tb> int findBin(const std::shared_ptr<Th>& h, const Tb v, const std::string& axis)
+    {
+        //Converts overflow to underflow
+        int bin = -1;
+        if(h)
+        {
+            if(axis=="X")
+            {
+                bin = h->GetXaxis()->FindBin(v);
+                if( v >= h->GetXaxis()->GetBinUpEdge(h->GetNbinsX()) ) bin = 0;//h->GetNbinsX();
+            }
+            else if(axis=="Y")
+            {
+                bin = h->GetYaxis()->FindBin(v);
+                if( v >= h->GetYaxis()->GetBinUpEdge(h->GetNbinsY()) ) bin = 0;// h->GetNbinsY();           
+            }
+        }
+        return bin;
+    }
+
 }
 
 #endif

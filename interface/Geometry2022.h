@@ -429,6 +429,10 @@ public:
     double pitch = 0.500;
     double sensorCenter  = 0.0;
     double sensorCenterY = 0.0;
+    double xBinSize_delay_corr = 0.05;
+    double yBinSize_delay_corr = 0.2;
+    double xBinSize = 0.05;
+    double yBinSize = 0.05;
     // std::vector<double> stripCenterXPosition = {-0.54, -1.04, -1.54, -2.04, -2.54, -3.04, -3.54, 0.0};
     std::vector<double> stripCenterXPosition = {-0.525, -1.024, -1.519, -2.018, -2.516, -3.017, -3.515, 0.0};
     int numLGADchannels = 7;
