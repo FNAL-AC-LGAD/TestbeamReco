@@ -26,7 +26,7 @@ private:
         const auto& x = tr.getVar<double>("x");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
 
-	//Find max channel and 2nd,3rd channels
+        //Find max channel and 2nd,3rd channels
         const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1);
         const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, 2);
         const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, 3);
@@ -40,24 +40,24 @@ private:
         tr.registerDerivedVar("amp5Indexes", amp5Indexes);
         tr.registerDerivedVar("amp6Indexes", amp6Indexes);
 
-	std::pair<int,int> ampIndexesTop;
-	if(amp1Indexes.first == 0 && amp1Indexes.second == 0)
-	{
-	    ampIndexesTop = std::make_pair<int,int>(0,1);
+        std::pair<int,int> ampIndexesTop;
+        if(amp1Indexes.first == 0 && amp1Indexes.second == 0)
+        {
+            ampIndexesTop = std::make_pair<int,int>(0,1);
         }
-	else if(amp1Indexes.first == 0  && amp1Indexes.second == 1)
+        else if(amp1Indexes.first == 0  && amp1Indexes.second == 1)
         {		
-	    ampIndexesTop = std::make_pair<int,int>(0,0);
+            ampIndexesTop = std::make_pair<int,int>(0,0);
         }
 
         std::pair<int,int> ampIndexesBot;
-	if(amp1Indexes.first == 1 && amp1Indexes.second == 0)
-	{
-	    ampIndexesBot = std::make_pair<int,int>(1,1);
+        if(amp1Indexes.first == 1 && amp1Indexes.second == 0)
+        {
+            ampIndexesBot = std::make_pair<int,int>(1,1);
         }
-	else if(amp1Indexes.first == 1  && amp1Indexes.second == 1)
+        else if(amp1Indexes.first == 1  && amp1Indexes.second == 1)
         {		
-	    ampIndexesBot = std::make_pair<int,int>(1,0);
+            ampIndexesBot = std::make_pair<int,int>(1,0);
         }
 
         std::pair<int,int> ampIndexesAdjPad;

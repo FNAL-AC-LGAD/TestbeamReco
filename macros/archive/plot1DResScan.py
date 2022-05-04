@@ -2,7 +2,8 @@ import ROOT
 import optparse
 ROOT.gROOT.SetBatch(True)
 from array import array
-from AlignBinning import z_values
+from AlignBinning import z_values, alpha_values, beta_values
+import myStyle
 
 def cosmetic_tgraph(graph):
         # graph.SetLineColor(colors[colorindex])
@@ -44,14 +45,18 @@ def plot1D(hists, colors, labels, name, xlab, ylab, bins=100, arange=(0,1)):
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('--runPad', dest='runPad', action='store_true', default = False, help="run fits or not")
 options, args = parser.parse_args()
+dataset = options.Dataset
 
-f = ROOT.TFile('../test/myoutputfile.root')
+outdir=""
+outdir = myStyle.getOutputDir(dataset)
+f = ROOT.TFile("%s%s_Align.root"%(outdir,dataset))
 
 hists=[]
 for i in range(len(z_values)):
-        hists.append(('deltaX_var%i'%i,'deltaX_variant_%i'%i,"tracker"))
+        hists.append(('deltaX_varZ%i'%i,'deltaX_variant_%i'%i,"tracker"))
 
 resolutions=[]
 res_errs=[]

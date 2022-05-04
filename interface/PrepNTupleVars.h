@@ -12,28 +12,7 @@ private:
     float xIntercept_;
     float yIntercept_;
 
-    void Rotate(NTupleReader& tr, double x0, double y0, double angle) const
-    {
-        double rad_angle = angle*3.14159/180.;
-        double x_rot = x0*cos(rad_angle) + y0*sin(rad_angle);
-        double y_rot = y0*cos(rad_angle) - x0*sin(rad_angle);
-        tr.registerDerivedVar("x", x_rot);
-        tr.registerDerivedVar("y", y_rot);
-    }
-
-    void RotateVec(NTupleReader& tr, const std::vector<float>& vx, const std::vector<float>& vy, double angle) const
-    {
-        auto& vec_x = tr.createDerivedVec<float>("x_var");
-        auto& vec_y = tr.createDerivedVec<float>("y_var");
-        double rad_angle = angle*3.14159/180.;
-        for(unsigned int i=0; i < vx.size() ;i++)
-        {
-            vec_x.push_back(vx[i]*cos(rad_angle) + vy[i]*sin(rad_angle));
-            vec_y.push_back(vy[i]*cos(rad_angle) - vx[i]*sin(rad_angle));
-        }
-    }
-
-    void ApplyAmplitudeCorrection(NTupleReader& tr) const
+    void applyAmplitudeCorrection(NTupleReader& tr) const
     {     
         const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
         auto& corrAmp = tr.createDerivedVec<double>("corrAmp");
@@ -46,28 +25,63 @@ private:
         }      
     }
 
-    void getXYOnSensor(double& xFinal, double& yFinal, const float z=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0)
+    // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z(alpha) -> Y(beta) -> X(gamma)
+    // * xyz_tracker gives the laboratory hit position relative to sensorCenter, sensorCenterY, z_center
+    void getXYOnSensor(std::vector<double>* xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
     {
-        //Define intial x, y position based on fit from telescope reco
-        double x0 = xSlope_*z + xIntercept_;
-        double y0 = ySlope_*z + yIntercept_;
+        double xI=xIntercept_, yI=yIntercept_, xS=xSlope_, yS=ySlope_;
 
-        //Correct for rotation in the plane of the sensor
+        // Use correct track parameters, given the axes defined such that the strips are always perpendicular to the x-axis 
+        if (isHorizontal)
+        {
+            xI = yIntercept_;
+            yI = -xIntercept_;
+            xS = ySlope_;
+            yS = -xSlope_;
+        }
+
         double degreesToRad = 3.14159/180.0;
-        double gamma_rad = gamma*degreesToRad;
-        double x1 = x0*cos(gamma_rad) + y0*sin(gamma_rad);
-        double y1 = y0*cos(gamma_rad) - x0*sin(gamma_rad);
-
-        //Correct for z-x plane rotation
         double alpha_rad = alpha*degreesToRad;
-        double x2 = x1 + x1*tan(alpha_rad);
-
-        //Correct for z-y plane rotation
         double beta_rad = beta*degreesToRad;
-        double y2 = y1 + y1*tan(beta_rad);
+        double gamma_rad = gamma*degreesToRad;
 
-        xFinal = x2;
-        yFinal = y2;
+        // Define angles' dependent factors used in the next expression for the laboratory z position of the hit in the sensor
+        double nx_nz = cos(alpha_rad)*tan(beta_rad) + sin(alpha_rad)*tan(gamma_rad)/cos(beta_rad);
+        double ny_nz = sin(alpha_rad)*tan(beta_rad) - cos(alpha_rad)*tan(gamma_rad)/cos(beta_rad);
+
+        double z_lab = (z_center - nx_nz*(xI - x_center) - ny_nz*(yI - y_center)) / (1 + nx_nz*xS + ny_nz*yS);
+
+        // Coordinates of the hit w.r.t. sensor's center in the lab frame
+        double lx = xI + z_lab*xS - x_center;
+        double ly = yI + z_lab*yS - y_center;
+        double lz = z_lab - z_center;
+
+        // Express the hit position in the local/sensor's frame
+        // First rotation around z-lab axis
+        double x_r1 = cos(alpha_rad)*lx + sin(alpha_rad)*ly;
+        double y_r1 = -sin(alpha_rad)*lx + cos(alpha_rad)*ly;
+        double z_r1 = lz;
+
+        // Second rotation around y-lab axis
+        double x_r2 = cos(beta_rad)*x_r1 - sin(beta_rad)*z_r1;
+        double y_r2 = y_r1;
+        double z_r2 = sin(beta_rad)*x_r1 + cos(beta_rad)*z_r1;
+
+        // Third rotation around x-lab axis (z component is always zero)
+        double x_r3 = x_r2;
+        double y_r3 = cos(gamma_rad)*y_r2 + sin(gamma_rad)*z_r2;
+        // double z_r3 = -sin(gamma_rad)*y_r2 + cos(gamma_rad)*z_r2; // z_r3 = 0;
+
+        // Save local/sensor hit's position when the tracker worked
+        xFinal = (xI==0 && xS==0) ? -9999 : x_r3;
+        yFinal = (yI==0 && yS==0) ? -9999 : y_r3;
+
+        if (xyz_tracker)
+        {
+            xyz_tracker->at(0) = (xI==0 && xS==0) ? -9999 : lx;
+            xyz_tracker->at(1) = (yI==0 && yS==0) ? -9999 : ly;
+            xyz_tracker->at(2) = (xI==0 && xS==0 && yI==0 && yS==0) ? -9999 : lz;
+        }
     }
 
     void prepNTupleVars(NTupleReader& tr)
@@ -81,33 +95,54 @@ private:
         ySlope_     = tr.getVar<float>("ySlope");
         xIntercept_ = tr.getVar<float>("xIntercept");
         yIntercept_ = tr.getVar<float>("yIntercept");
+        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
+        const auto& z_dut = tr.getVar<double>("z_dut");
         const auto& alpha = tr.getVar<double>("alpha");
         const auto& beta  = tr.getVar<double>("beta");
         const auto& gamma = tr.getVar<double>("gamma");
-        const auto& z_dut = tr.getVar<double>("z_dut");
-    	//const auto& x_dut = tr.getVec<float>("x_dut");
-    	//const auto& y_dut = tr.getVec<float>("y_dut");
-        //
-    	//Rotate(tr, x_dut[7], y_dut[7], gamma);
-        //RotateVec(tr, x_dut, y_dut, gamma);
+        const auto& isHorizontal = tr.getVar<bool>("isHorizontal");
 
         // Define final telescope hit location on DUT based on track lines and hard coded parameters
         auto& x = tr.createDerivedVar<double>("x");
         auto& y = tr.createDerivedVar<double>("y");
-        getXYOnSensor(x, y, z_dut, alpha, beta, gamma);
+        auto& xyz_tracker = tr.createDerivedVec<double>("xyz_tracker",3);
+        getXYOnSensor(&xyz_tracker, x, y, z_dut, alpha, beta, gamma, sensorCenter, sensorCenterY, isHorizontal);
 
         // Create vectors of possible x,y locations by varying hard coded parameters
         const auto& zScan = tr.getVar<std::vector<double>>("zScan");
+        const auto& alphaScan = tr.getVar<std::vector<double>>("alphaScan");
+        const auto& betaScan = tr.getVar<std::vector<double>>("betaScan");
+        const auto& gammaScan = tr.getVar<std::vector<double>>("gammaScan");
+
         auto& x_var = tr.createDerivedVec<double>("x_var",zScan.size());
         auto& y_var = tr.createDerivedVec<double>("y_var",zScan.size());
+        auto& x_varA = tr.createDerivedVec<double>("x_varA",alphaScan.size());
+        auto& y_varA = tr.createDerivedVec<double>("y_varA",alphaScan.size());
+        auto& x_varB = tr.createDerivedVec<double>("x_varB",betaScan.size());
+        auto& y_varB = tr.createDerivedVec<double>("y_varB",betaScan.size());
+        auto& x_varC = tr.createDerivedVec<double>("x_varC",gammaScan.size());
+        auto& y_varC = tr.createDerivedVec<double>("y_varC",gammaScan.size());
+
         for(unsigned int i = 0; i < zScan.size(); i++)
         {
-            getXYOnSensor(x_var[i], y_var[i], zScan[i], alpha, beta, gamma);
-            //std::cout<<"z_dut = "<<z_dut<<" zHypothesis = "<<zScan[i]<<std::endl;
+            getXYOnSensor(nullptr, x_var[i], y_var[i], zScan[i], alpha, beta, gamma, sensorCenter, sensorCenterY);
         }
-        
+        for(unsigned int i = 0; i < alphaScan.size(); i++)
+        {
+            getXYOnSensor(nullptr, x_varA[i], y_varA[i], z_dut, alphaScan[i], beta, gamma, sensorCenter, sensorCenterY);
+        }
+        for(unsigned int i = 0; i < betaScan.size(); i++)
+        {
+            getXYOnSensor(nullptr, x_varB[i], y_varB[i], z_dut, alpha, betaScan[i], gamma, sensorCenter, sensorCenterY);
+        }
+        for(unsigned int i = 0; i < gammaScan.size(); i++)
+        {
+            getXYOnSensor(nullptr, x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY);
+        }
+
         // Correct amp and map raw amplitude
-	ApplyAmplitudeCorrection(tr);
+	    applyAmplitudeCorrection(tr);
         const auto& amp = tr.getVec<float>("amp");
         const auto& rawAmpLGAD = utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
         double totRawAmpLGAD = 0.0;
@@ -118,6 +153,29 @@ private:
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
         tr.registerDerivedVar("hitSensor", hitSensor);
+
+        // Hit through active sensor for scan vars
+        auto& hitSensorZ = tr.createDerivedVec<bool>("hitSensorZ",zScan.size());
+        auto& hitSensorA = tr.createDerivedVec<bool>("hitSensorA",alphaScan.size());
+        auto& hitSensorB = tr.createDerivedVec<bool>("hitSensorB",betaScan.size());
+        auto& hitSensorC = tr.createDerivedVec<bool>("hitSensorC",gammaScan.size());
+
+        for(unsigned int i = 0; i < zScan.size(); i++)
+        {
+            hitSensorZ[i] = sensorEdges[0][0] < x_var[i] && x_var[i] < sensorEdges[1][0] &&  sensorEdges[0][1] < y_var[i] && y_var[i] < sensorEdges[1][1];
+        }
+        for(unsigned int i = 0; i < alphaScan.size(); i++)
+        {
+            hitSensorA[i] = sensorEdges[0][0] < x_varA[i] && x_varA[i] < sensorEdges[1][0] &&  sensorEdges[0][1] < y_varA[i] && y_varA[i] < sensorEdges[1][1];
+        }
+        for(unsigned int i = 0; i < betaScan.size(); i++)
+        {
+            hitSensorB[i] = sensorEdges[0][0] < x_varB[i] && x_varB[i] < sensorEdges[1][0] &&  sensorEdges[0][1] < y_varB[i] && y_varB[i] < sensorEdges[1][1];
+        }
+        for(unsigned int i = 0; i < gammaScan.size(); i++)
+        {
+            hitSensorC[i] = sensorEdges[0][0] < x_varC[i] && x_varC[i] < sensorEdges[1][0] &&  sensorEdges[0][1] < y_varC[i] && y_varC[i] < sensorEdges[1][1];
+        }
 
         // Correct the time variable
         const auto& LP2_20 = tr.getVec<float>("LP2_20");

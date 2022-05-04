@@ -48,12 +48,11 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
         {
             const auto& r = std::to_string(rowIndex);
             const auto& s = std::to_string(i);
-    utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
-    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-
+            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
+            utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+        }
+        rowIndex++;
     }
-    rowIndex++;
-}
     std::cout<<"Finished making histos"<<std::endl;
 }
 
@@ -110,8 +109,8 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
-        bool passTrigger = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
-        bool pass = passTrigger && hitSensor && goodPhotek;
+        bool goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+        bool pass = goodTrack && hitSensor && goodPhotek;
 
         double photekTime = corrTime[photekIndex];
         const auto& x = tr.getVar<double>("x");
@@ -141,12 +140,9 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["amplitude_vs_xy_channel"+r+s], x,y,rawAmpChannel);
                 utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["timeDiff_vs_xy_channel"+r+s], x,y,time-photekTime);
 
+            }
+            rowIndex++;
         }
-        rowIndex++;
-
-    }
-
-
 
     } //event loop
 }
