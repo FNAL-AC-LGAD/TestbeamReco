@@ -512,21 +512,22 @@ public:
     double pitch = 0.15;
     double sensorCenter  = -1.075; // Lab-Tracker's frame
     double sensorCenterY = -2.325; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {0.461, 0.313, 0.163, 0.011, -0.140, -0.294, -0.448, 0.0};
+    // std::vector<double> stripCenterXPosition = {0.461, 0.313, 0.163, 0.011, -0.140, -0.294, -0.448, 0.0}; // std::vector<double> stripCenterXPosition = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+    std::vector<double> stripCenterXPosition = {0.463, 0.316, 0.165, 0.013, -0.138, -0.291, -0.446, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex  = 1;
     int highGoodStripIndex = 5;
-    double alpha = 1.17; // 1.17; // 1.17; // 0.0;
-    double beta  =-0.06; // 0.00; // 0.00; // 0.0;
-    double gamma = 0.00; // 0.00; // 0.00; // 0.0;
-    double z_dut =-4.09; //-4.09; // 0.00; // 0.0;
+    double alpha = 1.16; //// 1.16; // 1.16; // 1.17; // 1.21; // 0.00;
+    double beta  = 0.03; //// 0.03; // 0.03; // 0.00; // 0.00; // 0.00;
+    double gamma = 0.00; //// 0.00; // 0.00; // 0.00; // 0.00; // 0.00;
+    double z_dut =-4.15; ////-4.20; //-4.13; //-3.90; // 0.00; // 0.00;
     double xBinSize = 0.02;
     double yBinSize = 0.05;
-    double xmin = -0.8; // 1 // Sensor's local frame
-    double xmax =  0.8; // 1 // Sensor's local frame
-    double ymin = -1.5; // 1 // Sensor's local frame
-    double ymax =  1.5; // 1 // Sensor's local frame
-    double positionRecoMaxPoint = 0.82; // 2
+    double xmin = -0.8; // Sensor's local frame
+    double xmax =  0.8; // Sensor's local frame
+    double ymin = -1.5; // Sensor's local frame
+    double ymax =  1.5; // Sensor's local frame
+    double positionRecoMaxPoint = 0.82;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 20.0;
     double signalAmpThreshold = 20.0;
@@ -534,7 +535,8 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits   = 4;
     int minStripHits = 6;
-    std::vector<double> positionRecoPar = {0.075000, -0.126820, -0.546862, 2.919943, -6.478527}; // 2
+    // std::vector<double> positionRecoPar = {0.075000, -0.126820, -0.546862, 2.919943, -6.478527}; // 2
+    std::vector<double> positionRecoPar = {0.075000, -0.118360, -0.657639, 3.425440, -7.292026};
     std::vector<std::vector<double>> sensorEdges = {{-0.575, -1.175}, {0.575, 1.175}}; // 1 // Sensor's local frame
 };
 

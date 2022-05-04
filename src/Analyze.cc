@@ -451,8 +451,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["risetime_vs_xy_channel"+r+s], x,y,risetime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["charge_vs_xy_channel"+r+s], x,y,charge);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["ampChargeRatio_vs_xy_channel"+r+s], x,y,ampChargeRatio);
-                utility::fillHisto(pass,                                                    my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s], x,y,ampChannel > signalAmpThreshold);
-                utility::fillHisto(pass && isMaxChannel,                                    my_2d_prof["efficiency_vs_xy_highThreshold_prof"], x,y,goodHit);
+                utility::fillHisto(goodTrack && goodPhotek,                                 my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s], x,y,ampChannel > signalAmpThreshold);
+                utility::fillHisto(goodTrack && goodPhotek && isMaxChannel,                 my_2d_prof["efficiency_vs_xy_highThreshold_prof"], x,y,goodHit);
                 utility::fillHisto(goodTrack && isMaxChannel,                               my_efficiencies["efficiency_vs_x"], goodHit,x);
                 utility::fillHisto(goodTrack && isMaxChannel,                               my_efficiencies["efficiency_vs_xy"], goodHit,x,y);
             }

@@ -166,7 +166,8 @@ public:
         //Define zScan
         double zMin = -60.0, zStep = 1.0;
         unsigned int nZBins = 81;
-        if (z_dut_def != 0.0){
+        if (z_dut_def != 0.0)
+        {
             zMin = -10.0, zStep = 0.5;
             nZBins = 41;
         }
@@ -184,7 +185,8 @@ public:
         //Define alphaScan
         double alphaMin = -3.0, alphaStep = 0.1;
         unsigned int nAlphaBins = 61;
-        if (alpha_def != 0.0){
+        if (alpha_def != 0.0)
+        {
             alphaMin = -1.0, alphaStep = 0.05;
             nAlphaBins = 41;
         }
@@ -200,9 +202,20 @@ public:
         pythonBins+="]\n";
 
         //Define betaScan
-        double betaMin = -3.0, betaStep = 0.1;
-        unsigned int nbetaBins = 61;
-        if (beta_def != 0.0){
+        double betaMin = -90.0, betaStep = 1.0;
+        unsigned int nbetaBins = 181;
+        if (alpha_def != 0.0)
+        {
+            betaMin = -10.0, betaStep = 0.5;
+            nbetaBins = 41;
+        }
+        if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        {
+            betaMin = -3.0, betaStep = 0.1;
+            nbetaBins = 61;
+        }
+        if (beta_def != 0.0)
+        {
             betaMin = -1.0, betaStep = 0.05;
             nbetaBins = 41;
         }
@@ -218,9 +231,15 @@ public:
         pythonBins+="]\n";
 
         //Define gammaScan
-        double gammaMin = -3.0, gammaStep = 0.1;
-        unsigned int ngammaBins = 61;
-        if (gamma_def != 0.0){
+        double gammaMin = -90.0, gammaStep = 1.0;
+        unsigned int ngammaBins = 181;
+        if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        {
+            gammaMin = -3.0, gammaStep = 0.1;
+            ngammaBins = 61;
+        }
+        if (gamma_def != 0.0)
+        {
             gammaMin = -1.0, gammaStep = 0.05;
             ngammaBins = 41;
         }

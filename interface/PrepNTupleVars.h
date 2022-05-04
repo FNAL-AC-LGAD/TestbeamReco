@@ -67,12 +67,12 @@ private:
         double y_r2 = y_r1;
         double z_r2 = sin(beta_rad)*x_r1 + cos(beta_rad)*z_r1;
 
-        // Third rotation around x-lab axis
+        // Third rotation around x-lab axis (z component is always zero)
         double x_r3 = x_r2;
         double y_r3 = cos(gamma_rad)*y_r2 + sin(gamma_rad)*z_r2;
         // double z_r3 = -sin(gamma_rad)*y_r2 + cos(gamma_rad)*z_r2; // z_r3 = 0;
 
-        // Save local/sensor hit's position when the tracker worked (z component is always zero)
+        // Save local/sensor hit's position when the tracker worked
         xFinal = (xI==0 && xS==0) ? -9999 : x_r3;
         yFinal = (yI==0 && yS==0) ? -9999 : y_r3;
 

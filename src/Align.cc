@@ -41,19 +41,19 @@ void Align::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& ge
 
     for(unsigned int ivar = 0; ivar<(zScan.size()); ivar++)
     {
-        utility::makeHisto(my_histos,"deltaX_varZ"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5); // 400,-2.,2.);
+        utility::makeHisto(my_histos,"deltaX_varZ"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5);
     }
     for(unsigned int ivar = 0; ivar<(alphaScan.size()); ivar++)
     {
-        utility::makeHisto(my_histos,"deltaX_varA"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5); // 400,-2.,2.);
+        utility::makeHisto(my_histos,"deltaX_varA"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5);
     }
     for(unsigned int ivar = 0; ivar<(betaScan.size()); ivar++)
     {
-        utility::makeHisto(my_histos,"deltaX_varB"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5); // 400,-2.,2.);
+        utility::makeHisto(my_histos,"deltaX_varB"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5);
     }
     for(unsigned int ivar = 0; ivar<(gammaScan.size()); ivar++)
     {
-        utility::makeHisto(my_histos,"deltaX_varC"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5); // 400,-2.,2.);
+        utility::makeHisto(my_histos,"deltaX_varC"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5);
     }
 
     utility::makeHisto(my_2d_histos,"position_local","; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
