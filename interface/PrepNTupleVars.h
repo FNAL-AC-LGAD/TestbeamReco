@@ -3,6 +3,8 @@
 
 #include <numeric>
 #include "TestbeamReco/interface/Utility.h"
+#include <TRandom3.h>
+#include <chrono>
 
 class PrepNTupleVars
 {
@@ -11,6 +13,8 @@ private:
     float ySlope_;
     float xIntercept_;
     float yIntercept_;
+    bool doAmpSmearing_;
+    mutable int seed;
 
     void Rotate(NTupleReader& tr, double x0, double y0, double angle) const
     {
@@ -33,17 +37,31 @@ private:
         }
     }
 
+    double getSmear(double mean, double sigma) const
+    {
+        seed+=1;
+        double smear = 1.0;
+        if(doAmpSmearing_)
+        {
+            auto rNG = TRandom3(seed);
+            smear = rNG.Gaus(mean, sigma);
+            smear = (smear < 0.0) ? -1.0*smear : smear;
+        }
+        return smear;
+    }
+
     void ApplyAmplitudeCorrection(NTupleReader& tr) const
     {     
         const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
         auto& corrAmp = tr.createDerivedVec<double>("corrAmp");
         const auto& amp = tr.getVec<float>("amp");
+        
         int counter = 0;
         for(auto thisAmp : amp) 
         {
-            corrAmp.emplace_back(thisAmp*ampCorrectionFactors.at(counter));
+            corrAmp.emplace_back(getSmear(1.0, 0.2)*thisAmp*ampCorrectionFactors.at(counter));
             counter++;
-        }      
+        }
     }
 
     void getXYOnSensor(double& xFinal, double& yFinal, const float z=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0)
@@ -161,8 +179,9 @@ private:
     }
 
 public:
-    PrepNTupleVars() : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0)
+    PrepNTupleVars(bool doAmpSmearing = false) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(doAmpSmearing)
     {
+        seed = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     }
 
     void operator()(NTupleReader& tr)
