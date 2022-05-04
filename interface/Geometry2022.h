@@ -544,4 +544,42 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-0.575, -1.175}, {0.575, 1.175}}; // 1 // Sensor's local frame
 };
 
+class IHEPGeometry : public DefaultGeometry
+{
+public:
+    IHEPGeometry(const int v=0) : voltage(v){}
+    const int voltage;
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};    
+    double stripWidth = 0.08;
+    double pitch = 0.15;
+    std::vector<double> stripCenterXPosition = {-0.68, -0.83, -0.98, -1.13, -1.28, -1.43, -1.58, 0.0};
+    int numLGADchannels = 7;
+    int lowGoodStripIndex = 0;
+    int highGoodStripIndex = 6;
+    double alpha = 0.0;
+    double beta  = 0.0;
+    double gamma =  0.0;
+    double z_dut = 28.41878;
+    double xBinSize = 1.0;
+    double yBinSize = 1.0;
+    double xmin =  -10.0;
+    double xmax =   10.0;
+    double ymin =  -10.0;
+    double ymax =   10.0;
+    double positionRecoMaxPoint = 0.82;
+    double photekSignalThreshold = 200.0;
+    double noiseAmpThreshold = 20.0;
+    double signalAmpThreshold = 20.0;
+    bool isHPKStrips = true;
+    int minPixHits = 4;
+    int minStripHits = 6;
+    bool enablePositionReconstruction = true;
+    std::vector<double> positionRecoPar = {0.075, -0.172763, 0.152945, -0.894909, 0.246914};
+    std::vector<std::vector<double>> sensorEdges = {{-10.0, 10.0}, {-10., 10.0}};
+};
+
 #endif

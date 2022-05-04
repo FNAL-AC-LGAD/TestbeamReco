@@ -3,6 +3,8 @@
 
 #include <numeric>
 #include "TestbeamReco/interface/Utility.h"
+#include <TRandom3.h>
+#include <chrono>
 
 class PrepNTupleVars
 {
@@ -11,19 +13,39 @@ private:
     float ySlope_;
     float xIntercept_;
     float yIntercept_;
+
     std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel; 
   
+
+    bool doAmpSmearing_;
+    mutable int seed;
+
+    double getSmear(double mean, double sigma) const
+    {
+        seed+=1;
+        double smear = 1.0;
+        if(doAmpSmearing_)
+        {
+            auto rNG = TRandom3(seed);
+            smear = rNG.Gaus(mean, sigma);
+            smear = (smear < 0.0) ? -1.0*smear : smear;
+        }
+        return smear;
+    }
+
+
     void applyAmplitudeCorrection(NTupleReader& tr) const
     {     
         const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
         auto& corrAmp = tr.createDerivedVec<double>("corrAmp");
         const auto& amp = tr.getVec<float>("amp");
+        
         int counter = 0;
         for(auto thisAmp : amp) 
         {
-            corrAmp.emplace_back(thisAmp*ampCorrectionFactors.at(counter));
+            corrAmp.emplace_back(getSmear(1.0, 0.2)*thisAmp*ampCorrectionFactors.at(counter));
             counter++;
-        }      
+        }
     }
 
     // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z(alpha) -> Y(beta) -> X(gamma)
@@ -143,7 +165,7 @@ private:
         }
 
         // Correct amp and map raw amplitude
-	    applyAmplitudeCorrection(tr);
+        applyAmplitudeCorrection(tr);
         const auto& amp = tr.getVec<float>("amp");
         const auto& rawAmpLGAD = utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
         double totRawAmpLGAD = 0.0;
@@ -242,6 +264,7 @@ private:
     }
 
 public:
+
     PrepNTupleVars(const std::string& filename, const int numChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0)
     {
         TFile * delayCorrectionsFile = TFile::Open(filename.c_str(),"READ");
@@ -252,6 +275,7 @@ public:
                 v_timeDiff_coarse_vs_xy_channel.emplace_back(this_chan);
             }
         }
+
     }
 
     void operator()(NTupleReader& tr)

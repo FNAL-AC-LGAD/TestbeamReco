@@ -153,6 +153,7 @@ public:
         else if(filetag.find("EIC_W1_0p5cm_500um_300um_gap_1_4_245V")  != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_4_StripsGeometry(voltage));
         else if(filetag.find("BNL_500um_squares_175V")                 != std::string::npos) registerGeometry(tr, BNL_500um_squares_Geometry(voltage));
         else if(filetag.find("BNL2021_2022_medium_285V")               != std::string::npos) registerGeometry(tr, BNL2021MediumV2Geometry(voltage));
+        else if(filetag.find("IHEP")               != std::string::npos) registerGeometry(tr, IHEPGeometry(voltage));
         else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
