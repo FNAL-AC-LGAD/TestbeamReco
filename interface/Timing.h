@@ -16,6 +16,7 @@ private:
         //const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
         const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
+        const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
         const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
         //auto amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
@@ -26,30 +27,37 @@ private:
         //-------------------------------------------------------
         double sum_amp=0.0, sum_amp_goodSig=0.0, sum_amp2=0.0, sum_amp2_goodSig=0.0;
         double weighted_time=0.0, weighted_time_goodSig=0.0, weighted2_time=0.0, weighted2_time_goodSig=0.0;
+        double weighted_time_tracker=0.0, weighted2_time_tracker=0.0;
         for(unsigned int i = 0; i < ampLGAD.size(); i++)
         {
             for(unsigned int j = 0; j < ampLGAD[i].size(); j++)
             {
                 const auto& amp = ampLGAD[i][j];
                 const auto& time = timeLGAD[i][j];
+                const auto& timeTracker = timeLGADTracker[i][j];
                 auto similarTime = abs(time - time1) < 1.0;
 
                 sum_amp       += getValue(similarTime && time!=0.0, amp);
                 weighted_time += getValue(similarTime && time!=0.0, amp*time);
+                weighted_time_tracker += getValue(similarTime && time!=0.0, amp*timeTracker);
 
                 sum_amp_goodSig       += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp);
                 weighted_time_goodSig += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*time);
                 
                 sum_amp2       += getValue(similarTime && time!=0.0, amp*amp);
                 weighted2_time += getValue(similarTime && time!=0.0, amp*amp*time);
+                weighted2_time_tracker += getValue(similarTime && time!=0.0, amp*amp*timeTracker);
+
 
                 sum_amp2_goodSig       += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*amp);
                 weighted2_time_goodSig += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*amp*time);
             }
         }
         tr.registerDerivedVar("weighted_time", weighted_time/sum_amp);
+        tr.registerDerivedVar("weighted_time_tracker", weighted_time_tracker/sum_amp);
         tr.registerDerivedVar("weighted_time_goodSig", weighted_time_goodSig/sum_amp_goodSig);
         tr.registerDerivedVar("weighted2_time", weighted2_time/sum_amp2);
+        tr.registerDerivedVar("weighted2_time_tracker", weighted2_time_tracker/sum_amp2);
         tr.registerDerivedVar("weighted2_time_goodSig", weighted2_time_goodSig/sum_amp2_goodSig);
     }
 public:
