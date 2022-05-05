@@ -106,6 +106,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-1.53, -2.7}, {0.40, 8.0}};
 };
@@ -156,6 +157,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-2.32, -2.7}, {-0.82, 8.0}};
 };
@@ -244,6 +246,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 0;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-5.5, -15.0}, {0.0, 15.0}};
 };
@@ -282,6 +285,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 0;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, 0.0262564, -8.09758,  12.3003, -11.0584};
     std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}};
 };
@@ -371,6 +375,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.691307, 0.170215, -0.0131045, -5.13558};
     std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
 };
