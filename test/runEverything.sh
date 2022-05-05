@@ -43,6 +43,10 @@ python PlotTimeMeanVsXY.py  -D BNL2021_2022_medium_285V --zmin -0.2 --zmax 0.2
 python PlotRecoDiffVsXY.py  -D BNL2021_2022_medium_285V --zmin 0.0 --zmax 20.0
 
 cd ../test
+./MyAnalysis -A InitialAnalyzer -D EIC_W1_1cm_255V
+cd ../macros
+python FindDelayCorrections.py -D EIC_W1_1cm_255V
+cd ../test
 ./MyAnalysis -A Analyze -D EIC_W1_1cm_255V
 cd ../macros
 python DoPositionRecoFit.py -D EIC_W1_1cm_255V --xmax 0.8 --pitch 500 --fitOrder 7 

@@ -55,6 +55,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.491296, -6.05401,  138.371, -1348.62,  5868.35, -9488.04};
     std::vector<std::vector<double>> sensorEdges = {{-3.1, -2.5}, {1.1, 8.0}};
 };

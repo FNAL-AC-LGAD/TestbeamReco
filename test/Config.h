@@ -44,6 +44,7 @@ private:
         tr.registerDerivedVar("photekIndex", g.photekIndex);
         tr.registerDerivedVar("lowGoodStripIndex", g.lowGoodStripIndex);
         tr.registerDerivedVar("highGoodStripIndex", g.highGoodStripIndex);
+        tr.registerDerivedVar("CFD_threshold", g.CFD_threshold);
         tr.registerDerivedVar("sensorEdges", g.sensorEdges);
         tr.registerDerivedVar("alpha", g.alpha);
         tr.registerDerivedVar("beta",  g.beta);
