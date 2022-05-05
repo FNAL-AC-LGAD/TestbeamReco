@@ -56,6 +56,7 @@ public:
     bool isHorizontal = false;
     int minPixHits = 0;
     int minStripHits = 7;
+    int CFD_threshold = 20;
     std::vector<double> positionRecoPar = {-1};
     std::vector<double> positionRecoParRight = {-1};
     std::vector<double> positionRecoParLeft = {-1};

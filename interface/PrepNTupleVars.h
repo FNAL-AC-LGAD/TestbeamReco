@@ -201,12 +201,13 @@ private:
         }
 
         // Correct the time variable
-        const auto& LP2_20 = tr.getVec<float>("LP2_20");
+        const auto& CFD_threshold = tr.getVar<int>("CFD_threshold");
+        const auto& LP2 = tr.getVec<float>(Form("LP2_%i",CFD_threshold));
         const auto& timeCalibrationCorrection = tr.getVar<std::map<int,double>>("timeCalibrationCorrection");
         auto& corrTime = tr.createDerivedVec<double>("corrTime");
         auto& corrTimeTracker = tr.createDerivedVec<double>("corrTimeTracker");
         uint counter = 0;
-        for(auto thisTime : LP2_20)
+        for(auto thisTime : LP2)
         {
             double corr = timeCalibrationCorrection.at(counter);
             if(thisTime == 0.0) corr = 0.0;
