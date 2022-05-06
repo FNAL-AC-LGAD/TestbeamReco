@@ -10,12 +10,12 @@ import myStyle
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-c', dest='Copy_Binning', action='store_true', default = False, help="Copy AlignBinning file from /macro")
+parser.add_option('-n', dest='No_Copy_Binning', action='store_true', default = False, help="Don't copy AlignBinning file from /macro")
 options, args = parser.parse_args()
 
 
 dataset = options.Dataset
-copy_binning = options.Copy_Binning
+no_copy_binning = options.No_Copy_Binning
 
 
 outdir=""
@@ -34,7 +34,7 @@ else:
                 i+=1
         os.mkdir(outdir)
 
-if copy_binning: os.system("cp AlignBinning.py %s"%outdir)
+if not no_copy_binning: os.system("cp AlignBinning.py %s"%outdir)
 
 outputfile=ROOT.TFile("%sScan_ZABC.root"%outdir,"RECREATE")
 

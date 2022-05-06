@@ -13,10 +13,6 @@ private:
     float ySlope_;
     float xIntercept_;
     float yIntercept_;
-
-    std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel; 
-  
-
     bool doAmpSmearing_;
     mutable int seed;
 
@@ -32,7 +28,6 @@ private:
         }
         return smear;
     }
-
 
     void applyAmplitudeCorrection(NTupleReader& tr) const
     {     
@@ -50,7 +45,8 @@ private:
 
     // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z(alpha) -> Y(beta) -> X(gamma)
     // * xyz_tracker gives the laboratory hit position relative to sensorCenter, sensorCenterY, z_center
-    void getXYOnSensor(std::vector<double>* xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0, const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
+    void getXYOnSensor(std::vector<double>* xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0,
+                        const float gamma=0.0, const float x_center=0.0, const float y_center=0.0, const bool isHorizontal=false)
     {
         double xI=xIntercept_, yI=yIntercept_, xS=xSlope_, yS=ySlope_;
 
@@ -149,19 +145,19 @@ private:
 
         for(unsigned int i = 0; i < zScan.size(); i++)
         {
-            getXYOnSensor(nullptr, x_var[i], y_var[i], zScan[i], alpha, beta, gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(nullptr, x_var[i], y_var[i], zScan[i], alpha, beta, gamma, sensorCenter, sensorCenterY, isHorizontal);
         }
         for(unsigned int i = 0; i < alphaScan.size(); i++)
         {
-            getXYOnSensor(nullptr, x_varA[i], y_varA[i], z_dut, alphaScan[i], beta, gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(nullptr, x_varA[i], y_varA[i], z_dut, alphaScan[i], beta, gamma, sensorCenter, sensorCenterY, isHorizontal);
         }
         for(unsigned int i = 0; i < betaScan.size(); i++)
         {
-            getXYOnSensor(nullptr, x_varB[i], y_varB[i], z_dut, alpha, betaScan[i], gamma, sensorCenter, sensorCenterY);
+            getXYOnSensor(nullptr, x_varB[i], y_varB[i], z_dut, alpha, betaScan[i], gamma, sensorCenter, sensorCenterY, isHorizontal);
         }
         for(unsigned int i = 0; i < gammaScan.size(); i++)
         {
-            getXYOnSensor(nullptr, x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY);
+            getXYOnSensor(nullptr, x_varC[i], y_varC[i], z_dut, alpha, beta, gammaScan[i], sensorCenter, sensorCenterY, isHorizontal);
         }
 
         // Correct amp and map raw amplitude
@@ -201,42 +197,18 @@ private:
         }
 
         // Correct the time variable
-        const auto& CFD_threshold = tr.getVar<int>("CFD_threshold");
-        const auto& LP2 = tr.getVec<float>(Form("LP2_%i",CFD_threshold));
+        const auto& LP2_20 = tr.getVec<float>("LP2_20");
         const auto& timeCalibrationCorrection = tr.getVar<std::map<int,double>>("timeCalibrationCorrection");
         auto& corrTime = tr.createDerivedVec<double>("corrTime");
-        auto& corrTimeTracker = tr.createDerivedVec<double>("corrTimeTracker");
-        uint counter = 0;
-        for(auto thisTime : LP2)
+        int counter = 0;
+        for(auto thisTime : LP2_20)
         {
             double corr = timeCalibrationCorrection.at(counter);
             if(thisTime == 0.0) corr = 0.0;
             corrTime.emplace_back(1e9*thisTime + corr);
-
-            double tracker_corr=0;
-            //Must check that thisTime !=0, because 0 indicates there was no timestamp assigned by TimingDAQ
-            if(thisTime != 0.0  && v_timeDiff_coarse_vs_xy_channel.size()>0 && counter < v_timeDiff_coarse_vs_xy_channel.size())
-            {
-                int ibin = v_timeDiff_coarse_vs_xy_channel[counter]->FindBin(x,y);
-                int xbin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], x, "X");  
-                int ybin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], y, "Y"); 
-
-                tracker_corr = v_timeDiff_coarse_vs_xy_channel[counter]->GetBinContent(ibin);
-
-                if(tracker_corr==0.0 && xbin >0 && ybin>0)
-                {
-                    tracker_corr = v_timeDiff_coarse_vs_xy_channel[counter]->Interpolate(x,y);
-                }
-            }
-
-            corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr + corr);
-          
             counter++;
-
         }
-
         utility::remapToLGADgeometry(tr, corrTime, "timeLGAD");
-        utility::remapToLGADgeometry(tr, corrTimeTracker, "timeLGADTracker");
 
         // Baseline RMS
         const auto& baselineRMS = tr.getVec<float>("baseline_RMS");
@@ -266,18 +238,9 @@ private:
     }
 
 public:
-
-    PrepNTupleVars(const std::string& filename, const int numChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0)
+    PrepNTupleVars(bool doAmpSmearing = false) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(doAmpSmearing)
     {
-        TFile * delayCorrectionsFile = TFile::Open(filename.c_str(),"READ");
-        if (delayCorrectionsFile){
-            std::cout<<"Getting corrections."<<std::endl;
-            for (int ichan=0;ichan<numChans;ichan++){
-                TProfile2D * this_chan = (TProfile2D *) delayCorrectionsFile->Get(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
-                v_timeDiff_coarse_vs_xy_channel.emplace_back(this_chan);
-            }
-        }
-
+        seed = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     }
 
     void operator()(NTupleReader& tr)
