@@ -13,6 +13,10 @@ private:
     float ySlope_;
     float xIntercept_;
     float yIntercept_;
+
+    std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel;
+
+
     bool doAmpSmearing_;
     mutable int seed;
 
@@ -197,18 +201,39 @@ private:
         }
 
         // Correct the time variable
-        const auto& LP2_20 = tr.getVec<float>("LP2_20");
+        const auto& CFD_threshold = tr.getVar<int>("CFD_threshold");
+        const auto& LP2 = tr.getVec<float>(Form("LP2_%i",CFD_threshold));
         const auto& timeCalibrationCorrection = tr.getVar<std::map<int,double>>("timeCalibrationCorrection");
         auto& corrTime = tr.createDerivedVec<double>("corrTime");
-        int counter = 0;
-        for(auto thisTime : LP2_20)
+        auto& corrTimeTracker = tr.createDerivedVec<double>("corrTimeTracker");
+        uint counter = 0;
+        for(auto thisTime : LP2)
         {
             double corr = timeCalibrationCorrection.at(counter);
             if(thisTime == 0.0) corr = 0.0;
             corrTime.emplace_back(1e9*thisTime + corr);
+
+            double tracker_corr=0;
+            //Must check that thisTime !=0, because 0 indicates there was no timestamp assigned by TimingDAQ
+            if(thisTime != 0.0 && v_timeDiff_coarse_vs_xy_channel.size()>0 && counter < v_timeDiff_coarse_vs_xy_channel.size())
+            {
+                int ibin = v_timeDiff_coarse_vs_xy_channel[counter]->FindBin(x,y);
+                int xbin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], x, "X");
+                int ybin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], y, "Y");
+
+                tracker_corr = v_timeDiff_coarse_vs_xy_channel[counter]->GetBinContent(ibin);
+
+                if(tracker_corr==0.0 && xbin >0 && ybin>0)
+                {
+                    tracker_corr = v_timeDiff_coarse_vs_xy_channel[counter]->Interpolate(x,y);
+                }
+            }
+
             counter++;
         }
+
         utility::remapToLGADgeometry(tr, corrTime, "timeLGAD");
+        utility::remapToLGADgeometry(tr, corrTimeTracker, "timeLGADTracker");
 
         // Baseline RMS
         const auto& baselineRMS = tr.getVec<float>("baseline_RMS");
@@ -238,9 +263,19 @@ private:
     }
 
 public:
-    PrepNTupleVars(bool doAmpSmearing = false) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(doAmpSmearing)
+    PrepNTupleVars(const std::string& filename, const int numChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0)
     {
-        seed = std::chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+        TFile * delayCorrectionsFile = TFile::Open(filename.c_str(),"READ");
+
+        if (delayCorrectionsFile)
+        {
+            std::cout<<"Getting corrections."<<std::endl;
+            for (int ichan=0;ichan<numChans;ichan++)
+            {
+                TProfile2D * this_chan = (TProfile2D *) delayCorrectionsFile->Get(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
+                v_timeDiff_coarse_vs_xy_channel.emplace_back(this_chan);
+            }
+        }
     }
 
     void operator()(NTupleReader& tr)

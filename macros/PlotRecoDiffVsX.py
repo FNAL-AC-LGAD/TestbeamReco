@@ -72,7 +72,8 @@ else:
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    #HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True,  35.0, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
+    # HistoInfo("deltaXmax_vs_Xtrack",   inputfile, "maxtrack", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
 
 canvas = TCanvas("cv","cv",1000,800)

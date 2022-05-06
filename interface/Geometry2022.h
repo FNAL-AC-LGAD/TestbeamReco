@@ -57,6 +57,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 2; // 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     // std::vector<double> positionRecoPar = {0.25, -0.491296, -6.05401,  138.371, -1348.62,  5868.35, -9488.04};
     // std::vector<double> positionRecoPar = {0.250000, -0.453042, -3.303962, 34.813939, -147.371406, 192.581910};
     std::vector<double> positionRecoPar = {0.250000, -0.440132, -3.524095, 36.376552, -151.080147, 194.344126};
@@ -110,6 +111,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-1.53, -2.7}, {0.40, 8.0}};
 };
@@ -160,6 +162,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-2.32, -2.7}, {-0.82, 8.0}};
 };
@@ -248,6 +251,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 0;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
     std::vector<std::vector<double>> sensorEdges = {{-5.5, -15.0}, {0.0, 15.0}};
 };
@@ -286,6 +290,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 0;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, 0.0262564, -8.09758,  12.3003, -11.0584};
     std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}};
 };
@@ -375,6 +380,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.691307, 0.170215, -0.0131045, -5.13558};
     std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
 };
@@ -434,6 +440,10 @@ public:
     double pitch = 0.500;
     double sensorCenter  = 0.0;
     double sensorCenterY = 0.0;
+    double xBinSize_delay_corr = 0.05;
+    double yBinSize_delay_corr = 0.2;
+    double xBinSize = 0.05;
+    double yBinSize = 0.05;
     // std::vector<double> stripCenterXPosition = {-0.54, -1.04, -1.54, -2.04, -2.54, -3.04, -3.54, 0.0};
     std::vector<double> stripCenterXPosition = {-0.525, -1.024, -1.519, -2.018, -2.516, -3.017, -3.515, 0.0};
     int numLGADchannels = 7;
