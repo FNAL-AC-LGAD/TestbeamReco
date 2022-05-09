@@ -263,7 +263,7 @@ private:
     }
 
 public:
-    PrepNTupleVars(const std::string& filename, const int numChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0)
+    PrepNTupleVars(const std::string& filename, const int numChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(false)
     {
         TFile * delayCorrectionsFile = TFile::Open(filename.c_str(),"READ");
 
