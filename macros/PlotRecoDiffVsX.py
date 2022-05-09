@@ -72,6 +72,8 @@ else:
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
+    # HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
     # HistoInfo("deltaXmax_vs_Xtrack",   inputfile, "maxtrack", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
@@ -118,8 +120,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 # tmpHist.Draw("hist")
                 # fit.Draw("same")
                 # canvas.SaveAs(outdir+"q_"+str(i)+".gif")
-                
-                # print ("Bin : " + str(i) + "("+ str(info.th1.GetXaxis().GetBinCenter(i)) +")"+ " -> " + str(value) + " +/- " + str(error))
+                # print ("Bin : " + str(i) + " ("+ str(info.th1.GetXaxis().GetBinCenter(i)) +")"+ " -> " + str(value) + " +/- " + str(error))
             else:
                 value *= 1000.0
                 error *= 1000.0

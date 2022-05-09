@@ -14,10 +14,12 @@ parser.add_option('-s','--sensor', dest='sensor', default = "UIC_W1_1cm", help="
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 255, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 3.0, help="Bias Voltage value in [V]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+parser.add_option('-n', dest='NoEdges', action='store_true', default = False, help="Don't consider edges")
 options, args = parser.parse_args()
 
 sensor = options.sensor
 bias = options.biasvolt
+noEdges = options.NoEdges
 xlength = float(options.xlength)
 
 dataset = options.Dataset
@@ -30,9 +32,12 @@ else:
 
 colors = myStyle.GetColors()
 
-efficiency_lowThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_lowThreshold_numerator")
-efficiency_highThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_highThreshold_numerator")
-efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator")
+extEdge = "_NEdges" if noEdges else ""
+
+
+efficiency_lowThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_lowThreshold_numerator"+extEdge)
+efficiency_highThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_highThreshold_numerator"+extEdge)
+efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator"+extEdge)
 
 #efficiency_lowThreshold_numerator_global.RebinX(3)
 #efficiency_highThreshold_numerator_global.RebinX(3)
@@ -40,9 +45,9 @@ efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator")
 
 shift = inputfile.Get("stripBoxInfo03").GetMean(1)
 
-EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_lowThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
-EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_highThreshold_global", "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_lowThreshold_global"+extEdge, "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_lowThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_lowThreshold_global"+extEdge, "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
+EfficiencyUtils.Plot2DEfficiency( efficiency_highThreshold_numerator_global, efficiency_denominator_global, outdir+"efficiency_highThreshold_global"+extEdge, "Efficiency Global", "X [mm]", -10, 10, "Y [mm]" , -20, 20 , 0.0, 1.0 )
 #For some reason the first time I call this function, the z-axis is not plotted in the right place. 
 #So I call it twice.
 
@@ -162,11 +167,11 @@ myStyle.BeamInfo()
 myStyle.SensorInfo(sensor, bias)
 
 htemp.Draw("AXIS same")
-canvas.SaveAs(outdir+"Efficiency_HighThreshold_vs_x_"+sensor+".gif")
-canvas.SaveAs(outdir+"Efficiency_HighThreshold_vs_x_"+sensor+".pdf")
+canvas.SaveAs(outdir+"Efficiency_HighThreshold_vs_x_"+sensor+extEdge+".gif")
+canvas.SaveAs(outdir+"Efficiency_HighThreshold_vs_x_"+sensor+extEdge+".pdf")
 
 # Save efficiency plots
-outputfile = TFile(outdir+"EfficiencyPlots_"+sensor+".root","RECREATE")
+outputfile = TFile(outdir+"EfficiencyPlots_"+sensor+extEdge+".root","RECREATE")
 # efficiency_vs_x_highThreshold_global.Write("efficiency_vs_x_highThreshold_global")
 efficiency_vs_x_highThreshold_channel00.Write("efficiency_vs_x_highThreshold_channel00")
 efficiency_vs_x_highThreshold_channel01.Write("efficiency_vs_x_highThreshold_channel01")

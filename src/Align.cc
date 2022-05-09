@@ -69,6 +69,7 @@ void Align::Loop(NTupleReader& tr, int maxevents)
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
+    const auto& photekSignalMax = tr.getVar<double>("photekSignalMax");
     const auto& firstFile = tr.getVar<bool>("firstFile");
     if(firstFile)
     {
@@ -120,7 +121,7 @@ void Align::Loop(NTupleReader& tr, int maxevents)
         const auto& hasGlobalSignal_highThreshold = tr.getVar<bool>("hasGlobalSignal_highThreshold");
         
         //Define selection bools
-        bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
+        bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool goodTrack = ntracks==1 && nplanes>=5 && npix>0;// && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         bool pass = goodTrack && goodPhotek && hitSensor;
         bool maxAmpNotEdgeStrip = (maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex);
