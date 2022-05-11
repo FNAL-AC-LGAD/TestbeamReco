@@ -83,6 +83,25 @@ namespace utility
         return bin;
     }
 
+    class ROI
+    {
+    private:
+        std::string name_;
+        double xmin_;
+        double xmax_;
+        double ymin_;
+        double ymax_;
+        
+    public:
+        ROI(const std::string& name, const double xmin, const double xmax, const double ymin, const double ymax) 
+            : name_(name), xmin_(xmin), xmax_(xmax), ymin_(ymin), ymax_(ymax)
+        {
+        }
+        
+        bool passROI(const double x, const double y) const { return xmin_ < x && x < xmax_ && ymin_ < y && y < ymax_; }
+        const std::string getName() const { return name_; }
+    };
+
 }
 
 #endif
