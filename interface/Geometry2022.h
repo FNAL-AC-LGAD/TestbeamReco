@@ -386,7 +386,7 @@ class EIC_W2_1cm_500um_200um_gap_StripsGeometry : public DefaultGeometry
 {
 public:
 
-    EIC_W2_1cm_500um_400um_gap_StripsGeometry(const int v=0) : voltage(v){}
+    EIC_W2_1cm_500um_200um_gap_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
