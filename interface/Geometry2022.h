@@ -237,8 +237,8 @@ public:
     double yBinSize = 0.10;
     double xmin =  -5.5;
     double xmax =  -1.5;
-    double ymin = -15.0;
-    double ymax =  15.0;
+    double ymin = -10.0;
+    double ymax =  20.0;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 20.0;
@@ -249,8 +249,8 @@ public:
     int minStripHits = 6;
     int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
-    std::vector<std::vector<double>> sensorEdges = {{-5.5, -15.0}, {0.0, 15.0}};
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -999.9,999.9, -999.9,999.9}};
+    std::vector<std::vector<double>> sensorEdges = {{-5.5, -10.0}, {0.0, 20.0}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.0,3.5, -4.5,4.0}};
 };
 
 class EIC2p5cmStripsGeometry : public DefaultGeometry
