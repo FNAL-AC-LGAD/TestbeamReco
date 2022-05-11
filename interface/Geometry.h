@@ -2,6 +2,7 @@
 #define Geometry_h
 
 #include "TestbeamReco/interface/NTupleReader.h"
+#include "TestbeamReco/interface/Utility.h"
 
 class DefaultGeometry
 {
@@ -66,6 +67,7 @@ public:
     std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> xSlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> boxes_XY = {{-999.9, -999.9,-999.9, -999.9}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"default", -999.9,999.9, -999.9,999.9}};
 };
 
 class BNL2020Geometry : public DefaultGeometry

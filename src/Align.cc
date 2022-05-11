@@ -15,7 +15,7 @@ Align::Align()
 }
 
 //Define all your histograms here. 
-void Align::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& geometry)
+void Align::InitHistos(NTupleReader& tr, [[maybe_unused]] const std::vector<std::vector<int>>& geometry)
 {
     TH1::SetDefaultSumw2();
     TH2::SetDefaultSumw2();

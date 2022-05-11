@@ -79,6 +79,7 @@ private:
         tr.registerDerivedVar("xSlices", g.xSlices);
         tr.registerDerivedVar("ySlices", g.ySlices);
         tr.registerDerivedVar("boxes_XY", g.boxes_XY);        
+        tr.registerDerivedVar("regionsOfIntrest", g.regionsOfIntrest);
     }
 
     int getVoltage(std::string name) const
@@ -150,6 +151,7 @@ public:
         else if(filetag.find("EIC_W1_2p5cm_215V")              != std::string::npos) registerGeometry(tr, EIC2p5cmStripsGeometry(voltage));
         else if(filetag.find("HPK_strips_Eb_45um_170V")        != std::string::npos) registerGeometry(tr, HPKStripsEbWideMetalGeometry(voltage));
         else if(filetag.find("EIC_W2_1cm_500um_400um_gap_220V")        != std::string::npos) registerGeometry(tr, EIC_W2_1cm_500um_400um_gap_StripsGeometry(voltage));
+        else if(filetag.find("EIC_W2_1cm_500um_200um_gap_240V")        != std::string::npos) registerGeometry(tr, EIC_W2_1cm_500um_200um_gap_StripsGeometry(voltage));
         else if(filetag.find("EIC_W1_0p5cm_500um_300um_gap_1_7_240V")  != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_7_StripsGeometry(voltage));
         else if(filetag.find("EIC_W1_0p5cm_500um_300um_gap_1_4_245V")  != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_4_StripsGeometry(voltage));
         else if(filetag.find("BNL_500um_squares_175V")                 != std::string::npos) registerGeometry(tr, BNL_500um_squares_Geometry(voltage));

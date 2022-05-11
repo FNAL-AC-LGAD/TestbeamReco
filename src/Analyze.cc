@@ -30,6 +30,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     const auto& xmax = tr.getVar<double>("xmax");
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
+    const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
     int xbins = 175;
     int ybins = 175;
     double xBinSizePad = 0.5;
@@ -268,6 +269,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
     // const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
     const auto& firstFile = tr.getVar<bool>("firstFile");
+    const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
+
+    for(const auto& roi : regionsOfIntrest)
+    {
+        std::cout<<roi.getName()<<" "<<roi.passROI(0.0,0.0)<<" "<<roi.passROI(10000.0,0.0)<<std::endl;
+    }
+
     bool plotWaveForm = false;
     if(firstFile) InitHistos(tr, geometry);
 
@@ -591,7 +599,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         
         // Fill wave form histos once
         bool maxAmpInCenter = maxAmpIndex == 2;// || maxAmpIndex == 3;
-        bool directHit = (abs( corrAmp[2] - corrAmp[4]) / corrAmp[2]) < 0.05;
+        //bool directHit = (abs( corrAmp[2] - corrAmp[4]) / corrAmp[2]) < 0.05;
         //if(plotWaveForm && pass && maxAmpInCenter && goodMaxLGADAmp && maxAmpLGAD > 99.0 &&  maxAmpLGAD < 101.0)
         //{
         //    std::cout<<abs( corrAmp[2] - corrAmp[4])<<" "<<corrAmp[2]<<" "<<(abs( corrAmp[2] - corrAmp[4]) / corrAmp[2])<<std::endl;
