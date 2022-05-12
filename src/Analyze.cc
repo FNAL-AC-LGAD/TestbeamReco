@@ -180,7 +180,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightBot_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightBot", (xmax-xmin)/xBinSize,-0.4,0.4, 25,0.0,1.0);
     utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotRight_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotRight", (ymax-ymin)/yBinSize,-0.5,0.5, 25,0.0,1.0);
     utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotLeft_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotLeft", (ymax-ymin)/yBinSize,-0.5,0.5, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax", "",           (5*pitch)/0.02,-2.5*pitch,2.5*pitch, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax", "",           (5*pitch)/0.01,-2.5*pitch,2.5*pitch, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad1_vs_deltaXmaxneg","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad2_vs_deltaXmaxpos","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad3_vs_deltaXmaxpos","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);

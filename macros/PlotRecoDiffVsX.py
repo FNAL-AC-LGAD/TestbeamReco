@@ -72,8 +72,8 @@ else:
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
-    # HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
     # HistoInfo("deltaXmax_vs_Xtrack",   inputfile, "maxtrack", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
