@@ -121,6 +121,7 @@ public:
         const auto& filetag = tr.getVar<std::string>("filetag");
         const auto& analyzer = tr.getVar<std::string>("analyzer");
         const auto& firstFile = tr.getVar<bool>("firstFile");
+        const auto& outpath = tr.getVar<std::string>("outpath");
 
         std::string runYear = "2021";
         tr.registerDerivedVar("runYear",runYear);
@@ -264,14 +265,6 @@ public:
         tr.registerDerivedVar<std::vector<double>>("gammaScan",gammaScan);
         pythonBins+="]";
 
-        //Save python file with for later
-        if(firstFile)
-        {
-            std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
-            overwriteFile << pythonBins << std::endl;
-            overwriteFile.close();
-        }
-
         //Register Modules that are needed for each Analyzer
         if (analyzer=="Analyze")
         {
@@ -285,6 +278,19 @@ public:
         }
         else if (analyzer=="Align")
         {
+            if(firstFile)
+            {
+                std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
+                overwriteFile << pythonBins << std::endl;
+                overwriteFile.close();
+
+                auto copyPath = Form("%sAlignBinning.py",outpath.c_str());
+                std::ofstream saveCopy(copyPath, std::ofstream::trunc);
+                saveCopy << pythonBins << std::endl;
+                saveCopy.close();
+            }
+
+
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
