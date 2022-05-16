@@ -282,20 +282,21 @@ public:
     double pitch = 0.500;
     double sensorCenter = -3.65; // Lab-Tracker's frame
     double sensorCenterY = 4.5; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {-2.33, -2.33, -2.83, -3.33, -3.83, -4.33, -4.83, 0.0};
+    // std::vector<double> stripCenterXPosition = {-2.33, -2.33, -2.83, -3.33, -3.83, -4.33, -4.83, 0.0};
+    std::vector<double> stripCenterXPosition = {1.309, 1.322, 0.819, 0.320, -0.181, -0.683, -1.183, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 2;
     int highGoodStripIndex = 5;
-    double alpha = 0.0;
-    double beta  = 0.0;
-    double gamma = 0.0;
-    double z_dut = 0.0;
+    double alpha = 0.03; // 0.00;
+    double beta  = 0.00; // 0.00;
+    double gamma = 0.00; // 0.00;
+    double z_dut = 0.00; // 0.00;
     double xBinSize = 0.05;
     double yBinSize = 0.10;
-    double xmin =  -5.5; // Sensor's local frame
-    double xmax =  -1.5; // Sensor's local frame
-    double ymin = -15.0; // Sensor's local frame
-    double ymax =  15.0; // Sensor's local frame
+    double xmin = -2.5; // Sensor's local frame
+    double xmax =  2.5; // Sensor's local frame
+    double ymin =-14.0; // Sensor's local frame
+    double ymax = 14.0; // Sensor's local frame
     double positionRecoMaxPoint = 0.82;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 5.0;
@@ -306,11 +307,12 @@ public:
     int minPixHits = 0;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
+    // std::vector<double> positionRecoPar = {0.25, -0.589864, 0.930168, -6.40437, 5.39412};
+    std::vector<double> positionRecoPar = {0.250000, -3.064970, 44.030625, -373.430406, 1413.816981, -1939.591395};
     // std::vector<std::vector<double>> sensorEdges = {{-5.5, -15.0}, {0.0, 15.0}}; // Sensor's local frame
     // std::vector<std::vector<double>> sensorEdges = {{-17.0, -5.3}, {8.0, -2.0}}; // Sensor's local frame -> REAL LAB FRAME
     // std::vector<std::vector<double>> sensorEdges = {{-5.3, -8.0}, {-2.0, 17.0}}; // Sensor's local frame -> LAB FRAME
-    std::vector<std::vector<double>> sensorEdges = {{-1.65, -12.5}, {1.65, 12.5}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdges = {{-1.7, -12.5}, {1.7, 12.5}}; // Sensor's local frame
 };
 
 class EIC2p5cmStripsGeometry : public DefaultGeometry
@@ -319,7 +321,6 @@ public:
     // EIC 2p5cm long strips 500um pitch 300um gap size
     // Used lecroy scope channels 0-7
     // Scope channel 0 was DC ring, scope channels 1-6 were AC channels, and scope channel 7 was the photek
-    // Note that the first strip is read by two channels, one in each end
     // 
     // |---------------|
     // | 0 0 0 0 0 0 0 |             -----
@@ -341,23 +342,24 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.64464175}, {1,0.64148521}, {2,0.75787912}, {3,0.64381268}, {4,0.74011157}, {5,0.63451148}, {6,0.75850835}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
-    double sensorCenter = -0.5; // Lab-Tracker's frame
-    double sensorCenterY = 2.25; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {1000.0, 1.33, 0.83, 0.33, -0.17, -0.67, -1.17, 1000.0};
+    double sensorCenter = 0.05; // Lab-Tracker's frame
+    double sensorCenterY = 0.50; // Lab-Tracker's frame
+    // std::vector<double> stripCenterXPosition = {1000.0, 1.33, 0.83, 0.33, -0.17, -0.67, -1.17, 1000.0};
+    std::vector<double> stripCenterXPosition = {-2.575, 1.294, 0.745, 0.265, -0.247, -0.739, -1.249, 0.0};
     int numLGADchannels = 7;
-    int lowGoodStripIndex = 0;
-    int highGoodStripIndex = 6;
-    double alpha = 0.0;
-    double beta  = 0.0;
-    double gamma = 0.0;
-    double z_dut = 28.41878;
-    double xBinSize = 0.10;
+    int lowGoodStripIndex = 2;
+    int highGoodStripIndex = 5;
+    double alpha =-0.56; //-0.56; // 0.00;
+    double beta  = 0.00; // 0.00; // 0.00;
+    double gamma = 0.00; // 0.00; // 0.00;
+    double z_dut = 0.00; // 0.00; // 0.00;
+    double xBinSize = 0.05;
     double yBinSize = 0.10;
-    double xmin = -3.2; // Sensor's local frame
-    double xmax =  3.2; // Sensor's local frame
+    double xmin = -2.5; // Sensor's local frame
+    double xmax =  2.5; // Sensor's local frame
     double ymin = -15.0; // Sensor's local frame
     double ymax =  15.0; // Sensor's local frame
-    double positionRecoMaxPoint = 0.82;
+    double positionRecoMaxPoint = 0.73;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 5.0;
     double signalAmpThreshold = 5.0;
@@ -367,8 +369,12 @@ public:
     int minPixHits = 0;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.25, 0.0262564, -8.09758,  12.3003, -11.0584};
-    std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}}; // Sensor's local frame
+    // std::vector<double> positionRecoPar = {0.25, 0.0262564, -8.09758,  12.3003, -11.0584};
+    std::vector<double> positionRecoPar = {0.250000, -1.220763, 9.797696, -75.459288, 151.303936};
+    // std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdges = {{-13.0, -1.5}, {12.0, 2.0}}; // Sensor's local frame -> REAL LAB FRAME
+    // std::vector<std::vector<double>> sensorEdges = {{-1.5, -12.0}, {2.0, 13.0}}; // Sensor's local frame -> LAB FRAME
+    std::vector<std::vector<double>> sensorEdges = {{-1.75, -12.5}, {1.75, 12.5}}; // Sensor's local frame // THIS IS NOT CONSIDERING GUARD RING. DO WE CARE ABOUT IT?
 };
 
 class HPKStripsEbWideMetalGeometry : public DefaultGeometry
@@ -376,7 +382,7 @@ class HPKStripsEbWideMetalGeometry : public DefaultGeometry
 public:
     // HPK Strips 2021 Mapping set
     // Used lecroy scope channels 0-7
-    // scope channel 0-6 was AC pads, and scope channel 7 was the photek
+    // scope channel 0-6 was AC strips, and scope channel 7 was the photek
     // 
     // |-----------|             -----
     // | 0 0 0 0 0 |             |777|
@@ -433,6 +439,19 @@ public:
 class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
 {
 public:
+    // EIC W2 1cm 500um pitch 400um gap size
+    // Used lecroy scope channels 0-7
+    // scope channels 0-6 were AC channels, and scope channel 7 was the photek
+    // 
+    // |-----------|             -----
+    // | 0 0 0 0 0 |             |777|
+    // | 1 1 1 1 1 |             |777|
+    // | 2 2 2 2 2 |             -----
+    // | 3 3 3 3 3 |
+    // | 4 4 4 4 4 |
+    // | 5 5 5 5 5 |
+    // | 6 6 6 6 6 |
+    // |-----------|
 
     EIC_W2_1cm_500um_400um_gap_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
@@ -443,34 +462,39 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
     double stripWidth = 0.100;
     double pitch = 0.500;
-    double sensorCenter  = 0.0; // Lab-Tracker's frame
-    double sensorCenterY = 0.0; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {0.2, -0.3, -0.8, -1.3, -1.8, -2.3, -2.8, 0.0};
+    double sensorCenter  =-1.4; // Lab-Tracker's frame
+    double sensorCenterY = 3.0; // Lab-Tracker's frame
+    // std::vector<double> stripCenterXPosition = {0.2, -0.3, -0.8, -1.3, -1.8, -2.3, -2.8, 0.0};
+    std::vector<double> stripCenterXPosition = {1.569, 1.074, 0.576, 0.077, -0.422, -0.926, -1.428, 0.0};
     int numLGADchannels = 7;
-    int lowGoodStripIndex = 0;
+    int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
-    double alpha = 0.0;
-    double beta  = 0.0;
-    double gamma = 0.0;
-    double z_dut = 28.41878;
-    double xBinSize = 0.01;
-    double yBinSize = 0.20;
-    double xmin =  -4.0; // Sensor's local frame
-    double xmax =   2.0; // Sensor's local frame
-    double ymin =  -3.0; // Sensor's local frame
-    double ymax =   9.0; // Sensor's local frame
-    double positionRecoMaxPoint = 0.75;
+    double alpha =-0.50; //-0.50; //-0.49; // 0.00;
+    double beta  = 0.00; // 0.00; // 0.00; // 0.00;
+    double gamma = 0.00; // 0.00; // 0.00; // 0.00;
+    double z_dut =-1.32; //-0.81; // 0.00; // 0.00;
+    double xBinSize = 0.05;
+    double yBinSize = 0.10;
+    double xmin =  -2.5; // Sensor's local frame
+    double xmax =   2.5; // Sensor's local frame
+    double ymin =  -5.5; // Sensor's local frame
+    double ymax =   5.5; // Sensor's local frame
+    double positionRecoMaxPoint = 0.82;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
-    int minPixHits = 4;
+    int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.25, -0.691307, 0.170215, -0.0131045, -5.13558};
-    std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}}; // Sensor's local frame
+    // std::vector<double> positionRecoPar = {0.25, -0.691307, 0.170215, -0.0131045, -5.13558};
+    std::vector<double> positionRecoPar = {0.250000, -0.628293, -0.713219, 4.955132, -13.761265};
+    // std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdges = {{-8.0, -3.4}, {2.0, 0.6}}; // Sensor's local frame -> REAL LAB FRAME
+    // std::vector<std::vector<double>> sensorEdges = {{-3.4, -2.0}, {0.6, 8.0}}; // Sensor's local frame -> LAB FRAME
+    std::vector<std::vector<double>> sensorEdges = {{-2.0, -5.0}, {2.0, 5.0}}; // Sensor's local frame
 };
 
 
@@ -484,23 +508,26 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
-    double stripWidth = 0.100;
+    double stripWidth = 0.200; // 0.200?
     double pitch = 0.500;
-    double sensorCenter  = 0.0; // Lab-Tracker's frame
-    double sensorCenterY = 0.0; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {0.15, -0.35, -0.85, -1.35, -1.85, -2.35, -2.85, 0.0};
+    double sensorCenter  =-1.8; //-2.0; // Lab-Tracker's frame
+    double sensorCenterY = 2.8; // 2.4; // Lab-Tracker's frame
+    // std::vector<double> stripCenterXPosition = {0.15, -0.35, -0.85, -1.35, -1.85, -2.35, -2.85, 0.0};
+    std::vector<double> stripCenterXPosition = {1.453, 0.952, 0.446, -0.056, -0.557, -1.048, -1.546, 0.0};
     int numLGADchannels = 7;
-    int lowGoodStripIndex = 0;
-    int highGoodStripIndex = 6;
-    double alpha = 0.0;
-    double beta  = 0.0;
-    double gamma = 0.0;
-    double z_dut = 28.41878;
-    double xmin =  -4; // Sensor's local frame
-    double xmax =   0.5; // Sensor's local frame
-    double ymin =  0.0; // Sensor's local frame
-    double ymax =   5.2; // Sensor's local frame
-    double positionRecoMaxPoint = 0.75;
+    int lowGoodStripIndex = 1;
+    int highGoodStripIndex = 5;
+    double alpha =-1.18; //-1.18; //-1.18; //-1.19; //-1.22; // 0.0;
+    double beta  =-1.83; //-1.44; //-1.78; // 0.00; // 0.00; // 0.0;
+    double gamma = 0.34; //-0.02; // 0.00; // 0.00; // 0.00; // 0.0;
+    double z_dut = 4.69; // 4.32; // 4.37; // 4.73; // 0.00; // 0.0;
+    double xBinSize = 0.05;
+    double yBinSize = 0.10;
+    double xmin =-2.5; // Sensor's local frame
+    double xmax = 2.5; // Sensor's local frame
+    double ymin =-2.8; // Sensor's local frame
+    double ymax = 2.8; // Sensor's local frame
+    double positionRecoMaxPoint = 0.87;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 15.0;
@@ -509,8 +536,12 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
-    std::vector<double> positionRecoPar = {0.25, -0.323138, -9.25501,  71.6547, -170.496};
-    std::vector<std::vector<double>> sensorEdges = {{-3.7, 0.5}, {0, 4.8}}; // Sensor's local frame
+    // std::vector<double> positionRecoPar = {0.25, -0.323138, -9.25501,  71.6547, -170.496};
+    std::vector<double> positionRecoPar = {0.250000, -0.358384, -2.161280, 13.418143, -25.561459};
+    // std::vector<std::vector<double>> sensorEdges = {{-3.7, 0.5}, {0, 4.8}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdges = {{-4.4, -4.0}, {-0.4, 0.0}}; // Sensor's local frame -> REAL LAB FRAME
+    // std::vector<std::vector<double>> sensorEdges = {{-4.0, 0.4}, {0.0, 4.4}}; // Sensor's local frame -> LAB FRAME
+    std::vector<std::vector<double>> sensorEdges = {{-2.0, -2.4}, {2.0, 2.4}}; // Sensor's local frame
 };
 
 
@@ -526,28 +557,30 @@ public:
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.1770}, {1,1.0961}, {2,1.0516}, {3,0.9551}, {4,0.9751}, {5,0.9202}, {6,0.8865}, {7,1.0}};
     // std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.96398053}, {1,0.84198568}, {2,0.93964217}, {3,0.83790917}, {4,0.88894472}, {5,0.80036949}, {6,0.91889931}, {7,0.0}};
-    double stripWidth = 0.100;
+    double stripWidth = 0.200;
     double pitch = 0.500;
-    double sensorCenter  = 0.0; // Lab-Tracker's frame
-    double sensorCenterY = 0.0; // Lab-Tracker's frame
+    double sensorCenter  =-2.0; // Lab-Tracker's frame
+    double sensorCenterY = 2.0; // Lab-Tracker's frame
     double xBinSize_delay_corr = 0.05;
     double yBinSize_delay_corr = 0.2;
-    double xBinSize = 0.05;
-    double yBinSize = 0.05;
     // std::vector<double> stripCenterXPosition = {-0.54, -1.04, -1.54, -2.04, -2.54, -3.04, -3.54, 0.0};
-    std::vector<double> stripCenterXPosition = {-0.525, -1.024, -1.519, -2.018, -2.516, -3.017, -3.515, 0.0};
+    // std::vector<double> stripCenterXPosition = {-0.525, -1.024, -1.519, -2.018, -2.516, -3.017, -3.515, 0.0};
+    // std::vector<double> stripCenterXPosition = {1.475, 0.977, 0.482, -0.018, -0.515, -1.015, -1.513, 0.0}; // 1
+    std::vector<double> stripCenterXPosition = {1.480, 0.981, 0.482, -0.017, -0.516, -1.017, -1.517, 0.0}; // 2
     int numLGADchannels = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
-    double alpha = -1.0;
-    double beta  = -1.30;
-    double gamma = 0.0;
-    double z_dut = 28.41878;
-    double xmin =  -4.2; // Sensor's local frame
-    double xmax =   0.5; // Sensor's local frame
-    double ymin =  -1.0; // Sensor's local frame
-    double ymax =   5.2; // Sensor's local frame
-    double positionRecoMaxPoint = 0.85;
+    double alpha =-1.30; //-1.30; //-1.30; ////-1.30; //-1.30; //-1.35; // 0.00; // -1.0;
+    double beta  =-2.36; //-2.25; //-2.20; //// 0.00; // 0.00; // 0.00; // 0.00; // -1.30;
+    double gamma =-0.03; //-0.03; // 0.00; //// 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
+    double z_dut = 4.50; // 4.62; // 3.64; //// 4.35; // 5.46; // 0.00; // 0.00; // 28.41878;
+    double xBinSize = 0.05;
+    double yBinSize = 0.10;
+    double xmin =-2.5; // Sensor's local frame
+    double xmax = 2.5; // Sensor's local frame
+    double ymin =-2.5; // Sensor's local frame
+    double ymax = 2.5; // Sensor's local frame
+    double positionRecoMaxPoint = 0.88;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 10.0;
@@ -557,8 +590,13 @@ public:
     int minPixHits = 4;
     int minStripHits = 6;
     // std::vector<double> positionRecoPar = {0.25, -0.682406,  12.6055, -257.771,   2476.2, -12142.6,  29452.7, -28032.3};
-    std::vector<double> positionRecoPar = {0.25, -0.411715,   -1.20881,  8.4184,  -17.3764};
-    std::vector<std::vector<double>> sensorEdges = {{-4.0, -1.0}, {0, 4.8}}; // Sensor's local frame
+    // std::vector<double> positionRecoPar = {0.25, -0.411715,   -1.20881,  8.4184,  -17.3764};
+    // std::vector<double> positionRecoPar = {0.250000, -0.378305, -1.713719, 11.056169, -21.852821};
+    std::vector<double> positionRecoPar = {0.250000, -0.370630, -1.650882, 10.307877, -20.045539};
+    // std::vector<std::vector<double>> sensorEdges = {{-4.0, -1.0}, {0, 4.8}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdges = {{-4.2, -4.0}, {0.2, 0.0}}; // Sensor's local frame -> REAL LAB FRAME
+    // std::vector<std::vector<double>> sensorEdges = {{-4.0, -0.2}, {0.0, 4.2}}; // Sensor's local frame -> LAB FRAME
+    std::vector<std::vector<double>> sensorEdges = {{-2.0, -2.2}, {2.0, 2.2}}; // Sensor's local frame
 };
 
 

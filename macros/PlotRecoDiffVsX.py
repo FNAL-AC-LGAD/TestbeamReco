@@ -54,13 +54,13 @@ parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias 
 parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
 parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Bias Voltage value in [V]") 
 parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Bias Voltage value in [V]") 
-parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath") 
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
 
 sensor = options.sensor
 bias = options.biasvolt
-xlength = float(options.xlength) 
-ylength = float(options.ylength) 
+xlength = float(options.xlength)
+ylength = float(options.ylength)
 
 dataset = options.Dataset
 outdir=""
@@ -74,6 +74,9 @@ all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack",   inputfile, "track_rms", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_rms_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_rms_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
     # HistoInfo("deltaXmax_vs_Xtrack",   inputfile, "maxtrack", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
