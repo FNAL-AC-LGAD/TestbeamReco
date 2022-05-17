@@ -229,6 +229,8 @@ private:
                 }
             }
 
+            corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr + corr);
+
             counter++;
         }
 
