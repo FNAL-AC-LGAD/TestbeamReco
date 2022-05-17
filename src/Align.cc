@@ -37,8 +37,6 @@ void Align::InitHistos(NTupleReader& tr, [[maybe_unused]] const std::vector<std:
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
 
-    const auto& z_dut_def = tr.getVar<double>("z_dut");
-
     for(unsigned int ivar = 0; ivar<(zScan.size()); ivar++)
     {
         utility::makeHisto(my_histos,"deltaX_varZ"+std::to_string(ivar), "; X_{reco} - X_{track} [mm]; Events", 200, -0.5, 0.5);
@@ -60,7 +58,7 @@ void Align::InitHistos(NTupleReader& tr, [[maybe_unused]] const std::vector<std:
     utility::makeHisto(my_2d_histos,"position_local_denominator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"position_local_ch2","; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     
-    utility::makeHisto(my_3d_histos,"position_tracker","; X_tracker - X_C [mm]; Y_tracker - Y_C [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,z_dut_def-0.005,z_dut_def+0.005);
+    utility::makeHisto(my_3d_histos,"position_tracker","; X_tracker - X_C [mm]; Y_tracker - Y_C [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,-0.005,0.005);
 
     std::cout<<"Finished making histos"<<std::endl;
 }
@@ -71,6 +69,7 @@ void Align::Loop(NTupleReader& tr, int maxevents)
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
+    const auto& photekSignalMax = tr.getVar<double>("photekSignalMax");
     const auto& firstFile = tr.getVar<bool>("firstFile");
     if(firstFile)
     {
@@ -122,7 +121,7 @@ void Align::Loop(NTupleReader& tr, int maxevents)
         const auto& hasGlobalSignal_highThreshold = tr.getVar<bool>("hasGlobalSignal_highThreshold");
         
         //Define selection bools
-        bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
+        bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool goodTrack = ntracks==1 && nplanes>=5 && npix>0;// && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         bool pass = goodTrack && goodPhotek && hitSensor;
         bool maxAmpNotEdgeStrip = (maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex);

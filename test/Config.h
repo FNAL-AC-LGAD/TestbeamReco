@@ -122,6 +122,7 @@ public:
         const auto& filetag = tr.getVar<std::string>("filetag");
         const auto& analyzer = tr.getVar<std::string>("analyzer");
         const auto& firstFile = tr.getVar<bool>("firstFile");
+        const auto& outpath = tr.getVar<std::string>("outpath");
 
         std::string runYear = "2021";
         tr.registerDerivedVar("runYear",runYear);
@@ -191,7 +192,12 @@ public:
         //Define alphaScan
         double alphaMin = -3.0, alphaStep = 0.1;
         unsigned int nAlphaBins = 61;
-        if (alpha_def != 0.0)
+        if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        {
+            alphaMin = -0.6, alphaStep = 0.04;
+            nAlphaBins = 31;
+        }
+        else if (alpha_def != 0.0)
         {
             alphaMin = -1.0, alphaStep = 0.05;
             nAlphaBins = 41;
@@ -210,21 +216,22 @@ public:
         //Define betaScan
         double betaMin = -90.0, betaStep = 1.0;
         unsigned int nbetaBins = 181;
-        if (alpha_def != 0.0)
-        {
-            betaMin = -10.0, betaStep = 0.5;
-            nbetaBins = 41;
-        }
-        if ((alpha_def != 0.0) && (z_dut_def != 0.0))
-        {
-            betaMin = -3.0, betaStep = 0.1;
-            nbetaBins = 61;
-        }
         if (beta_def != 0.0)
         {
             betaMin = -1.0, betaStep = 0.05;
             nbetaBins = 41;
         }
+        else if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        {
+            betaMin = -3.0, betaStep = 0.1;
+            nbetaBins = 61;
+        }
+        else if (alpha_def != 0.0)
+        {
+            betaMin = -10.0, betaStep = 0.5;
+            nbetaBins = 41;
+        }
+
         std::vector<double> betaScan(nbetaBins);
         pythonBins+="beta_values = [";
         for(unsigned int i = 0; i < nbetaBins; i++) 
@@ -237,17 +244,17 @@ public:
         pythonBins+="]\n";
 
         //Define gammaScan
-        double gammaMin = -90.0, gammaStep = 1.0;
-        unsigned int ngammaBins = 181;
-        if ((alpha_def != 0.0) && (z_dut_def != 0.0))
-        {
-            gammaMin = -3.0, gammaStep = 0.1;
-            ngammaBins = 61;
-        }
+        double gammaMin = -90.0, gammaStep = 4.0;
+        unsigned int ngammaBins = 46;
         if (gamma_def != 0.0)
         {
             gammaMin = -1.0, gammaStep = 0.05;
             ngammaBins = 41;
+        }
+        else if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        {
+            gammaMin = -8.0, gammaStep = 0.5;
+            ngammaBins = 33;
         }
         std::vector<double> gammaScan(ngammaBins);
         pythonBins+="gamma_values = [";
@@ -259,14 +266,6 @@ public:
         }
         tr.registerDerivedVar<std::vector<double>>("gammaScan",gammaScan);
         pythonBins+="]";
-
-        //Save python file with for later
-        if(firstFile)
-        {
-            std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
-            overwriteFile << pythonBins << std::endl;
-            overwriteFile.close();
-        }
 
         //Register Modules that are needed for each Analyzer
         if (analyzer=="Analyze")
@@ -281,6 +280,19 @@ public:
         }
         else if (analyzer=="Align")
         {
+            if(firstFile)
+            {
+                std::ofstream overwriteFile("../macros/AlignBinning.py", std::ofstream::trunc);
+                overwriteFile << pythonBins << std::endl;
+                overwriteFile.close();
+
+                auto copyPath = Form("%sAlignBinning.py",outpath.c_str());
+                std::ofstream saveCopy(copyPath, std::ofstream::trunc);
+                saveCopy << pythonBins << std::endl;
+                saveCopy.close();
+            }
+
+
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",

@@ -3,24 +3,26 @@ import os
 import optparse
 ROOT.gROOT.SetBatch(True)
 from array import array
-from AlignBinning import z_values, alpha_values, beta_values, gamma_values
 import myStyle
 
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-c', dest='Copy_Binning', action='store_true', default = False, help="Copy AlignBinning file from /macro")
+parser.add_option('-n', dest='No_Copy_Binning', action='store_true', default = False, help="Don't copy AlignBinning file from /macro")
 options, args = parser.parse_args()
 
 
 dataset = options.Dataset
-copy_binning = options.Copy_Binning
+no_copy_binning = options.No_Copy_Binning
 
 
 outdir=""
 outdir = myStyle.getOutputDir(dataset)
 inputfile = ROOT.TFile("%s%s_Align.root"%(outdir,dataset))
+
+os.system("cp %sAlignBinning.py ."%(outdir))
+from AlignBinning import z_values, alpha_values, beta_values, gamma_values
 
 outdir = os.path.join(outdir,"Scan0/")
 
@@ -34,9 +36,9 @@ else:
                 i+=1
         os.mkdir(outdir)
 
-if copy_binning: os.system("cp AlignBinning.py %s"%outdir)
+if not no_copy_binning: os.system("cp AlignBinning.py %s"%outdir)
 
-outputfile=ROOT.TFile("%sScan_ZABC.root"%outdir,"RECREATE")
+outputfile=ROOT.TFile("%sFullScan_ZABC.root"%outdir,"RECREATE")
 
 
 def cosmetic_tgraph(graph):
@@ -101,16 +103,23 @@ def createTGraph(f, out, var_values, var):
         c = ROOT.TCanvas("c","c",1000,600)
 
         fit_limits = {
-                "Z": [var_values[0], var_values[-1], 17.5, -99, -99], # 9.3 # -99, -99, -99],
-                "A": [var_values[0], var_values[-1], 17, -99, -99],
-                "B": [var_values[0], var_values[-1], 9.23, -99, -99],
-                "C": [var_values[0], var_values[-1], 9.23, -99, -99], # 50.0, 50.0, 20.0],
+                "Z": [var_values[0], var_values[-1], -99, -99, -99],
+                "A": [var_values[0], var_values[-1], 30, -99, -99],
+                "B": [var_values[0], var_values[-1], -99, -99, -99],
+                "C": [var_values[0], var_values[-1], -99, -99, -99],
         }
 
 
-        fitFunc = ROOT.TF1("","pol6",var_values[0], var_values[-1]);
+        if var=="A":
+                fitFunc = ROOT.TF1("","pol2",var_values[0], var_values[-1]);
+                fitFunc.SetParLimits(1,0.0,300.0)
+                fitFunc.SetParLimits(2,0.0,300.0)
+        else: fitFunc = ROOT.TF1("","pol6",var_values[0], var_values[-1]);
 
-        fitFunc.SetParLimits(0,0.0,50.0)
+        # fitFunc = ROOT.TF1("","pol6",var_values[0], var_values[-1]);
+
+        # fitFunc.SetParLimits(0,0.0,50.0)
+        fitFunc.SetParLimits(0,0.0,110.0)
         # fitFunc.SetParLimits(0,0.0,1.e12)
         # fitFunc.SetParLimits(2,0.0,10000)
         if fit_limits[var][2]!=-99: fitFunc.SetParameter(0,fit_limits[var][2])
@@ -145,7 +154,8 @@ def createTGraph(f, out, var_values, var):
         c.SaveAs(outdir+"Scan_"+var+".gif")
         c.SaveAs(outdir+"Scan_"+var+".pdf")
 
-        resolution_vs_var.GetYaxis().SetRangeUser(5.1, 20.9)
+        # resolution_vs_var.GetYaxis().SetRangeUser(5.1, 20.9)
+        resolution_vs_var.GetYaxis().SetRangeUser(10.1, 39.9)
         # resolution_vs_var.GetYaxis().SetRangeUser(10.1, 49.9)
         # resolution_vs_var.GetYaxis().SetRangeUser(15.1, 24.9)
         c.SaveAs(outdir+"Scan_"+var+"_fixY.gif")
