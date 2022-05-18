@@ -81,6 +81,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_top"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
             utility::makeHisto(my_2d_histos,"delay_vs_x_channel_top"+r+s, "; X [mm]; Arrival time [ns]", (xmax-xmin)/xBinSize,xmin,xmax, 100,-11,-10);
             utility::makeHisto(my_2d_histos,"timeDiff_vs_x_channel"+r+s, "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_2d_histos,"Ytrack_vs_timeDiff"+r+s, "; Time [ns]; Y[mm]", timeDiffNbin,timeDiffLow,timeDiffHigh, (ymax-ymin)/yBinSize,ymin,ymax);
+            if(i<row.size()-1) utility::makeHisto(my_2d_histos,"Ytrack_vs_timeDiff_dt"+r+s, "; Time [ns]; Y[mm]", timeDiffNbin,timeDiffLow,timeDiffHigh, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_histos,"timeDiffTracker_vs_x_channel"+r+s, "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_bottom"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
             utility::makeHisto(my_2d_histos,"relFrac_vs_y_channel"+r+s, "; Y [mm]; relFrac", (ymax-ymin)/yBinSize,ymin,ymax, 100,0.0,1.0);            
@@ -108,6 +110,9 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
             utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
             utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            if(i<row.size()-1) utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel_dt"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,timeDiffNbin,timeDiffLow,timeDiffHigh);
+            if(i<row.size()-1) utility::makeHisto(my_3d_histos,"x_vs_timeDiff2_"+r+s,"X [mm]; Time-PhotekTime_i [ns]; Time-PhotekTime_(i+1) [ns]", timeDiffNbin,timeDiffLow,timeDiffHigh, timeDiffNbin,timeDiffLow,timeDiffHigh, (xmax-xmin)/xBinSize,xmin,xmax);
+            if(i<row.size()-1) utility::makeHisto(my_3d_histos,"y_vs_timeDiff2_"+r+s,"Y [mm]; Time-PhotekTime_i [ns]; Time-PhotekTime_(i+1) [ns]", timeDiffNbin,timeDiffLow,timeDiffHigh, timeDiffNbin,timeDiffLow,timeDiffHigh, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_3d_histos,"risetime_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
             utility::makeHisto(my_3d_histos,"charge_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,150.0);
@@ -468,6 +473,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodNoiseAmp,                                    my_2d_histos["efficiency_vs_xy_lowThreshold_numerator_channel"+r+s], x,y);
                 utility::fillHisto(pass && goodSignalAmp,                                   my_2d_histos["efficiency_vs_xy_highThreshold_numerator_channel"+r+s], x,y);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos["timeDiff_vs_x_channel"+r+s], x,time-photekTime);
+                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos["Ytrack_vs_timeDiff"+r+s], time-photekTime,y);
+                if(i<row.size()-1) utility::fillHisto(pass && goodHit && isMaxChannel,      my_2d_histos["Ytrack_vs_timeDiff_dt"+r+s], timeLGAD[0][i]-timeLGAD[0][i+1],y);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos["timeDiffTracker_vs_x_channel"+r+s], x,timeTracker-photekTime);
                 utility::fillHisto(pass && goodHit && inBottomRow,                          my_2d_histos["relFrac_vs_x_channel_bottom"+r+s], x, relFracChannel);
                 utility::fillHisto(pass && goodHit && inBottomRow,                          my_2d_histos["amp_vs_x_channel_bottom"+r+s], x, ampChannel);
@@ -491,6 +498,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && (maxAmpinPad2 || maxAmpinPad3),       my_3d_histos["amplitudeRight_vs_xy_channel"+r+s], x,y,ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_3d_histos["raw_amp_vs_xy_channel"+r+s], x,y,rawAmpChannel);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["timeDiff_vs_xy_channel"+r+s], x,y,time-photekTime);
+                if(i<row.size()-1) utility::fillHisto(pass && goodHit && isMaxChannel,      my_3d_histos["timeDiff_vs_xy_channel_dt"+r+s], x,y,timeLGAD[0][i]-timeLGAD[0][i+1]);
+                if(i<row.size()-1) utility::fillHisto(pass && goodHit && isMaxChannel,      my_3d_histos["x_vs_timeDiff2_"+r+s], timeLGAD[0][i]-photekTime,timeLGAD[0][i+1]-photekTime,x);
+                if(i<row.size()-1) utility::fillHisto(pass && goodHit && isMaxChannel,      my_3d_histos["y_vs_timeDiff2_"+r+s], timeLGAD[0][i]-photekTime,timeLGAD[0][i+1]-photekTime,y);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["timeDiffTracker_vs_xy_channel"+r+s], x,y,timeTracker-photekTime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["risetime_vs_xy_channel"+r+s], x,y,risetime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos["charge_vs_xy_channel"+r+s], x,y,charge);
