@@ -27,7 +27,7 @@ private:
         const auto& enablePositionReconstruction = tr.getVar<bool>("enablePositionReconstruction");
         const auto& positionRecoPar = tr.getVar<std::vector<double>>("positionRecoPar");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
-        const auto& Amp2Index = tr.getVar<int>("Amp2Index");        
+        const auto& Amp2Index = tr.getVar<int>("Amp2Index");
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
         const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");

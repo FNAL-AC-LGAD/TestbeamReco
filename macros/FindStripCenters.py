@@ -21,13 +21,14 @@ parser.add_option('-s','--sensor', dest='sensor', default = "", help="Type of se
 parser.add_option('-p','--pitch', dest='pitch', default = 500, help="pitch in um")
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias Voltage value in [V]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+parser.add_option('-n','--nStrips', dest='nStrips', default = 7, help="Number of ac-lgad strips")
 options, args = parser.parse_args()
 
 sensor = options.sensor
 bias = options.biasvolt
 pitch = float(options.pitch)
 
-num_strips=7
+num_strips=int(options.nStrips)
 
 dataset = options.Dataset
 outdir=""
@@ -99,7 +100,7 @@ maxAmpChannels = []
 maxAmpALL = 0
 n_channels = 0
 #loop over X,Y bins
-for channel in range(0, len(list_amplitude_vs_x)):
+for channel in range(num_strips):
     # print("Channel : " + str(channel))
     maxAmp = 0
     maxLoc=-999
@@ -220,10 +221,11 @@ print("\n\nList of distance between centers [mm]:  ",delta_center_list)
 print("\n\n")
 print("vector for geometry file:")
 
+first_good_channel = 7 - num_strips
 string_for_geo = "std::vector<double> stripCenterXPosition = {"
 for channel in range(8):
-    if channel < len(list_of_fit_functions):
-        string_for_geo+= "%0.3f, "%list_of_fit_functions[channel].GetParameter("Mean")
+    if (channel >= first_good_channel and channel < 7):
+        string_for_geo+= "%0.3f, "%list_of_fit_functions[channel - first_good_channel].GetParameter("Mean")
     else:
          string_for_geo+= "0.0, "
          

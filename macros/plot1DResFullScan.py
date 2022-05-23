@@ -110,13 +110,13 @@ def createTGraph(f, out, var_values, var):
         }
 
 
-        if var=="A":
-                fitFunc = ROOT.TF1("","pol2",var_values[0], var_values[-1]);
-                fitFunc.SetParLimits(1,0.0,300.0)
-                fitFunc.SetParLimits(2,0.0,300.0)
-        else: fitFunc = ROOT.TF1("","pol6",var_values[0], var_values[-1]);
+        # if var=="A":
+        #         fitFunc = ROOT.TF1("","pol2",var_values[0], var_values[-1]);
+        #         fitFunc.SetParLimits(1,0.0,300.0)
+        #         fitFunc.SetParLimits(2,0.0,300.0)
+        # else: fitFunc = ROOT.TF1("","pol6",var_values[0], var_values[-1]);
 
-        # fitFunc = ROOT.TF1("","pol6",var_values[0], var_values[-1]);
+        fitFunc = ROOT.TF1("","pol6",var_values[0], var_values[-1]);
 
         # fitFunc.SetParLimits(0,0.0,50.0)
         fitFunc.SetParLimits(0,0.0,110.0)

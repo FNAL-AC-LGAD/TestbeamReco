@@ -100,13 +100,13 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             }*/
 
             //Define 3D histograms
-            utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeTop_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeBot_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
+            utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeTop_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeBot_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500 );
+            utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
             utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_3d_histos,"risetime_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
@@ -158,6 +158,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"risetime","", 150,0.0,1500.0);
     utility::makeHisto(my_histos,"charge","", 300,0.0,150.0);
     utility::makeHisto(my_histos,"ampChargeRatio","", 300,0.0,15.0);
+
+    utility::makeHisto(my_histos,"index_diff", "; index1 - index2; Events", 16,-8,8);
 
     //Global 2D histograms
     utility::makeHisto(my_2d_histos,"relFracTot_vs_x", "; X [mm]; relFracTot", (xmax-xmin)/xBinSize,-0.4,0.4, 100,0.0,1.0);
@@ -264,19 +266,25 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
-    const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
+    const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+    const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
-    const auto& photekSignalMax = tr.getVar<double>("photekSignalMax");
     const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
+    const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
+    const auto& photekSignalMax = tr.getVar<double>("photekSignalMax");
     const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
     const auto& isHPKStrips = tr.getVar<bool>("isHPKStrips");
     const auto& uses2022Pix = tr.getVar<bool>("uses2022Pix");
     const auto& minPixHits = tr.getVar<int>("minPixHits");
     const auto& minStripHits = tr.getVar<int>("minStripHits");
+    const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
     //const auto& xSlices = tr.getVar<std::vector<std::vector<double>>>("xSlices");
     const auto& ySlices = tr.getVar<std::vector<std::vector<double>>>("ySlices");
     const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
     // const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
+    const auto& stripWidth = tr.getVar<double>("stripWidth");
+    const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
+    const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
 
@@ -284,6 +292,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     {
         std::cout<<roi.getName()<<" "<<roi.passROI(0.0,0.0)<<" "<<roi.passROI(10000.0,0.0)<<std::endl;
     }
+
+    int lowGoodStrip = (geometry[0].size()==1) ? lowGoodStripIndex-1 : lowGoodStripIndex;
+    int highGoodStrip = (geometry[0].size()==1) ? highGoodStripIndex-1 : highGoodStripIndex;
 
     bool plotWaveForm = false;
     if(firstFile) InitHistos(tr, geometry);
@@ -298,7 +309,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         if( maxevents != -1 && tr.getEvtNum() >= maxevents ) break;
         if( tr.getEvtNum() % 100000 == 0 ) printf( " Event %i\n", tr.getEvtNum() );
                        
-        //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
+        //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy calculations
         /*const auto& channel = tr.getVecVec<float>("channel");
         const auto& time_real = tr.getVecVec<float>("time");*/
         const auto& corrAmp = tr.getVec<double>("corrAmp");
@@ -322,8 +333,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& x = tr.getVar<double>("x");
         const auto& y = tr.getVar<double>("y");
         const auto& xErrDUT = tr.getVar<float>("xErrDUT");
-        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
-        const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
         const auto& padx = tr.getVar<double>("padx");
         const auto& padxAdj = tr.getVar<double>("padxAdj");
         const auto& x_reco = tr.getVar<double>("x_reco");
@@ -369,15 +378,11 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& Amp1OverAmp123 = tr.getVar<double>("Amp1OverAmp123");
         const auto& Amp2OverAmp123 = tr.getVar<double>("Amp2OverAmp123");
         const auto& Amp3OverAmp123 = tr.getVar<double>("Amp3OverAmp123");
-        const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
         const auto& hasGlobalSignal_lowThreshold = tr.getVar<bool>("hasGlobalSignal_lowThreshold");
         const auto& hasGlobalSignal_highThreshold = tr.getVar<bool>("hasGlobalSignal_highThreshold");
         const auto& clusterSize = tr.getVar<int>("clusterSize");
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& stripCenterYPositionLGAD = tr.getVec<std::vector<double>>("stripCenterYPositionLGAD");
-        const auto& stripWidth = tr.getVar<double>("stripWidth");
-        const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
-        const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
@@ -385,7 +390,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         if(isPadSensor)      goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
         bool pass = goodTrack && hitSensor && goodPhotek;
-        bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex) || isPadSensor);
+        bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
         bool inTopRow = y>ySlices[1][0] && y<ySlices[1][1];
         bool maxAmpinPad1 = amp1Indexes.first==0 && amp1Indexes.second==0;
@@ -402,8 +407,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         if(isHPKStrips || uses2022Pix)
         {
             twoGoodHits = false;
-            if(amp1Indexes.second - 1 >= lowGoodStripIndex) twoGoodHits = twoGoodHits || ampLGAD[amp1Indexes.first][amp1Indexes.second-1] > noiseAmpThreshold;
-            if(amp1Indexes.second + 1 <= highGoodStripIndex) twoGoodHits = twoGoodHits || ampLGAD[amp1Indexes.first][amp1Indexes.second+1] > noiseAmpThreshold;
+            if(amp1Indexes.second - 1 >= lowGoodStrip) twoGoodHits = twoGoodHits || ampLGAD[amp1Indexes.first][amp1Indexes.second-1] > noiseAmpThreshold;
+            if(amp1Indexes.second + 1 <= highGoodStrip) twoGoodHits = twoGoodHits || ampLGAD[amp1Indexes.first][amp1Indexes.second+1] > noiseAmpThreshold;
         }
 
         double photekTime = corrTime[photekIndex];
@@ -536,6 +541,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["charge"], chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["risetime"], risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["ampChargeRatio"], ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["index_diff"], amp1Indexes.second - amp2Indexes.second);
+
 
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_2d_histos["relFracMaxAmp_vs_x"], padx, relFrac[amp1Indexes.first][amp1Indexes.second]);
         utility::fillHisto(pass,                                                                           my_2d_histos["relFracDC_vs_x_channel_top"], x,relFracDC);
