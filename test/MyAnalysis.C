@@ -7,6 +7,7 @@
 #include "TestbeamReco/interface/Analyze.h"
 #include "TestbeamReco/interface/Align.h"
 #include "TestbeamReco/interface/InitialAnalyzer.h"
+#include "TestbeamReco/interface/RecoAnalyzer.h"
 #include "Config.h"
 #include "TSystem.h"
 #include "TH1D.h"
@@ -165,6 +166,7 @@ int main(int argc, char *argv[])
         {"Analyze",             run<Analyze>},
         {"Align",               run<Align>},
         {"InitialAnalyzer",     run<InitialAnalyzer>},
+        {"RecoAnalyzer",        run<RecoAnalyzer>},
         {"MakeNNVariables",     run<MakeNNVariables>},
     }; 
 

@@ -26,11 +26,16 @@ private:
 	//******************************************************************
         const auto& enablePositionReconstruction = tr.getVar<bool>("enablePositionReconstruction");
         const auto& positionRecoPar = tr.getVar<std::vector<double>>("positionRecoPar");
+        const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
         const auto& Amp2Index = tr.getVar<int>("Amp2Index");
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
         const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
+        const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
+
+        auto& goodNeighbour = tr.createDerivedVar<bool>("goodNeighbour");
+        goodNeighbour = abs(maxAmpIndex - Amp2Index)==1 && ampLGAD[0][Amp2Index]>noiseAmpThreshold;
 
         double y_reco=0.0, x_reco = 0.0, x1 = 0.0, y1 = 0.0, x2 = 0.0;
         if(enablePositionReconstruction)
@@ -39,10 +44,10 @@ private:
             assert(Amp1OverAmp1and2 <= 1);
             x1 = stripCenterXPositionLGAD[0][maxAmpIndex];
             x2 = stripCenterXPositionLGAD[0][Amp2Index];
-            
+
             //use the poly fit function
             auto dX = getDX(positionRecoPar, Amp1OverAmp1and2, 0.5);
-            dX = (Amp1OverAmp1and2 > positionRecoMaxPoint) ? 0.0 : dX;
+            dX = (goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint)) ? dX : 0.0;
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 	    } //if enabled position reconstruction
