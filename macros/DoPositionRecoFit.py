@@ -3,6 +3,7 @@ import ROOT
 import os
 import optparse
 import myStyle
+import stripBox
 
 organized_mode=True
 gROOT.SetBatch( True )
@@ -25,7 +26,7 @@ dataset = options.Dataset
 outdir=""
 if organized_mode: 
     outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+    inputfile = TFile("%s%s_RecoAnalyzer.root"%(outdir,dataset))
 else: 
     inputfile = TFile("../test/myoutputfile.root")   
 
@@ -100,10 +101,14 @@ string_for_geo = string_for_geo.replace(", }","}")
 
 print(string_for_geo)
 
+width = (inputfile.Get("stripBoxInfo03")).GetMean(2)
+boxes = stripBox.getStripBoxForRecoFit(width, pitch, 0.6*pitch, xmax, xmin)
+for box in boxes:
+         box.Draw()
 
-Amp1OverAmp1and2_vs_deltaXmax_profile.Draw()
-fit.Draw("same")
+Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same axis")
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same")
+fit.Draw("same")
 
 line = TF1("line","0.0",xmin,1.0)
 line.SetLineColor(ROOT.kBlack)

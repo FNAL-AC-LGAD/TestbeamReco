@@ -51,3 +51,17 @@ def getStripBoxY(f, yampmin=0.0, yampmax=100.0, getCenter=False, color=18, shift
 
     return boxes
 
+def getStripBoxForRecoFit(stripWidth, pitch, ymax, xmax, xmin=0.5):
+    boxes = []
+    i=0
+    while i<=ymax+stripWidth/2:
+        yt = i+stripWidth/2
+        yl = i-stripWidth/2
+        if yt>ymax: yt=ymax
+        if yl<0: yl=0.0
+        box = ROOT.TBox(xmin,yl, xmax,yt)
+        box.SetFillColor(18)
+        boxes.append(box)
+        i+=pitch
+
+    return boxes
