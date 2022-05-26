@@ -6,6 +6,7 @@
 #include "TestbeamReco/interface/Utility.h"
 
 class EIC_W2_1cm_500um_200um_gap_StripsGeometry : public DefaultGeometry
+// EIC_W2_1cm_500up_300uw
 {
 public:
     // EIC W2 1cm 500um pitch 200um gap size
@@ -34,41 +35,41 @@ public:
     double pitch = 0.500;
     double sensorCenter  =-1.2; // Lab-Tracker's frame
     double sensorCenterY = 2.4; // Lab-Tracker's frame
-    // std::vector<double> stripCenterXPosition = {0.0, 1.311, 0.811, 0.317, -0.182, -0.678, -1.179, 0.0};
-    std::vector<double> stripCenterXPosition = {0.0, 1.310, 0.811, 0.309, -0.186, -0.684, -1.185, 0.0};
+    std::vector<double> stripCenterXPosition = {0.0, 1.310, 0.810, 0.308, -0.186, -0.684, -1.185, 0.0};
     int numLGADchannels = 6;
     int lowGoodStripIndex = 2;
     int highGoodStripIndex = 5;
-    double alpha =-0.48; //-0.47; //-0.47; // 0.00;
-    double beta  =-0.02; // 0.00; // 0.00; // 0.00;
-    double gamma = 0.00; // 0.00; // 0.00; // 0.00;
-    double z_dut =-1.25; //-1.97; // 0.00; // 0.00;
+    double alpha =-0.48; //-0.49; ////-0.48; //-0.48; ////-0.48; //-0.47; //-0.47; // 0.00;
+    double beta  =-0.01; //-0.01; ////-0.01; //-0.01; ////-0.02; // 0.00; // 0.00; // 0.00;
+    double gamma = 0.00; // 0.00; //// 0.00; // 0.00; //// 0.00; // 0.00; // 0.00; // 0.00;
+    double z_dut =-1.95; //-1.95; ////-7.15; //-7.98; ////-1.25; //-1.97; // 0.00; // 0.00;
     double xBinSize = 0.05;
     double yBinSize = 0.2;
     double xmin =  -2.0;
     double xmax =   2.0;
     double ymin =  -6.0;
     double ymax =   6.0;
-    double positionRecoMaxPoint = 0.75;
+    double positionRecoMaxPoint = 0.72; // 0.74;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 15.0;
+    double noiseAmpThreshold  = 15.0; // 20.0; // 20.0; // 10.0;
+    double signalAmpThreshold = 25.0; // 25.0; // 30.0; // 15.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    // std::vector<double> positionRecoPar = {0.25, -0.691307, 0.170215, -0.0131045, -5.13558};
-    // std::vector<double> positionRecoPar = {0.250000, -0.706844, 7.774366, -95.541002, 517.489863, -1064.634164};
-    std::vector<double> positionRecoPar = {0.250000, -0.648807, 7.984364, -115.448253, 678.541722, -1419.055998};
+    // std::vector<double> positionRecoPar = {0.250000, -0.665859, 8.779584, -127.386294, 748.448429, -1558.165383};
+    std::vector<double> positionRecoPar = {0.250000, -0.654507, 8.251580, -118.137841, 684.216545, -1407.697202};
     // std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
     // std::vector<std::vector<double>> sensorEdges = {{-7.4, -2.8}, {2.6, 0.5}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-2.8, -2.6}, {0.4, 7.4}}; // Lab-Tracker's frame after rotation
-    std::vector<std::vector<double>> sensorEdges = {{-1.6, -5.0}, {1.6, 5.0}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdges = {{-1.6, -5.0}, {1.6, 5.0}}; // Sensor's local frame // Iteration 1
+    std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.15}, {1.8, 4.9}}; // Sensor's local frame // Iteration 2
 };
 
 class EIC1cmStripsGeometry : public DefaultGeometry
+// EIC_W1_1cm_500up_200uw
 {
 public:
     // EIC W1 1cm long strips 500um pitch 300um gap size
@@ -97,37 +98,38 @@ public:
     double pitch = 0.500;
     double sensorCenter  =-1.0; // Lab-Tracker's frame
     double sensorCenterY = 2.8; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {1.567, 1.064, 0.568, 0.068, -0.432, -0.932, -1.432, 0.0};
+    std::vector<double> stripCenterXPosition = {1.567, 1.064, 0.567, 0.067, -0.432, -0.932, -1.433, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
-    double alpha =-0.20; //-0.20; //-0.20; //-0.21; // 0.0;
-    double beta  = 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
-    double gamma = 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
-    double z_dut =-2.87; //-2.76; //-3.80; // 0.00; // 0.0;
+    double alpha =-0.20; //-0.20; //-0.20; //-0.20; //-0.21; // 0.0;
+    double beta  = 0.00; // 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
+    double gamma = 0.00; // 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
+    double z_dut =-6.04; //-2.87; //-2.76; //-3.80; // 0.00; // 0.0;
     double xBinSize = 0.05;
     double yBinSize = 0.2;
     double xmin = -3.00; // Sensor's local frame
     double xmax =  3.00; // Sensor's local frame
-    double ymin = -5.00; // Sensor's local frame
-    double ymax =  5.00; // Sensor's local frame
-    double positionRecoMaxPoint = 0.81;
+    double ymin = -5.20; // Sensor's local frame
+    double ymax =  5.20; // Sensor's local frame
+    double positionRecoMaxPoint = 0.77; // 0.81;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 15.0;
+    double noiseAmpThreshold  = 15.0; // 10.0;
+    double signalAmpThreshold = 25.0; // 15.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
-    int minPixHits = 2; // 4;
+    int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    // std::vector<double> positionRecoPar = {0.250000, -0.440132, -3.524095, 36.376552, -151.080147, 194.344126};
-    std::vector<double> positionRecoPar = {0.250000, -0.412552, -4.392779, 46.140779, -195.436380, 264.025921};
+    std::vector<double> positionRecoPar = {0.250000, -0.414954, -3.861040, 37.128136, -141.558350, 162.643997};
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
-    std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdges = {{-1.9, -5.1}, {2.0, 4.9}}; // Sensor's local frame
 };
 
 class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
+// EIC_W2_1cm_500up_100uw
 {
 public:
     // EIC W2 1cm 500um pitch 400um gap size
@@ -155,40 +157,40 @@ public:
     double pitch = 0.500;
     double sensorCenter  =-1.4; // Lab-Tracker's frame
     double sensorCenterY = 3.0; // Lab-Tracker's frame
-    // std::vector<double> stripCenterXPosition = {0.2, -0.3, -0.8, -1.3, -1.8, -2.3, -2.8, 0.0};
-    std::vector<double> stripCenterXPosition = {1.569, 1.074, 0.576, 0.077, -0.422, -0.926, -1.428, 0.0};
+    std::vector<double> stripCenterXPosition = {1.561, 1.070, 0.572, 0.073, -0.426, -0.929, -1.432, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
-    double alpha =-0.50; //-0.50; //-0.49; // 0.00;
-    double beta  = 0.00; // 0.00; // 0.00; // 0.00;
-    double gamma = 0.00; // 0.00; // 0.00; // 0.00;
-    double z_dut =-1.32; //-0.81; // 0.00; // 0.00;
+    double alpha =-0.50; //-0.54; //-0.53; //-0.54; ////-0.50; //-0.50; //-0.49; // 0.00;
+    double beta  = 0.02; // 0.02; // 0.02; // 0.02; //// 0.00; // 0.00; // 0.00; // 0.00;
+    double gamma = 0.00; // 0.00; // 0.00; // 0.00; //// 0.00; // 0.00; // 0.00; // 0.00;
+    double z_dut =-2.64; //-2.64; //-4.80; //-0.12; ////-1.32; //-0.81; // 0.00; // 0.00;
     double xBinSize = 0.05;
     double yBinSize = 0.10;
     double xmin = -2.50; // Sensor's local frame
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.50; // Sensor's local frame
     double ymax =  5.50; // Sensor's local frame
-    double positionRecoMaxPoint = 0.82;
+    double positionRecoMaxPoint = 0.81; // 0.82;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 15.0;
+    double noiseAmpThreshold  = 15.0; // 10.0;
+    double signalAmpThreshold = 25.0; // 15.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    // std::vector<double> positionRecoPar = {0.25, -0.691307, 0.170215, -0.0131045, -5.13558};
-    std::vector<double> positionRecoPar = {0.250000, -0.628293, -0.713219, 4.955132, -13.761265};
+    std::vector<double> positionRecoPar = {0.250000, -0.615442, -0.768993, 5.082484, -12.892653};
     // std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
     // std::vector<std::vector<double>> sensorEdges = {{-8.0, -3.4}, {2.0, 0.6}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-3.4, -2.0}, {0.6, 8.0}}; // Lab-Tracker's frame after rotation
-    std::vector<std::vector<double>> sensorEdges = {{-2.0, -5.0}, {2.0, 5.0}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdges = {{-2.0, -5.0}, {2.0, 5.0}}; // Sensor's local frame // Iteration 1
+    std::vector<std::vector<double>> sensorEdges = {{-1.95, -4.9}, {2.05, 5.1}}; // Sensor's local frame // Iteration 2
 };
 
 class EIC1cmStrips100Geometry : public DefaultGeometry
+// EIC_W1_1cm_100up_50uw
 {
 public:
     // EIC W1 1cm long strips 100um pitch
@@ -249,6 +251,7 @@ public:
 };
 
 class EIC1cmStrips200Geometry : public DefaultGeometry
+// EIC_W1_1cm_200up_100uw
 {
 public:
     // EIC W1 1cm long strips 200um pitch
@@ -309,6 +312,7 @@ public:
 };
 
 class EIC1cmStrips300Geometry : public DefaultGeometry
+// EIC_W1_1cm_300up_150uw
 {
 public:
     // EIC W1 1cm long strips 300um pitch
@@ -362,7 +366,6 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    // std::vector<double> positionRecoPar = {0.150000, -0.327752, -3.991644, 54.115327, -354.909392, 762.694132};
     std::vector<double> positionRecoPar = {0.150000, -0.264595, -6.515409, 92.129057, -569.612996, 1170.771788};
     // std::vector<std::vector<double>> sensorEdges = {{-1.53, -2.7}, {0.40, 8.0}};
     // std::vector<std::vector<double>> sensorEdges = {{-1.625, -4.75}, {1.625, 4.75}}; // Sensor's local frame -> WHOLE SENSOR, INCLUDING CHANNELS NOT READ HERE
@@ -372,6 +375,7 @@ public:
 };
 
 class EIC2p5cmStripsUCSCGeometry : public DefaultGeometry
+// EIC_UCSC_2p5cm_500up_200uw
 {
 public:
     // EIC UCSC 2p5cm long strips 500um pitch 300um gap size
@@ -433,6 +437,7 @@ public:
 };
 
 class EIC2p5cmStripsGeometry : public DefaultGeometry
+// EIC_2p5cm_500up_200uw
 {
 public:
     // EIC 2p5cm long strips 500um pitch 300um gap size
@@ -452,23 +457,23 @@ public:
 
     EIC2p5cmStripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
-    std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
-    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
+    std::vector<std::vector<int>> geometry = {{0},{1,2,3,4,5,6}, {7}};
+    std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.64464175}, {1,0.64148521}, {2,0.75787912}, {3,0.64381268}, {4,0.74011157}, {5,0.63451148}, {6,0.75850835}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
     double sensorCenter  = 0.05; // Lab-Tracker's frame
     double sensorCenterY = 0.50; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {-2.575, 1.294, 0.745, 0.265, -0.247, -0.739, -1.249, 0.0};
-    int numLGADchannels = 7;
+    std::vector<double> stripCenterXPosition = {0.0, 1.202, 0.726, 0.219, -0.272, -0.769, -1.272, 0.0};
+    int numLGADchannels = 6;
     int lowGoodStripIndex = 2;
     int highGoodStripIndex = 5;
     double alpha =-0.56; //-0.56; // 0.00;
     double beta  = 0.00; // 0.00; // 0.00;
     double gamma = 0.00; // 0.00; // 0.00;
-    double z_dut = 0.00; // 0.00; // 0.00;
+    double z_dut=-10.00; // 0.00; // 0.00;
     double xBinSize = 0.05;
     double yBinSize = 0.10;
     double xmin = -2.50; // Sensor's local frame
@@ -477,16 +482,16 @@ public:
     double ymax = 15.00; // Sensor's local frame
     double positionRecoMaxPoint = 0.73;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold = 5.0;
-    double signalAmpThreshold = 5.0;
+    double noiseAmpThreshold  = 7.0; //  5.0; // 5.0;
+    double signalAmpThreshold =12.0; // 10.0; // 5.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 0;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    // std::vector<double> positionRecoPar = {0.25, 0.0262564, -8.09758,  12.3003, -11.0584};
-    std::vector<double> positionRecoPar = {0.250000, -1.220763, 9.797696, -75.459288, 151.303936};
+    // std::vector<double> positionRecoPar = {0.250000, -1.220763, 9.797696, -75.459288, 151.303936};
+    std::vector<double> positionRecoPar = {0.250000, -0.941941, 5.241489, -45.243161, 101.427658};
     // std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}};
     // std::vector<std::vector<double>> sensorEdges = {{-13.0, -1.5}, {12.0, 2.0}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-1.5, -12.0}, {2.0, 13.0}}; // Lab-Tracker's frame after rotation
@@ -494,6 +499,7 @@ public:
 };
 
 class HPKStripsEbWideMetalGeometry : public DefaultGeometry
+// HPK_1cm_80up_45uw
 {
 public:
     // HPK Strips 2021 Mapping set
@@ -551,6 +557,7 @@ public:
 };
 
 class EIC_W1_0p5cm_500um_300um_gap_1_7_StripsGeometry : public DefaultGeometry
+// EIC_W1_0p5cm_500up_200uw_1_7
 {
 public:
     EIC_W1_0p5cm_500um_300um_gap_1_7_StripsGeometry(const int v=0) : voltage(v){}
@@ -596,6 +603,7 @@ public:
 };
 
 class EIC_W1_0p5cm_500um_300um_gap_1_4_StripsGeometry : public DefaultGeometry
+// EIC_W1_0p5cm_500up_200uw_1_4
 {
 public:
 
@@ -646,6 +654,7 @@ public:
 };
 
 class BNL_500um_squares_Geometry : public DefaultGeometry
+// BNL_?cm_500up_100uw
 {
 public:
 
@@ -690,6 +699,7 @@ public:
 };
 
 class BNL2021MediumV2Geometry : public DefaultGeometry
+// BNL2021_V2_?cm_150up_80uw
 {
 public:
     BNL2021MediumV2Geometry(const int v=0) : voltage(v){}
@@ -732,6 +742,7 @@ public:
 };
 
 class IHEPGeometry : public DefaultGeometry
+// IHEP_?cm_150up_80uw
 {
 public:
     IHEPGeometry(const int v=0) : voltage(v){}
