@@ -91,6 +91,18 @@ gStyle.SetOptStat(0)
 
 print("Finished setting up langaus fit class")
 
+if debugMode:
+    outdir_q = os.path.join(outdir,"q_res0/")
+    if not os.path.exists(outdir_q):
+            print(outdir_q)
+            os.mkdir(outdir_q)
+    else:
+            i = 1
+            while(os.path.exists(outdir_q)):
+                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
+                    i+=1
+            os.mkdir(outdir_q)
+
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 #loop over X bins
 for i in range(0, nXBins+1):
@@ -130,7 +142,7 @@ for i in range(0, nXBins+1):
                 if (debugMode):
                     tmpHist.Draw("hist")
                     fit.Draw("same")
-                    canvas.SaveAs(outdir+"q_"+info.outHistoName+str(i)+".gif")
+                    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
                     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
             else:
                 value *= 1000.0
@@ -139,7 +151,7 @@ for i in range(0, nXBins+1):
                 # if (debugMode):
                 #     tmpHist.Draw("hist")
                 #     fit.Draw("same")
-                #     canvas.SaveAs(outdir+"q_"+info.outHistoName+str(i)+".gif")
+                #     canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
                 #     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution_rms: %.3f +/- %.3f"%(value, error))
         else:
             value = 0.0

@@ -75,8 +75,12 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             
             //Define 2D histograms
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highThreshold_numerator_channel"+r+s,"; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highThreshold_oneStrip_numerator_channel"+r+s,"; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highThreshold_twoStrips_numerator_channel"+r+s,"; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_prof,  "efficiency_vs_xy_highThreshold_prof_channel"+r+s, "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_lowThreshold_numerator_channel"+r+s, "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_lowThreshold_oneStrip_numerator_channel"+r+s, "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_lowThreshold_twoStrips_numerator_channel"+r+s, "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
             utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_top"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
             utility::makeHisto(my_2d_histos,"delay_vs_x_channel_top"+r+s, "; X [mm]; Arrival time [ns]", (xmax-xmin)/xBinSize,xmin,xmax, 100,-11,-10);
@@ -480,6 +484,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && isMaxChannel && goodNeighbour,        my_2d_histos["Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s], deltaXmax, Amp1OverAmp1and2);
                 utility::fillHisto(pass && goodNoiseAmp && goodNeighbour,                   my_2d_histos["efficiency_vs_xy_lowThreshold_numerator_channel"+r+s], x,y);
                 utility::fillHisto(pass && goodSignalAmp && goodNeighbour,                  my_2d_histos["efficiency_vs_xy_highThreshold_numerator_channel"+r+s], x,y);
+
+                utility::fillHisto(pass && goodNoiseAmp && oneStripReco,                   my_2d_histos["efficiency_vs_xy_lowThreshold_oneStrip_numerator_channel"+r+s], x,y);
+                utility::fillHisto(pass && goodSignalAmp && oneStripReco,                  my_2d_histos["efficiency_vs_xy_highThreshold_oneStrip_numerator_channel"+r+s], x,y);
+                utility::fillHisto(pass && goodNoiseAmp && !oneStripReco,                   my_2d_histos["efficiency_vs_xy_lowThreshold_twoStrips_numerator_channel"+r+s], x,y);
+                utility::fillHisto(pass && goodSignalAmp && !oneStripReco,                  my_2d_histos["efficiency_vs_xy_highThreshold_twoStrips_numerator_channel"+r+s], x,y);
+
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos["timeDiff_vs_x_channel"+r+s], x,time-photekTime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos["timeDiffTracker_vs_x_channel"+r+s], x,timeTracker-photekTime);
                 utility::fillHisto(pass && goodHit && inBottomRow,                          my_2d_histos["relFrac_vs_x_channel_bottom"+r+s], x, relFracChannel);
