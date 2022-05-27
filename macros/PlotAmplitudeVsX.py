@@ -17,17 +17,11 @@ organized_mode=True
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-s','--sensor', dest='sensor', default = "BNL2020", help="Type of sensor (BNL, HPK, ...)")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias Voltage value in [V]")
+parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="Bias Voltage value in [V]")
 parser.add_option('-y','--ylength', dest='ylength', default = 150, help="Bias Voltage value in [V]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
-
-sensor = options.sensor
-bias = options.biasvolt
-xlength = float(options.xlength)
-ylength = float(options.ylength)
 
 dataset = options.Dataset
 outdir=""
@@ -38,6 +32,12 @@ else:
     inputfile = TFile("../test/myoutputfile.root")   
 
 colors = myStyle.GetColors(True)
+
+sensor_Geometry = myStyle.GetGeometry(dataset)
+sensor = sensor_Geometry['sensor']
+bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
+xlength = float(options.xlength)
+ylength = float(options.ylength)
 
 #Define histo names
 h00 = "amplitude_vs_xy_channel00"

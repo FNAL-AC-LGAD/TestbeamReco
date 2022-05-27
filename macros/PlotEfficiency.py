@@ -10,16 +10,11 @@ organized_mode=True
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-s','--sensor', dest='sensor', default = "UIC_W1_1cm", help="Type of sensor (BNL2020, BNL2021, ...)")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 255, help="Bias Voltage value in [V]")
+parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 3.0, help="Bias Voltage value in [V]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-r', dest='recoMethod', default = 0, help="Reco method: 1:_oneStrip, 2:_twoStrips or empty")
 options, args = parser.parse_args()
-
-sensor = options.sensor
-bias = options.biasvolt
-xlength = float(options.xlength)
 
 recoMethod_dic = {0: "", 1: "_oneStrip", 2: "_twoStrips"}
 recoMethod = recoMethod_dic[int(options.recoMethod)]
@@ -33,6 +28,11 @@ else:
     inputfile = TFile("../test/myoutputfile.root")   
 
 colors = myStyle.GetColors()
+
+sensor_Geometry = myStyle.GetGeometry(dataset)
+sensor = sensor_Geometry['sensor']
+bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
+xlength = float(options.xlength)
 
 
 efficiency_lowThreshold_numerator_global = inputfile.Get("efficiency_vs_xy_lowThreshold%s_numerator"%(recoMethod))

@@ -17,7 +17,7 @@ def getFitFunction(fitOrder):
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('--xmax', dest='xmax', type='float', default = 0.75, help="Set the xmax for the final histogram")
-parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
+# parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
 parser.add_option('--fitOrder', dest='fitOrder', type='int', default = 4, help="Set the poly order for the fit")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
@@ -30,9 +30,11 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")   
 
+sensor_Geometry = myStyle.GetGeometry(dataset)
+
 xmin=0.50
 xmax=options.xmax
-pitch = 0.001*options.pitch
+pitch = 0.001*sensor_Geometry['pitch'] #0.001*options.pitch
 fitOrder = options.fitOrder
 fitFunction = getFitFunction(fitOrder)
 print(fitFunction)
