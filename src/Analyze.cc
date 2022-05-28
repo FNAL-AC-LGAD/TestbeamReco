@@ -58,6 +58,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_histos,"timeDiff_channel"+r+s, "", timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_histos,"timeDiffTracker_channel"+r+s, "", timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_histos,"weighted_timeDiff_channel"+r+s, "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+            //utility::makeHisto(my_histos,"timeDiff_channel"+r+s, "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+            //utility::makeHisto(my_histos,"timeDiffTracker_channel"+r+s, "", timeDiffNbin,timeDiffLow,timeDiffHigh);
             // utility::makeHisto(my_histos,"weighted_timeDiff_tracker_channel"+r+s, "", timeDiffNbin,timeDiffLow,timeDiffHigh);
             // utility::makeHisto(my_histos,"weighted2_timeDiff_tracker_channel"+r+s, "", timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_histos,"weighted_time-time_channel"+r+s, "", timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -72,7 +74,17 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
                 const auto& c = std::to_string(ch);
                 utility::makeHisto(my_histos,"amp"+r+s+"From"+c,"", 405,-5.0,400.0);
             }
-            
+           
+             for(unsigned int k = 0; k < regionsOfIntrest.size(); k++){
+             
+             utility::makeHisto(my_histos,"baselineRMS"+r+s+regionsOfIntrest[k].getName(),"", 50,0.0,10.0); 
+             utility::makeHisto(my_histos,"risetime"+r+s+regionsOfIntrest[k].getName(),"", 100,0.0,1200.0);
+             utility::makeHisto(my_histos,"charge"+r+s+regionsOfIntrest[k].getName(),"", 50,0.0,100.0);  
+             utility::makeHisto(my_histos,"ampChargeRatio"+r+s+regionsOfIntrest[k].getName(),"", 50,0.0,10.0);
+             utility::makeHisto(my_histos,"slewrate"+r+s+regionsOfIntrest[k].getName(),"", 100,0.0,250.0);
+
+            } 
+                      
             //Define 2D histograms
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highThreshold_numerator_channel"+r+s,"; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_prof,  "efficiency_vs_xy_highThreshold_prof_channel"+r+s, "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);
@@ -213,6 +225,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 
     //Define 3D histograms
     utility::makeHisto(my_3d_histos,"amplitude_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
+    utility::makeHisto(my_3d_histos,"amplitude_vs_xyROI","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
     utility::makeHisto(my_3d_histos,"totgoodamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);	
     utility::makeHisto(my_3d_histos,"totamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"totamplitudePad_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
@@ -244,7 +257,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp2OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
     utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp3OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
     utility::makeHisto(my_1d_prof,"clusterSize_vs_x_prof", "; X [mm]; Cluster Size", (xmax-xmin)/xBinSize,xmin,xmax);
-    utility::makeHisto(my_1d_prof,"waveProf0", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
+    /*utility::makeHisto(my_1d_prof,"waveProf0", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf1", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf2", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf3", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
@@ -252,7 +265,21 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_1d_prof,"waveProf5", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf6", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf7", "; Time [ns]; Voltage [mV]", 500,-25.0,25.0);
-    
+    */
+    for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+    {
+    utility::makeHisto(my_1d_prof,"waveProf0"+regionsOfIntrest[k].getName(), "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf1"+regionsOfIntrest[k].getName(), "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf2"+regionsOfIntrest[k].getName(), "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf3"+regionsOfIntrest[k].getName(), "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf4"+regionsOfIntrest[k].getName(), "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf5"+regionsOfIntrest[k].getName(), "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf6"+regionsOfIntrest[k].getName(), "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf7"+regionsOfIntrest[k].getName(), "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
+
+    }
+
+   
     //Define TEfficiencies if you are doing trigger studies (for proper error bars) or cut flow charts.
     utility::makeHisto(my_efficiencies,"event_sel_weight","",9,0,9);
     utility::makeHisto(my_efficiencies,"efficiency_vs_x","; X [mm]",xbins,xmin,xmax);
@@ -285,7 +312,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         std::cout<<roi.getName()<<" "<<roi.passROI(0.0,0.0)<<" "<<roi.passROI(10000.0,0.0)<<std::endl;
     }
 
-    bool plotWaveForm = false;
+    bool plotWaveForm = true;
     if(firstFile) InitHistos(tr, geometry);
 
     while( tr.getNextEvent() )
@@ -311,6 +338,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& risetimeLGAD = tr.getVec<std::vector<double>>("risetimeLGAD");
         const auto& chargeLGAD = tr.getVec<std::vector<double>>("chargeLGAD");
         const auto& ampChargeRatioLGAD = tr.getVec<std::vector<double>>("ampChargeRatioLGAD");
+        const auto& slewrateLGAD = tr.getVec<std::vector<double>>("slewrateLGAD");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& ntracks_alt = tr.getVar<int>("ntracks_alt");
@@ -435,6 +463,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 const auto& risetime = risetimeLGAD[rowIndex][i];
                 const auto& charge = chargeLGAD[rowIndex][i];
                 const auto& ampChargeRatio = ampChargeRatioLGAD[rowIndex][i];
+                const auto& slewrate = slewrateLGAD[rowIndex][i];
+                //std::cout << slewrate << std::endl;
                 bool goodNoiseAmp = ampChannel>noiseAmpThreshold;
                 bool goodSignalAmp = ampChannel>signalAmpThreshold;
                 double time = timeLGAD[rowIndex][i];
@@ -455,6 +485,19 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["risetime"+r+s], risetime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["charge"+r+s], charge);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["ampChargeRatio"+r+s], ampChargeRatio);
+               
+                for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+                { 
+                if(regionsOfIntrest[k].passROI(x,y))
+                {
+                utility::fillHisto(pass && goodHit,                         my_histos["baselineRMS"+r+s+regionsOfIntrest[k].getName()], noise);
+                utility::fillHisto(pass,                         my_histos["risetime"+r+s+regionsOfIntrest[k].getName()], risetime);
+                utility::fillHisto(pass && goodHit,                         my_histos["charge"+r+s+regionsOfIntrest[k].getName()], charge);
+                utility::fillHisto(pass && goodHit,                         my_histos["ampChargeRatio"+r+s+regionsOfIntrest[k].getName()], ampChargeRatio);
+                utility::fillHisto(pass && goodHit,                         my_histos["slewrate"+r+s+regionsOfIntrest[k].getName()], slewrate);
+                utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos["amplitude_vs_xyROI"], x,y,maxAmp);
+                }
+                }
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted_timeDiff_channel"+r+s], weighted_time-photekTime);
                 // utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted_timeDiff_tracker_channel"+r+s], weighted_time_tracker-photekTime);
                 // utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted2_timeDiff_tracker_channel"+r+s], weighted2_time_tracker-photekTime);
@@ -618,7 +661,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(goodTrack,                                                                      my_2d_prof["efficiency_vs_xy_DCRing"], x,y,goodDCAmp);
         
         // Fill wave form histos once
-        bool maxAmpInCenter = maxAmpIndex == 2;// || maxAmpIndex == 3;
+        bool maxAmpInCenter = maxAmpIndex == 1;// || maxAmpIndex == 3;
         //bool directHit = (abs( corrAmp[2] - corrAmp[4]) / corrAmp[2]) < 0.05;
         //if(plotWaveForm && pass && maxAmpInCenter && goodMaxLGADAmp && maxAmpLGAD > 99.0 &&  maxAmpLGAD < 101.0)
         //{
@@ -630,7 +673,11 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
             const auto& channel = tr.getVecVec<float>("channel");
             const auto& time = tr.getVecVec<float>("time");
             const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
-        
+            for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+            { 
+            if(regionsOfIntrest[k].passROI(x,y))
+            {
+
             for(unsigned int i = 0; i < channel.size(); i++)
             {
                 auto t = timeCalibrationCorrection.at(i) - 10.0;
@@ -639,12 +686,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 for(unsigned int j = 0; j < time[0].size(); j++)
                 {                                        
                     my_histos     ["wave"+index]->Fill(1e9*time[0][j] - photekTime - t, channel[i][j]);
-                    my_1d_prof["waveProf"+index]->Fill(1e9*time[0][j] - photekTime - t, channel[i][j]);
+                    my_1d_prof["waveProf"+index+regionsOfIntrest[k].getName()]->Fill(1e9*time[0][j] - photekTime - t, channel[i][j]);
                 }
             }
         }
-        
-	// Example Fill event selection efficiencies
+      }  
+
+    }	// Example Fill event selection efficiencies
 	my_efficiencies["event_sel_weight"]->SetUseWeightedEvents();
 	my_efficiencies["event_sel_weight"]->FillWeighted(true,1.0,0);
     } //event loop
