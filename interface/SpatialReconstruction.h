@@ -18,11 +18,23 @@ private:
         return (dX >= 0.0) ? dX : 0.0;
     }
 
+    double getDXDerivative(const std::vector<double>& coeffs, const double x, const double shift = 0.0)
+    {
+        double dXD = 0.0;
+        int index = 0;
+        for(const auto& coeff : coeffs)
+        {
+            dXD += index*coeff*pow(x - shift,index-1);
+            index++;
+        }
+        return dXD;
+    }
+
     void spatialReconstruction([[maybe_unused]] NTupleReader& tr)
     {
 
 	//******************************************************************
-	//X-Position Reconstruction
+	//Position Reconstruction
 	//******************************************************************
         const auto& enablePositionReconstruction = tr.getVar<bool>("enablePositionReconstruction");
         const auto& positionRecoPar = tr.getVar<std::vector<double>>("positionRecoPar");
@@ -32,12 +44,16 @@ private:
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
         const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
+        const auto& pitch = tr.getVar<double>("pitch");
+        const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
 
         auto& goodNeighbour = tr.createDerivedVar<bool>("goodNeighbour");
         goodNeighbour = abs(maxAmpIndex - Amp2Index)==1 && ampLGAD[0][Amp2Index]>noiseAmpThreshold;
 
         double y_reco=0.0, x_reco = 0.0, x1 = 0.0, y1 = 0.0, x2 = 0.0;
+        double x_reco_basic = 0.0, y_reco_basic = 0.0;
+        double dXdFrac = 0.0;
         if(enablePositionReconstruction)
         {	  
             assert(Amp1OverAmp1and2 >= 0); //make sure a1/(a1+a2) is a sensible number
@@ -50,6 +66,27 @@ private:
             dX = (goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint)) ? dX : 0.0;
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
+
+            //Define basic x reco
+            double xBasic = (1.0 - Amp1OverAmp1and2)*pitch;
+            x_reco_basic = (x2>x1) ? x1 + xBasic : x1 - xBasic;
+
+            //Define slope of poly fit function
+            dXdFrac = getDXDerivative(positionRecoPar, Amp1OverAmp1and2, 0.5);
+
+            //Define basic y reco
+            double t1 = timeLGADTracker[0][maxAmpIndex];
+            double t2 = timeLGADTracker[0][Amp2Index];
+            double vX =  2.0;
+            double vY = 50.0;
+            double vR = vY/vX;
+            double dXSign = (x2>x1) ? dX : -dX;
+            double dT = t1 - t2;
+            double yBasic = vR*(pitch - 2*dXSign) + vY*dT;
+            //double yBasic = vR*(pitch - 2*x_reco_basic) + vY*dT;
+            //double yBasic = vR*pitch*(2*Amp1OverAmp1and2 - 1.0) + vY*dT;
+            y_reco_basic = 0.5*yBasic;
+
 	    } //if enabled position reconstruction
         
         const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
@@ -87,7 +124,10 @@ private:
 	    } //if enabled position reconstruction
 
         tr.registerDerivedVar("x_reco", x_reco);
+        tr.registerDerivedVar("x_reco_basic", x_reco_basic);
+        tr.registerDerivedVar("dXdFrac", dXdFrac);
         tr.registerDerivedVar("y_reco", y_reco);
+        tr.registerDerivedVar("y_reco_basic", y_reco_basic);
     }
 public:
     SpatialReconstruction()
