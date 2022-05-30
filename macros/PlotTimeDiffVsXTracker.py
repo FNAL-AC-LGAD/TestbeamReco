@@ -71,11 +71,11 @@ all_histoInfos = [
     # HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
     # HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
     # HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
-    HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
+    HistoInfo("timeDiffTracker_vs_xy", inputfile, "time_diff"),
     # HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
     # HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
     # HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
-    HistoInfo("weighted2_timeDiff_vs_xy", inputfile, "weighted2_time_diff"),
+    HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_time_diff"),
     # HistoInfo("weighted_timeDiff_goodSig_vs_xy", inputfile, "weighted_time_goodSig"),
     # HistoInfo("weighted2_timeDiff_goodSig_vs_xy", inputfile, "weighted2_time_goodSig"),
 ]
@@ -109,7 +109,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
         errorMean = 0.0
 
         #Do fit 
-        if(nEvents > 50):
+        if(nEvents > 500):
             tmpHist.Rebin(2)
 
             fit = TF1('fit','gaus',fitlow,fithigh)
@@ -126,7 +126,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             ##For Debugging
             tmpHist.Draw("hist")
             fit.Draw("same")
-            canvas.SaveAs(outdir+"q"+info.outHistoName +"_"+str(i)+".gif")
+            canvas.SaveAs(outdir+"qTracker"+info.outHistoName +"_"+str(i)+".gif")
             
             # print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
         else:
@@ -144,7 +144,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
         # info.th1Mean.SetBinError(i,errorMean)
                         
 # Plot 2D histograms
-outputfile = TFile(outdir+"timeDiffVsXandY.root","RECREATE")
+outputfile = TFile(outdir+"timeDiffVsXandYTracker.root","RECREATE")
 for info in all_histoInfos:
     info.th1.Draw("hist e")
     info.th1.SetStats(0)
@@ -171,8 +171,8 @@ for info in all_histoInfos:
     myStyle.BeamInfo()
     myStyle.SensorInfo(sensor, bias)
 
-    canvas.SaveAs(outdir+"TimeRes_vs_x_"+info.outHistoName+".gif")
-    canvas.SaveAs(outdir+"TimeRes_vs_x_"+info.outHistoName+".pdf")
+    canvas.SaveAs(outdir+"TimeRes_vs_xTracker_"+info.outHistoName+".gif")
+    canvas.SaveAs(outdir+"TimeRes_vs_xTracker_"+info.outHistoName+".pdf")
     info.th1.Write()
 
 hTimeRes = all_histoInfos[0].th1 # 6
@@ -204,8 +204,8 @@ legend.Draw();
 myStyle.BeamInfo()
 myStyle.SensorInfo(sensor, bias)
 
-canvas.SaveAs(outdir+"TimeRes_vs_x_BothMethods.gif")
-canvas.SaveAs(outdir+"TimeRes_vs_x_BothMethods.pdf")
+canvas.SaveAs(outdir+"TimeRes_vs_xTracker_BothMethods.gif")
+canvas.SaveAs(outdir+"TimeRes_vs_xTracker_BothMethods.pdf")
 
 outputfile.Close()
 

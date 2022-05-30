@@ -93,7 +93,9 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     // std::map<int, double> amplitudeCorrectionFactor = {{0,0.9398}, {1,0.9619}, {2,0.9845}, {3,0.9794}, {4,1.0186}, {5,1.0318}, {6,1.1004}, {7,1.0}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
+    //std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
+    //std::map<int, double> timeCalibrationCorrection = {{0,0.83550257}, {1,0.72130393}, {2,0.82432096}, {3,0.71540105}, {4,0.78519213}, {5,0.69938706}, {6,0.82695301}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
     double sensorCenter  =-1.0; // Lab-Tracker's frame
@@ -121,11 +123,12 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 2;
     int minStripHits = 6;
-    int CFD_threshold = 50;
+    int CFD_threshold = 20;
     std::vector<double> positionRecoPar = {0.250000, -0.414954, -3.861040, 37.128136, -141.558350, 162.643997};
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.9, -5.1}, {2.0, 4.9}}; // Sensor's local frame
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.95,1.15, -1.6,-0.30},{"cold", 0.95,1.15, 1.2,2.5},{"gap", 0.75,0.85, 0.4,3.00}};
 };
 
 class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
@@ -435,7 +438,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-17.0, -5.3}, {8.0, -2.0}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-5.3, -8.0}, {-2.0, 17.0}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.7, -12.5}, {1.7, 12.5}}; // Sensor's local frame
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.0,3.5, -4.5,4.0}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -0.35,0.0, -4.0,-1.5},{"cold", -0.35,0.0, -8.0,-5.5},{"gap", -0.5,-0.3, -1.5,2.875}};
 };
 
 class EIC2p5cmStripsGeometry : public DefaultGeometry
@@ -658,6 +661,8 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-4.2, -4.0}, {0.2, 0.0}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-4.0, -0.2}, {0.0, 4.2}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-2.0, -2.2}, {2.0, 2.2}}; // Sensor's local frame
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -0.20,0.1, 0.5,1.5},{"cold", -0.20,0.1, -1.7,-0.7},{"gap", -0.35,-0.2, -1.5,0.5}};
+
 };
 
 class BNL_500um_squares_Geometry : public DefaultGeometry

@@ -40,7 +40,7 @@ bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 
 
 #Get 3D histograms 
-th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xy")
+th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xyROI")
 th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
 th3_amplitude_vs_xy_channel01 = inputfile.Get("amplitude_vs_xy_channel01")
 th3_amplitude_vs_xy_channel02 = inputfile.Get("amplitude_vs_xy_channel02")
@@ -61,9 +61,9 @@ list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel06)
 
 #Build amplitude histograms
 efficiency_vs_xy_denominator = inputfile.Get("efficiency_vs_xy_denominator")
-amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
+amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xyROI")
 
-amplitude_vs_xy = amplitude_vs_xy_temp.Clone("amplitude_vs_xy")
+amplitude_vs_xy = amplitude_vs_xy_temp.Clone("amplitude_vs_xyROI")
 amplitude_vs_xy_channel00 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel00")
 amplitude_vs_xy_channel01 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel01")
 amplitude_vs_xy_channel02 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel02")

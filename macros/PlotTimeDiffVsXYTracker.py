@@ -26,8 +26,8 @@ class HistoInfo:
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-z','--zmin', dest='zmin', default =   -50.0, help="Set zmin")
-parser.add_option('-Z','--zmax', dest='zmax', default = 150.0, help="Set zmax")
+parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set zmin")
+parser.add_option('-Z','--zmax', dest='zmax', default = 120.0, help="Set zmax")
 
 options, args = parser.parse_args()
 dataset = options.Dataset
@@ -42,17 +42,17 @@ else:
     inputfile = TFile("../test/myoutputfile.root")   
 
 all_histoInfos = [
-    HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
-    HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
-    HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
-    HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
-    HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
-    HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
-    HistoInfo("timeDiff_vs_xy_channel06",inputfile, "channel_7"),
-    HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
-    HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
-    HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
-    HistoInfo("weighted2_timeDiff_vs_xy", inputfile, "weighted2_time_diff"),
+    HistoInfo("timeDiffTracker_vs_xy_channel00",inputfile, "channel_1"),
+    HistoInfo("timeDiffTracker_vs_xy_channel01",inputfile, "channel_2"),
+    HistoInfo("timeDiffTracker_vs_xy_channel02",inputfile, "channel_3"),
+    HistoInfo("timeDiffTracker_vs_xy_channel03",inputfile, "channel_4"),
+    HistoInfo("timeDiffTracker_vs_xy_channel04",inputfile, "channel_5"),
+    HistoInfo("timeDiffTracker_vs_xy_channel05",inputfile, "channel_6"),
+    HistoInfo("timeDiffTracker_vs_xy_channel06",inputfile, "channel_7"),
+    HistoInfo("timeDiffTracker_vs_xy", inputfile, "time_diff"),
+    #HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
+    #HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
+    HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_time_diff"),
 ]
 
 canvas = TCanvas("cv","cv",800,800)
@@ -111,7 +111,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 
 
 # Plot 2D histograms
-outputfile = TFile("%splotsTimeDiffVsXY.root"%outdir,"RECREATE")
+outputfile = TFile("%splotsTimeDiffVsXYTracker.root"%outdir,"RECREATE")
 for info in all_histoInfos:
     info.th2.Draw("colz")
     info.th2.SetStats(0)
@@ -120,8 +120,8 @@ for info in all_histoInfos:
     info.th2.SetMaximum(zmax)
     info.th2.SetLineColor(kBlack)
 
-    canvas.SaveAs(outdir+"TimeRes_vs_xy_"+info.outHistoName+".gif")
-    canvas.SaveAs(outdir+"TimeRes_vs_xy_"+info.outHistoName+".pdf")
+    canvas.SaveAs(outdir+"TimeRes_vs_xyTracker_"+info.outHistoName+".gif")
+    canvas.SaveAs(outdir+"TimeRes_vs_xyTracker_"+info.outHistoName+".pdf")
     info.th2.Write()
 
 outputfile.Close()
