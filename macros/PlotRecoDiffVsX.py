@@ -49,18 +49,12 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-s','--sensor', dest='sensor', default = "BNL2020", help="Type of sensor (BNL, HPK, ...)")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias Voltage value in [V]")
-parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
-parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Bias Voltage value in [V]") 
-parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Bias Voltage value in [V]") 
+parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
+parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="X axis range [-x, x]") 
+parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Y axis upper limit") 
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 options, args = parser.parse_args()
-
-sensor = options.sensor
-bias = options.biasvolt
-xlength = float(options.xlength)
-ylength = float(options.ylength)
 
 dataset = options.Dataset
 outdir=""
@@ -68,16 +62,25 @@ if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
-    inputfile = TFile("../test/myoutputfile.root")   
+    inputfile = TFile("../test/myoutputfile.root")
+
+sensor_Geometry = myStyle.GetGeometry(dataset)
+
+sensor = sensor_Geometry['sensor']
+bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
+pitch  = sensor_Geometry['pitch']
+xlength = float(options.xlength)
+ylength = float(options.ylength)
+debugMode = options.debugMode
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack",   inputfile, "track_rms", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_rms_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_rms_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "rms_track_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "rms_track_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
     # HistoInfo("deltaXmax_vs_Xtrack",   inputfile, "maxtrack", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
@@ -90,13 +93,27 @@ gStyle.SetOptStat(0)
 
 print("Finished setting up langaus fit class")
 
+if debugMode:
+    outdir_q = os.path.join(outdir,"q_res0/")
+    if not os.path.exists(outdir_q):
+            print(outdir_q)
+            os.mkdir(outdir_q)
+    else:
+            i = 1
+            while(os.path.exists(outdir_q)):
+                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
+                    i+=1
+            os.mkdir(outdir_q)
+
+nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 #loop over X bins
-for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
+for i in range(0, nXBins+1):
     ##For Debugging
     #if not (i==46 and j==5):
     #    continue
 
     for info in all_histoInfos:
+        totalEvents = info.th2.GetEntries()
         tmpHist = info.th2.ProjectionY("py",i,i)
         myMean = tmpHist.GetMean()
         myRMS = tmpHist.GetRMS()
@@ -107,8 +124,11 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
         value = myRMS
         error = myRMSError
 
+        minEvtsCut = totalEvents/nXBins
+
+        if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
         #Do fit 
-        if(nEvents > 50):
+        if(nEvents > minEvtsCut):
             if(info.doFits):
                 # tmpHist.Rebin(2)
                 
@@ -121,13 +141,20 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 error = 1000.0*mySigmaError
             
                 ##For Debugging
-                # tmpHist.Draw("hist")
-                # fit.Draw("same")
-                # canvas.SaveAs(outdir+"q_"+str(i)+".gif")
-                # print ("Bin : " + str(i) + " ("+ str(info.th1.GetXaxis().GetBinCenter(i)) +")"+ " -> " + str(value) + " +/- " + str(error))
+                if (debugMode):
+                    tmpHist.Draw("hist")
+                    fit.Draw("same")
+                    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
+                    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
             else:
                 value *= 1000.0
                 error *= 1000.0
+                ##For Debugging
+                # if (debugMode):
+                #     tmpHist.Draw("hist")
+                #     fit.Draw("same")
+                #     canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
+                #     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution_rms: %.3f +/- %.3f"%(value, error))
         else:
             value = 0.0
             error = 0.0
@@ -178,7 +205,7 @@ for info in all_histoInfos:
     # for box in boxes2:
     #     box.Draw("same")
 
-    default_res = ROOT.TLine(-xlength,options.pitch/TMath.Sqrt(12),xlength,options.pitch/TMath.Sqrt(12))
+    default_res = ROOT.TLine(-xlength,pitch/TMath.Sqrt(12),xlength,pitch/TMath.Sqrt(12))
     default_res.SetLineWidth(4)
     default_res.SetLineStyle(9)
     default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))

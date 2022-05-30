@@ -17,17 +17,9 @@ organized_mode=True
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-s','--sensor', dest='sensor', default = "", help="Type of sensor (BNL, HPK, ...)")
-parser.add_option('-p','--pitch', dest='pitch', default = 500, help="pitch in um")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias Voltage value in [V]")
+parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
-
-sensor = options.sensor
-bias = options.biasvolt
-pitch = float(options.pitch)
-
-num_strips=7
 
 dataset = options.Dataset
 outdir=""
@@ -39,6 +31,11 @@ else:
 
 colors = myStyle.GetColors(True)
 
+sensor_Geometry = myStyle.GetGeometry(dataset)
+
+sensor = sensor_Geometry['sensor']
+bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
+pitch  = sensor_Geometry['pitch']
 
 def findCenter(hist):
 
@@ -58,37 +55,31 @@ def findCenter(hist):
 list_th2_amplitude_vs_x = []
 
 th3_amplitude_vs_xy_channels =[]
-for i in range(num_strips):
+
+for i in range(7):
     th3_amp_vs_xy_channel = inputfile.Get("amplitude_vs_xy_channel0%i"%i)
-    th3_amplitude_vs_xy_channels.append(th3_amp_vs_xy_channel)
-    amp_vs_x_channel = th3_amp_vs_xy_channel.Project3D("zx")
-    list_th2_amplitude_vs_x.append(amp_vs_x_channel)
+    if th3_amp_vs_xy_channel:
+        th3_amplitude_vs_xy_channels.append(th3_amp_vs_xy_channel)
+        amp_vs_x_channel = th3_amp_vs_xy_channel.Project3D("zx")
+        list_th2_amplitude_vs_x.append(amp_vs_x_channel)
+
+nStrips = len(th3_amplitude_vs_xy_channels)
 
 #Build amplitude histograms
 th1 = th3_amplitude_vs_xy_channels[0].ProjectionX().Clone("th1")
 xmin = th1.GetXaxis().GetXmin()
 xmax = th1.GetXaxis().GetXmax()
 
-amplitude_vs_x_channel00 = TH1F("amplitude_vs_x_channel00","",th1.GetXaxis().GetNbins(),xmin,xmax)
-amplitude_vs_x_channel01 = TH1F("amplitude_vs_x_channel01","",th1.GetXaxis().GetNbins(),xmin,xmax)
-amplitude_vs_x_channel02 = TH1F("amplitude_vs_x_channel02","",th1.GetXaxis().GetNbins(),xmin,xmax)
-amplitude_vs_x_channel03 = TH1F("amplitude_vs_x_channel03","",th1.GetXaxis().GetNbins(),xmin,xmax)
-amplitude_vs_x_channel04 = TH1F("amplitude_vs_x_channel04","",th1.GetXaxis().GetNbins(),xmin,xmax)
-amplitude_vs_x_channel05 = TH1F("amplitude_vs_x_channel05","",th1.GetXaxis().GetNbins(),xmin,xmax)
-amplitude_vs_x_channel06 = TH1F("amplitude_vs_x_channel06","",th1.GetXaxis().GetNbins(),xmin,xmax)
 # amplitude_vs_x_channelall = TH1F("amplitude_vs_x_channelall","",th1.GetXaxis().GetNbins(),th1.GetXaxis().GetXmin(),th1.GetXaxis().GetXmax())
 
 print ("Amplitude vs X: " + str(th1.GetXaxis().GetBinLowEdge(1)) + " -> " + str(th1.GetXaxis().GetBinUpEdge(th1.GetXaxis().GetNbins())))
 
 list_amplitude_vs_x = []
-list_amplitude_vs_x.append(amplitude_vs_x_channel00)
-list_amplitude_vs_x.append(amplitude_vs_x_channel01)
-list_amplitude_vs_x.append(amplitude_vs_x_channel02)
-list_amplitude_vs_x.append(amplitude_vs_x_channel03)
-list_amplitude_vs_x.append(amplitude_vs_x_channel04)
-list_amplitude_vs_x.append(amplitude_vs_x_channel05)
-list_amplitude_vs_x.append(amplitude_vs_x_channel06)
-# list_amplitude_vs_x.append(amplitude_vs_x_channelall)
+for i in range(nStrips):
+    amplitude_vs_x_channel = TH1F("amplitude_vs_x_channel0%i"%(i),"",th1.GetXaxis().GetNbins(),xmin,xmax)
+    list_amplitude_vs_x.append(amplitude_vs_x_channel)
+
+# # list_amplitude_vs_x.append(amplitude_vs_x_channelall)
 
 print("Setting up Langaus")
 fit = langaus.LanGausFit()
@@ -99,7 +90,7 @@ maxAmpChannels = []
 maxAmpALL = 0
 n_channels = 0
 #loop over X,Y bins
-for channel in range(0, len(list_amplitude_vs_x)):
+for channel in range(nStrips):
     # print("Channel : " + str(channel))
     maxAmp = 0
     maxLoc=-999
@@ -162,7 +153,7 @@ print("Average Max Amplitude = " + str(maxAmpAvg) + "; N of non-empty channels: 
 list_of_fit_functions=[]
 
 ymax = list_amplitude_vs_x[0].GetMaximum()
-for i in range(num_strips):
+for i in range(nStrips):
     if list_amplitude_vs_x[i].GetMaximum()>ymax: ymax = list_amplitude_vs_x[i].GetMaximum()
     
     list_of_fit_functions.append(findCenter(list_amplitude_vs_x[i]))
@@ -187,7 +178,7 @@ totalAmplitude_vs_x.SetMaximum(ymax*1.5)
 #    box.Draw()
 totalAmplitude_vs_x.Draw("AXIS same")
 totalAmplitude_vs_x.Draw("hist same")
-for i in range(num_strips):
+for i in range(nStrips):
     list_amplitude_vs_x[i].Draw("histsame")
     list_of_fit_functions[i].Draw("same")
 
@@ -198,7 +189,7 @@ legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize())
 legend.SetBorderSize(0)
 legend.SetFillColor(kWhite)
-for i in range(num_strips):
+for i in range(nStrips):
     legend.AddEntry(list_amplitude_vs_x[i], "Strip %i"%(i+1))
 
 legend.Draw();
@@ -211,7 +202,7 @@ canvas.SaveAs(outdir+"TotalAmplitude_vs_x_"+sensor+".pdf")
 
 center_list = []
 delta_center_list=[]
-for channel in range(num_strips):
+for channel in range(nStrips):
     center_list.append(list_of_fit_functions[channel].GetParameter("Mean"))
     if channel>0:
         delta_center_list.append(center_list[channel]-center_list[channel-1])
@@ -220,10 +211,11 @@ print("\n\nList of distance between centers [mm]:  ",delta_center_list)
 print("\n\n")
 print("vector for geometry file:")
 
+first_good_channel = 7 - nStrips
 string_for_geo = "std::vector<double> stripCenterXPosition = {"
 for channel in range(8):
-    if channel < len(list_of_fit_functions):
-        string_for_geo+= "%0.3f, "%list_of_fit_functions[channel].GetParameter("Mean")
+    if ((first_good_channel <= channel) and (channel < 7)):
+        string_for_geo+= "%0.3f, "%list_of_fit_functions[channel - first_good_channel].GetParameter("Mean")
     else:
          string_for_geo+= "0.0, "
          
@@ -234,7 +226,7 @@ print(string_for_geo)
 # Save amplitude histograms
 outputfile = TFile(outdir+"PlotAmplitudeVsX.root","RECREATE")
 
-for channel in range(num_strips):
+for channel in range(nStrips):
     list_amplitude_vs_x[channel].Write()
     list_of_fit_functions[channel].Write()
 outputfile.Close()

@@ -18,16 +18,11 @@ myStyle.ForceStyle()
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-f', dest='file', default = "myoutputfile.root", help="File name (or path from ../test/)")
-parser.add_option('-s','--sensor', dest='sensor', default = "EIC W1-1cm", help="Type of sensor (BNL, HPK, ...)")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 180, help="Bias Voltage value in [V]")
+parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set zmin")
 parser.add_option('-Z','--zmax', dest='zmax', default = 120.0, help="Set zmax")
 options, args = parser.parse_args()
 
-file = options.file
-sensor = options.sensor
-bias = options.biasvolt
 dataset = options.Dataset
 zmin = float(options.zmin)
 zmax = float(options.zmax)
@@ -37,11 +32,15 @@ if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
-    inputfile = TFile("../test/"+file)
+    inputfile = TFile("../test/myoutputfile.root")
+
+sensor_Geometry = myStyle.GetGeometry(dataset)
+sensor = sensor_Geometry['sensor']
+bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 
 
 #Get 3D histograms 
-th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xy")
+th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xyROI")
 th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
 th3_amplitude_vs_xy_channel01 = inputfile.Get("amplitude_vs_xy_channel01")
 th3_amplitude_vs_xy_channel02 = inputfile.Get("amplitude_vs_xy_channel02")
@@ -62,9 +61,9 @@ list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel06)
 
 #Build amplitude histograms
 efficiency_vs_xy_denominator = inputfile.Get("efficiency_vs_xy_denominator")
-amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
+amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xyROI")
 
-amplitude_vs_xy = amplitude_vs_xy_temp.Clone("amplitude_vs_xy")
+amplitude_vs_xy = amplitude_vs_xy_temp.Clone("amplitude_vs_xyROI")
 amplitude_vs_xy_channel00 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel00")
 amplitude_vs_xy_channel01 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel01")
 amplitude_vs_xy_channel02 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel02")
