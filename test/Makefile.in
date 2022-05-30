@@ -40,7 +40,7 @@ INCLUDESDIRS += -I$(TDIR) -I$(IFWDIR) -I$(SFWDIR) -I$(ITTDir) -I$(STTDir)
 
 PROGRAMS = MyAnalysis
 
-ANALYZERS = $(ODIR)/Analyze.o  $(ODIR)/Align.o $(ODIR)/InitialAnalyzer.o $(ODIR)/MakeNNVariables.o
+ANALYZERS = $(ODIR)/Analyze.o  $(ODIR)/Align.o $(ODIR)/InitialAnalyzer.o $(ODIR)/RecoAnalyzer.o $(ODIR)/MakeNNVariables.o
 HELPERS = $(ODIR)/NTupleReader.o $(ODIR)/Utility.o $(ODIR)/samples.o $(ODIR)/SATException.o $(ODIR)/MiniTupleMaker.o
 
 all: mkobj sampPyWrap $(PROGRAMS)

@@ -230,7 +230,7 @@ private:
             }
 
             corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr + corr);
-
+            //corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr);
             counter++;
         }
 
@@ -245,12 +245,22 @@ private:
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& risetime = tr.getVec<float>("risetime");
         auto& corrRisetime = tr.createDerivedVec<double>("corrRisetime",risetime.size());
+        //auto& SlewRate = tr.createDerivedVec<float>("SlewRate",risetime.size());
         for(unsigned int i = 0; i < risetime.size(); i++)
         {
             corrRisetime[i] = 1e12*abs(0.8*corrAmp[i] / risetime[i]);
+            //SlewRate[i] = 1e-9*abs(risetime[i]);
         }
         utility::remapToLGADgeometry(tr, corrRisetime, "risetimeLGAD");
-
+        
+        const auto& slewrate = tr.getVec<float>("risetime");
+        auto& corrSlewrate = tr.createDerivedVec<double>("corrSlewrate", slewrate.size());
+        for(unsigned int i = 0; i < slewrate.size(); i++)
+        {
+             corrSlewrate[i] = 1e-9*abs(slewrate[i]);
+        }
+        utility::remapToLGADgeometry(tr, corrSlewrate, "slewrateLGAD");
+        //utility::remapToLGADgeometry(tr, SlewRate, "slewrateLGAD");
         //Charge, amp/charge ratio
         const auto& integral = tr.getVec<float>("integral");
         auto& charge = tr.createDerivedVec<double>("charge",integral.size());

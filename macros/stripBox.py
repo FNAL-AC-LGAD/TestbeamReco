@@ -10,7 +10,7 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True,
         boxesInfo.append(f.Get("stripBoxInfo03"))
         boxesInfo.append(f.Get("stripBoxInfo04"))
         boxesInfo.append(f.Get("stripBoxInfo05"))
-        boxesInfo.append(f.Get("stripBoxInfo06"))
+        if (f.Get("stripBoxInfo06")): boxesInfo.append(f.Get("stripBoxInfo06"))
     else :
         boxesInfo = []
         boxesInfo.append(f.Get("stripBoxInfo00"))
@@ -51,3 +51,17 @@ def getStripBoxY(f, yampmin=0.0, yampmax=100.0, getCenter=False, color=18, shift
 
     return boxes
 
+def getStripBoxForRecoFit(stripWidth, pitch, ymax, xmax, xmin=0.5, color=18):
+    boxes = []
+    i=0
+    while i<=ymax+stripWidth/2:
+        yt = i+stripWidth/2
+        yl = i-stripWidth/2
+        if yt>ymax: yt=ymax
+        if yl<0: yl=0.0
+        box = ROOT.TBox(xmin,yl, xmax,yt)
+        box.SetFillColor(color)
+        boxes.append(box)
+        i+=pitch
+
+    return boxes

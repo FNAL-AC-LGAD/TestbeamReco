@@ -3,6 +3,7 @@ import ROOT
 import os
 import optparse
 import myStyle
+import stripBox
 
 organized_mode=True
 gROOT.SetBatch( True )
@@ -16,7 +17,7 @@ def getFitFunction(fitOrder):
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('--xmax', dest='xmax', type='float', default = 0.75, help="Set the xmax for the final histogram")
-parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
+# parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
 parser.add_option('--fitOrder', dest='fitOrder', type='int', default = 4, help="Set the poly order for the fit")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
@@ -25,13 +26,15 @@ dataset = options.Dataset
 outdir=""
 if organized_mode: 
     outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+    inputfile = TFile("%s%s_RecoAnalyzer.root"%(outdir,dataset))
 else: 
     inputfile = TFile("../test/myoutputfile.root")   
 
+sensor_Geometry = myStyle.GetGeometry(dataset)
+
 xmin=0.50
 xmax=options.xmax
-pitch = 0.001*options.pitch
+pitch = 0.001*sensor_Geometry['pitch'] #0.001*options.pitch
 fitOrder = options.fitOrder
 fitFunction = getFitFunction(fitOrder)
 print(fitFunction)
@@ -100,10 +103,14 @@ string_for_geo = string_for_geo.replace(", }","}")
 
 print(string_for_geo)
 
+width = (inputfile.Get("stripBoxInfo03")).GetMean(2)
+boxes = stripBox.getStripBoxForRecoFit(width, pitch, 0.6*pitch, xmax, xmin)
+for box in boxes:
+         box.Draw()
 
-Amp1OverAmp1and2_vs_deltaXmax_profile.Draw()
-fit.Draw("same")
+Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same axis")
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same")
+fit.Draw("same")
 
 line = TF1("line","0.0",xmin,1.0)
 line.SetLineColor(ROOT.kBlack)

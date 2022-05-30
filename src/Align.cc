@@ -70,7 +70,13 @@ void Align::Loop(NTupleReader& tr, int maxevents)
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
     const auto& photekSignalMax = tr.getVar<double>("photekSignalMax");
+    const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
+    const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
     const auto& firstFile = tr.getVar<bool>("firstFile");
+
+    int lowGoodStrip = (geometry[0].size()==1) ? lowGoodStripIndex-1 : lowGoodStripIndex;
+    int highGoodStrip = (geometry[0].size()==1) ? highGoodStripIndex-1 : highGoodStripIndex;
+
     if(firstFile)
     {
         InitHistos(tr, geometry);
@@ -116,15 +122,13 @@ void Align::Loop(NTupleReader& tr, int maxevents)
 
         const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
-        const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
-        const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
         const auto& hasGlobalSignal_highThreshold = tr.getVar<bool>("hasGlobalSignal_highThreshold");
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool goodTrack = ntracks==1 && nplanes>=5 && npix>0;// && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         bool pass = goodTrack && goodPhotek && hitSensor;
-        bool maxAmpNotEdgeStrip = (maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= highGoodStripIndex);
+        bool maxAmpNotEdgeStrip = (maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip);
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
         bool goodHitCh2 = goodMaxLGADAmp && maxAmpIndex==2;
 
