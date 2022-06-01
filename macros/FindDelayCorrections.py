@@ -27,7 +27,7 @@ sensor = options.sensor
 bias = options.biasvolt
 pitch = float(options.pitch)
 
-num_strips=7
+num_strips=8
 
 dataset = options.Dataset
 outdir=""

@@ -203,9 +203,23 @@ private:
         // Correct the time variable
         const auto& CFD_threshold = tr.getVar<int>("CFD_threshold");
         const auto& LP2 = tr.getVec<float>(Form("LP2_%i",CFD_threshold));
+    
+
         const auto& timeCalibrationCorrection = tr.getVar<std::map<int,double>>("timeCalibrationCorrection");
         auto& corrTime = tr.createDerivedVec<double>("corrTime");
         auto& corrTimeTracker = tr.createDerivedVec<double>("corrTimeTracker");
+
+    
+        std::vector<std::vector<double>* > v_corrTime_allCFD;
+        std::vector<std::vector<float> > v_LP2_allCFD;
+        const auto& CFD_list = tr.getVar<std::vector<std::string> >("CFD_list");
+        for (auto cfd : CFD_list)
+        {
+            v_LP2_allCFD.emplace_back(tr.getVec<float>("LP2_"+cfd));
+            v_corrTime_allCFD.emplace_back(&tr.createDerivedVec<double>("corrTime"+cfd+"Tracker"));
+        }
+
+
         uint counter = 0;
         for(auto thisTime : LP2)
         {
@@ -230,12 +244,25 @@ private:
             }
 
             corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr + corr);
+            int icfd =0;
+            for (auto cfd : CFD_list)
+            {
+                v_corrTime_allCFD[icfd]->emplace_back(1e9*(v_LP2_allCFD[icfd][counter]) - tracker_corr + corr);
+                icfd++;
+            }
+
             //corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr);
             counter++;
         }
 
         utility::remapToLGADgeometry(tr, corrTime, "timeLGAD");
         utility::remapToLGADgeometry(tr, corrTimeTracker, "timeLGADTracker");
+        int icfd =0;
+        for (auto* corrTimeEachCFD: v_corrTime_allCFD )
+        {
+            utility::remapToLGADgeometry(tr, *corrTimeEachCFD, "time"+CFD_list[icfd]+"LGADTracker");
+            icfd++;
+        }
 
         // Baseline RMS
         const auto& baselineRMS = tr.getVec<float>("baseline_RMS");
@@ -267,7 +294,7 @@ private:
         auto& AmpChargeRatio = tr.createDerivedVec<double>("AmpChargeRatio",integral.size());
         for(unsigned int i = 0; i < integral.size(); i++)
         {
-            charge[i] = -1000*integral[i]*1e9*50/4700;
+            charge[i] = -1000*integral[i]*1e9*50/(1.4*4700); //FNAL / UCSC Q ratio is 1.4, using 4700 for both.
             AmpChargeRatio[i] = corrAmp[i]/charge[i];
         }
         utility::remapToLGADgeometry(tr, charge, "chargeLGAD");
@@ -276,14 +303,14 @@ private:
 
 public:
 
-    PrepNTupleVars(const std::string& filename, const int numChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(false)
+    PrepNTupleVars(const std::string& filename, const uint numScopeChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(false)
     {
         TFile * delayCorrectionsFile = TFile::Open(filename.c_str(),"READ");
 
         if (delayCorrectionsFile)
         {
             std::cout<<"Getting corrections."<<std::endl;
-            for (int ichan=0;ichan<numChans;ichan++)
+            for (uint ichan=0;ichan<numScopeChans;ichan++)
             {
                 TProfile2D * this_chan = (TProfile2D *) delayCorrectionsFile->Get(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
                 v_timeDiff_coarse_vs_xy_channel.emplace_back(this_chan);

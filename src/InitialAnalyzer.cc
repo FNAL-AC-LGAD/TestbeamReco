@@ -63,9 +63,12 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
     }
 
     //Time corrections need to match dimension of LP2_X branches, NOT the LGAD coordinates.
-    for(uint i=0;i<=7;i++)
+    const auto& amp = tr.getVec<float>("amp");
+    uint n_scope_channels = amp.size();
+    std::cout<<"I found "<<n_scope_channels<<" channels."<<std::endl;
+    for(uint i=0;i<n_scope_channels;i++)
     {
-            utility::makeHisto(my_3d_histos,Form("timeDiff_coarse_vs_xy_channel0%i",i), "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+        utility::makeHisto(my_3d_histos,Form("timeDiff_coarse_vs_xy_channel0%i",i), "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     }
 
     std::cout<<"Finished making histos"<<std::endl;
@@ -101,6 +104,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                        
         //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
         const auto& amp = tr.getVec<float>("amp");
+        uint n_scope_channels = amp.size();
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
 
@@ -162,7 +166,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
             }
             rowIndex++;
         }
-        for(uint i=0;i<=7;i++)
+        for(uint i=0;i<n_scope_channels;i++)
         {
             const auto& rawAmpChannel = amp[i];
             bool goodNoiseAmp = rawAmpChannel>noiseAmpThreshold;

@@ -58,6 +58,7 @@ public:
     int minPixHits = 0;
     int minStripHits = 7;
     int CFD_threshold = 20;
+    std::vector<std::string> CFD_list = {"5","10","15","20","25","30","35","40","50","60"};
     std::vector<double> positionRecoPar = {-1};
     std::vector<double> positionRecoParRight = {-1};
     std::vector<double> positionRecoParLeft = {-1};

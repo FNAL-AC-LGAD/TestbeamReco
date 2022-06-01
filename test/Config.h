@@ -20,7 +20,7 @@ private:
     {
         for(const auto& module : modules)
         {
-            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( tr.getVar<std::string>("outpath")+"/delayCorrections.root", tr.getVar<int>("numLGADchannels"));
+            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( tr.getVar<std::string>("outpath")+"/delayCorrections.root", tr.getVec<float>("amp").size());
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
             else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>();
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
@@ -45,6 +45,7 @@ private:
         tr.registerDerivedVar("lowGoodStripIndex", g.lowGoodStripIndex);
         tr.registerDerivedVar("highGoodStripIndex", g.highGoodStripIndex);
         tr.registerDerivedVar("CFD_threshold", g.CFD_threshold);
+        tr.registerDerivedVar("CFD_list", g.CFD_list);
         tr.registerDerivedVar("sensorEdges", g.sensorEdges);
         tr.registerDerivedVar("alpha", g.alpha);
         tr.registerDerivedVar("beta",  g.beta);
