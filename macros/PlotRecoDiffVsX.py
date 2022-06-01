@@ -4,6 +4,7 @@ import os
 from stripBox import getStripBox
 import optparse
 import myStyle
+import math
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -89,10 +90,14 @@ all_histoInfos = [
 #### histograms for expected resolution
 noise12_vs_x = inputfile.Get("BaselineRMS12_vs_x")
 amp12_vs_x = inputfile.Get("Amp12_vs_x")
+amp1_vs_x = inputfile.Get("Amp1_vs_x")
+amp2_vs_x = inputfile.Get("Amp2_vs_x")
 dXdFrac_vs_x = inputfile.Get("dXdFrac_vs_Xtrack")
 
 mean_noise12_vs_x = noise12_vs_x.ProfileX()
 mean_amp12_vs_x = amp12_vs_x.ProfileX()
+mean_amp1_vs_x = amp1_vs_x.ProfileX()
+mean_amp2_vs_x = amp2_vs_x.ProfileX()
 mean_dXFrac_vs_x = dXdFrac_vs_x.ProfileX()
 
 nbinsx = mean_amp12_vs_x.GetNbinsX()
@@ -102,7 +107,7 @@ high_x = mean_amp12_vs_x.GetBinLowEdge(121)- all_histoInfos[0].shift()
 expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
 for ibin in range(expected_res_vs_x.GetNbinsX()+1):
     if mean_amp12_vs_x.GetBinContent(ibin)>0:
-        expected_res = abs(0.5*1000*mean_dXFrac_vs_x.GetBinContent(ibin) * mean_noise12_vs_x.GetBinContent(ibin) /  mean_amp12_vs_x.GetBinContent(ibin))
+        expected_res = math.sqrt(10.**2 + pow(abs(1000*mean_dXFrac_vs_x.GetBinContent(ibin) * (0.5*mean_noise12_vs_x.GetBinContent(ibin)) * pow(pow(mean_amp1_vs_x.GetBinContent(ibin),2)+pow(mean_amp2_vs_x.GetBinContent(ibin),2),0.5) /  (mean_amp12_vs_x.GetBinContent(ibin))**2),2))
     else:
         expected_res=0
 
