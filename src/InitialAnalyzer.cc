@@ -56,11 +56,18 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
             const auto& r = std::to_string(rowIndex);
             const auto& s = std::to_string(i);
             utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"timeDiff_coarse_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            // utility::makeHisto(my_3d_histos,"timeDiff_coarse_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_3d_histos,"timeDiff_fine_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
         }
         rowIndex++;
     }
+
+    //Time corrections need to match dimension of LP2_X branches, NOT the LGAD coordinates.
+    for(uint i=0;i<=7;i++)
+    {
+            utility::makeHisto(my_3d_histos,Form("timeDiff_coarse_vs_xy_channel0%i",i), "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    }
+
     std::cout<<"Finished making histos"<<std::endl;
 }
 
@@ -93,6 +100,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         if( tr.getEvtNum() % 100000 == 0 ) printf( " Event %i\n", tr.getEvtNum() );
                        
         //Can add some fun code here....try not to calculate too much in this file: use modules to do the heavy caclulations
+        const auto& amp = tr.getVec<float>("amp");
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
 
@@ -148,12 +156,19 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 double timeTracker = timeLGADTracker[rowIndex][i];
 
                 utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["amplitude_vs_xy_channel"+r+s], x,y,rawAmpChannel);
-                utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["timeDiff_coarse_vs_xy_channel"+r+s], x,y,time-photekTime);
+                // utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["timeDiff_coarse_vs_xy_channel"+r+s], x,y,time-photekTime);
                 utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["timeDiff_fine_vs_xy_channel"+r+s], x,y,timeTracker-photekTime);
 
             }
             rowIndex++;
         }
+        for(uint i=0;i<=7;i++)
+        {
+            const auto& rawAmpChannel = amp[i];
+            bool goodNoiseAmp = rawAmpChannel>noiseAmpThreshold;
+            utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos[Form("timeDiff_coarse_vs_xy_channel0%i",i)], x,y,corrTime[i]-photekTime);
+        }
+
 
     } //event loop
 }
