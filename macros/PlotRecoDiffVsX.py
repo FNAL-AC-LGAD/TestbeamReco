@@ -85,6 +85,30 @@ all_histoInfos = [
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
 
+
+#### histograms for expected resolution
+noise12_vs_x = inputfile.Get("BaselineRMS12_vs_x")
+amp12_vs_x = inputfile.Get("Amp12_vs_x")
+dXdFrac_vs_x = inputfile.Get("dXdFrac_vs_Xtrack")
+
+mean_noise12_vs_x = noise12_vs_x.ProfileX()
+mean_amp12_vs_x = amp12_vs_x.ProfileX()
+mean_dXFrac_vs_x = dXdFrac_vs_x.ProfileX()
+
+nbinsx = mean_amp12_vs_x.GetNbinsX()
+low_x = mean_amp12_vs_x.GetBinLowEdge(1) - all_histoInfos[0].shift()
+high_x = mean_amp12_vs_x.GetBinLowEdge(121)- all_histoInfos[0].shift()
+
+expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
+for ibin in range(expected_res_vs_x.GetNbinsX()+1):
+    if mean_amp12_vs_x.GetBinContent(ibin)>0:
+        expected_res = abs(0.5*1000*mean_dXFrac_vs_x.GetBinContent(ibin) * mean_noise12_vs_x.GetBinContent(ibin) /  mean_amp12_vs_x.GetBinContent(ibin))
+    else:
+        expected_res=0
+
+    print("Bin %i, res %0.2f"%(ibin,expected_res))
+    expected_res_vs_x.SetBinContent(ibin,expected_res)
+
 canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
 # gPad.SetTicks(1,1)
@@ -158,6 +182,8 @@ for i in range(0, nXBins+1):
         else:
             value = 0.0
             error = 0.0
+            if "track_twoStrips" in info.outHistoName:
+                expected_res_vs_x.SetBinContent(i,0)
 
         # Removing telescope contribution
         #if value>6.0:
@@ -217,6 +243,8 @@ for info in all_histoInfos:
     # info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
 
+
+
     legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.2,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.1)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
@@ -225,6 +253,11 @@ for info in all_histoInfos:
     #legend.SetFillStyle(0)
     legend.AddEntry(default_res, "Binary readout","l")
     legend.AddEntry(info.th1, "Two-strip reconstruction")
+
+    if "track_twoStrips" in info.outHistoName:
+        expected_res_vs_x.Draw("hist same")
+        legend.AddEntry(expected_res_vs_x,"Expected resolution")
+
     legend.Draw();
 
     myStyle.BeamInfo()

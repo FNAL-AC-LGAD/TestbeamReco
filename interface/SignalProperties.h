@@ -17,6 +17,7 @@ private:
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");       
         const auto& isPadSensor = tr.getVar<bool>("isPadSensor"); 
         const auto& corrAmp = tr.getVec<double>("corrAmp");
+        const auto& baselineRMS = tr.getVec<std::vector<float>>("baselineRMS");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
         const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
         const auto& stripCenterYPosition = tr.getVar<std::vector<double>>("stripCenterYPosition");
@@ -152,6 +153,10 @@ private:
         double AmpLeftBot = 0; 
         double AmpRightTop = 0;
         double AmpRightBot = 0;
+        double Noise1 = stayPositive(baselineRMS[amp1Indexes.first][amp1Indexes.second]);
+        double Noise2 = stayPositive(baselineRMS[amp2Indexes.first][amp2Indexes.second]);
+
+
         if (isPadSensor)
         {
             AmpLeftTop = stayPositive(ampLGAD[0][0]);
@@ -164,6 +169,7 @@ private:
         double AmpTopOverAmpTopandBotLeft = stayPositive(AmpLeftTop/ (AmpLeftTop + AmpLeftBot));
         double AmpTopOverAmpTopandBotRight = stayPositive(AmpRightTop/ (AmpRightTop + AmpRightBot));
         double Amp12 = stayPositive(Amp1 + Amp2);
+        double Noise12 = stayPositive(Noise1 + Noise2);
         double Amp123 = stayPositive(Amp1 + Amp2 + Amp3);
         double Amp1Top = stayPositive(Amp1 + AmpTop);
         double Amp1Bot = stayPositive(Amp1 + AmpBot);
@@ -245,6 +251,7 @@ private:
         tr.registerDerivedVar("Amp1OverAmp1andBot", Amp1OverAmp1andBot);
         tr.registerDerivedVar("Amp1OverAmp1andAdjPad", Amp1OverAmp1andAdjPad);
         tr.registerDerivedVar("Amp12", Amp12);
+        tr.registerDerivedVar("Noise12", Noise12);
         tr.registerDerivedVar("Amp123", Amp123);
     }
 public:
