@@ -22,7 +22,7 @@ private:
         {
             if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( tr.getVar<std::string>("outpath")+"/delayCorrections.root", tr.getVec<float>("amp").size());
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
-            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>();
+            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>(tr.getVar<std::string>("outpath")+"/EIC_W1_1cm_255V_RecoAnalyzer.root");
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
         }
     }
@@ -275,8 +275,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "SpatialReconstruction",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -298,8 +298,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "SpatialReconstruction",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -317,8 +317,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "SpatialReconstruction",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -327,8 +327,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "SpatialReconstruction",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }

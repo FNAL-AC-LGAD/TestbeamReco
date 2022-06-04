@@ -35,8 +35,8 @@ th3_charge_vs_xy = inputfile.Get("charge_vs_xy")
 th3_risetime_vs_xy = inputfile.Get("risetime_vs_xy")
 th3_ampChargeRatio_vs_xy = inputfile.Get("ampChargeRatio_vs_xy")
 th3_timeDiff_vs_xy = inputfile.Get("timeDiff_vs_xy")
-
-
+th3_deltaX_vs_xy = inputfile.Get("deltaX_vs_Xtrack_vs_Ytrack")
+th3_deltaY_vs_xy = inputfile.Get("deltaY_vs_Xtrack_vs_Ytrack")
 
 
 outputfile=TFile("%splotsSimpleMapsvsXY.root"%outdir,"RECREATE")
@@ -76,5 +76,7 @@ printProjectionColZ(th3_charge_vs_xy,"Mean charge [fC]","charge",2,30)
 printProjectionColZ(th3_risetime_vs_xy,"Mean risetime [ps]","risetime",400,700)
 printProjectionColZ(th3_ampChargeRatio_vs_xy,"Mean amplitude/charge ratio","ampChargeRatio",1.5,6.5)
 printProjectionColZ(th3_timeDiff_vs_xy,"Mean arrival time (w.r.t MCP) [ps]","meanTime",-200,100)
+printProjectionColZ(th3_deltaX_vs_xy,"deltaX","deltaX",-0.1,0.1)
+printProjectionColZ(th3_deltaY_vs_xy,"deltaY","deltaY",-5,5)
 
 outputfile.Close()

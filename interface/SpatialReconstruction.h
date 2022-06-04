@@ -6,6 +6,8 @@
 class SpatialReconstruction
 {
 private:
+    std::shared_ptr<TProfile2D> y_timeDiff_ampFrac;
+
     double getDX(const std::vector<double>& coeffs, const double x, const double shift = 0.0)
     {
         double dX = 0.0;
@@ -47,6 +49,10 @@ private:
         const auto& pitch = tr.getVar<double>("pitch");
         const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
+        const auto& deltaT = tr.getVar<double>("deltaT");
+        //std::vector<int> parity = {1,-1,1,-1,1,-1,1,-1};
+        std::vector<int> parity = {-1,1,-1,1,-1,1,-1,1};
+        const auto& parityLGAD = utility::remapToLGADgeometry(tr, parity, "parityLGAD");
 
         auto& goodNeighbour = tr.createDerivedVar<bool>("goodNeighbour");
         goodNeighbour = abs(maxAmpIndex - Amp2Index)==1 && ampLGAD[0][Amp2Index]>noiseAmpThreshold;
@@ -75,19 +81,32 @@ private:
             dXdFrac = getDXDerivative(positionRecoPar, Amp1OverAmp1and2, 0.5);
 
             //Define basic y reco
-            double t1 = timeLGADTracker[0][maxAmpIndex];
-            double t2 = timeLGADTracker[0][Amp2Index];
             double vX =  2.0;
             double vY = 50.0;
             double vR = vY/vX;
             double dXSign = (x2>x1) ? dX : -dX;
-            double dT = t1 - t2;
-            double yBasic = vR*(pitch - 2*dXSign) + vY*dT;
+            double yBasic = vR*(pitch - 2*dXSign) + vY*deltaT;
             //double yBasic = vR*(pitch - 2*x_reco_basic) + vY*dT;
             //double yBasic = vR*pitch*(2*Amp1OverAmp1and2 - 1.0) + vY*dT;
-            y_reco_basic = 0.5*yBasic;
+            y_reco_basic = 0.5*parityLGAD[0][maxAmpIndex]*yBasic;
 
-	    } //if enabled position reconstruction
+            //use lookup table for y reco
+            if(y_timeDiff_ampFrac)
+            {
+                int ibin = y_timeDiff_ampFrac->FindBin(Amp1OverAmp1and2,deltaT);
+                int xbin = utility::findBin(y_timeDiff_ampFrac, Amp1OverAmp1and2, "X");
+                int ybin = utility::findBin(y_timeDiff_ampFrac, deltaT, "Y");
+                y_reco = y_timeDiff_ampFrac->GetBinContent(ibin);
+
+                if(y_reco == 0.0 && xbin > 0 && ybin > 0)
+                {
+                    y_reco = y_timeDiff_ampFrac->Interpolate(Amp1OverAmp1and2,deltaT);
+                }
+
+                y_reco *= parityLGAD[0][maxAmpIndex];
+            }
+
+        } //if enabled position reconstruction
         
         const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
         const auto& positionRecoParLeft = tr.getVar<std::vector<double>>("positionRecoParLeft");
@@ -118,10 +137,8 @@ private:
             auto dYLeft = getDX(positionRecoParLeft, AmpTopOverAmpTopandBotLeft);
             auto dY = (amp1Indexes.second == 0) ? dYLeft : dYRight;
             
-            y_reco = dY + y1;
-                                
-             
-	    } //if enabled position reconstruction
+            y_reco = dY + y1;                                            
+        } //if enabled position reconstruction
 
         tr.registerDerivedVar("x_reco", x_reco);
         tr.registerDerivedVar("x_reco_basic", x_reco_basic);
@@ -130,9 +147,18 @@ private:
         tr.registerDerivedVar("y_reco_basic", y_reco_basic);
     }
 public:
-    SpatialReconstruction()
+    SpatialReconstruction(const std::string& filename) : y_timeDiff_ampFrac(nullptr)
     {
         std::cout<<"Running Spatial Reconstruction Module"<<std::endl;
+
+        TFile* yRecoFile = TFile::Open(filename.c_str(),"READ");
+        
+        if(yRecoFile)
+        {
+            std::cout<<"Getting y reco file"<<std::endl;
+            y_timeDiff_ampFrac.reset((TProfile2D*)yRecoFile->Get("y_vs_Amp1OverAmp1and2_deltaT_prof"));
+        }
+
     }
 
     void operator()(NTupleReader& tr)

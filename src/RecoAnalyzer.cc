@@ -72,6 +72,7 @@ void RecoAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector<in
             }*/
 
             //Define 3D histograms
+            utility::makeHisto(my_2d_prof,  "y_vs_Amp1OverAmp1and2_deltaT_profchannel"+r+s, "; Amp_{Max} / Amp_{Max} + Amp_{2}; t_{Max} - t_{2} [ns]; Y [mm]", 50,0.5,1.0, 50,-1,1);
             utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
         }
         rowIndex++;
@@ -121,7 +122,9 @@ void RecoAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector<in
 
 
     //Define 2d prof
-    utility::makeHisto(my_2d_prof,"efficiency_vs_xy_Strip2or5", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);	
+    utility::makeHisto(my_2d_prof,"efficiency_vs_xy_Strip2or5", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);
+    utility::makeHisto(my_2d_prof,"y_vs_Amp1OverAmp1and2_deltaT_prof", "; Amp_{Max} / Amp_{Max} + Amp_{2}; t_{Max} - t_{2} [ns]; Y [mm]", 100,0.0,1.0, 50,-1,1);
+    utility::makeHisto(my_2d_prof,"y_vs_x_deltaT_prof", "; X [mm]; t_{Max} - t_{2} [ns]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 50,-1,1);
     
     //Define 1d prof
     
@@ -179,6 +182,7 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
         const auto& time_real = tr.getVecVec<float>("time");*/
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
+        const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& ntracks_alt = tr.getVar<int>("ntracks_alt");
@@ -206,7 +210,9 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& stripCenterYPositionLGAD = tr.getVec<std::vector<double>>("stripCenterYPositionLGAD");
         const auto& goodNeighbour = tr.getVar<bool>("goodNeighbour");
-        
+        const auto& parityLGAD = tr.getVec<std::vector<int>>("parityLGAD");
+        const auto& deltaT = tr.getVar<double>("deltaT");
+
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
@@ -232,6 +238,7 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
         }
 
         double maxAmp = ampLGAD[amp1Indexes.first][amp1Indexes.second];
+        int parityMax = parityLGAD[amp1Indexes.first][amp1Indexes.second];
         double amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
         double firstEvent = tr.isFirstEvent();
 
@@ -268,6 +275,7 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(firstEvent,                                              my_2d_histos["stripBoxInfoY"+r+s], stripCenterYPositionLGAD[rowIndex][i],stripWidth);
 
                 utility::fillHisto(pass && goodHit,                                         my_3d_histos["amplitude_vs_xy_channel"+r+s], x,y,ampChannel);
+                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_prof["y_vs_Amp1OverAmp1and2_deltaT_profchannel"+r+s], Amp1OverAmp1and2,deltaT, y);
                 utility::fillHisto(goodTrack && goodPhotek,                                 my_2d_prof["efficiency_vs_xy_highThreshold_prof_channel"+r+s], x,y,ampChannel > signalAmpThreshold);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel,                 my_2d_prof["efficiency_vs_xy_highThreshold_prof"], x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && oneStripReco, my_2d_prof["efficiency_vs_xy_highThreshold_oneStrip_prof"], x,y,goodHit);
@@ -316,7 +324,8 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos["amp12_vs_xy"], x,y, Amp12);
 
         utility::fillHisto(goodTrack,                                                                      my_2d_prof["efficiency_vs_xy_Strip2or5"], x,y,goodHitGlobal2and5);
-        
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_prof["y_vs_Amp1OverAmp1and2_deltaT_prof"], Amp1OverAmp1and2, deltaT, parityMax*y);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_prof["y_vs_x_deltaT_prof"], x, deltaT, parityMax*y);
         // Example Fill event selection efficiencies
         my_efficiencies["event_sel_weight"]->SetUseWeightedEvents();
         my_efficiencies["event_sel_weight"]->FillWeighted(true,1.0,0);
