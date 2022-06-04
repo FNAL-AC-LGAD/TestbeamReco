@@ -8,12 +8,14 @@ gStyle.SetOptFit(1011)
 organized_mode=True
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName):
+    def __init__(self, inHistoName, f, outHistoName, zmin, zmax):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
         self.th3 = self.getTH3(f, inHistoName)
         self.th2 = self.getTH2(self.th3, outHistoName)
+        self.zmin = zmin
+        self.zmax = zmax
 
     def getTH3(self, f, name):
         return f.Get(name)        
@@ -24,7 +26,7 @@ class HistoInfo:
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set zmin")
-parser.add_option('-Z','--zmax', dest='zmax', default = 120.0, help="Set zmax")
+parser.add_option('-Z','--zmax', dest='zmax', default = 50.0, help="Set zmax")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
@@ -39,7 +41,9 @@ else:
     inputfile = TFile("../test/myoutputfile.root")   
 
 all_histoInfos = [
-    HistoInfo("deltaX_vs_Xtrack_vs_Ytrack", inputfile, "PositionX_Resolution"),
+    HistoInfo("deltaX_vs_Xtrack_vs_Ytrack", inputfile, "PositionX_Resolution",zmin,zmax),
+    HistoInfo("deltaY_vs_Xtrack_vs_Ytrack", inputfile, "PositionY_Resolution",0.0,3000),
+    HistoInfo("deltaY_vs_Xtrack_vs_Ytrack", inputfile, "PositionY_ResolutionCloserLook",0.0,500),
 ]
 
 canvas = TCanvas("cv","cv",800,800)
@@ -103,8 +107,8 @@ for info in all_histoInfos:
     info.th2.Draw("colz")
     info.th2.SetStats(0)
     info.th2.SetTitle(info.outHistoName)
-    info.th2.SetMinimum(zmin)
-    info.th2.SetMaximum(zmax)
+    info.th2.SetMinimum(info.zmin)
+    info.th2.SetMaximum(info.zmax)
     info.th2.SetLineColor(kBlack)
 
     canvas.SaveAs(outdir+"PosRes_vs_xy_"+info.outHistoName+".gif")

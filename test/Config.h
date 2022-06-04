@@ -18,11 +18,13 @@ class Config
 private:
     void registerModules(NTupleReader& tr, const std::vector<std::string>&& modules) const
     {
+        const auto& outpath = tr.getVar<std::string>("outpath");
+
         for(const auto& module : modules)
         {
-            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( tr.getVar<std::string>("outpath")+"/delayCorrections.root", tr.getVec<float>("amp").size());
+            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( outpath+"/delayCorrections.root", tr.getVec<float>("amp").size());
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
-            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>(tr.getVar<std::string>("outpath")+"/EIC_W1_1cm_255V_RecoAnalyzer.root");
+            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>(outpath+"/HPK_strips_Eb_45um_170V_RecoAnalyzer.root");
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
         }
     }

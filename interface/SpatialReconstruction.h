@@ -45,14 +45,16 @@ private:
         const auto& Amp2Index = tr.getVar<int>("Amp2Index");
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
+        //const auto& x = tr.getVar<double>("x");
         const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
         const auto& pitch = tr.getVar<double>("pitch");
-        const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
         const auto& deltaT = tr.getVar<double>("deltaT");
         //std::vector<int> parity = {1,-1,1,-1,1,-1,1,-1};
         std::vector<int> parity = {-1,1,-1,1,-1,1,-1,1};
         const auto& parityLGAD = utility::remapToLGADgeometry(tr, parity, "parityLGAD");
+        bool goodDeltaY = true;//maxAmpIndex==2 && maxAmpIndex==3;
+        tr.registerDerivedVar("goodDeltaY", goodDeltaY);
 
         auto& goodNeighbour = tr.createDerivedVar<bool>("goodNeighbour");
         goodNeighbour = abs(maxAmpIndex - Amp2Index)==1 && ampLGAD[0][Amp2Index]>noiseAmpThreshold;
@@ -95,12 +97,15 @@ private:
             {
                 int ibin = y_timeDiff_ampFrac->FindBin(Amp1OverAmp1and2,deltaT);
                 int xbin = utility::findBin(y_timeDiff_ampFrac, Amp1OverAmp1and2, "X");
+                //int ibin = y_timeDiff_ampFrac->FindBin(x,deltaT);
+                //int xbin = utility::findBin(y_timeDiff_ampFrac, x, "X");
                 int ybin = utility::findBin(y_timeDiff_ampFrac, deltaT, "Y");
                 y_reco = y_timeDiff_ampFrac->GetBinContent(ibin);
 
                 if(y_reco == 0.0 && xbin > 0 && ybin > 0)
                 {
                     y_reco = y_timeDiff_ampFrac->Interpolate(Amp1OverAmp1and2,deltaT);
+                    //y_reco = y_timeDiff_ampFrac->Interpolate(x,deltaT);
                 }
 
                 y_reco *= parityLGAD[0][maxAmpIndex];
@@ -155,8 +160,9 @@ public:
         
         if(yRecoFile)
         {
-            std::cout<<"Getting y reco file"<<std::endl;
+            std::cout<<"Getting y reco file: "<<yRecoFile<<std::endl;
             y_timeDiff_ampFrac.reset((TProfile2D*)yRecoFile->Get("y_vs_Amp1OverAmp1and2_deltaT_prof"));
+            //y_timeDiff_ampFrac.reset((TProfile2D*)yRecoFile->Get("y_vs_x_deltaT_prof"));
         }
 
     }

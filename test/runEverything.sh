@@ -13,6 +13,11 @@ python PlotTimeMeanVsXY.py  -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V --zmin -0.2
 python PlotRecoDiffVsXY.py  -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V --zmin 0.0 --zmax 100.0
 
 cd ../test
+./MyAnalysis -A InitialAnalyzer -D HPK_strips_Eb_45um_170V
+cd ../macros
+python FindDelayCorrections.py -D HPK_strips_Eb_45um_170V
+cd ../test
+./MyAnalysis -A RecoAnalyzer -D HPK_strips_Eb_45um_170V
 ./MyAnalysis -A Analyze -D HPK_strips_Eb_45um_170V
 cd ../macros
 python DoPositionRecoFit.py -D HPK_strips_Eb_45um_170V --xmax 0.62 --pitch 80 --fitOrder 3 
@@ -26,6 +31,7 @@ python PlotAmplitudeVsXY.py -D HPK_strips_Eb_45um_170V --zmin 0.0 --zmax 80.0
 python PlotTimeDiffVsXY.py  -D HPK_strips_Eb_45um_170V --zmin 20.0 --zmax 130.0
 python PlotTimeMeanVsXY.py  -D HPK_strips_Eb_45um_170V --zmin -0.2 --zmax 0.2
 python PlotRecoDiffVsXY.py  -D HPK_strips_Eb_45um_170V --zmin 0.0 --zmax 30.0
+python PlotRecoDiffVsY.py   -D HPK_strips_Eb_45um_170V -b 170 --xlength 10.0 --ylength 5000.0
 
 cd ../test
 ./MyAnalysis -A Analyze -D BNL2021_2022_medium_285V
@@ -47,6 +53,7 @@ cd ../test
 cd ../macros
 python FindDelayCorrections.py -D EIC_W1_1cm_255V
 cd ../test
+./MyAnalysis -A RecoAnalyzer -D EIC_W1_1cm_255V
 ./MyAnalysis -A Analyze -D EIC_W1_1cm_255V
 cd ../macros
 python DoPositionRecoFit.py -D EIC_W1_1cm_255V --xmax 0.8 --pitch 500 --fitOrder 7 
