@@ -24,7 +24,7 @@ private:
         {
             if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( outpath+"/delayCorrections.root", tr.getVec<float>("amp").size());
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
-            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>(outpath+"/HPK_strips_Eb_45um_170V_RecoAnalyzer.root");
+            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>(outpath+"/yRecoHistos.root");
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
         }
     }

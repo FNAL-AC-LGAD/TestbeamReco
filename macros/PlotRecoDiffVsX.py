@@ -170,11 +170,11 @@ for i in range(0, nXBins+1):
                 error = 1000.0*mySigmaError
             
                 ##For Debugging
-                if (debugMode):
-                    tmpHist.Draw("hist")
-                    fit.Draw("same")
-                    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
-                    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
+                #if (debugMode):
+                #    tmpHist.Draw("hist")
+                #    fit.Draw("same")
+                #    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
+                #    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
             else:
                 value *= 1000.0
                 error *= 1000.0
