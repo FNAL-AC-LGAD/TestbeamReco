@@ -18,11 +18,13 @@ class Config
 private:
     void registerModules(NTupleReader& tr, const std::vector<std::string>&& modules) const
     {
+        const auto& outpath = tr.getVar<std::string>("outpath");
+
         for(const auto& module : modules)
         {
-            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( tr.getVar<std::string>("outpath")+"/delayCorrections.root", tr.getVec<float>("amp").size());
+            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( outpath+"/delayCorrections.root", tr.getVec<float>("amp").size());
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
-            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>();
+            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>(outpath+"/yRecoHistos.root");
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
         }
     }
@@ -275,8 +277,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "SpatialReconstruction",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -298,8 +300,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "SpatialReconstruction",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -317,8 +319,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "SpatialReconstruction",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -327,8 +329,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "SpatialReconstruction",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }
