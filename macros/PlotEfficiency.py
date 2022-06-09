@@ -161,7 +161,7 @@ if hasCh6: legend.AddEntry(efficiency_vs_x_highThreshold_channel06, "Strip 7")
 legend.Draw();
 
 legend2 = TLegend(myStyle.GetPadCenter()-0.2,1-myStyle.GetMargin()-0.01-0.24,myStyle.GetPadCenter()+0.2,1-myStyle.GetMargin()-0.01-0.16);
-legend2.AddEntry(efficiency_vs_x_highThreshold_global, "At least two strips")
+legend2.AddEntry(efficiency_vs_x_highThreshold_global, "Overall")
 legend2.Draw();
 
 myStyle.BeamInfo()

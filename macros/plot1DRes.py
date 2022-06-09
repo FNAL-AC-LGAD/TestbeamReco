@@ -84,7 +84,8 @@ else:
 
 channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
 
-hists = [('deltaX','deltaX',"tracker"), ("timeDiff","time","photek"), ("weighted2_timeDiff","weighted2Time","photek")]
+hists = [('deltaX','deltaX',"tracker"), ('deltaX_oneStrip','deltaX_oneStrip',"tracker"), ('deltaX_twoStrips','deltaX_twoStrips',"tracker"),
+        ("timeDiff","time","photek"), ("weighted2_timeDiff","weighted2Time","photek")]
 if options.plotAll:
         hists += list(('weighted_timeDiff_channel{0}{1}'.format(t[0],t[1]),'weightedTime','photek') for t in channelMap)
         hists += list(('timeDiff_channel{0}{1}'.format(t[0],t[1]),'time','photek') for t in channelMap)

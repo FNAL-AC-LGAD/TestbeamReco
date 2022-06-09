@@ -102,7 +102,8 @@ mean_dXFrac_vs_x = dXdFrac_vs_x.ProfileX()
 
 nbinsx = mean_amp12_vs_x.GetNbinsX()
 low_x = mean_amp12_vs_x.GetBinLowEdge(1) - all_histoInfos[0].shift()
-high_x = mean_amp12_vs_x.GetBinLowEdge(121)- all_histoInfos[0].shift()
+# high_x = mean_amp12_vs_x.GetBinLowEdge(121)- all_histoInfos[0].shift()
+high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx+1) - all_histoInfos[0].shift()
 
 expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
 for ibin in range(expected_res_vs_x.GetNbinsX()+1):
@@ -170,11 +171,11 @@ for i in range(0, nXBins+1):
                 error = 1000.0*mySigmaError
             
                 ##For Debugging
-                #if (debugMode):
-                #    tmpHist.Draw("hist")
-                #    fit.Draw("same")
-                #    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
-                #    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
+                if (debugMode):
+                   tmpHist.Draw("hist")
+                   fit.Draw("same")
+                   canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
+                   print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
             else:
                 value *= 1000.0
                 error *= 1000.0
@@ -256,12 +257,18 @@ for info in all_histoInfos:
     # legend.SetTextFont(myStyle.GetFont())
     # legend.SetTextSize(myStyle.GetSize())
     #legend.SetFillStyle(0)
-    legend.AddEntry(default_res, "Binary readout","l")
-    legend.AddEntry(info.th1, "Two-strip reconstruction")
 
-    if "track_twoStrips" in info.outHistoName:
+    legend.AddEntry(default_res, "Default resolution","l")
+
+    if ('oneStrip' in info.outHistoName):
+        legend.AddEntry(info.th1, "One strip reconstruction")
+    elif ('twoStrips' in info.outHistoName):
+        legend.AddEntry(info.th1, "Two strips reconstruction")
         expected_res_vs_x.Draw("hist same")
         legend.AddEntry(expected_res_vs_x,"Expected resolution")
+    else:
+        legend.AddEntry(info.th1, "Full reconstruction")
+        
 
     legend.Draw();
 
