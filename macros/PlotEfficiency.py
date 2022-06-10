@@ -25,7 +25,9 @@ if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
-    inputfile = TFile("../test/myoutputfile.root")   
+    inputfile = TFile("../test/myoutputfile.root")
+
+outdir = myStyle.GetPlotsDir(outdir, "Eff/")
 
 colors = myStyle.GetColors()
 

@@ -65,6 +65,8 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")
 
+outdir = myStyle.GetPlotsDir(outdir, "Res/")
+
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
@@ -124,16 +126,8 @@ gStyle.SetOptStat(0)
 print("Finished setting up langaus fit class")
 
 if debugMode:
-    outdir_q = os.path.join(outdir,"q_res0/")
-    if not os.path.exists(outdir_q):
-            print(outdir_q)
-            os.mkdir(outdir_q)
-    else:
-            i = 1
-            while(os.path.exists(outdir_q)):
-                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
-                    i+=1
-            os.mkdir(outdir_q)
+    outdir_q = myStyle.CreateFolder(outdir, "q_res0/")
+    
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 #loop over X bins

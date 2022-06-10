@@ -1,4 +1,5 @@
 import ROOT
+import os
 
 ## Define global variables
 marg=0.05
@@ -6,10 +7,36 @@ font=43 # Helvetica
 # tsize=32
 tsize=38 #35
 
+### Paths and directories' functions
 def getOutputDir(dataset):
     outdir = "../output/%s/" % dataset
     return outdir
 
+def CreateFolder(outdir, title, overwrite = False):
+    outdir2 = os.path.join(outdir,title)
+
+    if overwrite:
+        os.mkdir(outdir2)
+    else:
+        if not os.path.exists(outdir2):
+                os.mkdir(outdir2)
+        else:
+            i = 1
+            while(os.path.exists(outdir2)):
+                    outdir2 = outdir2[0:-2] + str(i) + outdir2[-1]
+                    i+=1
+            os.mkdir(outdir2)
+    print(outdir2,"created.")
+    return outdir2
+
+def GetPlotsDir(outdir, macro_title):
+    outdir_tmp = os.path.join(outdir, macro_title)
+    if not (os.path.exists(outdir_tmp)):
+        outdir_tmp = CreateFolder(outdir, macro_title, True)
+
+    return outdir_tmp
+
+### Style functions
 def ForceStyle():
     ## Defining Style
     ROOT.gStyle.SetPadTopMargin(marg)    #0.05
@@ -69,30 +96,6 @@ def SensorInfo(sensor="Name", bias_voltage="X", write_bv=True,adjustleft=0):
 def SensorInfoSmart(dataset):
     sensor ="Not defined"
     bias_voltage = "X"
-
-    # if dataset=="EIC_W1_1cm_255V":
-    #     sensor = "EIC W1 1 cm, 300 um gaps"
-    #     bias_voltage = "255"
-
-    # if dataset=="EIC_W1_0p5cm_500um_300um_gap_1_7_240V":
-    #     sensor = "EIC W1 0.5 cm, 300 um gaps (1_7)"
-    #     bias_voltage = "240"
-
-    # if dataset=="EIC_W1_0p5cm_500um_300um_gap_1_4_245V":
-    #     sensor = "EIC W1 0.5 cm, 300 um gaps (1_4)"
-    #     bias_voltage = "245"
-
-    # if dataset=="EIC_W1_2p5cm_UCSC_330V":
-    #     sensor = "EIC W1 2.5 cm, 300 um gaps, UCSC"
-    #     bias_voltage = "330"
-
-    # if dataset=="EIC_W2_1cm_500um_400um_gap_220V" or dataset=="EIC_W2_1cm_500um_400um_gap_220V_628":
-    #     sensor = "EIC W2 1 cm, 400 um gaps"
-    #     bias_voltage ="220"
-
-    # if dataset=="EIC_W1_2p5cm_215V":
-    #     sensor = "EIC W1 2.5 cm, 300 um gaps"
-    #     bias_voltage = "215"
 
     if sensorsGeom2022[dataset]:
         sensor = sensorsGeom2022[dataset]['sensor']

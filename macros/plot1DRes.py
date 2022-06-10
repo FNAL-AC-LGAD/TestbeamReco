@@ -4,18 +4,34 @@ import myStyle
 
 ROOT.gROOT.SetBatch(True)
 
+myStyle.ForceStyle()
 organized_mode=True
 
+ROOT.gStyle.SetOptFit(1)
+ROOT.gStyle.SetPadRightMargin(2*myStyle.GetMargin())
+ROOT.gStyle.SetTextSize(myStyle.GetSize()-5)
+ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"x")
+ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"y")
+ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"z")
+ROOT.gStyle.SetHistLineWidth(2)
+ROOT.gROOT.ForceStyle()
+
 def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange=(0,1), fmin=1, fmax=1):
-        ROOT.gStyle.SetOptFit(1)
+        # ROOT.gStyle.SetOptFit(1)
         c = ROOT.TCanvas("c","c",1000,1000)
-        ROOT.gPad.SetLeftMargin(0.12)
-        ROOT.gPad.SetRightMargin(0.15)
-        ROOT.gPad.SetTopMargin(0.08)
-        ROOT.gPad.SetBottomMargin(0.12)
+        # ROOT.gPad.SetLeftMargin(0.12)
+        # ROOT.gPad.SetRightMargin(0.15)
+        # ROOT.gPad.SetTopMargin(0.08)
+        # ROOT.gPad.SetBottomMargin(0.12)
+        # ROOT.gStyle.SetPadRightMargin(2*myStyle.GetMargin())
+        # ROOT.gStyle.SetTextSize(myStyle.GetSize()-5)
+        # ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"x")
+        # ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"y")
+        # ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"z")
         ROOT.gPad.SetTicks(1,1)
         ROOT.TH1.SetDefaultSumw2()
         #ROOT.gPad.SetLogy()
+        # ROOT.gROOT.ForceStyle()
 
         h = hists[0]
         h.Rebin(2)
@@ -80,7 +96,9 @@ if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
     inputfile = ROOT.TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
-    inputfile = ROOT.TFile("../test/myoutputfile.root")   
+    inputfile = ROOT.TFile("../test/myoutputfile.root")
+
+outdir = myStyle.GetPlotsDir(outdir, "1DRes/")
 
 channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
 
