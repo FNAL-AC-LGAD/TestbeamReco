@@ -28,11 +28,13 @@ parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-z','--zmin', dest='zmin', default =   -50.0, help="Set zmin")
 parser.add_option('-Z','--zmax', dest='zmax', default = 150.0, help="Set zmax")
+parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 
 options, args = parser.parse_args()
 dataset = options.Dataset
 zmin = float(options.zmin)
 zmax = float(options.zmax)
+debugMode = options.debugMode
 
 outdir=""
 if organized_mode: 
@@ -42,17 +44,18 @@ else:
     inputfile = TFile("../test/myoutputfile.root")   
 
 all_histoInfos = [
-    HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
-    HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
-    HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
-    HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
-    HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
-    HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
-    HistoInfo("timeDiff_vs_xy_channel06",inputfile, "channel_7"),
+    #HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
+    #HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
+    #HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
+    #HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
+    #HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
+    #HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
+    #HistoInfo("timeDiff_vs_xy_channel06",inputfile, "channel_7"),
     HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
-    HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
-    HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
-    HistoInfo("weighted2_timeDiff_vs_xy", inputfile, "weighted2_time_diff"),
+    HistoInfo("timeDiffTracker_vs_xy", inputfile, "timeDiffTracker"),
+    #HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
+    #HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
+    HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_timeDiff_tracker"),
 ]
 
 canvas = TCanvas("cv","cv",800,800)
@@ -62,14 +65,33 @@ gPad.SetTopMargin(0.08)
 gPad.SetBottomMargin(0.12)
 gPad.SetTicks(1,1)
 
+
+if debugMode:
+    outdir_q = os.path.join(outdir,"q_resTimeXY/")
+    if not os.path.exists(outdir_q):
+            print(outdir_q)
+            os.mkdir(outdir_q)
+    else:
+            i = 1
+            while(os.path.exists(outdir_q)):
+                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
+                    i+=1
+            os.mkdir(outdir_q)
+
+
+nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
+nYBins = all_histoInfos[0].th2.GetYaxis().GetNbins()
+
+
 #loop over X bins
-for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
-    for j in range(0, all_histoInfos[0].th2.GetYaxis().GetNbins()+1):
+for i in range(0, nXBins+1):
+    for j in range(0, nYBins+1):
         ##For Debugging
         #if not (i==46 and j==5):
         #    continue
         
         for info in all_histoInfos:
+            totalEvents = info.th2.GetEntries()
             tmpHist = info.th3.ProjectionZ("pz",i,i,j,j)
             myMean = tmpHist.GetMean()
             myRMS = tmpHist.GetRMS()
@@ -79,8 +101,15 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             value = myRMS
             error = 0.0
             
+
+            minEvtsCut = totalEvents/(nXBins*(4*nYBins))
+            #minEvtsCut = totalEvents/(nXBins*nYBins)
+            #print(minEvtsCut, totalEvents)
+            if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
+
+
             #Do fit 
-            if(nEvents > 50):
+            if(nEvents > minEvtsCut):
                 #tmpHist.Rebin(4)
                 
                 fit = TF1('fit','gaus',fitlow,fithigh)
@@ -94,6 +123,13 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 error = 0
                 
                 
+                if (debugMode):
+                    tmpHist.Draw("hist")
+                    fit.Draw("same")
+                    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
+                    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
+
+
                 
                 ##For Debugging
                 #tmpHist.Draw("hist")
