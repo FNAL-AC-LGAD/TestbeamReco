@@ -13,19 +13,29 @@ python PlotTimeMeanVsXY.py  -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V --zmin -0.2
 python PlotRecoDiffVsXY.py  -D EIC_W1_0p5cm_500um_300um_gap_1_4_245V --zmin 0.0 --zmax 100.0
 
 cd ../test
+./MyAnalysis -A InitialAnalyzer -D HPK_strips_Eb_45um_170V
+cd ../macros
+python FindDelayCorrections.py -D HPK_strips_Eb_45um_170V
+cd ../test
+./MyAnalysis -A RecoAnalyzer -D HPK_strips_Eb_45um_170V
+cd ../macros
+python FindInputHistos4YReco.py -D HPK_strips_Eb_45um_170V
+cd ../test
 ./MyAnalysis -A Analyze -D HPK_strips_Eb_45um_170V
 cd ../macros
-python DoPositionRecoFit.py -D HPK_strips_Eb_45um_170V --xmax 0.62 --pitch 80 --fitOrder 3 
+python DoPositionRecoFit.py -D HPK_strips_Eb_45um_170V --xmax 0.62 --fitOrder 3 
 python plot1DRes.py         -D HPK_strips_Eb_45um_170V
-python PlotAmplitudeVsX.py  -D HPK_strips_Eb_45um_170V -s HPK_Eb -b 170 --xlength 0.3 --ylength 90.0
-python PlotTimeDiffVsX.py   -D HPK_strips_Eb_45um_170V -s HPK_Eb -b 170 --pitch 80 --xlength 0.3 --ylength 150.0
-python PlotRecoDiffVsX.py   -D HPK_strips_Eb_45um_170V -s HPK_Eb -b 170 --pitch 80 --xlength 0.3 --ylength 40.0
-python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -s HPK_Eb -b 170 --xlength 0.3
+python PlotAmplitudeVsX.py  -D HPK_strips_Eb_45um_170V -b 170 --xlength 0.3 --ylength 90.0
+python PlotTimeDiffVsX.py   -D HPK_strips_Eb_45um_170V -b 170 --pitch 80 --xlength 0.3 --ylength 150.0
+python PlotRecoDiffVsX.py   -D HPK_strips_Eb_45um_170V -b 170 --xlength 0.3 --ylength 40.0
+python PlotRecoDiffVsY.py   -D HPK_strips_Eb_45um_170V -b 170 --xlength 10.0 --ylength 5000.0
+python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -b 170 --xlength 0.3
 python PlotSimpleXYMaps.py  -D HPK_strips_Eb_45um_170V
 python PlotAmplitudeVsXY.py -D HPK_strips_Eb_45um_170V --zmin 0.0 --zmax 80.0
 python PlotTimeDiffVsXY.py  -D HPK_strips_Eb_45um_170V --zmin 20.0 --zmax 130.0
 python PlotTimeMeanVsXY.py  -D HPK_strips_Eb_45um_170V --zmin -0.2 --zmax 0.2
 python PlotRecoDiffVsXY.py  -D HPK_strips_Eb_45um_170V --zmin 0.0 --zmax 30.0
+python PlotRecoDiffVsY.py   -D HPK_strips_Eb_45um_170V -b 170 --xlength 10.0 --ylength 5000.0
 
 cd ../test
 ./MyAnalysis -A Analyze -D BNL2021_2022_medium_285V
@@ -46,6 +56,10 @@ cd ../test
 ./MyAnalysis -A InitialAnalyzer -D EIC_W1_1cm_255V
 cd ../macros
 python FindDelayCorrections.py -D EIC_W1_1cm_255V
+cd ../test
+./MyAnalysis -A RecoAnalyzer -D EIC_W1_1cm_255V
+cd ../macros
+python FindInputHistos4YReco.py -D EIC_W1_1cm_255V
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W1_1cm_255V
 cd ../macros

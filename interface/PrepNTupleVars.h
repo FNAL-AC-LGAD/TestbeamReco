@@ -229,7 +229,7 @@ private:
 
             double tracker_corr=0;
             //Must check that thisTime !=0, because 0 indicates there was no timestamp assigned by TimingDAQ
-            if(thisTime != 0.0 && v_timeDiff_coarse_vs_xy_channel.size()>0 && counter < v_timeDiff_coarse_vs_xy_channel.size())
+            if(thisTime != 0.0 && v_timeDiff_coarse_vs_xy_channel.size() > 0 && counter < v_timeDiff_coarse_vs_xy_channel.size())
             {
                 int ibin = v_timeDiff_coarse_vs_xy_channel[counter]->FindBin(x,y);
                 int xbin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], x, "X");

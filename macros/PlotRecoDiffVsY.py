@@ -52,7 +52,7 @@ class HistoInfo:
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="X axis range [-x, x]") 
-parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Y axis upper limit") 
+parser.add_option('-y','--ylength', dest='ylength', default = 10000.0, help="Y axis upper limit") 
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 options, args = parser.parse_args()
@@ -69,50 +69,23 @@ sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
 bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
-pitch  = sensor_Geometry['pitch']
+length  = sensor_Geometry['length']*1000.0
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
 
 all_histoInfos = [
-    HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "rms_track_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "rms_track_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
+    HistoInfo("deltaY_vs_Ytrack",   inputfile, "track", True,  ylength, "", "Track y position [mm]","Position resolution [#mum]",sensor),
+    HistoInfo("deltaYBasic_vs_Ytrack",   inputfile, "trackBasic", True,  ylength, "", "Track y position [mm]","Position resolution [#mum]",sensor),
+    #HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
+    #HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
+    #HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
+    #HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "rms_track_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
+    #HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "rms_track_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
     # HistoInfo("deltaXmax_vs_Xtrack",   inputfile, "maxtrack", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
 
-
-#### histograms for expected resolution
-noise12_vs_x = inputfile.Get("BaselineRMS12_vs_x")
-amp12_vs_x = inputfile.Get("Amp12_vs_x")
-amp1_vs_x = inputfile.Get("Amp1_vs_x")
-amp2_vs_x = inputfile.Get("Amp2_vs_x")
-dXdFrac_vs_x = inputfile.Get("dXdFrac_vs_Xtrack")
-
-mean_noise12_vs_x = noise12_vs_x.ProfileX()
-mean_amp12_vs_x = amp12_vs_x.ProfileX()
-mean_amp1_vs_x = amp1_vs_x.ProfileX()
-mean_amp2_vs_x = amp2_vs_x.ProfileX()
-mean_dXFrac_vs_x = dXdFrac_vs_x.ProfileX()
-
-nbinsx = mean_amp12_vs_x.GetNbinsX()
-low_x = mean_amp12_vs_x.GetBinLowEdge(1) - all_histoInfos[0].shift()
-high_x = mean_amp12_vs_x.GetBinLowEdge(121)- all_histoInfos[0].shift()
-
-expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
-for ibin in range(expected_res_vs_x.GetNbinsX()+1):
-    if mean_amp12_vs_x.GetBinContent(ibin)>0:
-        expected_res = math.sqrt(10.**2 + pow(abs(1000*mean_dXFrac_vs_x.GetBinContent(ibin) * (0.5*mean_noise12_vs_x.GetBinContent(ibin)) * pow(pow(mean_amp1_vs_x.GetBinContent(ibin),2)+pow(mean_amp2_vs_x.GetBinContent(ibin),2),0.5) /  (mean_amp12_vs_x.GetBinContent(ibin))**2),2))
-    else:
-        expected_res=0
-
-    print("Bin %i, res %0.2f"%(ibin,expected_res))
-    expected_res_vs_x.SetBinContent(ibin,expected_res)
 
 canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
@@ -153,7 +126,7 @@ for i in range(0, nXBins+1):
         value = myRMS
         error = myRMSError
 
-        minEvtsCut = totalEvents/nXBins
+        minEvtsCut = 0.5*totalEvents/nXBins
 
         if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
         #Do fit 
@@ -170,11 +143,11 @@ for i in range(0, nXBins+1):
                 error = 1000.0*mySigmaError
             
                 ##For Debugging
-                #if (debugMode):
-                #    tmpHist.Draw("hist")
-                #    fit.Draw("same")
-                #    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
-                #    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
+                if (debugMode):
+                    tmpHist.Draw("hist")
+                    fit.Draw("same")
+                    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
+                    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
             else:
                 value *= 1000.0
                 error *= 1000.0
@@ -228,15 +201,15 @@ for info in all_histoInfos:
     ymin = info.th1.GetMinimum()
     ymax = info.yMax
 
-    boxes = getStripBox(inputfile,ymin,ymax,False,18,True,info.shift())
-    for box in boxes:
-        box.Draw()
+    #boxes = getStripBox(inputfile,ymin,ymax,False,18,True,info.shift())
+    #for box in boxes:
+    #    box.Draw()
 
     # boxes2 = getStripBox(inputfile,ymin,ymax,True,ROOT.kRed,True,info.shift())
     # for box in boxes2:
     #     box.Draw("same")
 
-    default_res = ROOT.TLine(-xlength,pitch/TMath.Sqrt(12),xlength,pitch/TMath.Sqrt(12))
+    default_res = ROOT.TLine(-xlength,length/TMath.Sqrt(12),xlength,length/TMath.Sqrt(12))
     default_res.SetLineWidth(4)
     default_res.SetLineStyle(9)
     default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
@@ -268,8 +241,8 @@ for info in all_histoInfos:
     myStyle.BeamInfo()
     myStyle.SensorInfo(sensor, bias)
 
-    canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".gif")
-    canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".pdf")
+    canvas.SaveAs(outdir+"PositionRes_vs_y_"+info.outHistoName+".gif")
+    canvas.SaveAs(outdir+"PositionRes_vs_y_"+info.outHistoName+".pdf")
     info.th1.Write()
     htemp.Delete()
 

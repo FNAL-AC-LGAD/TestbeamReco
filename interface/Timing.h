@@ -19,8 +19,12 @@ private:
         const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
         const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
+        const auto& amp2Indexes = tr.getVar<std::pair<int,int>>("amp2Indexes");
         //auto amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
         auto time1 = timeLGAD[amp1Indexes.first][amp1Indexes.second];
+        auto time2 = timeLGAD[amp2Indexes.first][amp2Indexes.second];
+        auto deltaT = time1 - time2;
+        tr.registerDerivedVar("deltaT",deltaT);
 
         //-------------------------------------------------------
         //Code from https://github.com/cmorgoth/AC_LGAD_Timing 
