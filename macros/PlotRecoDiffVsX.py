@@ -266,7 +266,7 @@ for info in all_histoInfos:
 
     legend.Draw();
 
-    myStyle.BeamInfo()
+    # myStyle.BeamInfo()
     myStyle.SensorInfo(sensor, bias)
 
     canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".gif")

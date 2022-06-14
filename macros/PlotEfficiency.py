@@ -166,7 +166,7 @@ legend2 = TLegend(myStyle.GetPadCenter()-0.2,1-myStyle.GetMargin()-0.01-0.24,myS
 legend2.AddEntry(efficiency_vs_x_highThreshold_global, "Overall")
 legend2.Draw();
 
-myStyle.BeamInfo()
+# myStyle.BeamInfo()
 myStyle.SensorInfo(sensor, bias)
 
 htemp.Draw("AXIS same")
