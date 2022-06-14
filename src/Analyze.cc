@@ -525,16 +525,17 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                
                 for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
                 { 
-                if(regionsOfIntrest[k].passROI(x,y))
-                {
-                utility::fillHisto(pass && goodHit,                         my_histos["baselineRMS"+r+s+regionsOfIntrest[k].getName()], noise);
-                utility::fillHisto(pass,                         my_histos["risetime"+r+s+regionsOfIntrest[k].getName()], risetime);
-                utility::fillHisto(pass && goodHit,                         my_histos["charge"+r+s+regionsOfIntrest[k].getName()], charge);
-                utility::fillHisto(pass && goodHit,                         my_histos["ampChargeRatio"+r+s+regionsOfIntrest[k].getName()], ampChargeRatio);
-                utility::fillHisto(pass && goodHit,                         my_histos["slewrate"+r+s+regionsOfIntrest[k].getName()], slewrate);
-                utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos["amplitude_vs_xyROI"], x,y,maxAmp);
+                    if(regionsOfIntrest[k].passROI(x,y))
+                    {
+                        utility::fillHisto(pass && goodHit,                         my_histos["baselineRMS"+r+s+regionsOfIntrest[k].getName()], noise);
+                        utility::fillHisto(pass,                                    my_histos["risetime"+r+s+regionsOfIntrest[k].getName()], risetime);
+                        utility::fillHisto(pass && goodHit,                         my_histos["charge"+r+s+regionsOfIntrest[k].getName()], charge);
+                        utility::fillHisto(pass && goodHit,                         my_histos["ampChargeRatio"+r+s+regionsOfIntrest[k].getName()], ampChargeRatio);
+                        utility::fillHisto(pass && goodHit,                         my_histos["slewrate"+r+s+regionsOfIntrest[k].getName()], slewrate);
+                        utility::fillHisto(pass && goodMaxLGADAmp,                  my_3d_histos["amplitude_vs_xyROI"], x,y,maxAmp);
+                    }
                 }
-                }
+
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted_timeDiff_channel"+r+s], weighted_time-photekTime);
                 // utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted_timeDiff_tracker_channel"+r+s], weighted_time_tracker-photekTime);
                 // utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos["weighted2_timeDiff_tracker_channel"+r+s], weighted2_time_tracker-photekTime);
@@ -634,7 +635,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos["index_diff"], amp1Indexes.second - amp2Indexes.second);
 
-
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_2d_histos["relFracMaxAmp_vs_x"], padx, relFrac[amp1Indexes.first][amp1Indexes.second]);
         utility::fillHisto(pass,                                                                           my_2d_histos["relFracDC_vs_x_channel_top"], x,relFracDC);
         utility::fillHisto(pass,                                                                           my_2d_histos["efficiency_vs_xy_denominator"], x,y);
@@ -668,8 +668,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !oneStripReco,                  my_2d_histos["Amp2_vs_x"], x, amp2);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !oneStripReco,                  my_2d_histos["BaselineRMS12_vs_x"], x, Noise12);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !oneStripReco,                  my_2d_histos["dXdFrac_vs_Xtrack"], x,dXdFrac);
-
-
 
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos["deltaX_vs_Xreco"], x_reco,x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,                     my_2d_histos["deltaY_vs_Ytrack"], y,y_reco-y);
