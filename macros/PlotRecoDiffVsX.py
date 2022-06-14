@@ -65,6 +65,8 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")
 
+outdir = myStyle.GetPlotsDir(outdir, "Res/")
+
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
@@ -104,7 +106,7 @@ mean_dXFrac_vs_x = dXdFrac_vs_x.ProfileX()
 
 nbinsx = mean_amp12_vs_x.GetNbinsX()
 low_x = mean_amp12_vs_x.GetBinLowEdge(1) - all_histoInfos[0].shift()
-high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx)- all_histoInfos[0].shift()
+high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx+1) - all_histoInfos[0].shift()
 
 expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
 for ibin in range(expected_res_vs_x.GetNbinsX()+1):
@@ -125,16 +127,8 @@ gStyle.SetOptStat(0)
 print("Finished setting up langaus fit class")
 
 if debugMode:
-    outdir_q = os.path.join(outdir,"q_res0/")
-    if not os.path.exists(outdir_q):
-            print(outdir_q)
-            os.mkdir(outdir_q)
-    else:
-            i = 1
-            while(os.path.exists(outdir_q)):
-                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
-                    i+=1
-            os.mkdir(outdir_q)
+    outdir_q = myStyle.CreateFolder(outdir, "q_res0/")
+    
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 #loop over X bins
@@ -172,11 +166,11 @@ for i in range(0, nXBins+1):
                 error = 1000.0*mySigmaError
             
                 ##For Debugging
-                #if (debugMode):
-                #    tmpHist.Draw("hist")
-                #    fit.Draw("same")
-                #    canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
-                #    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
+                if (debugMode):
+                   tmpHist.Draw("hist")
+                   fit.Draw("same")
+                   canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
+                   print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
             else:
                 value *= 1000.0
                 error *= 1000.0
@@ -258,16 +252,22 @@ for info in all_histoInfos:
     # legend.SetTextFont(myStyle.GetFont())
     # legend.SetTextSize(myStyle.GetSize())
     #legend.SetFillStyle(0)
-    legend.AddEntry(default_res, "Binary readout","l")
-    legend.AddEntry(info.th1, "Two-strip reconstruction")
 
-    if "track_twoStrips" in info.outHistoName:
+    legend.AddEntry(default_res, "Default resolution","l")
+
+    if ('oneStrip' in info.outHistoName):
+        legend.AddEntry(info.th1, "One strip reconstruction")
+    elif ('twoStrips' in info.outHistoName):
+        legend.AddEntry(info.th1, "Two strips reconstruction")
         expected_res_vs_x.Draw("hist same")
         legend.AddEntry(expected_res_vs_x,"Expected resolution")
+    else:
+        legend.AddEntry(info.th1, "Full reconstruction")
+        
 
     legend.Draw();
 
-    myStyle.BeamInfo()
+    # myStyle.BeamInfo()
     myStyle.SensorInfo(sensor, bias)
 
     canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".gif")
