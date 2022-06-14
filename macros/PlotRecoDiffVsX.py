@@ -78,7 +78,9 @@ debugMode = options.debugMode
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
@@ -104,7 +106,6 @@ mean_dXFrac_vs_x = dXdFrac_vs_x.ProfileX()
 
 nbinsx = mean_amp12_vs_x.GetNbinsX()
 low_x = mean_amp12_vs_x.GetBinLowEdge(1) - all_histoInfos[0].shift()
-# high_x = mean_amp12_vs_x.GetBinLowEdge(121)- all_histoInfos[0].shift()
 high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx+1) - all_histoInfos[0].shift()
 
 expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
@@ -114,7 +115,7 @@ for ibin in range(expected_res_vs_x.GetNbinsX()+1):
     else:
         expected_res=0
 
-    print("Bin %i, res %0.2f"%(ibin,expected_res))
+    #print("Bin %i, res %0.2f"%(ibin,expected_res))
     expected_res_vs_x.SetBinContent(ibin,expected_res)
 
 canvas = TCanvas("cv","cv",1000,800)

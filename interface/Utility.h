@@ -57,10 +57,21 @@ namespace utility
         return std::make_pair<int,int>( int(std::get<1>(vecInfo[rank-1])), int(std::get<2>(vecInfo[rank-1])) );
     }
 
-    template<typename T, typename... Args> void fillHisto(const bool pass, T& histo, Args... args) { if(pass) histo->Fill(args...); }
     template<typename T, typename... Args> void makeHisto(std::map<std::string, std::shared_ptr<T>>& map, const std::string& name, const std::string& hName, Args... args)
     {
         map.emplace(name.c_str(), std::make_shared<T>(name.c_str(), (name+hName).c_str(), args...) ) ;
+    }
+
+    template<typename T, typename... Args> void fillHisto(const bool pass, std::map<std::string, std::shared_ptr<T>>& map, const std::string& name, Args... args) 
+    { 
+        try
+        {
+            if(pass) map.at(name)->Fill(args...);
+        }
+        catch(std::out_of_range& e)
+        {
+            throw std::out_of_range(color("Error: Histogram named: \"" + name + "\" not defined", "red"));
+        }
     }
 
     template<typename Th, typename Tb> int findBin(const std::shared_ptr<Th>& h, const Tb v, const std::string& axis)

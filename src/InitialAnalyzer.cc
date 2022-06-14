@@ -159,9 +159,9 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 double time = timeLGAD[rowIndex][i];
                 double timeTracker = timeLGADTracker[rowIndex][i];
 
-                utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["amplitude_vs_xy_channel"+r+s], x,y,rawAmpChannel);
-                // utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["timeDiff_coarse_vs_xy_channel"+r+s], x,y,time-photekTime);
-                utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos["timeDiff_fine_vs_xy_channel"+r+s], x,y,timeTracker-photekTime);
+                utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos, "amplitude_vs_xy_channel"+r+s, x,y,rawAmpChannel);
+                // utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos, "timeDiff_coarse_vs_xy_channel"+r+s, x,y,time-photekTime);
+                utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos, "timeDiff_fine_vs_xy_channel"+r+s, x,y,timeTracker-photekTime);
 
             }
             rowIndex++;
@@ -170,7 +170,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         {
             const auto& rawAmpChannel = amp[i];
             bool goodNoiseAmp = rawAmpChannel>noiseAmpThreshold;
-            utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos[Form("timeDiff_coarse_vs_xy_channel0%i",i)], x,y,corrTime[i]-photekTime);
+            utility::fillHisto(pass && goodNoiseAmp,                 my_3d_histos, Form("timeDiff_coarse_vs_xy_channel0%i",i), x,y,corrTime[i]-photekTime);
         }
 
 
