@@ -64,6 +64,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-7.4, -2.8}, {2.6, 0.5}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-2.8, -2.6}, {0.4, 7.4}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.0}, {1.7, 5.0}}; // Sensor's local frame
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.7,0.95, -4.75,-4.0},{"cold", 0.7,0.95, 0.5,1.25},{"gap", 0.50,0.60,-1.5,0.375}};
 };
 
 class EIC1cmStripsGeometry : public DefaultGeometry
@@ -126,7 +127,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.95,1.15, -1.6,-0.30},{"cold", 0.95,1.15, 1.2,2.5},{"gap", 0.75,0.85, 0.4,3.00}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.95,1.15, -1.5,-0.5},{"cold", 0.95,1.15, 1.0,2.0},{"gap", 0.75,0.85, 0.5,2.5}};
 };
 
 class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
@@ -187,6 +188,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-8.0, -3.4}, {2.0, 0.6}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-3.4, -2.0}, {0.6, 8.0}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.9, -5.0}, {1.9, 5.0}}; // Sensor's local frame
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 1.0,1.15, -2.75,-2.00},{"cold", 1.0,1.15, 3.25,4.0},{"gap", 0.75,0.85, 1.0,2.125}};
 };
 
 class EIC1cmStrips100Geometry : public DefaultGeometry
@@ -464,6 +466,7 @@ public:
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.64464175}, {1,0.64148521}, {2,0.75787912}, {3,0.64381268}, {4,0.74011157}, {5,0.63451148}, {6,0.75850835}, {7,0.0}};
+    //std::map<int, double> timeCalibrationCorrection = {{0,0}, {1,0.64148521}, {2,0.75787912}, {3,0.64381268}, {4,0.74011157}, {5,0.63451148}, {6,0.75850835}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
     double sensorCenter  = 0.05; // Lab-Tracker's frame
@@ -498,6 +501,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}};
     // std::vector<std::vector<double>> sensorEdges = {{-13.0, -1.5}, {12.0, 2.0}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-1.5, -12.0}, {2.0, 13.0}}; // Lab-Tracker's frame after rotation
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.1,0.35, -11.0,-9.5},{"cold", 0.1,0.35, 5.0,6.5},{"gap", -0.1,0.0, 1.0,4.75}};
     std::vector<std::vector<double>> sensorEdges = {{-1.75, -12.5}, {1.75, 12.5}}; // Sensor's local frame // THIS IS NOT CONSIDERING GUARD RING
 };
 
@@ -655,6 +659,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 4;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     // std::vector<double> positionRecoPar = {0.250000, -0.378305, -1.713719, 11.056169, -21.852821};
     // std::vector<double> positionRecoPar = {0.250000, -0.370630, -1.650882, 10.307877, -20.045539};
     // std::vector<double> positionRecoPar = {0.250000, -0.486276, 1.440258, -15.619359, 66.190079, -99.022406}; // 15A 10N
@@ -664,8 +669,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-4.0, -0.2}, {0.0, 4.2}}; // Lab-Tracker's frame after rotation
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -2.2}, {2.0, 2.2}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.9, -2.2}, {1.9, 2.2}}; // Sensor's local frame
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -0.20,0.1, 0.5,1.5},{"cold", -0.20,0.1, -1.7,-0.7},{"gap", -0.35,-0.2, -1.5,0.5}};
-
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -0.15,0.1, 0.8,1.3},{"cold", -0.15,0.1, -1.8,-1.3},{"gap", -0.35,-0.2, -1.2,-0.36}};
 };
 
 class BNL_500um_squares_Geometry : public DefaultGeometry

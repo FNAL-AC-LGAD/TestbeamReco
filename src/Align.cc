@@ -138,29 +138,29 @@ void Align::Loop(NTupleReader& tr, int maxevents)
         //Loop over each channel in each sensor
         for(unsigned int ivar=0; ivar < x_var.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,    my_histos["deltaX_varZ"+std::to_string(ivar)], x_reco-x_var[ivar]);
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,    my_histos, "deltaX_varZ"+std::to_string(ivar), x_reco-x_var[ivar]);
         }
 
         for(unsigned int ivar=0; ivar < x_varA.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,    my_histos["deltaX_varA"+std::to_string(ivar)], x_reco-x_varA[ivar]);
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,    my_histos, "deltaX_varA"+std::to_string(ivar), x_reco-x_varA[ivar]);
         }
 
         for(unsigned int ivar=0; ivar < x_varB.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,    my_histos["deltaX_varB"+std::to_string(ivar)], x_reco-x_varB[ivar]);
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,    my_histos, "deltaX_varB"+std::to_string(ivar), x_reco-x_varB[ivar]);
         }
 
         for(unsigned int ivar=0; ivar < x_varC.size(); ivar++)
         {
-            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,    my_histos["deltaX_varC"+std::to_string(ivar)], x_reco-x_varC[ivar]);
+            utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,    my_histos, "deltaX_varC"+std::to_string(ivar), x_reco-x_varC[ivar]);
         }
 
-        utility::fillHisto(pass && hasGlobalSignal_highThreshold,               my_2d_histos["position_local"], x, y);
-        utility::fillHisto(pass,                                                my_2d_histos["position_local_denominator"], x, y);
-        utility::fillHisto(pass && hasGlobalSignal_highThreshold && goodHitCh2, my_2d_histos["position_local_ch2"], x, y);
+        utility::fillHisto(pass && hasGlobalSignal_highThreshold,               my_2d_histos, "position_local", x, y);
+        utility::fillHisto(pass,                                                my_2d_histos, "position_local_denominator", x, y);
+        utility::fillHisto(pass && hasGlobalSignal_highThreshold && goodHitCh2, my_2d_histos, "position_local_ch2", x, y);
         
-        utility::fillHisto(pass && hasGlobalSignal_highThreshold,               my_3d_histos["position_tracker"], xyz_tracker[0], xyz_tracker[1], xyz_tracker[2]);
+        utility::fillHisto(pass && hasGlobalSignal_highThreshold,               my_3d_histos, "position_tracker", xyz_tracker[0], xyz_tracker[1], xyz_tracker[2]);
 
     } //event loop
 }

@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1D,TH1F,TH2F,TLatex,TMath,TColor,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kRed,kWhite
+from ROOT import TFile,TTree,TCanvas,TH1D,TH1F,TH2F,TLatex,TMath,TColor,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kRed,kWhite,TH1
 import os
 import optparse
 from stripBox import getStripBox
@@ -49,12 +49,14 @@ parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Se
 parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Bias Voltage value in [V]") 
 parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Bias Voltage value in [V]") 
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath") 
+parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 options, args = parser.parse_args()
 
 sensor = options.sensor
 bias = options.biasvolt
 xlength = float(options.xlength) 
 ylength = float(options.ylength) 
+debugMode = options.debugMode
 
 dataset = options.Dataset
 outdir=""
@@ -72,10 +74,11 @@ all_histoInfos = [
     # HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
     # HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
     HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
+    HistoInfo("timeDiffTracker_vs_xy", inputfile, "time_diffTracker"),
     # HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
     # HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
     # HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
-    HistoInfo("weighted2_timeDiff_vs_xy", inputfile, "weighted2_time_diff"),
+    HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_time_diffTracker"),
     # HistoInfo("weighted_timeDiff_goodSig_vs_xy", inputfile, "weighted_time_goodSig"),
     # HistoInfo("weighted2_timeDiff_goodSig_vs_xy", inputfile, "weighted2_time_goodSig"),
 ]
@@ -88,15 +91,33 @@ canvas = TCanvas("cv","cv",1000,800)
 # gPad.SetTicks(1,1)
 #gPad.SetLogy()
 canvas.SetGrid(0,1)
+TH1.SetDefaultSumw2()
+gStyle.SetOptStat(0)
 print("Finished setting up langaus fit class")
 
+if debugMode:
+    outdir_q = os.path.join(outdir,"q_resTimeX/")
+    if not os.path.exists(outdir_q):
+            print(outdir_q)
+            os.mkdir(outdir_q)
+    else:
+            i = 1
+            while(os.path.exists(outdir_q)):
+                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
+                    i+=1
+            os.mkdir(outdir_q)
+
+
+nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
+
 #loop over X bins
-for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
+for i in range(0, nXBins+1):
     ##For Debugging
     #if not (i==46 and j==5):
     #    continue
 
     for info in all_histoInfos:
+        totalEvents = info.th2.GetEntries()
         tmpHist = info.th2.ProjectionY("py",i,i)
         myRMS = tmpHist.GetRMS()
         myMean = tmpHist.GetMean()
@@ -108,8 +129,12 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
         valueMean = myMean
         errorMean = 0.0
 
+        minEvtsCut = totalEvents/nXBins
+        if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
+
+
         #Do fit 
-        if(nEvents > 50):
+        if(nEvents > minEvtsCut):
             tmpHist.Rebin(2)
 
             fit = TF1('fit','gaus',fitlow,fithigh)
@@ -124,10 +149,17 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             errorMean = 1000.0*myFitMeanError
 
             ##For Debugging
-            tmpHist.Draw("hist")
-            fit.Draw("same")
-            canvas.SaveAs(outdir+"q"+info.outHistoName +"_"+str(i)+".gif")
+            #tmpHist.Draw("hist")
+            #fit.Draw("same")
+            #canvas.SaveAs(outdir+"q"+info.outHistoName +"_"+str(i)+".gif")
             
+            if (debugMode):
+                tmpHist.Draw("hist")
+                fit.Draw("same")
+                canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
+                print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
+
+
             # print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
         else:
             value = 0.0
@@ -176,8 +208,10 @@ for info in all_histoInfos:
     info.th1.Write()
 
 hTimeRes = all_histoInfos[0].th1 # 6
-hTimeResW2 = all_histoInfos[1].th1 #7
-hTimeRes.SetLineColor(kBlack)
+hTimeResCorr = all_histoInfos[1].th1
+hTimeResW2 = all_histoInfos[2].th1 #7
+hTimeRes.SetLineColor(28)
+hTimeResCorr.SetLineColor(kBlack)
 hTimeResW2.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
 
 hTimeRes.Draw("hist e")
@@ -192,13 +226,15 @@ gPad.RedrawAxis("g")
 
 hTimeRes.Draw("hist e same")
 hTimeRes.Draw("AXIS same")
+hTimeResCorr.Draw("hist e same")
 hTimeResW2.Draw("hist e same")
 
-legend = TLegend(myStyle.GetPadCenter()-0.33,0.70,myStyle.GetPadCenter()+0.33,0.90)
+legend = TLegend(myStyle.GetPadCenter()-0.4,0.70,myStyle.GetPadCenter()+0.4,0.90)
 legend.SetFillColor(kWhite)
 #legend.SetFillStyle(4050)
-legend.AddEntry(hTimeRes, "Single-channel timestamp")
-legend.AddEntry(hTimeResW2, "Multi-channel timestamp")
+legend.AddEntry(hTimeRes, "Single-channel (w/o TrackerCorrection)")
+legend.AddEntry(hTimeResCorr, "Single-channel (w/ TrackerCorrection)")
+legend.AddEntry(hTimeResW2, "Multi-channel (w/ TrackerCorrection)")
 legend.Draw();
 
 myStyle.BeamInfo()
