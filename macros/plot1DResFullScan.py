@@ -156,7 +156,7 @@ def createTGraph(f, out, var_values, var):
 
         # resolution_vs_var.GetYaxis().SetRangeUser(5.1, 20.9)
         resolution_vs_var.GetYaxis().SetRangeUser(10.1, 39.9)
-        # resolution_vs_var.GetYaxis().SetRangeUser(10.1, 49.9)
+        # resolution_vs_var.GetYaxis().SetRangeUser(20.1, 79.9)
         # resolution_vs_var.GetYaxis().SetRangeUser(15.1, 24.9)
         c.SaveAs(outdir+"Scan_"+var+"_fixY.gif")
         c.SaveAs(outdir+"Scan_"+var+"_fixY.pdf")
