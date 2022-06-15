@@ -24,8 +24,8 @@ class HistoInfo:
     def getTH2(self, f, name, axis='zy'):
         th3 = f.Get(name)
         th2 = th3.Project3D(axis)
-        if sensor=="BNL2020": th2.RebinX(5)
-        elif sensor=="BNL2021": th2.RebinX(10)
+        #if sensor=="BNL2020": th2.RebinX(5)
+        #elif sensor=="BNL2021": th2.RebinX(10)
         return th2
 
     def getTH1(self, th2, name):
