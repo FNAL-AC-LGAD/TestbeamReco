@@ -33,16 +33,16 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
     double stripWidth = 0.300;
     double pitch = 0.500;
-    double sensorCenter  =-1.25; // Lab-Tracker's frame
-    double sensorCenterY = 2.50; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {0.0, 1.310, 0.810, 0.308, -0.186, -0.684, -1.185, 0.0};
+    double sensorCenter  =-1.15; // Lab-Tracker's frame
+    double sensorCenterY = 2.30; // Lab-Tracker's frame
+    std::vector<double> stripCenterXPosition = {0.0, 1.271, 0.769, 0.268, -0.233, -0.729, -1.238, 0.0};
     int numLGADchannels = 6;
     int lowGoodStripIndex = 2;
     int highGoodStripIndex = 5;
-    double alpha =-0.48; //-0.49; ////-0.48; //-0.48; ////-0.48; //-0.47; //-0.47; // 0.00;
-    double beta  =-0.01; //-0.01; ////-0.01; //-0.01; ////-0.02; // 0.00; // 0.00; // 0.00;
-    double gamma = 0.00; // 0.00; //// 0.00; // 0.00; //// 0.00; // 0.00; // 0.00; // 0.00;
-    double z_dut =-1.95; //-1.95; ////-7.15; //-7.98; ////-1.25; //-1.97; // 0.00; // 0.00;
+    double alpha =-0.49; //-0.48; //-0.47; //-0.47; // 0.00;
+    double beta  = 0.00; // 0.00; // 0.00; // 0.00; // 0.00;
+    double gamma = 0.00; // 0.00; // 0.00; // 0.00; // 0.00;
+    double z_dut =-1.97; //-1.25; //-1.97; // 0.00; // 0.00;
     double xBinSize = 0.05;
     double yBinSize = 0.2;
     double xmin =  -2.5;
@@ -59,14 +59,11 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    // std::vector<double> positionRecoPar = {0.250000, -0.665859, 8.779584, -127.386294, 748.448429, -1558.165383};
-    std::vector<double> positionRecoPar = {0.250000, -0.654507, 8.251580, -118.137841, 684.216545, -1407.697202};
+    std::vector<double> positionRecoPar = {0.250000, -0.643829, 8.150092, -117.089379, 675.759294, -1385.358876};
     // std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
     // std::vector<std::vector<double>> sensorEdges = {{-7.4, -2.8}, {2.6, 0.5}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-2.8, -2.6}, {0.4, 7.4}}; // Lab-Tracker's frame after rotation
-    // std::vector<std::vector<double>> sensorEdges = {{-1.6, -5.0}, {1.6, 5.0}}; // Sensor's local frame // Iteration 1
-    // std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.15}, {1.8, 4.9}}; // Sensor's local frame // Iteration 2
-    std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.0}, {1.7, 5.0}}; // Sensor's local frame // Iteration 3
+    std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.0}, {1.7, 5.0}}; // Sensor's local frame
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.7,0.95, -4.75,-4.0},{"cold", 0.7,0.95, 0.5,1.25},{"gap", 0.50,0.60,-1.5,0.375}};
 };
 
@@ -100,20 +97,20 @@ public:
     // std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
-    double sensorCenter  =-1.0; // Lab-Tracker's frame
-    double sensorCenterY = 2.8; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {1.567, 1.064, 0.567, 0.067, -0.432, -0.932, -1.433, 0.0};
+    double sensorCenter  =-0.95; // Lab-Tracker's frame
+    double sensorCenterY = 2.7; // Lab-Tracker's frame
+    std::vector<double> stripCenterXPosition = {1.518, 1.014, 0.515, 0.016, -0.483, -0.983, -1.483, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
-    double alpha =-0.20; //-0.20; //-0.20; //-0.20; //-0.21; // 0.0;
-    double beta  = 0.00; // 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
-    double gamma = 0.00; // 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
-    double z_dut =-6.04; //-2.87; //-2.76; //-3.80; // 0.00; // 0.0;
+    double alpha =-0.23; //-0.20; //-0.20; //-0.21; // 0.0;
+    double beta  = 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
+    double gamma = 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
+    double z_dut =-2.37; //-2.76; //-3.80; // 0.00; // 0.0;
     double xBinSize = 0.05;
     double yBinSize = 0.2;
-    double xmin = -3.00; // Sensor's local frame
-    double xmax =  3.00; // Sensor's local frame
+    double xmin = -2.50; // Sensor's local frame
+    double xmax =  2.50; // Sensor's local frame
     double ymin = -5.20; // Sensor's local frame
     double ymax =  5.20; // Sensor's local frame
     double positionRecoMaxPoint = 0.77; // 0.81;
@@ -126,10 +123,10 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.414954, -3.861040, 37.128136, -141.558350, 162.643997};
+    std::vector<double> positionRecoPar = {0.250000, -0.496276, -1.074230, 5.910960, -3.311599, -44.637909};
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdges = {{-1.9, -5.1}, {2.0, 4.9}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.95,1.15, -1.5,-0.5},{"cold", 0.95,1.15, 1.0,2.0},{"gap", 0.75,0.85, 0.5,2.5}};
 };
 
@@ -160,23 +157,23 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
     double stripWidth = 0.100;
     double pitch = 0.500;
-    double sensorCenter  =-1.4; // Lab-Tracker's frame
-    double sensorCenterY = 3.0; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {1.561, 1.070, 0.572, 0.073, -0.426, -0.929, -1.432, 0.0};
+    double sensorCenter  =-1.3; // Lab-Tracker's frame
+    double sensorCenterY = 3.1; // Lab-Tracker's frame
+    std::vector<double> stripCenterXPosition = {1.467, 0.971, 0.470, -0.028, -0.524, -1.028, -1.527, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
-    double alpha =-0.50; //-0.54; //-0.53; //-0.54; ////-0.50; //-0.50; //-0.49; // 0.00;
-    double beta  = 0.02; // 0.02; // 0.02; // 0.02; //// 0.00; // 0.00; // 0.00; // 0.00;
-    double gamma = 0.00; // 0.00; // 0.00; // 0.00; //// 0.00; // 0.00; // 0.00; // 0.00;
-    double z_dut =-2.64; //-2.64; //-4.80; //-0.12; ////-1.32; //-0.81; // 0.00; // 0.00;
+    double alpha =-0.51; //-0.50; //-0.50; //-0.49; // 0.00;
+    double beta  = 0.00; // 0.00; // 0.00; // 0.00; // 0.00;
+    double gamma = 0.00; // 0.00; // 0.00; // 0.00; // 0.00;
+    double z_dut =-2.89; //-1.32; //-0.81; // 0.00; // 0.00;
     double xBinSize = 0.05;
     double yBinSize = 0.10;
     double xmin = -2.50; // Sensor's local frame
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.50; // Sensor's local frame
     double ymax =  5.50; // Sensor's local frame
-    double positionRecoMaxPoint = 0.81; // 0.82;
+    double positionRecoMaxPoint = 0.80; // 0.82;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 10.0;
     double signalAmpThreshold = 25.0; // 15.0;
@@ -186,13 +183,12 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.615442, -0.768993, 5.082484, -12.892653};
+    std::vector<double> positionRecoPar = {0.250000, -0.625186, -0.634565, 4.385245, -11.638048};
     // std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
     // std::vector<std::vector<double>> sensorEdges = {{-8.0, -3.4}, {2.0, 0.6}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-3.4, -2.0}, {0.6, 8.0}}; // Lab-Tracker's frame after rotation
-    // std::vector<std::vector<double>> sensorEdges = {{-2.0, -5.0}, {2.0, 5.0}}; // Sensor's local frame // Iteration 1
+    std::vector<std::vector<double>> sensorEdges = {{-1.9, -5.0}, {1.9, 5.0}}; // Sensor's local frame
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 1.0,1.15, -2.75,-2.00},{"cold", 1.0,1.15, 3.25,4.0},{"gap", 0.75,0.85, 1.0,2.125}};
-    std::vector<std::vector<double>> sensorEdges = {{-1.95, -4.9}, {2.05, 5.1}}; // Sensor's local frame // Iteration 2
 };
 
 class EIC1cmStrips100Geometry : public DefaultGeometry
@@ -538,8 +534,6 @@ public:
     double pitch = 0.080;
     double sensorCenter  =-2.4; // Lab-Tracker's frame
     double sensorCenterY = 3.2; // Lab-Tracker's frame
-    // std::vector<double> stripCenterXPosition = {0.368, 0.294, 0.215, 0.134, 0.055, -0.028, -0.119, 0.0};
-    // std::vector<double> stripCenterXPosition = {0.271, 0.197, 0.118, 0.037, -0.043, -0.126, -0.216, 0.0};
     std::vector<double> stripCenterXPosition = {0.271, 0.197, 0.118, 0.037, -0.043, -0.125, -0.216, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex  = 1;
@@ -647,8 +641,8 @@ public:
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
     double alpha =-1.30; //-1.30; ////-1.30; //-1.30; //-1.30; ////-1.30; //-1.30; //-1.35; // 0.00; // -1.0;
-    double beta  =-2.88; //-2.88; ////-2.36; //-2.25; //-2.20; //// 0.00; // 0.00; // 0.00; // 0.00; // -1.30;
-    double gamma =-0.03; //-0.03; ////-0.03; //-0.03; // 0.00; //// 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
+    double beta  = 0.0; ///-2.88; //-2.88; ////-2.36; //-2.25; //-2.20; //// 0.00; // 0.00; // 0.00; // 0.00; // -1.30;
+    double gamma = 0.0; ///-0.03; //-0.03; ////-0.03; //-0.03; // 0.00; //// 0.00; // 0.00; // 0.00; // 0.00; // 0.0;
     double z_dut = 2.76; // 3.17; //// 4.50; // 4.62; // 3.64; //// 4.35; // 5.46; // 0.00; // 0.00; // 28.41878;
     double xBinSize = 0.05;
     double yBinSize = 0.10;
