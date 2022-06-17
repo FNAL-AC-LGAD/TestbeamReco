@@ -25,8 +25,8 @@ class HistoInfo:
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set zmin")
-parser.add_option('-Z','--zmax', dest='zmax', default = 50.0, help="Set zmax")
+parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set min PositionRes value in final plot")
+parser.add_option('-Z','--zmax', dest='zmax', default = 50.0, help="Set max PositionRes value in final plot")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
@@ -38,7 +38,9 @@ if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
-    inputfile = TFile("../test/myoutputfile.root")   
+    inputfile = TFile("../test/myoutputfile.root")
+
+outdir = myStyle.GetPlotsDir(outdir, "PositionRes_XY/")
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack_vs_Ytrack", inputfile, "PositionX_Resolution",zmin,zmax),

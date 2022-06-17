@@ -19,8 +19,8 @@ myStyle.ForceStyle()
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
-parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set zmin")
-parser.add_option('-Z','--zmax', dest='zmax', default = 120.0, help="Set zmax")
+parser.add_option('-z','--zmin', dest='zmin', default =   0.0, help="Set min Amp value in final plot")
+parser.add_option('-Z','--zmax', dest='zmax', default = 120.0, help="Set max Amp value in final plot")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
@@ -38,59 +38,37 @@ sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor = sensor_Geometry['sensor']
 bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 
+outdir = myStyle.GetPlotsDir(outdir, "AmpPlots/")
 
-#Get 3D histograms 
-th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xy")
-th3_amplitude_vs_xy_channel00 = inputfile.Get("amplitude_vs_xy_channel00")
-th3_amplitude_vs_xy_channel01 = inputfile.Get("amplitude_vs_xy_channel01")
-th3_amplitude_vs_xy_channel02 = inputfile.Get("amplitude_vs_xy_channel02")
-th3_amplitude_vs_xy_channel03 = inputfile.Get("amplitude_vs_xy_channel03")
-th3_amplitude_vs_xy_channel04 = inputfile.Get("amplitude_vs_xy_channel04")
-th3_amplitude_vs_xy_channel05 = inputfile.Get("amplitude_vs_xy_channel05")
-th3_amplitude_vs_xy_channel06 = inputfile.Get("amplitude_vs_xy_channel06")
-list_th3_amplitude_vs_xy = []
-list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy)
-list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel00)
-list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel01)
-list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel02)
-list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel03)
-list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel04)
-list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel05)
-list_th3_amplitude_vs_xy.append(th3_amplitude_vs_xy_channel06)
+#Get 3D histograms
+channel_good_index = []
+th3_amplitude_vs_xy_ch = []
+for i in range(7):
+    hname = "amplitude_vs_xy_channel0"+str(i)
+    if inputfile.Get(hname):
+        channel_good_index.append(i)
+        th3_amplitude_vs_xy_ch.append(inputfile.Get(hname))
+
+th3_amplitude_vs_xy_ch.append(inputfile.Get("amplitude_vs_xy"))
 
 
 #Build amplitude histograms
 efficiency_vs_xy_denominator = inputfile.Get("efficiency_vs_xy_denominator")
 amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
 
-amplitude_vs_xy = amplitude_vs_xy_temp.Clone("amplitude_vs_xy")
-amplitude_vs_xy_channel00 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel00")
-amplitude_vs_xy_channel01 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel01")
-amplitude_vs_xy_channel02 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel02")
-amplitude_vs_xy_channel03 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel03")
-amplitude_vs_xy_channel04 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel04")
-amplitude_vs_xy_channel05 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel05")
-amplitude_vs_xy_channel06 = amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel06")
-
-
-
 list_amplitude_vs_xy = []
-list_amplitude_vs_xy.append(amplitude_vs_xy)
-list_amplitude_vs_xy.append(amplitude_vs_xy_channel00)
-list_amplitude_vs_xy.append(amplitude_vs_xy_channel01)
-list_amplitude_vs_xy.append(amplitude_vs_xy_channel02)
-list_amplitude_vs_xy.append(amplitude_vs_xy_channel03)
-list_amplitude_vs_xy.append(amplitude_vs_xy_channel04)
-list_amplitude_vs_xy.append(amplitude_vs_xy_channel05)
-list_amplitude_vs_xy.append(amplitude_vs_xy_channel06)
+for i,ch in enumerate(channel_good_index):
+    list_amplitude_vs_xy.append(amplitude_vs_xy_temp.Clone("amplitude_vs_xy_channel0%i"%(ch)))
+
+list_amplitude_vs_xy.append(amplitude_vs_xy_temp.Clone("amplitude_vs_xy"))
 
 
 canvas = TCanvas("cv","cv",800,800)
 fit = langaus.LanGausFit()
 
 #loop over X,Y bins
-for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
-    for j in range(1, amplitude_vs_xy.GetYaxis().GetNbins()):
+for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()):
+    for j in range(1, amplitude_vs_xy_temp.GetYaxis().GetNbins()):
 #for i in range(amplitude_vs_xy.GetXaxis().FindFixBin(-2.6), amplitude_vs_xy.GetXaxis().FindFixBin(-2.0)):
 #    for j in range(amplitude_vs_xy.GetYaxis().FindFixBin(-3.0), amplitude_vs_xy.GetYaxis().FindFixBin(9.0)):
 
@@ -99,7 +77,7 @@ for i in range(1, amplitude_vs_xy.GetXaxis().GetNbins()):
         #    continue
 
         for channel in range(0, len(list_amplitude_vs_xy)):
-            tmpHist = list_th3_amplitude_vs_xy[channel].ProjectionZ("pz",i,i,j,j)
+            tmpHist = th3_amplitude_vs_xy_ch[channel].ProjectionZ("pz",i,i,j,j)
             myMean = tmpHist.GetMean()
             myRMS = tmpHist.GetRMS()
             value = myMean
@@ -144,7 +122,7 @@ for channel in range(0, len(list_amplitude_vs_xy)):
     canvas.SetRightMargin(0.18)
     canvas.SetLeftMargin(0.12)
 
-    name = "Amplitude_vs_xy_channel"+str(channel) if channel != 0 else "Amplitude_vs_xy"
+    name = "Amplitude_vs_xy_channel"+str(channel) if channel != (len(list_amplitude_vs_xy)-1) else "Amplitude_vs_xy"
     canvas.SaveAs(outdir+name+".gif")
     canvas.SaveAs(outdir+name+".pdf")
 

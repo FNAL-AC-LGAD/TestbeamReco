@@ -65,7 +65,7 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")
 
-outdir = myStyle.GetPlotsDir(outdir, "Res/")
+outdir = myStyle.GetPlotsDir(outdir, "PositionRes/")
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
