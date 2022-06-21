@@ -15,19 +15,12 @@ myStyle.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
 organized_mode=True
 
+
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-s','--sensor', dest='sensor', default = "", help="Type of sensor (BNL, HPK, ...)")
-parser.add_option('-p','--pitch', dest='pitch', default = 500, help="pitch in um")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias Voltage value in [V]")
+parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
-
-sensor = options.sensor
-bias = options.biasvolt
-pitch = float(options.pitch)
-
-num_strips=8
 
 dataset = options.Dataset
 outdir=""
@@ -36,6 +29,14 @@ if organized_mode:
     inputfile = TFile("%s%s_InitialAnalyzer.root"%(outdir,dataset))
 else: 
     inputfile = TFile("../test/myoutputfile.root")   
+
+sensor_Geometry = myStyle.GetGeometry(dataset)
+
+sensor = sensor_Geometry['sensor']
+bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
+pitch  = sensor_Geometry['pitch']
+
+num_strips=8
 
 colors = myStyle.GetColors(True)
 

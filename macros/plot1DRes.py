@@ -16,18 +16,9 @@ ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"z")
 ROOT.gStyle.SetHistLineWidth(2)
 ROOT.gROOT.ForceStyle()
 
-def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange=(0,1), fmin=1, fmax=1):
+def plot1D(hists, colors, labels, name, yTitle, xTitle, pads=False, bins=100, arange=(0,1), fmin=1, fmax=1):
         # ROOT.gStyle.SetOptFit(1)
         c = ROOT.TCanvas("c","c",1000,1000)
-        # ROOT.gPad.SetLeftMargin(0.12)
-        # ROOT.gPad.SetRightMargin(0.15)
-        # ROOT.gPad.SetTopMargin(0.08)
-        # ROOT.gPad.SetBottomMargin(0.12)
-        # ROOT.gStyle.SetPadRightMargin(2*myStyle.GetMargin())
-        # ROOT.gStyle.SetTextSize(myStyle.GetSize()-5)
-        # ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"x")
-        # ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"y")
-        # ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"z")
         ROOT.gPad.SetTicks(1,1)
         ROOT.TH1.SetDefaultSumw2()
         #ROOT.gPad.SetLogy()
@@ -35,8 +26,8 @@ def plot1D(hists, colors, labels, name, xlab, ylab, pads=False, bins=100, arange
 
         h = hists[0]
         h.Rebin(2)
-        h.GetXaxis().SetTitle(ylab)
-        h.GetYaxis().SetTitle(xlab)
+        h.GetXaxis().SetTitle(xTitle)
+        h.GetYaxis().SetTitle(yTitle)
         h.Draw('hists e')
         myMean = h.GetMean()
         myRMS = h.GetRMS()
@@ -91,6 +82,10 @@ parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which deter
 options, args = parser.parse_args()
 
 dataset = options.Dataset
+runPad = options.runPad
+fitmin = options.min
+fitmax = options.max
+
 outdir=""
 if organized_mode: 
     outdir = myStyle.getOutputDir(dataset)
@@ -103,6 +98,7 @@ outdir = myStyle.GetPlotsDir(outdir, "1DRes/")
 channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
 
 hists = [('deltaX','deltaX',"tracker"), ('deltaX_oneStrip','deltaX_oneStrip',"tracker"), ('deltaX_twoStrips','deltaX_twoStrips',"tracker"),
+        ('deltaX_oneStrip_onMetal','deltaX_oneStrip_onMetal',"tracker"), ('deltaX_twoStrips_noMetal','deltaX_twoStrips_noMetal',"tracker"),
         ("timeDiff","time","photek"), ("weighted2_timeDiff","weighted2Time","photek")]
 if options.plotAll:
         hists += list(('weighted_timeDiff_channel{0}{1}'.format(t[0],t[1]),'weightedTime','photek') for t in channelMap)
@@ -113,10 +109,7 @@ if options.plotAll:
 
 for t in hists:
     h = inputfile.Get(t[0])
-    if options.runPad:
-        plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], True, 100, (0,1), options.min, options.max)
-    else:
-        plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], False, 100, (0,1), options.min, options.max)
+    plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], runPad, 100, (0,1), fitmin, fitmax)
 
         
 
