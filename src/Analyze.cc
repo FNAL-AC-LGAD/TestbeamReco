@@ -362,7 +362,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     int lowGoodStrip = (geometry[0].size()==1) ? lowGoodStripIndex-1 : lowGoodStripIndex;
     int highGoodStrip = (geometry[0].size()==1) ? highGoodStripIndex-1 : highGoodStripIndex;
 
-    bool plotWaveForm = true;
+    bool plotWaveForm = false;
     if(firstFile) InitHistos(tr, geometry);
 
     while( tr.getNextEvent() )
@@ -582,10 +582,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodNoiseAmp,                                    my_2d_histos, "efficiency_vs_xy_lowThreshold_numerator_channel"+r+s, x,y);
                 utility::fillHisto(pass && goodSignalAmp,                                   my_2d_histos, "efficiency_vs_xy_highThreshold_numerator_channel"+r+s, x,y);
 
-                utility::fillHisto(pass && goodNoiseAmp && oneStripReco,                    my_2d_histos, "efficiency_vs_xy_lowThreshold_oneStrip_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && goodSignalAmp && oneStripReco,                   my_2d_histos, "efficiency_vs_xy_highThreshold_oneStrip_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && goodNoiseAmp && !oneStripReco,                   my_2d_histos, "efficiency_vs_xy_lowThreshold_twoStrips_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && goodSignalAmp && !oneStripReco,                  my_2d_histos, "efficiency_vs_xy_highThreshold_twoStrips_numerator_channel"+r+s, x,y);
+                utility::fillHisto(pass && goodNoiseAmp && oneStripReco && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_lowThreshold_oneStrip_numerator_channel"+r+s, x,y);
+                utility::fillHisto(pass && goodSignalAmp && oneStripReco && isMaxChannel,   my_2d_histos, "efficiency_vs_xy_highThreshold_oneStrip_numerator_channel"+r+s, x,y);
+                utility::fillHisto(pass && goodNoiseAmp && !oneStripReco && isMaxChannel,   my_2d_histos, "efficiency_vs_xy_lowThreshold_twoStrips_numerator_channel"+r+s, x,y);
+                utility::fillHisto(pass && goodSignalAmp && !oneStripReco && isMaxChannel,  my_2d_histos, "efficiency_vs_xy_highThreshold_twoStrips_numerator_channel"+r+s, x,y);
                 utility::fillHisto(pass && fullReco_ch,                                     my_2d_histos, "efficiency_vs_xy_fullReco_numerator_channel"+r+s, x,y);
 
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos, "timeDiff_vs_x_channel"+r+s, x,time-photekTime);
@@ -708,7 +708,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaYBasic_vs_Xtrack", x,y_reco_basic-y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaYBasic_vs_Ytrack", y,y_reco_basic-y);
 
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && oneStripReco,                   my_2d_histos, "deltaX_vs_Xtrack_oneStrip", x,x_reco-x);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && oneStripReco,                 my_2d_histos, "deltaX_vs_Xtrack_oneStrip", x,x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !oneStripReco,                  my_2d_histos, "deltaX_vs_Xtrack_twoStrips", x,x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !oneStripReco,                  my_2d_histos, "Amp12_vs_x", x, Amp12);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !oneStripReco,                  my_2d_histos, "Amp1_vs_x", x, maxAmp);
