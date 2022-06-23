@@ -12,10 +12,10 @@ dict_resolutions = myStyle.resolutions2022
 
 outdir = myStyle.getOutputDir("Paper2022")
 
-# Sensors with 500um pitch and 200um metal width
-list_of_sensors = ["EIC_W1_2p5cm_215V", "EIC_W1_1cm_255V", "EIC_W1_0p5cm_500um_300um_gap_1_4_245V"]
+# Sensors with 500um pitch
+list_of_sensors = ["EIC_W1_2p5cm_215V", "EIC_W1_1cm_255V", "EIC_W1_0p5cm_500um_300um_gap_1_4_245V","EIC_W2_1cm_500um_200um_gap_240V", "EIC_W2_1cm_500um_400um_gap_220V"]
 
-length = []
+area = []
 empty = [0]*len(list_of_sensors)
 # positionres_oneStrip  = np.array([78.65, 84.13, 53.97]) # Sigma from fit to oneStrip 1DPlot
 positionres_oneStrip  = [] # RMS from oneStrip onMetal 1DPlot
@@ -24,13 +24,13 @@ positionres_oneStripuncert  = []
 positionres_twoStripsuncert = []
 
 for name in list_of_sensors:
-    length.append(dict_sensors[name]['length'])
+    area.append(dict_sensors[name]['length']*dict_sensors[name]['stripWidth']/1000)
     positionres_oneStrip.append(dict_resolutions[name]['position_oneStripRMS'])
     positionres_oneStripuncert.append(0.01)
     positionres_twoStrips.append(dict_resolutions[name]['position_twoStrips'])
     positionres_twoStripsuncert.append(dict_resolutions[name]['position_twoStrips_E'])
 
-length = np.asarray(length)
+area = np.asarray(area)
 empty = np.asarray(empty)
 positionres_oneStrip = np.asarray(positionres_oneStrip)
 positionres_oneStripuncert = np.asarray(positionres_oneStripuncert)
@@ -61,8 +61,8 @@ positionres_twoStripsuncert = np.asarray(positionres_twoStripsuncert)
 #     # timingresuncert[i] = timingresuncert[i]*ROOT.TMath.Sqrt(timingres[i]*timingres[i]+100)/timingres[i]
 #     # timingresweighted2uncert[i] = timingresweighted2uncert[i]*ROOT.TMath.Sqrt(timingresweighted2[i]*timingresweighted2[i]+100)/timingresweighted2[i]
 
-position_oneStrip_graph  = ROOT.TGraphErrors(length.size ,length.astype(np.double), positionres_oneStrip.astype(np.double), empty.astype(np.double), positionres_oneStripuncert.astype(np.double))
-position_twoStrips_graph = ROOT.TGraphErrors(length.size ,length.astype(np.double), positionres_twoStrips.astype(np.double), empty.astype(np.double), positionres_twoStripsuncert.astype(np.double))
+position_oneStrip_graph  = ROOT.TGraphErrors(area.size ,area.astype(np.double), positionres_oneStrip.astype(np.double), empty.astype(np.double), positionres_oneStripuncert.astype(np.double))
+position_twoStrips_graph = ROOT.TGraphErrors(area.size ,area.astype(np.double), positionres_twoStrips.astype(np.double), empty.astype(np.double), positionres_twoStripsuncert.astype(np.double))
 # time_graph = ROOT.TGraphErrors(length.size , length.astype(np.double), timingres.astype(np.double), empty.astype(np.double), timingresuncert.astype(np.double))
 # time_weight_graph = ROOT.TGraphErrors(length.size , length.astype(np.double), timingresweighted2.astype(np.double), empty.astype(np.double), timingresweighted2uncert.astype(np.double))
 
@@ -100,8 +100,8 @@ ROOT.gPad.SetTicks(1,1)
 ROOT.gStyle.SetOptStat(0) 
 
 
-hdummy = ROOT.TH1D("","",1,length.min()-5,length.max()+5)
-hdummy.GetXaxis().SetTitle("Strip length [mm]")
+hdummy = ROOT.TH1D("","",1,area.min()-1,area.max()+1)
+hdummy.GetXaxis().SetTitle("Strip area [mm^2]")
 hdummy.GetYaxis().SetTitle("X position resolution [#mum]")
 hdummy.SetMaximum(90.0)
 hdummy.SetMinimum(0.0001)
@@ -133,12 +133,12 @@ leg.AddEntry(position_twoStrips_graph, "Two strips reconstruction", "pl")
 text = ROOT.TLatex()
 text.SetTextSize(myStyle.GetSize()-4)
 text.SetTextAlign(31)
-text.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{EIC 500um pitch 200um metal width}")
+text.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{EIC 500um pitch}")
 
 leg.Draw()
-position_oneStrip_graph.Draw("epl same")
-position_twoStrips_graph.Draw("epl same")
+position_oneStrip_graph.Draw("ep same")
+position_twoStrips_graph.Draw("ep same")
 # time_graph.Draw("epl same")
 # time_weight_graph.Draw("epl same")
 
-c1.SaveAs("%sresolution_vs_length_EIC.pdf"%(outdir))
+c1.SaveAs("%sresolution_vs_area_EIC.pdf"%(outdir))

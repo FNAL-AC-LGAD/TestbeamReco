@@ -7,13 +7,39 @@ ROOT.gROOT.SetBatch( True )
 myStyle.ForceStyle()
 colors = myStyle.GetColors(True)
 
+dict_sensors = myStyle.sensorsGeom2022
+dict_resolutions = myStyle.resolutions2022
+
 outdir = myStyle.getOutputDir("Paper2022")
 
-width = np.array([300, 200, 100])
+# Sensors with 1cm strip length and 500um pitch
+list_of_sensors = ["EIC_W2_1cm_500um_200um_gap_240V", "EIC_W1_1cm_255V", "EIC_W2_1cm_500um_400um_gap_220V"]
+
+width = []
+empty = [0]*len(list_of_sensors)
+# positionres_oneStrip  = np.array([78.65, 84.13, 53.97]) # Sigma from fit to oneStrip 1DPlot
+positionres_oneStrip  = [] # RMS from oneStrip onMetal 1DPlot
+positionres_twoStrips = []
+positionres_oneStripuncert  = []
+positionres_twoStripsuncert = []
+
+for name in list_of_sensors:
+    width.append(dict_sensors[name]['stripWidth'])
+    positionres_oneStrip.append(dict_resolutions[name]['position_oneStripRMS'])
+    positionres_oneStripuncert.append(0.01)
+    positionres_twoStrips.append(dict_resolutions[name]['position_twoStrips'])
+    positionres_twoStripsuncert.append(dict_resolutions[name]['position_twoStrips_E'])
+
+width = np.asarray(width)
+empty = np.asarray(empty)
+positionres_oneStrip = np.asarray(positionres_oneStrip)
+positionres_oneStripuncert = np.asarray(positionres_oneStripuncert)
+positionres_twoStrips = np.asarray(positionres_twoStrips)
+positionres_twoStripsuncert = np.asarray(positionres_twoStripsuncert)
 
 # positionres_oneStrip  = np.array([78.65, 84.13, 53.97]) # Sigma from fit to oneStrip 1DPlot
-positionres_oneStrip  = np.array([80.37, 54.87, 27.93]) # RMS from oneStrip onMetal 1DPlot
-positionres_twoStrips = np.array([15.38, 18.53, 18.73])
+# positionres_oneStrip  = np.array([80.37, 54.87, 27.93]) # RMS from oneStrip onMetal 1DPlot
+# positionres_twoStrips = np.array([15.38, 18.53, 18.73])
 # timingres = np.array([          39.57,  37.34,  34.20,  32.95,  32.55,  35.18])
 # timingresweighted2 = np.array([ 35.84,  35.71,  32.67,  31.89,  31.15,  34.11])
 
@@ -22,11 +48,11 @@ positionres_twoStrips = np.array([15.38, 18.53, 18.73])
 #     # timingres[i] = ROOT.TMath.Sqrt(timingres[i]*timingres[i]-100)
 #     # timingresweighted2[i] = ROOT.TMath.Sqrt(timingresweighted2[i]*timingresweighted2[i]-100)
 
-empty = np.array([0,0,0])
+# empty = np.array([0,0,0])
 
 # positionres_oneStripuncert  = np.array([0.18, 0.08, 0.21])
-positionres_oneStripuncert  = np.array([0.01, 0.01, 0.01])
-positionres_twoStripsuncert = np.array([0.07, 0.02, 0.02])
+# positionres_oneStripuncert  = np.array([0.01, 0.01, 0.01])
+# positionres_twoStripsuncert = np.array([0.07, 0.02, 0.02])
 # timingresuncert = np.array([            2.58, 0.72, 0.60, 0.52, 0.54, 1.50])
 # timingresweighted2uncert = np.array([   1.96, 0.50, 0.52, 0.47, 0.48, 1.36])
 
@@ -37,6 +63,7 @@ positionres_twoStripsuncert = np.array([0.07, 0.02, 0.02])
 
 position_oneStrip_graph  = ROOT.TGraphErrors(width.size ,width.astype(np.double), positionres_oneStrip.astype(np.double), empty.astype(np.double), positionres_oneStripuncert.astype(np.double))
 position_twoStrips_graph = ROOT.TGraphErrors(width.size ,width.astype(np.double), positionres_twoStrips.astype(np.double), empty.astype(np.double), positionres_twoStripsuncert.astype(np.double))
+
 # time_graph = ROOT.TGraphErrors(width.size , width.astype(np.double), timingres.astype(np.double), empty.astype(np.double), timingresuncert.astype(np.double))
 # time_weight_graph = ROOT.TGraphErrors(width.size , width.astype(np.double), timingresweighted2.astype(np.double), empty.astype(np.double), timingresweighted2uncert.astype(np.double))
 
@@ -99,7 +126,7 @@ leg = ROOT.TLegend(2*myStyle.GetMargin()+0.01, 1-myStyle.GetMargin()-0.01-0.20, 
 # leg.SetTextFont(42)
 # leg.AddEntry(time_graph, "#splitline{Single-channel Time}{Resolution}", "pl")
 # leg.AddEntry(time_weight_graph, "#splitline{Multi-channel Time}{Resolution}", "pl")
-leg.AddEntry(position_oneStrip_graph, "One strips reconstruction", "pl")
+leg.AddEntry(position_oneStrip_graph, "One strip reconstruction", "pl")
 leg.AddEntry(position_twoStrips_graph, "Two strips reconstruction", "pl")
 
 # myStyle.BeamInfo()
@@ -115,4 +142,4 @@ position_twoStrips_graph.Draw("epl same")
 # time_graph.Draw("epl same")
 # time_weight_graph.Draw("epl same")
 
-c1.SaveAs("%sresolution_vs_width_EIC1cm.pdf"%(outdir))
+c1.SaveAs("%sresolution_vs_width_EIC.pdf"%(outdir))
