@@ -175,8 +175,8 @@ python PlotTimeDiffVsXY.py  -D HPK_strips_Eb_45um_170V --zmin 25.0 --zmax 75.0
 python PlotTimeDiffVsY.py   -D HPK_strips_Eb_45um_170V --xlength 5.5 --ylength 150.0
 python PlotTimeMeanVsXY.py  -D HPK_strips_Eb_45um_170V --zmin -0.5 --zmax 0.5
 python PlotSimpleXYMaps.py  -D HPK_strips_Eb_45um_170V
-python PlotRecoDiffVsXY.py  -D HPK_strips_Eb_45um_170V --zmin 0.0 --zmax 60.0
-python PlotRecoDiffVsX.py   -D HPK_strips_Eb_45um_170V --xlength 0.6 --ylength 60.0
+python PlotRecoDiffVsXY.py  -D HPK_strips_Eb_45um_170V --zmin 0.0 --zmax 40.0
+python PlotRecoDiffVsX.py   -D HPK_strips_Eb_45um_170V --xlength 0.6 --ylength 40.0
 python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -x 0.6 -r 0
 python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -x 0.6 -r 1
 python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -x 0.6 -r 2
