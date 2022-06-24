@@ -65,7 +65,7 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")
 
-outdir = myStyle.GetPlotsDir(outdir, "Res/")
+outdir = myStyle.GetPlotsDir(outdir, "PositionRes/")
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
@@ -78,9 +78,9 @@ debugMode = options.debugMode
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    # HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    # HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),

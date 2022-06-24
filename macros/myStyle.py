@@ -151,3 +151,21 @@ sensorsGeom2022 = { "EIC_W2_1cm_500um_200um_gap_240V": {'sensor': "EIC_W2_1cm_50
                     "BNL2021_2022_medium_285V": {'sensor': "BNL2021_V2_1cm_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 285},
                     "IHEP_W1_I_185V": {'sensor': "IHEP_W1_I_1cm_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 185},
 }
+
+resolutions2022 = {
+    "EIC_W2_1cm_500um_200um_gap_240V": {'position_oneStrip' : 78.65, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 80.37,
+                                        'position_twoStrips': 15.38, 'position_twoStrips_E': 0.00},
+    "EIC_W1_1cm_255V": {'position_oneStrip' : 129.4, 'position_oneStrip_E' : 1.60, 'position_oneStripRMS': 54.87,
+                        'position_twoStrips': 18.53, 'position_twoStrips_E': 0.02},
+    "EIC_W2_1cm_500um_400um_gap_220V": {'position_oneStrip' : 53.97, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 27.93,
+                                        'position_twoStrips': 18.73, 'position_twoStrips_E': 0.00},
+    "EIC_W1_2p5cm_215V": {'position_oneStrip' : 205.8, 'position_oneStrip_E' : 2.80, 'position_oneStripRMS': 72.09,
+                          'position_twoStrips': 34.13, 'position_twoStrips_E': 0.16},
+    "HPK_strips_Eb_45um_170V": {'position_oneStrip' : 11.91, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 13.83,
+                                'position_twoStrips':  9.36, 'position_twoStrips_E': 0.00},
+    "EIC_W1_0p5cm_500um_300um_gap_1_4_245V": {'position_oneStrip' : 179.4, 'position_oneStrip_E' : 12.6, 'position_oneStripRMS': 52.91,
+                                              'position_twoStrips': 11.82, 'position_twoStrips_E': 0.02},
+    "BNL2021_2022_medium_285V": {'position_oneStrip' : 14.0, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 22.35,
+                                 'position_twoStrips': 8.01, 'position_twoStrips_E': 0.00},
+}
+

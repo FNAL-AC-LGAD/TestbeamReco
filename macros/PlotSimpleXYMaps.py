@@ -27,7 +27,7 @@ outdir=""
 outdir = myStyle.getOutputDir(dataset)
 inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 
-
+outdir = myStyle.GetPlotsDir(outdir, "SimpleMaps/")
 
 #Get 3D histograms 
 th3_amplitude_vs_xy = inputfile.Get("amplitude_vs_xy")
@@ -44,7 +44,7 @@ outputfile=TFile("%splotsSimpleMapsvsXY.root"%outdir,"RECREATE")
 
 
 def printProjectionColZ(th3,variable_title,tag,zmin,zmax):
-	th2 = th3.Project3DProfile("xy")
+	th2 = th3.Project3DProfile("yx")
 	if "arrival time" in variable_title: th2.Scale(1000)
 	canvas = TCanvas("cv","cv",1200,800)
 
@@ -59,7 +59,7 @@ def printProjectionColZ(th3,variable_title,tag,zmin,zmax):
 	th2.Draw("colz")
 
 
-#	myStyle.BeamInfo()
+	#myStyle.BeamInfo()
 	myStyle.SensorInfoSmart(dataset)
 
 	canvas.SaveAs(outdir+tag+"vs_xy.gif")
@@ -67,8 +67,6 @@ def printProjectionColZ(th3,variable_title,tag,zmin,zmax):
 	canvas.SaveAs(outdir+tag+"vs_xy.root")
 
 	th2.Write()
-
-
 
 
 printProjectionColZ(th3_amplitude_vs_xy,"Mean amplitude [mV]","amp",15,130)
