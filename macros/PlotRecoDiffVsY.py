@@ -74,6 +74,10 @@ xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
 
+outdir = myStyle.GetPlotsDir(outdir, "PositionResY/")
+if debugMode:
+    outdir_q = myStyle.CreateFolder(outdir, "q_resY0/")
+
 all_histoInfos = [
     HistoInfo("deltaY_vs_Ytrack",   inputfile, "track", True,  ylength, "", "Track y position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaYBasic_vs_Ytrack",   inputfile, "trackBasic", True,  ylength, "", "Track y position [mm]","Position resolution [#mum]",sensor),
@@ -94,18 +98,6 @@ TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
 
 print("Finished setting up langaus fit class")
-
-if debugMode:
-    outdir_q = os.path.join(outdir,"q_res0/")
-    if not os.path.exists(outdir_q):
-            print(outdir_q)
-            os.mkdir(outdir_q)
-    else:
-            i = 1
-            while(os.path.exists(outdir_q)):
-                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
-                    i+=1
-            os.mkdir(outdir_q)
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 #loop over X bins
@@ -160,8 +152,8 @@ for i in range(0, nXBins+1):
         else:
             value = 0.0
             error = 0.0
-            if "track_twoStrips" in info.outHistoName:
-                expected_res_vs_x.SetBinContent(i,0)
+            # if "track_twoStrips" in info.outHistoName:
+            #     expected_res_vs_x.SetBinContent(i,0)
 
         # Removing telescope contribution
         #if value>6.0:
@@ -232,13 +224,13 @@ for info in all_histoInfos:
     legend.AddEntry(default_res, "Binary readout","l")
     legend.AddEntry(info.th1, "Two-strip reconstruction")
 
-    if "track_twoStrips" in info.outHistoName:
-        expected_res_vs_x.Draw("hist same")
-        legend.AddEntry(expected_res_vs_x,"Expected resolution")
+    # if "track_twoStrips" in info.outHistoName:
+    #     expected_res_vs_x.Draw("hist same")
+    #     legend.AddEntry(expected_res_vs_x,"Expected resolution")
 
     legend.Draw();
 
-    myStyle.BeamInfo()
+    # myStyle.BeamInfo()
     myStyle.SensorInfo(sensor, bias)
 
     canvas.SaveAs(outdir+"PositionRes_vs_y_"+info.outHistoName+".gif")
