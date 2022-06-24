@@ -108,9 +108,16 @@ if options.plotAll:
         hists += [('deltaX_TopRow','deltaX_TopRow',"tracker"), ('deltaX_BotRow','deltaX_BotRow',"tracker"), ('deltaY_RightCol','deltaY_RightCol',"tracker"), ('deltaY_LeftCol','deltaY_LeftCol',"tracker")] 
         hists += [("weighted_timeDiff_goodSig","weighted_goodSig","photek"), ("weighted2_timeDiff_goodSig","weighted2_goodSig","photek")]
 
+nEntries = {}
 for t in hists:
     h = inputfile.Get(t[0])
     plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], runPad, 100, (0,1), fitmin, fitmax)
 
-        
+    if (t[0] in ['deltaX_oneStrip','deltaX_twoStrips']):
+        # print("* Number of entries in",t[0],":",h.GetEntries())
+        nEntries[t[0]] = h.GetEntries()
+
+## Get fraction of events per reconstruction method
+for reco_method in nEntries:
+        print("* {0}: {1}/{2} ({3:.2f} %)".format(reco_method, nEntries[reco_method], sum(nEntries.values()), 100*nEntries[reco_method]/sum(nEntries.values())))
 
