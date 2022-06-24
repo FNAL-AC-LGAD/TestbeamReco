@@ -11,15 +11,17 @@ python FindInputHistos4YReco.py -D EIC_W2_1cm_500um_200um_gap_240V
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W2_1cm_500um_200um_gap_240V
 cd ../macros
+
 python DoPositionRecoFit.py -D EIC_W2_1cm_500um_200um_gap_240V -A --xmax 0.74 --fitOrder 5
 python PlotAmplitudeVsX.py  -D EIC_W2_1cm_500um_200um_gap_240V --xlength 2.5 --ylength 90.0
 python PlotAmplitudeVsXY.py -D EIC_W2_1cm_500um_200um_gap_240V --zmin 20.0 --zmax 90.0
 python PlotTimeDiffVsX.py   -D EIC_W2_1cm_500um_200um_gap_240V --xlength 2.5 --ylength 150.0
-python PlotTimeDiffVsXY.py  -D EIC_W2_1cm_500um_200um_gap_240V --zmin 25.0 --zmax 75.0  ## --zmin 25.0 --zmax 75.0 For all fo the sensors! (2.5 cm uses 35. - 150.)
+python PlotTimeDiffVsXY.py  -D EIC_W2_1cm_500um_200um_gap_240V --zmin 25.0 --zmax 75.0
 python PlotTimeDiffVsY.py   -D EIC_W2_1cm_500um_200um_gap_240V --xlength 6.0 --ylength 150.0
 python PlotTimeMeanVsXY.py  -D EIC_W2_1cm_500um_200um_gap_240V --zmin -0.5 --zmax 0.5
 python PlotSimpleXYMaps.py  -D EIC_W2_1cm_500um_200um_gap_240V
 python PlotRecoDiffVsXY.py  -D EIC_W2_1cm_500um_200um_gap_240V --zmin 0.0 --zmax 100.0
+# python PlotRecoDiffVsY.py   -D EIC_W2_1cm_500um_200um_gap_240V --xlength 6.0 --ylength 150.0
 python PlotRecoDiffVsX.py   -D EIC_W2_1cm_500um_200um_gap_240V --xlength 2.5 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W2_1cm_500um_200um_gap_240V -x 2.5 -r 0
 python PlotEfficiency.py    -D EIC_W2_1cm_500um_200um_gap_240V -x 2.5 -r 1
@@ -39,6 +41,7 @@ python FindInputHistos4YReco.py -D EIC_W1_1cm_255V
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W1_1cm_255V
 cd ../macros
+
 python DoPositionRecoFit.py -D EIC_W1_1cm_255V -A --xmax 0.81 --fitOrder 5
 python PlotAmplitudeVsX.py  -D EIC_W1_1cm_255V --xlength 2.5 --ylength 90.0
 python PlotAmplitudeVsXY.py -D EIC_W1_1cm_255V --zmin 20.0 --zmax 90.0
@@ -243,19 +246,4 @@ python PlotEfficiency.py    -D BNL2021_2022_medium_285V -x 0.8 -r 0
 python PlotEfficiency.py    -D BNL2021_2022_medium_285V -x 0.8 -r 1
 python PlotEfficiency.py    -D BNL2021_2022_medium_285V -x 0.8 -r 2
 python plot1DRes.py         -D BNL2021_2022_medium_285V
-
-# # # cd ../test
-# # # ./MyAnalysis -A Analyze -D BNL2021_2022_medium_285V
-# # # cd ../macros
-# # # python DoPositionRecoFit.py -D BNL2021_2022_medium_285V --xmax 0.82 --pitch 150 --fitOrder 4 
-# # # python plot1DRes.py         -D BNL2021_2022_medium_285V
-# # # python PlotAmplitudeVsX.py  -D BNL2021_2022_medium_285V -s BNL_2021 -b 285 --xlength 0.6 --ylength 180.0
-# # # python PlotTimeDiffVsX.py   -D BNL2021_2022_medium_285V -s BNL_2021 -b 285 --pitch 150 --xlength 0.6 --ylength 80.0
-# # # python PlotRecoDiffVsX.py   -D BNL2021_2022_medium_285V -s BNL_2021 -b 285 --pitch 150 --xlength 0.6 --ylength 60.0
-# # # python PlotEfficiency.py    -D BNL2021_2022_medium_285V -s BNL_2021 -b 285 --xlength 0.6
-# # # python PlotSimpleXYMaps.py  -D BNL2021_2022_medium_285V
-# # # python PlotAmplitudeVsXY.py -D BNL2021_2022_medium_285V --zmin 0.0 --zmax 150.0
-# # # python PlotTimeDiffVsXY.py  -D BNL2021_2022_medium_285V --zmin 0.0 --zmax 50.0
-# # # python PlotTimeMeanVsXY.py  -D BNL2021_2022_medium_285V --zmin -0.2 --zmax 0.2
-# # # python PlotRecoDiffVsXY.py  -D BNL2021_2022_medium_285V --zmin 0.0 --zmax 20.0
 
