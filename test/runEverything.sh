@@ -11,7 +11,6 @@ python FindInputHistos4YReco.py -D EIC_W2_1cm_500um_200um_gap_240V
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W2_1cm_500um_200um_gap_240V
 cd ../macros
-
 python DoPositionRecoFit.py -D EIC_W2_1cm_500um_200um_gap_240V -A --xmax 0.74 --fitOrder 5
 python PlotAmplitudeVsX.py  -D EIC_W2_1cm_500um_200um_gap_240V --xlength 2.5 --ylength 90.0
 python PlotAmplitudeVsXY.py -D EIC_W2_1cm_500um_200um_gap_240V --zmin 20.0 --zmax 90.0
@@ -27,6 +26,7 @@ python PlotEfficiency.py    -D EIC_W2_1cm_500um_200um_gap_240V -x 2.5 -r 0
 python PlotEfficiency.py    -D EIC_W2_1cm_500um_200um_gap_240V -x 2.5 -r 1
 python PlotEfficiency.py    -D EIC_W2_1cm_500um_200um_gap_240V -x 2.5 -r 2
 python plot1DRes.py         -D EIC_W2_1cm_500um_200um_gap_240V
+
 
 ## EIC_W1_1cm_500up_200uw
 echo "Running over EIC_W1_1cm_500up_200uw sensor"
@@ -136,6 +136,14 @@ cd ../test
 cd ../macros
 python FindInputHistos4YReco.py -D EIC_W1_2p5cm_215V
 cd ../test
+./MyAnalysis -A InitialAnalyzer -D EIC_W1_2p5cm_215V
+cd ../macros
+python FindDelayCorrections.py -D EIC_W1_2p5cm_215V
+cd ../test
+./MyAnalysis -A RecoAnalyzer -D EIC_W1_2p5cm_215V
+cd ../macros
+python FindInputHistos4YReco.py -D EIC_W1_2p5cm_215V
+cd ../test
 ./MyAnalysis -A Analyze -D EIC_W1_2p5cm_215V
 cd ../macros
 
@@ -184,7 +192,7 @@ python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -x 0.6 -r 0
 python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -x 0.6 -r 1
 python PlotEfficiency.py    -D HPK_strips_Eb_45um_170V -x 0.6 -r 2
 python plot1DRes.py         -D HPK_strips_Eb_45um_170V
-
+python PlotRecoDiffVsY.py   -D HPK_strips_Eb_45um_170V -b 170 --xlength 10.0 --ylength 5000.0
 
 
 ## EIC_W1_0p5cm_500up_200uw_1_4

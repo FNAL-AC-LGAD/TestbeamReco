@@ -29,11 +29,6 @@ class HistoInfo:
 
     def getTH2(self, f, name, sensor):
         th2 = f.Get(name)
-        # th2_temp = TH2D(outHist,"",42,-0.210,0.210,th2.GetYaxis().GetNbins(),th2.GetYaxis().GetXmin(),th2.GetYaxis().GetXmax())
-        # for i in range(th2.GetXaxis().FindBin(-0.210+centerShift),th2.GetXaxis().FindBin(0.210+centerShift)+1,1):
-        #     th2_temp.Fill()
-        if sensor=="BNL2020": th2.RebinX(7)
-        elif sensor=="BNL2021": th2.RebinX(10)
         return th2
 
     def getTH1(self, th2, name, centerShift, fine_value):
@@ -90,6 +85,25 @@ all_histoInfos = [
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
 
+#### histograms for expected resolution
+otherInfile = TFile("%stimeDiffVsY.root"%(outdir))
+#sigma_timeDiff_vs_y = otherInfile.Get("time_diff")
+sigma_timeDiff_vs_y = otherInfile.Get("time_diffTracker")
+
+nbinsy = sigma_timeDiff_vs_y.GetNbinsX()
+low_y = sigma_timeDiff_vs_y.GetBinLowEdge(1) - all_histoInfos[0].shift()
+high_y = sigma_timeDiff_vs_y.GetBinLowEdge(nbinsy)- all_histoInfos[0].shift()
+
+expected_res_vs_y = ROOT.TH1F("h_exp","",nbinsy,low_y,high_y)
+for ibin in range(expected_res_vs_y.GetNbinsX()+1):
+    if sigma_timeDiff_vs_y.GetBinError(ibin)>0:
+        expected_res = (1/math.sqrt(2))*50.0*sigma_timeDiff_vs_y.GetBinContent(ibin)
+    else:
+        expected_res=0
+
+    #print("Bin %i, res %f, %f"%(ibin,expected_res,sigma_timeDiff_vs_y.GetBinContent(ibin)))
+    expected_res_vs_y.SetBinContent(ibin,expected_res)
+
 
 canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
@@ -102,9 +116,6 @@ print("Finished setting up langaus fit class")
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 #loop over X bins
 for i in range(0, nXBins+1):
-    ##For Debugging
-    #if not (i==46 and j==5):
-    #    continue
 
     for info in all_histoInfos:
         totalEvents = info.th2.GetEntries()
@@ -152,8 +163,9 @@ for i in range(0, nXBins+1):
         else:
             value = 0.0
             error = 0.0
-            # if "track_twoStrips" in info.outHistoName:
-            #     expected_res_vs_x.SetBinContent(i,0)
+
+            #if "track_twoStrips" in info.outHistoName:
+            expected_res_vs_y.SetBinContent(i,0)
 
         # Removing telescope contribution
         #if value>6.0:
@@ -170,7 +182,7 @@ for i in range(0, nXBins+1):
         info.th1.SetBinError(i,error)
                         
 # Plot 2D histograms
-outputfile = TFile(outdir+"PlotRecoDiffVsX.root","RECREATE")
+outputfile = TFile(outdir+"PlotRecoDiffVsY.root","RECREATE")
 for info in all_histoInfos:
     htemp = TH1F("htemp","",1,-xlength,xlength)
     htemp.SetStats(0)
@@ -193,14 +205,6 @@ for info in all_histoInfos:
     ymin = info.th1.GetMinimum()
     ymax = info.yMax
 
-    #boxes = getStripBox(inputfile,ymin,ymax,False,18,True,info.shift())
-    #for box in boxes:
-    #    box.Draw()
-
-    # boxes2 = getStripBox(inputfile,ymin,ymax,True,ROOT.kRed,True,info.shift())
-    # for box in boxes2:
-    #     box.Draw("same")
-
     default_res = ROOT.TLine(-xlength,length/TMath.Sqrt(12),xlength,length/TMath.Sqrt(12))
     default_res.SetLineWidth(4)
     default_res.SetLineStyle(9)
@@ -214,7 +218,6 @@ for info in all_histoInfos:
     info.th1.Draw("hist e same")
 
 
-
     legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.2,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.1)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
@@ -224,9 +227,11 @@ for info in all_histoInfos:
     legend.AddEntry(default_res, "Binary readout","l")
     legend.AddEntry(info.th1, "Two-strip reconstruction")
 
-    # if "track_twoStrips" in info.outHistoName:
-    #     expected_res_vs_x.Draw("hist same")
-    #     legend.AddEntry(expected_res_vs_x,"Expected resolution")
+    #if "track_twoStrips" in info.outHistoName:
+    expected_res_vs_y.Draw("hist same")
+    legend.AddEntry(expected_res_vs_y,"Expected resolution")
+    #expected_res_vs_y.Print("all")
+
 
     legend.Draw();
 
