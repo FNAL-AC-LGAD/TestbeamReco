@@ -69,6 +69,7 @@ xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
 
+indir = myStyle.GetPlotsDir(outdir, "TimeRes/")
 outdir = myStyle.GetPlotsDir(outdir, "PositionResY/")
 if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "q_resY0/")
@@ -86,7 +87,7 @@ all_histoInfos = [
 ]
 
 #### histograms for expected resolution
-otherInfile = TFile("%stimeDiffVsY.root"%(outdir))
+otherInfile = TFile("%stimeDiffVsY.root"%(indir))
 #sigma_timeDiff_vs_y = otherInfile.Get("time_diff")
 sigma_timeDiff_vs_y = otherInfile.Get("time_diffTracker")
 
