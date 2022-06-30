@@ -381,7 +381,7 @@ public:
 };
 
 class EIC2p5cmStripsUCSCGeometry : public DefaultGeometry
-// EIC_UCSC_2p5cm_500up_200uw
+// EIC_W1_UCSC_2p5cm_500up_200uw
 {
 public:
     // EIC UCSC 2p5cm long strips 500um pitch 300um gap size
@@ -443,7 +443,7 @@ public:
 };
 
 class EIC2p5cmStripsGeometry : public DefaultGeometry
-// EIC_2p5cm_500up_200uw
+// EIC_W1_2p5cm_500up_200uw
 {
 public:
     // EIC 2p5cm long strips 500um pitch 300um gap size
@@ -510,7 +510,7 @@ public:
 };
 
 class HPKStripsEbWideMetalGeometry : public DefaultGeometry
-// HPK_1cm_80up_45uw
+// HPK_Eb_1cm_80up_45uw
 {
 public:
     // HPK Strips 2021 Mapping set
@@ -726,7 +726,7 @@ public:
 };
 
 class BNL2021MediumV2Geometry : public DefaultGeometry
-// BNL2021_V2_?cm_150up_80uw
+// BNL2021_22_medium_150up_80uw
 {
 public:
     BNL2021MediumV2Geometry(const int v=0) : voltage(v){}
@@ -771,7 +771,7 @@ public:
 };
 
 class IHEPGeometry : public DefaultGeometry
-// IHEP_?cm_150up_80uw
+// IHEP_W1_I_150up_80uw
 {
 public:
     IHEPGeometry(const int v=0) : voltage(v){}

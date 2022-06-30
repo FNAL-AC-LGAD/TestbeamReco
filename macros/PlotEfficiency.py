@@ -10,7 +10,6 @@ organized_mode=True
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 3.0, help="Limit x-axis in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-r', dest='recoMethod', default = 0, help="Reco method: 0: Full, 1:_oneStrip, 2:_twoStrips")
@@ -33,9 +32,6 @@ outdir = myStyle.GetPlotsDir(outdir, "Eff/")
 
 colors = myStyle.GetColors()
 
-sensor_Geometry = myStyle.GetGeometry(dataset)
-sensor = sensor_Geometry['sensor']
-bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 xlength = float(options.xlength)
 
 
@@ -146,7 +142,7 @@ for t,threshold in enumerate(list_threshold):
     # legend2.Draw()
 
     # myStyle.BeamInfo()
-    myStyle.SensorInfo(sensor, bias)
+    myStyle.SensorInfoSmart(dataset)
 
     htemp.Draw("AXIS same")
     if t==3: recoMethod=""

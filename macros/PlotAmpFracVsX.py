@@ -39,7 +39,6 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="X axis range [-x, x]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
@@ -56,7 +55,6 @@ else:
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 pitch  = sensor_Geometry['pitch']
 xlength = float(options.xlength)
 debugMode = options.debugMode
@@ -219,7 +217,7 @@ for i,info in enumerate(all_histoInfos):
 
 legend.Draw();
 myStyle.BeamInfo()
-myStyle.SensorInfo(sensor, bias)
+myStyle.SensorInfoSmart(dataset)
 
 canvas.SaveAs(outdir+"AmpFrac_vs_x.gif")
 canvas.SaveAs(outdir+"AmpFrac_vs_x.pdf")

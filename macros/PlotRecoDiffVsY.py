@@ -45,7 +45,6 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="X axis range [-x, x]") 
 parser.add_option('-y','--ylength', dest='ylength', default = 10000.0, help="Y axis upper limit") 
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
@@ -63,7 +62,6 @@ else:
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 length  = sensor_Geometry['length']*1000.0
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -237,7 +235,7 @@ for info in all_histoInfos:
     legend.Draw();
 
     # myStyle.BeamInfo()
-    myStyle.SensorInfo(sensor, bias)
+    myStyle.SensorInfoSmart(dataset)
 
     canvas.SaveAs(outdir+"PositionRes_vs_y_"+info.outHistoName+".gif")
     canvas.SaveAs(outdir+"PositionRes_vs_y_"+info.outHistoName+".pdf")
