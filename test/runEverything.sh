@@ -58,6 +58,7 @@ python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 2.5 -r 1
 python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 2.5 -r 2
 python plot1DRes.py         -D EIC_W1_1cm_500up_200uw_255V
 
+
 ## EIC_W2_1cm_500up_100uw_220V
 echo "Running over EIC_W2_1cm_500up_100uw_220V sensor"
 cd ../test
