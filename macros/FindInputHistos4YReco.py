@@ -18,16 +18,21 @@ organized_mode=True
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+parser.add_option('-I', dest='useInitialAnalyzer', action='store_true', default = False, help="Use InitialAnalyzer as input")
 options, args = parser.parse_args()
 
 num_strips=8
 
 dataset = options.Dataset
+useInit = options.useInitialAnalyzer
 outdir=""
-if organized_mode: 
+if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_RecoAnalyzer.root"%(outdir,dataset))
-else: 
+    if useInit:
+        inputfile = TFile("%s%s_InitialAnalyzer.root"%(outdir,dataset))
+    else:
+        inputfile = TFile("%s%s_RecoAnalyzer.root"%(outdir,dataset))
+else:
     inputfile = TFile("../test/myoutputfile.root")   
 
 sensor_Geometry = myStyle.GetGeometry(dataset)

@@ -311,6 +311,7 @@ public:
                 "PrepNTupleVars",
                 "SignalProperties",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }

@@ -4,10 +4,7 @@ cd ../test
 ./MyAnalysis -A InitialAnalyzer -D EIC_W2_1cm_500up_300uw_240V
 cd ../macros
 python FindDelayCorrections.py -D EIC_W2_1cm_500up_300uw_240V
-cd ../test
-./MyAnalysis -A RecoAnalyzer -D EIC_W2_1cm_500up_300uw_240V
-cd ../macros
-python FindInputHistos4YReco.py -D EIC_W2_1cm_500up_300uw_240V
+python FindInputHistos4YReco.py -D EIC_W2_1cm_500up_300uw_240V -I
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W2_1cm_500up_300uw_240V
 cd ../macros
@@ -35,10 +32,7 @@ cd ../test
 ./MyAnalysis -A InitialAnalyzer -D EIC_W1_1cm_500up_200uw_255V
 cd ../macros
 python FindDelayCorrections.py -D EIC_W1_1cm_500up_200uw_255V
-cd ../test
-./MyAnalysis -A RecoAnalyzer -D EIC_W1_1cm_500up_200uw_255V
-cd ../macros
-python FindInputHistos4YReco.py -D EIC_W1_1cm_500up_200uw_255V
+python FindInputHistos4YReco.py -D EIC_W1_1cm_500up_200uw_255V -I
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W1_1cm_500up_200uw_255V
 cd ../macros
@@ -65,10 +59,7 @@ cd ../test
 ./MyAnalysis -A InitialAnalyzer -D EIC_W2_1cm_500up_100uw_220V
 cd ../macros
 python FindDelayCorrections.py -D EIC_W2_1cm_500up_100uw_220V
-cd ../test
-./MyAnalysis -A RecoAnalyzer -D EIC_W2_1cm_500up_100uw_220V
-cd ../macros
-python FindInputHistos4YReco.py -D EIC_W2_1cm_500up_100uw_220V
+python FindInputHistos4YReco.py -D EIC_W2_1cm_500up_100uw_220V -I
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W2_1cm_500up_100uw_220V
 cd ../macros
@@ -133,18 +124,7 @@ cd ../test
 ./MyAnalysis -A InitialAnalyzer -D EIC_W1_2p5cm_500up_200uw_215V
 cd ../macros
 python FindDelayCorrections.py -D EIC_W1_2p5cm_500up_200uw_215V
-cd ../test
-./MyAnalysis -A RecoAnalyzer -D EIC_W1_2p5cm_500up_200uw_215V
-cd ../macros
-python FindInputHistos4YReco.py -D EIC_W1_2p5cm_500up_200uw_215V
-cd ../test
-./MyAnalysis -A InitialAnalyzer -D EIC_W1_2p5cm_500up_200uw_215V
-cd ../macros
-python FindDelayCorrections.py -D EIC_W1_2p5cm_500up_200uw_215V
-cd ../test
-./MyAnalysis -A RecoAnalyzer -D EIC_W1_2p5cm_500up_200uw_215V
-cd ../macros
-python FindInputHistos4YReco.py -D EIC_W1_2p5cm_500up_200uw_215V
+python FindInputHistos4YReco.py -D EIC_W1_2p5cm_500up_200uw_215V -I
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W1_2p5cm_500up_200uw_215V
 cd ../macros
@@ -172,10 +152,7 @@ cd ../test
 ./MyAnalysis -A InitialAnalyzer -D HPK_Eb_1cm_80up_45uw_170V
 cd ../macros
 python FindDelayCorrections.py -D HPK_Eb_1cm_80up_45uw_170V
-cd ../test
-./MyAnalysis -A RecoAnalyzer -D HPK_Eb_1cm_80up_45uw_170V
-cd ../macros
-python FindInputHistos4YReco.py -D HPK_Eb_1cm_80up_45uw_170V
+python FindInputHistos4YReco.py -D HPK_Eb_1cm_80up_45uw_170V -I
 cd ../test
 ./MyAnalysis -A Analyze -D HPK_Eb_1cm_80up_45uw_170V
 cd ../macros
@@ -203,10 +180,7 @@ cd ../test
 ./MyAnalysis -A InitialAnalyzer -D EIC_W1_0p5cm_500up_200uw_1_4_245V
 cd ../macros
 python FindDelayCorrections.py -D EIC_W1_0p5cm_500up_200uw_1_4_245V
-cd ../test
-./MyAnalysis -A RecoAnalyzer -D EIC_W1_0p5cm_500up_200uw_1_4_245V
-cd ../macros
-python FindInputHistos4YReco.py -D EIC_W1_0p5cm_500up_200uw_1_4_245V
+python FindInputHistos4YReco.py -D EIC_W1_0p5cm_500up_200uw_1_4_245V -I
 cd ../test
 ./MyAnalysis -A Analyze -D EIC_W1_0p5cm_500up_200uw_1_4_245V
 cd ../macros
@@ -234,10 +208,7 @@ cd ../test
 ./MyAnalysis -A InitialAnalyzer -D BNL2021_22_medium_150up_80uw_285V
 cd ../macros
 python FindDelayCorrections.py -D BNL2021_22_medium_150up_80uw_285V
-cd ../test
-./MyAnalysis -A RecoAnalyzer -D BNL2021_22_medium_150up_80uw_285V
-cd ../macros
-python FindInputHistos4YReco.py -D BNL2021_22_medium_150up_80uw_285V
+python FindInputHistos4YReco.py -D BNL2021_22_medium_150up_80uw_285V -I
 cd ../test
 ./MyAnalysis -A Analyze -D BNL2021_22_medium_150up_80uw_285V
 cd ../macros
