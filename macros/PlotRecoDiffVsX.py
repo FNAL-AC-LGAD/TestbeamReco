@@ -236,7 +236,7 @@ for info in all_histoInfos:
     default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
     default_res.Draw("same")
 
-    tracker_res = ROOT.TLine(-xlength,6.,xlength,6.)
+    tracker_res = ROOT.TLine(-xlength,5.,xlength,5.)
     tracker_res.SetLineWidth(4)
     tracker_res.SetLineStyle(5)
     tracker_res.SetLineColor(880) #kViolet
