@@ -43,7 +43,6 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Limit x-axis in final plot")
 parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Max TimeResolution value in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
@@ -60,7 +59,6 @@ else:
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor = sensor_Geometry['sensor']
-bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
@@ -192,7 +190,7 @@ for info in all_histoInfos:
     info.th1.Draw("hist e same")
 
     # myStyle.BeamInfo()
-    myStyle.SensorInfo(sensor, bias)
+    myStyle.SensorInfoSmart(dataset)
 
     canvas.SaveAs(outdir+"TimeRes_vs_x_"+info.outHistoName+".gif")
     canvas.SaveAs(outdir+"TimeRes_vs_x_"+info.outHistoName+".pdf")
@@ -229,7 +227,7 @@ legend.AddEntry(hTimeResW2, "Multi-channel (w/ TrackerCorrection)")
 legend.Draw();
 
 # myStyle.BeamInfo()
-myStyle.SensorInfo(sensor, bias)
+myStyle.SensorInfoSmart(dataset)
 
 canvas.SaveAs(outdir+"TimeRes_vs_x_BothMethods.gif")
 canvas.SaveAs(outdir+"TimeRes_vs_x_BothMethods.pdf")

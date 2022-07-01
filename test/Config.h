@@ -148,20 +148,20 @@ public:
         else if(filetag.find("BNL2021_hexpix")                         != std::string::npos) registerGeometry(tr, BNLPixelHexGeometry(voltage));
         else if(filetag.find("HPK2_DCLGAD_220V")                       != std::string::npos) registerGeometry(tr, HPK2DCLGADGeometry(voltage));
         // 2022 Campaign
-        else if(filetag.find("EIC_W2_1cm_500um_200um_gap_240V")        != std::string::npos) registerGeometry(tr, EIC_W2_1cm_500um_200um_gap_StripsGeometry(voltage));
-        else if(filetag.find("EIC_W1_1cm_255V")                        != std::string::npos) registerGeometry(tr, EIC1cmStripsGeometry(voltage));
-        else if(filetag.find("EIC_W2_1cm_500um_400um_gap_220V")        != std::string::npos) registerGeometry(tr, EIC_W2_1cm_500um_400um_gap_StripsGeometry(voltage));
-        else if(filetag.find("EIC_W1_1cm_100_multiPitch_240V")         != std::string::npos) registerGeometry(tr, EIC1cmStrips100Geometry(voltage));
-        else if(filetag.find("EIC_W1_1cm_200_multiPitch_240V")         != std::string::npos) registerGeometry(tr, EIC1cmStrips200Geometry(voltage));
-        else if(filetag.find("EIC_W1_1cm_300_multiPitch_240V")         != std::string::npos) registerGeometry(tr, EIC1cmStrips300Geometry(voltage));
-        else if(filetag.find("EIC_W1_2p5cm_UCSC_330V")                 != std::string::npos) registerGeometry(tr, EIC2p5cmStripsUCSCGeometry(voltage));
-        else if(filetag.find("EIC_W1_2p5cm_215V")                      != std::string::npos) registerGeometry(tr, EIC2p5cmStripsGeometry(voltage));
-        else if(filetag.find("HPK_strips_Eb_45um_170V")                != std::string::npos) registerGeometry(tr, HPKStripsEbWideMetalGeometry(voltage));
-        else if(filetag.find("EIC_W1_0p5cm_500um_300um_gap_1_7_240V")  != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_7_StripsGeometry(voltage));
-        else if(filetag.find("EIC_W1_0p5cm_500um_300um_gap_1_4_245V")  != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_4_StripsGeometry(voltage));
+        else if(filetag.find("EIC_W2_1cm_500up_300uw")                 != std::string::npos) registerGeometry(tr, EIC_W2_1cm_500um_200um_gap_StripsGeometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_500up_200uw")                 != std::string::npos) registerGeometry(tr, EIC1cmStripsGeometry(voltage));
+        else if(filetag.find("EIC_W2_1cm_500up_100uw")                 != std::string::npos) registerGeometry(tr, EIC_W2_1cm_500um_400um_gap_StripsGeometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_100up_50uw")                  != std::string::npos) registerGeometry(tr, EIC1cmStrips100Geometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_200up_100uw")                 != std::string::npos) registerGeometry(tr, EIC1cmStrips200Geometry(voltage));
+        else if(filetag.find("EIC_W1_1cm_300up_150uw")                 != std::string::npos) registerGeometry(tr, EIC1cmStrips300Geometry(voltage));
+        else if(filetag.find("EIC_W1_UCSC_2p5cm_500up_200uw")          != std::string::npos) registerGeometry(tr, EIC2p5cmStripsUCSCGeometry(voltage));
+        else if(filetag.find("EIC_W1_2p5cm_500up_200uw")               != std::string::npos) registerGeometry(tr, EIC2p5cmStripsGeometry(voltage));
+        else if(filetag.find("HPK_Eb_1cm_80up_45uw")                   != std::string::npos) registerGeometry(tr, HPKStripsEbWideMetalGeometry(voltage));
+        else if(filetag.find("EIC_W1_0p5cm_500up_200uw_1_7")           != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_7_StripsGeometry(voltage));
+        else if(filetag.find("EIC_W1_0p5cm_500up_200uw_1_4")           != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_4_StripsGeometry(voltage));
         else if(filetag.find("BNL_500um_squares_175V")                 != std::string::npos) registerGeometry(tr, BNL_500um_squares_Geometry(voltage));
-        else if(filetag.find("BNL2021_2022_medium_285V")               != std::string::npos) registerGeometry(tr, BNL2021MediumV2Geometry(voltage));
-        else if(filetag.find("IHEP")                                   != std::string::npos) registerGeometry(tr, IHEPGeometry(voltage));
+        else if(filetag.find("BNL2021_22_medium_150up_80uw")           != std::string::npos) registerGeometry(tr, BNL2021MediumV2Geometry(voltage));
+        else if(filetag.find("IHEP_W1_I_150up_80uw")                        != std::string::npos) registerGeometry(tr, IHEPGeometry(voltage));
         else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
@@ -311,6 +311,7 @@ public:
                 "PrepNTupleVars",
                 "SignalProperties",
                 "Timing",
+                "SpatialReconstruction",
             };
             registerModules(tr, std::move(modulesList));
         }
