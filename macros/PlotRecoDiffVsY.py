@@ -45,7 +45,6 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="X axis range [-x, x]") 
 parser.add_option('-y','--ylength', dest='ylength', default = 10000.0, help="Y axis upper limit") 
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
@@ -63,11 +62,15 @@ else:
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 length  = sensor_Geometry['length']*1000.0
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
+
+indir = myStyle.GetPlotsDir(outdir, "TimeRes/")
+outdir = myStyle.GetPlotsDir(outdir, "PositionResY/")
+if debugMode:
+    outdir_q = myStyle.CreateFolder(outdir, "q_resY0/")
 
 all_histoInfos = [
     HistoInfo("deltaY_vs_Ytrack",   inputfile, "track", True,  ylength, "", "Track y position [mm]","Position resolution [#mum]",sensor),
@@ -82,7 +85,7 @@ all_histoInfos = [
 ]
 
 #### histograms for expected resolution
-otherInfile = TFile("%stimeDiffVsY.root"%(outdir))
+otherInfile = TFile("%stimeDiffVsY.root"%(indir))
 #sigma_timeDiff_vs_y = otherInfile.Get("time_diff")
 sigma_timeDiff_vs_y = otherInfile.Get("time_diffTracker")
 
@@ -108,18 +111,6 @@ TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
 
 print("Finished setting up langaus fit class")
-
-if debugMode:
-    outdir_q = os.path.join(outdir,"q_res0/")
-    if not os.path.exists(outdir_q):
-            print(outdir_q)
-            os.mkdir(outdir_q)
-    else:
-            i = 1
-            while(os.path.exists(outdir_q)):
-                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
-                    i+=1
-            os.mkdir(outdir_q)
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 #loop over X bins
@@ -171,6 +162,7 @@ for i in range(0, nXBins+1):
         else:
             value = 0.0
             error = 0.0
+
             #if "track_twoStrips" in info.outHistoName:
             expected_res_vs_y.SetBinContent(i,0)
 
@@ -239,10 +231,11 @@ for info in all_histoInfos:
     legend.AddEntry(expected_res_vs_y,"Expected resolution")
     #expected_res_vs_y.Print("all")
 
+
     legend.Draw();
 
-    myStyle.BeamInfo()
-    myStyle.SensorInfo(sensor, bias)
+    # myStyle.BeamInfo()
+    myStyle.SensorInfoSmart(dataset)
 
     canvas.SaveAs(outdir+"PositionRes_vs_y_"+info.outHistoName+".gif")
     canvas.SaveAs(outdir+"PositionRes_vs_y_"+info.outHistoName+".pdf")

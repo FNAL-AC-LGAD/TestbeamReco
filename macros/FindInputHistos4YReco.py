@@ -17,25 +17,28 @@ organized_mode=True
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-s','--sensor', dest='sensor', default = "", help="Type of sensor (BNL, HPK, ...)")
-parser.add_option('-p','--pitch', dest='pitch', default = 500, help="pitch in um")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias Voltage value in [V]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+parser.add_option('-I', dest='useInitialAnalyzer', action='store_true', default = False, help="Use InitialAnalyzer as input")
 options, args = parser.parse_args()
-
-sensor = options.sensor
-bias = options.biasvolt
-pitch = float(options.pitch)
 
 num_strips=8
 
 dataset = options.Dataset
+useInit = options.useInitialAnalyzer
 outdir=""
-if organized_mode: 
+if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_RecoAnalyzer.root"%(outdir,dataset))
-else: 
+    if useInit:
+        inputfile = TFile("%s%s_InitialAnalyzer.root"%(outdir,dataset))
+    else:
+        inputfile = TFile("%s%s_RecoAnalyzer.root"%(outdir,dataset))
+else:
     inputfile = TFile("../test/myoutputfile.root")   
+
+sensor_Geometry = myStyle.GetGeometry(dataset)
+
+sensor = sensor_Geometry['sensor']
+pitch  = sensor_Geometry['pitch']
 
 colors = myStyle.GetColors(True)
 

@@ -86,22 +86,24 @@ def BeamInfo():
     text.SetTextSize(tsize-4)
     text.DrawLatexNDC(2*marg+0.005,1-marg+0.01,"#bf{FNAL 120 GeV proton beam}")
 
-def SensorInfo(sensor="Name", bias_voltage="X", write_bv=True,adjustleft=0):
+def SensorInfo(sensor="Name", bias_voltage="", write_bv=True,adjustleft=0):
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
     text.SetTextAlign(31)
-    if write_bv: text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"V}")
-    else: text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor)+"}")
+    if bias_voltage:
+        text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"}")
+    else:
+        text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor)+"}")
 
 def SensorInfoSmart(dataset):
-    sensor ="Not defined"
+    name ="Not defined"
     bias_voltage = "X"
 
-    if sensorsGeom2022[dataset]:
-        sensor = sensorsGeom2022[dataset]['sensor']
-        bias_voltage = sensorsGeom2022[dataset]['BV']
+    if GetGeometry(dataset):
+        name = GetGeometry(dataset)['sensor']
+        bias_voltage = GetBV(dataset)
 
-    SensorInfo(sensor,bias_voltage,True,0.08)
+    SensorInfo(name,bias_voltage,True,0.00)
 
 def GetMargin():
     return marg
@@ -129,25 +131,56 @@ def GetColors(color_blind = False):
 
 def GetGeometry(name):
     sensor_dict = {}
-    if sensorsGeom2022[name]:
-        sensor_dict = sensorsGeom2022[name]
+    if sensorsGeom2022[RemoveBV(name)]:
+        sensor_dict = sensorsGeom2022[RemoveBV(name)]
     else:
         print("Sensor not found")
     return sensor_dict
 
+def RemoveBV(name):
+    name_split=name.split('_')
+    if name_split[-1][-1]=="V":
+        name='_'.join(str(name_split[i]) for i in range(len(name_split)-1))
+    return name
 
-sensorsGeom2022 = { "EIC_W2_1cm_500um_200um_gap_240V": {'sensor': "EIC_W2_1cm_500up_300uw", 'pitch': 500, 'stripWidth': 300, "BV": 240, "length": 10.0},
-                    "EIC_W1_1cm_255V": {'sensor': "EIC_W1_1cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 255, "length": 10.0},
-                    "EIC_W2_1cm_500um_400um_gap_220V": {'sensor': "EIC_W2_1cm_500up_100uw", 'pitch': 500, 'stripWidth': 100, "BV": 220, "length": 10.0},
-                    "EIC_W1_1cm_100_multiPitch_240V": {'sensor': "EIC_W1_1cm_100up_50uw", 'pitch': 100, 'stripWidth': 50, "BV": 240, "length": 10.0},
-                    "EIC_W1_1cm_200_multiPitch_240V": {'sensor': "EIC_W1_1cm_200up_100uw", 'pitch': 200, 'stripWidth': 100, "BV": 240, "length": 10.0},
-                    "EIC_W1_1cm_300_multiPitch_240V": {'sensor': "EIC_W1_1cm_300up_150uw", 'pitch': 300, 'stripWidth': 150, "BV": 240, "length": 10.0},
-                    "EIC_W1_2p5cm_UCSC_330V": {'sensor': "EIC_W1_2p5cm_UCSC_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 330, "length": 25.0},
-                    "EIC_W1_2p5cm_215V": {'sensor': "EIC_W1_2p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 215, "length": 25.0},
-                    "HPK_strips_Eb_45um_170V": {'sensor': "HPK_Eb_80up_45uw", 'pitch': 80, 'stripWidth': 45, "BV": 170, "length": 10.0},
-                    "EIC_W1_0p5cm_500um_300um_gap_1_7_240V": {'sensor': "EIC_W1_1_7_0p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 240, "length": 5.0},
-                    "EIC_W1_0p5cm_500um_300um_gap_1_4_245V": {'sensor': "EIC_W1_1_4_0p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 245, "length": 5.0},
+def GetBV(name):
+    name_split=name.split('_')
+    if name_split[-1][-1]=="V":
+        return name_split[-1]
+    else:
+        return ""
+
+
+sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "EIC_1cm_500up_300uw", 'pitch': 500, 'stripWidth': 300, "BV": 240, "length": 10.0},
+                    "EIC_W1_1cm_500up_200uw": {'sensor': "EIC_1cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 255, "length": 10.0},
+                    "EIC_W2_1cm_500up_100uw": {'sensor': "EIC_1cm_500up_100uw", 'pitch': 500, 'stripWidth': 100, "BV": 220, "length": 10.0},
+                    "EIC_W1_1cm_100up_50uw": {'sensor': "EIC_1cm_100up_50uw", 'pitch': 100, 'stripWidth': 50, "BV": 240, "length": 10.0},
+                    "EIC_W1_1cm_200up_100uw": {'sensor': "EIC_1cm_200up_100uw", 'pitch': 200, 'stripWidth': 100, "BV": 240, "length": 10.0},
+                    "EIC_W1_1cm_300up_150uw": {'sensor': "EIC_1cm_300up_150uw", 'pitch': 300, 'stripWidth': 150, "BV": 240, "length": 10.0},
+                    "EIC_W1_UCSC_2p5cm_500up_200uw": {'sensor': "EIC_2p5cm_UCSC_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 330, "length": 25.0},
+                    "EIC_W1_2p5cm_500up_200uw": {'sensor': "EIC_2p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 215, "length": 25.0},
+                    "HPK_Eb_1cm_80up_45uw": {'sensor': "HPK_Eb_80up_45uw", 'pitch': 80, 'stripWidth': 45, "BV": 170, "length": 10.0},
+                    "EIC_W1_0p5cm_500up_200uw_1_7": {'sensor': "EIC_1_7_0p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 240, "length": 5.0},
+                    "EIC_W1_0p5cm_500up_200uw_1_4": {'sensor': "EIC_1_4_0p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 245, "length": 5.0},
                     "BNL_500um_squares_175V": {'sensor': "BNL_squares_1cm_500up_300uw", 'pitch': 500, 'stripWidth': 100, "BV": 175},
-                    "BNL2021_2022_medium_285V": {'sensor': "BNL2021_V2_1cm_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 285},
-                    "IHEP_W1_I_185V": {'sensor': "IHEP_W1_I_1cm_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 185},
+                    "BNL2021_22_medium_150up_80uw": {'sensor': "BNL2021_V2_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 285},
+                    "IHEP_W1_I_150up_80uw": {'sensor': "IHEP_1cm_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 185},
 }
+
+resolutions2022 = {
+    "EIC_W2_1cm_500up_300uw_240V": {'position_oneStrip' : 78.65, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 80.37,
+                                    'position_twoStrips': 15.38, 'position_twoStrips_E': 0.00},
+    "EIC_W1_1cm_500up_200uw_255V": {'position_oneStrip' : 129.4, 'position_oneStrip_E' : 1.60, 'position_oneStripRMS': 54.87,
+                                    'position_twoStrips': 18.53, 'position_twoStrips_E': 0.02},
+    "EIC_W2_1cm_500up_100uw_220V": {'position_oneStrip' : 53.97, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 27.93,
+                                    'position_twoStrips': 18.73, 'position_twoStrips_E': 0.00},
+    "EIC_W1_2p5cm_500up_200uw_215V": {'position_oneStrip' : 205.8, 'position_oneStrip_E' : 2.80, 'position_oneStripRMS': 72.09,
+                                      'position_twoStrips': 34.13, 'position_twoStrips_E': 0.16},
+    "HPK_Eb_1cm_80up_45uw": {'position_oneStrip' : 11.91, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 13.83,
+                             'position_twoStrips':  9.36, 'position_twoStrips_E': 0.00},
+    "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'position_oneStrip' : 179.4, 'position_oneStrip_E' : 12.6, 'position_oneStripRMS': 52.91,
+                                          'position_twoStrips': 11.82, 'position_twoStrips_E': 0.02},
+    "BNL2021_22_medium_150up_80uw_285V": {'position_oneStrip' : 14.0, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 22.35,
+                                          'position_twoStrips': 8.01, 'position_twoStrips_E': 0.00},
+}
+

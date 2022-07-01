@@ -17,7 +17,6 @@ organized_mode=True
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
 
@@ -34,7 +33,6 @@ colors = myStyle.GetColors(True)
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 pitch  = sensor_Geometry['pitch']
 
 def findCenter(hist):
@@ -195,7 +193,7 @@ for i in range(nStrips):
 legend.Draw();
 
 myStyle.BeamInfo()
-myStyle.SensorInfo(sensor, bias)
+myStyle.SensorInfoSmart(dataset)
 
 canvas.SaveAs(outdir+"TotalAmplitude_vs_x_"+sensor+".gif")
 canvas.SaveAs(outdir+"TotalAmplitude_vs_x_"+sensor+".pdf")

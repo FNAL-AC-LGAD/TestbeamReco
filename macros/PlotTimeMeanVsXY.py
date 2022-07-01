@@ -29,6 +29,8 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")   
 
+outdir = myStyle.GetPlotsDir(outdir, "TimeMean/")
+
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName):
         self.inHistoName = inHistoName
@@ -45,17 +47,19 @@ class HistoInfo:
 
 
 all_histoInfos = [
-    HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
-    HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
-    HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
-    HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
-    HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
-    HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
-    HistoInfo("timeDiff_vs_xy_channel06",inputfile, "channel_7"),
+    # HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
+    # HistoInfo("timeDiff_vs_xy_channel01",inputfile, "channel_2"),
+    # HistoInfo("timeDiff_vs_xy_channel02",inputfile, "channel_3"),
+    # HistoInfo("timeDiff_vs_xy_channel03",inputfile, "channel_4"),
+    # HistoInfo("timeDiff_vs_xy_channel04",inputfile, "channel_5"),
+    # HistoInfo("timeDiff_vs_xy_channel05",inputfile, "channel_6"),
+    # HistoInfo("timeDiff_vs_xy_channel06",inputfile, "channel_7"),
     HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
-    HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
-    HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
-    HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
+    HistoInfo("timeDiffTracker_vs_xy", inputfile, "timeDiffTracker"),
+    # HistoInfo("timeDiff_vs_xy_amp2", inputfile, "time_diff_amp2"),
+    # HistoInfo("timeDiff_vs_xy_amp3", inputfile, "time_diff_amp3"),
+    # HistoInfo("weighted_timeDiff_vs_xy", inputfile, "weighted_time_diff"),
+    HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_timeDiff_tracker"),
 ]
 
 canvas = TCanvas("cv","cv",800,800)
@@ -67,17 +71,7 @@ gPad.SetTicks(1,1)
 print("Finished setting up langaus fit class")
 
 if debugMode:
-    outdir_q = os.path.join(outdir,"q_meanTimeXY/")
-    if not os.path.exists(outdir_q):
-            print(outdir_q)
-            os.mkdir(outdir_q)
-    else:
-            i = 1
-            while(os.path.exists(outdir_q)):
-                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
-                    i+=1
-            os.mkdir(outdir_q)
-
+    outdir_q = myStyle.CreateFolder(outdir, "q_meanTimeXY0/")
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 nYBins = all_histoInfos[0].th2.GetYaxis().GetNbins()
@@ -99,8 +93,8 @@ for i in range(0, nXBins+1):
             value = myMean
             error = 0.0
             
-            minEvtsCut = totalEvents/(nXBins+4*nYBins)
-            if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
+            minEvtsCut = totalEvents/(nXBins*4*nYBins)
+            if i==0 and j==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
 
 
 

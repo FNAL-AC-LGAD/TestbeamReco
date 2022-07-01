@@ -26,8 +26,8 @@ class HistoInfo:
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-z','--zmin', dest='zmin', default =   -50.0, help="Set zmin")
-parser.add_option('-Z','--zmax', dest='zmax', default = 150.0, help="Set zmax")
+parser.add_option('-z','--zmin', dest='zmin', default =   -50.0, help="Set min TimeRes value in final plot")
+parser.add_option('-Z','--zmax', dest='zmax', default = 150.0, help="Set max TimeRes value in final plot")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 
 options, args = parser.parse_args()
@@ -41,7 +41,9 @@ if organized_mode:
     outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 else: 
-    inputfile = TFile("../test/myoutputfile.root")   
+    inputfile = TFile("../test/myoutputfile.root")
+
+outdir = myStyle.GetPlotsDir(outdir, "TimeRes/")
 
 all_histoInfos = [
     #HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
@@ -67,17 +69,7 @@ gPad.SetTicks(1,1)
 
 
 if debugMode:
-    outdir_q = os.path.join(outdir,"q_resTimeXY/")
-    if not os.path.exists(outdir_q):
-            print(outdir_q)
-            os.mkdir(outdir_q)
-    else:
-            i = 1
-            while(os.path.exists(outdir_q)):
-                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
-                    i+=1
-            os.mkdir(outdir_q)
-
+    outdir_q = myStyle.CreateFolder(outdir, "q_resTimeXY0/")
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 nYBins = all_histoInfos[0].th2.GetYaxis().GetNbins()
@@ -105,12 +97,12 @@ for i in range(0, nXBins+1):
             minEvtsCut = totalEvents/(nXBins*(4*nYBins))
             #minEvtsCut = totalEvents/(nXBins*nYBins)
             #print(minEvtsCut, totalEvents)
-            if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
+            if i==0 and j==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
 
 
             #Do fit 
             if(nEvents > minEvtsCut):
-                #tmpHist.Rebin(4)
+                #tmpHist.Rebin(4) #Only for EIC_W2_1cm_500um_200um_gap_240V
                 
                 fit = TF1('fit','gaus',fitlow,fithigh)
                 tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
@@ -128,8 +120,6 @@ for i in range(0, nXBins+1):
                     fit.Draw("same")
                     canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
                     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
-
-
                 
                 ##For Debugging
                 #tmpHist.Draw("hist")

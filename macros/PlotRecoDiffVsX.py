@@ -50,7 +50,6 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
 parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="X axis range [-x, x]") 
 parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Y axis upper limit") 
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
@@ -65,12 +64,11 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")
 
-outdir = myStyle.GetPlotsDir(outdir, "Res/")
+outdir = myStyle.GetPlotsDir(outdir, "PositionRes/")
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 pitch  = sensor_Geometry['pitch']
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -78,9 +76,9 @@ debugMode = options.debugMode
 
 all_histoInfos = [
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    # HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
+    # HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
@@ -238,6 +236,12 @@ for info in all_histoInfos:
     default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
     default_res.Draw("same")
 
+    tracker_res = ROOT.TLine(-xlength,5.,xlength,5.)
+    tracker_res.SetLineWidth(4)
+    tracker_res.SetLineStyle(5)
+    tracker_res.SetLineColor(880) #kViolet
+    tracker_res.Draw("same")
+
     gPad.RedrawAxis("g")
 
     htemp.Draw("AXIS same")
@@ -246,7 +250,7 @@ for info in all_histoInfos:
 
 
 
-    legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.2,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.1)
+    legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.3,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.1)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
     # legend.SetTextFont(myStyle.GetFont())
@@ -254,6 +258,7 @@ for info in all_histoInfos:
     #legend.SetFillStyle(0)
 
     legend.AddEntry(default_res, "Default resolution","l")
+    legend.AddEntry(tracker_res, "Tracker resolution","l")
 
     if ('oneStrip' in info.outHistoName):
         legend.AddEntry(info.th1, "One strip reconstruction")
@@ -268,7 +273,7 @@ for info in all_histoInfos:
     legend.Draw();
 
     # myStyle.BeamInfo()
-    myStyle.SensorInfo(sensor, bias)
+    myStyle.SensorInfoSmart(dataset)
 
     canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".gif")
     canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".pdf")

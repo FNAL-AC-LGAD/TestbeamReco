@@ -35,28 +35,29 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-s','--sensor', dest='sensor', default = "BNL2020", help="Type of sensor (BNL, HPK, ...)")
-parser.add_option('-b','--biasvolt', dest='biasvolt', default = 220, help="Bias Voltage value in [V]")
-parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
-parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Bias Voltage value in [V]") 
-parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Bias Voltage value in [V]") 
-parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath") 
+parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Limit x-axis in final plot")
+parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Max TimeResolution value in final plot")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 options, args = parser.parse_args()
-
-sensor = options.sensor
-bias = options.biasvolt
-xlength = float(options.xlength) 
-ylength = float(options.ylength) 
-debugMode = options.debugMode
 
 dataset = options.Dataset
 outdir=""
 if organized_mode: 
     outdir = myStyle.getOutputDir(dataset)
     inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
-else: 
-    inputfile = TFile("../test/myoutputfile.root")   
+else:
+    inputfile = TFile("../test/myoutputfile.root")
+
+outdir = myStyle.GetPlotsDir(outdir, "TimeRes/")
+
+sensor_Geometry = myStyle.GetGeometry(dataset)
+
+sensor = sensor_Geometry['sensor']
+pitch  = sensor_Geometry['pitch']
+xlength = float(options.xlength)
+ylength = float(options.ylength)
+debugMode = options.debugMode
 
 all_histoInfos = [
     # HistoInfo("timeDiff_vs_xy_channel00",inputfile, "channel_1"),
@@ -87,20 +88,10 @@ gStyle.SetOptStat(0)
 print("Finished setting up langaus fit class")
 
 if debugMode:
-    outdir_q = os.path.join(outdir,"q_resTimeY/")
-    if not os.path.exists(outdir_q):
-            print(outdir_q)
-            os.mkdir(outdir_q)
-    else:
-            i = 1
-            while(os.path.exists(outdir_q)):
-                    outdir_q = outdir_q[0:-2] + str(i) + outdir_q[-1]
-                    i+=1
-            os.mkdir(outdir_q)
-
+    outdir_q = myStyle.CreateFolder(outdir, "q_resTimeY0/")
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
-print(nXBins)
+# print(nXBins)
 #loop over X bins
 for i in range(0, nXBins+1):
     ##For Debugging
@@ -189,8 +180,8 @@ for info in all_histoInfos:
     info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
 
-    myStyle.BeamInfo()
-    myStyle.SensorInfo(sensor, bias)
+    # myStyle.BeamInfo()
+    myStyle.SensorInfoSmart(dataset)
 
     canvas.SaveAs(outdir+"TimeRes_vs_y_"+info.outHistoName+".gif")
     canvas.SaveAs(outdir+"TimeRes_vs_y_"+info.outHistoName+".pdf")
@@ -224,8 +215,8 @@ legend.AddEntry(hTimeResCorr, "Single-channel (w/ TrackerCorrection)")
 legend.AddEntry(hTimeResW2, "Multi-channel (w/ TrackerCorrection)")
 legend.Draw();
 
-myStyle.BeamInfo()
-myStyle.SensorInfo(sensor, bias)
+# myStyle.BeamInfo()
+myStyle.SensorInfoSmart(dataset)
 
 canvas.SaveAs(outdir+"TimeRes_vs_y_BothMethods.gif")
 canvas.SaveAs(outdir+"TimeRes_vs_y_BothMethods.pdf")
