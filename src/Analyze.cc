@@ -173,6 +173,18 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"timePhotek", "", 500, -225.0, -175.0);
     utility::makeHisto(my_histos,"timeDiff", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"timeDiffTracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    
+    utility::makeHisto(my_histos,"timeDiff5Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff10Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff15Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff20Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff25Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff30Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff35Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff40Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff50Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiff60Tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    
     utility::makeHisto(my_histos,"timeDiff_amp2", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"timeDiff_amp3", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted_timeDiff", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -384,7 +396,19 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& corrTime = tr.getVec<double>("corrTime");
         const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
+        
         const auto& CFD_list = tr.getVar<std::vector<std::string> >("CFD_list");
+        const auto& time5LGADTracker = tr.getVec<std::vector<double>>("time5LGADTracker");
+        const auto& time10LGADTracker = tr.getVec<std::vector<double>>("time10LGADTracker"); 
+        const auto& time15LGADTracker = tr.getVec<std::vector<double>>("time15LGADTracker");
+        const auto& time20LGADTracker = tr.getVec<std::vector<double>>("time20LGADTracker");
+        const auto& time25LGADTracker = tr.getVec<std::vector<double>>("time25LGADTracker");
+        const auto& time30LGADTracker = tr.getVec<std::vector<double>>("time30LGADTracker");
+        const auto& time35LGADTracker = tr.getVec<std::vector<double>>("time35LGADTracker");
+        const auto& time40LGADTracker = tr.getVec<std::vector<double>>("time40LGADTracker");
+        const auto& time50LGADTracker = tr.getVec<std::vector<double>>("time50LGADTracker");
+        const auto& time60LGADTracker = tr.getVec<std::vector<double>>("time60LGADTracker");
+        
         const auto& baselineRMS = tr.getVec<std::vector<float>>("baselineRMS");
         const auto& risetimeLGAD = tr.getVec<std::vector<double>>("risetimeLGAD");
         const auto& chargeLGAD = tr.getVec<std::vector<double>>("chargeLGAD");
@@ -497,6 +521,18 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         double maxAmp = ampLGAD[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTime = timeLGAD[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTimeTracker = timeLGADTracker[amp1Indexes.first][amp1Indexes.second];
+        
+        double maxAmpTime5Tracker = time5LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime10Tracker = time10LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime15Tracker = time15LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime20Tracker = time20LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime25Tracker = time25LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime30Tracker = time30LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime35Tracker = time35LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime40Tracker = time40LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime50Tracker = time50LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTime60Tracker = time60LGADTracker[amp1Indexes.first][amp1Indexes.second];
+        
         double amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
         double amp2Time = timeLGAD[amp2Indexes.first][amp2Indexes.second];
         double amp3Time = timeLGAD[amp3Indexes.first][amp3Indexes.second];
@@ -656,6 +692,18 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "ampRank6", ampLGAD[amp6Indexes.first][amp6Indexes.second]);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff", maxAmpTime-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiffTracker", maxAmpTimeTracker-photekTime);
+        
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff5Tracker", maxAmpTime5Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff10Tracker", maxAmpTime10Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff15Tracker", maxAmpTime15Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff20Tracker", maxAmpTime20Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff25Tracker", maxAmpTime25Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff30Tracker", maxAmpTime30Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff35Tracker", maxAmpTime35Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff40Tracker", maxAmpTime40Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff50Tracker", maxAmpTime50Tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff60Tracker", maxAmpTime60Tracker-photekTime);
+
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff_amp2", amp2Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff_amp3", amp3Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted_timeDiff", weighted_time-photekTime);

@@ -93,8 +93,7 @@ public:
     // std::map<int, double> amplitudeCorrectionFactor = {{0,0.9398}, {1,0.9619}, {2,0.9845}, {3,0.9794}, {4,1.0186}, {5,1.0318}, {6,1.1004}, {7,1.0}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
-    //std::map<int, double> timeCalibrationCorrection = {{0,0.83550257}, {1,0.72130393}, {2,0.82432096}, {3,0.71540105}, {4,0.78519213}, {5,0.69938706}, {6,0.82695301}, {7,0.0}};
-    // std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
+    //std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.200;
     double pitch = 0.500;
     double sensorCenter  =-0.95; // Lab-Tracker's frame
@@ -129,6 +128,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.95,1.15, -1.5,-0.5},{"cold", 0.95,1.15, 1.0,2.0},{"gap", 0.75,0.85, 0.5,2.5}};
+    //std::vector<utility::ROI> regionsOfIntrest = {{"Flat", 0.4,0.6, -4.0,-2.0},{"Fall", 0.4,0.6, 0.0,2.0}};
 };
 
 class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
@@ -562,6 +562,7 @@ public:
     bool enablePositionReconstruction = true;
     int minPixHits = 2;
     int minStripHits = 6;
+    int CFD_threshold = 50;
     // std::vector<double> positionRecoPar = {0.04, -0.268695, 0.462989, -12.2277};
     // std::vector<double> positionRecoPar = {0.040000, -0.291368, 0.526470, -5.120203, -62.435080};
     // std::vector<double> positionRecoPar = {0.040000, -0.300401, 1.285693, -21.691921, 42.924177};
