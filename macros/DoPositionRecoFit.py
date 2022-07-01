@@ -96,14 +96,10 @@ outputfile = TFile(outdir+"positionRecoFitPlots.root","RECREATE")
 #outputfile.Close()
 
 gStyle.SetOptFit(1011)
-fit = TF1("mainFit",fitFunction,xmin,xmax)
-fit.FixParameter(0, 0.5*pitch)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMaximum(0.6*pitch)
 Amp1OverAmp1and2_vs_deltaXmax_profile.SetMinimum(0.00)
 #Amp1OverAmp1and2_vs_deltaXmax_profile.GetXaxis().SetRangeUser(xmin,xmax)
 Amp1OverAmp1and2_vs_deltaXmax_profile.GetXaxis().SetRangeUser(xmin,1.0)
-results = Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"SQ","",xmin,xmax)
-results.Print("V")
 
 fit2 = TF1("mainFit",getNewFitFunction(1),xmin,1.0)
 fit2.FixParameter(0, pitch)
@@ -115,6 +111,11 @@ fit3 = TF1("mainFit",newFitFunction,xmin,xmax)
 fit3.FixParameter(0, pitch)
 fit3.SetLineColor(ROOT.kBlue+2)
 results3 = Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit3,"SQ","",xmin,xmax)
+
+fit = TF1("mainFit",fitFunction,xmin,xmax)
+fit.FixParameter(0, 0.5*pitch)
+results = Amp1OverAmp1and2_vs_deltaXmax_profile.Fit(fit,"SQ","",xmin,xmax)
+results.Print("V")
 
 string_for_geo = "\nstd::vector<double> positionRecoPar = {"
 for deg in range(fitOrder+1):
@@ -133,9 +134,9 @@ for box in boxes:
 
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same axis")
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("same")
-fit.Draw("same")
 fit2.Draw("same")
 fit3.Draw("same")
+fit.Draw("same")
 
 line = TF1("line","0.0",xmin,1.0)
 line.SetLineColor(ROOT.kBlack)
