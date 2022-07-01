@@ -7,13 +7,12 @@ ROOT.gROOT.SetBatch( True )
 myStyle.ForceStyle()
 colors = myStyle.GetColors(True)
 
-dict_sensors = myStyle.sensorsGeom2022
 dict_resolutions = myStyle.resolutions2022
 
 outdir = myStyle.getOutputDir("Paper2022")
 
 # Sensors with 500um pitch and 200um metal width
-list_of_sensors = ["EIC_W1_2p5cm_215V", "EIC_W1_1cm_255V", "EIC_W1_0p5cm_500um_300um_gap_1_4_245V"]
+list_of_sensors = ["EIC_W1_2p5cm_500up_200uw_215V", "EIC_W1_1cm_500up_200uw_255V", "EIC_W1_0p5cm_500up_200uw_1_4_245V"]
 
 length = []
 empty = [0]*len(list_of_sensors)
@@ -24,7 +23,7 @@ positionres_oneStripuncert  = []
 positionres_twoStripsuncert = []
 
 for name in list_of_sensors:
-    length.append(dict_sensors[name]['length'])
+    length.append(myStyle.GetGeometry(name)['length'])
     positionres_oneStrip.append(dict_resolutions[name]['position_oneStripRMS'])
     positionres_oneStripuncert.append(0.01)
     positionres_twoStrips.append(dict_resolutions[name]['position_twoStrips'])
