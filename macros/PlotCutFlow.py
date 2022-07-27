@@ -12,6 +12,10 @@ gStyle.SetOptFit(1011)
 
 ## Defining Style
 myStyle.ForceStyle()
+gStyle.SetPadBottomMargin(4*myStyle.GetMargin())
+# gStyle.SetPadRightMargin(2*myStyle.GetMargin())
+gStyle.SetLabelSize(myStyle.GetSize()-12,"x")
+gROOT.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
 organized_mode=True
 
@@ -58,12 +62,12 @@ for i,cut_name in enumerate(list_cut_name_twoStrips):
 
 
 
-canvas = TCanvas("cv","cv",1000,1000)
+canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
 # gPad.SetTicks(1,1)
 gStyle.SetOptStat(0)
-gStyle.SetPadBottomMargin(10*myStyle.GetMargin())
 
+hist_oneStrip.LabelsOption("u")
 hist_oneStrip.Draw()
 
 # myStyle.BeamInfo()
@@ -74,6 +78,7 @@ canvas.SaveAs(outdir+"PlotCutFlow_one.pdf")
 
 canvas.Clear()
 
+hist_twoStrips.LabelsOption("u")
 hist_twoStrips.Draw()
 
 # myStyle.BeamInfo()
