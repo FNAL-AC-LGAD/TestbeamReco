@@ -109,7 +109,11 @@ high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx+1) - all_histoInfos[0].shift()
 expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
 for ibin in range(expected_res_vs_x.GetNbinsX()+1):
     if mean_amp12_vs_x.GetBinContent(ibin)>0:
-        expected_res = math.sqrt(10.**2 + pow(abs(1000*mean_dXFrac_vs_x.GetBinContent(ibin) * (0.5*mean_noise12_vs_x.GetBinContent(ibin)) * pow(pow(mean_amp1_vs_x.GetBinContent(ibin),2)+pow(mean_amp2_vs_x.GetBinContent(ibin),2),0.5) /  (mean_amp12_vs_x.GetBinContent(ibin))**2),2))
+        # With tracker's contribution of 5 microns
+        # expected_res = math.sqrt(5.**2 + pow(abs(1000*mean_dXFrac_vs_x.GetBinContent(ibin) * (0.5*mean_noise12_vs_x.GetBinContent(ibin)) * pow(pow(mean_amp1_vs_x.GetBinContent(ibin),2)+pow(mean_amp2_vs_x.GetBinContent(ibin),2),0.5) /  (mean_amp12_vs_x.GetBinContent(ibin))**2),2))
+
+        # Without tracker's contribution of 5 microns
+        expected_res = abs(1000*mean_dXFrac_vs_x.GetBinContent(ibin) * (0.5*mean_noise12_vs_x.GetBinContent(ibin)) * pow(pow(mean_amp1_vs_x.GetBinContent(ibin),2)+pow(mean_amp2_vs_x.GetBinContent(ibin),2),0.5) /  (mean_amp12_vs_x.GetBinContent(ibin))**2)
     else:
         expected_res=0
 
@@ -184,13 +188,13 @@ for i in range(0, nXBins+1):
             if "track_twoStrips" in info.outHistoName:
                 expected_res_vs_x.SetBinContent(i,0)
 
-        # Removing telescope contribution
-        #if value>6.0:
-        #    error = error*value/TMath.Sqrt(value*value - 6*6)
-        #    value = TMath.Sqrt(value*value - 6*6)
-        #else:
-        #    value = 0.0 # 20.0 to check if there are strange resolution values
-        #    error = 0.0
+        # Removing tracker's contribution of 5 microns
+        if value>5.0:
+           error = error*value/TMath.Sqrt(value*value - 5*5)
+           value = TMath.Sqrt(value*value - 5*5)
+        elif value>0.0:
+           value = 2.0 # to check if there are strange resolution values
+           error = 2.0
         #if i<=info.th1.FindBin(-0.2) and sensor=="BNL2020":
         #    value = 0.0
         #    error = 0.0
@@ -236,11 +240,11 @@ for info in all_histoInfos:
     default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
     default_res.Draw("same")
 
-    tracker_res = ROOT.TLine(-xlength,5.,xlength,5.)
-    tracker_res.SetLineWidth(4)
-    tracker_res.SetLineStyle(5)
-    tracker_res.SetLineColor(880) #kViolet
-    tracker_res.Draw("same")
+    # tracker_res = ROOT.TLine(-xlength,5.,xlength,5.)
+    # tracker_res.SetLineWidth(4)
+    # tracker_res.SetLineStyle(5)
+    # tracker_res.SetLineColor(880) #kViolet
+    # tracker_res.Draw("same")
 
     gPad.RedrawAxis("g")
 
@@ -257,8 +261,8 @@ for info in all_histoInfos:
     # legend.SetTextSize(myStyle.GetSize())
     #legend.SetFillStyle(0)
 
-    legend.AddEntry(default_res, "Default resolution","l")
-    legend.AddEntry(tracker_res, "Tracker resolution","l")
+    legend.AddEntry(default_res, "Binary readout","l")
+    # legend.AddEntry(tracker_res, "Tracker resolution","l")
 
     if ('oneStrip' in info.outHistoName):
         legend.AddEntry(info.th1, "One strip reconstruction")
