@@ -80,6 +80,8 @@ all_histoInfos = [
     HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_time_diffTracker"),
     # HistoInfo("weighted_timeDiff_goodSig_vs_xy", inputfile, "weighted_time_goodSig"),
     # HistoInfo("weighted2_timeDiff_goodSig_vs_xy", inputfile, "weighted2_time_goodSig"),
+    HistoInfo("timeDiff_Even_vs_xy", inputfile, "time_diffEven"),
+    HistoInfo("timeDiff_Odd_vs_xy", inputfile, "time_diffOdd"),
 ]
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -199,10 +201,13 @@ for info in all_histoInfos:
 hTimeRes = all_histoInfos[0].th1 # 6
 hTimeResCorr = all_histoInfos[1].th1
 hTimeResW2 = all_histoInfos[2].th1 #7
+hTimeResEven = all_histoInfos[3].th1 #7
+hTimeResOdd = all_histoInfos[4].th1 #7
 hTimeRes.SetLineColor(28)
 hTimeResCorr.SetLineColor(kBlack)
 hTimeResW2.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
-
+hTimeResEven.SetLineColor(4) #kGreen+2 #(TColor.GetColor(136,34,85))
+hTimeResOdd.SetLineColor(6) #kGreen+2 #(TColor.GetColor(136,34,85))
 hTimeRes.Draw("hist e")
 
 ymin = hTimeRes.GetMinimum()
@@ -217,11 +222,17 @@ hTimeRes.Draw("hist e same")
 hTimeRes.Draw("AXIS same")
 hTimeResCorr.Draw("hist e same")
 hTimeResW2.Draw("hist e same")
+hTimeResEven.Draw("hist e same")
+hTimeResOdd.Draw("hist e same")
 
-legend = TLegend(myStyle.GetPadCenter()-0.4,0.70,myStyle.GetPadCenter()+0.4,0.90)
-legend.SetFillColor(kWhite)
+legend = TLegend(myStyle.GetPadCenter()-0.2,0.70,myStyle.GetPadCenter()+0.2,0.90)
+#legend.SetFillColor(kWhite)
+legend.SetTextSize(0.03);
+legend.SetTextFont(32);
 #legend.SetFillStyle(4050)
 legend.AddEntry(hTimeRes, "Single-channel (w/o TrackerCorrection)")
+legend.AddEntry(hTimeResEven, "Even Single-channel (w/o TrackerCorrection)")
+legend.AddEntry(hTimeResOdd, "Odd Single-channel (w/o TrackerCorrection)")
 legend.AddEntry(hTimeResCorr, "Single-channel (w/ TrackerCorrection)")
 legend.AddEntry(hTimeResW2, "Multi-channel (w/ TrackerCorrection)")
 legend.Draw();

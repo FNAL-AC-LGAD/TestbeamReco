@@ -114,8 +114,8 @@ public:
     double ymax =  5.20; // Sensor's local frame
     double positionRecoMaxPoint = 0.77; // 0.81;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold  = 15.0; // 10.0;
-    double signalAmpThreshold = 25.0; // 15.0;
+    double noiseAmpThreshold  = 10.0; // 10.0;
+    double signalAmpThreshold = 15.0; // 15.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -127,7 +127,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.95,1.15, -1.5,-0.5},{"cold", 0.95,1.15, 1.0,2.0},{"gap", 0.75,0.85, 0.5,2.5}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5},{"gap", 0.70,0.80, 0.5,2.5}};
     //std::vector<utility::ROI> regionsOfIntrest = {{"Flat", 0.4,0.6, -4.0,-2.0},{"Fall", 0.4,0.6, 0.0,2.0}};
 };
 

@@ -285,6 +285,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"amp123_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"amp12_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);	
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiff_Even_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiff_Odd_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp2", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp3", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -365,7 +367,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
-
+    
     for(const auto& roi : regionsOfIntrest)
     {
         std::cout<<roi.getName()<<" "<<roi.passROI(0.0,0.0)<<" "<<roi.passROI(10000.0,0.0)<<std::endl;
@@ -481,7 +483,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& stripCenterYPositionLGAD = tr.getVec<std::vector<double>>("stripCenterYPositionLGAD");
         const auto& goodNeighbour = tr.getVar<bool>("goodNeighbour");
         const auto& goodDeltaY = tr.getVar<bool>("goodDeltaY");
-
+        const auto& parityLGAD = tr.getVec<std::vector<int>>("parityLGAD");
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
@@ -521,7 +523,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         double maxAmp = ampLGAD[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTime = timeLGAD[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTimeTracker = timeLGADTracker[amp1Indexes.first][amp1Indexes.second];
-        
+        int parityMax = parityLGAD[amp1Indexes.first][amp1Indexes.second];
+        bool EvenChannel = parityMax == -1;
+        bool OddChannel = parityMax == 1;    
         double maxAmpTime5Tracker = time5LGADTracker[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTime10Tracker = time10LGADTracker[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTime15Tracker = time15LGADTracker[amp1Indexes.first][amp1Indexes.second];
@@ -801,6 +805,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "amp123_vs_xy", x,y, Amp123);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "amp12_vs_xy", x,y, Amp12);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiff_vs_xy", x,y,maxAmpTime-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "timeDiff_Even_vs_xy", x,y,maxAmpTime-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "timeDiff_Odd_vs_xy", x,y,maxAmpTime-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiffTracker_vs_xy", x,y,maxAmpTimeTracker-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiff_vs_xy_amp2", x,y,amp2Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiff_vs_xy_amp3", x,y,amp3Time-photekTime);
