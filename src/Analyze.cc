@@ -845,22 +845,21 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
             }
         }	// Example Fill event selection efficiencies
         my_efficiencies["event_oneStripReco"]->SetUseWeightedEvents();
-        my_efficiencies["event_oneStripReco"]->FillWeighted(true,1.0,0); // "Full");
-        my_efficiencies["event_oneStripReco"]->FillWeighted(true && pass,1.0,1); // "Pass");
-        my_efficiencies["event_oneStripReco"]->FillWeighted(true && pass && hasGlobalSignal_lowThreshold,1.0,2); // "Signal over Noise");
-        my_efficiencies["event_oneStripReco"]->FillWeighted(true && pass && hasGlobalSignal_lowThreshold && oneStripReco,1.0,3); // "OneStripReco");
-        my_efficiencies["event_oneStripReco"]->FillWeighted(true && pass && hasGlobalSignal_highThreshold && oneStripReco,1.0,4); // "OneStripReco HighThreshold");
-        my_efficiencies["event_oneStripReco"]->FillWeighted(true && pass && hasGlobalSignal_lowThreshold && highFraction,1.0,5); // "High fraction");
-        my_efficiencies["event_oneStripReco"]->FillWeighted(true && pass && hasGlobalSignal_lowThreshold && !goodNeighbour,1.0,6); // "No good neighbour");
-        my_efficiencies["event_oneStripReco"]->FillWeighted(true && pass && hasGlobalSignal_lowThreshold && highFraction && !goodNeighbour,1.0,7); // "Both high fraction and No neighbour");
+        my_efficiencies["event_oneStripReco"]->FillWeighted(pass,1.0,0); // "Pass");
+        my_efficiencies["event_oneStripReco"]->FillWeighted(pass && hasGlobalSignal_lowThreshold,1.0,1); // "Signal over Noise");
+        my_efficiencies["event_oneStripReco"]->FillWeighted(pass && hasGlobalSignal_lowThreshold && oneStripReco,1.0,2); // "OneStripReco");
+        my_efficiencies["event_oneStripReco"]->FillWeighted(pass && hasGlobalSignal_lowThreshold && highFraction,1.0,3); // "High fraction");
+        my_efficiencies["event_oneStripReco"]->FillWeighted(pass && hasGlobalSignal_lowThreshold && highFraction && goodNeighbour,1.0,4); // "Good neighbour but high fraction");
+        my_efficiencies["event_oneStripReco"]->FillWeighted(pass && hasGlobalSignal_lowThreshold && !goodNeighbour,1.0,5); // "No good neighbour");
+        my_efficiencies["event_oneStripReco"]->FillWeighted(pass && hasGlobalSignal_lowThreshold && highFraction && !goodNeighbour,1.0,6); // "Both high fraction and No neighbour");
+        // my_efficiencies["event_oneStripReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && oneStripReco,1.0,4); // "OneStripReco HighThreshold");
 
         my_efficiencies["event_twoStripsReco"]->SetUseWeightedEvents();
-        my_efficiencies["event_twoStripsReco"]->FillWeighted(true,1.0,0); // "Full");
-        my_efficiencies["event_twoStripsReco"]->FillWeighted(true && pass,1.0,1); // "Pass");
-        my_efficiencies["event_twoStripsReco"]->FillWeighted(true && pass && hasGlobalSignal_highThreshold,1.0,2); // "Signal over highThreshold");
-        my_efficiencies["event_twoStripsReco"]->FillWeighted(true && pass && hasGlobalSignal_highThreshold && goodNeighbour,1.0,3); // "Good neighbour");
-        my_efficiencies["event_twoStripsReco"]->FillWeighted(true && pass && hasGlobalSignal_highThreshold && !highFraction,1.0,4); // "Good Amp fraction");
-        my_efficiencies["event_twoStripsReco"]->FillWeighted(true && pass && hasGlobalSignal_highThreshold && twoStripsReco,1.0,5); // "TwoStripsReco");
+        my_efficiencies["event_twoStripsReco"]->FillWeighted(pass,1.0,0); // "Pass");
+        my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold,1.0,1); // "Signal over highThreshold");
+        my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && goodNeighbour,1.0,2); // "Good neighbour");
+        my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && !highFraction,1.0,3); // "Good Amp fraction");
+        my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && twoStripsReco,1.0,4); // "TwoStripsReco");
     } //event loop
 }
 
