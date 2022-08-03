@@ -49,6 +49,7 @@ private:
         tr.registerDerivedVar("CFD_threshold", g.CFD_threshold);
         tr.registerDerivedVar("CFD_list", g.CFD_list);
         tr.registerDerivedVar("sensorEdges", g.sensorEdges);
+        tr.registerDerivedVar("sensorEdgesTight", g.sensorEdgesTight);
         tr.registerDerivedVar("alpha", g.alpha);
         tr.registerDerivedVar("beta",  g.beta);
         tr.registerDerivedVar("gamma", g.gamma);
@@ -81,7 +82,7 @@ private:
         tr.registerDerivedVar("positionRecoParBot", g.positionRecoParBot);
         tr.registerDerivedVar("xSlices", g.xSlices);
         tr.registerDerivedVar("ySlices", g.ySlices);
-        tr.registerDerivedVar("boxes_XY", g.boxes_XY);        
+        tr.registerDerivedVar("boxes_XY", g.boxes_XY);
         tr.registerDerivedVar("regionsOfIntrest", g.regionsOfIntrest);
     }
 

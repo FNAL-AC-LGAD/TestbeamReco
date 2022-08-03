@@ -64,6 +64,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-7.4, -2.8}, {2.6, 0.5}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-2.8, -2.6}, {0.4, 7.4}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.0}, {1.7, 5.0}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Was 4.8 instead of 4.6
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.7,0.95, -4.75,-4.0},{"cold", 0.7,0.95, 0.5,1.25},{"gap", 0.50,0.60,-1.5,0.375}};
 };
 
@@ -128,6 +129,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.95,1.15, -1.5,-0.5},{"cold", 0.95,1.15, 1.0,2.0},{"gap", 0.75,0.85, 0.5,2.5}};
 };
 
@@ -190,6 +192,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-8.0, -3.4}, {2.0, 0.6}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-3.4, -2.0}, {0.6, 8.0}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.9, -5.0}, {1.9, 5.0}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}};
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 1.0,1.15, -2.75,-2.00},{"cold", 1.0,1.15, 3.25,4.0},{"gap", 0.75,0.85, 1.0,2.125}};
 };
 

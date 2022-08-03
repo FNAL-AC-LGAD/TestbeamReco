@@ -65,6 +65,7 @@ public:
     std::vector<double> positionRecoParTop = {-1};
     std::vector<double> positionRecoParBot = {-1}; 
     std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};
+    std::vector<std::vector<double>> sensorEdgesTight = {{-999.9, -999.9}, {999.9, 999.9}};
     std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> xSlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> boxes_XY = {{-999.9, -999.9,-999.9, -999.9}};
