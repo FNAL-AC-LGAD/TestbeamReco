@@ -20,9 +20,7 @@ python PlotSimpleXYMaps.py  -D EIC_W2_1cm_500up_300uw_240V
 python PlotRecoDiffVsXY.py  -D EIC_W2_1cm_500up_300uw_240V --zmin 0.0 --zmax 100.0
 # python PlotRecoDiffVsY.py   -D EIC_W2_1cm_500up_300uw_240V --xlength 6.0 --ylength 150.0
 python PlotRecoDiffVsX.py   -D EIC_W2_1cm_500up_300uw_240V --xlength 2.5 --ylength 150.0
-python PlotEfficiency.py    -D EIC_W2_1cm_500up_300uw_240V -x 2.5 -r 0
-python PlotEfficiency.py    -D EIC_W2_1cm_500up_300uw_240V -x 2.5 -r 1
-python PlotEfficiency.py    -D EIC_W2_1cm_500up_300uw_240V -x 2.5 -r 2
+python PlotEfficiency.py    -D EIC_W2_1cm_500up_300uw_240V -x 2.5
 python plot1DRes.py         -D EIC_W2_1cm_500up_300uw_240V
 
 
@@ -47,9 +45,7 @@ python PlotTimeMeanVsXY.py  -D EIC_W1_1cm_500up_200uw_255V --zmin -0.5 --zmax 0.
 python PlotSimpleXYMaps.py  -D EIC_W1_1cm_500up_200uw_255V
 python PlotRecoDiffVsXY.py  -D EIC_W1_1cm_500up_200uw_255V --zmin 0.0 --zmax 100.0
 python PlotRecoDiffVsX.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 2.5 --ylength 150.0
-python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 2.5 -r 0
-python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 2.5 -r 1
-python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 2.5 -r 2
+python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 2.5
 python plot1DRes.py         -D EIC_W1_1cm_500up_200uw_255V
 
 
@@ -74,9 +70,7 @@ python PlotTimeMeanVsXY.py  -D EIC_W2_1cm_500up_100uw_220V --zmin -0.5 --zmax 0.
 python PlotSimpleXYMaps.py  -D EIC_W2_1cm_500up_100uw_220V
 python PlotRecoDiffVsXY.py  -D EIC_W2_1cm_500up_100uw_220V --zmin 0.0 --zmax 100.0
 python PlotRecoDiffVsX.py   -D EIC_W2_1cm_500up_100uw_220V --xlength 2.5 --ylength 150.0
-python PlotEfficiency.py    -D EIC_W2_1cm_500up_100uw_220V -x 2.5 -r 0
-python PlotEfficiency.py    -D EIC_W2_1cm_500up_100uw_220V -x 2.5 -r 1
-python PlotEfficiency.py    -D EIC_W2_1cm_500up_100uw_220V -x 2.5 -r 2
+python PlotEfficiency.py    -D EIC_W2_1cm_500up_100uw_220V -x 2.5
 python plot1DRes.py         -D EIC_W2_1cm_500up_100uw_220V
 
 
@@ -139,9 +133,7 @@ python PlotTimeMeanVsXY.py  -D EIC_W1_2p5cm_500up_200uw_215V --zmin -0.5 --zmax 
 python PlotSimpleXYMaps.py  -D EIC_W1_2p5cm_500up_200uw_215V
 python PlotRecoDiffVsXY.py  -D EIC_W1_2p5cm_500up_200uw_215V --zmin 0.0 --zmax 100.0
 python PlotRecoDiffVsX.py   -D EIC_W1_2p5cm_500up_200uw_215V --xlength 2.5 --ylength 150.0
-python PlotEfficiency.py    -D EIC_W1_2p5cm_500up_200uw_215V -x 2.5 -r 0
-python PlotEfficiency.py    -D EIC_W1_2p5cm_500up_200uw_215V -x 2.5 -r 1
-python PlotEfficiency.py    -D EIC_W1_2p5cm_500up_200uw_215V -x 2.5 -r 2
+python PlotEfficiency.py    -D EIC_W1_2p5cm_500up_200uw_215V -x 2.5
 python plot1DRes.py         -D EIC_W1_2p5cm_500up_200uw_215V
 
 
@@ -167,9 +159,7 @@ python PlotTimeMeanVsXY.py  -D HPK_Eb_1cm_80up_45uw_170V --zmin -0.5 --zmax 0.5
 python PlotSimpleXYMaps.py  -D HPK_Eb_1cm_80up_45uw_170V
 python PlotRecoDiffVsXY.py  -D HPK_Eb_1cm_80up_45uw_170V --zmin 0.0 --zmax 40.0
 python PlotRecoDiffVsX.py   -D HPK_Eb_1cm_80up_45uw_170V --xlength 0.6 --ylength 40.0
-python PlotEfficiency.py    -D HPK_Eb_1cm_80up_45uw_170V -x 0.6 -r 0
-python PlotEfficiency.py    -D HPK_Eb_1cm_80up_45uw_170V -x 0.6 -r 1
-python PlotEfficiency.py    -D HPK_Eb_1cm_80up_45uw_170V -x 0.6 -r 2
+python PlotEfficiency.py    -D HPK_Eb_1cm_80up_45uw_170V -x 0.6
 python plot1DRes.py         -D HPK_Eb_1cm_80up_45uw_170V
 python PlotRecoDiffVsY.py   -D HPK_Eb_1cm_80up_45uw_170V --xlength 10.0 --ylength 5000.0
 
@@ -195,9 +185,7 @@ python PlotTimeMeanVsXY.py  -D EIC_W1_0p5cm_500up_200uw_1_4_245V --zmin -0.5 --z
 python PlotSimpleXYMaps.py  -D EIC_W1_0p5cm_500up_200uw_1_4_245V
 python PlotRecoDiffVsXY.py  -D EIC_W1_0p5cm_500up_200uw_1_4_245V --zmin 0.0 --zmax 100.0
 python PlotRecoDiffVsX.py   -D EIC_W1_0p5cm_500up_200uw_1_4_245V --xlength 2.5 --ylength 150.0
-python PlotEfficiency.py    -D EIC_W1_0p5cm_500up_200uw_1_4_245V -x 2.5 -r 0
-python PlotEfficiency.py    -D EIC_W1_0p5cm_500up_200uw_1_4_245V -x 2.5 -r 1
-python PlotEfficiency.py    -D EIC_W1_0p5cm_500up_200uw_1_4_245V -x 2.5 -r 2
+python PlotEfficiency.py    -D EIC_W1_0p5cm_500up_200uw_1_4_245V -x 2.5
 python plot1DRes.py         -D EIC_W1_0p5cm_500up_200uw_1_4_245V
 
 
@@ -223,8 +211,6 @@ python PlotTimeMeanVsXY.py  -D BNL2021_22_medium_150up_80uw_285V --zmin -0.5 --z
 python PlotSimpleXYMaps.py  -D BNL2021_22_medium_150up_80uw_285V
 python PlotRecoDiffVsXY.py  -D BNL2021_22_medium_150up_80uw_285V --zmin 0.0 --zmax 60.0
 python PlotRecoDiffVsX.py   -D BNL2021_22_medium_150up_80uw_285V --xlength 0.8 --ylength 60.0
-python PlotEfficiency.py    -D BNL2021_22_medium_150up_80uw_285V -x 0.8 -r 0
-python PlotEfficiency.py    -D BNL2021_22_medium_150up_80uw_285V -x 0.8 -r 1
-python PlotEfficiency.py    -D BNL2021_22_medium_150up_80uw_285V -x 0.8 -r 2
+python PlotEfficiency.py    -D BNL2021_22_medium_150up_80uw_285V -x 0.8
 python plot1DRes.py         -D BNL2021_22_medium_150up_80uw_285V
 
