@@ -9,13 +9,11 @@
 class PrepNTupleVars
 {
 private:
+    std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel;
     float xSlope_;
     float ySlope_;
     float xIntercept_;
     float yIntercept_;
-
-    std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel;
-
 
     bool doAmpSmearing_;
     mutable int seed;
@@ -303,19 +301,8 @@ private:
 
 public:
 
-    PrepNTupleVars(const std::string& filename, const uint numScopeChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(false)
+    PrepNTupleVars(const std::vector<std::shared_ptr<TProfile2D>>& histVec) : v_timeDiff_coarse_vs_xy_channel(histVec), xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(false)
     {
-        TFile * delayCorrectionsFile = TFile::Open(filename.c_str(),"READ");
-
-        if (delayCorrectionsFile)
-        {
-            std::cout<<"Getting corrections."<<std::endl;
-            for (uint ichan=0;ichan<numScopeChans;ichan++)
-            {
-                TProfile2D * this_chan = (TProfile2D *) delayCorrectionsFile->Get(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
-                v_timeDiff_coarse_vs_xy_channel.emplace_back(this_chan);
-            }
-        }
     }
 
     void operator()(NTupleReader& tr)

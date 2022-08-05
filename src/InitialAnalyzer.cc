@@ -120,7 +120,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         const auto& rawAmpLGAD = tr.getVec<std::vector<float>>("rawAmpLGAD");
 
         const auto& corrTime = tr.getVec<double>("corrTime");
-        const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
+        //const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
@@ -174,7 +174,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 // const auto& charge = chargeLGAD[rowIndex][i];
                 // const auto& ampChargeRatio = ampChargeRatioLGAD[rowIndex][i];
                 bool goodNoiseAmp = rawAmpChannel>noiseAmpThreshold;
-                double time = timeLGAD[rowIndex][i];
+                //double time = timeLGAD[rowIndex][i];
                 double timeTracker = timeLGADTracker[rowIndex][i];
 
                 utility::fillHisto(pass && goodNoiseAmp,                                my_3d_histos, "amplitude_vs_xy_channel"+r+s, x,y,rawAmpChannel);

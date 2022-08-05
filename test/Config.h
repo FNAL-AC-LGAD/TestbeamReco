@@ -16,13 +16,42 @@
 class Config
 {
 private:
+   
+    template<typename T> std::vector<std::shared_ptr<T>> getHistoFromROOT(const std::string& filename, const std::vector<std::string>& histos) const
+    {
+        TFile * file = TFile::Open(filename.c_str(),"READ");
+        std::vector<std::shared_ptr<T>> outVec; 
+   
+        if (file)
+        {
+            std::cout<<"Getting corrections."<<std::endl;
+            for (const auto& name : histos)
+            {
+                T* hist = (T *) file->Get(name.c_str());
+                outVec.emplace_back(hist);
+            }
+        }
+        else 
+        {
+            std::cout<<"ROOT File:\""+filename+"\" not found"<<std::endl;
+        }
+    
+        return outVec; 
+    }
+
     void registerModules(NTupleReader& tr, const std::vector<std::string>&& modules) const
     {
         const auto& outpath = tr.getVar<std::string>("outpath");
+        
+        std::vector<std::string> delayHistos;
+        for (uint ichan=0;ichan<tr.getVec<float>("amp").size();ichan++)
+        {
+            delayHistos.emplace_back(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
+        }  
 
         for(const auto& module : modules)
         {
-            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( outpath+"/delayCorrections.root", tr.getVec<float>("amp").size());
+            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>(getHistoFromROOT<TProfile2D>(outpath+"/delayCorrections.root", delayHistos));
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
             else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>(outpath+"/yRecoHistos.root");
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
