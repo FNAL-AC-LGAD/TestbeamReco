@@ -150,7 +150,7 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
     const auto& minPixHits = tr.getVar<int>("minPixHits");
     const auto& minStripHits = tr.getVar<int>("minStripHits");
     const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
-    const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
+    //const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
     // const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
     const auto& stripWidth = tr.getVar<double>("stripWidth");
     const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
@@ -183,7 +183,7 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
         const auto& time_real = tr.getVecVec<float>("time");*/
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
-        const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
+        //const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& ntracks_alt = tr.getVar<int>("ntracks_alt");
