@@ -239,7 +239,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"deltaXBasic_vs_Xtrack", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaYBasic_vs_Xtrack", "; X_{track} [mm]; #Y_{reco} - Y_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-30.5,30.5);
     utility::makeHisto(my_2d_histos,"deltaYBasic_vs_Ytrack", "; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]", (ymax-ymin)/yBinSize,ymin,ymax, 200,-30.5,30.5);
-    utility::makeHisto(my_2d_histos,"dXdFrac_vs_Xtrack", "; X_{track} [mm]; dX/dFraction [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-19.0,1.0);
+    utility::makeHisto(my_2d_histos,"dXdFrac_vs_Xtrack", "; X_{track} [mm]; dX/dFraction [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 500,-19.0,1.0);
 
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_noNeighb", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_highFrac", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
