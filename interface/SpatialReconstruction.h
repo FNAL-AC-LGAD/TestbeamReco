@@ -7,6 +7,7 @@ class SpatialReconstruction
 {
 private:
     std::shared_ptr<TProfile2D> y_timeDiff_ampFrac;
+    std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel;
 
     double getDX(const std::vector<double>& coeffs, const double x, const double shift = 0.0)
     {
@@ -53,8 +54,6 @@ private:
         //std::vector<int> parity = {1,-1,1,-1,1,-1,1,-1};
         std::vector<int> parity = {-1,1,-1,1,-1,1,-1,1};
         const auto& parityLGAD = utility::remapToLGADgeometry(tr, parity, "parityLGAD");
-        bool goodDeltaY = true;//maxAmpIndex==2 && maxAmpIndex==3;
-        tr.registerDerivedVar("goodDeltaY", goodDeltaY);
 
         auto& goodNeighbour = tr.createDerivedVar<bool>("goodNeighbour");
         goodNeighbour = abs(maxAmpIndex - Amp2Index)==1 && ampLGAD[0][Amp2Index]>noiseAmpThreshold;
@@ -112,7 +111,28 @@ private:
             }
 
         } //if enabled position reconstruction
-        
+
+
+        //Compute time resolution using reco positions
+        const auto& y = tr.getVar<double>("y");
+        const auto& corrTime = tr.getVec<double>("corrTime");
+        auto& corrTimeLGADXTrackerY = tr.createDerivedVec<double>("corrTimeLGADXTrackY");
+        auto& corrTimeLGADXY = tr.createDerivedVec<double>("corrTimeLGADXY");
+
+        uint counter = 0;
+        for(auto thisTime : corrTime)
+        {
+            auto lgadX_trackerY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
+            auto lgadX_lgadY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y_reco, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
+            corrTimeLGADXTrackerY.emplace_back(thisTime - lgadX_trackerY_corr);
+            corrTimeLGADXY.emplace_back(thisTime - lgadX_lgadY_corr);
+            counter++;
+        }
+
+        utility::remapToLGADgeometry(tr, corrTimeLGADXTrackerY, "timeLGADXTrackerY");
+        utility::remapToLGADgeometry(tr, corrTimeLGADXY,        "timeLGADXY");
+
+        // Position resolution for the pad sensors
         const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
         const auto& positionRecoParLeft = tr.getVar<std::vector<double>>("positionRecoParLeft");
         const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
@@ -152,7 +172,7 @@ private:
         tr.registerDerivedVar("y_reco_basic", y_reco_basic);
     }
 public:
-    SpatialReconstruction(const std::shared_ptr<TProfile2D>& histo) : y_timeDiff_ampFrac(histo)
+    SpatialReconstruction(const std::shared_ptr<TProfile2D>& histo, const std::vector<std::shared_ptr<TProfile2D>>& histVec) : y_timeDiff_ampFrac(histo), v_timeDiff_coarse_vs_xy_channel(histVec)
     {
         std::cout<<"Running Spatial Reconstruction Module"<<std::endl;
     }

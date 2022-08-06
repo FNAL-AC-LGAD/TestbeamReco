@@ -140,7 +140,6 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         //const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
         const auto& parityLGAD = tr.getVec<std::vector<int>>("parityLGAD");
         const auto& deltaT = tr.getVar<double>("deltaT");
-        const auto& goodDeltaY = tr.getVar<bool>("goodDeltaY");
         
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
@@ -191,7 +190,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
             utility::fillHisto(pass && goodNoiseAmp,                                    my_3d_histos, Form("timeDiff_coarse_vs_xy_channel0%i",i), x,y,corrTime[i]-photekTime);
         }
 
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,  my_2d_prof, "y_vs_Amp1OverAmp1and2_deltaT_prof", Amp1OverAmp1and2, deltaT, parityMax*y);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,  my_2d_prof, "y_vs_Amp1OverAmp1and2_deltaT_prof", Amp1OverAmp1and2, deltaT, parityMax*y);
 
     } //event loop
 }

@@ -45,26 +45,6 @@ private:
         }
     }
 
-    double getTrackerTimeCorr(double x, double y, double time, uint channel, const std::vector<std::shared_ptr<TProfile2D>>& histVec)
-    {
-        double tracker_corr=0;
-        //Must check that time !=0, because 0 indicates there was no timestamp assigned by TimingDAQ
-        if(time != 0.0 && histVec.size() > 0 && channel < histVec.size())
-        {
-            auto hist = histVec[channel];
-            int ibin = hist->FindBin(x,y);
-            int xbin = utility::findBin(hist, x, "X");
-            int ybin = utility::findBin(hist, y, "Y");
-            tracker_corr = hist->GetBinContent(ibin);
-            
-            if(tracker_corr==0.0 && xbin >0 && ybin>0)
-            {
-                tracker_corr = hist->Interpolate(x,y);
-            }
-        }
-        return tracker_corr;    
-    }
-
     // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z(alpha) -> Y(beta) -> X(gamma)
     // * xyz_tracker gives the laboratory hit position relative to sensorCenter, sensorCenterY, z_center
     void getXYOnSensor(std::vector<double>* xyz_tracker, double& xFinal, double& yFinal, const float z_center=0.0, const float alpha=0.0, const float beta=0.0,
@@ -238,7 +218,7 @@ private:
         for(auto thisTime : LP2)
         {
             auto corr = (thisTime == 0.0) ? 0.0 : timeCalibrationCorrection.at(counter);
-            auto tracker_corr = getTrackerTimeCorr(x, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
+            auto tracker_corr = utility::getTrackerTimeCorr<TProfile2D>(x, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
 
             corrTime.emplace_back(1e9*(thisTime) + corr);
             corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr + corr);
