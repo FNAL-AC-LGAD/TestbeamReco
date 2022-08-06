@@ -372,15 +372,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
 
-    for(const auto& roi : regionsOfIntrest)
-    {
-        std::cout<<roi.getName()<<" "<<roi.passROI(0.0,0.0)<<" "<<roi.passROI(10000.0,0.0)<<std::endl;
-    }
-
     int lowGoodStrip = (geometry[0].size()==1) ? lowGoodStripIndex-1 : lowGoodStripIndex;
     int highGoodStrip = (geometry[0].size()==1) ? highGoodStripIndex-1 : highGoodStripIndex;
-
     bool plotWaveForm = false;
+
     if(firstFile) InitHistos(tr, geometry);
 
     while( tr.getNextEvent() )

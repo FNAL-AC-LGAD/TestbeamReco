@@ -152,19 +152,9 @@ private:
         tr.registerDerivedVar("y_reco_basic", y_reco_basic);
     }
 public:
-    SpatialReconstruction(const std::string& filename) : y_timeDiff_ampFrac(nullptr)
+    SpatialReconstruction(const std::shared_ptr<TProfile2D>& histo) : y_timeDiff_ampFrac(histo)
     {
         std::cout<<"Running Spatial Reconstruction Module"<<std::endl;
-
-        TFile* yRecoFile = TFile::Open(filename.c_str(),"READ");
-        
-        if(yRecoFile)
-        {
-            std::cout<<"Getting y reco file: "<<yRecoFile<<std::endl;
-            y_timeDiff_ampFrac.reset((TProfile2D*)yRecoFile->Get("y_vs_Amp1OverAmp1and2_deltaT_prof"));
-            //y_timeDiff_ampFrac.reset((TProfile2D*)yRecoFile->Get("y_vs_x_deltaT_prof"));
-        }
-
     }
 
     void operator()(NTupleReader& tr)
