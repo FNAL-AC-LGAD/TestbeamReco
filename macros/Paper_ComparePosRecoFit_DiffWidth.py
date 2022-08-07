@@ -59,7 +59,7 @@ ymax=0.30*y_scale
 canvas = TCanvas("cv","cv",1000,800)
 
 # Save amplitude histograms
-outputfile = TFile(outdir+"ComparePosRecoFit_EIC1cm.root","RECREATE")   
+outputfile = TFile(outdir+"ComparePosRecoFit_DiffWidth.root","RECREATE")   
 #Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
 #outputfile.Close()
 
@@ -136,8 +136,13 @@ legend.Draw();
 
 myStyle.BeamInfo()
 
-canvas.SaveAs(outdir+"ComparePosRecoFit_EIC1cm.gif")
-canvas.SaveAs(outdir+"ComparePosRecoFit_EIC1cm.pdf")
+TopRightText = ROOT.TLatex()
+TopRightText.SetTextSize(myStyle.GetSize()-4)
+TopRightText.SetTextAlign(31)
+TopRightText.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Diff Metal width}")
+
+canvas.SaveAs(outdir+"ComparePosRecoFit_DiffWidth.gif")
+canvas.SaveAs(outdir+"ComparePosRecoFit_DiffWidth.pdf")
 # Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
 # fit.Write()
 outputfile.Close()

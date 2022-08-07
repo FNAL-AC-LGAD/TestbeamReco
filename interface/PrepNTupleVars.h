@@ -175,6 +175,10 @@ private:
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
         tr.registerDerivedVar("hitSensor", hitSensor);
 
+        const auto& sensorEdgesTight = tr.getVar<std::vector<std::vector<double>>>("sensorEdgesTight");
+        bool hitSensorTight = sensorEdgesTight[0][0] < x && x < sensorEdgesTight[1][0] &&  sensorEdgesTight[0][1] < y && y < sensorEdgesTight[1][1];
+        tr.registerDerivedVar("hitSensorTight", hitSensorTight);
+
         // Hit through active sensor for scan vars
         auto& hitSensorZ = tr.createDerivedVec<bool>("hitSensorZ",zScan.size());
         auto& hitSensorA = tr.createDerivedVec<bool>("hitSensorA",alphaScan.size());
