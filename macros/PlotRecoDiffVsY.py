@@ -227,8 +227,8 @@ for info in all_histoInfos:
     legend.AddEntry(info.th1, "Two-strip reconstruction")
 
     #if "track_twoStrips" in info.outHistoName:
-    expected_res_vs_y.Draw("hist same")
-    legend.AddEntry(expected_res_vs_y,"Expected resolution")
+    #expected_res_vs_y.Draw("hist same")
+    #legend.AddEntry(expected_res_vs_y,"Expected resolution")
     #expected_res_vs_y.Print("all")
 
 

@@ -239,7 +239,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"deltaXBasic_vs_Xtrack", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaYBasic_vs_Xtrack", "; X_{track} [mm]; #Y_{reco} - Y_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-30.5,30.5);
     utility::makeHisto(my_2d_histos,"deltaYBasic_vs_Ytrack", "; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]", (ymax-ymin)/yBinSize,ymin,ymax, 200,-30.5,30.5);
-    utility::makeHisto(my_2d_histos,"dXdFrac_vs_Xtrack", "; X_{track} [mm]; dX/dFraction [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-19.0,1.0);
+    utility::makeHisto(my_2d_histos,"dXdFrac_vs_Xtrack", "; X_{track} [mm]; dX/dFraction [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 500,-19.0,1.0);
 
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_noNeighb", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_highFrac", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
@@ -436,15 +436,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
 
-    for(const auto& roi : regionsOfIntrest)
-    {
-        std::cout<<roi.getName()<<" "<<roi.passROI(0.0,0.0)<<" "<<roi.passROI(10000.0,0.0)<<std::endl;
-    }
-
     int lowGoodStrip = (geometry[0].size()==1) ? lowGoodStripIndex-1 : lowGoodStripIndex;
     int highGoodStrip = (geometry[0].size()==1) ? highGoodStripIndex-1 : highGoodStripIndex;
-
     bool plotWaveForm = false;
+
     if(firstFile) InitHistos(tr, geometry);
 
     while( tr.getNextEvent() )
@@ -539,7 +534,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& stripCenterYPositionLGAD = tr.getVec<std::vector<double>>("stripCenterYPositionLGAD");
         const auto& goodNeighbour = tr.getVar<bool>("goodNeighbour");
-        const auto& goodDeltaY = tr.getVar<bool>("goodDeltaY");
 
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
@@ -739,7 +733,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && (maxAmpinPad1 || maxAmpinPad2), my_histos, "deltaX_TopRow", x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && (maxAmpinPad3 || maxAmpinPad4), my_histos, "deltaX_BotRow", x_reco-x);
         //std::cout<<"yreco "<<y_reco<<" y "<<y<<" deltaY "<<y_reco-y<<std::endl;
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,                     my_histos, "deltaY", y_reco-y);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "deltaY", y_reco-y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && (maxAmpinPad2 || maxAmpinPad3), my_histos, "deltaY_RightCol", y_reco-y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && (maxAmpinPad1 || maxAmpinPad4), my_histos, "deltaY_LeftCol", y_reco-y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "chi2", chi2);
@@ -820,16 +814,17 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_2d_histos, "dXdFrac_vs_Xtrack", x,dXdFrac);
 
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaX_vs_Xreco", x_reco,x_reco-x);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,                     my_2d_histos, "deltaY_vs_Xtrack", x,y_reco-y);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,                     my_2d_histos, "deltaY_vs_Ytrack", y,y_reco-y);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,                     my_2d_histos, "deltaY_vs_Yreco", y_reco,y_reco-y);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_2d_histos, "deltaY_vs_Xtrack", x,y_reco-y);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_2d_histos, "deltaY_vs_Ytrack", y,y_reco-y);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_2d_histos, "deltaY_vs_Yreco", y_reco,y_reco-y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaXmax_vs_Xtrack", x,deltaXmax);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaXmax_vs_Xreco", x_reco,deltaXmax);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "weighted_timeDiff_vs_x", x,weighted_time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "weighted_timeDiff_tracker_vs_x", x,weighted_time_tracker-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "Xreco_vs_Xtrack", x,x_reco);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,                     my_2d_histos, "Yreco_vs_Ytrack", y,y_reco);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_2d_histos, "Yreco_vs_Ytrack", y,y_reco);
         // utility::fillHisto(pass && highRelAmp1,                                                            my_2d_histos, "deltaX_vs_Xtrack_A1OverA12Above0p75", x,x_reco-x);
+        
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaX_vs_amplitude1", maxAmp,x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaX_vs_amplitude2", amp2,x_reco-x);
         utility::fillHisto(pass && highRelAmp1,                                                            my_2d_histos, "Amp2OverAmp2and3_vs_deltaXmax", deltaXmax,Amp2OverAmp2and3);
@@ -894,7 +889,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted_timeDiff_goodSig_vs_xy", x,y,weighted_time_goodSig-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_goodSig_vs_xy", x,y,weighted2_time_goodSig-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "deltaX_vs_Xtrack_vs_Ytrack", x,y,x_reco-x);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,                     my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack", x,y,y_reco-y);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack", x,y,y_reco-y);
 
         // Save 3d histos using pass_loose, i.e. loose edges cut (lc)
         utility::fillHisto(pass_loose && goodMaxLGADAmp,                                                   my_3d_histos, "amplitude_vs_xy_Loose", x,y,maxAmp);

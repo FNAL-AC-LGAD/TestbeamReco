@@ -19,12 +19,19 @@ private:
     void registerModules(NTupleReader& tr, const std::vector<std::string>&& modules) const
     {
         const auto& outpath = tr.getVar<std::string>("outpath");
+        
+        std::vector<std::string> delayHistos;
+        for(uint ichan=0; ichan < tr.getVec<float>("amp").size(); ichan++)
+        {
+            delayHistos.emplace_back(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
+        }  
+        const auto& delayHistoVec = utility::getHistoFromROOT<TProfile2D>(outpath+"/delayCorrections.root", delayHistos);
 
         for(const auto& module : modules)
         {
-            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>( outpath+"/delayCorrections.root", tr.getVec<float>("amp").size());
+            if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>(delayHistoVec);
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
-            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>(outpath+"/yRecoHistos.root");
+            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>( utility::getHistoFromROOT<TProfile2D>(outpath+"/yRecoHistos.root", "y_vs_Amp1OverAmp1and2_deltaT_prof"), delayHistoVec);
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
         }
     }

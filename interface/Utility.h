@@ -3,6 +3,7 @@
 
 #include "TestbeamReco/interface/NTupleReader.h"
 #include "TLorentzVector.h"
+#include "TFile.h"
 #include <cmath>
 
 namespace utility
@@ -92,6 +93,64 @@ namespace utility
             }
         }
         return bin;
+    }
+
+    template<typename T> std::vector<std::shared_ptr<T>> getHistoFromROOT(const std::string& filename, const std::vector<std::string>& histos)
+    {
+        TFile* file = TFile::Open(filename.c_str(),"READ");
+        std::vector<std::shared_ptr<T>> outVec; 
+   
+        if(file)
+        {
+            for (const auto& name : histos)
+            {
+                T* hist = (T*)file->Get(name.c_str());
+                outVec.emplace_back(hist);
+            }
+        }
+        else 
+        {
+            std::cout<<"ROOT File:\""+filename+"\" not found"<<std::endl;
+        }
+    
+        return outVec; 
+    }
+
+    template<typename T> std::shared_ptr<T> getHistoFromROOT(const std::string& filename, const std::string& name)
+    {
+        TFile* file = TFile::Open(filename.c_str(),"READ");
+        std::shared_ptr<T> out; 
+   
+        if(file)
+        {
+            out.reset((T*)file->Get(name.c_str()));
+        }
+        else 
+        {
+            std::cout<<"ROOT File:\""+filename+"\" not found"<<std::endl;
+        }
+    
+        return out; 
+    }
+
+    template<typename T> double getTrackerTimeCorr(double x, double y, double time, uint channel, const std::vector<std::shared_ptr<T>>& histVec)
+    {
+        double tracker_corr=0;
+        //Must check that time !=0, because 0 indicates there was no timestamp assigned by TimingDAQ
+        if(time != 0.0 && histVec.size() > 0 && channel < histVec.size())
+        {
+            auto hist = histVec[channel];
+            int ibin = hist->FindBin(x,y);
+            int xbin = utility::findBin(hist, x, "X");
+            int ybin = utility::findBin(hist, y, "Y");
+            tracker_corr = hist->GetBinContent(ibin);
+            
+            if(tracker_corr==0.0 && xbin >0 && ybin>0)
+            {
+                tracker_corr = hist->Interpolate(x,y);
+            }
+        }
+        return tracker_corr;    
     }
 
     class ROI

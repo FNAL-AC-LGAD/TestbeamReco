@@ -9,13 +9,11 @@
 class PrepNTupleVars
 {
 private:
+    std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel;
     float xSlope_;
     float ySlope_;
     float xIntercept_;
     float yIntercept_;
-
-    std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel;
-
 
     bool doAmpSmearing_;
     mutable int seed;
@@ -207,62 +205,42 @@ private:
         // Correct the time variable
         const auto& CFD_threshold = tr.getVar<int>("CFD_threshold");
         const auto& LP2 = tr.getVec<float>(Form("LP2_%i",CFD_threshold));
-    
-
         const auto& timeCalibrationCorrection = tr.getVar<std::map<int,double>>("timeCalibrationCorrection");
         auto& corrTime = tr.createDerivedVec<double>("corrTime");
         auto& corrTimeTracker = tr.createDerivedVec<double>("corrTimeTracker");
-
     
-        std::vector<std::vector<double>* > v_corrTime_allCFD;
-        std::vector<std::vector<float> > v_LP2_allCFD;
-        const auto& CFD_list = tr.getVar<std::vector<std::string> >("CFD_list");
-        for (auto cfd : CFD_list)
+        const auto& CFD_list = tr.getVar<std::vector<std::string>>("CFD_list");
+        std::vector<std::vector<float>> v_LP2_allCFD;
+        std::vector<std::vector<double>*> v_corrTime_allCFD;
+        for(auto cfd : CFD_list)
         {
             v_LP2_allCFD.emplace_back(tr.getVec<float>("LP2_"+cfd));
             v_corrTime_allCFD.emplace_back(&tr.createDerivedVec<double>("corrTime"+cfd+"Tracker"));
         }
 
-
         uint counter = 0;
         for(auto thisTime : LP2)
         {
-            double corr = timeCalibrationCorrection.at(counter);
-            if(thisTime == 0.0) corr = 0.0;
-            corrTime.emplace_back(1e9*thisTime + corr);
+            auto corr = (thisTime == 0.0) ? 0.0 : timeCalibrationCorrection.at(counter);
+            auto tracker_corr = utility::getTrackerTimeCorr<TProfile2D>(x, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
 
-            double tracker_corr=0;
-            //Must check that thisTime !=0, because 0 indicates there was no timestamp assigned by TimingDAQ
-            if(thisTime != 0.0 && v_timeDiff_coarse_vs_xy_channel.size() > 0 && counter < v_timeDiff_coarse_vs_xy_channel.size())
-            {
-                int ibin = v_timeDiff_coarse_vs_xy_channel[counter]->FindBin(x,y);
-                int xbin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], x, "X");
-                int ybin = utility::findBin(v_timeDiff_coarse_vs_xy_channel[counter], y, "Y");
-
-                tracker_corr = v_timeDiff_coarse_vs_xy_channel[counter]->GetBinContent(ibin);
-
-                if(tracker_corr==0.0 && xbin >0 && ybin>0)
-                {
-                    tracker_corr = v_timeDiff_coarse_vs_xy_channel[counter]->Interpolate(x,y);
-                }
-            }
-
+            corrTime.emplace_back(1e9*(thisTime) + corr);
             corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr + corr);
+
             int icfd =0;
-            for (auto cfd : CFD_list)
+            for(auto cfd : CFD_list)
             {
                 v_corrTime_allCFD[icfd]->emplace_back(1e9*(v_LP2_allCFD[icfd][counter]) - tracker_corr + corr);
                 icfd++;
             }
 
-            //corrTimeTracker.emplace_back(1e9*(thisTime) - tracker_corr);
             counter++;
         }
 
         utility::remapToLGADgeometry(tr, corrTime, "timeLGAD");
         utility::remapToLGADgeometry(tr, corrTimeTracker, "timeLGADTracker");
         int icfd =0;
-        for (auto* corrTimeEachCFD: v_corrTime_allCFD )
+        for(auto* corrTimeEachCFD: v_corrTime_allCFD )
         {
             utility::remapToLGADgeometry(tr, *corrTimeEachCFD, "time"+CFD_list[icfd]+"LGADTracker");
             icfd++;
@@ -307,19 +285,8 @@ private:
 
 public:
 
-    PrepNTupleVars(const std::string& filename, const uint numScopeChans ) : xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(false)
+    PrepNTupleVars(const std::vector<std::shared_ptr<TProfile2D>>& histVec) : v_timeDiff_coarse_vs_xy_channel(histVec), xSlope_(0), ySlope_(0), xIntercept_(0), yIntercept_(0), doAmpSmearing_(false)
     {
-        TFile * delayCorrectionsFile = TFile::Open(filename.c_str(),"READ");
-
-        if (delayCorrectionsFile)
-        {
-            std::cout<<"Getting corrections."<<std::endl;
-            for (uint ichan=0;ichan<numScopeChans;ichan++)
-            {
-                TProfile2D * this_chan = (TProfile2D *) delayCorrectionsFile->Get(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
-                v_timeDiff_coarse_vs_xy_channel.emplace_back(this_chan);
-            }
-        }
     }
 
     void operator()(NTupleReader& tr)

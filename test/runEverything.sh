@@ -22,7 +22,7 @@ python PlotRecoDiffVsXY.py  -D EIC_W2_1cm_500up_300uw_240V --zmin 0.0 --zmax 100
 python PlotRecoDiffVsX.py   -D EIC_W2_1cm_500up_300uw_240V --xlength 2.5 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W2_1cm_500up_300uw_240V -x 2.5
 python plot1DRes.py         -D EIC_W2_1cm_500up_300uw_240V
-
+python PlotRecoDiffVsY.py   -D EIC_W2_1cm_500up_300uw_240V --xlength 10.0 --ylength 3500.0
 
 ## EIC_W1_1cm_500up_200uw_255V
 echo "Running over EIC_W1_1cm_500up_200uw_255V sensor"
@@ -47,6 +47,7 @@ python PlotRecoDiffVsXY.py  -D EIC_W1_1cm_500up_200uw_255V --zmin 0.0 --zmax 100
 python PlotRecoDiffVsX.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 2.5 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 2.5
 python plot1DRes.py         -D EIC_W1_1cm_500up_200uw_255V
+python PlotRecoDiffVsY.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 10.0 --ylength 3500.0
 
 
 ## EIC_W2_1cm_500up_100uw_220V
@@ -72,7 +73,7 @@ python PlotRecoDiffVsXY.py  -D EIC_W2_1cm_500up_100uw_220V --zmin 0.0 --zmax 100
 python PlotRecoDiffVsX.py   -D EIC_W2_1cm_500up_100uw_220V --xlength 2.5 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W2_1cm_500up_100uw_220V -x 2.5
 python plot1DRes.py         -D EIC_W2_1cm_500up_100uw_220V
-
+python PlotRecoDiffVsY.py   -D EIC_W2_1cm_500up_100uw_220V --xlength 10.0 --ylength 3500.0
 
 
 # ## MultiPitch
@@ -135,7 +136,7 @@ python PlotRecoDiffVsXY.py  -D EIC_W1_2p5cm_500up_200uw_215V --zmin 0.0 --zmax 1
 python PlotRecoDiffVsX.py   -D EIC_W1_2p5cm_500up_200uw_215V --xlength 2.5 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W1_2p5cm_500up_200uw_215V -x 2.5
 python plot1DRes.py         -D EIC_W1_2p5cm_500up_200uw_215V
-
+python PlotRecoDiffVsY.py   -D EIC_W1_2p5cm_500up_200uw_215V --xlength 25.0 --ylength 10000.0
 
 
 ## HPK_Eb_1cm_80up_45uw_170V
@@ -161,7 +162,7 @@ python PlotRecoDiffVsXY.py  -D HPK_Eb_1cm_80up_45uw_170V --zmin 0.0 --zmax 40.0
 python PlotRecoDiffVsX.py   -D HPK_Eb_1cm_80up_45uw_170V --xlength 0.6 --ylength 40.0
 python PlotEfficiency.py    -D HPK_Eb_1cm_80up_45uw_170V -x 0.6
 python plot1DRes.py         -D HPK_Eb_1cm_80up_45uw_170V
-python PlotRecoDiffVsY.py   -D HPK_Eb_1cm_80up_45uw_170V --xlength 10.0 --ylength 5000.0
+python PlotRecoDiffVsY.py   -D HPK_Eb_1cm_80up_45uw_170V --xlength 10.0 --ylength 3500.0
 
 
 ## EIC_W1_0p5cm_500up_200uw_1_4_245V
