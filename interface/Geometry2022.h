@@ -130,7 +130,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.95,1.15, -1.5,-0.5},{"cold", 0.95,1.15, 1.0,2.0},{"gap", 0.75,0.85, 0.5,2.5}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5},{"gap", 0.70,0.80, 0.5,2.5}};
 };
 
 class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
@@ -512,7 +512,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}};
     // std::vector<std::vector<double>> sensorEdges = {{-13.0, -1.5}, {12.0, 2.0}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-1.5, -12.0}, {2.0, 13.0}}; // Lab-Tracker's frame after rotation
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.1,0.35, -11.0,-9.5},{"cold", 0.1,0.35, 5.0,6.5},{"gap", -0.1,0.0, 1.0,4.75}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.1,0.35, -11.5,-10.0},{"cold", 0.1,0.35, 5.0,6.5},{"gap", -0.1,0.0, 1.0,4.75}};
     std::vector<std::vector<double>> sensorEdges = {{-1.75, -12.5}, {1.75, 12.5}}; // Sensor's local frame // THIS IS NOT CONSIDERING GUARD RING
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -11.8}, {stripCenterXPosition[lowGoodStripIndex], 11.8}};
 };
@@ -688,7 +688,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -2.2}, {2.0, 2.2}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.9, -2.2}, {1.9, 2.2}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -2.0}, {stripCenterXPosition[lowGoodStripIndex], 2.0}};
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -0.15,0.1, 0.8,1.3},{"cold", -0.15,0.1, -1.8,-1.3},{"gap", -0.35,-0.2, -1.2,-0.36}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -0.15,0.1, 0.8,1.3},{"cold", -0.15,0.1, -1.8,-1.3},{"gap", -0.35,-0.2, -1.2,-0.37}};
 };
 
 class BNL_500um_squares_Geometry : public DefaultGeometry
