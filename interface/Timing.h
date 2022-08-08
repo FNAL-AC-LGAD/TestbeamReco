@@ -26,12 +26,6 @@ private:
         auto time1 = timeLGAD[amp1Indexes.first][amp1Indexes.second];
         //auto time2 = timeLGAD[amp2Indexes.first][amp2Indexes.second];
        
-        //utility::remapToLGADgeometry(tr, corrTimeLGADXTrackerY, "timeLGADXTrackerY");
-        //utility::remapToLGADgeometry(tr, corrTimeLGADXY,        "timeLGADXY");
-        //utility::remapToLGADgeometry(tr, corrTimeLGADXY0,       "timeLGADXY0");
-        //utility::remapToLGADgeometry(tr, corrTimeLGADX,         "timeLGADX");
-        //utility::remapToLGADgeometry(tr, corrTimeTrackerX,      "timeTrackerX");
-
         //-------------------------------------------------------
         //Code from https://github.com/cmorgoth/AC_LGAD_Timing 
         //-------------------------------------------------------
