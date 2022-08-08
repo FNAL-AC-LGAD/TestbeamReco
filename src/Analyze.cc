@@ -876,15 +876,15 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,            my_2d_histos, "dXdFrac_vs_Xtrack_Loose", x,dXdFrac);
 
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "deltaX_vs_Xreco_Loose", x_reco,x_reco-x);
-        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,               my_2d_histos, "deltaY_vs_Xtrack_Loose", x,y_reco-y);
-        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,               my_2d_histos, "deltaY_vs_Ytrack_Loose", y,y_reco-y);
-        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,               my_2d_histos, "deltaY_vs_Yreco_Loose", y_reco,y_reco-y);
+        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,            my_2d_histos, "deltaY_vs_Xtrack_Loose", x,y_reco-y);
+        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,            my_2d_histos, "deltaY_vs_Ytrack_Loose", y,y_reco-y);
+        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,            my_2d_histos, "deltaY_vs_Yreco_Loose", y_reco,y_reco-y);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "deltaXmax_vs_Xtrack_Loose", x,deltaXmax);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "deltaXmax_vs_Xreco_Loose", x_reco,deltaXmax);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "weighted_timeDiff_vs_x_Loose", x,weighted_time-photekTime);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "weighted_timeDiff_tracker_vs_x_Loose", x,weighted_time_tracker-photekTime);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "Xreco_vs_Xtrack_Loose", x,x_reco);
-        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,               my_2d_histos, "Yreco_vs_Ytrack_Loose", y,y_reco);
+        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,            my_2d_histos, "Yreco_vs_Ytrack_Loose", y,y_reco);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "deltaX_vs_amplitude1_Loose", maxAmp,x_reco-x);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "deltaX_vs_amplitude2_Loose", amp2,x_reco-x);
         utility::fillHisto(pass_loose && highRelAmp1,                                                      my_2d_histos, "Amp2OverAmp2and3_vs_deltaXmax_Loose", deltaXmax,Amp2OverAmp2and3);
@@ -941,7 +941,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_3d_histos, "weighted_timeDiff_goodSig_vs_xy_Loose", x,y,weighted_time_goodSig-photekTime);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_3d_histos, "weighted2_timeDiff_goodSig_vs_xy_Loose", x,y,weighted2_time_goodSig-photekTime);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_3d_histos, "deltaX_vs_Xtrack_vs_Ytrack_Loose", x,y,x_reco-x);
-        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && goodDeltaY,               my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack_Loose", x,y,y_reco-y);
+        utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,            my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack_Loose", x,y,y_reco-y);
 
 
         // Save profiles and efficiency histos using pass, i.e. tight edges cut
