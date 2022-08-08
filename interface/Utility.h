@@ -153,6 +153,19 @@ namespace utility
         return tracker_corr;    
     }
 
+    template<typename T> double getTrackerTimeCorr(double x, double time, uint channel, const std::vector<std::shared_ptr<T>>& histVec)
+    {
+        double tracker_corr=0;
+        //Must check that time !=0, because 0 indicates there was no timestamp assigned by TimingDAQ
+        if(time != 0.0 && histVec.size() > 0 && channel < histVec.size())
+        {
+            auto hist = histVec[channel];
+            int ibin = hist->FindBin(x);
+            tracker_corr = hist->GetBinContent(ibin); 
+        }
+        return tracker_corr;    
+    }
+
     class ROI
     {
     private:

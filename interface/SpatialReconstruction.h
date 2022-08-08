@@ -8,6 +8,7 @@ class SpatialReconstruction
 private:
     std::shared_ptr<TProfile2D> y_timeDiff_ampFrac;
     std::vector<std::shared_ptr<TProfile2D>> v_timeDiff_coarse_vs_xy_channel;
+    std::vector<std::shared_ptr<TProfile>> v_timeDiff_coarse_vs_x_channel;
 
     double getDX(const std::vector<double>& coeffs, const double x, const double shift = 0.0)
     {
@@ -115,22 +116,36 @@ private:
 
         //Compute time resolution using reco positions
         const auto& y = tr.getVar<double>("y");
+        const auto& x = tr.getVar<double>("x");
         const auto& corrTime = tr.getVec<double>("corrTime");
         auto& corrTimeLGADXTrackerY = tr.createDerivedVec<double>("corrTimeLGADXTrackY");
         auto& corrTimeLGADXY = tr.createDerivedVec<double>("corrTimeLGADXY");
-
+        auto& corrTimeLGADXY0 = tr.createDerivedVec<double>("corrTimeLGADXY0");     
+        auto& corrTimeLGADX = tr.createDerivedVec<double>("corrTimeLGADX");
+        auto& corrTimeTrackerX = tr.createDerivedVec<double>("corrTimeTracker");   
+     
         uint counter = 0;
         for(auto thisTime : corrTime)
         {
             auto lgadX_trackerY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
             auto lgadX_lgadY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y_reco, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
+            auto lgadX_lgadY0_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, 0.0, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
+            auto lgadX_corr = utility::getTrackerTimeCorr<TProfile>(x_reco, thisTime, counter, v_timeDiff_coarse_vs_x_channel);
+            auto TrackerX_corr = utility::getTrackerTimeCorr<TProfile>(x, thisTime, counter, v_timeDiff_coarse_vs_x_channel);
+            
             corrTimeLGADXTrackerY.emplace_back(thisTime - lgadX_trackerY_corr);
             corrTimeLGADXY.emplace_back(thisTime - lgadX_lgadY_corr);
+            corrTimeLGADXY0.emplace_back(thisTime - lgadX_lgadY0_corr);
+            corrTimeLGADX.emplace_back(thisTime - lgadX_corr);
+            corrTimeTrackerX.emplace_back(thisTime - TrackerX_corr);
             counter++;
         }
 
         utility::remapToLGADgeometry(tr, corrTimeLGADXTrackerY, "timeLGADXTrackerY");
         utility::remapToLGADgeometry(tr, corrTimeLGADXY,        "timeLGADXY");
+        utility::remapToLGADgeometry(tr, corrTimeLGADXY0,       "timeLGADXY0");
+        utility::remapToLGADgeometry(tr, corrTimeLGADX,         "timeLGADX");   
+        utility::remapToLGADgeometry(tr, corrTimeTrackerX,      "timeTrackerX");
 
         // Position resolution for the pad sensors
         const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
@@ -172,7 +187,8 @@ private:
         tr.registerDerivedVar("y_reco_basic", y_reco_basic);
     }
 public:
-    SpatialReconstruction(const std::shared_ptr<TProfile2D>& histo, const std::vector<std::shared_ptr<TProfile2D>>& histVec) : y_timeDiff_ampFrac(histo), v_timeDiff_coarse_vs_xy_channel(histVec)
+    SpatialReconstruction(const std::shared_ptr<TProfile2D>& histo, const std::vector<std::shared_ptr<TProfile2D>>& histVec,  const std::vector<std::shared_ptr<TProfile>>& histVec1D)
+    : y_timeDiff_ampFrac(histo), v_timeDiff_coarse_vs_xy_channel(histVec), v_timeDiff_coarse_vs_x_channel(histVec1D)   
     {
         std::cout<<"Running Spatial Reconstruction Module"<<std::endl;
     }
