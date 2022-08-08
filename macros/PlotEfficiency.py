@@ -205,6 +205,50 @@ canvas.SaveAs("%sEfficiencyFullReco_vs_x"%(outdir)+".gif")
 canvas.SaveAs("%sEfficiencyFullReco_vs_x"%(outdir)+".pdf")
 canvas.Clear()
 
+####################################
+#### Draw only global x projections all together
+####################################
+
+htemp.Draw()
+for box in boxes:
+    box.Draw()
+
+legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.23,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.01);
+# legend.SetNColumns(3)
+
+index_LowThre = list_thresholds.index("_lowThreshold")
+index_HigThre = list_thresholds.index("_highThreshold")
+index_RecoOne = list_recoMethod.index("_oneStrip")
+index_RecoTwo = list_recoMethod.index("_twoStrips")
+
+# Draw OneStripReco Global
+hist_Global_OneStrip = list_efficiency_vs_x_project_global[index_RecoOne + index_LowThre*len(list_recoMethod)]
+hist_Global_OneStrip.Draw("LPsame")
+hist_Global_OneStrip.SetLineWidth(2)
+hist_Global_OneStrip.SetLineColor(colors[0])
+legend.AddEntry(hist_Global_OneStrip, "One strip reconstruction")
+
+# Draw TwoStripsReco Global
+hist_Global_TwoStrips = list_efficiency_vs_x_project_global[index_RecoTwo + index_HigThre*len(list_recoMethod)]
+hist_Global_TwoStrips.Draw("LPsame")
+hist_Global_TwoStrips.SetLineWidth(2)
+hist_Global_TwoStrips.SetLineColor(colors[1])
+legend.AddEntry(hist_Global_TwoStrips, "Two strips reconstruction")
+
+# Draw FullReco Global
+efficiency_vs_x_project_fullReco_global.Draw("LPsame")
+efficiency_vs_x_project_fullReco_global.SetLineWidth(2)
+efficiency_vs_x_project_fullReco_global.SetLineColor(colors[2])
+legend.AddEntry(efficiency_vs_x_project_fullReco_global, "Full reconstruction")
+
+legend.Draw()
+htemp.Draw("AXIS same")
+
+# myStyle.BeamInfo()
+myStyle.SensorInfoSmart(dataset)
+
+canvas.SaveAs("%sEfficiencyAllProj_vs_x"%(outdir)+".gif")
+canvas.SaveAs("%sEfficiencyAllProj_vs_x"%(outdir)+".pdf")
 
 # Save efficiency plots
 outputfile = TFile("%sEfficiencyPlots.root"%(outdir),"RECREATE")
