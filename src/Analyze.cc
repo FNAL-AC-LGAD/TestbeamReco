@@ -90,6 +90,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
                       
             //Define 2D histograms
             utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
+            utility::makeHisto(my_2d_histos,"ampOverMaxAmp_vs_x_channel"+r+s, "; X [mm]; ampOverMaxAmp", (xmax-xmin)/xBinSize,xmin,xmax, 101,0.0,1.01);
             utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_top"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
             utility::makeHisto(my_2d_histos,"delay_vs_x_channel_top"+r+s, "; X [mm]; Arrival time [ns]", (xmax-xmin)/xBinSize,xmin,xmax, 100,-11,-10);
             utility::makeHisto(my_2d_histos,"timeDiff_vs_x_channel"+r+s, "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -461,7 +462,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& corrTime = tr.getVec<double>("corrTime");
         const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
-        const auto& CFD_list = tr.getVar<std::vector<std::string> >("CFD_list");
         const auto& baselineRMS = tr.getVec<std::vector<float>>("baselineRMS");
         const auto& risetimeLGAD = tr.getVec<std::vector<double>>("risetimeLGAD");
         const auto& chargeLGAD = tr.getVec<std::vector<double>>("chargeLGAD");
@@ -496,6 +496,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
         const auto& relFracDC = tr.getVar<double>("relFracDC");
         const auto& relFrac = tr.getVec<std::vector<double>>("relFrac");
+        const auto& fracMax = tr.getVec<std::vector<double>>("fracMax");
         const auto& totAmpLGAD = tr.getVar<double>("totAmpLGAD");
         const auto& totRawAmpLGAD = tr.getVar<double>("totRawAmpLGAD");
         const auto& totGoodAmpLGAD = tr.getVar<double>("totGoodAmpLGAD");
@@ -598,6 +599,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 const auto& maxAmpStr = std::to_string(maxAmpIndex);
                 const auto& ampChannel = ampLGAD[rowIndex][i];
                 const auto& relFracChannel = relFrac[rowIndex][i];
+                const auto& fracMaxChannel = fracMax[rowIndex][i];
                 const auto& rawAmpChannel = rawAmpLGAD[rowIndex][i];
                 const auto& noise = baselineRMS[rowIndex][i]; 
                 const auto& risetime = risetimeLGAD[rowIndex][i];
@@ -658,6 +660,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "amp_vs_x_channel"+r+s, x,ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "amp_vs_y_channel"+r+s, y,ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "relFrac_vs_x_channel"+r+s, x,relFracChannel);
+                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "ampOverMaxAmp_vs_x_channel"+r+s, x,fracMaxChannel);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "relFrac_vs_y_channel"+r+s, y,relFracChannel);
                 utility::fillHisto(pass && goodHit && isMaxChannel && goodNeighbour,        my_2d_histos, "Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s, deltaXmax, Amp1OverAmp1and2);
 
