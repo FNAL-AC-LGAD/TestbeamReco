@@ -274,14 +274,19 @@ private:
         const auto& integral = tr.getVec<float>("integral");
         auto& charge = tr.createDerivedVec<double>("charge",integral.size());
         auto& AmpChargeRatio = tr.createDerivedVec<double>("AmpChargeRatio",integral.size());
+        auto& SlewRateChargeRatio = tr.createDerivedVec<double>("SlewRateChargeRatio",integral.size());
         for(unsigned int i = 0; i < integral.size(); i++)
         {
             charge[i] = -1000*integral[i]*1e9*50/(1.4*4700); //FNAL / UCSC Q ratio is 1.4, using 4700 for both.
             AmpChargeRatio[i] = corrAmp[i]/charge[i];
+            SlewRateChargeRatio[i] = corrSlewrate[i]/charge[i];
         }
         utility::remapToLGADgeometry(tr, charge, "chargeLGAD");
         utility::remapToLGADgeometry(tr, AmpChargeRatio, "ampChargeRatioLGAD");
+        utility::remapToLGADgeometry(tr, SlewRateChargeRatio, "slewRateChargeRatioLGAD");
+    
     }
+        
 
 public:
 

@@ -257,6 +257,13 @@ private:
         tr.registerDerivedVar("Amp12", Amp12);
         tr.registerDerivedVar("Noise12", Noise12);
         tr.registerDerivedVar("Amp123", Amp123);
+
+        //add delatT
+        const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
+        auto time1 = timeLGAD[amp1Indexes.first][amp1Indexes.second];
+        auto time2 = timeLGAD[amp2Indexes.first][amp2Indexes.second];
+        auto deltaT = time1 - time2;
+        tr.registerDerivedVar("deltaT",deltaT);
     }
 public:
     SignalProperties()

@@ -26,12 +26,19 @@ private:
             delayHistos.emplace_back(Form("timeDiff_coarse_vs_xy_channel0%i_pyx",ichan));
         }  
         const auto& delayHistoVec = utility::getHistoFromROOT<TProfile2D>(outpath+"/delayCorrections.root", delayHistos);
+        
+        //1D histogram of 2D delay correction
+        std::vector<std::shared_ptr<TProfile>> delayHistos1DVec;
+        for(uint ichan=0; ichan < delayHistoVec.size(); ichan++)
+        {
+            delayHistos1DVec.emplace_back((TProfile*)delayHistoVec[ichan]->ProfileX());
+        }
 
         for(const auto& module : modules)
         {
             if     (module=="PrepNTupleVars")          tr.emplaceModule<PrepNTupleVars>(delayHistoVec);
             else if(module=="SignalProperties")        tr.emplaceModule<SignalProperties>();
-            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>( utility::getHistoFromROOT<TProfile2D>(outpath+"/yRecoHistos.root", "y_vs_Amp1OverAmp1and2_deltaT_prof"), delayHistoVec);
+            else if(module=="SpatialReconstruction")   tr.emplaceModule<SpatialReconstruction>( utility::getHistoFromROOT<TProfile2D>(outpath+"/yRecoHistos.root", "y_vs_Amp1OverAmp1and2_deltaT_prof"), delayHistoVec, delayHistos1DVec);
             else if(module=="Timing")                  tr.emplaceModule<Timing>();
         }
     }
@@ -285,8 +292,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "Timing",
                 "SpatialReconstruction",
+                "Timing",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -308,8 +315,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "Timing",
                 "SpatialReconstruction",
+                "Timing",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -318,8 +325,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "Timing",
                 "SpatialReconstruction",
+                "Timing",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -328,8 +335,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "Timing",
                 "SpatialReconstruction",
+                "Timing",
             };
             registerModules(tr, std::move(modulesList));
         }
@@ -338,8 +345,8 @@ public:
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",
                 "SignalProperties",
-                "Timing",
                 "SpatialReconstruction",
+                "Timing",
             };
             registerModules(tr, std::move(modulesList));
         }
