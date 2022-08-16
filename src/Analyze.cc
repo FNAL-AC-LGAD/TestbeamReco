@@ -92,8 +92,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             }
                       
             //Define 2D histograms
+            utility::makeHisto(my_2d_histos,"AmpOverMaxAmp_vs_x_channel"+r+s, "; X [mm]; ampOverMaxAmp", 171,-0.855,0.855, 101,0.0,1.01);
+            utility::makeHisto(my_2d_histos,"AmpOverMaxAmp_vs_x_channel"+r+s+"_NearHit", "; X [mm]; ampOverMaxAmp", 171,-0.855,0.855, 101,0.0,1.01);
             utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-            utility::makeHisto(my_2d_histos,"ampOverMaxAmp_vs_x_channel"+r+s, "; X [mm]; ampOverMaxAmp", (xmax-xmin)/xBinSize,xmin,xmax, 101,0.0,1.01);
+            // utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel"+r+s+"_NearHit", "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
             utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_top"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
             utility::makeHisto(my_2d_histos,"delay_vs_x_channel_top"+r+s, "; X [mm]; Arrival time [ns]", (xmax-xmin)/xBinSize,xmin,xmax, 100,-11,-10);
             utility::makeHisto(my_2d_histos,"timeDiff_vs_x_channel"+r+s, "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -267,6 +269,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp3OverAmp123", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + m_{3})", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
 
     //Global 2D histograms using loose edges cut (_Loose)
+    /*
     utility::makeHisto(my_2d_histos,"weighted_timeDiff_vs_x_Loose", "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_2d_histos,"weighted_timeDiff_tracker_vs_x_Loose", "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
@@ -303,7 +306,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp1OverAmp123_Loose", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + A_{3})", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp2OverAmp123_Loose", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + A_{3})", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp3OverAmp123_Loose", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + m_{3})", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-
+    */
 
     //Global 3D histograms using tight edges cut
     utility::makeHisto(my_3d_histos,"amplitude_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
@@ -335,6 +338,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,15.0);
 
     //Global 3D histograms using loose edges cut (_Loose)
+    /*
     utility::makeHisto(my_3d_histos,"amplitude_vs_xy_Loose","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
     utility::makeHisto(my_3d_histos,"totgoodamplitude_vs_xy_Loose", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"totamplitude_vs_xy_Loose", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
@@ -357,7 +361,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"risetime_vs_xy_Loose","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
     utility::makeHisto(my_3d_histos,"charge_vs_xy_Loose","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,150.0);
     utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy_Loose","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,15.0);
-
+    */
 
     //Efficiency
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
@@ -425,6 +429,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
+    const auto& numLGADchannels = tr.getVar<int>("numLGADchannels");
     const auto& sensorCenter = tr.getVar<double>("sensorCenter");
     const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
@@ -440,6 +445,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     //const auto& xSlices = tr.getVar<std::vector<std::vector<double>>>("xSlices");
     const auto& ySlices = tr.getVar<std::vector<std::vector<double>>>("ySlices");
     const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
+    const auto& sensorEdgesTight = tr.getVar<std::vector<std::vector<double>>>("sensorEdgesTight");
     // const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
     const auto& stripWidth = tr.getVar<double>("stripWidth");
     const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
@@ -506,11 +512,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& weighted_time_goodSig = tr.getVar<double>("weighted_time_goodSig");
         const auto& weighted2_time_goodSig = tr.getVar<double>("weighted2_time_goodSig");
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
+        const auto& hitSensorTightY = tr.getVar<bool>("hitSensorTightY");
         const auto& hitSensorTight = tr.getVar<bool>("hitSensorTight");
         const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
         const auto& relFracDC = tr.getVar<double>("relFracDC");
         const auto& relFrac = tr.getVec<std::vector<double>>("relFrac");
         const auto& fracMax = tr.getVec<std::vector<double>>("fracMax");
+        // const auto& timeNearMax = tr.getVec<std::vector<bool>>("timeNearMax");
         const auto& totAmpLGAD = tr.getVar<double>("totAmpLGAD");
         const auto& totRawAmpLGAD = tr.getVar<double>("totRawAmpLGAD");
         const auto& totGoodAmpLGAD = tr.getVar<double>("totGoodAmpLGAD");
@@ -556,8 +564,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         if(isPadSensor)      goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+
+        bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
+
         bool pass = goodTrack && hitSensorTight && goodPhotek;
         bool pass_loose = goodTrack && hitSensor && goodPhotek;
+        bool pass_tightY = goodTrack && hitSensorOnlyTightY && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
         bool inTopRow = y>ySlices[1][0] && y<ySlices[1][1];
@@ -627,12 +639,14 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 const auto& slewrate = slewrateLGAD[rowIndex][i];
                 //std::cout << slewrate << std::endl;
                 const auto& slewRateChargeRatio = slewRateChargeRatioLGAD[rowIndex][i];
+                const auto& stripXPosition = stripCenterXPositionLGAD[rowIndex][i];
                 bool goodNoiseAmp = ampChannel>noiseAmpThreshold;
                 bool goodSignalAmp = ampChannel>signalAmpThreshold;
                 double time = timeLGAD[rowIndex][i];
                 double timeTracker = timeLGADTracker[rowIndex][i];
                 bool isMaxChannel = amp1Indexes.first == rowIndex && amp1Indexes.second == int(i);
                 bool fullReco_ch = isMaxChannel && ((goodSignalAmp && twoStripsReco) || (goodNoiseAmp && oneStripReco));
+                bool goodNearHit = amp1Indexes.first == rowIndex && (amp1Indexes.second == int(i-1) || amp1Indexes.second == int(i) || amp1Indexes.second == int(i+1));
                 bool goodHit = goodNoiseAmp && goodMaxLGADAmp;
                 if(i==1 || i==4) goodHitGlobal2and5 = goodHitGlobal2and5 || (isMaxChannel && goodHit);
                 if (stripCenterXPositionLGAD[rowIndex][i]!=0.0 && ((stripCenterXPositionLGAD[rowIndex][i]-stripWidth/2.)<x) && (x<(stripCenterXPositionLGAD[rowIndex][i]+stripWidth/2.)))
@@ -683,9 +697,18 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "risetime_vs_amp"+r+s,ampChannel, risetime);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "amp_vs_y_channel"+r+s, y,ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "relFrac_vs_x_channel"+r+s, x,relFracChannel);
-                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "ampOverMaxAmp_vs_x_channel"+r+s, x,fracMaxChannel);
+                /*
+                utility::fillHisto(pass && goodHit && goodNearHit,                          my_2d_histos, "relFrac_vs_x_channel"+r+s+"_NearHit", x,relFracChannel);
+                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "AmpOverAmpandAmpMax_vs_x_channel"+r+s, x,xTalkChannel);
+                utility::fillHisto(pass && goodHit && goodNearHit,                          my_2d_histos, "AmpOverAmpandAmpMax_vs_x_channel"+r+s+"_NearHit", x,xTalkChannel);
+                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "Amp1OverAmp1and2_vs_x_channel"+r+s, x,Amp1OverAmp1and2);
+                utility::fillHisto(pass && goodHit && goodNearHit,                          my_2d_histos, "Amp1OverAmp1and2_vs_x_channel"+r+s+"_NearHit", x,Amp1OverAmp1and2);
+                */
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "relFrac_vs_y_channel"+r+s, y,relFracChannel);
                 utility::fillHisto(pass && goodHit && isMaxChannel && goodNeighbour,        my_2d_histos, "Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s, deltaXmax, Amp1OverAmp1and2);
+
+                utility::fillHisto(pass_tightY && goodHit,                                  my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s, x-stripXPosition,fracMaxChannel);
+                utility::fillHisto(pass_tightY && goodHit && goodNearHit,                   my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s+"_NearHit", x-stripXPosition,fracMaxChannel);
 
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos, "timeDiff_vs_x_channel"+r+s, x,time-photekTime);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos, "timeDiffTracker_vs_x_channel"+r+s, x,timeTracker-photekTime);
@@ -731,7 +754,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(goodTrack && goodPhotek,                                 my_2d_prof, "efficiency_vs_xy_highThreshold_prof_channel"+r+s, x,y,ampChannel > signalAmpThreshold);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel,                 my_2d_prof, "efficiency_vs_xy_highThreshold_prof", x,y,goodHit);
                 utility::fillHisto(pass && isMaxChannel,                                    my_2d_prof, "efficiency_vs_xy_highThreshold_EdgeCut_prof", x,y,goodHit);
-                utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && !goodNeighbour,my_2d_prof, "efficiency_vs_xy_highThreshold_noNeighb_prof", x,y,goodHit);
+                utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && !goodNeighbour,my_2d_prof,"efficiency_vs_xy_highThreshold_noNeighb_prof", x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && highFraction, my_2d_prof, "efficiency_vs_xy_highThreshold_highFrac_prof", x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && oneStripReco, my_2d_prof, "efficiency_vs_xy_highThreshold_oneStrip_prof", x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && twoStripsReco,my_2d_prof, "efficiency_vs_xy_highThreshold_twoStrips_prof", x,y,goodHit);
@@ -859,6 +882,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "clusterSize_vs_x", x,clusterSize);
 
         // Save 2d histos using pass_loose, i.e. loose edges cut (lc)
+        /*
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoGoodHits,              my_2d_histos, "Amp1OverAmp1and2_vs_deltaXmax_Loose", fabs(deltaXmax),Amp1OverAmp1and2);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip,                                               my_2d_histos, "Amp1OverAmp123_vs_deltaXmax_Loose", fabs(deltaXmax),Amp1OverAmp123);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip,                                               my_2d_histos, "Xtrack_vs_Amp1OverAmp123_Loose", x,Amp1OverAmp123);
@@ -893,7 +917,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "deltaX_vs_amplitude2_Loose", amp2,x_reco-x);
         utility::fillHisto(pass_loose && highRelAmp1,                                                      my_2d_histos, "Amp2OverAmp2and3_vs_deltaXmax_Loose", deltaXmax,Amp2OverAmp2and3);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_2d_histos, "clusterSize_vs_x_Loose", x,clusterSize);
-
+        */
         
         // Save 3d histos using pass, i.e. tight edges cut
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "amplitude_vs_xy", x,y,maxAmp);
@@ -924,6 +948,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack", x,y,y_reco-y);
 
         // Save 3d histos using pass_loose, i.e. loose edges cut (lc)
+        /*
         utility::fillHisto(pass_loose && goodMaxLGADAmp,                                                   my_3d_histos, "amplitude_vs_xy_Loose", x,y,maxAmp);
         utility::fillHisto(pass_loose && goodMaxLGADAmp,                                                   my_3d_histos, "risetime_vs_xy_Loose", x,y,risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
         utility::fillHisto(pass_loose && goodMaxLGADAmp,                                                   my_3d_histos, "charge_vs_xy_Loose", x,y,chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
@@ -946,7 +971,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_3d_histos, "weighted2_timeDiff_goodSig_vs_xy_Loose", x,y,weighted2_time_goodSig-photekTime);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_3d_histos, "deltaX_vs_Xtrack_vs_Ytrack_Loose", x,y,x_reco-x);
         utility::fillHisto(pass_loose && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,            my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack_Loose", x,y,y_reco-y);
-
+        */
 
         // Save profiles and efficiency histos using pass, i.e. tight edges cut
         utility::fillHisto(pass && maxAmpNotEdgeStrip,                                                     my_1d_prof, "Xtrack_vs_Amp1OverAmp123_prof", x,Amp1OverAmp123);

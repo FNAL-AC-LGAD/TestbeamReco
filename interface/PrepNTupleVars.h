@@ -175,8 +175,11 @@ private:
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
         tr.registerDerivedVar("hitSensor", hitSensor);
 
+        bool hitSensorTightY = sensorEdgesTight[0][1] < y && y < sensorEdgesTight[1][1];
+        tr.registerDerivedVar("hitSensorTightY", hitSensorTightY);
+
         const auto& sensorEdgesTight = tr.getVar<std::vector<std::vector<double>>>("sensorEdgesTight");
-        bool hitSensorTight = sensorEdgesTight[0][0] < x && x < sensorEdgesTight[1][0] &&  sensorEdgesTight[0][1] < y && y < sensorEdgesTight[1][1];
+        bool hitSensorTight = sensorEdgesTight[0][0] < x && x < sensorEdgesTight[1][0] &&  hitSensorTightY;
         tr.registerDerivedVar("hitSensorTight", hitSensorTight);
 
         // Hit through active sensor for scan vars
