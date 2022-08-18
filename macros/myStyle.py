@@ -151,17 +151,17 @@ def GetBV(name):
         return ""
 
 
-sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "EIC_1cm_500up_300uw", 'pitch': 500, 'stripWidth': 300, "BV": 240, "length": 10.0},
-                    "EIC_W1_1cm_500up_200uw": {'sensor': "EIC_1cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 255, "length": 10.0},
-                    "EIC_W2_1cm_500up_100uw": {'sensor': "EIC_1cm_500up_100uw", 'pitch': 500, 'stripWidth': 100, "BV": 220, "length": 10.0},
+sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "BNL 10-300", 'pitch': 500, 'stripWidth': 300, "BV": 240, "length": 10.0},
+                    "EIC_W1_1cm_500up_200uw": {'sensor': "BNL 10-200", 'pitch': 500, 'stripWidth': 200, "BV": 255, "length": 10.0},
+                    "EIC_W2_1cm_500up_100uw": {'sensor': "BNL 10-100", 'pitch': 500, 'stripWidth': 100, "BV": 220, "length": 10.0},
                     "EIC_W1_1cm_100up_50uw": {'sensor': "EIC_1cm_100up_50uw", 'pitch': 100, 'stripWidth': 50, "BV": 240, "length": 10.0},
                     "EIC_W1_1cm_200up_100uw": {'sensor': "EIC_1cm_200up_100uw", 'pitch': 200, 'stripWidth': 100, "BV": 240, "length": 10.0},
                     "EIC_W1_1cm_300up_150uw": {'sensor': "EIC_1cm_300up_150uw", 'pitch': 300, 'stripWidth': 150, "BV": 240, "length": 10.0},
                     "EIC_W1_UCSC_2p5cm_500up_200uw": {'sensor': "EIC_2p5cm_UCSC_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 330, "length": 25.0},
-                    "EIC_W1_2p5cm_500up_200uw": {'sensor': "EIC_2p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 215, "length": 25.0},
+                    "EIC_W1_2p5cm_500up_200uw": {'sensor': "BNL 25-200", 'pitch': 500, 'stripWidth': 200, "BV": 215, "length": 25.0},
                     "HPK_Eb_1cm_80up_45uw": {'sensor': "HPK_Eb_80up_45uw", 'pitch': 80, 'stripWidth': 45, "BV": 170, "length": 10.0},
                     "EIC_W1_0p5cm_500up_200uw_1_7": {'sensor': "EIC_1_7_0p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 240, "length": 5.0},
-                    "EIC_W1_0p5cm_500up_200uw_1_4": {'sensor': "EIC_1_4_0p5cm_500up_200uw", 'pitch': 500, 'stripWidth': 200, "BV": 245, "length": 5.0},
+                    "EIC_W1_0p5cm_500up_200uw_1_4": {'sensor': "BNL 5-200", 'pitch': 500, 'stripWidth': 200, "BV": 245, "length": 5.0},
                     "BNL_500um_squares_175V": {'sensor': "BNL_squares_1cm_500up_300uw", 'pitch': 500, 'stripWidth': 100, "BV": 175},
                     "BNL2021_22_medium_150up_80uw": {'sensor': "BNL2021_V2_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 285},
                     "IHEP_W1_I_150up_80uw": {'sensor': "IHEP_1cm_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 185},
