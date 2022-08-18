@@ -89,6 +89,9 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
                 utility::makeHisto(my_histos,"timeDiffTracker_channel"+r+s+regionsOfIntrest[k].getName(), "", timeDiffNbin,timeDiffLow,timeDiffHigh);
                 utility::makeHisto(my_histos,"weighted2_timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), "", timeDiffNbin,timeDiffLow,timeDiffHigh);
                 utility::makeHisto(my_histos,"weighted2_timeDiff_tracker_channel"+r+s+regionsOfIntrest[k].getName(), "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+                utility::makeHisto(my_2d_histos,"AmpOverMaxAmp_vs_x_channel"+r+s+regionsOfIntrest[k].getName(), "; X [mm]; ampOverMaxAmp", 171,-0.855,0.855, 101,0.0,1.01);
+                utility::makeHisto(my_2d_histos,"AmpOverMaxAmp_vs_x_channel"+r+s+"_NearHit"+regionsOfIntrest[k].getName(), "; X [mm]; ampOverMaxAmp", 171,-0.855,0.855, 101,0.0,1.01);
             }
                       
             //Define 2D histograms
@@ -670,8 +673,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "slewRateChargeRatio"+r+s, slewRateChargeRatio); 
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "slewrate"+r+s, slewrate);              
                 for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
-                { 
-
+                {
                     if(regionsOfIntrest[k].passROI(x,y))
                     {
                         utility::fillHisto(pass && goodHit,                                 my_histos, "baselineRMS"+r+s+regionsOfIntrest[k].getName(), noise);
@@ -684,6 +686,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                         utility::fillHisto(pass && goodHit,                                 my_histos, "timeDiffTracker_channel"+r+s+regionsOfIntrest[k].getName(), timeTracker-photekTime);
                         utility::fillHisto(pass && goodHit,                                 my_histos, "weighted2_timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), weighted2_time-photekTime);
                         utility::fillHisto(pass && goodHit,                                 my_histos, "weighted2_timeDiff_tracker_channel"+r+s+regionsOfIntrest[k].getName(), weighted2_time_tracker-photekTime);
+
+                        utility::fillHisto(pass_tightY && goodHit,                          my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s+regionsOfIntrest[k].getName(), x-stripXPosition,fracMaxChannel);
+                        utility::fillHisto(pass_tightY && goodHit && goodNearHit,           my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s+"_NearHit"+regionsOfIntrest[k].getName(), x-stripXPosition,fracMaxChannel);
                         utility::fillHisto(pass && goodHit,                                 my_3d_histos, "amplitude_vs_xyROI", x,y,maxAmp);
                     }
                 }
