@@ -28,13 +28,13 @@ def CopyHist(hist, number):
     return hist_tmp
 
 # Construct the argument parser
-parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-n','--name', dest='hist2plot', default = "AmpOverMaxAmp", help="Histogram to draw w/o _vs_x_channel")
-parser.add_option('-c','--cut', dest='histCut', default = "", help="Cut used, can be _NearHit, or none, WITH _")
-options, args = parser.parse_args()
+# parser = optparse.OptionParser("usage: %prog [options]\n")
+# parser.add_option('-n','--name', dest='hist2plot', default = "AmpOverMaxAmp", help="Histogram to draw w/o _vs_x_channel")
+# parser.add_option('-c','--cut', dest='histCut', default = "", help="Cut used, can be _NearHit, or none, WITH _")
+# options, args = parser.parse_args()
 
-histName = options.hist2plot
-histCut  = options.histCut
+# histName = options.hist2plot
+# histCut  = options.histCut
 
 outdir = myStyle.getOutputDir("Paper2022")
 
@@ -52,20 +52,20 @@ pitch = 0.500 #mm
 # xlim=2.5
 # xlim=1.1
 xlim=0.75
-ymin=0.001
-ymax=1.2
+ymin=0.00
+ymax=1.19
 
 # gStyle.SetOptFit(0)
 # gROOT.ForceStyle()
 canvas = TCanvas("cv","cv",1000,800)
 
 # Save amplitude histograms
-outputfile = TFile(outdir+"RelFracVsX_DiffWidth_"+histName+histCut+".root","RECREATE")
+outputfile = TFile(outdir+"RelFracVsX_DiffWidth.root","RECREATE")
 
 temp_hist = TH1F("htemp","", 1, -xlim, xlim)
-temp_hist.GetXaxis().SetTitle("X_{wrtCenter} [mm]")
+temp_hist.GetXaxis().SetTitle("Track X position [mm]")
 temp_hist.GetYaxis().SetRangeUser(ymin, ymax)
-temp_hist.GetYaxis().SetTitle("RelAmp in Ch3")
+temp_hist.GetYaxis().SetTitle("Amp middle / Amp max")
 temp_hist.Draw("axis")
 
 boxes = stripBox.getStripBox(list_input[0],ymin,1.0,False,18,True,list_input[0].Get("stripBoxInfo03").GetMean(1))
@@ -101,7 +101,7 @@ legend.SetFillStyle(0)
 
 th1_list = []
 for i,item in enumerate(sensor_list):
-    th1_relFrac = list_input[i].Get(histName+"_vs_x_channel03"+histCut).ProfileX()
+    th1_relFrac = list_input[i].Get("AmpOverMaxAmp_vs_x_channel03").ProfileX()
     tmp_relFrac = CopyHist(th1_relFrac, i)
 
     tmp_relFrac.SetLineColor(colors[2*i])
@@ -114,20 +114,20 @@ for i,item in enumerate(sensor_list):
 
 legend.Draw();
 
-# myStyle.BeamInfo()
+myStyle.BeamInfo()
 
-TopLeftText = ROOT.TLatex()
-TopLeftText.SetTextSize(myStyle.GetSize()-4)
-TopLeftText.SetTextAlign(11)
-TopLeftText.DrawLatexNDC(2*myStyle.GetMargin()+0.005,1-myStyle.GetMargin()+0.01,"#bf{"+histName+histCut+"}")
+# TopLeftText = ROOT.TLatex()
+# TopLeftText.SetTextSize(myStyle.GetSize()-4)
+# TopLeftText.SetTextAlign(11)
+# TopLeftText.DrawLatexNDC(2*myStyle.GetMargin()+0.005,1-myStyle.GetMargin()+0.01,"#bf{"+histName+"}")
 
 TopRightText = ROOT.TLatex()
 TopRightText.SetTextSize(myStyle.GetSize()-4)
 TopRightText.SetTextAlign(31)
-TopRightText.DrawLatexNDC(1-myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Diff Width}")
+TopRightText.DrawLatexNDC(1-myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Varying width}")
 
-canvas.SaveAs(outdir+"RelFracVsX_DiffWidth_"+histName+histCut+".gif")
-canvas.SaveAs(outdir+"RelFracVsX_DiffWidth_"+histName+histCut+".pdf")
+canvas.SaveAs(outdir+"RelFracVsX_DiffWidth.gif")
+canvas.SaveAs(outdir+"RelFracVsX_DiffWidth.pdf")
 outputfile.Close()
 
 for e in list_input:
