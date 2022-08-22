@@ -30,7 +30,7 @@ def CopyHist(hist, number):
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-n','--name', dest='hist2plot', default = "AmpOverMaxAmp", help="Histogram to draw w/o _vs_x_channel")
-parser.add_option('-c','--cut', dest='histCut', default = "_NearHit", help="Cut used, can be _NearHit, or none, WITH _")
+parser.add_option('-c','--cut', dest='histCut', default = "", help="Cut used, can be _NearHit, or none, WITH _")
 options, args = parser.parse_args()
 
 histName = options.hist2plot
