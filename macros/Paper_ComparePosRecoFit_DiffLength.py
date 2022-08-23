@@ -109,7 +109,7 @@ legend = TLegend(1-myStyle.GetMargin()-0.35,1-myStyle.GetMargin()-0.25,1-myStyle
 legend.SetBorderSize(0)
 legend.SetFillColor(ROOT.kWhite)
 legend.SetTextFont(myStyle.GetFont())
-legend.SetTextSize(myStyle.GetSize()-14)
+legend.SetTextSize(myStyle.GetSize()-4)
 legend.SetFillStyle(0)
 
 fitFunction_list = []
@@ -141,7 +141,7 @@ myStyle.BeamInfo()
 TopRightText = ROOT.TLatex()
 TopRightText.SetTextSize(myStyle.GetSize()-4)
 TopRightText.SetTextAlign(31)
-TopRightText.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Diff Length}")
+TopRightText.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Varying length}")
 
 canvas.SaveAs(outdir+"ComparePosRecoFit_DiffLength.gif")
 canvas.SaveAs(outdir+"ComparePosRecoFit_DiffLength.pdf")
