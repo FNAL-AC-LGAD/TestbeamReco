@@ -125,7 +125,7 @@ for t in list_thresholds:
 ####################################
 canvas = TCanvas("cv","cv",1000,800)
 htemp = TH1F("htemp",";Track x position [mm];Efficiency",1,-xlength,xlength)
-htemp.GetYaxis().SetRangeUser(0.0001,1.5)
+htemp.GetYaxis().SetRangeUser(0.00,1.49)
 htemp.Fill(0,-2)
 
 ### Draw 1D projection per channel
