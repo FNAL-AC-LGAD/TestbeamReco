@@ -51,14 +51,14 @@ efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_fullReco_
 #efficiency_denominator_global.RebinX(3)
 
 ### Plot and save 2D efficiency Global Histograms
-EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco"%(outdir), "Efficiency Full Reconstruction", "X [mm]", -10, 10, "Y [mm]", -20, 20, 0.0, 1.0)
-EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco"%(outdir), "Efficiency Full Reconstruction", "X [mm]", -10, 10, "Y [mm]", -20, 20, 0.0, 1.0)
+EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco"%(outdir), "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0, True)
+EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco"%(outdir), "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0, True)
 #For some reason the first time I call this function, the z-axis is not plotted in the right place. 
 #So I call it twice.
 e = 0
 for t in list_thresholds:
     for m in list_recoMethod:
-        EfficiencyUtils.Plot2DEfficiency(list_efficiency_numerator_global[e], efficiency_denominator_global, "%sEfficiency%s%s_Global"%(outdir,t,m), "Efficiency%s%s"%(t,m), "X [mm]", -10, 10, "Y [mm]", -20, 20, 0.0, 1.0)
+        EfficiencyUtils.Plot2DEfficiency(list_efficiency_numerator_global[e], efficiency_denominator_global, "%sEfficiency%s%s_Global"%(outdir,t,m), "Efficiency%s%s"%(t,m), "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0)
         e+=1
 
 
@@ -70,7 +70,7 @@ for i in range(7):
     if inputfile.Get("efficiency_vs_xy_fullReco_numerator_channel0%i"%(i)):
         channel_good_index.append(i)
         list_efficiency_vs_xy_fullReco_numerator_ch.append(inputfile.Get("efficiency_vs_xy_fullReco_numerator_channel0%i"%(i)))
-        EfficiencyUtils.Plot2DEfficiency(list_efficiency_vs_xy_fullReco_numerator_ch[-1], efficiency_denominator_global, "%sEfficiencyFullReco_ch0%i"%(outdir,i), "Efficiency Full Reconstruction Strip %i"%(i+1), "X [mm]", -10, 10, "Y [mm]", -20, 20, 0.0, 1.0)
+        EfficiencyUtils.Plot2DEfficiency(list_efficiency_vs_xy_fullReco_numerator_ch[-1], efficiency_denominator_global, "%sEfficiencyFullReco_ch0%i"%(outdir,i), "Efficiency Full Reconstruction Strip %i"%(i+1), "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0)
 
 ### Get 2D efficiency Histograms per channel
 list_efficiency_vs_xy_numerator_ch = []
@@ -125,7 +125,8 @@ for t in list_thresholds:
 ####################################
 canvas = TCanvas("cv","cv",1000,800)
 htemp = TH1F("htemp",";Track x position [mm];Efficiency",1,-xlength,xlength)
-htemp.GetYaxis().SetRangeUser(0.0001,1.5)
+htemp.GetYaxis().SetRangeUser(0.00,1.49)
+htemp.Fill(0,-2)
 
 ### Draw 1D projection per channel
 e = 0
@@ -159,7 +160,7 @@ for t in list_thresholds:
             legend2.AddEntry(list_efficiency_vs_x_project_global[eG], "Overall")
             legend2.Draw()
 
-        # myStyle.BeamInfo()
+        myStyle.BeamInfo()
         myStyle.SensorInfoSmart(dataset)
 
         htemp.Draw("AXIS same")
@@ -196,7 +197,7 @@ if draw_overall:
     legend2.AddEntry(efficiency_vs_x_project_fullReco_global, "Overall")
     legend2.Draw()
 
-# myStyle.BeamInfo()
+myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
 htemp.Draw("AXIS same")
@@ -205,6 +206,50 @@ canvas.SaveAs("%sEfficiencyFullReco_vs_x"%(outdir)+".gif")
 canvas.SaveAs("%sEfficiencyFullReco_vs_x"%(outdir)+".pdf")
 canvas.Clear()
 
+####################################
+#### Draw only global x projections all together
+####################################
+
+htemp.Draw()
+for i,box in enumerate(boxes):
+    if (i!=0 and i!=(len(boxes)-1)): box.Draw()
+
+legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.23,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.01);
+# legend.SetNColumns(3)
+
+index_LowThre = list_thresholds.index("_lowThreshold")
+index_HigThre = list_thresholds.index("_highThreshold")
+index_RecoOne = list_recoMethod.index("_oneStrip")
+index_RecoTwo = list_recoMethod.index("_twoStrips")
+
+# Draw OneStripReco Global
+hist_Global_OneStrip = list_efficiency_vs_x_project_global[index_RecoOne + index_LowThre*len(list_recoMethod)]
+hist_Global_OneStrip.Draw("LPsame")
+hist_Global_OneStrip.SetLineWidth(2)
+hist_Global_OneStrip.SetLineColor(colors[0])
+legend.AddEntry(hist_Global_OneStrip, "One strip reconstruction")
+
+# Draw TwoStripsReco Global
+hist_Global_TwoStrips = list_efficiency_vs_x_project_global[index_RecoTwo + index_HigThre*len(list_recoMethod)]
+hist_Global_TwoStrips.Draw("LPsame")
+hist_Global_TwoStrips.SetLineWidth(2)
+hist_Global_TwoStrips.SetLineColor(colors[2])
+legend.AddEntry(hist_Global_TwoStrips, "Two strips reconstruction")
+
+# Draw FullReco Global
+efficiency_vs_x_project_fullReco_global.Draw("LPsame")
+efficiency_vs_x_project_fullReco_global.SetLineWidth(2)
+efficiency_vs_x_project_fullReco_global.SetLineColor(colors[4])
+legend.AddEntry(efficiency_vs_x_project_fullReco_global, "Full reconstruction")
+
+legend.Draw()
+htemp.Draw("AXIS same")
+
+myStyle.BeamInfo()
+myStyle.SensorInfoSmart(dataset)
+
+canvas.SaveAs("%sEfficiencyAllProj_vs_x"%(outdir)+".gif")
+canvas.SaveAs("%sEfficiencyAllProj_vs_x"%(outdir)+".pdf")
 
 # Save efficiency plots
 outputfile = TFile("%sEfficiencyPlots.root"%(outdir),"RECREATE")

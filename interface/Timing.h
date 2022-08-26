@@ -33,6 +33,7 @@ private:
         double weighted_time=0.0, weighted_time_goodSig=0.0, weighted2_time=0.0, weighted2_time_goodSig=0.0;
         double weighted_time_tracker=0.0, weighted2_time_tracker=0.0;
         double average_time_LGADXY=0.0, average_time_LGADX=0.0, weighted_time_LGADXY=0.0, weighted2_time_LGADXY=0.0, weighted_time_LGADX=0.0, weighted2_time_LGADX=0.0;
+        auto& timeNearMax = tr.createDerivedVec<std::vector<bool>>("timeNearMax",ampLGAD.size());
         for(unsigned int i = 0; i < ampLGAD.size(); i++)
         {
             for(unsigned int j = 0; j < ampLGAD[i].size(); j++)
@@ -43,6 +44,7 @@ private:
                 const auto& timeLGADxy = timeLGADXY[i][j];
                 const auto& timeLGADx = timeLGADX[i][j];
                 auto similarTime = abs(time - time1) < 1.0;
+                timeNearMax[i].push_back(similarTime);
 
                 sum_amp       += getValue(similarTime && time!=0.0, amp);
                 weighted_time += getValue(similarTime && time!=0.0, amp*time);

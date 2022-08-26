@@ -103,11 +103,12 @@ for i,item in enumerate(sensor_list):
 
 temp_hist.Draw("same axis")
 
-legend = TLegend(1-myStyle.GetMargin()-0.55,1-myStyle.GetMargin()-0.2,1-myStyle.GetMargin()-0.05,1-myStyle.GetMargin()-0.02)
+# legend = TLegend(1-myStyle.GetMargin()-0.55,1-myStyle.GetMargin()-0.2,1-myStyle.GetMargin()-0.05,1-myStyle.GetMargin()-0.02)
+legend = TLegend(1-myStyle.GetMargin()-0.35,1-myStyle.GetMargin()-0.25,1-myStyle.GetMargin()-0.03,1-myStyle.GetMargin()-0.05)
 legend.SetBorderSize(0)
 legend.SetFillColor(ROOT.kWhite)
 legend.SetTextFont(myStyle.GetFont())
-legend.SetTextSize(myStyle.GetSize()-14)
+legend.SetTextSize(myStyle.GetSize()-4)
 legend.SetFillStyle(0)
 
 fitFunction_list = []
@@ -139,7 +140,7 @@ myStyle.BeamInfo()
 TopRightText = ROOT.TLatex()
 TopRightText.SetTextSize(myStyle.GetSize()-4)
 TopRightText.SetTextAlign(31)
-TopRightText.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Diff Metal width}")
+TopRightText.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Varying width}")
 
 canvas.SaveAs(outdir+"ComparePosRecoFit_DiffWidth.gif")
 canvas.SaveAs(outdir+"ComparePosRecoFit_DiffWidth.pdf")
