@@ -429,6 +429,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 //Put everything you want to do per event here.
 void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
+    const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& numLGADchannels = tr.getVar<int>("numLGADchannels");
     const auto& sensorCenter = tr.getVar<double>("sensorCenter");
@@ -454,8 +455,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
 
-    int lowGoodStrip = (geometry[0].size()==1) ? lowGoodStripIndex-1 : lowGoodStripIndex;
-    int highGoodStrip = (geometry[0].size()==1) ? highGoodStripIndex-1 : highGoodStripIndex;
+    int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
+    int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
     bool plotWaveForm = false;
 
     if(firstFile) InitHistos(tr, geometry);

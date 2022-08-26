@@ -24,9 +24,9 @@ def getNewFitFunction(fitOrder):
     return fitFunction
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('--xmax', dest='xmax', type='float', default = 0.75, help="Set the xmax for the final histogram")
+parser.add_option('-x','--xmax', dest='xmax', type='float', default = 0.75, help="Set the xmax for the final histogram")
 # parser.add_option('--pitch', dest='pitch', type='float', default = 100, help="Set the pitch for the fit")
-parser.add_option('--fitOrder', dest='fitOrder', type='int', default = 4, help="Set the poly order for the fit")
+parser.add_option('-O','--fitOrder', dest='fitOrder', type='int', default = 4, help="Set the poly order for the fit")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-A', dest='Use_Analyze', action='store_true', default = False, help="Use Analyze (True) or RecoAnalyze (False) file as input")
 options, args = parser.parse_args()
