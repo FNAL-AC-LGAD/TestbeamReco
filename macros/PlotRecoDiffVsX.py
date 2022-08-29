@@ -50,7 +50,7 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="X axis range [-x, x]") 
+parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="X axis range [-x, x]") 
 parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Y axis upper limit") 
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
@@ -254,7 +254,7 @@ for info in all_histoInfos:
 
 
 
-    legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.3,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.1)
+    legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.21,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.03)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
     # legend.SetTextFont(myStyle.GetFont())
@@ -276,7 +276,7 @@ for info in all_histoInfos:
 
     legend.Draw();
 
-    # myStyle.BeamInfo()
+    myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset)
 
     canvas.SaveAs(outdir+"PositionRes_vs_x_"+info.outHistoName+".gif")

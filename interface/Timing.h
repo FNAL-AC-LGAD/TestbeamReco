@@ -45,6 +45,7 @@ private:
         double weighted_time=0.0, weighted_time_goodSig=0.0, weighted2_time=0.0, weighted2_time_goodSig=0.0;
         double weighted_time_tracker=0.0, weighted2_time_tracker=0.0;
         double average_time_LGADXY=0.0, average_time_LGADX=0.0, weighted_time_LGADXY=0.0, weighted2_time_LGADXY=0.0, weighted_time_LGADX=0.0, weighted2_time_LGADX=0.0;
+<<<<<<< HEAD
         double weighted_time_trackerX = 0.0, weighted2_time_trackerX = 0.0;        
         
         bool similarTime12 = abs(time2 - time1) < 1.0;

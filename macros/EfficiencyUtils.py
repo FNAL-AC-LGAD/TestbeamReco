@@ -4,7 +4,7 @@ import array
 ##########################
 #2D Efficiency 
 ##########################
-def Plot2DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, xAxisRangeHigh, yAxisTitle, yAxisRangeLow, yAxisRangeHigh, effMin, effMax ) :
+def Plot2DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, xAxisRangeHigh, yAxisTitle, yAxisRangeLow, yAxisRangeHigh, effMin, effMax, savePDF=False ) :
 
     c = TCanvas("cv","cv",800,800)    
 
@@ -40,6 +40,7 @@ def Plot2DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
     #title.DrawLatexNDC(.2,.93,topTitle);
 
     c.SaveAs(plotname+".gif")
+    if savePDF: c.SaveAs(plotname+".pdf")
 
 
 

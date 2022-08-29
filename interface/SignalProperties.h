@@ -112,6 +112,10 @@ private:
         auto& relFrac = tr.createDerivedVec<std::vector<double>>("relFrac", ampLGAD);
         for(auto& row : relFrac){ for(auto& amp : row) amp /= totAmpLGAD;}
 
+        //Find signal in channel over MaxAmp
+        auto& fracMax = tr.createDerivedVec<std::vector<double>>("fracMax", ampLGAD);
+        for(auto& row : fracMax){ for(auto& amp : row) amp /= maxAmpLGAD;}
+
    
         //Find rel fraction of DC amp vs. LGAD amp
         tr.registerDerivedVar("relFracDC", corrAmp[0]/totAmpLGAD);
