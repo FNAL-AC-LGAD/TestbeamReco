@@ -52,7 +52,7 @@ public:
     double positionRecoMaxPoint = 0.72; // 0.74;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 20.0; // 20.0; // 10.0;
-    double signalAmpThreshold = 25.0; // 25.0; // 30.0; // 15.0;
+    double signalAmpThreshold = 15.0; // 25.0; // 30.0; // 15.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -65,7 +65,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.8, -2.6}, {0.4, 7.4}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.0}, {1.7, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Was 4.8 instead of 4.6
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.7,0.95, -4.75,-4.0},{"cold", 0.7,0.95, 0.5,1.25},{"gap", 0.50,0.60,-1.5,0.375}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.7,0.95, -4.50,-3.75},{"cold", 0.7,0.95, 0.5,1.25},{"gap", 0.50,0.60,-1.5,0.375}};
 };
 
 class EIC1cmStripsGeometry : public DefaultGeometry
@@ -117,7 +117,7 @@ public:
     double positionRecoMaxPoint = 0.77; // 0.81;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 10.0;
-    double signalAmpThreshold = 25.0; // 15.0;
+    double signalAmpThreshold = 15.0; // 15.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -179,7 +179,7 @@ public:
     double positionRecoMaxPoint = 0.80; // 0.82;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 10.0;
-    double signalAmpThreshold = 25.0; // 15.0;
+    double signalAmpThreshold = 15.0; // 15.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -193,7 +193,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-3.4, -2.0}, {0.6, 8.0}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.9, -5.0}, {1.9, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}};
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 1.0,1.15, -2.75,-2.00},{"cold", 1.0,1.15, 3.25,4.0},{"gap", 0.75,0.85, 1.0,2.125}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.85,1.10, -2.75,-2.00},{"cold", 0.85,1.10, 3.25,4.0},{"gap", 0.65,0.80, 1.0,2.25}};
 };
 
 class EIC1cmStrips100Geometry : public DefaultGeometry
@@ -498,7 +498,7 @@ public:
     double positionRecoMaxPoint = 0.73;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; //// 10.0; // 7.0; // 10.0; // 7.0; //  5.0; // 5.0;
-    double signalAmpThreshold = 25.0; //// 15.0; //15.0; // 15.0; //12.0; // 10.0; // 5.0;
+    double signalAmpThreshold = 15.0; //// 15.0; //15.0; // 15.0; //12.0; // 10.0; // 5.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -670,7 +670,7 @@ public:
     double positionRecoMaxPoint = 0.84; // 0.88;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 10.0;
-    double signalAmpThreshold = 25.0; // 15.0; // 10.0;
+    double signalAmpThreshold = 15.0; // 15.0; // 10.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
