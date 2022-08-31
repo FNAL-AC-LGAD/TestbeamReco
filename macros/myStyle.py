@@ -168,18 +168,18 @@ sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "BNL 10-300", 'pitch': 
 }
 
 resolutions2022 = {
-    "EIC_W2_1cm_500up_300uw_240V": {'position_oneStrip' : 78.65, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 80.37,
-                                    'position_twoStrips': 15.38, 'position_twoStrips_E': 0.00},
-    "EIC_W1_1cm_500up_200uw_255V": {'position_oneStrip' : 129.4, 'position_oneStrip_E' : 1.60, 'position_oneStripRMS': 54.87,
-                                    'position_twoStrips': 18.53, 'position_twoStrips_E': 0.02},
-    "EIC_W2_1cm_500up_100uw_220V": {'position_oneStrip' : 53.97, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 27.93,
-                                    'position_twoStrips': 18.73, 'position_twoStrips_E': 0.00},
-    "EIC_W1_2p5cm_500up_200uw_215V": {'position_oneStrip' : 205.8, 'position_oneStrip_E' : 2.80, 'position_oneStripRMS': 72.09,
-                                      'position_twoStrips': 34.13, 'position_twoStrips_E': 0.16},
+    "EIC_W2_1cm_500up_300uw_240V": {'position_oneStrip' : 82.72, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 78.26,
+                                    'position_twoStrips': 16.00, 'position_twoStrips_E': 0.00},
+    "EIC_W1_1cm_500up_200uw_255V": {'position_oneStrip' :121.80, 'position_oneStrip_E' : 1.50, 'position_oneStripRMS': 54.62,
+                                    'position_twoStrips': 18.29, 'position_twoStrips_E': 0.02},
+    "EIC_W2_1cm_500up_100uw_220V": {'position_oneStrip' : 53.33, 'position_oneStrip_E' : 0.24, 'position_oneStripRMS': 27.92,
+                                    'position_twoStrips': 18.58, 'position_twoStrips_E': 0.02},
+    "EIC_W1_2p5cm_500up_200uw_215V": {'position_oneStrip' : 209.1, 'position_oneStrip_E' : 3.50, 'position_oneStripRMS': 70.93,
+                                      'position_twoStrips': 33.36, 'position_twoStrips_E': 0.11},
+    "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'position_oneStrip' : 174.9, 'position_oneStrip_E' : 16.3, 'position_oneStripRMS': 52.03,
+                                          'position_twoStrips': 11.57, 'position_twoStrips_E': 0.02},
     "HPK_Eb_1cm_80up_45uw": {'position_oneStrip' : 11.91, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 13.83,
                              'position_twoStrips':  9.36, 'position_twoStrips_E': 0.00},
-    "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'position_oneStrip' : 179.4, 'position_oneStrip_E' : 12.6, 'position_oneStripRMS': 52.91,
-                                          'position_twoStrips': 11.82, 'position_twoStrips_E': 0.02},
     "BNL2021_22_medium_150up_80uw_285V": {'position_oneStrip' : 14.0, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 22.35,
                                           'position_twoStrips': 8.01, 'position_twoStrips_E': 0.00},
 }
