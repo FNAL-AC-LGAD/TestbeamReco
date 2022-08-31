@@ -58,7 +58,8 @@ private:
 
         auto& goodNeighbour = tr.createDerivedVar<bool>("goodNeighbour");
         goodNeighbour = abs(maxAmpIndex - Amp2Index)==1 && ampLGAD[0][Amp2Index]>noiseAmpThreshold;
-
+        auto& twoStripsReco = tr.createDerivedVar<bool>("twoStripsReco");
+        twoStripsReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
         double y_reco=0.0, x_reco = 0.0, x1 = 0.0, y1 = 0.0, x2 = 0.0;
         double x_reco_basic = 0.0, y_reco_basic = 0.0;
         double dXdFrac = 0.0;
@@ -122,15 +123,26 @@ private:
         auto& corrTimeLGADXY = tr.createDerivedVec<double>("corrTimeLGADXY");
         auto& corrTimeLGADXY0 = tr.createDerivedVec<double>("corrTimeLGADXY0");     
         auto& corrTimeLGADX = tr.createDerivedVec<double>("corrTimeLGADX");
-        auto& corrTimeTrackerX = tr.createDerivedVec<double>("corrTimeTracker");   
-     
+        auto& corrTimeTrackerX = tr.createDerivedVec<double>("corrTimeTrackerX");   
+          
         uint counter = 0;
         for(auto thisTime : corrTime)
         {
-            auto lgadX_trackerY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
-            auto lgadX_lgadY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y_reco, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
-            auto lgadX_lgadY0_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, 0.0, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
-            auto lgadX_corr = utility::getTrackerTimeCorr<TProfile>(x_reco, thisTime, counter, v_timeDiff_coarse_vs_x_channel);
+            double default_corr =  utility::getTrackerTimeCorr<TProfile2D>(x1, 0.0, thisTime, counter, v_timeDiff_coarse_vs_xy_channel); 
+            double lgadX_trackerY_corr = default_corr;
+            double lgadX_lgadY_corr =  default_corr;
+            double lgadX_lgadY0_corr = default_corr;
+            //Is this a good default?
+            double lgadX_corr = default_corr;
+         
+            if (twoStripsReco)
+            {
+               lgadX_trackerY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
+               lgadX_lgadY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y_reco, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
+               lgadX_lgadY0_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, 0.0, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
+               lgadX_corr = utility::getTrackerTimeCorr<TProfile>(x_reco, thisTime, counter, v_timeDiff_coarse_vs_x_channel);
+            }
+           
             auto TrackerX_corr = utility::getTrackerTimeCorr<TProfile>(x, thisTime, counter, v_timeDiff_coarse_vs_x_channel);
             
             corrTimeLGADXTrackerY.emplace_back(thisTime - lgadX_trackerY_corr);

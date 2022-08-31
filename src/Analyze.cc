@@ -197,8 +197,26 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"weighted_timeDiff_tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted2_timeDiff", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted2_timeDiff_tracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+   
     utility::makeHisto(my_histos,"timeDiffLGADXTrackerY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"timeDiffLGADXY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiffLGADXY0", "", timeDiffNbin,timeDiffLow,timeDiffHigh);    
+    utility::makeHisto(my_histos,"timeDiffLGADX", "", timeDiffNbin,timeDiffLow,timeDiffHigh); 
+    utility::makeHisto(my_histos,"timeDiffTrackerX", "", timeDiffNbin,timeDiffLow,timeDiffHigh); 
+    utility::makeHisto(my_histos,"weighted_timeDiff_LGADXY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_LGADX", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_LGADXY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_LGADX", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"average_timeDiff_LGADXY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"average_timeDiff_LGADX", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    
+    utility::makeHisto(my_histos,"weighted_timeDiff_LGADXY_2Strip", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_LGADX_2Strip", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_LGADXY_2Strip", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_LGADX_2Strip", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"average_timeDiff_LGADXY_2Strip", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"average_timeDiff_LGADX_2Strip", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+
     utility::makeHisto(my_histos,"weighted_timeDiff_goodSig", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted2_timeDiff_goodSig", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"clusterSize", "; Cluster Size", 8,0.0,8.0);
@@ -318,18 +336,112 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"totrawamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"amp123_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"amp12_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
+    
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiff_Even_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiff_Odd_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);   
+ 
     utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+   
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp2", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp3", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    
     utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
+
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_TrackerX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_TrackerX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
+
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
     utility::makeHisto(my_3d_histos,"weighted_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"weighted2_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"deltaX_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #X_{reco} - X_{track} [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,-0.5,0.5);
@@ -480,8 +592,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& corrTime = tr.getVec<double>("corrTime");
         const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
         const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
+        
         const auto& timeLGADXTrackerY = tr.getVec<std::vector<double>>("timeLGADXTrackerY");
         const auto& timeLGADXY = tr.getVec<std::vector<double>>("timeLGADXY");
+        const auto& timeLGADXY0 = tr.getVec<std::vector<double>>("timeLGADXY0");
+        const auto& timeLGADX = tr.getVec<std::vector<double>>("timeLGADX");
+        const auto& timeTrackerX = tr.getVec<std::vector<double>>("timeTrackerX");
+
         //const auto& CFD_list = tr.getVar<std::vector<std::string> >("CFD_list");
         const auto& baselineRMS = tr.getVec<std::vector<float>>("baselineRMS");
         const auto& risetimeLGAD = tr.getVec<std::vector<double>>("risetimeLGAD");
@@ -513,6 +630,16 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& weighted2_time_tracker = tr.getVar<double>("weighted2_time_tracker");
         const auto& weighted_time_goodSig = tr.getVar<double>("weighted_time_goodSig");
         const auto& weighted2_time_goodSig = tr.getVar<double>("weighted2_time_goodSig");
+
+        const auto& average_time_LGADXY = tr.getVar<double>("average_time_LGADXY");
+        const auto& average_time_LGADX = tr.getVar<double>("average_time_LGADX");
+        const auto& weighted_time_LGADXY = tr.getVar<double>("weighted_time_LGADXY");                                  
+        const auto& weighted2_time_LGADXY = tr.getVar<double>("weighted2_time_LGADXY");
+        const auto& weighted_time_LGADX = tr.getVar<double>("weighted_time_LGADX");
+        const auto& weighted2_time_LGADX = tr.getVar<double>("weighted2_time_LGADX");
+        const auto& weighted_time_trackerX = tr.getVar<double>("weighted_time_trackerX");
+        const auto& weighted2_time_trackerX = tr.getVar<double>("weighted2_time_trackerX");       
+
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
         const auto& hitSensorTightY = tr.getVar<bool>("hitSensorTightY");
         const auto& hitSensorTight = tr.getVar<bool>("hitSensorTight");
@@ -566,9 +693,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         if(isPadSensor)      goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
-
         bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
-
         bool pass = goodTrack && hitSensorTight && goodPhotek;
         bool pass_loose = goodTrack && hitSensor && goodPhotek;
         bool pass_tightY = goodTrack && hitSensorOnlyTightY && goodPhotek;
@@ -610,8 +735,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         double maxAmp = ampLGAD[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTime = timeLGAD[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTimeTracker = timeLGADTracker[amp1Indexes.first][amp1Indexes.second];
+        
         double maxAmpTimeLGADXTrackerY = timeLGADXTrackerY[amp1Indexes.first][amp1Indexes.second];
         double maxAmpTimeLGADXY = timeLGADXY[amp1Indexes.first][amp1Indexes.second];
+        double maxAmpTimeLGADXY0 = timeLGADXY0[amp1Indexes.first][amp1Indexes.second];       
+        double maxAmpTimeLGADX = timeLGADX[amp1Indexes.first][amp1Indexes.second];         
+        double maxAmpTimeTrackerX = timeTrackerX[amp1Indexes.first][amp1Indexes.second]; 
+
         double amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
         double amp2Time = timeLGAD[amp2Indexes.first][amp2Indexes.second];
         double amp3Time = timeLGAD[amp3Indexes.first][amp3Indexes.second];
@@ -639,7 +769,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 const auto& charge = chargeLGAD[rowIndex][i];
                 const auto& ampChargeRatio = ampChargeRatioLGAD[rowIndex][i];
                 const auto& slewrate = slewrateLGAD[rowIndex][i];
-                //std::cout << slewrate << std::endl;
                 const auto& slewRateChargeRatio = slewRateChargeRatioLGAD[rowIndex][i];
                 const auto& stripXPosition = stripCenterXPositionLGAD[rowIndex][i];
                 bool goodNoiseAmp = ampChannel>noiseAmpThreshold;
@@ -802,14 +931,35 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "ampRank6", ampLGAD[amp6Indexes.first][amp6Indexes.second]);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff", maxAmpTime-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiffTracker", maxAmpTimeTracker-photekTime);
+        
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiffLGADXTrackerY",maxAmpTimeLGADXTrackerY-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiffLGADXY",maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiffLGADXY0",maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiffLGADX",maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiffTrackerX",maxAmpTimeTrackerX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted_timeDiff_LGADXY", weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted_timeDiff_LGADX", weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted2_timeDiff_LGADXY", weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted2_timeDiff_LGADX", weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "average_timeDiff_LGADXY", average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "average_timeDiff_LGADX", average_time_LGADX-photekTime);
+   
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "weighted_timeDiff_LGADXY_2Strip", weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "weighted_timeDiff_LGADX_2Strip", weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "weighted2_timeDiff_LGADXY_2Strip", weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "weighted2_timeDiff_LGADX_2Strip", weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "average_timeDiff_LGADXY_2Strip", average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "average_timeDiff_LGADX_2Strip", average_time_LGADX-photekTime);
+     
+ 
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff_amp2", amp2Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff_amp3", amp3Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted_timeDiff", weighted_time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted_timeDiff_tracker", weighted_time_tracker-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted2_timeDiff", weighted2_time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted2_timeDiff_tracker", weighted2_time_tracker-photekTime);
+        
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted_timeDiff_goodSig", weighted_time_goodSig-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted2_timeDiff_goodSig", weighted2_time_goodSig-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "clusterSize", clusterSize);
@@ -932,18 +1082,114 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "totrawamplitude_vs_xy", x,y,totRawAmpLGAD);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "amp123_vs_xy", x,y, Amp123);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "amp12_vs_xy", x,y, Amp12);
+        
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiff_vs_xy", x,y,maxAmpTime-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "timeDiff_Even_vs_xy", x,y,maxAmpTime-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "timeDiff_Odd_vs_xy", x,y,maxAmpTime-photekTime);
+        
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiffTracker_vs_xy", x,y,maxAmpTimeTracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "timeDiffTracker_vs_xy_Odd", x,y,maxAmpTimeTracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "timeDiffTracker_vs_xy_Even", x,y,maxAmpTimeTracker-photekTime);        
+
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiffLGADXTrackerY_vs_xy", x,y,maxAmpTimeLGADXTrackerY-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiffLGADXY_vs_xy", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiffLGADXY0_vs_xy", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiffLGADX_vs_xy", x,y,maxAmpTimeLGADX-photekTime);        
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiffTrackerX_vs_xy", x,y,maxAmpTimeTrackerX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                    my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_Odd", x,y,maxAmpTimeLGADXTrackerY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                    my_3d_histos, "timeDiffLGADXY_vs_xy_Odd", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                    my_3d_histos, "timeDiffLGADXY0_vs_xy_Odd", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                    my_3d_histos, "timeDiffLGADX_vs_xy_Odd", x,y,maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                    my_3d_histos, "timeDiffTrackerX_vs_xy_Odd", x,y,maxAmpTimeTrackerX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                   my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_Even", x,y,maxAmpTimeLGADXTrackerY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                   my_3d_histos, "timeDiffLGADXY_vs_xy_Even", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                   my_3d_histos, "timeDiffLGADXY0_vs_xy_Even", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                   my_3d_histos, "timeDiffLGADX_vs_xy_Even", x,y,maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                   my_3d_histos, "timeDiffTrackerX_vs_xy_Even", x,y,maxAmpTimeTrackerX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                 my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip", x,y,maxAmpTimeLGADXTrackerY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                 my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                 my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                 my_3d_histos, "timeDiffLGADX_vs_xy_2Strip", x,y,maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                 my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip", x,y,maxAmpTimeTrackerX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel && twoStripsReco,   my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXTrackerY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel && twoStripsReco,   my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel && twoStripsReco,   my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel && twoStripsReco,   my_3d_histos, "timeDiffLGADX_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel && twoStripsReco,   my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip_Odd", x,y,maxAmpTimeTrackerX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel && twoStripsReco,  my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXTrackerY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel && twoStripsReco,  my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel && twoStripsReco,  my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel && twoStripsReco,  my_3d_histos, "timeDiffLGADX_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel && twoStripsReco,  my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip_Even", x,y,maxAmpTimeTrackerX-photekTime);
+
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiff_vs_xy_amp2", x,y,amp2Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "timeDiff_vs_xy_amp3", x,y,amp3Time-photekTime);
+        
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted_timeDiff_vs_xy", x,y,weighted_time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted_timeDiff_tracker_vs_xy", x,y,weighted_time_tracker-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_vs_xy", x,y,weighted2_time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_tracker_vs_xy", x,y,weighted2_time_tracker-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "weighted_timeDiff_vs_xy_Odd", x,y,weighted_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "weighted_timeDiff_tracker_vs_xy_Odd", x,y,weighted_time_tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "weighted2_timeDiff_vs_xy_Odd", x,y,weighted2_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "weighted2_timeDiff_tracker_vs_xy_Odd", x,y,weighted2_time_tracker-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "weighted_timeDiff_vs_xy_Even", x,y,weighted_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "weighted_timeDiff_tracker_vs_xy_Even", x,y,weighted_time_tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "weighted2_timeDiff_vs_xy_Even", x,y,weighted2_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "weighted2_timeDiff_tracker_vs_xy_Even", x,y,weighted2_time_tracker-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted_timeDiff_LGADX_vs_xy", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted_timeDiff_TrackerX_vs_xy", x,y,weighted_time_trackerX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_TrackerX_vs_xy", x,y,weighted2_time_trackerX-photekTime);
+        
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "average_timeDiff_LGADXY_vs_xy", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "average_timeDiff_LGADX_vs_xy", x,y,average_time_LGADX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_Odd", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_Odd", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_Odd", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_Odd", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "average_timeDiff_LGADXY_vs_xy_Odd", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && OddChannel,                     my_3d_histos, "average_timeDiff_LGADX_vs_xy_Odd", x,y,average_time_LGADX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_Even", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_Even", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_Even", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_Even", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "average_timeDiff_LGADXY_vs_xy_Even", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && EvenChannel,                    my_3d_histos, "average_timeDiff_LGADX_vs_xy_Even", x,y,average_time_LGADX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip", x,y,average_time_LGADX-photekTime);        
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && OddChannel,   my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && OddChannel,   my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && OddChannel,   my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && OddChannel,   my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && OddChannel,   my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && OddChannel,   my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,average_time_LGADX-photekTime);
+
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && EvenChannel, my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && EvenChannel, my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && EvenChannel, my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && EvenChannel, my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && EvenChannel, my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && EvenChannel, my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,average_time_LGADX-photekTime);
+
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted_timeDiff_goodSig_vs_xy", x,y,weighted_time_goodSig-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_goodSig_vs_xy", x,y,weighted2_time_goodSig-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "deltaX_vs_Xtrack_vs_Ytrack", x,y,x_reco-x);
@@ -999,7 +1245,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(goodTrack,                                                                      my_2d_prof, "efficiency_vs_xy_Strip2or5", x,y,goodHitGlobal2and5);
         
         // Fill wave form histos once
-        bool maxAmpInCenter = maxAmpIndex == 2;// || maxAmpIndex == 3;
+        bool maxAmpInCenter = maxAmpIndex == 1;// || maxAmpIndex == 3;
         //bool directHit = (abs( corrAmp[2] - corrAmp[4]) / corrAmp[2]) < 0.05;
         //if(plotWaveForm && pass && maxAmpInCenter && goodMaxLGADAmp && maxAmpLGAD > 99.0 &&  maxAmpLGAD < 101.0)
         //{

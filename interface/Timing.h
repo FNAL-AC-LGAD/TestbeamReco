@@ -19,13 +19,25 @@ private:
         const auto& timeLGADTracker = tr.getVec<std::vector<double>>("timeLGADTracker");
         const auto& timeLGADXY = tr.getVec<std::vector<double>>("timeLGADXY");
         const auto& timeLGADX = tr.getVec<std::vector<double>>("timeLGADX");
+        const auto& timeTrackerX = tr.getVec<std::vector<double>>("timeTrackerX");
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
+        const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
         const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
         const auto& amp2Indexes = tr.getVar<std::pair<int,int>>("amp2Indexes");
-        //auto amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
+        
+        auto amp1 = ampLGAD[amp1Indexes.first][amp1Indexes.second];
+        auto amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
         auto time1 = timeLGAD[amp1Indexes.first][amp1Indexes.second];
-        //auto time2 = timeLGAD[amp2Indexes.first][amp2Indexes.second];
-       
+        auto time2 = timeLGAD[amp2Indexes.first][amp2Indexes.second];
+        auto timeTracker1 = timeLGADTracker[amp1Indexes.first][amp1Indexes.second];
+        auto timeTracker2 = timeLGADTracker[amp2Indexes.first][amp2Indexes.second];
+        auto timeLGADXY1 = timeLGADXY[amp1Indexes.first][amp1Indexes.second];
+        auto timeLGADXY2 = timeLGADXY[amp2Indexes.first][amp2Indexes.second];
+        auto timeLGADX1 = timeLGADX[amp1Indexes.first][amp1Indexes.second];
+        auto timeLGADX2 = timeLGADX[amp2Indexes.first][amp2Indexes.second];
+        auto timeTrackerX1 = timeTrackerX[amp1Indexes.first][amp1Indexes.second];
+        auto timeTrackerX2 = timeTrackerX[amp2Indexes.first][amp2Indexes.second];
+
         //-------------------------------------------------------
         //Code from https://github.com/cmorgoth/AC_LGAD_Timing 
         //-------------------------------------------------------
@@ -33,54 +45,83 @@ private:
         double weighted_time=0.0, weighted_time_goodSig=0.0, weighted2_time=0.0, weighted2_time_goodSig=0.0;
         double weighted_time_tracker=0.0, weighted2_time_tracker=0.0;
         double average_time_LGADXY=0.0, average_time_LGADX=0.0, weighted_time_LGADXY=0.0, weighted2_time_LGADXY=0.0, weighted_time_LGADX=0.0, weighted2_time_LGADX=0.0;
-        auto& timeNearMax = tr.createDerivedVec<std::vector<bool>>("timeNearMax",ampLGAD.size());
-        for(unsigned int i = 0; i < ampLGAD.size(); i++)
+        double weighted_time_trackerX = 0.0, weighted2_time_trackerX = 0.0;        
+        
+        bool similarTime12 = abs(time2 - time1) < 1.0;
+        bool twoGoodChannel = amp1 > noiseAmpThreshold  &&  amp2 > noiseAmpThreshold && similarTime12 && time1 != 0.0 && time2 != 0.0;
+        if (!twoGoodChannel)
         {
-            for(unsigned int j = 0; j < ampLGAD[i].size(); j++)
-            {
-                const auto& amp = ampLGAD[i][j];
-                const auto& time = timeLGAD[i][j];
-                const auto& timeTracker = timeLGADTracker[i][j];
-                const auto& timeLGADxy = timeLGADXY[i][j];
-                const auto& timeLGADx = timeLGADX[i][j];
-                auto similarTime = abs(time - time1) < 1.0;
-                timeNearMax[i].push_back(similarTime);
+           weighted_time = time1;
+           weighted2_time = time1;
 
-                sum_amp       += getValue(similarTime && time!=0.0, amp);
-                weighted_time += getValue(similarTime && time!=0.0, amp*time);
-                weighted_time_tracker += getValue(similarTime && time!=0.0, amp*timeTracker);
-                weighted_time_LGADXY += getValue(similarTime && time!=0.0, amp*timeLGADxy);            
-                weighted_time_LGADX += getValue(similarTime && time!=0.0, amp*timeLGADx);
-                
-                sum_amp_goodSig       += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp);
-                weighted_time_goodSig += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*time);
-                
-                sum_amp2       += getValue(similarTime && time!=0.0, amp*amp);
-                weighted2_time += getValue(similarTime && time!=0.0, amp*amp*time);
-                weighted2_time_tracker += getValue(similarTime && time!=0.0, amp*amp*timeTracker);
-                weighted2_time_LGADXY += getValue(similarTime && time!=0.0, amp*amp*timeLGADxy);
-                weighted2_time_LGADX += getValue(similarTime && time!=0.0, amp*amp*timeLGADx);
+           weighted_time_tracker = timeTracker1;
+           weighted2_time_tracker = timeTracker1;
 
-                sum_amp2_goodSig       += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*amp);
-                weighted2_time_goodSig += getValue(similarTime && time!=0.0 && amp > signalAmpThreshold, amp*amp*time);
-            }
+           weighted_time_LGADXY = timeLGADXY1;
+           weighted2_time_LGADXY = timeLGADXY1;
+
+           weighted_time_LGADX = timeLGADX1;
+           weighted2_time_LGADX = timeLGADX1;
+
+           weighted_time_trackerX = timeTrackerX1;
+           weighted2_time_trackerX = timeTrackerX1;
+
+           average_time_LGADXY = timeLGADXY1;
+           average_time_LGADX = timeLGADX1;
         }
- 
-        average_time_LGADXY = (timeLGADXY[amp1Indexes.first][amp1Indexes.second] + timeLGADXY[amp2Indexes.first][amp2Indexes.second])*0.5;
-        average_time_LGADX = (timeLGADX[amp1Indexes.first][amp1Indexes.second] + timeLGADX[amp2Indexes.first][amp2Indexes.second])*0.5;
-        tr.registerDerivedVar("weighted_time", weighted_time/sum_amp);
-        tr.registerDerivedVar("weighted_time_tracker", weighted_time_tracker/sum_amp);
-        tr.registerDerivedVar("weighted_time_goodSig", weighted_time_goodSig/sum_amp_goodSig);
-        tr.registerDerivedVar("weighted2_time", weighted2_time/sum_amp2);
-        tr.registerDerivedVar("weighted2_time_tracker", weighted2_time_tracker/sum_amp2);
-        tr.registerDerivedVar("weighted2_time_goodSig", weighted2_time_goodSig/sum_amp2_goodSig);
+        else 
+        {
+           sum_amp = amp1 + amp2;
+           weighted_time = (amp1*time1 + amp2*time2)/sum_amp;
+           weighted_time_tracker = (amp1*timeTracker1 + amp2*timeTracker2)/sum_amp; 
+           weighted_time_LGADXY = (amp1*timeLGADXY1 + amp2*timeLGADXY2)/sum_amp;
+           weighted_time_LGADX = (amp1*timeLGADX1 + amp2*timeLGADX2)/sum_amp;         
+           weighted_time_trackerX = (amp1*timeTrackerX1 + amp2*timeTrackerX2)/sum_amp;  
 
+           sum_amp2 = (amp1*amp1) + (amp2*amp2);
+           weighted2_time = (amp1*amp1*time1 + amp2*amp2*time2)/sum_amp2;  
+           weighted2_time_tracker = (amp1*amp1*timeTracker1 + amp2*amp2*timeTracker2)/sum_amp2;
+           weighted2_time_LGADXY = (amp1*amp1*timeLGADXY1 + amp2*amp2*timeLGADXY2)/sum_amp2;
+           weighted2_time_LGADX = (amp1*amp1*timeLGADX1 + amp2*amp2*timeLGADX2)/sum_amp2;
+           weighted2_time_trackerX = (amp1*amp1*timeTrackerX1 + amp2*amp2*timeTrackerX2)/sum_amp2;         
+
+           average_time_LGADXY = (timeLGADXY1 + timeLGADXY2)*0.5;
+           average_time_LGADX = (timeLGADX1 + timeLGADX2)*0.5;
+             
+        }
+   
+        bool twoGoodChannelSignalThres = amp1 > signalAmpThreshold  &&  amp2 > signalAmpThreshold && similarTime12 && time1 != 0.0 && time2 != 0.0;
+        if (!twoGoodChannelSignalThres)
+        {
+           weighted_time_goodSig = time1;
+           weighted2_time_goodSig = time1;
+        }
+        else
+        {
+           sum_amp_goodSig = amp1 + amp2;
+           weighted_time_goodSig = (amp1*time1 + amp2*time2)/sum_amp_goodSig;
+         
+           sum_amp2_goodSig = (amp1*amp1) + (amp2*amp2);
+           weighted2_time_goodSig = (amp1*amp1*time1 + amp2*amp2*time2)/sum_amp2_goodSig;        
+        }
+    
+
+        tr.registerDerivedVar("weighted_time", weighted_time);
+        tr.registerDerivedVar("weighted_time_tracker", weighted_time_tracker);
+        tr.registerDerivedVar("weighted2_time", weighted2_time);
+        tr.registerDerivedVar("weighted2_time_tracker", weighted2_time_tracker);
         tr.registerDerivedVar("average_time_LGADXY", average_time_LGADXY); 
         tr.registerDerivedVar("average_time_LGADX", average_time_LGADX); 
-        tr.registerDerivedVar("weighted_time_LGADXY", weighted_time_LGADXY/sum_amp);
-        tr.registerDerivedVar("weighted2_time_LGADXY", weighted2_time_LGADXY/sum_amp2);
-        tr.registerDerivedVar("weighted_time_LGADX", weighted_time_LGADX/sum_amp); // LGADXY, LGADX
-        tr.registerDerivedVar("weighted2_time_LGADX", weighted2_time_LGADX/sum_amp2);
+        tr.registerDerivedVar("weighted_time_LGADXY", weighted_time_LGADXY);
+        tr.registerDerivedVar("weighted2_time_LGADXY", weighted2_time_LGADXY);
+        tr.registerDerivedVar("weighted_time_LGADX", weighted_time_LGADX);
+        tr.registerDerivedVar("weighted2_time_LGADX", weighted2_time_LGADX);
+        tr.registerDerivedVar("weighted_time_trackerX", weighted_time_trackerX);
+        tr.registerDerivedVar("weighted2_time_trackerX", weighted2_time_trackerX);
+        tr.registerDerivedVar("weighted_time_goodSig", weighted_time_goodSig);
+        tr.registerDerivedVar("weighted2_time_goodSig", weighted2_time_goodSig);
+
+
 
     }
 public:
