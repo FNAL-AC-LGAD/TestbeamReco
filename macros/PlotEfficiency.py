@@ -31,7 +31,8 @@ outdir = myStyle.GetPlotsDir(outdir, "Eff/")
 xlength = float(options.xlength)
 shift = inputfile.Get("stripBoxInfo03").GetMean(1)
 
-list_thresholds = ["_lowThreshold", "_highThreshold"]
+# list_thresholds = ["_lowThreshold", "_highThreshold"]
+list_thresholds = [""]
 list_recoMethod = ["", "_noNeighb", "_highFrac", "_oneStrip", "_twoStrips"]
 
 list_efficiency_numerator_global = []
@@ -217,20 +218,20 @@ for i,box in enumerate(boxes):
 legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.23,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.01);
 # legend.SetNColumns(3)
 
-index_LowThre = list_thresholds.index("_lowThreshold")
-index_HigThre = list_thresholds.index("_highThreshold")
+# index_LowThre = list_thresholds.index("_lowThreshold")
+# index_HigThre = list_thresholds.index("_highThreshold")
 index_RecoOne = list_recoMethod.index("_oneStrip")
 index_RecoTwo = list_recoMethod.index("_twoStrips")
 
 # Draw OneStripReco Global
-hist_Global_OneStrip = list_efficiency_vs_x_project_global[index_RecoOne + index_LowThre*len(list_recoMethod)]
+hist_Global_OneStrip = list_efficiency_vs_x_project_global[index_RecoOne] # + index_LowThre*len(list_recoMethod)]
 hist_Global_OneStrip.Draw("LPsame")
 hist_Global_OneStrip.SetLineWidth(2)
 hist_Global_OneStrip.SetLineColor(colors[0])
 legend.AddEntry(hist_Global_OneStrip, "One strip reconstruction")
 
 # Draw TwoStripsReco Global
-hist_Global_TwoStrips = list_efficiency_vs_x_project_global[index_RecoTwo + index_HigThre*len(list_recoMethod)]
+hist_Global_TwoStrips = list_efficiency_vs_x_project_global[index_RecoTwo] # + index_HigThre*len(list_recoMethod)]
 hist_Global_TwoStrips.Draw("LPsame")
 hist_Global_TwoStrips.SetLineWidth(2)
 hist_Global_TwoStrips.SetLineColor(colors[2])
