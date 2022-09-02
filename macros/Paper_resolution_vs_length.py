@@ -91,10 +91,8 @@ position_twoStrips_graph.SetLineColor(colors[2])
 
 # c1 = ROOT.TCanvas( "c1", "c1", 0, 0, 800, 800)
 c1 = ROOT.TCanvas("c1","c1",1000,800)
-# ROOT.gPad.SetLeftMargin(0.12)
-# ROOT.gPad.SetRightMargin(2*myStyle.GetMargin())
-# ROOT.gPad.SetTopMargin(0.08)
-# ROOT.gPad.SetBottomMargin(0.12)
+c1.SetGrid(0,1)
+
 ROOT.gPad.SetTicks(1,1)
 ROOT.gStyle.SetOptStat(0) 
 
@@ -115,8 +113,8 @@ hdummy.Draw("AXIS")
 # right_axis.SetTitleSize(myStyle.GetSize())
 # right_axis.Draw()
 
-# leg = ROOT.TLegend(myStyle.GetPadCenter()-0.25, 1-myStyle.GetMargin()-0.01-0.30, myStyle.GetPadCenter()+0.25, 1-myStyle.GetMargin()-0.01)
-leg = ROOT.TLegend(2*myStyle.GetMargin()+0.01, 1-myStyle.GetMargin()-0.01-0.20, 2*myStyle.GetMargin()+0.01+0.25, 1-myStyle.GetMargin()-0.01)
+# leg = ROOT.TLegend(2*myStyle.GetMargin()+0.01, 1-myStyle.GetMargin()-0.01-0.20, 2*myStyle.GetMargin()+0.01+0.25, 1-myStyle.GetMargin()-0.01)
+leg = ROOT.TLegend(2*myStyle.GetMargin()+0.01, 1-myStyle.GetMargin()-0.01-0.20, 2*myStyle.GetMargin()+0.01+0.35, 1-myStyle.GetMargin()-0.01)
 # leg.SetFillStyle(0)
 # leg.SetBorderSize(0)
 # leg.SetLinelength(1)
@@ -127,16 +125,18 @@ leg = ROOT.TLegend(2*myStyle.GetMargin()+0.01, 1-myStyle.GetMargin()-0.01-0.20, 
 leg.AddEntry(position_oneStrip_graph, "One strip reconstruction", "pl")
 leg.AddEntry(position_twoStrips_graph, "Two strips reconstruction", "pl")
 
-# myStyle.BeamInfo()
+myStyle.BeamInfo()
 # myStyle.SensorInfo("BNL2021", 285, False)
 text = ROOT.TLatex()
 text.SetTextSize(myStyle.GetSize()-4)
 text.SetTextAlign(31)
-text.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{EIC 500um pitch 200um metal width}")
+text.DrawLatexNDC(1-myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Varying length}")
 
 leg.Draw()
 position_oneStrip_graph.Draw("epl same")
 position_twoStrips_graph.Draw("epl same")
+
+ROOT.gPad.RedrawAxis("g")
 # time_graph.Draw("epl same")
 # time_weight_graph.Draw("epl same")
 
