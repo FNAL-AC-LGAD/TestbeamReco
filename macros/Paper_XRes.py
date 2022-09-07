@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1D,TH1F,TH2D,TH2F,TLatex,TMath,TColor,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kWhite,TH1
+from ROOT import TFile,TTree,TCanvas,TH1D,TH1F,TH2D,TH2F,TLatex,TMath,TLine,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kWhite,TH1
 import ROOT
 import os
 from stripBox import getStripBox
@@ -8,12 +8,13 @@ import math
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
+colors = myStyle.GetColors(True)
 
 ## Defining Style
 myStyle.ForceStyle()
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="", ylabel="Position resolution [#mum]", sensor=""):
+    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="", ylabel="Position resolution [#mum]", sensor="", addShift = False):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
@@ -23,7 +24,8 @@ class HistoInfo:
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.th2 = self.getTH2(f, inHistoName, sensor)
-        self.th1 = self.getTH1(self.th2, outHistoName, self.shift(), self.fine_tuning(sensor))
+        self.th1 = self.getTH1(self.th2, outHistoName, self.shift(), self.fine_tuning(sensor), addShift)
+        self.fine_tune = self.fine_tuning(sensor)
         # self.sensor = sensor
 
     def getTH2(self, f, name, sensor):
@@ -35,8 +37,11 @@ class HistoInfo:
         # elif sensor=="BNL2021": th2.RebinX(10)
         return th2
 
-    def getTH1(self, th2, name, centerShift, fine_value):
-        th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-centerShift-fine_value,th2.GetXaxis().GetXmax()-centerShift-fine_value)
+    def getTH1(self, th2, name, centerShift, fine_value, shift):
+        if shift:
+            th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-fine_value,th2.GetXaxis().GetXmax()-fine_value) # -centerShift
+        else:
+            th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin(),th2.GetXaxis().GetXmax()) # -centerShift
         return th1_temp
 
     def shift(self):
@@ -45,8 +50,11 @@ class HistoInfo:
         return real_center
 
     def fine_tuning(self, sensor):
-        value = 0.0
-        if sensor=="BNL2020": value = 0.0075
+        # value = 0.0
+        value = self.th2.GetXaxis().GetBinWidth(2)/2.
+        if "1cm_500up_300uw" in sensor: value = 0.0
+        elif "1cm_500up_100uw" in sensor: value = self.shift()
+        # if sensor=="BNL2020": value = 0.0075
         return value
 
 # Construct the argument parser
@@ -55,8 +63,10 @@ parser.add_option('-x','--xlength', dest='xlength', default = 1.7, help="X axis 
 # parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Y axis upper limit")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
+parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
 options, args = parser.parse_args()
 
+useShift = options.noShift
 dataset = options.Dataset
 outdir=""
 outdir = myStyle.getOutputDir(dataset)
@@ -71,8 +81,6 @@ pitch  = sensor_Geometry['pitch']
 strip_width  = sensor_Geometry['stripWidth']
 strip_length  = sensor_Geometry['length']
 
-oneStripRes = myStyle.resolutions2022[dataset]['position_oneStripRMS']
-
 xlength = float(options.xlength)
 # ylength = 200.0
 ylength = 160.0
@@ -84,14 +92,14 @@ all_histoInfos = [
     # HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","X position resolution [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","X position resolution [#mum]",dataset, useShift),
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "rms_track_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "rms_track_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
 ]
 
 
-#### histograms for expected resolution
+#### Get histograms for expected resolution
 noise12_vs_x = inputfile.Get("BaselineRMS12_vs_x")
 amp12_vs_x = inputfile.Get("Amp12_vs_x")
 amp1_vs_x = inputfile.Get("Amp1_vs_x")
@@ -105,10 +113,16 @@ mean_amp2_vs_x = amp2_vs_x.ProfileX()
 mean_dXFrac_vs_x = dXdFrac_vs_x.ProfileX()
 
 nbinsx = mean_amp12_vs_x.GetNbinsX()
-low_x = mean_amp12_vs_x.GetBinLowEdge(1) - all_histoInfos[0].shift()
-high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx+1) - all_histoInfos[0].shift()
+low_x = mean_amp12_vs_x.GetBinLowEdge(1) # - all_histoInfos[0].shift() - all_histoInfos[0].fine_tune
+high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx+1) # - all_histoInfos[0].shift() - all_histoInfos[0].fine_tune
+if useShift:
+    low_x -= all_histoInfos[0].fine_tune
+    high_x -= all_histoInfos[0].fine_tune
 
 expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
+expected_res_vs_x.SetLineWidth(4)
+expected_res_vs_x.SetLineStyle(7)
+expected_res_vs_x.SetLineColor(colors[2])
 for ibin in range(expected_res_vs_x.GetNbinsX()+1):
     if mean_amp12_vs_x.GetBinContent(ibin)>0:
         # With tracker's contribution of 5 microns
@@ -132,7 +146,16 @@ print("Finished setting up langaus fit class")
 
 if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "q_res0/")
-    
+
+
+oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
+oneStripHist = all_histoInfos[0].th1.Clone("oneStripRes")
+oneStripHist.SetLineWidth(4)
+# oneStripHist.SetLineStyle(1)
+oneStripHist.SetLineColor(colors[0])
+
+max_strip_edge = all_histoInfos[0].f.Get("stripBoxInfo01").GetMean(1) + strip_width/2000.
+if useShift: max_strip_edge -= all_histoInfos[0].shift()
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 #loop over X bins
@@ -155,7 +178,7 @@ for i in range(0, nXBins+1):
 
         minEvtsCut = totalEvents/nXBins
 
-        if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
+        if i==0: print("%s: nEvents > %.2f (Total events: %i; N bins: %i)"%(info.inHistoName,minEvtsCut,totalEvents,nXBins))
         #Do fit 
         if(nEvents > minEvtsCut):
             if(info.doFits):
@@ -186,11 +209,16 @@ for i in range(0, nXBins+1):
                 #     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution_rms: %.3f +/- %.3f"%(value, error))
         else:
             ## Add oneStripReco value
-            value = TMath.Sqrt(oneStripRes*oneStripRes - 5*5)
+            # value = TMath.Sqrt(oneStripRes*oneStripRes - 5*5)
+            value = 0.0
             error = 0.0
             if "track_twoStrips" in info.outHistoName:
                 ## Add metal width/sqrt(12) as expected resolution in metal region
-                expected_res_vs_x.SetBinContent(i,strip_width/TMath.Sqrt(12))
+                # expected_res_vs_x.SetBinContent(i,strip_width/TMath.Sqrt(12))
+                expected_res_vs_x.SetBinContent(i,0)
+
+            if (info.th1.FindBin(-max_strip_edge)<i and i<info.th1.FindBin(max_strip_edge)) :
+                oneStripHist.SetBinContent(i, oneStripResValue)
 
         # Removing tracker's contribution of 5 microns
         if value>5.0:
@@ -199,19 +227,34 @@ for i in range(0, nXBins+1):
         elif value>0.0:
             value = 2.0 # to check if there are strange resolution values
             error = 2.0
-        if info.f.Get("stripBoxInfo06") and (i<=info.th1.FindBin(-1.1) or info.th1.FindBin(1.1)<=i):
-            value = -10.0
-            error = 0.0
-            expected_res_vs_x.SetBinContent(i,-10)
+        # if info.f.Get("stripBoxInfo06") and (i<=info.th1.FindBin(-1.1) or info.th1.FindBin(1.1)<=i):
+        #     value = -10.0
+        #     error = 0.0
+        #     expected_res_vs_x.SetBinContent(i,-10)
         
-        elif not info.f.Get("stripBoxInfo06") and (i<=info.th1.FindBin(-0.9) or info.th1.FindBin(0.9)<=i):
-            value = -10.0
-            error = 0.0
-            expected_res_vs_x.SetBinContent(i,-10)
+        # elif not info.f.Get("stripBoxInfo06") and (i<=info.th1.FindBin(-0.9) or info.th1.FindBin(0.9)<=i):
+        #     value = -10.0
+        #     error = 0.0
+        #     expected_res_vs_x.SetBinContent(i,-10)
 
         info.th1.SetBinContent(i,value)
         info.th1.SetBinError(i,error)
-                        
+
+# Get lines with binary readout in the sensor, binary readout in the strip, and oneStripReco
+
+# sqrt_12 = TLatex("#sqrt(12)")
+
+binary_readout_res_sensor = ROOT.TLine(-xlength,pitch/TMath.Sqrt(12), xlength,pitch/TMath.Sqrt(12))
+binary_readout_res_sensor.SetLineWidth(4)
+binary_readout_res_sensor.SetLineStyle(7)
+binary_readout_res_sensor.SetLineColor(colors[4]) #kGreen+2 #(TColor.GetColor(136,34,85))
+
+binary_readout_res_strip = ROOT.TLine(-xlength,strip_width/TMath.Sqrt(12), xlength,strip_width/TMath.Sqrt(12))
+binary_readout_res_strip.SetLineWidth(4)
+binary_readout_res_strip.SetLineStyle(7)
+binary_readout_res_strip.SetLineColor(colors[0]) #kGreen+2 #(TColor.GetColor(136,34,85))
+
+
 # Plot 2D histograms
 outputfile = TFile(outdir+"PlotXRes.root","RECREATE")
 for info in all_histoInfos:
@@ -226,7 +269,7 @@ for info in all_histoInfos:
     # info.th1.SetStats(0)
     # info.th1.SetMinimum(0.0001)
     # info.th1.SetMaximum(info.yMax)
-    info.th1.SetLineColor(kBlack)
+    info.th1.SetLineColor(colors[2]) #(kBlack)
     # info.th1.SetTitle(info.title)
     # info.th1.GetXaxis().SetTitle(info.xlabel)
     # info.th1.GetXaxis().SetRangeUser(-0.32, 0.32)
@@ -236,20 +279,17 @@ for info in all_histoInfos:
     ymin = info.th1.GetMinimum()
     ymax = info.yMax
 
-    boxes = getStripBox(inputfile,0.0,ymax,False,18,True,info.shift())
+    this_shift = info.shift() if useShift else 0
+
+    boxes = getStripBox(inputfile,0.0,ymax,False,18,True,this_shift)
     for box in boxes:
         box.Draw()
 
-    # boxes2 = getStripBox(inputfile,ymin,ymax,True,ROOT.kRed,True,info.shift())
-    # for box in boxes2:
-    #     box.Draw("same")
-
-    default_res = ROOT.TLine(-xlength,pitch/TMath.Sqrt(12),xlength,pitch/TMath.Sqrt(12))
-    default_res.SetLineWidth(4)
-    default_res.SetLineStyle(9)
-    default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
-    default_res.Draw("same")
-
+    # Draw lines
+    binary_readout_res_sensor.Draw("same")
+    binary_readout_res_strip.Draw("same")
+    oneStripHist.Draw("hist same")
+    
     # tracker_res = ROOT.TLine(-xlength,5.,xlength,5.)
     # tracker_res.SetLineWidth(4)
     # tracker_res.SetLineStyle(5)
@@ -264,24 +304,26 @@ for info in all_histoInfos:
 
 
 
-    legend = TLegend(myStyle.GetPadCenter()-0.26,1-myStyle.GetMargin()-0.30,myStyle.GetPadCenter()+0.26,1-myStyle.GetMargin()-0.12)
+    legend = TLegend(myStyle.GetPadCenter()-0.28,1-myStyle.GetMargin()-0.40, myStyle.GetPadCenter()+0.28,1-myStyle.GetMargin()-0.10)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
-    # legend.SetTextFont(myStyle.GetFont())
-    # legend.SetTextSize(myStyle.GetSize())
+    legend.SetTextFont(myStyle.GetFont())
+    legend.SetTextSize(myStyle.GetSize()-4)
     #legend.SetFillStyle(0)
 
-    legend.AddEntry(default_res, "Binary readout","l")
+    legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
+    legend.AddEntry(binary_readout_res_strip, "Width / #sqrt{12}","l")
+    legend.AddEntry(oneStripHist, "Single strip reconstruction","l")
     # legend.AddEntry(tracker_res, "Tracker resolution","l")
 
-    if ('oneStrip' in info.outHistoName):
-        legend.AddEntry(info.th1, "One strip reconstruction")
-    elif ('twoStrips' in info.outHistoName):
-        legend.AddEntry(info.th1, "Reconstruction")
+    # if ('oneStrip' in info.outHistoName):
+    #     legend.AddEntry(info.th1, "One strip reconstruction")
+    if ('twoStrips' in info.outHistoName):
+        legend.AddEntry(info.th1, "Two strip reconstruction")
         expected_res_vs_x.Draw("hist same")
-        legend.AddEntry(expected_res_vs_x,"Expected resolution")
-    else:
-        legend.AddEntry(info.th1, "Full reconstruction")
+        legend.AddEntry(expected_res_vs_x,"Two strip expected")
+    # else:
+    #     legend.AddEntry(info.th1, "Full reconstruction")
         
 
     legend.Draw();
