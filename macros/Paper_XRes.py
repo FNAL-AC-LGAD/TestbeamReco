@@ -92,7 +92,7 @@ all_histoInfos = [
     # HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Resolution x position [#mum]",dataset, useShift),
+    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "rms_track_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "rms_track_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
@@ -219,6 +219,8 @@ for i in range(0, nXBins+1):
 
             if (info.th1.FindBin(-max_strip_edge)<i and i<info.th1.FindBin(max_strip_edge)) :
                 oneStripHist.SetBinContent(i, oneStripResValue)
+            if (("300uw" in dataset) and ((i == (info.th1.FindBin(-max_strip_edge)+1)) or (i == (info.th1.FindBin(max_strip_edge)-1)))):
+                oneStripHist.SetBinContent(i, -10.0)
 
         # Removing tracker's contribution of 5 microns
         if value>5.0:
@@ -300,13 +302,12 @@ for info in all_histoInfos:
 
     gPad.RedrawAxis("g")
 
-    htemp.Draw("AXIS same")
     # info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
 
 
 
-    legend = TLegend(myStyle.GetPadCenter()-0.22,1-myStyle.GetMargin()-0.38, myStyle.GetPadCenter()+0.22,1-myStyle.GetMargin()-0.09)
+    legend = TLegend(myStyle.GetPadCenter()-0.22,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.22,1-myStyle.GetMargin()-0.095)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
     legend.SetTextFont(myStyle.GetFont())
@@ -327,7 +328,7 @@ for info in all_histoInfos:
     # else:
     #     legend.AddEntry(info.th1, "Full reconstruction")
         
-
+    htemp.Draw("AXIS same")
     legend.Draw();
 
     myStyle.BeamInfo()

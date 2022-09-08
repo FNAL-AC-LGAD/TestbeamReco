@@ -71,12 +71,12 @@ position_twoStrips_graph = ROOT.TGraphErrors(length.size ,length.astype(np.doubl
 
 position_oneStrip_graph.SetMarkerColor(colors[0])
 position_oneStrip_graph.SetMarkerStyle(20)
-position_oneStrip_graph.SetMarkerSize(1)
+position_oneStrip_graph.SetMarkerSize(2)
 position_oneStrip_graph.SetLineColor(colors[0])
 
 position_twoStrips_graph.SetMarkerColor(colors[2])
 position_twoStrips_graph.SetMarkerStyle(20)
-position_twoStrips_graph.SetMarkerSize(1)
+position_twoStrips_graph.SetMarkerSize(2)
 position_twoStrips_graph.SetLineColor(colors[2])
 
 # time_graph.SetMarkerColor(ROOT.kBlack)
@@ -99,7 +99,7 @@ ROOT.gStyle.SetOptStat(0)
 
 hdummy = ROOT.TH1D("","",1,length.min()-5,length.max()+5)
 hdummy.GetXaxis().SetTitle("Strip length [mm]")
-hdummy.GetYaxis().SetTitle("X position resolution [#mum]")
+hdummy.GetYaxis().SetTitle("Position resolution [#mum]")
 hdummy.SetMaximum(90.0)
 hdummy.SetMinimum(0.0001)
 hdummy.Draw("AXIS")
@@ -115,15 +115,12 @@ hdummy.Draw("AXIS")
 
 # leg = ROOT.TLegend(2*myStyle.GetMargin()+0.01, 1-myStyle.GetMargin()-0.01-0.20, 2*myStyle.GetMargin()+0.01+0.25, 1-myStyle.GetMargin()-0.01)
 leg = ROOT.TLegend(2*myStyle.GetMargin()+0.01, 1-myStyle.GetMargin()-0.01-0.20, 2*myStyle.GetMargin()+0.01+0.35, 1-myStyle.GetMargin()-0.01)
-# leg.SetFillStyle(0)
-# leg.SetBorderSize(0)
-# leg.SetLinelength(1)
-# leg.SetNColumns(1)
-# leg.SetTextFont(42)
+leg.SetTextFont(myStyle.GetFont())
+leg.SetTextSize(myStyle.GetSize()-4)
 # leg.AddEntry(time_graph, "#splitline{Single-channel Time}{Resolution}", "pl")
 # leg.AddEntry(time_weight_graph, "#splitline{Multi-channel Time}{Resolution}", "pl")
-leg.AddEntry(position_oneStrip_graph, "One strip reconstruction", "pl")
-leg.AddEntry(position_twoStrips_graph, "Two strips reconstruction", "pl")
+leg.AddEntry(position_oneStrip_graph, "Exactly one strip reconstruction", "pl")
+leg.AddEntry(position_twoStrips_graph, "Two strip reconstruction", "pl")
 
 myStyle.BeamInfo()
 # myStyle.SensorInfo("BNL2021", 285, False)
@@ -133,10 +130,11 @@ text.SetTextAlign(31)
 text.DrawLatexNDC(1-myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Varying length}")
 
 leg.Draw()
+ROOT.gPad.RedrawAxis("g")
+
 position_oneStrip_graph.Draw("epl same")
 position_twoStrips_graph.Draw("epl same")
 
-ROOT.gPad.RedrawAxis("g")
 # time_graph.Draw("epl same")
 # time_weight_graph.Draw("epl same")
 

@@ -139,7 +139,9 @@ boxes = getStripBox(inputfile,0.0,1.0,False,18,True,shift)
 for i,box in enumerate(boxes):
     if (i!=0 and i!=(len(boxes)-1)): box.Draw()
 
-legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.01-0.23,myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.01);
+legend = TLegend(myStyle.GetPadCenter()-0.36,1-myStyle.GetMargin()-0.01-0.23,myStyle.GetPadCenter()+0.36,1-myStyle.GetMargin()-0.01);
+legend.SetTextFont(myStyle.GetFont())
+legend.SetTextSize(myStyle.GetSize()-4)
 # legend.SetNColumns(3)
 
 # index_LowThre = list_thresholds.index("_lowThreshold")
@@ -165,8 +167,8 @@ hist_Global_FullReco.Draw("hist same")
 hist_Global_FullReco.SetLineWidth(3)
 hist_Global_FullReco.SetLineColor(colors[4])
 
-legend.AddEntry(hist_Global_FullReco, "Binary readout")
-legend.AddEntry(hist_Global_OneStrip, "Single strip reconstruction")
+legend.AddEntry(hist_Global_FullReco, "One or more strips reconstruction")
+legend.AddEntry(hist_Global_OneStrip, "Exactly one strip reconstruction")
 legend.AddEntry(hist_Global_TwoStrips, "Two strip reconstruction")
 legend.Draw()
 htemp.Draw("AXIS same")
