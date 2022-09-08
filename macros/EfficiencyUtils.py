@@ -543,3 +543,35 @@ def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
     title.DrawLatexNDC(.2,.93,topTitle);
 
     return effGraph
+
+def Make1DEfficiencyHist( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, xAxisRangeHigh, shift=0.0, fine_tune = 0.0) :
+
+    nbins = num.GetXaxis().GetNbins()
+    xmin_lim = num.GetXaxis().GetBinLowEdge(1) + fine_tune
+    xmax_lim = num.GetXaxis().GetBinUpEdge(nbins) + fine_tune
+
+    this_hist = TH1F("h%s"%plotname,topTitle, nbins,xmin_lim,xmax_lim)
+
+    for b in range(1,nbins+1):
+
+        xtemp = num.GetXaxis().GetBinCenter(b) - shift
+
+        ratio = 0
+
+        n1 = int(num.GetBinContent(b));
+        n2 = int(den.GetBinContent(b));
+        #print ("numerator: " + str(n1) + " and denominator: " + str(n2))
+        if (n1 > n2):
+            n1 = n2
+
+        if (n2>0):
+            ratio = float(n1)/float(n2)
+            if (ratio > 1):
+                ratio = 1
+
+        ytemp = ratio
+        this_bin = num.GetXaxis().FindBin(xtemp)
+
+        if (0<this_bin and this_bin<nbins+1): this_hist.SetBinContent(this_bin,ytemp)
+
+    return this_hist

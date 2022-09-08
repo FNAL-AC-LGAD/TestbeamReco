@@ -36,13 +36,14 @@ def GetPlotsDir(outdir, macro_title):
 
     return outdir_tmp
 
+
 ### Style functions
 def ForceStyle():
     ## Defining Style
-    ROOT.gStyle.SetPadTopMargin(marg)    #0.05
-    ROOT.gStyle.SetPadRightMargin(marg)  #0.05
-    ROOT.gStyle.SetPadBottomMargin(2*marg)  #0.16
-    ROOT.gStyle.SetPadLeftMargin(2*marg)   #0.16
+    ROOT.gStyle.SetPadTopMargin(marg)       #0.05
+    ROOT.gStyle.SetPadRightMargin(marg)     #0.05
+    ROOT.gStyle.SetPadBottomMargin(2*marg)  #0.10
+    ROOT.gStyle.SetPadLeftMargin(2*marg)    #0.10
 
     ROOT.gStyle.SetPadTickX(1)
     ROOT.gStyle.SetPadTickY(1)
@@ -105,6 +106,8 @@ def SensorInfoSmart(dataset):
 
     SensorInfo(name,bias_voltage,True,0.00)
 
+
+### Return-value functions
 def GetMargin():
     return marg
 
@@ -117,6 +120,8 @@ def GetSize():
 def GetPadCenter():
     return (1 + marg)/2
 
+
+### Colors
 def GetColors(color_blind = False):
     strip_colors = [416+2, 432+2, 600, 880, 632, 400+2, 600-5]
     ## [#kGreen+2, #kCyan+2, #kBlue, #kViolet, #kRed, #kYellow+2, #kBlue-3]
@@ -129,6 +134,8 @@ def GetColors(color_blind = False):
 
     return strip_colors
 
+
+### Names and strings
 def GetGeometry(name):
     sensor_dict = {}
     if sensorsGeom2022[RemoveBV(name)]:
@@ -151,6 +158,7 @@ def GetBV(name):
         return ""
 
 
+### Sensors' information dictionaries
 sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "BNL 10-300", 'pitch': 500, 'stripWidth': 300, "BV": 240, "length": 10.0},
                     "EIC_W1_1cm_500up_200uw": {'sensor': "BNL 10-200", 'pitch': 500, 'stripWidth': 200, "BV": 255, "length": 10.0},
                     "EIC_W2_1cm_500up_100uw": {'sensor': "BNL 10-100", 'pitch': 500, 'stripWidth': 100, "BV": 220, "length": 10.0},
