@@ -79,6 +79,7 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
 //Put everything you want to do per event here.
 void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
 {
+    const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
@@ -91,8 +92,8 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
     const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
     const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
 
-    int lowGoodStrip = (geometry[0].size()==1) ? lowGoodStripIndex-1 : lowGoodStripIndex;
-    int highGoodStrip = (geometry[0].size()==1) ? highGoodStripIndex-1 : highGoodStripIndex;
+    int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
+    int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
 
     //const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
     const auto& firstFile = tr.getVar<bool>("firstFile");

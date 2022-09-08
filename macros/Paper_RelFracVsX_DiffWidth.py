@@ -63,9 +63,9 @@ canvas = TCanvas("cv","cv",1000,800)
 outputfile = TFile(outdir+"RelFracVsX_DiffWidth.root","RECREATE")
 
 temp_hist = TH1F("htemp","", 1, -xlim, xlim)
-temp_hist.GetXaxis().SetTitle("Track X position [mm]")
+temp_hist.GetXaxis().SetTitle("Track x position [mm]")
 temp_hist.GetYaxis().SetRangeUser(ymin, ymax)
-temp_hist.GetYaxis().SetTitle("Amp middle / Amp max")
+temp_hist.GetYaxis().SetTitle("Amp. middle / Amp. max")
 temp_hist.Draw("axis")
 
 boxes = stripBox.getStripBox(list_input[0],ymin,1.0,False,18,True,list_input[0].Get("stripBoxInfo03").GetMean(1))

@@ -49,7 +49,7 @@ public:
     double xmax =   2.5;
     double ymin =  -6.0;
     double ymax =   6.0;
-    double positionRecoMaxPoint = 0.72; // 0.74;
+    double positionRecoMaxPoint = 0.73; // 0.74;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 20.0; // 20.0; // 10.0;
     double signalAmpThreshold = 15.0; // 25.0; // 30.0; // 15.0;
@@ -59,7 +59,8 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.643829, 8.150092, -117.089379, 675.759294, -1385.358876};
+    // std::vector<double> positionRecoPar = {0.250000, -0.643829, 8.150092, -117.089379, 675.759294, -1385.358876};
+    std::vector<double> positionRecoPar = {0.250000, -0.690040, 8.748832, -118.315282, 659.636900, -1321.795166};
     // std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
     // std::vector<std::vector<double>> sensorEdges = {{-7.4, -2.8}, {2.6, 0.5}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-2.8, -2.6}, {0.4, 7.4}}; // Lab-Tracker's frame after rotation
@@ -100,7 +101,8 @@ public:
     double pitch = 0.500;
     double sensorCenter  =-0.95; // Lab-Tracker's frame
     double sensorCenterY = 2.7; // Lab-Tracker's frame
-    std::vector<double> stripCenterXPosition = {1.518, 1.014, 0.515, 0.016, -0.483, -0.983, -1.483, 0.0};
+    // std::vector<double> stripCenterXPosition = {1.518, 1.014, 0.515, 0.016, -0.483, -0.983, -1.483, 0.0};
+    std::vector<double> stripCenterXPosition = {1.516, 1.013, 0.514, 0.015, -0.484, -0.985, -1.485, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
@@ -114,7 +116,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.20; // Sensor's local frame
     double ymax =  5.20; // Sensor's local frame
-    double positionRecoMaxPoint = 0.77; // 0.81;
+    double positionRecoMaxPoint = 0.77; // 0.79;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 10.0;
     double signalAmpThreshold = 15.0; // 15.0;
@@ -125,7 +127,9 @@ public:
     int minStripHits = 6;
     int CFD_threshold = 50;
     // std::vector<double> positionRecoPar = {0.250000, -0.496276, -1.074230, 5.910960, -3.311599, -44.637909};
-    std::vector<double> positionRecoPar = {0.250000, -0.483075, -1.464649, 9.779935, -18.860555, -22.898713};
+    // std::vector<double> positionRecoPar = {0.250000, -0.483075, -1.464649, 9.779935, -18.860555, -22.898713};
+    // std::vector<double> positionRecoPar = {0.250000, -0.535301, -0.480628, 1.973952, 8.378354, -56.796318};
+    std::vector<double> positionRecoPar = {0.250000, -0.592554, 1.695367, -24.201246, 132.757266, -259.853428};
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
@@ -177,7 +181,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.50; // Sensor's local frame
     double ymax =  5.50; // Sensor's local frame
-    double positionRecoMaxPoint = 0.80; // 0.82;
+    double positionRecoMaxPoint = 0.81; // 0.82;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 10.0;
     double signalAmpThreshold = 15.0; // 15.0;
@@ -188,7 +192,8 @@ public:
     int minStripHits = 6;
     int CFD_threshold = 50;
     // std::vector<double> positionRecoPar = {0.250000, -0.625186, -0.634565, 4.385245, -11.638048};
-    std::vector<double> positionRecoPar = {0.250000, -0.626581, -0.615199, 4.293562, -11.496421};
+    // std::vector<double> positionRecoPar = {0.250000, -0.626581, -0.615199, 4.293562, -11.496421};
+    std::vector<double> positionRecoPar = {0.250000, -0.630295, -0.605694, 4.392662, -11.783797};
     // std::vector<std::vector<double>> sensorEdges = {{-3.1, -2}, {0.4, 8.1}};
     // std::vector<std::vector<double>> sensorEdges = {{-8.0, -3.4}, {2.0, 0.6}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-3.4, -2.0}, {0.6, 8.0}}; // Lab-Tracker's frame after rotation
@@ -496,7 +501,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin =-15.00; // Sensor's local frame
     double ymax = 15.00; // Sensor's local frame
-    double positionRecoMaxPoint = 0.73;
+    double positionRecoMaxPoint = 0.73; // 0.75
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; //// 10.0; // 7.0; // 10.0; // 7.0; //  5.0; // 5.0;
     double signalAmpThreshold = 15.0; //// 15.0; //15.0; // 15.0; //12.0; // 10.0; // 5.0;
@@ -509,7 +514,8 @@ public:
     // std::vector<double> positionRecoPar = {0.250000, -1.220763, 9.797696, -75.459288, 151.303936};
     // std::vector<double> positionRecoPar = {0.250000, -0.941941, 5.241489, -45.243161, 101.427658};
     // std::vector<double> positionRecoPar = {0.250000, -0.760107, 0.755445, -0.842242, -9.046702};
-    std::vector<double> positionRecoPar = {0.250000, -0.786175, 1.527987, -7.541677, 8.530849};
+    // std::vector<double> positionRecoPar = {0.250000, -0.786175, 1.527987, -7.541677, 8.530849};
+    std::vector<double> positionRecoPar = {0.250000, -0.767034, 0.502086, 2.191084, -17.243009};
     // std::vector<std::vector<double>> sensorEdges = {{-2.35, -12.4}, {2.9, 13.5}};
     // std::vector<std::vector<double>> sensorEdges = {{-13.0, -1.5}, {12.0, 2.0}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-1.5, -12.0}, {2.0, 13.0}}; // Lab-Tracker's frame after rotation
@@ -565,7 +571,7 @@ public:
     double positionRecoMaxPoint = 0.60; // 0.63
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 10.0; // 15.0; // 10.0;
-    double signalAmpThreshold = 25.0; // 25.0; // 25.0; // 20.0;
+    double signalAmpThreshold = 15.0; // 25.0; // 25.0; // 20.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -654,7 +660,8 @@ public:
     double yBinSize_delay_corr = 0.2;
     // std::vector<double> stripCenterXPosition = {1.475, 0.977, 0.482, -0.018, -0.515, -1.015, -1.513, 0.0};
     // std::vector<double> stripCenterXPosition = {1.480, 0.981, 0.482, -0.017, -0.516, -1.017, -1.517, 0.0};
-    std::vector<double> stripCenterXPosition = {1.482, 0.981, 0.482, -0.017, -0.516, -1.018, -1.519, 0.0};
+    // std::vector<double> stripCenterXPosition = {1.482, 0.981, 0.482, -0.017, -0.516, -1.018, -1.519, 0.0};
+    std::vector<double> stripCenterXPosition = {1.480, 0.981, 0.482, -0.017, -0.516, -1.017, -1.517, 0.0};
     int numLGADchannels = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
@@ -668,7 +675,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -2.50; // Sensor's local frame
     double ymax =  2.50; // Sensor's local frame
-    double positionRecoMaxPoint = 0.84; // 0.88;
+    double positionRecoMaxPoint = 0.85; // 0.86;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0; // 10.0;
     double signalAmpThreshold = 15.0; // 15.0; // 10.0;
@@ -682,7 +689,8 @@ public:
     // std::vector<double> positionRecoPar = {0.250000, -0.370630, -1.650882, 10.307877, -20.045539};
     // std::vector<double> positionRecoPar = {0.250000, -0.486276, 1.440258, -15.619359, 66.190079, -99.022406}; // 15A 10N
     // std::vector<double> positionRecoPar = {0.250000, -0.493802, 1.651379, -17.180369, 69.983728, -100.858147}; // 25A 15N
-    std::vector<double> positionRecoPar = {0.250000, -0.504018, 1.821950, -18.300502, 73.162455, -104.089614};
+    // std::vector<double> positionRecoPar = {0.250000, -0.504018, 1.821950, -18.300502, 73.162455, -104.089614};
+    std::vector<double> positionRecoPar = {0.250000, -0.494945, 1.653949, -16.600146, 66.041247, -93.911712};
     // std::vector<std::vector<double>> sensorEdges = {{-4.0, -1.0}, {0, 4.8}};
     // std::vector<std::vector<double>> sensorEdges = {{-4.2, -4.0}, {0.2, 0.0}}; // Lab-Tracker's frame before rotation
     // std::vector<std::vector<double>> sensorEdges = {{-4.0, -0.2}, {0.0, 4.2}}; // Lab-Tracker's frame after rotation

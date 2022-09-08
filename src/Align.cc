@@ -66,6 +66,7 @@ void Align::InitHistos(NTupleReader& tr, [[maybe_unused]] const std::vector<std:
 //Put everything you want to do per event here.
 void Align::Loop(NTupleReader& tr, int maxevents)
 {
+    const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
@@ -74,8 +75,8 @@ void Align::Loop(NTupleReader& tr, int maxevents)
     const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
     const auto& firstFile = tr.getVar<bool>("firstFile");
 
-    int lowGoodStrip = (geometry[0].size()==1) ? lowGoodStripIndex-1 : lowGoodStripIndex;
-    int highGoodStrip = (geometry[0].size()==1) ? highGoodStripIndex-1 : highGoodStripIndex;
+    int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
+    int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
 
     if(firstFile)
     {
