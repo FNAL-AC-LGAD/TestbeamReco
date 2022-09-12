@@ -7,7 +7,7 @@ import myStyle
 
 gROOT.SetBatch( True )
 organized_mode=True
-colors = myStyle.GetColors()
+colors = myStyle.GetColors(True)
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -26,10 +26,12 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")
 
-outdir = myStyle.GetPlotsDir(outdir, "Eff/")
+outdir = myStyle.GetPlotsDir(outdir, "Paper_Eff/")
 
 xlength = float(options.xlength)
 shift = inputfile.Get("stripBoxInfo03").GetMean(1)
+if not inputfile.Get("stripBoxInfo06"):
+    shift = (inputfile.Get("stripBoxInfo02").GetMean(1) + shift)/2.
 
 # list_thresholds = ["_lowThreshold", "_highThreshold"]
 list_thresholds = [""]
@@ -92,15 +94,17 @@ gStyle.SetOptStat(0)
 
 efficiency_denominator_global_vs_x = efficiency_denominator_global.ProjectionX("efficiency_vs_x_denominator")#,binY_lowEdge,binY_highEdge)
 
+fine_tune = efficiency_denominator_global_vs_x.GetBinWidth(2)/2.
+
 ### Make and save 1D projections (vs X) fullReco Global
 eff_num_tmp = efficiency_fullReco_numerator_global.ProjectionX("efficiency_vs_x_fullReco_numerator_global")
-efficiency_vs_x_project_fullReco_global = EfficiencyUtils.Make1DEfficiency(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x_fullReco", "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, False, shift)
+efficiency_vs_x_project_fullReco_global = EfficiencyUtils.Make1DEfficiencyHist(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x_fullReco", "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, shift, fine_tune)
 
 ### Make and save 1D projections (vs X) fullReco per channel
 list_efficiency_vs_x_project_fullReco_ch = []
 for i,index in enumerate(channel_good_index):
     eff_num_tmp = list_efficiency_vs_xy_fullReco_numerator_ch[i].ProjectionX("efficiency_vs_x_fullReco_numerator_channel0%i"%(i))
-    list_efficiency_vs_x_project_fullReco_ch.append( EfficiencyUtils.Make1DEfficiency(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x_fullReco_channel%i"%(i), "Efficiency Full Reconstruction Strip %i"%(i+1), "X [mm]", -xlength, xlength, False, shift) )
+    list_efficiency_vs_x_project_fullReco_ch.append( EfficiencyUtils.Make1DEfficiencyHist(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x_fullReco_channel%i"%(i), "Efficiency Full Reconstruction Strip %i"%(i+1), "X [mm]", -xlength, xlength, shift, fine_tune) )
 
 ### Make and save 1D projections (vs X) Global
 list_efficiency_vs_x_project_global = []
@@ -108,7 +112,7 @@ e = 0
 for t in list_thresholds:
     for m in list_recoMethod:
         eff_num_tmp = list_efficiency_numerator_global[e].ProjectionX("efficiency_vs_x%s%s_numerator"%(t,m))
-        list_efficiency_vs_x_project_global.append( EfficiencyUtils.Make1DEfficiency(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x%s%s"%(t,m), "Efficiency%s%s"%(t,m), "X [mm]", -xlength, xlength, False, shift) )
+        list_efficiency_vs_x_project_global.append( EfficiencyUtils.Make1DEfficiencyHist(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x%s%s"%(t,m), "Efficiency%s%s"%(t,m), "X [mm]", -xlength, xlength, shift, fine_tune) )
         e+=1
 
 ### Make and save 1D projections (vs X) per channel
@@ -118,104 +122,26 @@ for t in list_thresholds:
     for m in list_recoMethod:
         for i in channel_good_index:
             eff_num_tmp = list_efficiency_vs_xy_numerator_ch[e].ProjectionX("efficiency_vs_x%s%s_numerator_channel0%i"%(t,m, i))
-            list_efficiency_vs_x_project_ch.append( EfficiencyUtils.Make1DEfficiency(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x%s%s_channel0%i"%(t,m,i), "Efficiency%s%s Strip %i"%(t,m,i+1), "X [mm]", -xlength, xlength, False, shift) )
+            list_efficiency_vs_x_project_ch.append( EfficiencyUtils.Make1DEfficiencyHist(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x%s%s_channel0%i"%(t,m,i), "Efficiency%s%s Strip %i"%(t,m,i+1), "X [mm]", -xlength, xlength, shift, fine_tune) )
             e+=1
 
 ####################################
-#### Draw 1D X Projections
+#### Draw only global x projections all together
 ####################################
 canvas = TCanvas("cv","cv",1000,800)
 htemp = TH1F("htemp",";Track x position [mm];Efficiency",1,-xlength,xlength)
 htemp.GetYaxis().SetRangeUser(0.00,1.49)
 htemp.Fill(0,-2)
 
-### Draw 1D projection per channel
-e = 0
-eG = 0
-for t in list_thresholds:
-    for m in list_recoMethod:
-        htemp.Draw()
-
-        boxes = getStripBox(inputfile,0.0,1.0,False,18,True,shift)
-        for box in boxes:
-            box.Draw()
-
-        legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.16,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.01);
-        legend.SetNColumns(3)
-        legend2 = TLegend(myStyle.GetPadCenter()-0.2,1-myStyle.GetMargin()-0.01-0.24,myStyle.GetPadCenter()+0.2,1-myStyle.GetMargin()-0.01-0.16);
-
-        for i,ch in enumerate(channel_good_index):
-            list_efficiency_vs_x_project_ch[e].Draw("LPsame")
-            list_efficiency_vs_x_project_ch[e].SetLineWidth(2)
-            list_efficiency_vs_x_project_ch[e].SetLineColor(colors[i])
-            legend.AddEntry(list_efficiency_vs_x_project_ch[e], "Strip %i"%(ch+1))
-
-            e+=1
-        
-        legend.Draw()
-
-        if draw_overall:
-            list_efficiency_vs_x_project_global[eG].Draw("LPsame")
-            list_efficiency_vs_x_project_global[eG].SetLineWidth(2)
-            list_efficiency_vs_x_project_global[eG].SetLineColor(1)
-            legend2.AddEntry(list_efficiency_vs_x_project_global[eG], "Overall")
-            legend2.Draw()
-
-        myStyle.BeamInfo()
-        myStyle.SensorInfoSmart(dataset)
-
-        htemp.Draw("AXIS same")
-        canvas.SaveAs("%sEfficiency%s%s_vs_x"%(outdir,t,m)+".gif")
-        canvas.SaveAs("%sEfficiency%s%s_vs_x"%(outdir,t,m)+".pdf")
-        canvas.Clear()
-        eG+=1
-
-
-### Draw 1D projection per channel with fullReco
-
 htemp.Draw()
 
 boxes = getStripBox(inputfile,0.0,1.0,False,18,True,shift)
-for box in boxes:
-    box.Draw()
-
-legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.16,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.01);
-legend.SetNColumns(3)
-legend2 = TLegend(myStyle.GetPadCenter()-0.2,1-myStyle.GetMargin()-0.01-0.24,myStyle.GetPadCenter()+0.2,1-myStyle.GetMargin()-0.01-0.16);
-
-for i,ch in enumerate(channel_good_index):
-    list_efficiency_vs_x_project_fullReco_ch[i].Draw("LPsame")
-    list_efficiency_vs_x_project_fullReco_ch[i].SetLineWidth(2)
-    list_efficiency_vs_x_project_fullReco_ch[i].SetLineColor(colors[i])
-    legend.AddEntry(list_efficiency_vs_x_project_fullReco_ch[i], "Strip %i"%(ch+1))
-
-legend.Draw()
-
-if draw_overall:
-    efficiency_vs_x_project_fullReco_global.Draw("LPsame")
-    efficiency_vs_x_project_fullReco_global.SetLineWidth(2)
-    efficiency_vs_x_project_fullReco_global.SetLineColor(1)
-    legend2.AddEntry(efficiency_vs_x_project_fullReco_global, "Overall")
-    legend2.Draw()
-
-myStyle.BeamInfo()
-myStyle.SensorInfoSmart(dataset)
-
-htemp.Draw("AXIS same")
-
-canvas.SaveAs("%sEfficiencyFullReco_vs_x"%(outdir)+".gif")
-canvas.SaveAs("%sEfficiencyFullReco_vs_x"%(outdir)+".pdf")
-canvas.Clear()
-
-####################################
-#### Draw only global x projections all together
-####################################
-
-htemp.Draw()
 for i,box in enumerate(boxes):
     if (i!=0 and i!=(len(boxes)-1)): box.Draw()
 
-legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.23,myStyle.GetPadCenter()+0.3,1-myStyle.GetMargin()-0.01);
+legend = TLegend(myStyle.GetPadCenter()-0.36,1-myStyle.GetMargin()-0.01-0.23,myStyle.GetPadCenter()+0.36,1-myStyle.GetMargin()-0.01);
+legend.SetTextFont(myStyle.GetFont())
+legend.SetTextSize(myStyle.GetSize()-4)
 # legend.SetNColumns(3)
 
 # index_LowThre = list_thresholds.index("_lowThreshold")
@@ -224,33 +150,34 @@ index_RecoOne = list_recoMethod.index("_oneStrip")
 index_RecoTwo = list_recoMethod.index("_twoStrips")
 
 # Draw OneStripReco Global
-hist_Global_OneStrip = list_efficiency_vs_x_project_global[index_RecoOne] # + index_LowThre*len(list_recoMethod)]
-hist_Global_OneStrip.Draw("LPsame")
-hist_Global_OneStrip.SetLineWidth(2)
+hist_Global_OneStrip = list_efficiency_vs_x_project_global[index_RecoOne]
+hist_Global_OneStrip.Draw("hist same")
+hist_Global_OneStrip.SetLineWidth(3)
 hist_Global_OneStrip.SetLineColor(colors[0])
-legend.AddEntry(hist_Global_OneStrip, "One strip reconstruction")
 
 # Draw TwoStripsReco Global
-hist_Global_TwoStrips = list_efficiency_vs_x_project_global[index_RecoTwo] # + index_HigThre*len(list_recoMethod)]
-hist_Global_TwoStrips.Draw("LPsame")
-hist_Global_TwoStrips.SetLineWidth(2)
+hist_Global_TwoStrips = list_efficiency_vs_x_project_global[index_RecoTwo]
+hist_Global_TwoStrips.Draw("hist same")
+hist_Global_TwoStrips.SetLineWidth(3)
 hist_Global_TwoStrips.SetLineColor(colors[2])
-legend.AddEntry(hist_Global_TwoStrips, "Two strips reconstruction")
 
 # Draw FullReco Global
-efficiency_vs_x_project_fullReco_global.Draw("LPsame")
-efficiency_vs_x_project_fullReco_global.SetLineWidth(2)
-efficiency_vs_x_project_fullReco_global.SetLineColor(colors[4])
-legend.AddEntry(efficiency_vs_x_project_fullReco_global, "Full reconstruction")
+hist_Global_FullReco = efficiency_vs_x_project_fullReco_global
+hist_Global_FullReco.Draw("hist same")
+hist_Global_FullReco.SetLineWidth(3)
+hist_Global_FullReco.SetLineColor(colors[4])
 
+legend.AddEntry(hist_Global_FullReco, "One or more strips reconstruction")
+legend.AddEntry(hist_Global_OneStrip, "Exactly one strip reconstruction")
+legend.AddEntry(hist_Global_TwoStrips, "Two strip reconstruction")
 legend.Draw()
 htemp.Draw("AXIS same")
 
 myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
-canvas.SaveAs("%sEfficiencyAllProj_vs_x"%(outdir)+".gif")
-canvas.SaveAs("%sEfficiencyAllProj_vs_x"%(outdir)+".pdf")
+canvas.SaveAs("%sEfficiencyAll_vs_x"%(outdir)+".gif")
+canvas.SaveAs("%sEfficiencyAll_vs_x"%(outdir)+".pdf")
 
 # Save efficiency plots
 outputfile = TFile("%sEfficiencyPlots.root"%(outdir),"RECREATE")

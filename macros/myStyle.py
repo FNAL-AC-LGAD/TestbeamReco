@@ -36,13 +36,14 @@ def GetPlotsDir(outdir, macro_title):
 
     return outdir_tmp
 
+
 ### Style functions
 def ForceStyle():
     ## Defining Style
-    ROOT.gStyle.SetPadTopMargin(marg)    #0.05
-    ROOT.gStyle.SetPadRightMargin(marg)  #0.05
-    ROOT.gStyle.SetPadBottomMargin(2*marg)  #0.16
-    ROOT.gStyle.SetPadLeftMargin(2*marg)   #0.16
+    ROOT.gStyle.SetPadTopMargin(marg)       #0.05
+    ROOT.gStyle.SetPadRightMargin(marg)     #0.05
+    ROOT.gStyle.SetPadBottomMargin(2*marg)  #0.10
+    ROOT.gStyle.SetPadLeftMargin(2*marg)    #0.10
 
     ROOT.gStyle.SetPadTickX(1)
     ROOT.gStyle.SetPadTickY(1)
@@ -105,6 +106,8 @@ def SensorInfoSmart(dataset,MoveLeft=0.0):
 
     SensorInfo(name,bias_voltage,True,MoveLeft)
 
+
+### Return-value functions
 def GetMargin():
     return marg
 
@@ -117,6 +120,8 @@ def GetSize():
 def GetPadCenter():
     return (1 + marg)/2
 
+
+### Colors
 def GetColors(color_blind = False):
     strip_colors = [416+2, 432+2, 600, 880, 632, 400+2, 600-5]
     ## [#kGreen+2, #kCyan+2, #kBlue, #kViolet, #kRed, #kYellow+2, #kBlue-3]
@@ -129,6 +134,8 @@ def GetColors(color_blind = False):
 
     return strip_colors
 
+
+### Names and strings
 def GetGeometry(name):
     sensor_dict = {}
     if sensorsGeom2022[RemoveBV(name)]:
@@ -151,6 +158,7 @@ def GetBV(name):
         return ""
 
 
+### Sensors' information dictionaries
 sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "BNL 10-300", 'pitch': 500, 'stripWidth': 300, "BV": 240, "length": 10.0},
                     "EIC_W1_1cm_500up_200uw": {'sensor': "BNL 10-200", 'pitch': 500, 'stripWidth': 200, "BV": 255, "length": 10.0},
                     "EIC_W2_1cm_500up_100uw": {'sensor': "BNL 10-100", 'pitch': 500, 'stripWidth': 100, "BV": 220, "length": 10.0},
@@ -168,18 +176,18 @@ sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "BNL 10-300", 'pitch': 
 }
 
 resolutions2022 = {
-    "EIC_W2_1cm_500up_300uw_240V": {'position_oneStrip' : 78.65, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 80.37,
-                                    'position_twoStrips': 15.38, 'position_twoStrips_E': 0.00},
-    "EIC_W1_1cm_500up_200uw_255V": {'position_oneStrip' : 129.4, 'position_oneStrip_E' : 1.60, 'position_oneStripRMS': 54.87,
-                                    'position_twoStrips': 18.53, 'position_twoStrips_E': 0.02},
-    "EIC_W2_1cm_500up_100uw_220V": {'position_oneStrip' : 53.97, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 27.93,
-                                    'position_twoStrips': 18.73, 'position_twoStrips_E': 0.00},
-    "EIC_W1_2p5cm_500up_200uw_215V": {'position_oneStrip' : 205.8, 'position_oneStrip_E' : 2.80, 'position_oneStripRMS': 72.09,
-                                      'position_twoStrips': 34.13, 'position_twoStrips_E': 0.16},
+    "EIC_W2_1cm_500up_300uw_240V": {'position_oneStrip' : 75.92, 'position_oneStrip_E' : 0.18, 'position_oneStripRMS': 78.11,
+                                    'position_twoStrips': 15.74, 'position_twoStrips_E': 0.08},
+    "EIC_W1_1cm_500up_200uw_255V": {'position_oneStrip' : 81.89, 'position_oneStrip_E' : 0.08, 'position_oneStripRMS': 54.75,
+                                    'position_twoStrips': 18.49, 'position_twoStrips_E': 0.02},
+    "EIC_W2_1cm_500up_100uw_220V": {'position_oneStrip' : 66.03, 'position_oneStrip_E' : 0.10, 'position_oneStripRMS': 27.84,
+                                    'position_twoStrips': 19.23, 'position_twoStrips_E': 0.02},
+    "EIC_W1_2p5cm_500up_200uw_215V": {'position_oneStrip' : 121.5, 'position_oneStrip_E' : 0.10, 'position_oneStripRMS': 70.93,
+                                      'position_twoStrips': 31.32, 'position_twoStrips_E': 0.12},
+    "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'position_oneStrip' : 59.39, 'position_oneStrip_E' : 0.08, 'position_oneStripRMS': 51.79,
+                                          'position_twoStrips': 11.76, 'position_twoStrips_E': 0.02},
     "HPK_Eb_1cm_80up_45uw": {'position_oneStrip' : 11.91, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 13.83,
                              'position_twoStrips':  9.36, 'position_twoStrips_E': 0.00},
-    "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'position_oneStrip' : 179.4, 'position_oneStrip_E' : 12.6, 'position_oneStripRMS': 52.91,
-                                          'position_twoStrips': 11.82, 'position_twoStrips_E': 0.02},
     "BNL2021_22_medium_150up_80uw_285V": {'position_oneStrip' : 14.0, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 22.35,
                                           'position_twoStrips': 8.01, 'position_twoStrips_E': 0.00},
 }
