@@ -694,6 +694,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
         bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool pass = goodTrack && hitSensorTight && goodPhotek;
+        //bool pass = goodTrack && hitSensor && goodPhotek;
         bool pass_loose = goodTrack && hitSensor && goodPhotek;
         bool pass_tightY = goodTrack && hitSensorOnlyTightY && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
@@ -1244,7 +1245,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(goodTrack,                                                                      my_2d_prof, "efficiency_vs_xy_Strip2or5", x,y,goodHitGlobal2and5);
         
         // Fill wave form histos once
-        bool maxAmpInCenter = maxAmpIndex == 1;// || maxAmpIndex == 3;
+        bool maxAmpInCenter = maxAmpIndex == 3;// || maxAmpIndex == 3;
         //bool directHit = (abs( corrAmp[2] - corrAmp[4]) / corrAmp[2]) < 0.05;
         //if(plotWaveForm && pass && maxAmpInCenter && goodMaxLGADAmp && maxAmpLGAD > 99.0 &&  maxAmpLGAD < 101.0)
         //{

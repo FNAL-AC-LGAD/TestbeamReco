@@ -43,8 +43,8 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
     double timeDiffLow = -1.0;
     double timeDiffHigh = 1.0;
     // int timeDiffYnbin = 50;
-
-
+    //int yBinsDelay = 500; 
+    //int xBinsDelay = 100; 
     //Time map: use 100 micron bins along strip
 
     int rowIndex = 0;
@@ -69,6 +69,7 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
     for(uint i=0;i<n_scope_channels;i++)
     {
         utility::makeHisto(my_3d_histos,Form("timeDiff_coarse_vs_xy_channel0%i",i), "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+        //utility::makeHisto(my_3d_histos,Form("timeDiff_coarse_vs_xy_channel0%i",i), "; X [mm]; Y [mm]", xBinsDelay,xmin,xmax, yBinsDelay,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     }
 
     utility::makeHisto(my_2d_prof,"y_vs_Amp1OverAmp1and2_deltaT_prof", "; Amp_{Max} / Amp_{Max} + Amp_{2}; t_{Max} - t_{2} [ns]; Y [mm]", 100,0.0,1.0, 1000,-1,1);
