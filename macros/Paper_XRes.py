@@ -307,7 +307,7 @@ for info in all_histoInfos:
 
 
 
-    legend = TLegend(myStyle.GetPadCenter()-0.22,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.22,1-myStyle.GetMargin()-0.095)
+    legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.095)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
     legend.SetTextFont(myStyle.GetFont())
@@ -316,7 +316,7 @@ for info in all_histoInfos:
 
     legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
     legend.AddEntry(binary_readout_res_strip, "Width / #sqrt{12}","l")
-    legend.AddEntry(oneStripHist, "Single strip observed","l")
+    legend.AddEntry(oneStripHist, "Exactly one strip observed","l")
     # legend.AddEntry(tracker_res, "Tracker resolution","l")
 
     # if ('oneStrip' in info.outHistoName):
