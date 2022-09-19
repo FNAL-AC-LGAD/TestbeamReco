@@ -53,8 +53,8 @@ th3_amplitude_vs_xy_ch.append(inputfile.Get("amplitude_vs_xy"))
 
 
 #Build amplitude histograms
-efficiency_vs_xy_denominator = inputfile.Get("efficiency_vs_xy_denominator")
-amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
+amplitude_th2_4binning = inputfile.Get("amplitude_vs_xyROI")
+amplitude_vs_xy_temp = amplitude_th2_4binning.Project3D("yx")
 
 list_amplitude_vs_xy = []
 for i,ch in enumerate(channel_good_index):
