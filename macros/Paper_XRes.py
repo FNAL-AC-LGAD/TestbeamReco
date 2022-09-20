@@ -251,10 +251,10 @@ binary_readout_res_sensor.SetLineWidth(3)
 binary_readout_res_sensor.SetLineStyle(7)
 binary_readout_res_sensor.SetLineColor(colors[4]) #kGreen+2 #(TColor.GetColor(136,34,85))
 
-binary_readout_res_strip = ROOT.TLine(-xlength,strip_width/TMath.Sqrt(12), xlength,strip_width/TMath.Sqrt(12))
-binary_readout_res_strip.SetLineWidth(3)
-binary_readout_res_strip.SetLineStyle(7)
-binary_readout_res_strip.SetLineColor(colors[0]) #kGreen+2 #(TColor.GetColor(136,34,85))
+# binary_readout_res_strip = ROOT.TLine(-xlength,strip_width/TMath.Sqrt(12), xlength,strip_width/TMath.Sqrt(12))
+# binary_readout_res_strip.SetLineWidth(3)
+# binary_readout_res_strip.SetLineStyle(7)
+# binary_readout_res_strip.SetLineColor(colors[0]) #kGreen+2 #(TColor.GetColor(136,34,85))
 
 
 # Plot 2D histograms
@@ -291,7 +291,7 @@ for info in all_histoInfos:
 
     # Draw lines
     binary_readout_res_sensor.Draw("same")
-    binary_readout_res_strip.Draw("same")
+    # binary_readout_res_strip.Draw("same")
     oneStripHist.Draw("hist same")
     
     # tracker_res = ROOT.TLine(-xlength,5.,xlength,5.)
@@ -307,7 +307,7 @@ for info in all_histoInfos:
 
 
 
-    legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.095)
+    legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.400, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.100)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
     legend.SetTextFont(myStyle.GetFont())
@@ -315,7 +315,7 @@ for info in all_histoInfos:
     #legend.SetFillStyle(0)
 
     legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
-    legend.AddEntry(binary_readout_res_strip, "Width / #sqrt{12}","l")
+    # legend.AddEntry(binary_readout_res_strip, "Width / #sqrt{12}","l")
     legend.AddEntry(oneStripHist, "Exactly one strip observed","l")
     # legend.AddEntry(tracker_res, "Tracker resolution","l")
 
