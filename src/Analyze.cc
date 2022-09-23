@@ -71,6 +71,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_histos,"ampChargeRatio"+r+s,"", 300,0.0,15.0);
             utility::makeHisto(my_histos,"slewrate"+r+s,"", 300,0.0,400.0);
             utility::makeHisto(my_histos,"slewRateChargeRatio"+r+s,"", 300,0.0,30.0);
+            utility::makeHisto(my_histos,"deltaX_oneStrip"+r+s, "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+
             for (unsigned int ch = 0; ch < row.size(); ch++)
             {
                 const auto& c = std::to_string(ch);
@@ -195,9 +197,9 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
    
     utility::makeHisto(my_histos,"timeDiffLGADXTrackerY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"timeDiffLGADXY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_histos,"timeDiffLGADXY0", "", timeDiffNbin,timeDiffLow,timeDiffHigh);    
-    utility::makeHisto(my_histos,"timeDiffLGADX", "", timeDiffNbin,timeDiffLow,timeDiffHigh); 
-    utility::makeHisto(my_histos,"timeDiffTrackerX", "", timeDiffNbin,timeDiffLow,timeDiffHigh); 
+    utility::makeHisto(my_histos,"timeDiffLGADXY0", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiffLGADX", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiffTrackerX", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted_timeDiff_LGADXY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted_timeDiff_LGADX", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted2_timeDiff_LGADXY", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -685,7 +687,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
         bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool pass = goodTrack && hitSensorTight && goodPhotek;
-        bool pass_loose = goodTrack && hitSensor && goodPhotek;
+        // bool pass_loose = goodTrack && hitSensor && goodPhotek;
         bool pass_tightY = goodTrack && hitSensorOnlyTightY && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
@@ -789,7 +791,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "charge"+r+s, charge);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "ampChargeRatio"+r+s, ampChargeRatio);
                 utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "slewRateChargeRatio"+r+s, slewRateChargeRatio); 
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "slewrate"+r+s, slewrate);              
+                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "slewrate"+r+s, slewrate);
+                
+                utility::fillHisto(pass_tightY && isMaxChannel && goodOverNoiseAmp && oneStripReco,my_histos, "deltaX_oneStrip"+r+s, x_reco-x);
                 for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
                 {
                     if(regionsOfIntrest[k].passROI(x,y))

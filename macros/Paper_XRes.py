@@ -148,7 +148,8 @@ if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "q_res0/")
 
 
-oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
+# oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
+oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
 oneStripHist = all_histoInfos[0].th1.Clone("oneStripRes")
 oneStripHist.SetLineWidth(3)
 # oneStripHist.SetLineStyle(1)
@@ -207,6 +208,9 @@ for i in range(0, nXBins+1):
                 #     fit.Draw("same")
                 #     canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
                 #     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution_rms: %.3f +/- %.3f"%(value, error))
+
+            ## Remove bins when twoStrip is used
+            oneStripHist.SetBinContent(i, -10.0)
         else:
             ## Add oneStripReco value
             # value = TMath.Sqrt(oneStripRes*oneStripRes - 5*5)
@@ -217,8 +221,8 @@ for i in range(0, nXBins+1):
                 # expected_res_vs_x.SetBinContent(i,strip_width/TMath.Sqrt(12))
                 expected_res_vs_x.SetBinContent(i,-10.0)
 
-            if (info.th1.FindBin(-max_strip_edge)<i and i<info.th1.FindBin(max_strip_edge)) :
-                oneStripHist.SetBinContent(i, oneStripResValue)
+            if (info.th1.FindBin(-max_strip_edge)<i and i<info.th1.FindBin(max_strip_edge)):
+                oneStripHist.SetBinContent(i, 30)
             if (("300uw" in dataset) and ((i == (info.th1.FindBin(-max_strip_edge)+1)) or (i == (info.th1.FindBin(max_strip_edge)-1)))):
                 oneStripHist.SetBinContent(i, -10.0)
 
@@ -251,11 +255,17 @@ binary_readout_res_sensor.SetLineWidth(3)
 binary_readout_res_sensor.SetLineStyle(7)
 binary_readout_res_sensor.SetLineColor(colors[4]) #kGreen+2 #(TColor.GetColor(136,34,85))
 
-# binary_readout_res_strip = ROOT.TLine(-xlength,strip_width/TMath.Sqrt(12), xlength,strip_width/TMath.Sqrt(12))
-# binary_readout_res_strip.SetLineWidth(3)
-# binary_readout_res_strip.SetLineStyle(7)
-# binary_readout_res_strip.SetLineColor(colors[0]) #kGreen+2 #(TColor.GetColor(136,34,85))
-
+indexOneStrip = 1
+change=False
+for i in range(oneStripHist.GetNbinsX(), 0, -1):
+    if oneStripResValue_list[indexOneStrip]<0.0: break
+    if oneStripHist.GetBinContent(i) > 0.0:
+        oneStripHist.SetBinContent(i,oneStripResValue_list[indexOneStrip])
+        if oneStripHist.GetBinContent(i-1) < 0.0:
+            change = True
+    if change:
+        indexOneStrip+=1
+        change=False
 
 # Plot 2D histograms
 outputfile = TFile(outdir+"PlotXRes.root","RECREATE")
@@ -285,9 +295,19 @@ for info in all_histoInfos:
 
     this_shift = info.shift() if useShift else 0
 
+    binary_readout_res_strip_4legend = []
     boxes = getStripBox(inputfile,0.0,ymax,False,18,True,this_shift)
     for i,box in enumerate(boxes):
-        if (i!=0 and i!=(len(boxes)-1)): box.Draw()
+        if (i!=0 and i!=(len(boxes)-1)):
+            box.Draw()
+            xl = box.GetX1()
+            xr = box.GetX2()
+            binary_readout_res_strip = ROOT.TLine(xl,strip_width/TMath.Sqrt(12), xr,strip_width/TMath.Sqrt(12))
+            binary_readout_res_strip.SetLineWidth(3)
+            binary_readout_res_strip.SetLineStyle(7)
+            binary_readout_res_strip.SetLineColor(colors[0]) #kGreen+2 #(TColor.GetColor(136,34,85))
+            binary_readout_res_strip_4legend.append(binary_readout_res_strip)
+            binary_readout_res_strip_4legend[-1].Draw("same")
 
     # Draw lines
     binary_readout_res_sensor.Draw("same")
@@ -307,7 +327,7 @@ for info in all_histoInfos:
 
 
 
-    legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.400, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.100)
+    legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.095)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
     legend.SetTextFont(myStyle.GetFont())
@@ -315,7 +335,7 @@ for info in all_histoInfos:
     #legend.SetFillStyle(0)
 
     legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
-    # legend.AddEntry(binary_readout_res_strip, "Width / #sqrt{12}","l")
+    legend.AddEntry(binary_readout_res_strip_4legend[0], "Width / #sqrt{12}","l")
     legend.AddEntry(oneStripHist, "Exactly one strip observed","l")
     # legend.AddEntry(tracker_res, "Tracker resolution","l")
 
