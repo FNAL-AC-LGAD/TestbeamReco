@@ -24,6 +24,9 @@ positionres_twoStripuncert = []
 positionres_weighted = []
 positionres_weighteduncert = [0.5]*len(list_of_sensors)
 
+positionres_oneStrip_StdDev = [] # StdDev from oneStrip 1DPlot
+positionres_weighted_StdDev = []
+
 for name in list_of_sensors:
     length.append(myStyle.GetGeometry(name)['length'])
     sensor_info = dict_resolutions[name]
@@ -35,6 +38,10 @@ for name in list_of_sensors:
     weighted_value = sensor_info['position_oneStripRMS']*sensor_info['efficiency_oneStrip'] + sensor_info['position_twoStrip']*sensor_info['efficiency_twoStrip']
     positionres_weighted.append(weighted_value)
 
+    positionres_oneStrip_StdDev.append(sensor_info['position_oneStrip_StdDev'])
+    weighted_value_StdDev = sensor_info['position_oneStrip_StdDev']*sensor_info['efficiency_oneStrip'] + sensor_info['position_twoStrip']*sensor_info['efficiency_twoStrip']
+    positionres_weighted_StdDev.append(weighted_value_StdDev)
+
 length = np.asarray(length)
 empty = np.asarray(empty)
 positionres_oneStrip = np.asarray(positionres_oneStrip)
@@ -43,6 +50,9 @@ positionres_twoStrip = np.asarray(positionres_twoStrip)
 positionres_twoStripuncert = np.asarray(positionres_twoStripuncert)
 positionres_weighted = np.asarray(positionres_weighted)
 positionres_weighteduncert = np.asarray(positionres_weighteduncert)
+
+positionres_oneStrip_StdDev = np.asarray(positionres_oneStrip_StdDev)
+positionres_weighted_StdDev = np.asarray(positionres_weighted_StdDev)
 
 # positionres_oneStrip  = np.array([78.65, 84.13, 53.97]) # Sigma from fit to oneStrip 1DPlot
 # positionres_oneStrip  = np.array([72.09, 54.87, 52.91]) # RMS from oneStrip onMetal 1DPlot
@@ -72,6 +82,9 @@ position_oneStrip_graph = ROOT.TGraphErrors(length.size ,length.astype(np.double
 position_twoStrip_graph = ROOT.TGraphErrors(length.size ,length.astype(np.double), positionres_twoStrip.astype(np.double), empty.astype(np.double), positionres_twoStripuncert.astype(np.double))
 position_weighted_graph = ROOT.TGraphErrors(length.size ,length.astype(np.double), positionres_weighted.astype(np.double), empty.astype(np.double), positionres_weighteduncert.astype(np.double))
 
+position_oneStrip_StdDev_graph = ROOT.TGraphErrors(length.size ,length.astype(np.double), positionres_oneStrip_StdDev.astype(np.double), empty.astype(np.double), positionres_oneStripuncert.astype(np.double))
+position_weighted_StdDev_graph = ROOT.TGraphErrors(length.size ,length.astype(np.double), positionres_weighted_StdDev.astype(np.double), empty.astype(np.double), positionres_weighteduncert.astype(np.double))
+
 # time_graph = ROOT.TGraphErrors(length.size , length.astype(np.double), timingres.astype(np.double), empty.astype(np.double), timingresuncert.astype(np.double))
 # time_weight_graph = ROOT.TGraphErrors(length.size , length.astype(np.double), timingresweighted2.astype(np.double), empty.astype(np.double), timingresweighted2uncert.astype(np.double))
 
@@ -79,20 +92,32 @@ position_weighted_graph = ROOT.TGraphErrors(length.size ,length.astype(np.double
 # print("Position resolution: "+"{:.1f}".format(positionres_twoStrip[4])+" #pm "+"{:.1f}".format(positionres_twoStripuncert[4]))
 # print("Time W2 resolution: "+"{:.1f}".format(timingresweighted2[4])+" #pm "+"{:.1f}".format(timingresweighted2uncert[4]))
 
-position_oneStrip_graph.SetMarkerColor(colors[0])
-position_oneStrip_graph.SetMarkerStyle(20)
-position_oneStrip_graph.SetMarkerSize(2)
-position_oneStrip_graph.SetLineColor(colors[0])
-
 position_twoStrip_graph.SetMarkerColor(colors[2])
 position_twoStrip_graph.SetMarkerStyle(20)
 position_twoStrip_graph.SetMarkerSize(2)
 position_twoStrip_graph.SetLineColor(colors[2])
 
-position_weighted_graph.SetMarkerColor(colors[4])
-position_weighted_graph.SetMarkerStyle(20)
-position_weighted_graph.SetMarkerSize(2)
-position_weighted_graph.SetLineColor(colors[4])
+# Using OnMetal cut
+# position_oneStrip_graph.SetMarkerColor(colors[0])
+# position_oneStrip_graph.SetMarkerStyle(20)
+# position_oneStrip_graph.SetMarkerSize(2)
+# position_oneStrip_graph.SetLineColor(colors[0])
+
+# position_weighted_graph.SetMarkerColor(colors[4])
+# position_weighted_graph.SetMarkerStyle(20)
+# position_weighted_graph.SetMarkerSize(2)
+# position_weighted_graph.SetLineColor(colors[4])
+
+# Without OnMetal cut
+position_oneStrip_StdDev_graph.SetMarkerColor(colors[0])
+position_oneStrip_StdDev_graph.SetMarkerStyle(20) #47 cross
+position_oneStrip_StdDev_graph.SetMarkerSize(2)
+position_oneStrip_StdDev_graph.SetLineColor(colors[0])
+
+position_weighted_StdDev_graph.SetMarkerColor(colors[4])
+position_weighted_StdDev_graph.SetMarkerStyle(20)
+position_weighted_StdDev_graph.SetMarkerSize(2)
+position_weighted_StdDev_graph.SetLineColor(colors[4])
 
 # time_graph.SetMarkerColor(ROOT.kBlack)
 # time_graph.SetMarkerStyle(20)
@@ -115,7 +140,8 @@ ROOT.gStyle.SetOptStat(0)
 hdummy = ROOT.TH1D("","",1,length.min()-5,length.max()+5)
 hdummy.GetXaxis().SetTitle("Strip length [mm]")
 hdummy.GetYaxis().SetTitle("Position resolution [#mum]")
-hdummy.SetMaximum(90.0)
+# hdummy.SetMaximum(90.0)
+hdummy.SetMaximum(140.0)
 hdummy.SetMinimum(0.0001)
 hdummy.Draw("AXIS")
 
@@ -134,9 +160,16 @@ leg.SetTextFont(myStyle.GetFont())
 leg.SetTextSize(myStyle.GetSize()-4)
 # leg.AddEntry(time_graph, "#splitline{Single-channel Time}{Resolution}", "pl")
 # leg.AddEntry(time_weight_graph, "#splitline{Multi-channel Time}{Resolution}", "pl")
-leg.AddEntry(position_oneStrip_graph, "Exactly one strip reconstruction", "pl")
+
+# Using OnMetal cut
+# leg.AddEntry(position_oneStrip_graph, "Exactly one strip reconstruction, OnMetal", "pl")
+# leg.AddEntry(position_weighted_graph, "Weighted average, OnMetal", "pl")
+
+# Without OnMetal cut
+leg.AddEntry(position_oneStrip_StdDev_graph, "Exactly one strip reconstruction", "pl")
+leg.AddEntry(position_weighted_StdDev_graph, "Weighted average", "pl")
+
 leg.AddEntry(position_twoStrip_graph, "Two strip reconstruction", "pl")
-leg.AddEntry(position_weighted_graph, "Weighted average", "pl")
 
 myStyle.BeamInfo()
 # myStyle.SensorInfo("BNL2021", 285, False)
@@ -148,9 +181,15 @@ text.DrawLatexNDC(1-myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Va
 leg.Draw()
 ROOT.gPad.RedrawAxis("g")
 
-position_oneStrip_graph.Draw("epl same")
+# Using OnMetal cut
+# position_oneStrip_graph.Draw("epl same")
+# position_weighted_graph.Draw("epl same")
+
+# Without OnMetal cut
+position_oneStrip_StdDev_graph.Draw("epl same")
+position_weighted_StdDev_graph.Draw("epl same")
+
 position_twoStrip_graph.Draw("epl same")
-position_weighted_graph.Draw("epl same")
 
 # time_graph.Draw("epl same")
 # time_weight_graph.Draw("epl same")

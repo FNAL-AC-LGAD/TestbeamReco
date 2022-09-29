@@ -175,20 +175,27 @@ sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "BNL 10-300", 'pitch': 
                     "IHEP_W1_I_150up_80uw": {'sensor': "IHEP_1cm_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 185},
 }
 
+# 'position_oneStrip': Std Dev from fit, 'position_oneStrip_E': Statistical error from fit, 'position_oneStripRMS': RMS WITH OnMetal cut,
+# 'position_oneStrip_StdDev': RMS WITHOUT OnMetal cut (This is the value used in the paper)
 resolutions2022 = {
     "EIC_W2_1cm_500up_300uw_240V": {'position_oneStrip'  : 75.92, 'position_oneStrip_E': 0.18, 'position_oneStripRMS': 78.11,
+                                    'position_oneStrip_StdDev': 82.71,
                                     'position_twoStrip'  : 15.74, 'position_twoStrip_E': 0.08,
                                     'efficiency_oneStrip': 0.51, 'efficiency_twoStrip' : 0.49},
     "EIC_W1_1cm_500up_200uw_255V": {'position_oneStrip'  : 81.89, 'position_oneStrip_E': 0.08, 'position_oneStripRMS': 54.75,
+                                    'position_oneStrip_StdDev': 81.86,
                                     'position_twoStrip'  : 18.49, 'position_twoStrip_E': 0.02,
                                     'efficiency_oneStrip': 0.43, 'efficiency_twoStrip' : 0.57},
     "EIC_W2_1cm_500up_100uw_220V": {'position_oneStrip'  : 66.03, 'position_oneStrip_E': 0.10, 'position_oneStripRMS': 27.84,
+                                    'position_oneStrip_StdDev': 68.89,
                                     'position_twoStrip'  : 19.23, 'position_twoStrip_E': 0.02,
                                     'efficiency_oneStrip': 0.23, 'efficiency_twoStrip' : 0.77},
     "EIC_W1_2p5cm_500up_200uw_215V": {'position_oneStrip'  : 121.5, 'position_oneStrip_E': 0.10, 'position_oneStripRMS': 70.93,
+                                      'position_oneStrip_StdDev': 128.10,
                                       'position_twoStrip'  : 31.32, 'position_twoStrip_E': 0.12,
                                       'efficiency_oneStrip': 0.82, 'efficiency_twoStrip' : 0.18},
     "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'position_oneStrip'  : 59.39, 'position_oneStrip_E': 0.08, 'position_oneStripRMS': 51.79,
+                                          'position_oneStrip_StdDev': 60.93,
                                           'position_twoStrip'  : 11.76, 'position_twoStrip_E': 0.02,
                                           'efficiency_oneStrip': 0.35, 'efficiency_twoStrip' : 0.65},
     "HPK_Eb_1cm_80up_45uw": {'position_oneStrip'  : 11.91, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 13.83,

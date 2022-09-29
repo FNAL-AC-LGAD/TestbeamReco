@@ -5,6 +5,7 @@ from stripBox import getStripBox
 import optparse
 import myStyle
 import math
+from array import array
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -150,10 +151,10 @@ if debugMode:
 
 # oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
 oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
-oneStripHist = all_histoInfos[0].th1.Clone("oneStripRes")
-oneStripHist.SetLineWidth(3)
-# oneStripHist.SetLineStyle(1)
-oneStripHist.SetLineColor(colors[0])
+# oneStripHist = all_histoInfos[0].th1.Clone("oneStripRes")
+# oneStripHist.SetLineWidth(3)
+# # oneStripHist.SetLineStyle(1)
+# oneStripHist.SetLineColor(colors[0])
 
 max_strip_edge = all_histoInfos[0].f.Get("stripBoxInfo01").GetMean(1) + strip_width/2000.
 if useShift: max_strip_edge -= all_histoInfos[0].shift()
@@ -209,8 +210,8 @@ for i in range(0, nXBins+1):
                 #     canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
                 #     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution_rms: %.3f +/- %.3f"%(value, error))
 
-            ## Remove bins when twoStrip is used
-            oneStripHist.SetBinContent(i, -10.0)
+            # ## Remove bins when twoStrip is used
+            # oneStripHist.SetBinContent(i, -10.0)
         else:
             ## Add oneStripReco value
             # value = TMath.Sqrt(oneStripRes*oneStripRes - 5*5)
@@ -221,10 +222,10 @@ for i in range(0, nXBins+1):
                 # expected_res_vs_x.SetBinContent(i,strip_width/TMath.Sqrt(12))
                 expected_res_vs_x.SetBinContent(i,-10.0)
 
-            if (info.th1.FindBin(-max_strip_edge)<i and i<info.th1.FindBin(max_strip_edge)):
-                oneStripHist.SetBinContent(i, 30)
-            if (("300uw" in dataset) and ((i == (info.th1.FindBin(-max_strip_edge)+1)) or (i == (info.th1.FindBin(max_strip_edge)-1)))):
-                oneStripHist.SetBinContent(i, -10.0)
+            # if (info.th1.FindBin(-max_strip_edge)<i and i<info.th1.FindBin(max_strip_edge)):
+            #     oneStripHist.SetBinContent(i, 30)
+            # if (("300uw" in dataset) and ((i == (info.th1.FindBin(-max_strip_edge)+1)) or (i == (info.th1.FindBin(max_strip_edge)-1)))):
+            #     oneStripHist.SetBinContent(i, -10.0)
 
         # Removing tracker's contribution of 5 microns
         if value>5.0:
@@ -255,17 +256,18 @@ binary_readout_res_sensor.SetLineWidth(3)
 binary_readout_res_sensor.SetLineStyle(7)
 binary_readout_res_sensor.SetLineColor(colors[4]) #kGreen+2 #(TColor.GetColor(136,34,85))
 
-indexOneStrip = 1
-change=False
-for i in range(oneStripHist.GetNbinsX(), 0, -1):
-    if oneStripResValue_list[indexOneStrip]<0.0: break
-    if oneStripHist.GetBinContent(i) > 0.0:
-        oneStripHist.SetBinContent(i,oneStripResValue_list[indexOneStrip])
-        if oneStripHist.GetBinContent(i-1) < 0.0:
-            change = True
-    if change:
-        indexOneStrip+=1
-        change=False
+# Get OneStripReco observed histogram
+# indexOneStrip = 1
+# change=False
+# for i in range(oneStripHist.GetNbinsX(), 0, -1):
+#     if oneStripResValue_list[indexOneStrip]<0.0: break
+#     if oneStripHist.GetBinContent(i) > 0.0:
+#         oneStripHist.SetBinContent(i,oneStripResValue_list[indexOneStrip])
+#         if oneStripHist.GetBinContent(i-1) < 0.0:
+#             change = True
+#     if change:
+#         indexOneStrip+=1
+#         change=False
 
 # Plot 2D histograms
 outputfile = TFile(outdir+"PlotXRes.root","RECREATE")
@@ -297,6 +299,13 @@ for info in all_histoInfos:
 
     binary_readout_res_strip_4legend = []
     boxes = getStripBox(inputfile,0.0,ymax,False,18,True,this_shift)
+
+    oneStripBins = [-1.00, -0.50, 0.00, 0.50, 1.00] if strip_width==300 else [-1.25, -0.75, -0.25, 0.25, 0.75, 1.25]
+    oneStripHist = TH1F("oneStripRes","", len(oneStripBins)-1, array('f',oneStripBins)) # all_histoInfos[0].th1.Clone("oneStripRes")
+    oneStripHist.SetLineWidth(3)
+    # oneStripHist.SetLineStyle(1)
+    oneStripHist.SetLineColor(colors[0])
+
     for i,box in enumerate(boxes):
         if (i!=0 and i!=(len(boxes)-1)):
             box.Draw()
@@ -308,6 +317,8 @@ for info in all_histoInfos:
             binary_readout_res_strip.SetLineColor(colors[0]) #kGreen+2 #(TColor.GetColor(136,34,85))
             binary_readout_res_strip_4legend.append(binary_readout_res_strip)
             binary_readout_res_strip_4legend[-1].Draw("same")
+
+            oneStripHist.Fill(xl, oneStripResValue_list[i])
 
     # Draw lines
     binary_readout_res_sensor.Draw("same")
@@ -324,8 +335,6 @@ for info in all_histoInfos:
 
     # info.th1.Draw("AXIS same")
     info.th1.Draw("hist e same")
-
-
 
     legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.095)
     # legend.SetBorderSize(0)

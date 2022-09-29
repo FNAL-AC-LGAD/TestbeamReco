@@ -44,73 +44,67 @@ colors = myStyle.GetColors(True)
 sensor_list = ["EIC_W2_1cm_500up_300uw_240V", "EIC_W1_1cm_500up_200uw_255V", "EIC_W2_1cm_500up_100uw_220V"]
 list_input = []
 for name in sensor_list:
-    file = TFile("../output/%s/%s_Analyze.root"%(name,name),"READ")
-    list_input.append(file)
+    indir = myStyle.getOutputDir(name)
+    indir = myStyle.GetPlotsDir(indir, "PositionResY/")
+    infile = TFile(indir+"PlotRecoDiffVsY.root","READ")
+    list_input.append(infile)
 
 pitch = 0.500 #mm
 
 # xlim=2.5
 # xlim=1.1
-xlim=0.75
-ymin=0.00
-ymax=1.19
+xlim = 5.00
+ymin = 0.00
+ymax = 4.00
 
 # gStyle.SetOptFit(0)
 # gROOT.ForceStyle()
 canvas = TCanvas("cv","cv",1000,800)
 
 # Save amplitude histograms
-outputfile = TFile(outdir+"RelFracVsX_DiffWidth.root","RECREATE")
+# outputfile = TFile(outdir+"RelFracVsX_DiffWidth.root","RECREATE")
 
 temp_hist = TH1F("htemp","", 1, -xlim, xlim)
-temp_hist.GetXaxis().SetTitle("Track x position [mm]")
+temp_hist.GetXaxis().SetTitle("Track y position [mm]")
 temp_hist.GetYaxis().SetRangeUser(ymin, ymax)
-temp_hist.GetYaxis().SetTitle("Amp. middle / Amp. max")
+temp_hist.GetYaxis().SetTitle("Position resolution [mm]")
 temp_hist.Draw("axis")
 
-boxes = stripBox.getStripBox(list_input[0],ymin,1.0,False,18,True,list_input[0].Get("stripBoxInfo03").GetMean(1))
-for b,box in enumerate(boxes):
-    if b<5: box.DrawClone("same")
 
-for i,item in enumerate(sensor_list):
-    sensor_Geometry = myStyle.GetGeometry(item)
-    width = sensor_Geometry['stripWidth']
-    for k in range(-1,2,2):
-        vertical_lineL = ROOT.TLine(-width/2000.+0.5*k, ymin, -width/2000.+0.5*k, 1.0)
-        vertical_lineL.SetLineWidth(3)
-        vertical_lineL.SetLineStyle(9)
-        vertical_lineL.SetLineColorAlpha(colors[2*i],0.4)
-        vertical_lineL.DrawClone("same")
+legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.24,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.02)
 
-        vertical_lineR = ROOT.TLine(width/2000.+0.5*k, ymin, width/2000.+0.5*k, 1.0)
-        vertical_lineR.SetLineWidth(3)
-        vertical_lineR.SetLineStyle(9)
-        vertical_lineR.SetLineColorAlpha(colors[2*i],0.4)
-        vertical_lineR.DrawClone("same")
-
-temp_hist.Draw("same axis")
-
-# legend = TLegend(2*myStyle.GetMargin()+0.2,1-myStyle.GetMargin()-0.2,1-myStyle.GetMargin()-0.2,1-myStyle.GetMargin()-0.02)
-legend = TLegend(myStyle.GetPadCenter()-0.35,1-myStyle.GetMargin()-0.12,myStyle.GetPadCenter()+0.35,1-myStyle.GetMargin()-0.02)
 legend.SetBorderSize(0)
-legend.SetFillColor(ROOT.kWhite)
+# legend.SetFillColor(ROOT.kWhite)
 legend.SetTextFont(myStyle.GetFont())
-legend.SetTextSize(myStyle.GetSize()-8)
-legend.SetNColumns(3)
+legend.SetTextSize(myStyle.GetSize()-4)
+#legend.SetFillStyle(0)
+legend.SetNColumns(2)
 legend.SetFillStyle(0)
+
+
+default_res = ROOT.TLine(-xlim,10/TMath.Sqrt(12),xlim,10/TMath.Sqrt(12))
+default_res.SetLineWidth(3)
+default_res.SetLineStyle(7)
+default_res.SetLineColor(colors[1])
+default_res.Draw("same")
+
+ROOT.gPad.RedrawAxis("g")
+
+legend.AddEntry(default_res, "Length / #sqrt{12}","l")
+# legend.AddEntry(info.th1, "Two strip reconstruction","l")
 
 th1_list = []
 for i,item in enumerate(sensor_list):
-    th1_relFrac = list_input[i].Get("AmpOverMaxAmp_vs_x_channel03").ProfileX()
-    tmp_relFrac = CopyHist(th1_relFrac, i)
+    # th1_YRes = list_input[i].Get("track").Clone(item) # Use original limits
+    th1_YRes = list_input[i].Get("track_1cm").Clone(item) # Use paper limits (all three sensors with the same value)
+    th1_YRes.SetLineColor(colors[2*i])
+    th1_YRes.SetLineWidth(3)
+    th1_list.append(th1_YRes)
 
-    tmp_relFrac.SetLineColor(colors[2*i])
-    th1_list.append(tmp_relFrac)
+    th1_YRes.Draw("hist e same")
 
-    tmp_relFrac.Draw("hist same")
-
-    legend.AddEntry(tmp_relFrac, myStyle.GetGeometry(item)["sensor"],"L")
-    tmp_relFrac.Write()
+    legend.AddEntry(th1_YRes, myStyle.GetGeometry(item)["sensor"],"L")
+    # th1_YRes.Write()
 
 legend.Draw();
 
@@ -126,9 +120,9 @@ TopRightText.SetTextSize(myStyle.GetSize()-4)
 TopRightText.SetTextAlign(31)
 TopRightText.DrawLatexNDC(1-myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.01,"#bf{Varying width}")
 
-canvas.SaveAs(outdir+"RelFracVsX_DiffWidth.gif")
-canvas.SaveAs(outdir+"RelFracVsX_DiffWidth.pdf")
-outputfile.Close()
+canvas.SaveAs(outdir+"ResolutionY_DiffWidth.gif")
+canvas.SaveAs(outdir+"ResolutionY_DiffWidth.pdf")
+# outputfile.Close()
 
 for e in list_input:
     e.Close()
