@@ -38,8 +38,8 @@ sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor = sensor_Geometry['sensor']
 
 list_cut_name_oneStrip  = ["Pass", "Signal over Noise", "OneStripReco", "High fraction", # "OneStripReco HighThreshold"
-                           "High fraction & Good neighbour", "No good neighbour", "High fraction & No neighbour"]
-list_cut_name_twoStrips = ["Pass", "Signal over highThreshold", "Good neighbour", "Good Amp fraction", "TwoStripsReco"]
+                           "High fraction & Good neighbour", "No good neighbour", "High fraction & No neighbour", "OneStripReco & OnMetal"]
+list_cut_name_twoStrips = ["Pass", "Signal over highThreshold", "Good neighbour", "Good Amp fraction", "TwoStripsReco", "TwoStripsReco & OnMetal"]
 
 event_oneStripReco  = inputfile.Get("event_oneStripReco")
 event_twoStripsReco = inputfile.Get("event_twoStripsReco")
