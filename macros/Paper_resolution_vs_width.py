@@ -38,8 +38,13 @@ for name in list_of_sensors:
     weighted_value = sensor_info['position_oneStripRMS']*sensor_info['efficiency_oneStrip'] + sensor_info['position_twoStrip']*sensor_info['efficiency_twoStrip']
     positionres_weighted.append(weighted_value)
 
-    positionres_oneStrip_StdDev.append(sensor_info['position_oneStrip_StdDev'])
-    weighted_value_StdDev = sensor_info['position_oneStrip_StdDev']*sensor_info['efficiency_oneStrip'] + sensor_info['position_twoStrip']*sensor_info['efficiency_twoStrip']
+    oneStrip_Res = sensor_info['position_oneStrip_StdDev']
+    twoStrip_Res = sensor_info['position_twoStrip']
+    oneStrip_Eff = sensor_info['efficiency_oneStrip']
+    twoStrip_Eff = sensor_info['efficiency_twoStrip']
+
+    positionres_oneStrip_StdDev.append(oneStrip_Res)
+    weighted_value_StdDev = ROOT.TMath.Sqrt(oneStrip_Res*oneStrip_Res*oneStrip_Eff + twoStrip_Res*twoStrip_Res*twoStrip_Eff)
     positionres_weighted_StdDev.append(weighted_value_StdDev)
 
 width = np.asarray(width)
@@ -114,10 +119,10 @@ position_oneStrip_StdDev_graph.SetMarkerStyle(20) # 47
 position_oneStrip_StdDev_graph.SetMarkerSize(2)
 position_oneStrip_StdDev_graph.SetLineColor(colors[0])
 
-position_weighted_StdDev_graph.SetMarkerColor(colors[4])
+position_weighted_StdDev_graph.SetMarkerColor(colors[1])
 position_weighted_StdDev_graph.SetMarkerStyle(20)
 position_weighted_StdDev_graph.SetMarkerSize(2)
-position_weighted_StdDev_graph.SetLineColor(colors[4])
+position_weighted_StdDev_graph.SetLineColor(colors[1])
 
 # time_graph.SetMarkerColor(ROOT.kBlack)
 # time_graph.SetMarkerStyle(20)
@@ -167,7 +172,7 @@ leg.SetTextSize(myStyle.GetSize()-4)
 
 # Without OnMetal cut
 leg.AddEntry(position_oneStrip_StdDev_graph, "Exactly one strip reconstruction", "pl")
-leg.AddEntry(position_weighted_StdDev_graph, "Weighted average", "pl")
+leg.AddEntry(position_weighted_StdDev_graph, "Effective resolution", "pl")
 
 leg.AddEntry(position_twoStrip_graph, "Two strip reconstruction", "pl")
 

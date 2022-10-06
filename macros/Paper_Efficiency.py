@@ -125,6 +125,10 @@ for t in list_thresholds:
             list_efficiency_vs_x_project_ch.append( EfficiencyUtils.Make1DEfficiencyHist(eff_num_tmp, efficiency_denominator_global_vs_x, "efficiency_vs_x%s%s_channel0%i"%(t,m,i), "Efficiency%s%s Strip %i"%(t,m,i+1), "X [mm]", -xlength, xlength, shift, fine_tune) )
             e+=1
 
+
+# Save efficiency plots
+outputfile = TFile("%sEfficiencyPlots.root"%(outdir),"RECREATE")
+
 ####################################
 #### Draw only global x projections all together
 ####################################
@@ -148,6 +152,9 @@ legend.SetTextSize(myStyle.GetSize()-4)
 # index_HigThre = list_thresholds.index("_highThreshold")
 index_RecoOne = list_recoMethod.index("_oneStrip")
 index_RecoTwo = list_recoMethod.index("_twoStrips")
+
+list_efficiency_vs_x_project_global[index_RecoOne].Write("Full_OneStripReco")
+list_efficiency_vs_x_project_global[index_RecoTwo].Write("Full_TwoStripReco")
 
 # Draw OneStripReco Global
 hist_Global_OneStrip = list_efficiency_vs_x_project_global[index_RecoOne]
@@ -179,8 +186,18 @@ myStyle.SensorInfoSmart(dataset)
 canvas.SaveAs("%sEfficiencyAll_vs_x"%(outdir)+".gif")
 canvas.SaveAs("%sEfficiencyAll_vs_x"%(outdir)+".pdf")
 
-# Save efficiency plots
-outputfile = TFile("%sEfficiencyPlots.root"%(outdir),"RECREATE")
+list_hist_coarse_bin = ["efficiency_vs_xy_numerator_coarseBins", "efficiency_vs_xy_oneStrip_numerator_coarseBins", "efficiency_vs_xy_twoStrips_numerator_coarseBins"]
+list_name_coarse_bin = ["efficiency_vs_x_coarseBins", "efficiency_vs_x_oneStrip_coarseBins", "efficiency_vs_x_twoStrip_coarseBins"]
+list_good_hists = []
+
+this_denom = inputfile.Get("efficiency_vs_xy_denominator_coarseBins").ProjectionX()
+for n,name in enumerate(list_hist_coarse_bin):
+    this_hist = inputfile.Get(name).ProjectionX()
+    good_hist = EfficiencyUtils.Make1DEfficiencyHist(this_hist, this_denom, list_name_coarse_bin[n], list_name_coarse_bin[n], "X [mm]", -xlength, xlength, 0.0, 0.0)
+    list_good_hists.append(good_hist)
+
+for h,hist in enumerate(list_good_hists):
+    hist.Write(list_name_coarse_bin[h])
 
 e=0
 for t in list_thresholds:
