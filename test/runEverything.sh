@@ -26,8 +26,8 @@ python PlotCutFlow.py       -D EIC_W2_1cm_500up_300uw_240V
 
 # Paper plots
 python Paper_1DRes.py       -D EIC_W2_1cm_500up_300uw_240V
-python Paper_XRes.py        -D EIC_W2_1cm_500up_300uw_240V -x 1.2
 python Paper_Efficiency.py  -D EIC_W2_1cm_500up_300uw_240V -x 1.2
+python Paper_XRes.py        -D EIC_W2_1cm_500up_300uw_240V -x 1.2
 
 
 ## EIC_W1_1cm_500up_200uw_255V
@@ -58,8 +58,8 @@ python PlotCutFlow.py       -D EIC_W1_1cm_500up_200uw_255V
 
 # Paper plots
 python Paper_1DRes.py       -D EIC_W1_1cm_500up_200uw_255V
-python Paper_XRes.py        -D EIC_W1_1cm_500up_200uw_255V -x 1.2
 python Paper_Efficiency.py  -D EIC_W1_1cm_500up_200uw_255V -x 1.2
+python Paper_XRes.py        -D EIC_W1_1cm_500up_200uw_255V -x 1.2
 
 
 ## EIC_W2_1cm_500up_100uw_220V
@@ -90,8 +90,8 @@ python PlotCutFlow.py       -D EIC_W2_1cm_500up_100uw_220V
 
 # Paper plots
 python Paper_1DRes.py       -D EIC_W2_1cm_500up_100uw_220V
-python Paper_XRes.py        -D EIC_W2_1cm_500up_100uw_220V -x 1.2
 python Paper_Efficiency.py  -D EIC_W2_1cm_500up_100uw_220V -x 1.2
+python Paper_XRes.py        -D EIC_W2_1cm_500up_100uw_220V -x 1.2
 
 
 # ## MultiPitch
@@ -250,3 +250,4 @@ python Paper_RelFracVsX_DiffWidth.py
 python Paper_resolution_vs_length.py
 python Paper_resolution_vs_width.py
 python Paper_YRes.py
+python Paper_1DRes_500um.py

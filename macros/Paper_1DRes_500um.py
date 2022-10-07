@@ -117,7 +117,7 @@ legend = ROOT.TLegend(1-myStyle.GetMargin()-0.03-0.35, 1-myStyle.GetMargin()-0.0
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-4)
 
-fit_limits = [[-0.9, 0.9], [-1.5, 1.5]]
+fit_limits = [[-1.5, 1.5], [-2.0, 2.0]]
 
 sensor_list = ["EIC_W1_2p5cm_500up_200uw_215V", "EIC_W1_1cm_500up_200uw_255V"] # , "EIC_W1_0p5cm_500up_200uw_1_4_245V"
 list_input = []
