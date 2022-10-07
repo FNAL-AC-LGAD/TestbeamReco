@@ -27,19 +27,9 @@ def CopyHist(hist, number):
             hist_tmp.SetBinContent(i, hist.GetBinContent(i))
     return hist_tmp
 
-# Construct the argument parser
-# parser = optparse.OptionParser("usage: %prog [options]\n")
-# parser.add_option('-n','--name', dest='hist2plot', default = "AmpOverMaxAmp", help="Histogram to draw w/o _vs_x_channel")
-# parser.add_option('-c','--cut', dest='histCut', default = "", help="Cut used, can be _NearHit, or none, WITH _")
-# options, args = parser.parse_args()
-
-# histName = options.hist2plot
-# histCut  = options.histCut
-
 outdir = myStyle.getOutputDir("Paper2022")
 
 colors = myStyle.GetColors(True)
-# colors = [ROOT.kRed, ROOT.kRed, ROOT.kGreen, ROOT.kGreen, ROOT.kBlue, ROOT.kBlue, ROOT.kMagenta, ROOT.kMagenta,]
 
 sensor_list = ["EIC_W2_1cm_500up_300uw_240V", "EIC_W1_1cm_500up_200uw_255V", "EIC_W2_1cm_500up_100uw_220V"]
 list_input = []
@@ -49,8 +39,6 @@ for name in sensor_list:
 
 pitch = 0.500 #mm
 
-# xlim=2.5
-# xlim=1.1
 xlim=0.75
 ymin=0.00
 ymax=1.19
@@ -90,7 +78,6 @@ for i,item in enumerate(sensor_list):
 
 temp_hist.Draw("same axis")
 
-# legend = TLegend(2*myStyle.GetMargin()+0.2,1-myStyle.GetMargin()-0.2,1-myStyle.GetMargin()-0.2,1-myStyle.GetMargin()-0.02)
 legend = TLegend(myStyle.GetPadCenter()-0.35,1-myStyle.GetMargin()-0.12,myStyle.GetPadCenter()+0.35,1-myStyle.GetMargin()-0.02)
 legend.SetBorderSize(0)
 legend.SetFillColor(ROOT.kWhite)
@@ -115,11 +102,6 @@ for i,item in enumerate(sensor_list):
 legend.Draw();
 
 myStyle.BeamInfo()
-
-# TopLeftText = ROOT.TLatex()
-# TopLeftText.SetTextSize(myStyle.GetSize()-4)
-# TopLeftText.SetTextAlign(11)
-# TopLeftText.DrawLatexNDC(2*myStyle.GetMargin()+0.005,1-myStyle.GetMargin()+0.01,"#bf{"+histName+"}")
 
 TopRightText = ROOT.TLatex()
 TopRightText.SetTextSize(myStyle.GetSize()-4)

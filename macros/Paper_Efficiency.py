@@ -49,10 +49,6 @@ for t in list_thresholds:
         list_efficiency_numerator_global.append(inputfile.Get("efficiency_vs_xy%s%s_numerator"%(t,m)))
 efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_fullReco_numerator")
 
-#efficiency_lowThreshold_numerator_global.RebinX(3)
-#efficiency_highThreshold_numerator_global.RebinX(3)
-#efficiency_denominator_global.RebinX(3)
-
 ### Plot and save 2D efficiency Global Histograms
 EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco"%(outdir), "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0, True)
 EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco"%(outdir), "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0, True)
@@ -148,8 +144,6 @@ legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-4)
 # legend.SetNColumns(3)
 
-# index_LowThre = list_thresholds.index("_lowThreshold")
-# index_HigThre = list_thresholds.index("_highThreshold")
 index_RecoOne = list_recoMethod.index("_oneStrip")
 index_RecoTwo = list_recoMethod.index("_twoStrips")
 

@@ -110,11 +110,6 @@ legend.Draw();
 
 myStyle.BeamInfo()
 
-# TopLeftText = ROOT.TLatex()
-# TopLeftText.SetTextSize(myStyle.GetSize()-4)
-# TopLeftText.SetTextAlign(11)
-# TopLeftText.DrawLatexNDC(2*myStyle.GetMargin()+0.005,1-myStyle.GetMargin()+0.01,"#bf{"+histName+"}")
-
 TopRightText = ROOT.TLatex()
 TopRightText.SetTextSize(myStyle.GetSize()-4)
 TopRightText.SetTextAlign(31)

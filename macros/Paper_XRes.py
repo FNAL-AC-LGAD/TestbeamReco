@@ -31,11 +31,6 @@ class HistoInfo:
 
     def getTH2(self, f, name, sensor):
         th2 = f.Get(name)
-        # # th2_temp = TH2D(outHist,"",42,-0.210,0.210,th2.GetYaxis().GetNbins(),th2.GetYaxis().GetXmin(),th2.GetYaxis().GetXmax())
-        # # for i in range(th2.GetXaxis().FindBin(-0.210+centerShift),th2.GetXaxis().FindBin(0.210+centerShift)+1,1):
-        # #     th2_temp.Fill()
-        # if sensor=="BNL2020": th2.RebinX(7)
-        # elif sensor=="BNL2021": th2.RebinX(10)
         return th2
 
     def getTH1(self, th2, name, centerShift, fine_value, shift):
@@ -88,13 +83,9 @@ debugMode = options.debugMode
 all_histoInfos = [
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    # HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    # HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
-    # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "rms_track_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
-    # HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "rms_track_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
 ]
 
 hist_info_twoStrip = all_histoInfos[0]
@@ -113,15 +104,11 @@ mean_amp2_vs_x = amp2_vs_x.ProfileX()
 mean_dXFrac_vs_x = dXdFrac_vs_x.ProfileX()
 
 nbinsx = mean_amp12_vs_x.GetNbinsX()
-low_x = mean_amp12_vs_x.GetBinLowEdge(1) # - all_histoInfos[0].shift() - all_histoInfos[0].fine_tune
-high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx+1) # - all_histoInfos[0].shift() - all_histoInfos[0].fine_tune
+low_x = mean_amp12_vs_x.GetBinLowEdge(1)
+high_x = mean_amp12_vs_x.GetBinLowEdge(nbinsx+1)
 if useShift:
     low_x -= hist_info_twoStrip.fine_tune
     high_x -= hist_info_twoStrip.fine_tune
-    # if "1cm_500up_300uw" in hist_info_twoStrip.sensor:
-    #     bin_shift = hist_info_twoStrip.th1.GetBinWidth(2)/2.
-    #     low_x -= bin_shift
-    #     high_x -= bin_shift
 
 expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
 expected_res_vs_x.SetLineWidth(3)
@@ -172,12 +159,8 @@ max_strip_edge = hist_info_twoStrip.f.Get("stripBoxInfo01").GetMean(1) + strip_w
 if useShift: max_strip_edge -= hist_info_twoStrip.shift()
 
 ### Create Weighted Average histogram
-
-# weighted_hist = hist_info_twoStrip.th1.Clone("Weighted_average")
 weighted_hist = ROOT.TH1F("Weighted_average","",nbinsx,low_x,high_x)
 
-# shift_rebin = 0.0 #-hist_info_twoStrip.th1.GetXaxis().GetBinWidth(2)/2.
-# weighted_hist_rebin = TH1D("Weighted_average_rebin","",hist_info_twoStrip.th1.GetNbinsX(),hist_info_twoStrip.th1.GetXaxis().GetXmin()-shift_rebin,hist_info_twoStrip.th1.GetXaxis().GetXmax()-shift_rebin)
 weighted_hist.SetLineWidth(3)
 # weighted_hist.SetLineStyle(1)
 weighted_hist.SetLineColor(colors[1])
@@ -189,7 +172,7 @@ this_shift = hist_info_twoStrip.shift() if useShift else 0
 boxes = getStripBox(inputfile,0.0,hist_info_twoStrip.yMax,False,18,True,this_shift)
 
 oneStripBins = [-1.00, -0.50, 0.00, 0.50, 1.00] if strip_width==300 else [-1.25, -0.75, -0.25, 0.25, 0.75, 1.25]
-oneStripHist = TH1F("oneStripRes","", len(oneStripBins)-1, array('f',oneStripBins)) # hist_info_twoStrip.th1.Clone("oneStripRes")
+oneStripHist = TH1F("oneStripRes","", len(oneStripBins)-1, array('f',oneStripBins))
 oneStripHist.SetLineWidth(3)
 # oneStripHist.SetLineStyle(1)
 oneStripHist.SetLineColor(colors[0])
@@ -293,53 +276,26 @@ for i in range(0, nXBins+1):
         eff_OneStrip_value = eff_OneStrip.GetBinContent(i)
         eff_TwoStrip_value = eff_TwoStrip.GetBinContent(i)
 
-        # eff_OneStrip_value_odd = eff_OneStrip.GetBinContent(2*i+1)
-        # eff_TwoStrip_value_odd = eff_TwoStrip.GetBinContent(2*i+1)
-
-        # eff_OneStrip_value_rebin = eff_OneStrip_rebin.GetBinContent(i)
-        # eff_TwoStrip_value_rebin = eff_TwoStrip_rebin.GetBinContent(i)
-
         res_OneStrip_value = oneStripHist.GetBinContent(oneStripHist.FindBin(x_value))
         res_TwoStrip_value = value
-        
-        # weighted_value_even  = res_OneStrip_value*eff_OneStrip_value_even  + res_TwoStrip_value*eff_TwoStrip_value_even
-        # weighted_value_odd   = res_OneStrip_value*eff_OneStrip_value_odd   + res_TwoStrip_value*eff_TwoStrip_value_odd
+
         weighted_value = TMath.Sqrt(res_OneStrip_value*res_OneStrip_value*eff_OneStrip_value + res_TwoStrip_value*res_TwoStrip_value*eff_TwoStrip_value)
 
         if res_TwoStrip_value<5.0:
-            # weighted_value_even  = res_OneStrip_value*eff_OneStrip_value_even
-            # weighted_value_odd   = res_OneStrip_value*eff_OneStrip_value_odd
             weighted_value = res_OneStrip_value #*eff_OneStrip_value
 
         # Remove unwanted bins outside the expected curve
         if expected_res_vs_x.GetBinContent(i)<0:
             weighted_value = 0.0
 
-        # weighted_hist_even.SetBinContent(i, weighted_value_even)
-        # weighted_hist_odd.SetBinContent(i, weighted_value_odd)
         weighted_hist.SetBinContent(i, weighted_value)
 
 # Get lines with binary readout in the sensor, binary readout in the strip, and oneStripReco
-
-# sqrt_12 = TLatex("#sqrt(12)")
 
 binary_readout_res_sensor = ROOT.TLine(-xlength,pitch/TMath.Sqrt(12), xlength,pitch/TMath.Sqrt(12))
 binary_readout_res_sensor.SetLineWidth(3)
 binary_readout_res_sensor.SetLineStyle(7)
 binary_readout_res_sensor.SetLineColor(colors[4]) #kGreen+2 #(TColor.GetColor(136,34,85))
-
-# Get OneStripReco observed histogram
-# indexOneStrip = 1
-# change=False
-# for i in range(oneStripHist.GetNbinsX(), 0, -1):
-#     if oneStripResValue_list[indexOneStrip]<0.0: break
-#     if oneStripHist.GetBinContent(i) > 0.0:
-#         oneStripHist.SetBinContent(i,oneStripResValue_list[indexOneStrip])
-#         if oneStripHist.GetBinContent(i-1) < 0.0:
-#             change = True
-#     if change:
-#         indexOneStrip+=1
-#         change=False
 
 # Plot 2D histograms
 outputfile = TFile(outdir+"PlotXRes.root","RECREATE")
@@ -369,33 +325,15 @@ ymax = hist_info_twoStrip.yMax
 
 this_shift = hist_info_twoStrip.shift() if useShift else 0
 
-# binary_readout_res_strip_4legend = []
-# boxes = getStripBox(inputfile,0.0,ymax,False,18,True,this_shift)
-
-# oneStripBins = [-1.00, -0.50, 0.00, 0.50, 1.00] if strip_width==300 else [-1.25, -0.75, -0.25, 0.25, 0.75, 1.25]
-# oneStripHist = TH1F("oneStripRes","", len(oneStripBins)-1, array('f',oneStripBins)) # all_histoInfos[0].th1.Clone("oneStripRes")
-
 for i,box in enumerate(boxes):
     if (i!=0 and i!=(len(boxes)-1)):
         box.Draw()
-        # xl = box.GetX1()
-        # xr = box.GetX2()
-        # # binary_readout_res_strip = ROOT.TLine(xl,strip_width/TMath.Sqrt(12), xr,strip_width/TMath.Sqrt(12))
-        # # binary_readout_res_strip.SetLineWidth(3)
-        # # binary_readout_res_strip.SetLineStyle(7)
-        # # binary_readout_res_strip.SetLineColor(colors[0]) #kGreen+2 #(TColor.GetColor(136,34,85))
-        # # binary_readout_res_strip_4legend.append(binary_readout_res_strip)
-        # # binary_readout_res_strip_4legend[-1].Draw("same")
-
-        # oneStripHist.Fill(xl, oneStripResValue_list[i])
 
 # Draw lines
 binary_readout_res_sensor.Draw("same")
 # binary_readout_res_strip.Draw("same")
 # oneStripHist.Draw("hist same")
 
-# weighted_hist_even.Draw("hist same")
-# weighted_hist_odd.Draw("hist same")
 weighted_hist.Draw("hist same")
 
 # tracker_res = ROOT.TLine(-xlength,5.,xlength,5.)
@@ -406,7 +344,6 @@ weighted_hist.Draw("hist same")
 
 gPad.RedrawAxis("g")
 
-# hist_info_twoStrip.th1.Draw("AXIS same")
 hist_info_twoStrip.th1.Draw("hist e same")
 
 legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.095)
@@ -426,8 +363,6 @@ if ('twoStrips' in info.outHistoName):
     legend.AddEntry(expected_res_vs_x,"Two strip expected","l")
     legend.AddEntry(hist_info_twoStrip.th1, "Two strip observed","l")
 
-# legend.AddEntry(weighted_hist_even, "Weighted average even","l")
-# legend.AddEntry(weighted_hist_odd, "Weighted average odd","l")
 legend.AddEntry(weighted_hist, "Effective resolution","l")
     
 htemp.Draw("AXIS same")
