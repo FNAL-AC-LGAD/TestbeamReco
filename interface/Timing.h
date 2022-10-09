@@ -121,6 +121,7 @@ private:
         tr.registerDerivedVar("weighted_time_goodSig", weighted_time_goodSig);
         tr.registerDerivedVar("weighted2_time_goodSig", weighted2_time_goodSig);
 
+        tr.registerDerivedVar("twoGoodChannel", twoGoodChannel);
 
 
     }

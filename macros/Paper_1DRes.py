@@ -53,16 +53,16 @@ def getHisto(f, name, rebin, color):
         h.SetLineWidth(2)
         return h
 
-fit_range = {   "EIC_W2_1cm_500up_300uw_240V": {'one': [-4,4], 'two': [-0.8,0.8]}, "EIC_W1_1cm_500up_200uw_255V": {'one': [-3,3], 'two': [-1.1,1.1]},
-                "EIC_W2_1cm_500up_100uw_220V": {'one': [-4,4], 'two': [-1.4,1.4]}, "EIC_W1_2p5cm_500up_200uw_215V": {'one': [-3.5,3.5], 'two': [-0.8,0.6]},
-                "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'one': [-4,4], 'two': [-1.1,1.1]} }
+fit_range = {   "EIC_W2_1cm_500up_300uw_240V": {'one': [-2.7,2.7], 'two': [-0.8,0.8]}, "EIC_W1_1cm_500up_200uw_255V": {'one': [-3.0,3.0], 'two': [-1.1,1.1]},
+                "EIC_W2_1cm_500up_100uw_220V": {'one': [-2.7,2.7], 'two': [-1.4,1.4]}, "EIC_W1_2p5cm_500up_200uw_215V": {'one': [-3.0,3.0], 'two': [-0.8,0.6]},
+                "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'one': [-4.0,4.0], 'two': [-1.1,1.1]} }
 
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('--runPad', dest='runPad', action='store_true', default = False, help="Is pad (True) or strip (False). Needed when -a=True.")
 parser.add_option('-a', dest='plotAll', action='store_true', default = False, help="Draw all channels")
-parser.add_option('-m', '--min', dest='min', default=1.0, type="float", help="Low limit of the fit (fmin): myMean - (fmin)*myRMS.")
+parser.add_option('-m', '--min', dest='min', default=-1.0, type="float", help="Low limit of the fit (fmin): myMean + (fmin)*myRMS.")
 parser.add_option('-M', '--max', dest='max', default=1.0, type="float", help="High limit of the fit (fmax): myMean + (fmax)*myRMS.")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
@@ -78,7 +78,7 @@ inputfile = ROOT.TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 outdir = myStyle.GetPlotsDir(outdir, "Paper_1DRes/")
 
-channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
+channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(0,6)]
 
 range_oneS = fit_range[dataset]['one']
 range_twoS = fit_range[dataset]['two']
@@ -89,8 +89,13 @@ hists = [('deltaX','deltaX',"tracker",fitmin,fitmax),
         ('deltaX_twoStrips','deltaX_twoStrips',"tracker",range_twoS[0],range_twoS[1]), # ('deltaX_twoStrips_noMetal','deltaX_twoStrips_noMetal',"tracker"),
         ("timeDiff","time","photek",fitmin,fitmax), ("weighted2_timeDiff","weighted2Time","photek",fitmin,fitmax),
         ("timeDiffTracker","time_tracker","photek",fitmin,fitmax), ("weighted2_timeDiff_tracker","weighted2_time_tracker","photek",fitmin,fitmax),
-        ('deltaY','deltaY','tracker',fitmin,fitmax)
+        ('deltaY','deltaY','tracker',fitmin,fitmax),
+        ('deltaY_oneStrip','deltaY_oneStrip','tracker',fitmin,fitmax),
+        ('deltaY_twoStrips','deltaY_twoStrips','tracker',fitmin,fitmax),
 ]
+
+hists += list(('deltaX_oneStrip{0}{1}'.format(t[0],t[1]),'deltaX_oneStripCh0%i'%(t[1]),'tracker',range_oneS[0],range_oneS[1]) for t in channelMap)
+
 if options.plotAll:
         hists += list(('weighted_timeDiff_channel{0}{1}'.format(t[0],t[1]),'weightedTime','photek') for t in channelMap)
         hists += list(('timeDiff_channel{0}{1}'.format(t[0],t[1]),'time','photek') for t in channelMap)
@@ -101,11 +106,12 @@ if options.plotAll:
 nEntries = {}
 for t in hists:
     h = inputfile.Get(t[0])
-    plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], runPad, 100, (0,1), t[3], t[4])
+    if h:
+        plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], runPad, 100, (0,1), t[3], t[4])
 
-    if (t[0] in ['deltaX_oneStrip','deltaX_twoStrips']):
-        # print("* Number of entries in",t[0],":",h.GetEntries())
-        nEntries[t[0]] = h.GetEntries()
+        if (t[0] in ['deltaX_oneStrip','deltaX_twoStrips']):
+                # print("* Number of entries in",t[0],":",h.GetEntries())
+                nEntries[t[0]] = h.GetEntries()
 
 ## Get fraction of events per reconstruction method
 for reco_method in nEntries:

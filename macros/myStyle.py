@@ -175,20 +175,55 @@ sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "BNL 10-300", 'pitch': 
                     "IHEP_W1_I_150up_80uw": {'sensor': "IHEP_1cm_150up_80uw", 'pitch': 150, 'stripWidth': 80, "BV": 185},
 }
 
+# 'position_oneStrip': Std Dev from fit, 'position_oneStrip_E': Statistical error from fit, 'position_oneStripRMS': RMS WITH OnMetal cut,
+# 'position_oneStrip_StdDev': RMS WITHOUT OnMetal cut (This is the value used in the paper)
 resolutions2022 = {
-    "EIC_W2_1cm_500up_300uw_240V": {'position_oneStrip' : 75.92, 'position_oneStrip_E' : 0.18, 'position_oneStripRMS': 78.11,
-                                    'position_twoStrips': 15.74, 'position_twoStrips_E': 0.08},
-    "EIC_W1_1cm_500up_200uw_255V": {'position_oneStrip' : 81.89, 'position_oneStrip_E' : 0.08, 'position_oneStripRMS': 54.75,
-                                    'position_twoStrips': 18.49, 'position_twoStrips_E': 0.02},
-    "EIC_W2_1cm_500up_100uw_220V": {'position_oneStrip' : 66.03, 'position_oneStrip_E' : 0.10, 'position_oneStripRMS': 27.84,
-                                    'position_twoStrips': 19.23, 'position_twoStrips_E': 0.02},
-    "EIC_W1_2p5cm_500up_200uw_215V": {'position_oneStrip' : 121.5, 'position_oneStrip_E' : 0.10, 'position_oneStripRMS': 70.93,
-                                      'position_twoStrips': 31.32, 'position_twoStrips_E': 0.12},
-    "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'position_oneStrip' : 59.39, 'position_oneStrip_E' : 0.08, 'position_oneStripRMS': 51.79,
-                                          'position_twoStrips': 11.76, 'position_twoStrips_E': 0.02},
-    "HPK_Eb_1cm_80up_45uw": {'position_oneStrip' : 11.91, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 13.83,
-                             'position_twoStrips':  9.36, 'position_twoStrips_E': 0.00},
-    "BNL2021_22_medium_150up_80uw_285V": {'position_oneStrip' : 14.0, 'position_oneStrip_E' : 0.00, 'position_oneStripRMS': 22.35,
-                                          'position_twoStrips': 8.01, 'position_twoStrips_E': 0.00},
+    "EIC_W2_1cm_500up_300uw_240V": {'position_oneStrip'  : 75.92, 'position_oneStrip_E': 0.18, 'position_oneStripRMS': 78.11,
+                                    'position_oneStrip_StdDev': 82.71,
+                                    'position_twoStrip'  : 15.74, 'position_twoStrip_E': 0.08,
+                                    'efficiency_oneStrip': 0.51, 'efficiency_twoStrip' : 0.49},
+    "EIC_W1_1cm_500up_200uw_255V": {'position_oneStrip'  : 81.89, 'position_oneStrip_E': 0.08, 'position_oneStripRMS': 54.75,
+                                    'position_oneStrip_StdDev': 81.86,
+                                    'position_twoStrip'  : 18.49, 'position_twoStrip_E': 0.02,
+                                    'efficiency_oneStrip': 0.43, 'efficiency_twoStrip' : 0.57},
+    "EIC_W2_1cm_500up_100uw_220V": {'position_oneStrip'  : 66.03, 'position_oneStrip_E': 0.10, 'position_oneStripRMS': 27.84,
+                                    'position_oneStrip_StdDev': 68.89,
+                                    'position_twoStrip'  : 19.23, 'position_twoStrip_E': 0.02,
+                                    'efficiency_oneStrip': 0.23, 'efficiency_twoStrip' : 0.77},
+    "EIC_W1_2p5cm_500up_200uw_215V": {'position_oneStrip'  : 121.5, 'position_oneStrip_E': 0.10, 'position_oneStripRMS': 70.93,
+                                      'position_oneStrip_StdDev': 128.10,
+                                      'position_twoStrip'  : 31.32, 'position_twoStrip_E': 0.12,
+                                      'efficiency_oneStrip': 0.82, 'efficiency_twoStrip' : 0.18},
+    "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'position_oneStrip'  : 59.39, 'position_oneStrip_E': 0.08, 'position_oneStripRMS': 51.79,
+                                          'position_oneStrip_StdDev': 60.93,
+                                          'position_twoStrip'  : 11.76, 'position_twoStrip_E': 0.02,
+                                          'efficiency_oneStrip': 0.35, 'efficiency_twoStrip' : 0.65},
+    "HPK_Eb_1cm_80up_45uw": {'position_oneStrip'  : 11.91, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 13.83,
+                             'position_twoStrip'  :  9.36, 'position_twoStrip_E': 0.00,
+                             'efficiency_oneStrip': 0.50, 'efficiency_twoStrip' : 0.50},
+    "BNL2021_22_medium_150up_80uw_285V": {'position_oneStrip'  : 14.0, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 22.35,
+                                          'position_twoStrip'  : 8.01, 'position_twoStrip_E': 0.00,
+                                          'efficiency_oneStrip': 0.50, 'efficiency_twoStrip': 0.50},
+}
+
+resolutions2022OneStripChannel = {
+    "EIC_W2_1cm_500up_300uw_240V": {'resOneStrip': [-1.00, 81.75, 83.41, 83.40, 82.10, -1.00, -1.00], ## Std Dev
+                                  # 'resOneStrip': [-1.00, 75.61, 75.73, 77.48, 77.80, -1.00, -1.00], ## Sigma fit
+                                  # 'errOneStrip': [ 1.00, 00.47, 00.40, 00.39, 00.40,  1.00,  1.00}],## Sigma fit
+                                    'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]},
+    "EIC_W1_1cm_500up_200uw_255V": {'resOneStrip': [-1.00, 76.99, 81.69, 79.00, 82.88, 84.76, -1.00],
+                                    'errOneStrip': [ 1.00, 00.23, 00.19, 00.10, 00.15, 00.16,  1.00]},
+    "EIC_W2_1cm_500up_100uw_220V": {'resOneStrip': [-1.00, 66.17, 68.40, 66.86, 68.28, 72.04, -1.00], ## Std Dev
+                                  # 'resOneStrip': [-1.00, 59.17, 63.30, 61.23, 64.21, 69.26, -1.00], ## Sigma fit
+                                  # 'errOneStrip': [ 1.00, 00.32, 00.30, 00.20, 00.17,  0.19,  1.00]},## Sigma fit
+                                    'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]},
+    "EIC_W1_2p5cm_500up_200uw_215V": {'resOneStrip': [-1.00, 76.99, 81.69, 79.00, 82.88, 84.76, -1.00],
+                                      'errOneStrip': [ 1.00, 00.23, 00.19, 00.10, 00.15, 00.16,  1.00]},
+    "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'resOneStrip': [-1.00, 76.99, 81.69, 79.00, 82.88, 84.76, -1.00],
+                                          'errOneStrip': [ 1.00, 00.23, 00.19, 00.10, 00.15, 00.16,  1.00]},
+    "HPK_Eb_1cm_80up_45uw": {'resOneStrip': [-1.00, 76.99, 81.69, 79.00, 82.88, 84.76, -1.00],
+                             'errOneStrip': [ 1.00, 00.23, 00.19, 00.10, 00.15, 00.16,  1.00]},
+    "BNL2021_22_medium_150up_80uw_285V": {'resOneStrip': [-1.00, 76.99, 81.69, 79.00, 82.88, 84.76, -1.00],
+                                          'errOneStrip': [ 1.00, 00.23, 00.19, 00.10, 00.15, 00.16,  1.00]},
 }
 
