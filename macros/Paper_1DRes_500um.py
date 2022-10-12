@@ -35,7 +35,7 @@ def draw1D(h, n, legend, fmin=-1, fmax=1):
     subscript = "25-200" if "25-200" in myStyle.GetGeometry(sensor_list[n])["sensor"] else "10-200"
 
     # print("%.2f, %.2f, %.2f"%(fit.GetParameter(0),fit.GetParameter(1),fit.GetParameter(2)))
-    legend.AddEntry(h, "#splitline{%s}{#sigma_{%s} = %.2f [mm]}"%(myStyle.GetGeometry(sensor_list[n])["sensor"], subscript, fit.GetParameter(2)))
+    legend.AddEntry(h, "#splitline{%s}{#sigma_{%s} = %.2f mm}"%(myStyle.GetGeometry(sensor_list[n])["sensor"], subscript, fit.GetParameter(2)))
 
 
 # Construct the argument parser
@@ -61,8 +61,8 @@ TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
 
 hdummy = TH1D("","", 1,-20.0,20.0)
-hdummy.GetXaxis().SetTitle("Position y reconstructed - tracker [mm]")
-hdummy.GetYaxis().SetTitle("Counts / Maximum count")
+hdummy.GetXaxis().SetTitle("#Deltay (LGAD - telescope) [mm]")
+hdummy.GetYaxis().SetTitle("Entries [A.U.]")
 hdummy.SetMaximum(1.1)
 hdummy.SetMinimum(0.0001)
 hdummy.Draw("AXIS")
