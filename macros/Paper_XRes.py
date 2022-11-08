@@ -334,7 +334,6 @@ for i,box in enumerate(boxes):
 # Draw lines
 binary_readout_res_sensor.Draw("same")
 # binary_readout_res_strip.Draw("same")
-oneStripHist.Draw("P same")
 
 # weighted_hist.Draw("hist same")
 
@@ -346,6 +345,7 @@ oneStripHist.Draw("P same")
 
 gPad.RedrawAxis("g")
 
+oneStripHist.Draw("P same")
 hist_info_twoStrip.th1.Draw("hist e same")
 
 legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.095)
