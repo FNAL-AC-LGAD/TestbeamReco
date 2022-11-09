@@ -66,7 +66,8 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.8, -2.6}, {0.4, 7.4}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.0}, {1.7, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Was 4.8 instead of 4.6
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.7,0.95, -4.50,-3.75},{"cold", 0.7,0.95, 0.5,1.25},{"gap", 0.50,0.60,-1.5,0.375}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.7,0.95, -4.50,-3.75},{"cold", 0.7,0.95, 0.5,1.25},{"gap", 0.50,0.60,-1.5,0.375},
+                                                  {"hotspot", -1.7,1.7, -3.00,-1.50}};
 };
 
 class EIC1cmStripsGeometry : public DefaultGeometry
@@ -135,7 +136,8 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5},{"gap", 0.70,0.80, 0.5,2.5},
-                                                  {"hot_ySlice", -1.95,1.95, -1.5,-0.25}, {"cold_ySlice", -1.95,1.95, -4.15,-2.90}};
+                                                  {"hot_ySlice", -1.95,1.95, -1.5,-0.25}, {"cold_ySlice", -1.95,1.95, -4.15,-2.90},
+                                                  {"hotspot", -1.95,1.95, -1.50,-0.50}};
 };
 
 class EIC_W2_1cm_500um_400um_gap_StripsGeometry : public DefaultGeometry
@@ -199,7 +201,8 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-3.4, -2.0}, {0.6, 8.0}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.9, -5.0}, {1.9, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}};
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.85,1.10, -2.75,-2.00},{"cold", 0.85,1.10, 3.25,4.0},{"gap", 0.65,0.80, 1.0,2.25}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.85,1.10, -2.75,-2.00},{"cold", 0.85,1.10, 3.25,4.0},{"gap", 0.65,0.80, 1.0,2.25},
+                                                  {"hotspot", -1.9,1.9, -1.00,0.50}};
 };
 
 class EIC1cmStrips100Geometry : public DefaultGeometry

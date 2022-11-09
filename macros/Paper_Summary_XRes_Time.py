@@ -60,20 +60,13 @@ parser.add_option('-y','--ylength', dest='ylength', default = 160.0, help="Y axi
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
+parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 options, args = parser.parse_args()
 
 useShift = options.noShift
 dataset = options.Dataset
 outdir=""
 outdir = myStyle.getOutputDir(dataset)
-
-Analyze_infile = TFile("%s%s_Analyze.root"%(outdir,dataset))
-
-XRes_indir = myStyle.GetPlotsDir(outdir, "Paper_XRes/")
-XRes_infile = TFile("%sPlotXRes.root"%(XRes_indir))
-
-Time_indir = myStyle.GetPlotsDir(outdir, "Paper_TimeRes/")
-Time_infile = TFile("%stimeDiffVsX.root"%(Time_indir))
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
@@ -87,6 +80,15 @@ ylength = float(options.ylength)
 # ylength = 200.0
 # ylength = 80.0
 debugMode = options.debugMode
+pref_hotspot = "_hotspot" if (options.hotspot) else ""
+
+Analyze_infile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+
+XRes_indir = myStyle.GetPlotsDir(outdir, "Paper_XRes/")
+XRes_infile = TFile("%sPlotXRes%s.root"%(XRes_indir, pref_hotspot))
+
+Time_indir = myStyle.GetPlotsDir(outdir, "Paper_TimeRes/")
+Time_infile = TFile("%stimeDiffVsX%s.root"%(Time_indir, pref_hotspot))
 
 ### Draw canvas
 canvas = TCanvas("cv","cv",1000,800)
@@ -212,8 +214,8 @@ legend.Draw();
 myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset, myStyle.GetMargin())
 
-canvas.SaveAs("%sSummary_XRes_Time_vs_x_%s.gif"%(outdir,dataset))
-canvas.SaveAs("%sSummary_XRes_Time_vs_x_%s.pdf"%(outdir,dataset))
+canvas.SaveAs("%sSummary_XRes_Time_vs_x%s_%s.gif"%(outdir, pref_hotspot, dataset))
+canvas.SaveAs("%sSummary_XRes_Time_vs_x%s_%s.pdf"%(outdir, pref_hotspot, dataset))
 # hist_info_twoStrip.th1.Write()
 htemp.Delete()
 

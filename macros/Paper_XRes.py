@@ -60,6 +60,7 @@ parser.add_option('-y','--ylength', dest='ylength', default = 160.0, help="Y axi
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
+parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 options, args = parser.parse_args()
 
 useShift = options.noShift
@@ -80,12 +81,14 @@ ylength = float(options.ylength)
 # ylength = 160.0
 # ylength = 80.0
 debugMode = options.debugMode
+pref_hotspot = "_hotspot" if (options.hotspot) else ""
+
 
 all_histoInfos = [
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
+    HistoInfo("deltaX_vs_Xtrack_twoStrips%s"%pref_hotspot,   inputfile, "track_twoStrips%s"%pref_hotspot, True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
 ]
 
@@ -300,7 +303,7 @@ binary_readout_res_sensor.SetLineStyle(7)
 binary_readout_res_sensor.SetLineColor(colors[4]) #kGreen+2 #(TColor.GetColor(136,34,85))
 
 # Plot 2D histograms
-outputfile = TFile(outdir+"PlotXRes.root","RECREATE")
+outputfile = TFile("%sPlotXRes%s.root"%(outdir,pref_hotspot),"RECREATE")
 # for info in all_histoInfos:
 htemp = TH1F("htemp","",1,-xlength,xlength)
 htemp.SetStats(0)
@@ -373,8 +376,8 @@ legend.Draw();
 myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
-canvas.SaveAs(outdir+"PositionRes_vs_x.gif")
-canvas.SaveAs(outdir+"PositionRes_vs_x.pdf")
+canvas.SaveAs("%sPositionRes_vs_x%s.gif"%(outdir,pref_hotspot))
+canvas.SaveAs("%sPositionRes_vs_x%s.pdf"%(outdir,pref_hotspot))
 expected_res_vs_x.Write()
 hist_info_twoStrip.th1.Clone("h_twoStrip").Write()
 oneStripHist.Write()
