@@ -51,6 +51,7 @@ class HistoInfo:
         value = self.th2.GetXaxis().GetBinWidth(2)/2.
         if "1cm_500up_300uw" in sensor: value = 0.0
         elif "1cm_500up_100uw" in sensor: value = self.shift()
+        elif "0p5cm_500up_200uw_1_4" in sensor: value = -value
         # if sensor=="BNL2020": value = 0.0075
         return value
 

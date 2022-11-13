@@ -50,6 +50,7 @@ class HistoInfo:
         value = self.th2.GetXaxis().GetBinWidth(2)/2.
         if "1cm_500up_300uw" in sensor: value = 0.0
         elif "1cm_500up_100uw" in sensor: value = self.shift()
+        elif "0p5cm_500up_200uw_1_4" in sensor: value = -value
         # if sensor=="BNL2020": value = 0.0075
         return value
 
@@ -81,8 +82,8 @@ ylength = float(options.ylength)
 # ylength = 160.0
 # ylength = 80.0
 debugMode = options.debugMode
-pref_hotspot = "_hotspot" if (options.hotspot) else ""
-
+is_hotspot = options.hotspot
+pref_hotspot = "_hotspot" if (is_hotspot) else ""
 
 all_histoInfos = [
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
@@ -151,6 +152,9 @@ outdir = myStyle.GetPlotsDir(outdir, "Paper_XRes/")
 if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "q_res0/")
 
+if (is_hotspot):
+    input_fullSnsr = TFile("%sPlotXRes.root"%(outdir), "READ")
+    hist_twoStrip_fullSnsr = input_fullSnsr.Get("h_twoStrip")
 
 # oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
 oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
@@ -272,6 +276,10 @@ for i in range(0, nXBins+1):
         #     error = 0.0
         #     expected_res_vs_x.SetBinContent(i,-10)
 
+        if (is_hotspot and hist_twoStrip_fullSnsr.GetBinContent(i)<2.0):
+            value = -10.0
+            error = 0
+
         info.th1.SetBinContent(i,value)
         info.th1.SetBinError(i,error)
 
@@ -385,4 +393,4 @@ oneStripHist.Write()
 htemp.Delete()
 binary_readout_res_sensor.Write("l_sqrt12")
 outputfile.Close()
-
+if (is_hotspot): input_fullSnsr.Close()
