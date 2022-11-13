@@ -61,7 +61,7 @@ TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
 
 hdummy = TH1D("","", 1,-20.0,20.0)
-hdummy.GetXaxis().SetTitle("#Deltay (LGAD - telescope) [mm]")
+hdummy.GetXaxis().SetTitle("#Deltay (AC-LGAD - telescope) [mm]")
 hdummy.GetYaxis().SetTitle("Entries [A.U.]")
 hdummy.SetMaximum(1.1)
 hdummy.SetMinimum(0.0001)

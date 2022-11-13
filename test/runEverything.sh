@@ -262,9 +262,9 @@ python Paper_Summary_XRes_Time.py   -D EIC_W1_0p5cm_500up_200uw_1_4_245V -x 1.2 
 cd ../macros
 python Paper_ComparePosRecoFit_DiffLength.py
 python Paper_ComparePosRecoFit_DiffWidth.py
-python Paper_RelFracVsX_DiffLength.py
-python Paper_RelFracVsX_DiffWidth.py
-python Paper_resolution_vs_length.py
-python Paper_resolution_vs_width.py
+# python Paper_RelFracVsX_DiffLength.py
+# python Paper_RelFracVsX_DiffWidth.py
+# python Paper_resolution_vs_length.py
+# python Paper_resolution_vs_width.py
 python Paper_YRes.py
 python Paper_1DRes_500um.py
