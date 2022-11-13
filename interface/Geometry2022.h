@@ -700,7 +700,8 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -2.2}, {2.0, 2.2}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-1.9, -2.2}, {1.9, 2.2}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -2.0}, {stripCenterXPosition[lowGoodStripIndex], 2.0}};
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -0.15,0.1, 0.8,1.3},{"cold", -0.15,0.1, -1.8,-1.3},{"gap", -0.35,-0.2, -1.2,-0.37}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"hot", -0.15,0.1, 0.8,1.3},{"cold", -0.15,0.1, -1.8,-1.3},{"gap", -0.35,-0.2, -1.2,-0.37},
+                                                  {"hotspot", -1.9,1.9, -0.3,1.6}};
 };
 
 class BNL_500um_squares_Geometry : public DefaultGeometry
