@@ -21,13 +21,13 @@ python PlotRecoDiffVsXY.py  -D EIC_W2_1cm_500up_300uw_240V --zmin 0.0 --zmax 100
 python PlotRecoDiffVsX.py   -D EIC_W2_1cm_500up_300uw_240V --xlength 1.7 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W2_1cm_500up_300uw_240V -x 1.7
 python plot1DRes.py         -D EIC_W2_1cm_500up_300uw_240V
-python PlotRecoDiffVsY.py   -D EIC_W2_1cm_500up_300uw_240V --xlength 10.0 --ylength 3500.0
+python PlotRecoDiffVsY.py   -D EIC_W2_1cm_500up_300uw_240V --xlength 4.5 --ylength 4.0
 python PlotCutFlow.py       -D EIC_W2_1cm_500up_300uw_240V
 
 # Paper plots
 python Paper_1DRes.py       -D EIC_W2_1cm_500up_300uw_240V
-python Paper_XRes.py        -D EIC_W2_1cm_500up_300uw_240V -x 1.2
 python Paper_Efficiency.py  -D EIC_W2_1cm_500up_300uw_240V -x 1.2
+python Paper_XRes.py        -D EIC_W2_1cm_500up_300uw_240V -x 1.2
 
 
 ## EIC_W1_1cm_500up_200uw_255V
@@ -53,13 +53,13 @@ python PlotRecoDiffVsXY.py  -D EIC_W1_1cm_500up_200uw_255V --zmin 0.0 --zmax 100
 python PlotRecoDiffVsX.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 1.7 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 1.7
 python plot1DRes.py         -D EIC_W1_1cm_500up_200uw_255V
-python PlotRecoDiffVsY.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 10.0 --ylength 3500.0
+python PlotRecoDiffVsY.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 4.5 --ylength 4.0
 python PlotCutFlow.py       -D EIC_W1_1cm_500up_200uw_255V
 
 # Paper plots
 python Paper_1DRes.py       -D EIC_W1_1cm_500up_200uw_255V
-python Paper_XRes.py        -D EIC_W1_1cm_500up_200uw_255V -x 1.2
 python Paper_Efficiency.py  -D EIC_W1_1cm_500up_200uw_255V -x 1.2
+python Paper_XRes.py        -D EIC_W1_1cm_500up_200uw_255V -x 1.2
 
 
 ## EIC_W2_1cm_500up_100uw_220V
@@ -85,13 +85,13 @@ python PlotRecoDiffVsXY.py  -D EIC_W2_1cm_500up_100uw_220V --zmin 0.0 --zmax 100
 python PlotRecoDiffVsX.py   -D EIC_W2_1cm_500up_100uw_220V --xlength 1.7 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W2_1cm_500up_100uw_220V -x 1.7
 python plot1DRes.py         -D EIC_W2_1cm_500up_100uw_220V
-python PlotRecoDiffVsY.py   -D EIC_W2_1cm_500up_100uw_220V --xlength 10.0 --ylength 3500.0
+python PlotRecoDiffVsY.py   -D EIC_W2_1cm_500up_100uw_220V --xlength 4.5 --ylength 4.0
 python PlotCutFlow.py       -D EIC_W2_1cm_500up_100uw_220V
 
 # Paper plots
 python Paper_1DRes.py       -D EIC_W2_1cm_500up_100uw_220V
-python Paper_XRes.py        -D EIC_W2_1cm_500up_100uw_220V -x 1.2
 python Paper_Efficiency.py  -D EIC_W2_1cm_500up_100uw_220V -x 1.2
+python Paper_XRes.py        -D EIC_W2_1cm_500up_100uw_220V -x 1.2
 
 
 # ## MultiPitch
@@ -154,7 +154,7 @@ python PlotRecoDiffVsXY.py  -D EIC_W1_2p5cm_500up_200uw_215V --zmin 0.0 --zmax 1
 python PlotRecoDiffVsX.py   -D EIC_W1_2p5cm_500up_200uw_215V --xlength 1.7 --ylength 150.0
 python PlotEfficiency.py    -D EIC_W1_2p5cm_500up_200uw_215V -x 1.7
 python plot1DRes.py         -D EIC_W1_2p5cm_500up_200uw_215V
-python PlotRecoDiffVsY.py   -D EIC_W1_2p5cm_500up_200uw_215V --xlength 25.0 --ylength 10000.0
+python PlotRecoDiffVsY.py   -D EIC_W1_2p5cm_500up_200uw_215V --xlength 25.0 --ylength 10.0
 python PlotCutFlow.py       -D EIC_W1_2p5cm_500up_200uw_215V
 
 # Paper plots
@@ -240,3 +240,14 @@ python Paper_1DRes.py       -D EIC_W1_0p5cm_500up_200uw_1_4_245V
 # python PlotEfficiency.py    -D BNL2021_22_medium_150up_80uw_285V -x 0.8
 # python plot1DRes.py         -D BNL2021_22_medium_150up_80uw_285V
 
+
+## Paper 2022: Summary plots
+cd ../macros
+python Paper_ComparePosRecoFit_DiffLength.py
+python Paper_ComparePosRecoFit_DiffWidth.py
+python Paper_RelFracVsX_DiffLength.py
+python Paper_RelFracVsX_DiffWidth.py
+python Paper_resolution_vs_length.py
+python Paper_resolution_vs_width.py
+python Paper_YRes.py
+python Paper_1DRes_500um.py

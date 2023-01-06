@@ -8,6 +8,7 @@ import math
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
+colors = myStyle.GetColors(True)
 
 ## Defining Style
 myStyle.ForceStyle()
@@ -36,7 +37,8 @@ class HistoInfo:
         return th1_temp
 
     def shift(self):
-        return self.f.Get("stripBoxInfo03").GetMean(1)
+        # return self.f.Get("stripBoxInfo03").GetMean(1)
+        return 0
 
     def fine_tuning(self, sensor):
         value = 0.0
@@ -62,7 +64,7 @@ else:
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-length  = sensor_Geometry['length']*1000.0
+length  = sensor_Geometry['length'] #*1000.0
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
@@ -73,8 +75,9 @@ if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "q_resY0/")
 
 all_histoInfos = [
-    HistoInfo("deltaY_vs_Ytrack",   inputfile, "track", True,  ylength, "", "Track y position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaYBasic_vs_Ytrack",   inputfile, "trackBasic", True,  ylength, "", "Track y position [mm]","Position resolution [#mum]",sensor),
+    HistoInfo("deltaY_vs_Ytrack",   inputfile, "track", True,  ylength, "", "Track y position [mm]","Position resolution [mm]",sensor),
+    HistoInfo("deltaY_vs_Ytrack_1cm",   inputfile, "track_1cm", True,  ylength, "", "Track y position [mm]","Position resolution [mm]",sensor),
+    HistoInfo("deltaYBasic_vs_Ytrack",   inputfile, "trackBasic", True,  ylength, "", "Track y position [mm]","Position resolution [mm]",sensor),
     #HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
     #HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
     #HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
@@ -128,7 +131,7 @@ for i in range(0, nXBins+1):
         value = myRMS
         error = myRMSError
 
-        minEvtsCut = 0.5*totalEvents/nXBins
+        minEvtsCut = 0.3*totalEvents/nXBins
 
         if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
         #Do fit 
@@ -141,8 +144,8 @@ for i in range(0, nXBins+1):
                 myMPV = fit.GetParameter(1)
                 mySigma = fit.GetParameter(2)
                 mySigmaError = fit.GetParError(2)
-                value = 1000.0*mySigma
-                error = 1000.0*mySigmaError
+                value = mySigma #1000.0*mySigma
+                error = mySigmaError #1000.0*mySigmaError
             
                 ##For Debugging
                 if (debugMode):
@@ -150,9 +153,9 @@ for i in range(0, nXBins+1):
                     fit.Draw("same")
                     canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
                     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
-            else:
-                value *= 1000.0
-                error *= 1000.0
+            # else:
+            #     value *= 1000.0
+            #     error *= 1000.0
                 ##For Debugging
                 # if (debugMode):
                 #     tmpHist.Draw("hist")
@@ -160,7 +163,7 @@ for i in range(0, nXBins+1):
                 #     canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
                 #     print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution_rms: %.3f +/- %.3f"%(value, error))
         else:
-            value = 0.0
+            value = 3.0
             error = 0.0
 
             #if "track_twoStrips" in info.outHistoName:
@@ -194,20 +197,22 @@ for info in all_histoInfos:
     # info.th1.SetStats(0)
     # info.th1.SetMinimum(0.0001)
     # info.th1.SetMaximum(info.yMax)
-    info.th1.SetLineColor(kBlack)
+    # info.th1.SetLineColor(kBlack)
     # info.th1.SetTitle(info.title)
     # info.th1.GetXaxis().SetTitle(info.xlabel)
     # info.th1.GetXaxis().SetRangeUser(-0.32, 0.32)
     # info.th1.GetYaxis().SetTitle(info.ylabel)
+    info.th1.SetLineWidth(3)
+    info.th1.SetLineColor(colors[2])
     htemp.Draw("AXIS")
 
     ymin = info.th1.GetMinimum()
     ymax = info.yMax
 
     default_res = ROOT.TLine(-xlength,length/TMath.Sqrt(12),xlength,length/TMath.Sqrt(12))
-    default_res.SetLineWidth(4)
-    default_res.SetLineStyle(9)
-    default_res.SetLineColor(416+2) #kGreen+2 #(TColor.GetColor(136,34,85))
+    default_res.SetLineWidth(3)
+    default_res.SetLineStyle(7)
+    default_res.SetLineColor(colors[4])
     default_res.Draw("same")
 
     gPad.RedrawAxis("g")
@@ -217,24 +222,18 @@ for info in all_histoInfos:
     info.th1.Draw("hist e same")
 
 
-    legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.2,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.1)
+    legend = TLegend(myStyle.GetPadCenter()-0.27,1-myStyle.GetMargin()-0.24,myStyle.GetPadCenter()+0.27,1-myStyle.GetMargin()-0.02)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
-    # legend.SetTextFont(myStyle.GetFont())
-    # legend.SetTextSize(myStyle.GetSize())
-    #legend.SetFillStyle(0)
-    legend.AddEntry(default_res, "Binary readout","l")
-    legend.AddEntry(info.th1, "Two-strip reconstruction")
-
-    #if "track_twoStrips" in info.outHistoName:
-    #expected_res_vs_y.Draw("hist same")
-    #legend.AddEntry(expected_res_vs_y,"Expected resolution")
-    #expected_res_vs_y.Print("all")
-
+    legend.SetTextFont(myStyle.GetFont())
+    legend.SetTextSize(myStyle.GetSize()-4)
+    legend.SetFillStyle(0)
+    legend.AddEntry(default_res, "Length / #sqrt{12}","l")
+    legend.AddEntry(info.th1, "Two strip reconstruction","l")
 
     legend.Draw();
 
-    # myStyle.BeamInfo()
+    myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset)
 
     canvas.SaveAs(outdir+"PositionRes_vs_y_"+info.outHistoName+".gif")

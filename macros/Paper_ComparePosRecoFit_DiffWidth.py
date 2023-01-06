@@ -32,18 +32,8 @@ def getFitFunction(parameters, scale):
 outdir = myStyle.getOutputDir("Paper2022")
 
 colors = myStyle.GetColors(True)
-# colors = [ROOT.kRed, ROOT.kRed, ROOT.kGreen, ROOT.kGreen, ROOT.kBlue, ROOT.kBlue, ROOT.kMagenta, ROOT.kMagenta,]
 
 sensor_list = ["EIC_W2_1cm_500up_300uw_240V", "EIC_W1_1cm_500up_200uw_255V", "EIC_W2_1cm_500up_100uw_220V"]
-
-# sensor_reco = { "EIC_W2_1cm_500um_200um_gap_240V": {'recomax': 0.72, 'xmax': 0.74, 'recoPars':[0.250000, -0.654507, 8.251580, -118.137841, 684.216545, -1407.697202]},
-#                 # "EIC_W1_1cm_255V": {'recomax': 0.77, 'xmax': 0.81, 'recoPars':[0.250000, -0.414954, -3.861040, 37.128136, -141.558350, 162.643997]},
-#                 "EIC_W1_1cm_255V": {'recomax': 0.77, 'xmax': 0.81, 'recoPars':[0.250000, -0.483075, -1.464649, 9.779935, -18.860555, -22.898713]},
-#                 "EIC_W2_1cm_500um_400um_gap_220V": {'recomax': 0.81, 'xmax': 0.82, 'recoPars':[0.250000, -0.615442, -0.768993, 5.082484, -12.892653]},}
-
-# sensor_reco = { "EIC_W2_1cm_500up_300uw_240V": {'recomax': 0.72, 'xmax': 0.74, 'recoPars':[0.250000, -0.643829, 8.150092, -117.089379, 675.759294, -1385.358876]},
-#                 "EIC_W1_1cm_500up_200uw_255V": {'recomax': 0.77, 'xmax': 0.81, 'recoPars':[0.250000, -0.483075, -1.464649, 9.779935, -18.860555, -22.898713]},
-#                 "EIC_W2_1cm_500up_100uw_220V": {'recomax': 0.80, 'xmax': 0.82, 'recoPars':[0.250000, -0.626581, -0.615199, 4.293562, -11.496421]},}
 
 sensor_reco = { "EIC_W2_1cm_500up_300uw_240V": {'recomax': 0.73, 'xmax': 0.74, 'recoPars':[0.250000, -0.690040, 8.748832, -118.315282, 659.636900, -1321.795166]},
                 "EIC_W1_1cm_500up_200uw_255V": {'recomax': 0.77, 'xmax': 0.79, 'recoPars':[0.250000, -0.592554, 1.695367, -24.201246, 132.757266, -259.853428]},
@@ -84,14 +74,6 @@ right_axis.SetTitleFont(myStyle.GetFont())
 # right_axis.SetLineColor(ROOT.kRed)
 right_axis.Draw()
 
-# for i,item in enumerate(sensor_list):
-#     sensor_Geometry = myStyle.GetGeometry(item)
-#     width = sensor_Geometry['stripWidth']
-#     boxes = stripBox.getStripBoxForRecoFit(width, pitch, ymax, xmax, xmin)
-#     for box in boxes:
-#         box.SetFillColorAlpha(colors[2*i],0.3)
-#         box.DrawClone("same")
-
 boxes = stripBox.getStripBoxForRecoFit(300, pitch, ymax, xmax, xmin)
 for box in boxes:
         box.DrawClone("same")
@@ -107,7 +89,6 @@ for i,item in enumerate(sensor_list):
 
 temp_hist.Draw("same axis")
 
-# legend = TLegend(1-myStyle.GetMargin()-0.55,1-myStyle.GetMargin()-0.2,1-myStyle.GetMargin()-0.05,1-myStyle.GetMargin()-0.02)
 legend = TLegend(1-myStyle.GetMargin()-0.35,1-myStyle.GetMargin()-0.25,1-myStyle.GetMargin()-0.03,1-myStyle.GetMargin()-0.05)
 legend.SetBorderSize(0)
 legend.SetFillColor(ROOT.kWhite)
@@ -148,7 +129,6 @@ TopRightText.DrawLatexNDC(1-2*myStyle.GetMargin()-0.005,1-myStyle.GetMargin()+0.
 
 canvas.SaveAs(outdir+"ComparePosRecoFit_DiffWidth.gif")
 canvas.SaveAs(outdir+"ComparePosRecoFit_DiffWidth.pdf")
-# Amp1OverAmp1and2_vs_deltaXmax_profile.Write()
-# fit.Write()
+
 outputfile.Close()
 
