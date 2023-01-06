@@ -66,6 +66,7 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-2.8, -2.6}, {0.4, 7.4}}; // Lab-Tracker's frame after rotation
     std::vector<std::vector<double>> sensorEdges = {{-1.7, -5.0}, {1.7, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Was 4.8 instead of 4.6
+    //std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.65,0.85, -4.50,-3.75},{"cold", 0.65,0.85, 0.5,1.25},{"gap", 0.45,0.55,-1.5,0.375}};
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.7,0.95, -4.50,-3.75},{"cold", 0.7,0.95, 0.5,1.25},{"gap", 0.50,0.60,-1.5,0.375},
                                                   {"hotspot", -1.7,1.7, -3.00,-1.50}};
 };
