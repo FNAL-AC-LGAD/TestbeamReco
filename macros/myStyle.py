@@ -96,7 +96,7 @@ def SensorInfo(sensor="Name", bias_voltage="", write_bv=True,adjustleft=0):
     else:
         text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor)+"}")
 
-def SensorInfoSmart(dataset,MoveLeft=0.0):
+def SensorInfoSmart(dataset, adjust=0.00):
     name ="Not defined"
     bias_voltage = "X"
 
@@ -104,7 +104,7 @@ def SensorInfoSmart(dataset,MoveLeft=0.0):
         name = GetGeometry(dataset)['sensor']
         bias_voltage = GetBV(dataset)
 
-    SensorInfo(name,bias_voltage,True,MoveLeft)
+    SensorInfo(name,bias_voltage,True,adjust)
 
 
 ### Return-value functions

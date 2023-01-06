@@ -50,16 +50,18 @@ class HistoInfo:
         value = self.th2.GetXaxis().GetBinWidth(2)/2.
         if "1cm_500up_300uw" in sensor: value = 0.0
         elif "1cm_500up_100uw" in sensor: value = self.shift()
+        elif "0p5cm_500up_200uw_1_4" in sensor: value = -value
         # if sensor=="BNL2020": value = 0.0075
         return value
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 1.7, help="X axis range [-x, x]")
-# parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Y axis upper limit")
+parser.add_option('-y','--ylength', dest='ylength', default = 160.0, help="Y axis upper limit")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
+parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 options, args = parser.parse_args()
 
 useShift = options.noShift
@@ -76,15 +78,18 @@ strip_width  = sensor_Geometry['stripWidth']
 strip_length  = sensor_Geometry['length']
 
 xlength = float(options.xlength)
-# ylength = 200.0
-ylength = 160.0
+ylength = float(options.ylength)
+# ylength = 160.0
+# ylength = 80.0
 debugMode = options.debugMode
+is_hotspot = options.hotspot
+pref_hotspot = "_hotspot" if (is_hotspot) else ""
 
 all_histoInfos = [
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
+    HistoInfo("deltaX_vs_Xtrack_twoStrips%s"%pref_hotspot,   inputfile, "track_twoStrips%s"%pref_hotspot, True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
 ]
 
@@ -129,10 +134,10 @@ for ibin in range(expected_res_vs_x.GetNbinsX()+1):
     #print("Bin %i, res %0.2f"%(ibin,expected_res))
     expected_res_vs_x.SetBinContent(ibin,expected_res)
 
-### Get Efficiency for weighted average curve
-in_efficiency = TFile("%sPaper_Eff/EfficiencyPlots.root"%(outdir), "READ")
-eff_OneStrip = in_efficiency.Get("efficiency_vs_x_oneStrip_coarseBins") # Remember that these Eff plots have the double of bins in x!!
-eff_TwoStrip = in_efficiency.Get("efficiency_vs_x_twoStrip_coarseBins")
+# ### Get Efficiency for weighted average curve
+# in_efficiency = TFile("%sPaper_Eff/EfficiencyPlots.root"%(outdir), "READ")
+# eff_OneStrip = in_efficiency.Get("efficiency_vs_x_oneStrip_coarseBins") # Remember that these Eff plots have the double of bins in x!!
+# eff_TwoStrip = in_efficiency.Get("efficiency_vs_x_twoStrip_coarseBins")
 
 ### Draw canvas
 canvas = TCanvas("cv","cv",1000,800)
@@ -147,23 +152,22 @@ outdir = myStyle.GetPlotsDir(outdir, "Paper_XRes/")
 if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "q_res0/")
 
+if (is_hotspot):
+    input_fullSnsr = TFile("%sPlotXRes.root"%(outdir), "READ")
+    hist_twoStrip_fullSnsr = input_fullSnsr.Get("h_twoStrip")
 
 # oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
 oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
-# oneStripHist = hist_info_twoStrip.th1.Clone("oneStripRes")
-# oneStripHist.SetLineWidth(3)
-# # oneStripHist.SetLineStyle(1)
-# oneStripHist.SetLineColor(colors[0])
 
 max_strip_edge = hist_info_twoStrip.f.Get("stripBoxInfo01").GetMean(1) + strip_width/2000.
 if useShift: max_strip_edge -= hist_info_twoStrip.shift()
 
-### Create Weighted Average histogram
-weighted_hist = ROOT.TH1F("Weighted_average","",nbinsx,low_x,high_x)
+# ### Create Weighted Average histogram
+# weighted_hist = ROOT.TH1F("Weighted_average","",nbinsx,low_x,high_x)
 
-weighted_hist.SetLineWidth(3)
-# weighted_hist.SetLineStyle(1)
-weighted_hist.SetLineColor(colors[1])
+# weighted_hist.SetLineWidth(3)
+# # weighted_hist.SetLineStyle(1)
+# weighted_hist.SetLineColor(colors[1])
 
 nXBins = hist_info_twoStrip.th2.GetXaxis().GetNbins()
 
@@ -171,17 +175,22 @@ nXBins = hist_info_twoStrip.th2.GetXaxis().GetNbins()
 this_shift = hist_info_twoStrip.shift() if useShift else 0
 boxes = getStripBox(inputfile,0.0,hist_info_twoStrip.yMax,False,18,True,this_shift)
 
-oneStripBins = [-1.00, -0.50, 0.00, 0.50, 1.00] if strip_width==300 else [-1.25, -0.75, -0.25, 0.25, 0.75, 1.25]
-oneStripHist = TH1F("oneStripRes","", len(oneStripBins)-1, array('f',oneStripBins))
-oneStripHist.SetLineWidth(3)
-# oneStripHist.SetLineStyle(1)
-oneStripHist.SetLineColor(colors[0])
+# oneStripBins = [-1.00, -0.50, 0.00, 0.50, 1.00] if strip_width!=300 else [-1.25, -0.75, -0.25, 0.25, 0.75, 1.25]
+oneStripBins = [-0.75, -0.25, 0.25, 0.75] if strip_width==300 else [-1.00, -0.50, 0.00, 0.50, 1.00]
+oneStripValues = []
 
+# print("N boxes = %i"%len(boxes))
 for i,box in enumerate(boxes):
     if (i!=0 and i!=(len(boxes)-1)):
-        xl = box.GetX1()
-        xr = box.GetX2()
-        oneStripHist.Fill(xl, oneStripResValue_list[i])
+        oneStripValues.append(oneStripResValue_list[i])
+
+oneStripHist = ROOT.TGraph(len(oneStripBins), array('f',oneStripBins), array('f',oneStripValues))
+oneStripHist.SetName("h_oneStrip")
+# oneStripHist.SetLineWidth(3)
+# oneStripHist.SetLineStyle(1)
+oneStripHist.SetMarkerStyle(33)
+oneStripHist.SetMarkerSize(3)
+oneStripHist.SetMarkerColor(colors[0])
 
 #loop over X bins
 for i in range(0, nXBins+1):
@@ -267,28 +276,32 @@ for i in range(0, nXBins+1):
         #     error = 0.0
         #     expected_res_vs_x.SetBinContent(i,-10)
 
+        if (is_hotspot and hist_twoStrip_fullSnsr.GetBinContent(i)<2.0):
+            value = -10.0
+            error = 0
+
         info.th1.SetBinContent(i,value)
         info.th1.SetBinError(i,error)
 
-        ### Fill WeightedAverage
-        x_value = info.th1.GetBinCenter(i)
+        # ### Fill WeightedAverage
+        # x_value = info.th1.GetBinCenter(i)
 
-        eff_OneStrip_value = eff_OneStrip.GetBinContent(i)
-        eff_TwoStrip_value = eff_TwoStrip.GetBinContent(i)
+        # eff_OneStrip_value = eff_OneStrip.GetBinContent(i)
+        # eff_TwoStrip_value = eff_TwoStrip.GetBinContent(i)
 
-        res_OneStrip_value = oneStripHist.GetBinContent(oneStripHist.FindBin(x_value))
-        res_TwoStrip_value = value
+        # res_OneStrip_value = oneStripHist.GetBinContent(oneStripHist.FindBin(x_value))
+        # res_TwoStrip_value = value
 
-        weighted_value = TMath.Sqrt(res_OneStrip_value*res_OneStrip_value*eff_OneStrip_value + res_TwoStrip_value*res_TwoStrip_value*eff_TwoStrip_value)
+        # weighted_value = TMath.Sqrt(res_OneStrip_value*res_OneStrip_value*eff_OneStrip_value + res_TwoStrip_value*res_TwoStrip_value*eff_TwoStrip_value)
 
-        if res_TwoStrip_value<5.0:
-            weighted_value = res_OneStrip_value #*eff_OneStrip_value
+        # if res_TwoStrip_value<5.0:
+        #     weighted_value = res_OneStrip_value #*eff_OneStrip_value
 
-        # Remove unwanted bins outside the expected curve
-        if expected_res_vs_x.GetBinContent(i)<0:
-            weighted_value = 0.0
+        # # Remove unwanted bins outside the expected curve
+        # if expected_res_vs_x.GetBinContent(i)<0:
+        #     weighted_value = 0.0
 
-        weighted_hist.SetBinContent(i, weighted_value)
+        # weighted_hist.SetBinContent(i, weighted_value)
 
 # Get lines with binary readout in the sensor, binary readout in the strip, and oneStripReco
 
@@ -298,7 +311,7 @@ binary_readout_res_sensor.SetLineStyle(7)
 binary_readout_res_sensor.SetLineColor(colors[4]) #kGreen+2 #(TColor.GetColor(136,34,85))
 
 # Plot 2D histograms
-outputfile = TFile(outdir+"PlotXRes.root","RECREATE")
+outputfile = TFile("%sPlotXRes%s.root"%(outdir,pref_hotspot),"RECREATE")
 # for info in all_histoInfos:
 htemp = TH1F("htemp","",1,-xlength,xlength)
 htemp.SetStats(0)
@@ -332,9 +345,8 @@ for i,box in enumerate(boxes):
 # Draw lines
 binary_readout_res_sensor.Draw("same")
 # binary_readout_res_strip.Draw("same")
-# oneStripHist.Draw("hist same")
 
-weighted_hist.Draw("hist same")
+# weighted_hist.Draw("hist same")
 
 # tracker_res = ROOT.TLine(-xlength,5.,xlength,5.)
 # tracker_res.SetLineWidth(4)
@@ -344,6 +356,7 @@ weighted_hist.Draw("hist same")
 
 gPad.RedrawAxis("g")
 
+oneStripHist.Draw("P same")
 hist_info_twoStrip.th1.Draw("hist e same")
 
 legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.095)
@@ -355,7 +368,7 @@ legend.SetTextSize(myStyle.GetSize()-4)
 
 legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
 # legend.AddEntry(binary_readout_res_strip_4legend[0], "Width / #sqrt{12}","l")
-# legend.AddEntry(oneStripHist, "Exactly one strip observed","l")
+legend.AddEntry(oneStripHist, "Exactly one strip observed","P")
 # legend.AddEntry(tracker_res, "Tracker resolution","l")
 
 if ('twoStrips' in info.outHistoName):
@@ -363,7 +376,7 @@ if ('twoStrips' in info.outHistoName):
     legend.AddEntry(expected_res_vs_x,"Two strip expected","l")
     legend.AddEntry(hist_info_twoStrip.th1, "Two strip observed","l")
 
-legend.AddEntry(weighted_hist, "Effective resolution","l")
+# legend.AddEntry(weighted_hist, "Effective resolution","l")
     
 htemp.Draw("AXIS same")
 legend.Draw();
@@ -371,10 +384,13 @@ legend.Draw();
 myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
-canvas.SaveAs(outdir+"PositionRes_vs_x.gif")
-canvas.SaveAs(outdir+"PositionRes_vs_x.pdf")
-hist_info_twoStrip.th1.Write()
+canvas.SaveAs("%sPositionRes_vs_x%s.gif"%(outdir,pref_hotspot))
+canvas.SaveAs("%sPositionRes_vs_x%s.pdf"%(outdir,pref_hotspot))
+expected_res_vs_x.Write()
+hist_info_twoStrip.th1.Clone("h_twoStrip").Write()
+oneStripHist.Write()
+
 htemp.Delete()
-
+binary_readout_res_sensor.Write("l_sqrt12")
 outputfile.Close()
-
+if (is_hotspot): input_fullSnsr.Close()
