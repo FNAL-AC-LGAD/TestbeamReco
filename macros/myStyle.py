@@ -138,8 +138,8 @@ def GetColors(color_blind = False):
 ### Names and strings
 def GetGeometry(name):
     sensor_dict = {}
-    if sensorsGeom2022[RemoveBV(name)]:
-        sensor_dict = sensorsGeom2022[RemoveBV(name)]
+    if sensorsGeom2023[RemoveBV(name)]:
+        sensor_dict = sensorsGeom2023[RemoveBV(name)]
     else:
         print("Sensor not found")
     return sensor_dict
@@ -226,4 +226,11 @@ resolutions2022OneStripChannel = {
     "BNL2021_22_medium_150up_80uw_285V": {'resOneStrip': [-1.00, 76.99, 81.69, 79.00, 82.88, 84.76, -1.00],
                                           'errOneStrip': [ 1.00, 00.23, 00.19, 00.10, 00.15, 00.16,  1.00]},
 }
+
+### Sensors' information dictionaries
+sensorsGeom2023 = { "BNL_50um_1cm_450um_W3051_2_2": {'sensor': "BNL_50um_1cm_450um_W3051", 'pitch': 500, 'stripWidth': 50, "BV": 170, "length": 10.0},
+                    "BNL_50um_1cm_450um_W3052_2_4": {'sensor': "BNL_50um_1cm_450um_W3052", 'pitch': 500, 'stripWidth': 50, "BV": 185, "length": 10.0},
+                    "BNL_20um_1cm_400um_W3074_1_4": {'sensor': "BNL_20um_1cm_400um_W3074", 'pitch': 500, 'stripWidth': 100, "BV": 95, "length": 10.0},
+}
+
 

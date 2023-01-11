@@ -121,7 +121,7 @@ for channel in range(0, len(list_amplitude_vs_xy)):
 
     canvas.SetRightMargin(0.18)
     canvas.SetLeftMargin(0.12)
-
+    myStyle.SensorInfoSmart(dataset,2.0*myStyle.GetMargin())
     name = "Amplitude_vs_xy_channel"+str(channel) if channel != (len(list_amplitude_vs_xy)-1) else "Amplitude_vs_xy"
     canvas.SaveAs(outdir+name+".gif")
     canvas.SaveAs(outdir+name+".pdf")
