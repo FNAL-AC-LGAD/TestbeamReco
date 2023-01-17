@@ -229,8 +229,14 @@ resolutions2022OneStripChannel = {
 
 ### Sensors' information dictionaries
 sensorsGeom2023 = { "BNL_50um_1cm_450um_W3051_2_2": {'sensor': "BNL_50um_1cm_450um_W3051", 'pitch': 500, 'stripWidth': 50, "BV": 170, "length": 10.0},
+                    "BNL_50um_1cm_400um_W3051_1_4": {'sensor': "BNL_50um_1cm_400um_W3051", 'pitch': 500, 'stripWidth': 100, "BV": 160, "length": 10.0},
                     "BNL_50um_1cm_450um_W3052_2_4": {'sensor': "BNL_50um_1cm_450um_W3052", 'pitch': 500, 'stripWidth': 50, "BV": 185, "length": 10.0},
                     "BNL_20um_1cm_400um_W3074_1_4": {'sensor': "BNL_20um_1cm_400um_W3074", 'pitch': 500, 'stripWidth': 100, "BV": 95, "length": 10.0},
+                    "BNL_20um_1cm_400um_W3075_1_2": {'sensor': "BNL_20um_1cm_400um_W3075", 'pitch': 500, 'stripWidth': 100, "BV": 80, "length": 10.0},
+                    "BNL_20um_1cm_450um_W3074_2_1": {'sensor': "BNL_20um_1cm_450um_W3074", 'pitch': 500, 'stripWidth': 50, "BV": 95, "length": 10.0},
+                    "BNL_20um_1cm_450um_W3075_2_4": {'sensor': "BNL_20um_1cm_450um_W3075", 'pitch': 500, 'stripWidth': 50, "BV": 80, "length": 10.0},
+                    "BNL_50um_2.5cm_mixConfig1_W3051_1_4": {'sensor': "BNL_50um_2.5cm_mixConfig1_W3051", 'pitch': 500, 'stripWidth': 100, "BV": 170, "length": 10.0},
+                    "BNL_50um_2.5cm_mixConfig2_W3051_1_4": {'sensor': "BNL_50um_2.5cm_mixConfig2_W3051", 'pitch': 500, 'stripWidth': 50, "BV": 170, "length": 10.0},
 }
 
 
