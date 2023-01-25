@@ -6,6 +6,7 @@
 #include "TestbeamReco/interface/Utility.h"
 #include "TestbeamReco/interface/Analyze.h"
 #include "TestbeamReco/interface/Align.h"
+#include "TestbeamReco/interface/AnalyzeCFD.h"
 #include "TestbeamReco/interface/InitialAnalyzer.h"
 #include "TestbeamReco/interface/RecoAnalyzer.h"
 #include "Config.h"
@@ -165,6 +166,7 @@ int main(int argc, char *argv[])
     std::vector<std::pair<std::string, std::function<void(const std::set<AnaSamples::FileSummary>&,const int,const int,const int,TFile* const,const std::string&,const std::string&)>>> AnalyzerPairVec = {
         {"Analyze",             run<Analyze>},
         {"Align",               run<Align>},
+        {"AnalyzeCFD",          run<AnalyzeCFD>},
         {"InitialAnalyzer",     run<InitialAnalyzer>},
         {"RecoAnalyzer",        run<RecoAnalyzer>},
         {"MakeNNVariables",     run<MakeNNVariables>},

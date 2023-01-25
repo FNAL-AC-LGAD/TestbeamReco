@@ -208,8 +208,10 @@ private:
         // Correct the time variable
         const auto& CFD_threshold = tr.getVar<int>("CFD_threshold");
         const auto& LP2 = tr.getVec<float>(Form("LP2_%i",CFD_threshold));
+        const auto& LP2_30mV = tr.getVec<float>("LP2_30mV");
         const auto& timeCalibrationCorrection = tr.getVar<std::map<int,double>>("timeCalibrationCorrection");
         auto& corrTime = tr.createDerivedVec<double>("corrTime");
+        auto& corrTime_30mV = tr.createDerivedVec<double>("corrTime_30mV");
         auto& corrTimeTracker = tr.createDerivedVec<double>("corrTimeTracker");
     
         const auto& CFD_list = tr.getVar<std::vector<std::string>>("CFD_list");
@@ -240,7 +242,16 @@ private:
             counter++;
         }
 
+        counter = 0;
+        for(auto thisTime : LP2_30mV)
+        {
+            auto corr = (thisTime == 0.0) ? 0.0 : timeCalibrationCorrection.at(counter);
+            corrTime_30mV.emplace_back(1e9*(thisTime) + corr);
+            counter++;
+        }
+
         utility::remapToLGADgeometry(tr, corrTime, "timeLGAD");
+        utility::remapToLGADgeometry(tr, corrTime_30mV, "timeLGAD_30mV");
         utility::remapToLGADgeometry(tr, corrTimeTracker, "timeLGADTracker");
         int icfd =0;
         for(auto* corrTimeEachCFD: v_corrTime_allCFD )
