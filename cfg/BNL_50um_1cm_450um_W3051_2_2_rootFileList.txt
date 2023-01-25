@@ -23,4 +23,3 @@ root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoD
 root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run62264_info.root
 root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run62265_info.root
 root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run62266_info.root
-
