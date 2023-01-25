@@ -1,0 +1,10 @@
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64382_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64383_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64384_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64385_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64386_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64387_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64388_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64389_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64390_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64391_info.root

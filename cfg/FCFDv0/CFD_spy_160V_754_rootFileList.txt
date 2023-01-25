@@ -1,0 +1,15 @@
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64331_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64332_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64333_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64335_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64336_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64337_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64338_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64339_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64340_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64341_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64342_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64343_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64344_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64345_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/SensorBeam2023/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v12/run64346_info.root
