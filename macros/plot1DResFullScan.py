@@ -27,14 +27,16 @@ from AlignBinning import z_values, alpha_values, beta_values, gamma_values
 outdir = os.path.join(outdir,"Scan0/")
 
 if not os.path.exists(outdir):
-        print(outdir)
-        os.mkdir(outdir)
+    print(outdir)
+    os.mkdir(outdir)
 else:
-        i = 1
-        while(os.path.exists(outdir)):
-                outdir = outdir[0:-2] + str(i) + outdir[-1]
-                i+=1
-        os.mkdir(outdir)
+    while(os.path.exists(outdir)):
+        tmp_list = outdir.split("Scan") # "<path>/ScanNN/" -> ["<path>/", "NN/"]
+        prevpath = tmp_list[0] # "<path>/"
+        num = int(tmp_list[1][0:-1]) # "NN/" -> "NN"
+        outdir = prevpath + "Scan" + str(num+1) + "/" # "<path>/ScanNN+1/"
+    print(outdir)
+    os.mkdir(outdir)
 
 if not no_copy_binning: os.system("cp AlignBinning.py %s"%outdir)
 
@@ -102,7 +104,7 @@ def createTGraph(f, out, var_values, var):
 
         c = ROOT.TCanvas("c","c",1000,600)
 
-        fit_limits = {
+        fit_limits = { # [fitX_min, fitX_max, guess_par1, guess_par2, guess_par3]
                 "Z": [var_values[0], var_values[-1], -99, -99, -99],
                 "A": [var_values[0], var_values[-1], 30, -99, -99],
                 "B": [var_values[0], var_values[-1], -99, -99, -99],
@@ -152,14 +154,14 @@ def createTGraph(f, out, var_values, var):
         out.Write()
 
         c.SaveAs(outdir+"Scan_"+var+".gif")
-        c.SaveAs(outdir+"Scan_"+var+".pdf")
+        # c.SaveAs(outdir+"Scan_"+var+".pdf")
 
         # resolution_vs_var.GetYaxis().SetRangeUser(5.1, 20.9)
         resolution_vs_var.GetYaxis().SetRangeUser(10.1, 39.9)
         # resolution_vs_var.GetYaxis().SetRangeUser(20.1, 79.9)
         # resolution_vs_var.GetYaxis().SetRangeUser(15.1, 24.9)
         c.SaveAs(outdir+"Scan_"+var+"_fixY.gif")
-        c.SaveAs(outdir+"Scan_"+var+"_fixY.pdf")
+        # c.SaveAs(outdir+"Scan_"+var+"_fixY.pdf")
 
 
 createTGraph(inputfile, outputfile, z_values,       "Z")
