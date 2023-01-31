@@ -158,7 +158,8 @@ def GetBV(name):
         return ""
 
 
-### Sensors' information dictionaries
+### 2022 Sensors' information dictionaries
+# Dataset_name: {'sensor': <name>, 'pitch': [micron], 'stripWidth': [micron], "BV": [V], "length": [mm]},
 sensorsGeom2022 = { "EIC_W2_1cm_500up_300uw": {'sensor': "BNL 10-300", 'pitch': 500, 'stripWidth': 300, "BV": 240, "length": 10.0},
                     "EIC_W1_1cm_500up_200uw": {'sensor': "BNL 10-200", 'pitch': 500, 'stripWidth': 200, "BV": 255, "length": 10.0},
                     "EIC_W2_1cm_500up_100uw": {'sensor': "BNL 10-100", 'pitch': 500, 'stripWidth': 100, "BV": 220, "length": 10.0},
@@ -227,7 +228,8 @@ resolutions2022OneStripChannel = {
                                           'errOneStrip': [ 1.00, 00.23, 00.19, 00.10, 00.15, 00.16,  1.00]},
 }
 
-### Sensors' information dictionaries
+### 2023 Sensors' information dictionaries
+# Dataset_name: {'sensor': <name>, 'pitch': [micron], 'stripWidth': [micron], "BV": [V], "length": [mm]},
 sensorsGeom2023 = { "BNL_50um_1cm_450um_W3051_2_2": {'sensor': "BNL_50um_1cm_450um_W3051", 'pitch': 500, 'stripWidth': 50, "BV": 170, "length": 10.0},
                     "BNL_50um_1cm_400um_W3051_1_4": {'sensor': "BNL_50um_1cm_400um_W3051", 'pitch': 500, 'stripWidth': 100, "BV": 160, "length": 10.0},
                     "BNL_50um_1cm_450um_W3052_2_4": {'sensor': "BNL_50um_1cm_450um_W3052", 'pitch': 500, 'stripWidth': 50, "BV": 185, "length": 10.0},
@@ -235,8 +237,71 @@ sensorsGeom2023 = { "BNL_50um_1cm_450um_W3051_2_2": {'sensor': "BNL_50um_1cm_450
                     "BNL_20um_1cm_400um_W3075_1_2": {'sensor': "BNL_20um_1cm_400um_W3075", 'pitch': 500, 'stripWidth': 100, "BV": 80, "length": 10.0},
                     "BNL_20um_1cm_450um_W3074_2_1": {'sensor': "BNL_20um_1cm_450um_W3074", 'pitch': 500, 'stripWidth': 50, "BV": 95, "length": 10.0},
                     "BNL_20um_1cm_450um_W3075_2_4": {'sensor': "BNL_20um_1cm_450um_W3075", 'pitch': 500, 'stripWidth': 50, "BV": 80, "length": 10.0},
-                    "BNL_50um_2p5cm_mixConfig1_W3051_1_4": {'sensor': "BNL_50um_2p5cm_mixConfig1_W3051", 'pitch': 500, 'stripWidth': 100, "BV": 170, "length": 10.0},
-                    "BNL_50um_2p5cm_mixConfig2_W3051_1_4": {'sensor': "BNL_50um_2p5cm_mixConfig2_W3051", 'pitch': 500, 'stripWidth': 50, "BV": 170, "length": 10.0},
+                    "BNL_50um_2p5cm_mixConfig1_W3051_1_4": {'sensor': "BNL_50um_2p5cm_mixConfig1_W3051", 'pitch': 500, 'stripWidth': 100, "BV": 170, "length": 25.0},
+                    "BNL_50um_2p5cm_mixConfig2_W3051_1_4": {'sensor': "BNL_50um_2p5cm_mixConfig2_W3051", 'pitch': 500, 'stripWidth': 50, "BV": 170, "length": 25.0},
+}
+
+# NEED TO BE UPDATED! ONLY PLACEHOLDERS TO MAKE PAPER_PLOTS MACROS RUN
+# 'position_oneStrip': Std Dev from fit, 'position_oneStrip_E': Statistical error from fit, 'position_oneStripRMS': RMS WITH OnMetal cut,
+# 'position_oneStrip_StdDev': RMS WITHOUT OnMetal cut (This is the value used in the paper)
+resolutions2023 = {
+    "BNL_50um_1cm_450um_W3051_2_2_170V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "BNL_50um_1cm_400um_W3051_1_4_160V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "BNL_50um_1cm_450um_W3052_2_4_185V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "BNL_20um_1cm_400um_W3074_1_4_95V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "BNL_20um_1cm_400um_W3075_1_2_80V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "BNL_20um_1cm_450um_W3074_2_1_95V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "BNL_20um_1cm_450um_W3075_2_4_80V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+}
+
+resolutions2023OneStripChannel = {
+"BNL_50um_1cm_450um_W3051_2_2_170V": {  'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"BNL_50um_1cm_400um_W3051_1_4_160V": {  'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"BNL_50um_1cm_450um_W3052_2_4_185V": {  'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"BNL_20um_1cm_400um_W3074_1_4_95V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"BNL_20um_1cm_400um_W3075_1_2_80V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"BNL_20um_1cm_450um_W3074_2_1_95V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"BNL_20um_1cm_450um_W3075_2_4_80V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                                'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                                'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 }
 
 
