@@ -157,7 +157,11 @@ if (is_hotspot):
     hist_twoStrip_fullSnsr = input_fullSnsr.Get("h_twoStrip")
 
 # oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
-oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
+try:
+    oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
+except:
+    oneStripResValue_list = myStyle.resolutions2023OneStripChannel[dataset]['resOneStrip']
+
 
 max_strip_edge = hist_info_twoStrip.f.Get("stripBoxInfo01").GetMean(1) + strip_width/2000.
 if useShift: max_strip_edge -= hist_info_twoStrip.shift()
