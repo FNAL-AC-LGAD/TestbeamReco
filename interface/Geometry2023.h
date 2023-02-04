@@ -509,7 +509,7 @@ public:
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
-    int minPixHits = 2;
+    int minPixHits = 0;
     int minStripHits = 6;
     int CFD_threshold = 50;
     // std::vector<double> positionRecoPar = {0.250000, -0.667970, -9.010738, 112.238851, -643.639801, 1280.390139}; // Iter1
@@ -578,7 +578,7 @@ public:
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
-    int minPixHits = 2;
+    int minPixHits = 0;
     int minStripHits = 6;
     int CFD_threshold = 50;
     // std::vector<double> positionRecoPar = {0.250000, -0.706613, -5.565170, 36.746184, -97.191069}; // Iter1
