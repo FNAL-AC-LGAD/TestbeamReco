@@ -650,13 +650,13 @@ public:
     double alpha = 0.00;
     double beta  = 0.00;
     double gamma = 0.00;
-    double z_dut = 6.55;
-    double xBinSize = 0.01;
-    double yBinSize = 0.01;
-    double xmin = -0.20; // Sensor's local frame
-    double xmax =  1.30; // Sensor's local frame
-    double ymin = -0.20; // Sensor's local frame
-    double ymax =  1.30; // Sensor's local frame
+    double z_dut = -2.00;
+    double xBinSize = 0.015;
+    double yBinSize = 0.015;
+    double xmin = -0.2; // Sensor's local frame
+    double xmax =  1.5; // Sensor's local frame
+    double ymin = -0.2; // Sensor's local frame
+    double ymax =  1.5; // Sensor's local frame
     //double positionRecoMaxPoint = 0.77;
     double photekSignalThreshold = 100.0;
     double photekSignalMax = 280.0; //in mV
@@ -665,12 +665,12 @@ public:
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = false;
-    int minPixHits = 3;
-    int minStripHits = 10;
+    int minPixHits = 4;
+    int minStripHits = 12;
     int CFD_threshold = 20;
     std::vector<double> positionRecoPar = {0.250000, -0.610460, -2.619740, 23.242264, -92.980050, 106.189949};
     //std::vector<std::vector<double>> sensorEdges = {{-2.48, 1.15}, {-1.18, 2.45}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdges = {{-2.38, 1.25}, {-1.28, 2.35}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdges = {{-2.35, 0.15}, {-1.05, 1.45}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     //std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5},{"gap", 0.70,0.80, 0.5,2.5},
     //                                              {"hot_ySlice", -1.95,1.95, -1.5,-0.25}, {"cold_ySlice", -1.95,1.95, -4.15,-2.90},
