@@ -9,7 +9,6 @@
 #include <TFile.h>
 #include <iostream>
 #include <fstream>
-using namespace std;
 InitialAnalyzer::InitialAnalyzer()
 {
 }
@@ -80,10 +79,8 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
 //Put everything you want to do per event here.
 void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
 {
-  cout<<"here 1\n";  
   const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
-  cout<<"here 2\n";
-    const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
+  const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
     const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
     const auto& photekSignalMax = tr.getVar<double>("photekSignalMax");
@@ -94,12 +91,8 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
 
     const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
     const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
-    cout<<"here 3\n";
     int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
-    cout<<indexToGeometryMap.at(lowGoodStripIndex)[0]<<"," << lowGoodStrip<<"\n";
-    cout<<indexToGeometryMap.at(highGoodStripIndex)[0]<<"," <<indexToGeometryMap.at(highGoodStripIndex)[1]<<endl;
     int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
-    cout<<"here 4\n";
     //const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
     const auto& firstFile = tr.getVar<bool>("firstFile");
     if(firstFile)
