@@ -605,7 +605,7 @@ public:
     HPK_20um_500x500um_E600_2x2PadGeometry(const int v=0) : voltage(v){}
     const int voltage;
     std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{1,1}}, {3,{1,0}}, {4,{2,0}}, {7,{3,0}}};
-    std::vector<std::vector<int>> geometry = {{0,1,2,3}, {4}, {7}};
+    std::vector<std::vector<int>> geometry = {{0,1},{3,2}, {4}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5, false}, {6, false}, {7,false}};
     
     int numLGADchannels = 5;
@@ -614,7 +614,7 @@ public:
 
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.935797725}, {2,1.0}, {3,1.0/0.979331568}, {4,1.0/1.021097111}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4797103988649}, {2,10.5140246761814}, {3,10.4517123511449}, {4,10.4652081424981}, {5,0.0}, {6,0.0}, {7,0.0}};
-    double stripWidth = 0.45; 
+    double stripWidth = 0.5; 
     double pitch = 0.5;
     double sensorCenter =-5.773;
     double sensorCenterY = 10.391; 
@@ -631,7 +631,7 @@ public:
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 50.0; 
-    bool isPadSensor = true;
+    bool isPadSensor = true; 
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<double> positionRecoParTop = {-0.494315,  1.28059, 1.92055, -9.89445, 11.8025, -4.01589};

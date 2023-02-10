@@ -21,6 +21,7 @@
 #include <functional>
 #include <unistd.h>
 
+using namespace std;
 const std::string getFullPath(const std::string& file)
 {
     char buf[512];
@@ -45,7 +46,7 @@ template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf
     Analyze a;
     bool firstFile = true;
     for(const auto& file : vvf)
-    {
+      {
         // Define what is needed per sample set
         std::cout << "Running over sample " << file.tag << std::endl;
         TChain* ch = new TChain( (file.treePath).c_str() );
@@ -64,7 +65,7 @@ template<typename Analyze> void run(const std::set<AnaSamples::FileSummary>& vvf
 
         // Loop over all of the events and fill histos
         std::cout << "Starting event loop (in run)" << std::endl;
-        a.Loop(tr, maxEvts);
+	a.Loop(tr, maxEvts);
         // Cleaning up dynamic memory
         delete ch;
 
@@ -177,7 +178,7 @@ int main(int argc, char *argv[])
         {
             if(pair.first==analyzer) 
             {
-                std::cout<<"Running the " << analyzer << " Analyzer" <<std::endl;
+                std::cout<<"RunnIng the " << analyzer << " Analyzer" <<std::endl;
                 pair.second(vvf,startFile,nFiles,maxEvts,outfile,analyzer,outpath); 
                 foundAnalyzer = true;
             }
