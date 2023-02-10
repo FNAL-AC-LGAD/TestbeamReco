@@ -190,6 +190,7 @@ public:
 		else if(filetag.find("BNL_50um_2p5cm_mixConfig2_W3051_1_4")          != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig2_W3051_1_4_StripsGeometry(voltage));
 		else if(filetag.find("CFD_spy")                                      != std::string::npos) registerGeometry(tr, CFD(voltage));
 		else if(filetag.find("CFD_noSpy")                                    != std::string::npos) registerGeometry(tr, CFD(voltage));
+	    else if(filetag.find("HPK_20um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_20um_500x500um_E600_2x2PadGeometry(voltage));
 		else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
