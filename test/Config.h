@@ -180,14 +180,15 @@ public:
         else if(filetag.find("IHEP_W1_I_150up_80uw")                        != std::string::npos) registerGeometry(tr, IHEPGeometry(voltage));
         // 2023 Campaign
         else if(filetag.find("BNL_50um_1cm_450um_W3051_2_2")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_450um_W3051_2_2_StripsGeometry(voltage));
-		else if(filetag.find("BNL_50um_1cm_400um_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_400um_W3051_1_4_StripsGeometry(voltage));
-		else if(filetag.find("BNL_50um_1cm_450um_W3052_2_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_450um_W3052_2_4_StripsGeometry(voltage)); 
-		else if(filetag.find("BNL_20um_1cm_400um_W3074_1_4")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_400um_W3074_1_4_StripsGeometry(voltage));
-		else if(filetag.find("BNL_20um_1cm_400um_W3075_1_2")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_400um_W3075_1_2_StripsGeometry(voltage));
-		else if(filetag.find("BNL_20um_1cm_450um_W3074_2_1")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_450um_W3074_2_1_StripsGeometry(voltage));
-		else if(filetag.find("BNL_20um_1cm_450um_W3075_2_4")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_450um_W3075_2_4_StripsGeometry(voltage));
-		else if(filetag.find("BNL_50um_2p5cm_mixConfig1_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig1_W3051_1_4_StripsGeometry(voltage));
-		else if(filetag.find("BNL_50um_2p5cm_mixConfig2_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig2_W3051_1_4_StripsGeometry(voltage));
+	else if(filetag.find("BNL_50um_1cm_400um_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_400um_W3051_1_4_StripsGeometry(voltage));
+	else if(filetag.find("BNL_50um_1cm_450um_W3052_2_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_450um_W3052_2_4_StripsGeometry(voltage)); 
+	else if(filetag.find("BNL_20um_1cm_400um_W3074_1_4")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_400um_W3074_1_4_StripsGeometry(voltage));
+	else if(filetag.find("BNL_20um_1cm_400um_W3075_1_2")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_400um_W3075_1_2_StripsGeometry(voltage));
+	else if(filetag.find("BNL_20um_1cm_450um_W3074_2_1")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_450um_W3074_2_1_StripsGeometry(voltage));
+	else if(filetag.find("BNL_20um_1cm_450um_W3075_2_4")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_450um_W3075_2_4_StripsGeometry(voltage));
+	else if(filetag.find("BNL_50um_2p5cm_mixConfig1_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig1_W3051_1_4_StripsGeometry(voltage));
+	else if(filetag.find("BNL_50um_2p5cm_mixConfig2_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig2_W3051_1_4_StripsGeometry(voltage));
+	else if(filetag.find("HPK_20um_500x500um_2x2pad_E600_FNAL")                 != std::string::npos) registerGeometry(tr, HPK_20um_500x500um_E600_2x2PadGeometry(voltage));
 		else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
