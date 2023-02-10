@@ -21,7 +21,6 @@
 #include <functional>
 #include <unistd.h>
 
-using namespace std;
 const std::string getFullPath(const std::string& file)
 {
     char buf[512];
@@ -178,7 +177,7 @@ int main(int argc, char *argv[])
         {
             if(pair.first==analyzer) 
             {
-                std::cout<<"RunnIng the " << analyzer << " Analyzer" <<std::endl;
+                std::cout<<"Running the " << analyzer << " Analyzer" <<std::endl;
                 pair.second(vvf,startFile,nFiles,maxEvts,outfile,analyzer,outpath); 
                 foundAnalyzer = true;
             }

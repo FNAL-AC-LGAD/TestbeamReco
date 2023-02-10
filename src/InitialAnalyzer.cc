@@ -9,7 +9,6 @@
 #include <TFile.h>
 #include <iostream>
 #include <fstream>
-using namespace std;
 InitialAnalyzer::InitialAnalyzer()
 {
 }
