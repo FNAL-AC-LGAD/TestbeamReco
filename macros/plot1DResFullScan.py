@@ -106,7 +106,8 @@ def createTGraph(f, out, var_values, var):
 
         fit_limits = { # [fitX_min, fitX_max, guess_par1, guess_par2, guess_par3]
                 "Z": [var_values[0], var_values[-1], -99, -99, -99],
-                "A": [var_values[0], var_values[-1], 30, -99, -99],
+                # "A": [var_values[0], var_values[-1], 30, -99, -99],
+                "A": [var_values[0], var_values[-1], -99, -99, -99],
                 "B": [var_values[0], var_values[-1], -99, -99, -99],
                 "C": [var_values[0], var_values[-1], -99, -99, -99],
         }
