@@ -45,7 +45,7 @@ public:
     double beta  =  0.00; //  0.00; // 0.00; // 0.00;
     double gamma =  0.00; //  0.00; // 0.00; // 0.00;
     double z_dut =-11.88; //-11.88; // 0.00; // 0.00;
-    double xBinSize = 0.025;
+    double xBinSize = 0.050; // 0.025;
     double yBinSize = 0.2;
     double xmin = -2.50; // Sensor's local frame
     double xmax =  2.50; // Sensor's local frame
@@ -53,8 +53,8 @@ public:
     double ymax =  5.60; // Sensor's local frame
     double positionRecoMaxPoint = 0.79; // 0.79;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold  = 10.0; // 7.0;
-    double signalAmpThreshold = 10.0; // 7.0;
+    double noiseAmpThreshold  = 12.0; // 10.0; // 7.0;
+    double signalAmpThreshold = 12.0; // 10.0; // 7.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -496,7 +496,7 @@ public:
     double beta  =  0.00; //  0.00; // 0.00; // 0.00;
     double gamma =  0.00; //  0.00; // 0.00; // 0.00;
     double z_dut =-10.41; //-10.41; // 0.00; // 0.00;
-    double xBinSize = 0.025;
+    double xBinSize = 0.050; // 0.025;
     double yBinSize = 0.2;
     double xmin = -2.70; // Sensor's local frame
     double xmax =  2.70; // Sensor's local frame
@@ -504,8 +504,8 @@ public:
     double ymax =  13.20; // Sensor's local frame
     double positionRecoMaxPoint = 0.71; // 0.72;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold  = 7.0; // 15.0;
-    double signalAmpThreshold = 7.0; // 15.0;
+    double noiseAmpThreshold  = 12.0; // 7.0;
+    double signalAmpThreshold = 12.0; // 7.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -565,7 +565,7 @@ public:
     double beta  =  0.00; //  0.00; // 0.00; // 0.00;
     double gamma =  0.00; //  0.00; // 0.00; // 0.00;
     double z_dut =-21.33; //-21.33; // 0.00; // 0.00;
-    double xBinSize = 0.025;
+    double xBinSize = 0.050; // 0.025;
     double yBinSize = 0.2;
     double xmin = -2.70; // Sensor's local frame
     double xmax =  2.70; // Sensor's local frame
@@ -573,8 +573,8 @@ public:
     double ymax =  13.20; // Sensor's local frame
     double positionRecoMaxPoint = 0.71; // 0.72;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold  = 7.0; // 15.0;
-    double signalAmpThreshold = 7.0; // 15.0;
+    double noiseAmpThreshold  = 12.0; // 7.0;
+    double signalAmpThreshold = 12.0; // 7.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -588,66 +588,6 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-2.6, -13.0}, {2.6, 13.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -13.0}, {stripCenterXPosition[lowGoodStripIndex], 13.0}}; // Sensor's local frame
     std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5}};
-};
-
-class HPK_20um_500x500um_E600_2x2PadGeometry : public DefaultGeometry
-{
-public:
-    // HPK 2022 Mapping set
-    // Used lecroy scope channels 0-7
-    // scope channel 0-3 was AC pads on FNAL board, 4 was the same sensor type AC channel on UCSC board, 5-6 were 50D and scope channel 7 was the photek
-    // ----- -----
-    // |0 1| |x 4|           -----
-    // |3 2| |x x|           |777|
-    // ----- -----           |777|
-    //                       -----
-    // 
-    HPK_20um_500x500um_E600_2x2PadGeometry(const int v=0) : voltage(v){}
-    const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{1,1}}, {3,{1,0}}, {4,{2,0}}, {7,{3,0}}};
-    std::vector<std::vector<int>> geometry = {{0,1},{3,2}, {4}, {7}};
-    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5, false}, {6, false}, {7,false}};
-    
-    int numLGADchannels = 5;
-    int lowGoodStripIndex = 0;
-    int highGoodStripIndex = 2;
-
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.935797725}, {2,1.0}, {3,1.0/0.979331568}, {4,1.0/1.021097111}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4797103988649}, {2,10.5140246761814}, {3,10.4517123511449}, {4,10.4652081424981}, {5,0.0}, {6,0.0}, {7,0.0}};
-    double stripWidth = 0.5; 
-    double pitch = 0.5;
-    double sensorCenter =-5.773;
-    double sensorCenterY = 10.391; 
-    std::vector<double> stripCenterXPosition = {0.0, -6.023, -5.523, -5.523, -6.023,  0.0};
-    std::vector<double> stripCenterYPosition = {0.0, 10.641, 10.641, 10.141, 10.141, 0.0};
-    double alpha = -0.5;
-    double beta  = 0.0;
-    double gamma = 0.0;
-    double z_dut = 0.0;
-    double xmin = -6.6;
-    double xmax = -5.0;
-    double ymin =  9.6;
-    double ymax = 11.0; 
-    double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 50.0; 
-    bool isPadSensor = true; 
-    bool enablePositionReconstruction = false;
-    bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParTop = {-0.494315,  1.28059, 1.92055, -9.89445, 11.8025, -4.01589};
-    std::vector<double> positionRecoParBot = {-0.0849671, -3.72958, 25.6829, -63.7924, 70.3368, -28.3888};
-    std::vector<double> positionRecoParRight = {-0.046495, -3.91451, 24.6937, -57.5006, 59.3214, -22.163};
-    std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
-    //std::vector<double> positionRecoParTop = {-0.137164, -0.126798, 1.18544,  -0.775188}; //100 microns around center
-    //std::vector<double> positionRecoParBot = {-0.0409756, -0.748701, 2.46567, -1.61481}; // 100 microns around center
-    //std::vector<std::vector<double>> sensorEdges = {{-5.87 , 9.94}, { -5.67, 10.84}}; //100 microns from center
-    std::vector<std::vector<double>> sensorEdges = {{-6.023 , 10.141}, { -5.523, 10.641}}; //square interior of pads
-    //std::vector<std::vector<double>> sensorEdges = {{-6.03 , 10.04}, { -5.53, 10.74}}; //current version for best x and y reco
-    //std::vector<std::vector<double>> sensorEdges = {{-6.03 , 9.94}, { -5.53, 10.84}};  //older version for best x reco
-    //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}}; //original version whole sensor
-    std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
-    std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
-    std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
 };
 
 #endif
