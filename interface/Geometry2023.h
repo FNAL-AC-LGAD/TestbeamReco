@@ -624,10 +624,10 @@ public:
     double beta  = 0.0;
     double gamma = 0.0;
     double z_dut = 0.0;
-    double xmin = -3.5;
-    double xmax = 0.5;
-    double ymin =  -4.0;
-    double ymax = 0.0; 
+    double xmin = 0.0;
+    double xmax = 2.0;
+    double ymin =  -5.0;
+    double ymax = -3.0; 
     double xBinSize = 0.025;
     double yBinSize = 0.2;
     double photekSignalThreshold = 50.0;
@@ -643,7 +643,8 @@ public:
     std::vector<double> positionRecoParBot = {-0.0849671, -3.72958, 25.6829, -63.7924, 70.3368, -28.3888};
     std::vector<double> positionRecoParRight = {-0.046495, -3.91451, 24.6937, -57.5006, 59.3214, -22.163};
     std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
-    std::vector<std::vector<double>> sensorEdges = {{-3.5 , -4.0}, { 0.5, 0.0}}; //square interior of pads
+    //std::vector<std::vector<double>> sensorEdges = {{-3.5 , -4.0}, { 0.5, 0.0}}; //square interior of pads
+    std::vector<std::vector<double>> sensorEdges = {{0.0 , -5.0}, { 2.0, -3.0}}; //square interior of pads
     //std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
     //std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
     //std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
