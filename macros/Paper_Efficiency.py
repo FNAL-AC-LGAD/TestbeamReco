@@ -14,10 +14,12 @@ parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="Limit x-axis in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-o', dest='Overall', action='store_true', default = False, help="Draw Overall efficiency (from Global) in 1DProjection")
+parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
 
-draw_overall = options.Overall
 dataset = options.Dataset
+draw_overall = options.Overall
+useTight = options.useTight
 
 outdir=""
 if organized_mode: 
@@ -34,6 +36,7 @@ if not inputfile.Get("stripBoxInfo06"):
     shift = (inputfile.Get("stripBoxInfo02").GetMean(1) + shift)/2.
 
 # list_thresholds = ["_lowThreshold", "_highThreshold"]
+tight_ext = "_tight" if useTight else ""
 list_thresholds = [""]
 list_recoMethod = ["", "_noNeighb", "_highFrac", "_oneStrip", "_twoStrips"]
 
@@ -43,21 +46,21 @@ list_efficiency_numerator_global = []
 #### Make and Save 2D Histograms
 ####################################
 ### Get 2D efficiency numerator Global Histograms
-efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator")
+efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_denominator%s"%(tight_ext))
 for t in list_thresholds:
     for m in list_recoMethod:
-        list_efficiency_numerator_global.append(inputfile.Get("efficiency_vs_xy%s%s_numerator"%(t,m)))
-efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_fullReco_numerator")
+        list_efficiency_numerator_global.append(inputfile.Get("efficiency_vs_xy%s%s_numerator%s"%(t,m,tight_ext)))
+efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_fullReco_numerator%s"%(tight_ext))
 
 ### Plot and save 2D efficiency Global Histograms
-EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco"%(outdir), "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0, True)
-EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco"%(outdir), "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0, True)
+EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco%s"%(outdir,tight_ext), "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0, True)
+EfficiencyUtils.Plot2DEfficiency(efficiency_fullReco_numerator_global, efficiency_denominator_global, "%sEfficiencyFullReco%s"%(outdir,tight_ext), "Efficiency Full Reconstruction", "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0, True)
 #For some reason the first time I call this function, the z-axis is not plotted in the right place. 
 #So I call it twice.
 e = 0
 for t in list_thresholds:
     for m in list_recoMethod:
-        EfficiencyUtils.Plot2DEfficiency(list_efficiency_numerator_global[e], efficiency_denominator_global, "%sEfficiency%s%s_Global"%(outdir,t,m), "Efficiency%s%s"%(t,m), "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0)
+        EfficiencyUtils.Plot2DEfficiency(list_efficiency_numerator_global[e], efficiency_denominator_global, "%sEfficiency%s%s_Global%s"%(outdir,t,m,tight_ext), "Efficiency%s%s"%(t,m), "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0)
         e+=1
 
 
@@ -66,10 +69,10 @@ channel_good_index = []
 list_efficiency_vs_xy_fullReco_numerator_ch = []
 # th2_efficiency_vs_xy_fullReco_ch = []
 for i in range(7):
-    if inputfile.Get("efficiency_vs_xy_fullReco_numerator_channel0%i"%(i)):
+    if inputfile.Get("efficiency_vs_xy_fullReco_numerator%s_channel0%i"%(tight_ext,i)):
         channel_good_index.append(i)
-        list_efficiency_vs_xy_fullReco_numerator_ch.append(inputfile.Get("efficiency_vs_xy_fullReco_numerator_channel0%i"%(i)))
-        EfficiencyUtils.Plot2DEfficiency(list_efficiency_vs_xy_fullReco_numerator_ch[-1], efficiency_denominator_global, "%sEfficiencyFullReco_ch0%i"%(outdir,i), "Efficiency Full Reconstruction Strip %i"%(i+1), "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0)
+        list_efficiency_vs_xy_fullReco_numerator_ch.append(inputfile.Get("efficiency_vs_xy_fullReco_numerator%s_channel0%i"%(tight_ext,i)))
+        EfficiencyUtils.Plot2DEfficiency(list_efficiency_vs_xy_fullReco_numerator_ch[-1], efficiency_denominator_global, "%sEfficiencyFullReco%s_ch0%i"%(outdir,tight_ext,i), "Efficiency Full Reconstruction Strip %i"%(i+1), "X [mm]", -xlength, xlength, "Y [mm]", -20, 20, 0.0, 1.0)
 
 ### Get 2D efficiency Histograms per channel
 list_efficiency_vs_xy_numerator_ch = []
@@ -77,7 +80,7 @@ list_efficiency_vs_xy_numerator_ch = []
 for t in list_thresholds:
     for m in list_recoMethod:
         for i in channel_good_index:
-            hname = "efficiency_vs_xy%s%s_numerator_channel0%i"%(t,m, i)
+            hname = "efficiency_vs_xy%s%s_numerator%s_channel0%i"%(t,m, tight_ext,i)
             list_efficiency_vs_xy_numerator_ch.append(inputfile.Get(hname))
 
 
@@ -174,13 +177,13 @@ legend.AddEntry(hist_Global_TwoStrips, "Two strip reconstruction")
 legend.Draw()
 htemp.Draw("AXIS same")
 
-myStyle.BeamInfo()
+# myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
-canvas.SaveAs("%sEfficiencyAll_vs_x"%(outdir)+".gif")
-canvas.SaveAs("%sEfficiencyAll_vs_x"%(outdir)+".pdf")
+canvas.SaveAs("%sEfficiencyAll_vs_x%s"%(outdir, tight_ext)+".gif")
+canvas.SaveAs("%sEfficiencyAll_vs_x%s"%(outdir, tight_ext)+".pdf")
 
-list_hist_coarse_bin = ["efficiency_vs_xy_numerator_coarseBins", "efficiency_vs_xy_oneStrip_numerator_coarseBins", "efficiency_vs_xy_twoStrips_numerator_coarseBins"]
+list_hist_coarse_bin = ["efficiency_vs_xy_numerator_coarseBins%s"%tight_ext, "efficiency_vs_xy_oneStrip_numerator_coarseBins%s"%tight_ext, "efficiency_vs_xy_twoStrips_numerator_coarseBins%s"%tight_ext]
 list_name_coarse_bin = ["efficiency_vs_x_coarseBins", "efficiency_vs_x_oneStrip_coarseBins", "efficiency_vs_x_twoStrip_coarseBins"]
 list_good_hists = []
 

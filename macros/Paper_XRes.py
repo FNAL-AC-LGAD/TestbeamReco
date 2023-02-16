@@ -62,6 +62,7 @@ parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which deter
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
+parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
 
 useShift = options.noShift
@@ -85,6 +86,9 @@ debugMode = options.debugMode
 is_hotspot = options.hotspot
 pref_hotspot = "_hotspot" if (is_hotspot) else ""
 
+useTight = options.useTight
+tight_ext = "_tight" if useTight else ""
+
 all_histoInfos = [
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
@@ -93,14 +97,19 @@ all_histoInfos = [
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
 ]
 
+if useTight:
+    all_histoInfos = [
+        HistoInfo("deltaX_vs_Xtrack_twoStrips_tight",   inputfile, "track_twoStrips%s"%pref_hotspot, True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
+    ]
+
 hist_info_twoStrip = all_histoInfos[0]
 
 #### Get histograms for expected resolution
-noise12_vs_x = inputfile.Get("BaselineRMS12_vs_x")
-amp12_vs_x = inputfile.Get("Amp12_vs_x")
-amp1_vs_x = inputfile.Get("Amp1_vs_x")
-amp2_vs_x = inputfile.Get("Amp2_vs_x")
-dXdFrac_vs_x = inputfile.Get("dXdFrac_vs_Xtrack")
+noise12_vs_x = inputfile.Get("BaselineRMS12_vs_x%s"%tight_ext)
+amp12_vs_x = inputfile.Get("Amp12_vs_x%s"%tight_ext)
+amp1_vs_x = inputfile.Get("Amp1_vs_x%s"%tight_ext)
+amp2_vs_x = inputfile.Get("Amp2_vs_x%s"%tight_ext)
+dXdFrac_vs_x = inputfile.Get("dXdFrac_vs_Xtrack%s"%tight_ext)
 
 mean_noise12_vs_x = noise12_vs_x.ProfileX()
 mean_amp12_vs_x = amp12_vs_x.ProfileX()
@@ -385,11 +394,13 @@ if ('twoStrips' in info.outHistoName):
 htemp.Draw("AXIS same")
 legend.Draw();
 
-myStyle.BeamInfo()
+# myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
-canvas.SaveAs("%sPositionRes_vs_x%s.gif"%(outdir,pref_hotspot))
-canvas.SaveAs("%sPositionRes_vs_x%s.pdf"%(outdir,pref_hotspot))
+save_name = "%sPositionRes_vs_x%s"%(outdir,pref_hotspot) if not useTight else "%sPositionRes_vs_x_tight"%(outdir)
+
+canvas.SaveAs("%s.gif"%(save_name))
+canvas.SaveAs("%s.pdf"%(save_name))
 expected_res_vs_x.Write()
 hist_info_twoStrip.th1.Clone("h_twoStrip").Write()
 oneStripHist.Write()

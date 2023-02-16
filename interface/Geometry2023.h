@@ -29,7 +29,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,1.5604958}, {1,1.4633604}, {2,1.5785752}, {3,1.4528504}, {4,1.5231632}, {5,1.4348996}, {6,1.5287634}, {7,0.0}};
     // std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.050;
     double pitch = 0.500;
@@ -45,7 +45,7 @@ public:
     double beta  =  0.00; //  0.00; // 0.00; // 0.00;
     double gamma =  0.00; //  0.00; // 0.00; // 0.00;
     double z_dut =-11.88; //-11.88; // 0.00; // 0.00;
-    double xBinSize = 0.025;
+    double xBinSize = 0.050; // 0.025;
     double yBinSize = 0.2;
     double xmin = -2.50; // Sensor's local frame
     double xmax =  2.50; // Sensor's local frame
@@ -53,8 +53,8 @@ public:
     double ymax =  5.60; // Sensor's local frame
     double positionRecoMaxPoint = 0.79; // 0.79;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold  = 10.0; // 7.0;
-    double signalAmpThreshold = 10.0; // 7.0;
+    double noiseAmpThreshold  = 15.0; // 10.0; // 7.0;
+    double signalAmpThreshold = 15.0; // 10.0; // 7.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -69,8 +69,8 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-2.4, -5.5}, {2.4, 5.5}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -5.5}, {stripCenterXPosition[lowGoodStripIndex], 5.5}}; // Sensor's local frame
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5}};
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
+    // std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5}};
 };
 
 
@@ -477,7 +477,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,1.1705073}, {1,1.4564536}, {2,1.2600368}, {3,1.4158836}, {4,1.2403504}, {5,1.4185924}, {6,1.1507471}, {7,0.0}};
     // std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.100; // Config1 has strips of 100 micron width
     double pitch = 0.500;
@@ -496,7 +496,7 @@ public:
     double beta  =  0.00; //  0.00; // 0.00; // 0.00;
     double gamma =  0.00; //  0.00; // 0.00; // 0.00;
     double z_dut =-10.41; //-10.41; // 0.00; // 0.00;
-    double xBinSize = 0.025;
+    double xBinSize = 0.050; // 0.025;
     double yBinSize = 0.2;
     double xmin = -2.70; // Sensor's local frame
     double xmax =  2.70; // Sensor's local frame
@@ -504,8 +504,8 @@ public:
     double ymax =  13.20; // Sensor's local frame
     double positionRecoMaxPoint = 0.71; // 0.72;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold  = 7.0; // 15.0;
-    double signalAmpThreshold = 7.0; // 15.0;
+    double noiseAmpThreshold  = 15.0; // 12.0; // 7.0;
+    double signalAmpThreshold = 15.0; // 12.0; // 7.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -516,9 +516,10 @@ public:
     std::vector<double> positionRecoPar = {0.250000, -0.668684, -8.909631, 109.086460, -614.727996, 1204.484787}; // Iter2
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdges = {{-2.6, -13.0}, {2.6, 13.0}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -13.0}, {stripCenterXPosition[lowGoodStripIndex], 13.0}}; // Sensor's local frame
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5}};
+    // std::vector<std::vector<double>> sensorEdges = {{-2.6, -13.0}, {2.6, 13.0}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdges = {{-1.3, -13.0}, {2.5, 13.0}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -11.5}, {stripCenterXPosition[lowGoodStripIndex], 11.5}}; // Sensor's local frame
+    // std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5}};
 };
 
 
@@ -546,7 +547,7 @@ public:
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.94679459}, {1,0.82059504}, {2,0.92001622}, {3,0.81254756}, {4,0.88364704}, {5,0.79850545}, {6,0.93318906}, {7,0.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,1.3716686}, {1,1.2568552}, {2,1.4215433}, {3,1.2103310}, {4,1.3574690}, {5,1.1304036}, {6,1.4516399}, {7,0.0}};
     // std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.050; // Config2 has strips of 50 micron width
     double pitch = 0.500;
@@ -565,7 +566,7 @@ public:
     double beta  =  0.00; //  0.00; // 0.00; // 0.00;
     double gamma =  0.00; //  0.00; // 0.00; // 0.00;
     double z_dut =-21.33; //-21.33; // 0.00; // 0.00;
-    double xBinSize = 0.025;
+    double xBinSize = 0.050; // 0.025;
     double yBinSize = 0.2;
     double xmin = -2.70; // Sensor's local frame
     double xmax =  2.70; // Sensor's local frame
@@ -573,8 +574,8 @@ public:
     double ymax =  13.20; // Sensor's local frame
     double positionRecoMaxPoint = 0.71; // 0.72;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold  = 5.0; // 15.0;
-    double signalAmpThreshold = 5.0; // 15.0;
+    double noiseAmpThreshold  = 15.0; // 12.0; // 7.0;
+    double signalAmpThreshold = 15.0; // 12.0; // 7.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -585,9 +586,9 @@ public:
     std::vector<double> positionRecoPar = {0.250000, -0.709684, -5.430126, 34.929432, -88.611179}; // Iter2
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdges = {{-2.6, -13.0}, {2.6, 13.0}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -13.0}, {stripCenterXPosition[lowGoodStripIndex], 13.0}}; // Sensor's local frame
-    std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5}};
+    std::vector<std::vector<double>> sensorEdges = {{-2.5, -13.0}, {1.3, 13.0}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -11.5}, {stripCenterXPosition[lowGoodStripIndex], 11.5}}; // Sensor's local frame
+    // std::vector<utility::ROI> regionsOfIntrest = {{"hot", 0.90,1.10, -1.5,-0.5},{"cold", 0.90,1.10, -3.5,-2.5}};
 };
 
 
