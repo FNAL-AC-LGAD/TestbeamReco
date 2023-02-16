@@ -252,6 +252,7 @@ sensorsGeom2023 = { "BNL_50um_1cm_450um_W3051_2_2": {'sensor': "BNL_50um_1cm_450
                     "BNL_20um_1cm_450um_W3075_2_4": {'sensor': "BNL_20um_1cm_450um_W3075", 'pitch': 500, 'stripWidth': 50, "BV": 80, "length": 10.0},
                     "BNL_50um_2p5cm_mixConfig1_W3051_1_4": {'sensor': "BNL_50um_2p5cm_mixConfig1_W3051", 'pitch': 500, 'stripWidth': 100, "BV": 170, "length": 25.0},
                     "BNL_50um_2p5cm_mixConfig2_W3051_1_4": {'sensor': "BNL_50um_2p5cm_mixConfig2_W3051", 'pitch': 500, 'stripWidth': 50, "BV": 170, "length": 25.0},
+                    "HPK_20um_500x500um_2x2pad_E600_FNAL": {'sensor': "HPK_20um_500x500um_2x2pad_E600_FNAL", 'pitch': 500, 'stripWidth': 500, "BV": 100, "length": 5.0},
 }
 
 # NEED TO BE UPDATED! ONLY PLACEHOLDERS TO MAKE PAPER_PLOTS MACROS RUN
@@ -294,6 +295,10 @@ resolutions2023 = {
                                         'position_oneStrip_StdDev': 0.00,
                                         'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
                                         'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "HPK_20um_500x500um_2x2pad_E600_FNAL_100V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
 }
 
 resolutions2023OneStripChannel = {
@@ -315,6 +320,9 @@ resolutions2023OneStripChannel = {
                                                 'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 "BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
                                                 'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"HPK_20um_500x500um_2x2pad_E600_FNAL_100V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                                'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+
 }
 
 

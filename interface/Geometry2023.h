@@ -652,40 +652,45 @@ public:
     // Used lecroy scope channels 0-7
     // scope channel 0-3 was AC pads on FNAL board, 4 was the same sensor type AC channel on UCSC board, 5-6 were 50D and scope channel 7 was the photek
     // ----- -----
-    // |0 1| |x 4|           -----
-    // |3 2| |x x|           |777|
+    // |1 0| |4 x|           -----
+    // |2 3| |x x|           |777|
     // ----- -----           |777|
     //                       -----
     // 
     HPK_20um_500x500um_E600_2x2PadGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{1,1}}, {3,{1,0}}, {4,{2,0}}, {7,{3,0}}};
-    std::vector<std::vector<int>> geometry = {{0,1},{3,2}, {4}, {7}};
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,1}}, {1,{0,0}}, {2,{1,0}}, {3,{1,1}}, {4,{2,0}}, {7,{3,0}}};
+    std::vector<std::vector<int>> geometry = {{1,0},{2,3}, {4}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5, false}, {6, false}, {7,false}};
     
     int numLGADchannels = 5;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 2;
 
-    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.935797725}, {2,1.0}, {3,1.0/0.979331568}, {4,1.0/1.021097111}, {5,1.0}, {6,1.0}, {7,1.0}};
-    std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4797103988649}, {2,10.5140246761814}, {3,10.4517123511449}, {4,10.4652081424981}, {5,0.0}, {6,0.0}, {7,0.0}};
+    std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
+    std::map<int, double> timeCalibrationCorrection = {{0,1.0},{1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,0.0}}; //{1,10.4797103988649}, {2,10.5140246761814}, {3,10.4517123511449}, {4,10.4652081424981}, {5,0.0}, {6,0.0}, {7,0.0}};
     double stripWidth = 0.5; 
     double pitch = 0.5;
-    double sensorCenter =-5.773;
-    double sensorCenterY = 10.391; 
-    std::vector<double> stripCenterXPosition = {0.0, -6.023, -5.523, -5.523, -6.023,  0.0};
-    std::vector<double> stripCenterYPosition = {0.0, 10.641, 10.641, 10.141, 10.141, 0.0};
-    double alpha = -0.5;
+    double sensorCenter =-2.0;// Lab-Tracker's frame ->  y_dut
+    double sensorCenterY = 2.0; // Lab-Tracker's frame -> -x_dut
+    std::vector<double> stripCenterXPosition = {-1.5,-2.5, -2.5, -1.5, -1.4, 0.0, 0.0, -2.0};
+    //std::vector<double> stripCenterYPosition = {0.0, 10.641, 10.641, 10.141, 10.141, 0.0};
+    double alpha = 0.0;
     double beta  = 0.0;
     double gamma = 0.0;
     double z_dut = 0.0;
-    double xmin = -6.6;
-    double xmax = -5.0;
-    double ymin =  9.6;
-    double ymax = 11.0; 
+    double xmin = 0.0;
+    double xmax = 2.0;
+    double ymin =  -5.0;
+    double ymax = -3.0; 
+    double xBinSize = 0.025;
+    double yBinSize = 0.2;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 50.0; 
+    double noiseAmpThreshold = 15.0;
+    double signalAmpThreshold = 15.0; 
+    int minPixHits = 0;
+    int minStripHits = 6;
+    int CFD_threshold = 50;
     bool isPadSensor = true; 
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
@@ -693,16 +698,11 @@ public:
     std::vector<double> positionRecoParBot = {-0.0849671, -3.72958, 25.6829, -63.7924, 70.3368, -28.3888};
     std::vector<double> positionRecoParRight = {-0.046495, -3.91451, 24.6937, -57.5006, 59.3214, -22.163};
     std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
-    //std::vector<double> positionRecoParTop = {-0.137164, -0.126798, 1.18544,  -0.775188}; //100 microns around center
-    //std::vector<double> positionRecoParBot = {-0.0409756, -0.748701, 2.46567, -1.61481}; // 100 microns around center
-    //std::vector<std::vector<double>> sensorEdges = {{-5.87 , 9.94}, { -5.67, 10.84}}; //100 microns from center
-    std::vector<std::vector<double>> sensorEdges = {{-6.023 , 10.141}, { -5.523, 10.641}}; //square interior of pads
-    //std::vector<std::vector<double>> sensorEdges = {{-6.03 , 10.04}, { -5.53, 10.74}}; //current version for best x and y reco
-    //std::vector<std::vector<double>> sensorEdges = {{-6.03 , 9.94}, { -5.53, 10.84}};  //older version for best x reco
-    //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}}; //original version whole sensor
-    std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
-    std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
-    std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
+    //std::vector<std::vector<double>> sensorEdges = {{-3.5 , -4.0}, { 0.5, 0.0}}; //square interior of pads
+    std::vector<std::vector<double>> sensorEdges = {{0.0 , -5.0}, { 2.0, -3.0}}; //square interior of pads
+    //std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
+    //std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
+    //std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
 };
 
 #endif
