@@ -41,6 +41,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     double timeDiffHigh = 1.0;
     int timeDiffYnbin = 50;
 
+    int    bvNbin = 500;
+    double bvLow  = 0.0;
+    double bvHigh = 500.0;
+
     int rowIndex = 0;
     for(const auto& row : geometry)
     {
@@ -114,6 +118,12 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_2d_histos,"amp_vs_x_channel_bottom"+r+s, "; X [mm]; amp", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
             utility::makeHisto(my_2d_histos,"stripBoxInfo"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);
             utility::makeHisto(my_2d_histos,"stripBoxInfoY"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);
+
+            utility::makeHisto(my_2d_histos,"timeDiff_vs_BV_channel"+r+s,    "; BV [V]; #Delta t [ps]", bvNbin,bvLow,bvHigh, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_2d_histos,"amp_vs_BV_channel"+r+s,         "; BV [V]; amp [mV]"     , bvNbin,bvLow,bvHigh, 250,0.0,500);
+            utility::makeHisto(my_2d_histos,"risetime_vs_BV_channel"+r+s,    "; BV [V]; risetime [ps]", bvNbin,bvLow,bvHigh, 100,100.0,1500.0);
+            utility::makeHisto(my_2d_histos,"baselineRMS_vs_BV_channel"+r+s, "; BV [V]; amp [mV]"     , bvNbin,bvLow,bvHigh, 250,0.0,250); 
+            utility::makeHisto(my_2d_histos,"slewrate_vs_BV_channel"+r+s,    "; BV [V]; slewrate"     , bvNbin,bvLow,bvHigh, 300,0.0,400.0); 
 
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
@@ -571,7 +581,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
-
+    const auto& voltage = tr.getVar<int>("voltage");
     int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
     int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
     bool plotWaveForm = false;
@@ -838,6 +848,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "risetime_vs_amp"+r+s,ampChannel, risetime);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "amp_vs_y_channel"+r+s, y,ampChannel);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "relFrac_vs_x_channel"+r+s, x,relFracChannel);
+
+                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "timeDiff_vs_BV_channel"+r+s, voltage,time-photekTime);
+                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "amp_vs_BV_channel"+r+s, voltage,ampChannel);
+                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "risetime_vs_BV_channel"+r+s, voltage,risetime);
+                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "baselineRMS_vs_BV_channel"+r+s, voltage,noise);
+                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "slewrate_vs_BV_channel"+r+s, voltage,slewrate);
+
                 /*
                 utility::fillHisto(pass && goodHit && goodNearHit,                          my_2d_histos, "relFrac_vs_x_channel"+r+s+"_NearHit", x,relFracChannel);
                 utility::fillHisto(pass && goodHit,                                         my_2d_histos, "AmpOverAmpandAmpMax_vs_x_channel"+r+s, x,xTalkChannel);
