@@ -394,7 +394,7 @@ if ('twoStrips' in info.outHistoName):
 htemp.Draw("AXIS same")
 legend.Draw();
 
-myStyle.BeamInfo()
+# myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
 save_name = "%sPositionRes_vs_x%s"%(outdir,pref_hotspot) if not useTight else "%sPositionRes_vs_x_tight"%(outdir)

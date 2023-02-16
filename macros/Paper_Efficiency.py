@@ -177,7 +177,7 @@ legend.AddEntry(hist_Global_TwoStrips, "Two strip reconstruction")
 legend.Draw()
 htemp.Draw("AXIS same")
 
-myStyle.BeamInfo()
+# myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
 canvas.SaveAs("%sEfficiencyAll_vs_x%s"%(outdir, tight_ext)+".gif")
