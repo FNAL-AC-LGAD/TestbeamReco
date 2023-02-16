@@ -83,6 +83,7 @@ n_channels = 0
 for channel in range(0, len(list_amplitude_vs_x)):
     # print("Channel : " + str(channel))
     maxAmp = 0
+    totalEvents = list_th2_amplitude_vs_x[channel].GetEntries()
     for i in range(1, list_amplitude_vs_x[channel].GetXaxis().GetNbins()):
         #print ("Bin " + str(i))
 
@@ -97,7 +98,11 @@ for channel in range(0, len(list_amplitude_vs_x)):
         value = myMean            
         nEvents = tmpHist.GetEntries()
 
-        if(nEvents > 50):
+        nXBins = th1_Nbins
+        minEvtsCut = totalEvents/nXBins
+        if i==1: print("Channel %i: nEvents > %.2f (Total events: %i; N bins: %i)"%(channel,minEvtsCut,totalEvents,nXBins))
+
+        if(nEvents > minEvtsCut):
             #use coarser bins when the signal is bigger
             if (myMean > 50) :
                 tmpHist.Rebin(5)
