@@ -61,14 +61,14 @@ fit_range = {   # 2022 sensors
                 "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'one': [-4.0,4.0], 'two': [-1.1,1.1]},
                 # 2023 sensors (need to be updated)
                 "BNL_50um_1cm_450um_W3051_2_2_170V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-                "BNL_50um_1cm_400um_W3051_1_4": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-                "BNL_50um_1cm_450um_W3052_2_4": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-                "BNL_20um_1cm_400um_W3074_1_4": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-                "BNL_20um_1cm_400um_W3075_1_2": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-                "BNL_20um_1cm_450um_W3074_2_1": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-                "BNL_20um_1cm_450um_W3075_2_4": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-                "BNL_50um_2p5cm_mixConfig1_W3051_1_4": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-                "BNL_50um_2p5cm_mixConfig2_W3051_1_4": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+                "BNL_50um_1cm_400um_W3051_1_4_160V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+                "BNL_50um_1cm_450um_W3052_2_4_185V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+                "BNL_20um_1cm_400um_W3074_1_4_95V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+                "BNL_20um_1cm_400um_W3075_1_2_80V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+                "BNL_20um_1cm_450um_W3074_2_1_95V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+                "BNL_20um_1cm_450um_W3075_2_4_80V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+                "BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+                "BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
                 }
 
 
@@ -79,12 +79,16 @@ parser.add_option('-a', dest='plotAll', action='store_true', default = False, he
 parser.add_option('-m', '--min', dest='min', default=-1.0, type="float", help="Low limit of the fit (fmin): myMean + (fmin)*myRMS.")
 parser.add_option('-M', '--max', dest='max', default=1.0, type="float", help="High limit of the fit (fmax): myMean + (fmax)*myRMS.")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
 runPad = options.runPad
 fitmin = options.min
 fitmax = options.max
+
+useTight = options.useTight
+tight_ext = "_tight" if useTight else ""
 
 outdir=""
 outdir = myStyle.getOutputDir(dataset)
@@ -97,12 +101,12 @@ channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2)
 range_oneS = fit_range[dataset]['one']
 range_twoS = fit_range[dataset]['two']
 
-hists = [('deltaX','deltaX',"tracker",fitmin,fitmax),
-        ('deltaX_oneStrip','deltaX_oneStrip',"tracker",range_oneS[0],range_oneS[1]),
-        ('deltaX_oneStrip_onMetal','deltaX_oneStrip_onMetal',"tracker",range_oneS[0],range_oneS[1]),
-        ('deltaX_twoStrips','deltaX_twoStrips',"tracker",range_twoS[0],range_twoS[1]), # ('deltaX_twoStrips_noMetal','deltaX_twoStrips_noMetal',"tracker"),
-        ("timeDiff","time","photek",fitmin,fitmax), ("weighted2_timeDiff","weighted2Time","photek",fitmin,fitmax),
-        ("timeDiffTracker","time_tracker","photek",fitmin,fitmax), ("weighted2_timeDiff_tracker","weighted2_time_tracker","photek",fitmin,fitmax),
+hists = [('deltaX%s'%tight_ext,'deltaX',"tracker",fitmin,fitmax),
+        ('deltaX_oneStrip%s'%tight_ext,'deltaX_oneStrip',"tracker",range_oneS[0],range_oneS[1]),
+        ('deltaX_oneStrip_onMetal%s'%tight_ext,'deltaX_oneStrip_onMetal',"tracker",range_oneS[0],range_oneS[1]),
+        ('deltaX_twoStrips%s'%tight_ext,'deltaX_twoStrips',"tracker",range_twoS[0],range_twoS[1]), # ('deltaX_twoStrips_noMetal','deltaX_twoStrips_noMetal',"tracker"),
+        ("timeDiff%s"%tight_ext,"time","photek",fitmin,fitmax), ("weighted2_timeDiff%s"%tight_ext,"weighted2Time","photek",fitmin,fitmax),
+        ("timeDiffTracker%s"%tight_ext,"time_tracker","photek",fitmin,fitmax), ("weighted2_timeDiff_tracker%s"%tight_ext,"weighted2_time_tracker","photek",fitmin,fitmax),
         ('deltaY','deltaY','tracker',fitmin,fitmax),
         ('deltaY_oneStrip','deltaY_oneStrip','tracker',fitmin,fitmax),
         ('deltaY_twoStrips','deltaY_twoStrips','tracker',fitmin,fitmax),

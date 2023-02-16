@@ -74,7 +74,8 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
             error = 0.0
             
             #Do fit 
-            if(nEvents > 50):
+            # if(nEvents > 50):
+            if(nEvents > 10):
                 #tmpHist.Rebin(4)
                 
                 fit = TF1('fit','gaus',fitlow,fithigh)
@@ -97,7 +98,7 @@ for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
                 #
                 #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             else:
-                value = -100.0            
+                value = -100.0
                 
             info.th2.SetBinContent(i,j,value)
             info.th2.SetBinError(i,j,error)
