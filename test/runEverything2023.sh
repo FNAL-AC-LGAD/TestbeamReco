@@ -29,12 +29,13 @@ python PlotCutFlow.py               -D BNL_50um_1cm_450um_W3051_2_2_170V
 python Paper_1DRes.py               -D BNL_50um_1cm_450um_W3051_2_2_170V
 python Paper_Efficiency.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5
 python Paper_XRes.py                -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5
+python Paper_PlotTimeDiffVsX.py     -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5 -y 150
 
 python Paper_1DRes.py               -D BNL_50um_1cm_450um_W3051_2_2_170V -t
 python Paper_Efficiency.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5 -t
 python Paper_XRes.py                -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5 -t
+python Paper_PlotTimeDiffVsX.py     -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5 -y 150 -t
 
-# python Paper_PlotTimeDiffVsX.py     -D BNL_50um_1cm_450um_W3051_2_2_170V -x 1.2 -y 82
 # python Paper_XRes.py                -D BNL_50um_1cm_450um_W3051_2_2_170V -x 1.2 --hot
 # python Paper_PlotTimeDiffVsX.py     -D BNL_50um_1cm_450um_W3051_2_2_170V -x 1.2 -y 82 --hot
 # python Paper_Summary_XRes_Time.py   -D BNL_50um_1cm_450um_W3051_2_2_170V -x 1.2 -y 70 --hot
@@ -293,12 +294,13 @@ python PlotCutFlow.py               -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V
 python Paper_1DRes.py               -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V
 python Paper_Efficiency.py          -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7
 python Paper_XRes.py                -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7
+python Paper_PlotTimeDiffVsX.py     -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7 -y 150
 
 python Paper_1DRes.py               -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -t
 python Paper_Efficiency.py          -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7 -t
 python Paper_XRes.py                -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7 -t
+python Paper_PlotTimeDiffVsX.py     -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7 -y 150 -t
 
-# python Paper_PlotTimeDiffVsX.py     -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 1.2 -y 82
 # python Paper_XRes.py                -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 1.2 --hot
 # python Paper_PlotTimeDiffVsX.py     -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 1.2 -y 82 --hot
 # python Paper_Summary_XRes_Time.py   -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 1.2 -y 70 --hot
@@ -334,12 +336,13 @@ python PlotCutFlow.py               -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V
 python Paper_1DRes.py               -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V
 python Paper_Efficiency.py          -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7
 python Paper_XRes.py                -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7
+python Paper_PlotTimeDiffVsX.py     -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -y 150
 
 python Paper_1DRes.py               -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -t
 python Paper_Efficiency.py          -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -t
 python Paper_XRes.py                -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -t
+python Paper_PlotTimeDiffVsX.py     -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -y 150 -t
 
-# python Paper_PlotTimeDiffVsX.py     -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -y 82
 # python Paper_XRes.py                -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 --hot
 # python Paper_PlotTimeDiffVsX.py     -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -y 82 --hot
 # python Paper_Summary_XRes_Time.py   -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -y 70 --hot

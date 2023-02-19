@@ -81,6 +81,7 @@ parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which deter
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
+parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 
 options, args = parser.parse_args()
 useShift = options.noShift
@@ -105,6 +106,9 @@ ylength = float(options.ylength)
 debugMode = options.debugMode
 pref_hotspot = "_hotspot" if (options.hotspot) else ""
 
+useTight = options.useTight
+tight_ext = "_tight" if useTight else ""
+
 outdir = myStyle.GetPlotsDir(outdir, "Paper_TimeRes/")
 # outdir = myStyle.getOutputDir("Paper2022")
 all_histoInfos = [
@@ -114,10 +118,10 @@ all_histoInfos = [
     # HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_time_DiffTracker"),
     # HistoInfo("weighted2_timeDiff_LGADXY_vs_xy", inputfile, "weighted2_time_DiffLGADXY"),
     # #HistoInfo("weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", inputfile, "weighted2_time_DiffLGADX_Even"),
-    HistoInfo("timeDiff_vs_xy", inputfile, "time_diff", True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
-    HistoInfo("timeDiffTracker_vs_xy", inputfile, "time_DiffTracker",True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
-    HistoInfo("weighted2_timeDiff_tracker_vs_xy%s"%pref_hotspot, inputfile, "weighted2_time_DiffTracker%s"%pref_hotspot,True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
-    HistoInfo("weighted2_timeDiff_LGADXY_vs_xy", inputfile, "weighted2_time_DiffLGADXY",True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
+    HistoInfo("timeDiff_vs_xy%s"%(tight_ext), inputfile, "time_diff", True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
+    HistoInfo("timeDiffTracker_vs_xy%s"%(tight_ext), inputfile, "time_DiffTracker",True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
+    HistoInfo("weighted2_timeDiff_tracker_vs_xy%s%s"%(pref_hotspot,tight_ext), inputfile, "weighted2_time_DiffTracker%s"%pref_hotspot,True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
+    HistoInfo("weighted2_timeDiff_LGADXY_vs_xy%s"%(tight_ext), inputfile, "weighted2_time_DiffLGADXY",True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
 ]
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -205,7 +209,7 @@ for i in range(0, nXBins+1):
         # info.th1Mean.SetBinError(i,errorMean)
                         
 # Plot 2D histograms
-outputfile = TFile("%stimeDiffVsX%s.root"%(outdir,pref_hotspot),"RECREATE")
+outputfile = TFile("%stimeDiffVsX%s%s.root"%(outdir,pref_hotspot,tight_ext),"RECREATE")
 for info in all_histoInfos:
     #info.th1.Draw("hist e")
     info.th1.SetStats(0)
@@ -240,8 +244,8 @@ gPad.RedrawAxis("g")
     #myStyle.BeamInfo()
     #myStyle.SensorInfoSmart(dataset)
 
-canvas.SaveAs(outdir+"TimeRes_vs_x%s_"%pref_hotspot+info.outHistoName+".gif")
-canvas.SaveAs(outdir+"TimeRes_vs_x%s_"%pref_hotspot+info.outHistoName+".pdf")
+canvas.SaveAs(outdir+"TimeRes_vs_x%s%s_"%(pref_hotspot,tight_ext)+info.outHistoName+".gif")
+canvas.SaveAs(outdir+"TimeRes_vs_x%s%s_"%(pref_hotspot,tight_ext)+info.outHistoName+".pdf")
 info.th1.Write()
 
 hTimeRes =  all_histoInfos[0].th1
@@ -293,11 +297,11 @@ htemp.Draw("AXIS same")
 legend.Draw();
 
 
-myStyle.BeamInfo()
+# myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
-canvas.SaveAs("%sTimeRes_vs_x%s_BothMethods.gif"%(outdir,pref_hotspot))
-canvas.SaveAs("%sTimeRes_vs_x%s_BothMethods.pdf"%(outdir,pref_hotspot))
+canvas.SaveAs("%sTimeRes_vs_x%s%s_BothMethods.gif"%(outdir,pref_hotspot,tight_ext))
+canvas.SaveAs("%sTimeRes_vs_x%s%s_BothMethods.pdf"%(outdir,pref_hotspot,tight_ext))
 
 hTimeW2Tracker.Clone("h_time").Write()
 
