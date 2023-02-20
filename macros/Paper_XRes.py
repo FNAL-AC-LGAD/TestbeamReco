@@ -24,10 +24,10 @@ class HistoInfo:
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
+        self.sensor = sensor
         self.th2 = self.getTH2(f, inHistoName, sensor)
         self.th1 = self.getTH1(self.th2, outHistoName, self.shift(), self.fine_tuning(sensor), addShift)
         self.fine_tune = self.fine_tuning(sensor)
-        self.sensor = sensor
 
     def getTH2(self, f, name, sensor):
         th2 = f.Get(name)
@@ -42,7 +42,15 @@ class HistoInfo:
 
     def shift(self):
         real_center = self.f.Get("stripBoxInfo03").GetMean(1)
-        if not self.f.Get("stripBoxInfo06"): real_center = (self.f.Get("stripBoxInfo02").GetMean(1) + real_center)/2.
+        if not self.f.Get("stripBoxInfo06"):
+            real_center = (self.f.Get("stripBoxInfo02").GetMean(1) + real_center)/2.
+
+        if ("2p5cm_mixConfig1_W3051" in self.sensor):
+            real_center = self.f.Get("stripBoxInfo02").GetMean(1)
+
+        elif ("2p5cm_mixConfig2_W3051" in self.sensor):
+            real_center = self.f.Get("stripBoxInfo04").GetMean(1)
+
         return real_center
 
     def fine_tuning(self, sensor):
@@ -52,6 +60,10 @@ class HistoInfo:
         elif "1cm_500up_100uw" in sensor: value = self.shift()
         elif "0p5cm_500up_200uw_1_4" in sensor: value = -value
         # if sensor=="BNL2020": value = 0.0075
+
+        if ("2p5cm_mixConfig" in sensor):
+            value = self.shift()
+
         return value
 
 # Construct the argument parser
@@ -352,8 +364,8 @@ ymax = hist_info_twoStrip.yMax
 this_shift = hist_info_twoStrip.shift() if useShift else 0
 
 for i,box in enumerate(boxes):
-    if (i!=0 and i!=(len(boxes)-1)):
-        box.Draw()
+    # if (i!=0 and i!=(len(boxes)-1)):
+    box.Draw()
 
 # Draw lines
 binary_readout_res_sensor.Draw("same")

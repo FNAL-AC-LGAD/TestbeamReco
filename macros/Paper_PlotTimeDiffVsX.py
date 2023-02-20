@@ -21,6 +21,7 @@ class HistoInfo:
         self.outHistoName = outHistoName
         self.xlabel = xlabel
         self.ylabel = ylabel
+        self.sensor = sensor
         self.th2 = self.getTH2(f, inHistoName, sensor)
         # self.th1 = self.getTH1(self.th2, outHistoName, self.shift(), self.fine_tuning(sensor))
         self.th1 = self.getTH1(self.th2, outHistoName, self.shift(), self.fine_tuning(sensor), addShift)
@@ -44,6 +45,13 @@ class HistoInfo:
     def shift(self):
         real_center = self.f.Get("stripBoxInfo03").GetMean(1)
         if not self.f.Get("stripBoxInfo06"): real_center = (self.f.Get("stripBoxInfo02").GetMean(1) + real_center)/2.
+
+        if ("2p5cm_mixConfig1_W3051" in self.sensor):
+            real_center = self.f.Get("stripBoxInfo02").GetMean(1)
+
+        elif ("2p5cm_mixConfig2_W3051" in self.sensor):
+            real_center = self.f.Get("stripBoxInfo04").GetMean(1)
+
         return real_center
 
     def fine_tuning(self, sensor):
@@ -53,6 +61,10 @@ class HistoInfo:
         elif "1cm_500up_100uw" in sensor: value = self.shift()
         elif "0p5cm_500up_200uw_1_4" in sensor: value = -value
         # if sensor=="BNL2020": value = 0.0075
+
+        if ("2p5cm_mixConfig" in sensor):
+            value = self.shift()
+
         return value
 
     # def shift(self):
@@ -280,7 +292,8 @@ hTimeTracker.Draw("hist e same")
 hTimeW2Tracker.Draw("hist e same")
 htemp.Draw("AXIS same")
 gPad.RedrawAxis("g")
-legend = TLegend(myStyle.GetPadCenter()-0.15,1-myStyle.GetMargin()-0.80,myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.60)
+# legend = TLegend(myStyle.GetPadCenter()-0.15,1-myStyle.GetMargin()-0.80,myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.60)
+legend = TLegend(myStyle.GetPadCenter()-0.20,2*myStyle.GetMargin()+0.01,myStyle.GetPadCenter()+0.20,2*myStyle.GetMargin()+0.16)
 legend.SetBorderSize(0)
 legend.SetFillColor(kWhite)
 legend.SetTextFont(myStyle.GetFont())
