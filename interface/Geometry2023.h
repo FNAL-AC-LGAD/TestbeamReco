@@ -435,10 +435,10 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.20; // Sensor's local frame
     double ymax =  5.20; // Sensor's local frame
-    double positionRecoMaxPoint = 0.75; // 0.75;
+    double positionRecoMaxPoint = 0.83; // 0.84;
     double photekSignalThreshold = 200.0;
-    double noiseAmpThreshold  = 7.0;
-    double signalAmpThreshold = 7.0;
+    double noiseAmpThreshold  = 15.0; // 7.0;
+    double signalAmpThreshold = 15.0; // 7.0;
     bool uses2022Pix = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
@@ -448,7 +448,8 @@ public:
     // std::vector<double> positionRecoPar = {0.250000, -0.936464, 1.897516, -15.593843, 32.081749};
     // std::vector<double> positionRecoPar = {0.250000, -0.989627, 3.870174, -40.279305, 160.215629, -229.438954};
     // std::vector<double> positionRecoPar = {0.250000, -0.997329, 4.084599, -42.707886, 171.844257, -249.440159};
-    std::vector<double> positionRecoPar = {0.250000, -0.980770, 3.669108, -39.123618, 159.022355, -231.519371};
+    // std::vector<double> positionRecoPar = {0.250000, -0.980770, 3.669108, -39.123618, 159.022355, -231.519371};
+    std::vector<double> positionRecoPar = {0.250000, -0.806497, 1.475103, -4.704219, 5.096062, -0.764719};
     // std::vector<std::vector<double>> sensorEdges = {{-3.0, -2.0}, {1.0, 7.6}};
     // std::vector<std::vector<double>> sensorEdges = {{-2.0, -4.8}, {2.0, 4.8}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-2.4, -5.5}, {2.4, 5.5}}; // Sensor's local frame
