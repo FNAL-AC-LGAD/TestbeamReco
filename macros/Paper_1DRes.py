@@ -127,11 +127,11 @@ for t in hists:
     if h:
         plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], runPad, 100, (0,1), t[3], t[4])
 
-        if (t[0] in ['deltaX_oneStrip','deltaX_twoStrips']):
+        if (t[0] in ['deltaX_oneStrip%s'%tight_ext,'deltaX_twoStrips%s'%tight_ext]):
                 # print("* Number of entries in",t[0],":",h.GetEntries())
                 nEntries[t[0]] = h.GetEntries()
 
 ## Get fraction of events per reconstruction method
 for reco_method in nEntries:
-        print("* {0}: {1}/{2} ({3:.2f} %)".format(reco_method, nEntries[reco_method], sum(nEntries.values()), 100*nEntries[reco_method]/sum(nEntries.values())))
-
+        print("\t* {0}: {1}/{2} ({3:.2f} %)".format(reco_method, nEntries[reco_method], sum(nEntries.values()), 100*nEntries[reco_method]/sum(nEntries.values())))
+print()

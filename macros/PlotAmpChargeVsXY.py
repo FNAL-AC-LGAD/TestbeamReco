@@ -45,8 +45,14 @@ outdir = myStyle.GetPlotsDir(outdir, "AmpCharge_XY/")
 list_name3Dhist = ["amplitude_vs_xy", "risetime_vs_xy", "charge_vs_xy", "ampChargeRatio_vs_xy"]
 list_namesOutput = ["Amplitude_vs_xy", "Risetime_vs_xy", "Charge_vs_xy", "AmpChargeRatio_vs_xy"]
 
-# z_limits = [[0.0,100.0], [0.0,1500.0], [0.0,150.0], [0.0,15.0]] # Default
-z_limits = [[10.0,90.0], [400.0,1000.0], [1.0,30.0], [2.0,7.0]]
+z_limits = [[0.0,100.0], [0.0,1500.0], [0.0,150.0], [0.0,15.0]] # Default
+
+if ("50um_1cm_450um" in dataset):
+    z_limits = [[10.0,90.0], [400.0,1000.0], [1.0,30.0], [2.0,7.0]] # 50um_1cm
+elif ("50um_2p5cm_mix" in dataset):
+    z_limits = [[15.0,50.0], [400.0,1000.0], [1.0,15.0], [2.0,7.0]] # 2p5cm
+elif ("20um_1cm_450um" in dataset):
+    z_limits = [[15.0,35.0], [400.0,1000.0], [1.0,10.0], [2.0,7.0]] # 20um
 
 # If you want to plot only one of the xy maps, or define a specific Z range for that one, use -p
 if (what2plot != -1):

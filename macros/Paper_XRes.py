@@ -419,5 +419,7 @@ oneStripHist.Write()
 
 htemp.Delete()
 binary_readout_res_sensor.Write("l_sqrt12")
+
+print()
 outputfile.Close()
 if (is_hotspot): input_fullSnsr.Close()
