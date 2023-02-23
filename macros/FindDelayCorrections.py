@@ -44,6 +44,9 @@ def sanitize_profile2D(profile2D):
     for ix in range(profile2D.GetNbinsX()+1):
         for iy in range(profile2D.GetNbinsY()+1):
             ibin = profile2D.GetBin(ix,iy)
+            if profile2D.GetBinContent(ibin) == 0:
+                profile2D.SetBinError(ibin,0)
+                continue
             if profile2D.GetBinEntries(ibin)<20 or profile2D.GetBinError(ibin)/profile2D.GetBinContent(ibin) > 0.2: 
                 profile2D.SetBinContent(ibin,0)
                 profile2D.SetBinError(ibin,0)

@@ -455,6 +455,13 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"charge_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,150.0);
     utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,15.0);
 
+
+    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+
     //Efficiency
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
@@ -539,7 +546,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
     const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
-    const auto& numLGADchannels = tr.getVar<int>("numLGADchannels");
+    // const auto& numLGADchannels = tr.getVar<int>("numLGADchannels");
     const auto& sensorCenter = tr.getVar<double>("sensorCenter");
     const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
@@ -563,6 +570,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
     const auto& voltage = tr.getVar<int>("voltage");
+
+    std::vector<int> lowEdgeStrip = indexToGeometryMap.at(lowGoodStripIndex-1);
+    std::vector<int> highEdgeStrip = indexToGeometryMap.at(highGoodStripIndex+1);
+
     int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
     int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
     bool plotWaveForm = false;
@@ -694,11 +705,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
         bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
+        bool hitSensorTightYNoEdgeX = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]] < x && x < stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]] && hitSensorTightY;
         bool pass = goodTrack && hitSensor && goodPhotek; // equivalent to pass_loose
-        bool pass_loose = goodTrack && hitSensor && goodPhotek;
-        bool pass_tight = goodTrack && hitSensorTight && goodPhotek;
-        bool pass_tightY = goodTrack && hitSensorOnlyTightY && goodPhotek;
-        bool pass_tightY_noPhotek = goodTrack && hitSensorOnlyTightY;
+        bool pass_loose = goodTrack && hitSensor && goodPhotek; // uses sensorEdges limits
+        bool pass_tight = goodTrack && hitSensorTight && goodPhotek; // uses sensorEdgesTight limits (removes half next-to-edge strips)
+        bool pass_tightY = goodTrack && hitSensorTightY && goodPhotek; // uses sensorEdgesTight Y limits only
+        bool pass_tightYNoEdgeX = goodTrack && hitSensorTightYNoEdgeX && goodPhotek; // uses sensorEdgesTight Y limits and removes half edge strips
+        bool pass_tightY_noPhotek = goodTrack && hitSensorTightYNoEdgeX; // uses sensorEdgesTight Y limits, removes half edge strips and Photek
 
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool inBottomRow = y>ySlices[0][0] && y<ySlices[0][1];
@@ -1064,12 +1077,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_2d_histos, "dXdFrac_vs_Xtrack", x,dXdFrac);
 
 
-        utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,           my_2d_histos, "deltaX_vs_Xtrack_twoStrips_tight", x,x_reco-x);
-        utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,           my_2d_histos, "Amp12_vs_x_tight", x, Amp12);
-        utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,           my_2d_histos, "Amp1_vs_x_tight", x, maxAmp);
-        utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,           my_2d_histos, "Amp2_vs_x_tight", x, amp2);
-        utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,           my_2d_histos, "BaselineRMS12_vs_x_tight", x, Noise12);
-        utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,           my_2d_histos, "dXdFrac_vs_Xtrack_tight", x,dXdFrac);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,    my_2d_histos, "deltaX_vs_Xtrack_twoStrips_tight", x,x_reco-x);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,    my_2d_histos, "Amp12_vs_x_tight", x, Amp12);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,    my_2d_histos, "Amp1_vs_x_tight", x, maxAmp);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,    my_2d_histos, "Amp2_vs_x_tight", x, amp2);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,    my_2d_histos, "BaselineRMS12_vs_x_tight", x, Noise12);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,    my_2d_histos, "dXdFrac_vs_Xtrack_tight", x,dXdFrac);
 
 
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaX_vs_Xreco", x_reco,x_reco-x);
@@ -1216,6 +1229,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_goodSig_vs_xy", x,y,weighted2_time_goodSig-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "deltaX_vs_Xtrack_vs_Ytrack", x,y,x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco  && twoGoodChannel,my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack", x,y,y_reco-y);
+
+
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_3d_histos, "timeDiff_vs_xy_tight", x,y,maxAmpTime-photekTime);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_3d_histos, "timeDiffTracker_vs_xy_tight", x,y,maxAmpTimeTracker-photekTime);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_3d_histos, "weighted2_timeDiff_tracker_vs_xy_tight", x,y,weighted2_time_tracker-photekTime);
+        utility::fillHisto(pass_tightYNoEdgeX && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_tight", x,y,weighted2_time_LGADXY-photekTime);
 
 
         // Save profiles and efficiency histos
