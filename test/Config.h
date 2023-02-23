@@ -58,6 +58,7 @@ private:
         tr.registerDerivedVar("stripCenterXPosition", g.stripCenterXPosition);
         tr.registerDerivedVar("stripCenterYPosition", g.stripCenterYPosition);
         tr.registerDerivedVar("timeCalibrationCorrection", g.timeCalibrationCorrection);
+        tr.registerDerivedVar("extraChannelIndex", g.extraChannelIndex);
         tr.registerDerivedVar("photekIndex", g.photekIndex);
         tr.registerDerivedVar("lowGoodStripIndex", g.lowGoodStripIndex);
         tr.registerDerivedVar("highGoodStripIndex", g.highGoodStripIndex);
@@ -65,6 +66,7 @@ private:
         tr.registerDerivedVar("CFD_list", g.CFD_list);
         tr.registerDerivedVar("sensorEdges", g.sensorEdges);
         tr.registerDerivedVar("sensorEdgesTight", g.sensorEdgesTight);
+        tr.registerDerivedVar("sensorEdgesExtra", g.sensorEdgesExtra);
         tr.registerDerivedVar("alpha", g.alpha);
         tr.registerDerivedVar("beta",  g.beta);
         tr.registerDerivedVar("gamma", g.gamma);
@@ -191,6 +193,8 @@ public:
 		else if(filetag.find("CFD_spy")                                      != std::string::npos) registerGeometry(tr, CFD(voltage));
 		else if(filetag.find("CFD_noSpy")                                    != std::string::npos) registerGeometry(tr, CFD(voltage));
 	    else if(filetag.find("HPK_20um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_20um_500x500um_E600_2x2PadGeometry(voltage));
+	    else if(filetag.find("HPK_30um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_30um_500x500um_E600_2x2PadGeometry(voltage));
+	    else if(filetag.find("HPK_50um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_50um_500x500um_E600_2x2PadGeometry(voltage));
 		else
         {
             registerGeometry(tr, DefaultGeometry(voltage));

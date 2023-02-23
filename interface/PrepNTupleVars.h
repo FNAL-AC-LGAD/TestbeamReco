@@ -172,8 +172,11 @@ private:
 
         // Cut to get hits that only go through active sensor
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
+        const auto& sensorEdgesExtra = tr.getVar<std::vector<std::vector<double>>>("sensorEdgesExtra");
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
+        bool hitSensorExtra = sensorEdgesExtra[0][0] < x && x < sensorEdgesExtra[1][0] &&  sensorEdgesExtra[0][1] < y && y < sensorEdgesExtra[1][1];
         tr.registerDerivedVar("hitSensor", hitSensor);
+        tr.registerDerivedVar("hitSensorExtra", hitSensorExtra);
 
         const auto& sensorEdgesTight = tr.getVar<std::vector<std::vector<double>>>("sensorEdgesTight");
 

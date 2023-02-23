@@ -42,7 +42,7 @@ namespace utility
         return vecvec;
     }
 
-    template<typename T> std::pair<int,int> findNthRankChannel(const std::vector<std::vector<T>>& channels, unsigned int rank)
+    template<typename T> std::pair<int,int> findNthRankChannel(const std::vector<std::vector<T>>& channels, unsigned int rank, T extraChannel)
     {
         typedef std::tuple<T,int,int> TPL;
         std::vector<TPL> vecInfo;
@@ -50,6 +50,7 @@ namespace utility
         {
             for(unsigned int j = 0; j < channels[i].size(); j++)
             {
+                if(channels[i][j] == extraChannel) continue;
                 vecInfo.emplace_back(channels[i][j], i, j);
             }
         }

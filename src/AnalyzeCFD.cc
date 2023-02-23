@@ -378,8 +378,8 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
         const auto& chi2 = tr.getVar<float>("chi2");
         const auto& xSlope = tr.getVar<float>("xSlope");
         const auto& ySlope = tr.getVar<float>("ySlope");
-        const auto& x = tr.getVar<double>("x") + 2.4;
-        const auto& y = tr.getVar<double>("y") - 1.25;
+        const auto& x = tr.getVar<double>("x") + 2.3;
+        const auto& y = tr.getVar<double>("y") - 0.2;
         const auto& xErrDUT = tr.getVar<float>("xErrDUT");
         const auto& x_reco = tr.getVar<double>("x_reco");
         const auto& x_reco_basic = tr.getVar<double>("x_reco_basic");
