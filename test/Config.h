@@ -58,6 +58,7 @@ private:
         tr.registerDerivedVar("stripCenterXPosition", g.stripCenterXPosition);
         tr.registerDerivedVar("stripCenterYPosition", g.stripCenterYPosition);
         tr.registerDerivedVar("timeCalibrationCorrection", g.timeCalibrationCorrection);
+        tr.registerDerivedVar("extraChannelIndex", g.extraChannelIndex);
         tr.registerDerivedVar("photekIndex", g.photekIndex);
         tr.registerDerivedVar("lowGoodStripIndex", g.lowGoodStripIndex);
         tr.registerDerivedVar("highGoodStripIndex", g.highGoodStripIndex);
@@ -65,6 +66,7 @@ private:
         tr.registerDerivedVar("CFD_list", g.CFD_list);
         tr.registerDerivedVar("sensorEdges", g.sensorEdges);
         tr.registerDerivedVar("sensorEdgesTight", g.sensorEdgesTight);
+        tr.registerDerivedVar("sensorEdgesExtra", g.sensorEdgesExtra);
         tr.registerDerivedVar("alpha", g.alpha);
         tr.registerDerivedVar("beta",  g.beta);
         tr.registerDerivedVar("gamma", g.gamma);
@@ -177,18 +179,22 @@ public:
         else if(filetag.find("EIC_W1_0p5cm_500up_200uw_1_4")           != std::string::npos) registerGeometry(tr, EIC_W1_0p5cm_500um_300um_gap_1_4_StripsGeometry(voltage));
         else if(filetag.find("BNL_500um_squares_175V")                 != std::string::npos) registerGeometry(tr, BNL_500um_squares_Geometry(voltage));
         else if(filetag.find("BNL2021_22_medium_150up_80uw")           != std::string::npos) registerGeometry(tr, BNL2021MediumV2Geometry(voltage));
-        else if(filetag.find("IHEP_W1_I_150up_80uw")                        != std::string::npos) registerGeometry(tr, IHEPGeometry(voltage));
+        else if(filetag.find("IHEP_W1_I_150up_80uw")                   != std::string::npos) registerGeometry(tr, IHEPGeometry(voltage));
         // 2023 Campaign
         else if(filetag.find("BNL_50um_1cm_450um_W3051_2_2")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_450um_W3051_2_2_StripsGeometry(voltage));
-	else if(filetag.find("BNL_50um_1cm_400um_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_400um_W3051_1_4_StripsGeometry(voltage));
-	else if(filetag.find("BNL_50um_1cm_450um_W3052_2_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_450um_W3052_2_4_StripsGeometry(voltage)); 
-	else if(filetag.find("BNL_20um_1cm_400um_W3074_1_4")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_400um_W3074_1_4_StripsGeometry(voltage));
-	else if(filetag.find("BNL_20um_1cm_400um_W3075_1_2")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_400um_W3075_1_2_StripsGeometry(voltage));
-	else if(filetag.find("BNL_20um_1cm_450um_W3074_2_1")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_450um_W3074_2_1_StripsGeometry(voltage));
-	else if(filetag.find("BNL_20um_1cm_450um_W3075_2_4")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_450um_W3075_2_4_StripsGeometry(voltage));
-	else if(filetag.find("BNL_50um_2p5cm_mixConfig1_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig1_W3051_1_4_StripsGeometry(voltage));
-	else if(filetag.find("BNL_50um_2p5cm_mixConfig2_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig2_W3051_1_4_StripsGeometry(voltage));
-	else if(filetag.find("HPK_20um_500x500um_2x2pad_E600_FNAL")                 != std::string::npos) registerGeometry(tr, HPK_20um_500x500um_E600_2x2PadGeometry(voltage));
+		else if(filetag.find("BNL_50um_1cm_400um_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_400um_W3051_1_4_StripsGeometry(voltage));
+		else if(filetag.find("BNL_50um_1cm_450um_W3052_2_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_450um_W3052_2_4_StripsGeometry(voltage)); 
+		else if(filetag.find("BNL_20um_1cm_400um_W3074_1_4")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_400um_W3074_1_4_StripsGeometry(voltage));
+		else if(filetag.find("BNL_20um_1cm_400um_W3075_1_2")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_400um_W3075_1_2_StripsGeometry(voltage));
+		else if(filetag.find("BNL_20um_1cm_450um_W3074_2_1")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_450um_W3074_2_1_StripsGeometry(voltage));
+		else if(filetag.find("BNL_20um_1cm_450um_W3075_2_4")                 != std::string::npos) registerGeometry(tr, BNL_20um_1cm_450um_W3075_2_4_StripsGeometry(voltage));
+		else if(filetag.find("BNL_50um_2p5cm_mixConfig1_W3051_1_4")          != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig1_W3051_1_4_StripsGeometry(voltage));
+		else if(filetag.find("BNL_50um_2p5cm_mixConfig2_W3051_1_4")          != std::string::npos) registerGeometry(tr, BNL_50um_2p5cm_mixConfig2_W3051_1_4_StripsGeometry(voltage));
+		else if(filetag.find("CFD_spy")                                      != std::string::npos) registerGeometry(tr, CFD(voltage));
+		else if(filetag.find("CFD_noSpy")                                    != std::string::npos) registerGeometry(tr, CFD(voltage));
+	    else if(filetag.find("HPK_20um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_20um_500x500um_E600_2x2PadGeometry(voltage));
+	    else if(filetag.find("HPK_30um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_30um_500x500um_E600_2x2PadGeometry(voltage));
+	    else if(filetag.find("HPK_50um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_50um_500x500um_E600_2x2PadGeometry(voltage));
 		else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
@@ -203,7 +209,7 @@ public:
 
         //Define zScan
         double zMin = -60.0, zStep = 1.0;
-        unsigned int nZBins = 81;
+        unsigned int nZBins = 100;
         if (z_dut_def != 0.0)
         {
             zMin = -10.0, zStep = 0.5;
@@ -300,6 +306,16 @@ public:
 
         //Register Modules that are needed for each Analyzer
         if (analyzer=="Analyze")
+        {
+            const std::vector<std::string> modulesList = {
+                "PrepNTupleVars",
+                "SignalProperties",
+                "SpatialReconstruction",
+                "Timing",
+            };
+            registerModules(tr, std::move(modulesList));
+        }
+        else if (analyzer=="AnalyzeCFD")
         {
             const std::vector<std::string> modulesList = {
                 "PrepNTupleVars",

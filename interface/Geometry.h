@@ -29,6 +29,7 @@ public:
     std::vector<double> stripCenterXPosition = {{0,0.0}};
     std::vector<double> stripCenterYPosition = {{0,0.0}};
     int numLGADchannels = 0;
+    int extraChannelIndex = -1;
     int photekIndex = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
@@ -66,6 +67,7 @@ public:
     std::vector<double> positionRecoParBot = {-1}; 
     std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};
     std::vector<std::vector<double>> sensorEdgesTight = {{-999.9, -999.9}, {999.9, 999.9}};
+    std::vector<std::vector<double>> sensorEdgesExtra = {{-999.9, -999.9}, {999.9, 999.9}};
     std::vector<std::vector<double>> ySlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> xSlices = {{-999.9, 999.9}, {-999.9, 999.9}};
     std::vector<std::vector<double>> boxes_XY = {{-999.9, -999.9,-999.9, -999.9}};

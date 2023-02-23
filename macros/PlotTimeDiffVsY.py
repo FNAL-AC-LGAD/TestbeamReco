@@ -148,10 +148,10 @@ for i in range(0, nXBins+1):
             value = 0.0
             valueMean = 0.0
 
-        ## Removing telescope contribution
-        #if value!=0.0:
-        #    error = error*value/TMath.Sqrt(value*value - 10*10)
-        #    value = TMath.Sqrt(value*value - 10*10)
+        # Removing telescope contribution
+        if value!=0.0:
+            error = error*value/TMath.Sqrt(value*value - 9*9)
+            value = TMath.Sqrt(value*value - 9*9)
 
         info.th1.SetBinContent(i,value)
         info.th1.SetBinError(i,error)

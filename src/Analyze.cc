@@ -41,6 +41,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     double timeDiffHigh = 1.0;
     int timeDiffYnbin = 50;
 
+    int    bvNbin = 500;
+    double bvLow  = 0.0;
+    double bvHigh = 500.0;
+
     int rowIndex = 0;
     for(const auto& row : geometry)
     {
@@ -114,6 +118,12 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_2d_histos,"amp_vs_x_channel_bottom"+r+s, "; X [mm]; amp", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
             utility::makeHisto(my_2d_histos,"stripBoxInfo"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);
             utility::makeHisto(my_2d_histos,"stripBoxInfoY"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);
+
+            utility::makeHisto(my_2d_histos,"timeDiff_vs_BV_channel"+r+s,    "; BV [V]; #Delta t [ps]", bvNbin,bvLow,bvHigh, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_2d_histos,"amp_vs_BV_channel"+r+s,         "; BV [V]; amp [mV]"     , bvNbin,bvLow,bvHigh, 250,0.0,500);
+            utility::makeHisto(my_2d_histos,"risetime_vs_BV_channel"+r+s,    "; BV [V]; risetime [ps]", bvNbin,bvLow,bvHigh, 100,100.0,1500.0);
+            utility::makeHisto(my_2d_histos,"baselineRMS_vs_BV_channel"+r+s, "; BV [V]; amp [mV]"     , bvNbin,bvLow,bvHigh, 250,0.0,250); 
+            utility::makeHisto(my_2d_histos,"slewrate_vs_BV_channel"+r+s,    "; BV [V]; slewrate"     , bvNbin,bvLow,bvHigh, 300,0.0,400.0); 
 
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
@@ -261,10 +271,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"weighted_timeDiff_tracker_vs_x", "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
     utility::makeHisto(my_2d_histos,"clusterSize_vs_x", "; X [mm]; Cluster Size", (xmax-xmin)/xBinSize,xmin,xmax, 8,0.0,8.0);
-    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightTop_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightTop", (xmax-xmin)/xBinSize,-0.4,0.4, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightBot_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightBot", (xmax-xmin)/xBinSize,-0.4,0.4, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotRight_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotRight", (ymax-ymin)/yBinSize,-0.5,0.5, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotLeft_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotLeft", (ymax-ymin)/yBinSize,-0.5,0.5, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightTop_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightTop", (xmax-xmin)/xBinSize,xmin,xmax+3.0, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightBot_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightBot", (xmax-xmin)/xBinSize,xmin,xmax+3.0, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotRight_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotRight", (ymax-ymin)/yBinSize,ymin,ymin+3.0, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotLeft_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotLeft", (ymax-ymin)/yBinSize,ymin,ymin+3.0, 25,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax", "",           (5*pitch)/0.01,-2.5*pitch,2.5*pitch, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad1_vs_deltaXmaxneg","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad2_vs_deltaXmaxpos","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
@@ -559,6 +569,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
+    const auto& voltage = tr.getVar<int>("voltage");
 
     std::vector<int> lowEdgeStrip = indexToGeometryMap.at(lowGoodStripIndex-1);
     std::vector<int> highEdgeStrip = indexToGeometryMap.at(highGoodStripIndex+1);
@@ -602,6 +613,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& ampChargeRatioLGAD = tr.getVec<std::vector<double>>("ampChargeRatioLGAD");
         const auto& slewrateLGAD = tr.getVec<std::vector<double>>("slewrateLGAD");
         const auto& slewRateChargeRatioLGAD = tr.getVec<std::vector<double>>("slewRateChargeRatioLGAD");
+        const auto& extraChannelIndex = tr.getVar<int>("extraChannelIndex");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
         const auto& ntracks_alt = tr.getVar<int>("ntracks_alt");
@@ -637,6 +649,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& weighted2_time_trackerX = tr.getVar<double>("weighted2_time_trackerX");       
 
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
+        const auto& hitSensorExtra = tr.getVar<bool>("hitSensorExtra");
         const auto& hitSensorTightY = tr.getVar<bool>("hitSensorTightY");
         const auto& hitSensorTight = tr.getVar<bool>("hitSensorTight");
         const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
@@ -690,6 +703,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         if(isPadSensor)      goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+        bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
+        bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
         bool hitSensorTightYNoEdgeX = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]] < x && x < stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]] && hitSensorTightY;
         bool pass = goodTrack && hitSensor && goodPhotek; // equivalent to pass_loose
         bool pass_loose = goodTrack && hitSensor && goodPhotek; // uses sensorEdges limits
@@ -760,6 +775,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
             {
                 const auto& r = std::to_string(rowIndex);
                 const auto& s = std::to_string(i);
+                auto passChannel = pass;
                 const auto& maxAmpStr = std::to_string(maxAmpIndex);
                 const auto& ampChannel = ampLGAD[rowIndex][i];
                 const auto& relFracChannel = relFrac[rowIndex][i];
@@ -785,72 +801,86 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 {
                     hitOnMetal = true;
                 }
+                //Adding var specific to having a seperate channel from the rest of the sensor
+                const auto& scopeIndex = geometry[rowIndex][i];
+                if(scopeIndex == extraChannelIndex)
+                {
+                    passChannel = passExtra;
+                    isMaxChannel = true;
+                    goodHit = goodNoiseAmp;
+                }
 
-                utility::fillHisto(pass,                                                    my_histos, "amp"+r+s, ampChannel);
-                utility::fillHisto(pass,                                                    my_histos, "amp"+r+s+"From"+maxAmpStr, ampChannel);
-                utility::fillHisto(pass && isMaxChannel,                                    my_histos, "ampMax"+r+s, ampChannel);
-                utility::fillHisto(pass && goodHit,                                         my_histos, "relFrac"+r+s, relFracChannel);
-                utility::fillHisto(pass && goodHit && (maxAmpinPad3 || maxAmpinPad4),       my_histos, "relFrac_bottom"+r+s, relFracChannel);
-                utility::fillHisto(pass && goodHit && (maxAmpinPad1 || maxAmpinPad2),       my_histos, "relFrac_top"+r+s, relFracChannel);
-                utility::fillHisto(pass,                                                    my_histos, "time"+r+s, time);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "timeDiff_channel"+r+s, time-photekTime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "timeDiffTracker_channel"+r+s, timeTracker-photekTime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "baselineRMS"+r+s, noise);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "risetime"+r+s, risetime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "charge"+r+s, charge);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "ampChargeRatio"+r+s, ampChargeRatio);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "slewRateChargeRatio"+r+s, slewRateChargeRatio); 
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "slewrate"+r+s, slewrate);
+                utility::fillHisto(passChannel,                                                    my_histos, "amp"+r+s, ampChannel);
+                utility::fillHisto(passChannel,                                                    my_histos, "amp"+r+s+"From"+maxAmpStr, ampChannel);
+                utility::fillHisto(passChannel && isMaxChannel,                                    my_histos, "ampMax"+r+s, ampChannel);
+                utility::fillHisto(passChannel && goodHit,                                         my_histos, "relFrac"+r+s, relFracChannel);
+                utility::fillHisto(passChannel && goodHit && (maxAmpinPad3 || maxAmpinPad4),       my_histos, "relFrac_bottom"+r+s, relFracChannel);
+                utility::fillHisto(passChannel && goodHit && (maxAmpinPad1 || maxAmpinPad2),       my_histos, "relFrac_top"+r+s, relFracChannel);
+                utility::fillHisto(passChannel,                                                    my_histos, "time"+r+s, time);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "timeDiff_channel"+r+s, time-photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "timeDiffTracker_channel"+r+s, timeTracker-photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "baselineRMS"+r+s, noise);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "risetime"+r+s, risetime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "charge"+r+s, charge);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "ampChargeRatio"+r+s, ampChargeRatio);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "slewRateChargeRatio"+r+s, slewRateChargeRatio); 
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "slewrate"+r+s, slewrate);
                 
                 utility::fillHisto(pass_tightY && isMaxChannel && goodOverNoiseAmp && oneStripReco,my_histos, "deltaX_oneStrip"+r+s, x_reco-x);
                 for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
                 {
                     if(regionsOfIntrest[k].passROI(x,y))
                     {
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "baselineRMS"+r+s+regionsOfIntrest[k].getName(), noise);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "risetime"+r+s+regionsOfIntrest[k].getName(), risetime);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "charge"+r+s+regionsOfIntrest[k].getName(), charge);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "ampChargeRatio"+r+s+regionsOfIntrest[k].getName(), ampChargeRatio);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "slewrate"+r+s+regionsOfIntrest[k].getName(), slewrate);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "slewRateChargeRatio"+r+s+regionsOfIntrest[k].getName(), slewRateChargeRatio);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), time-photekTime);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "timeDiffTracker_channel"+r+s+regionsOfIntrest[k].getName(), timeTracker-photekTime);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "weighted2_timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), weighted2_time-photekTime);
-                        utility::fillHisto(pass && goodHit,                                 my_histos, "weighted2_timeDiff_tracker_channel"+r+s+regionsOfIntrest[k].getName(), weighted2_time_tracker-photekTime);
-
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "baselineRMS"+r+s+regionsOfIntrest[k].getName(), noise);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "risetime"+r+s+regionsOfIntrest[k].getName(), risetime);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "charge"+r+s+regionsOfIntrest[k].getName(), charge);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "ampChargeRatio"+r+s+regionsOfIntrest[k].getName(), ampChargeRatio);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "slewrate"+r+s+regionsOfIntrest[k].getName(), slewrate);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "slewRateChargeRatio"+r+s+regionsOfIntrest[k].getName(), slewRateChargeRatio);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), time-photekTime);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "timeDiffTracker_channel"+r+s+regionsOfIntrest[k].getName(), timeTracker-photekTime);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "weighted2_timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), weighted2_time-photekTime);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "weighted2_timeDiff_tracker_channel"+r+s+regionsOfIntrest[k].getName(), weighted2_time_tracker-photekTime);
                         utility::fillHisto(pass_tightY && goodHit && goodNearHit,           my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s+regionsOfIntrest[k].getName(), x-stripXPosition,fracMaxChannel);
-                        utility::fillHisto(pass && goodHit,                                 my_3d_histos, "amplitude_vs_xyROI", x,y,maxAmp);
+                        utility::fillHisto(passChannel && goodHit,                                 my_3d_histos, "amplitude_vs_xyROI", x,y,maxAmp);
                     }
                 }
 
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "weighted2_timeDiff_channel"+r+s, weighted2_time-photekTime);
-                // utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "weighted_timeDiff_tracker_channel"+r+s, weighted_time_tracker-photekTime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "weighted2_timeDiff_tracker_channel"+r+s, weighted2_time_tracker-photekTime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_histos, "weighted_time-time_channel"+r+s, weighted_time-time);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos, "baselineRMS_vs_x_channel"+r+s, x,noise);
-                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "amp_vs_x_channel"+r+s, x,ampChannel);
-                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "risetime_vs_amp"+r+s,ampChannel, risetime);
-                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "amp_vs_y_channel"+r+s, y,ampChannel);
-                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "relFrac_vs_x_channel"+r+s, x,relFracChannel);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "weighted2_timeDiff_channel"+r+s, weighted2_time-photekTime);
+                // utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "weighted_timeDiff_tracker_channel"+r+s, weighted_time_tracker-photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "weighted2_timeDiff_tracker_channel"+r+s, weighted2_time_tracker-photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "weighted_time-time_channel"+r+s, weighted_time-time);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "baselineRMS_vs_x_channel"+r+s, x,noise);
+                utility::fillHisto(passChannel && goodHit,                                         my_2d_histos, "amp_vs_x_channel"+r+s, x,ampChannel);
+                utility::fillHisto(passChannel && goodHit,                                         my_2d_histos, "risetime_vs_amp"+r+s,ampChannel, risetime);
+                utility::fillHisto(passChannel && goodHit,                                         my_2d_histos, "amp_vs_y_channel"+r+s, y,ampChannel);
+                utility::fillHisto(passChannel && goodHit,                                         my_2d_histos, "relFrac_vs_x_channel"+r+s, x,relFracChannel);
+
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "timeDiff_vs_BV_channel"+r+s, voltage,time-photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "amp_vs_BV_channel"+r+s, voltage,ampChannel);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "risetime_vs_BV_channel"+r+s, voltage,risetime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "baselineRMS_vs_BV_channel"+r+s, voltage,noise);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "slewrate_vs_BV_channel"+r+s, voltage,slewrate);
+
                 /*
-                utility::fillHisto(pass && goodHit && goodNearHit,                          my_2d_histos, "relFrac_vs_x_channel"+r+s+"_NearHit", x,relFracChannel);
-                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "AmpOverAmpandAmpMax_vs_x_channel"+r+s, x,xTalkChannel);
-                utility::fillHisto(pass && goodHit && goodNearHit,                          my_2d_histos, "AmpOverAmpandAmpMax_vs_x_channel"+r+s+"_NearHit", x,xTalkChannel);
-                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "Amp1OverAmp1and2_vs_x_channel"+r+s, x,Amp1OverAmp1and2);
-                utility::fillHisto(pass && goodHit && goodNearHit,                          my_2d_histos, "Amp1OverAmp1and2_vs_x_channel"+r+s+"_NearHit", x,Amp1OverAmp1and2);
+                utility::fillHisto(passChannel && goodHit && goodNearHit,                          my_2d_histos, "relFrac_vs_x_channel"+r+s+"_NearHit", x,relFracChannel);
+                utility::fillHisto(passChannel && goodHit,                                         my_2d_histos, "AmpOverAmpandAmpMax_vs_x_channel"+r+s, x,xTalkChannel);
+                utility::fillHisto(passChannel && goodHit && goodNearHit,                          my_2d_histos, "AmpOverAmpandAmpMax_vs_x_channel"+r+s+"_NearHit", x,xTalkChannel);
+                utility::fillHisto(passChannel && goodHit,                                         my_2d_histos, "Amp1OverAmp1and2_vs_x_channel"+r+s, x,Amp1OverAmp1and2);
+                utility::fillHisto(passChannel && goodHit && goodNearHit,                          my_2d_histos, "Amp1OverAmp1and2_vs_x_channel"+r+s+"_NearHit", x,Amp1OverAmp1and2);
                 */
-                utility::fillHisto(pass && goodHit,                                         my_2d_histos, "relFrac_vs_y_channel"+r+s, y,relFracChannel);
-                utility::fillHisto(pass && goodHit && isMaxChannel && goodNeighbour,        my_2d_histos, "Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s, deltaXmax, Amp1OverAmp1and2);
+                utility::fillHisto(passChannel && goodHit,                                         my_2d_histos, "relFrac_vs_y_channel"+r+s, y,relFracChannel);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel && goodNeighbour,        my_2d_histos, "Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s, deltaXmax, Amp1OverAmp1and2);
 
                 utility::fillHisto(pass_tightY && goodHit && goodNearHit,                   my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s, x-stripXPosition,fracMaxChannel);
 
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos, "timeDiff_vs_x_channel"+r+s, x,time-photekTime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_2d_histos, "timeDiffTracker_vs_x_channel"+r+s, x,timeTracker-photekTime);
-                utility::fillHisto(pass && goodHit && inBottomRow,                          my_2d_histos, "relFrac_vs_x_channel_bottom"+r+s, x, relFracChannel);
-                utility::fillHisto(pass && goodHit && inBottomRow,                          my_2d_histos, "amp_vs_x_channel_bottom"+r+s, x, ampChannel);
-                utility::fillHisto(pass && goodHit && inTopRow,                             my_2d_histos, "relFrac_vs_x_channel_top"+r+s, x, relFracChannel);
-                utility::fillHisto(pass && goodHit && inTopRow,                             my_2d_histos, "amp_vs_x_channel_top"+r+s, x, ampChannel);
-                utility::fillHisto(pass && goodHit && inTopRow && time!=0 && photekTime!=0, my_2d_histos, "delay_vs_x_channel_top"+r+s, x, timeLGAD[rowIndex][i] - photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "timeDiff_vs_x_channel"+r+s, x,time-photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "timeDiffTracker_vs_x_channel"+r+s, x,timeTracker-photekTime);
+                utility::fillHisto(passChannel && goodHit && inBottomRow,                          my_2d_histos, "relFrac_vs_x_channel_bottom"+r+s, x, relFracChannel);
+                utility::fillHisto(passChannel && goodHit && inBottomRow,                          my_2d_histos, "amp_vs_x_channel_bottom"+r+s, x, ampChannel);
+                utility::fillHisto(passChannel && goodHit && inTopRow,                             my_2d_histos, "relFrac_vs_x_channel_top"+r+s, x, relFracChannel);
+                utility::fillHisto(passChannel && goodHit && inTopRow,                             my_2d_histos, "amp_vs_x_channel_top"+r+s, x, ampChannel);
+                utility::fillHisto(passChannel && goodHit && inTopRow && time!=0 && photekTime!=0, my_2d_histos, "delay_vs_x_channel_top"+r+s, x, timeLGAD[rowIndex][i] - photekTime);
                 utility::fillHisto(firstEvent,                                              my_2d_histos, "stripBoxInfo"+r+s, stripCenterXPositionLGAD[rowIndex][i],stripWidth);
                 utility::fillHisto(firstEvent,                                              my_2d_histos, "stripBoxInfoY"+r+s, stripCenterYPositionLGAD[rowIndex][i],stripWidth);
                 /*for (unsigned int j = 0; j < channel[geometry[1][i]].size(); j++)
@@ -860,29 +890,29 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                     utility::fillHisto(pass,      my_2d_histos, "wave"+r+s+"From"+maxAmpStr+"", time_channel-photekTime, signal);
                     utility::fillHisto(pass && goodHit,      my_2d_histos, "wave"+r+s+"From"+maxAmpStr+"goodHit", time_channel-photekTime, signal);
                 }*/
-                utility::fillHisto(pass,                                                    my_3d_histos, "baselineRMS_vs_xy_channel"+r+s, x,y,noise);
-                utility::fillHisto(pass && goodHit,                                         my_3d_histos, "amplitude_vs_xy_channel"+r+s, x,y,ampChannel);
-                utility::fillHisto(pass && goodHit && (maxAmpinPad1 || maxAmpinPad2),       my_3d_histos, "amplitudeTop_vs_xy_channel"+r+s, x,y,ampChannel);
-                utility::fillHisto(pass && goodHit && (maxAmpinPad3 || maxAmpinPad4),       my_3d_histos, "amplitudeBot_vs_xy_channel"+r+s, x,y,ampChannel);
-                utility::fillHisto(pass && goodHit && (maxAmpinPad1 || maxAmpinPad4),       my_3d_histos, "amplitudeLeft_vs_xy_channel"+r+s, x,y,ampChannel);
-                utility::fillHisto(pass && goodHit && (maxAmpinPad2 || maxAmpinPad3),       my_3d_histos, "amplitudeRight_vs_xy_channel"+r+s, x,y,ampChannel);
-                utility::fillHisto(pass && goodHit,                                         my_3d_histos, "raw_amp_vs_xy_channel"+r+s, x,y,rawAmpChannel);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos, "timeDiff_vs_xy_channel"+r+s, x,y,time-photekTime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos, "timeDiffTracker_vs_xy_channel"+r+s, x,y,timeTracker-photekTime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos, "risetime_vs_xy_channel"+r+s, x,y,risetime);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos, "charge_vs_xy_channel"+r+s, x,y,charge);
-                utility::fillHisto(pass && goodHit && isMaxChannel,                         my_3d_histos, "ampChargeRatio_vs_xy_channel"+r+s, x,y,ampChargeRatio);
+                utility::fillHisto(passChannel,                                                    my_3d_histos, "baselineRMS_vs_xy_channel"+r+s, x,y,noise);
+                utility::fillHisto(passChannel && goodHit,                                         my_3d_histos, "amplitude_vs_xy_channel"+r+s, x,y,ampChannel);
+                utility::fillHisto(passChannel && goodHit && (maxAmpinPad1 || maxAmpinPad2),       my_3d_histos, "amplitudeTop_vs_xy_channel"+r+s, x,y,ampChannel);
+                utility::fillHisto(passChannel && goodHit && (maxAmpinPad3 || maxAmpinPad4),       my_3d_histos, "amplitudeBot_vs_xy_channel"+r+s, x,y,ampChannel);
+                utility::fillHisto(passChannel && goodHit && (maxAmpinPad1 || maxAmpinPad4),       my_3d_histos, "amplitudeLeft_vs_xy_channel"+r+s, x,y,ampChannel);
+                utility::fillHisto(passChannel && goodHit && (maxAmpinPad2 || maxAmpinPad3),       my_3d_histos, "amplitudeRight_vs_xy_channel"+r+s, x,y,ampChannel);
+                utility::fillHisto(passChannel && goodHit,                                         my_3d_histos, "raw_amp_vs_xy_channel"+r+s, x,y,rawAmpChannel);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_3d_histos, "timeDiff_vs_xy_channel"+r+s, x,y,time-photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_3d_histos, "timeDiffTracker_vs_xy_channel"+r+s, x,y,timeTracker-photekTime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_3d_histos, "risetime_vs_xy_channel"+r+s, x,y,risetime);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_3d_histos, "charge_vs_xy_channel"+r+s, x,y,charge);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_3d_histos, "ampChargeRatio_vs_xy_channel"+r+s, x,y,ampChargeRatio);
 
-                utility::fillHisto(pass && goodNoiseAmp,                                    my_2d_histos, "efficiency_vs_xy_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && goodNoiseAmp && !goodNeighbour && isMaxChannel,  my_2d_histos, "efficiency_vs_xy_noNeighb_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && goodNoiseAmp && highFraction && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_highFrac_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && goodNoiseAmp && oneStripReco && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && goodNoiseAmp && twoStripsReco && isMaxChannel,   my_2d_histos, "efficiency_vs_xy_twoStrips_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && fullReco_ch,                                     my_2d_histos, "efficiency_vs_xy_fullReco_numerator_channel"+r+s, x,y);
+                utility::fillHisto(passChannel && goodNoiseAmp,                                    my_2d_histos, "efficiency_vs_xy_numerator_channel"+r+s, x,y);
+                utility::fillHisto(passChannel && goodNoiseAmp && !goodNeighbour && isMaxChannel,  my_2d_histos, "efficiency_vs_xy_noNeighb_numerator_channel"+r+s, x,y);
+                utility::fillHisto(passChannel && goodNoiseAmp && highFraction && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_highFrac_numerator_channel"+r+s, x,y);
+                utility::fillHisto(passChannel && goodNoiseAmp && oneStripReco && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_channel"+r+s, x,y);
+                utility::fillHisto(passChannel && goodNoiseAmp && twoStripsReco && isMaxChannel,   my_2d_histos, "efficiency_vs_xy_twoStrips_numerator_channel"+r+s, x,y);
+                utility::fillHisto(passChannel && fullReco_ch,                                     my_2d_histos, "efficiency_vs_xy_fullReco_numerator_channel"+r+s, x,y);
 
-                utility::fillHisto(goodTrack && goodPhotek,                                 my_2d_prof, "efficiency_vs_xy_prof_channel"+r+s, x,y,ampChannel > signalAmpThreshold);
-                utility::fillHisto(goodTrack && goodPhotek && isMaxChannel,                 my_2d_prof, "efficiency_vs_xy_prof", x,y,goodHit);
-                utility::fillHisto(pass && isMaxChannel,                                    my_2d_prof, "efficiency_vs_xy_EdgeCut_prof", x,y,goodHit);
+                utility::fillHisto(passChannel && goodPhotek && isMaxChannel,                my_2d_prof, "efficiency_vs_xy_prof_channel"+r+s, x,y,goodHit);
+                utility::fillHisto(goodTrack && goodPhotek && isMaxChannel,                  my_2d_prof, "efficiency_vs_xy_prof", x,y,goodHit);
+                utility::fillHisto(passChannel && isMaxChannel,                              my_2d_prof, "efficiency_vs_xy_EdgeCut_prof", x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && !goodNeighbour,my_2d_prof,"efficiency_vs_xy_noNeighb_prof", x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && highFraction, my_2d_prof, "efficiency_vs_xy_highFrac_prof", x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && oneStripReco, my_2d_prof, "efficiency_vs_xy_oneStrip_prof", x,y,goodHit);

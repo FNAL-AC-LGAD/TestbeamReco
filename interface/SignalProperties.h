@@ -26,14 +26,15 @@ private:
         utility::remapToLGADgeometry(tr, stripCenterYPosition, "stripCenterYPositionLGAD");
         const auto& x = tr.getVar<double>("x");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        const auto& extraChannelIndex = tr.getVar<int>("extraChannelIndex");
 
         //Find max channel and 2nd,3rd channels
-        const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1);
-        const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, 2);
-        const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, 3);
-        const auto amp4Indexes = utility::findNthRankChannel(ampLGAD, 4);
-        const auto amp5Indexes = utility::findNthRankChannel(ampLGAD, 5);
-        const auto amp6Indexes = utility::findNthRankChannel(ampLGAD, 6);
+        const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1, corrAmp[extraChannelIndex]);
+        const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, 2, corrAmp[extraChannelIndex]);
+        const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, 3, corrAmp[extraChannelIndex]);
+        const auto amp4Indexes = utility::findNthRankChannel(ampLGAD, 4, corrAmp[extraChannelIndex]);
+        const auto amp5Indexes = utility::findNthRankChannel(ampLGAD, 5, corrAmp[extraChannelIndex]);
+        const auto amp6Indexes = utility::findNthRankChannel(ampLGAD, 6, corrAmp[extraChannelIndex]);
         tr.registerDerivedVar("amp1Indexes", amp1Indexes);
         tr.registerDerivedVar("amp2Indexes", amp2Indexes);
         tr.registerDerivedVar("amp3Indexes", amp3Indexes);

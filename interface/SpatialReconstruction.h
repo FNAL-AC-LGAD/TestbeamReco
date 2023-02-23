@@ -57,7 +57,11 @@ private:
         const auto& parityLGAD = utility::remapToLGADgeometry(tr, parity, "parityLGAD");
 
         auto& goodNeighbour = tr.createDerivedVar<bool>("goodNeighbour");
-        goodNeighbour = abs(maxAmpIndex - Amp2Index)==1 && ampLGAD[0][Amp2Index]>noiseAmpThreshold;
+        const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
+        const auto& amp2Indexes = tr.getVar<std::pair<int,int>>("amp2Indexes");
+        int distance = abs(amp1Indexes.first - amp2Indexes.first) + abs(amp1Indexes.second - amp2Indexes.second);
+        goodNeighbour = distance==1 && ampLGAD[amp2Indexes.first][amp2Indexes.second]>noiseAmpThreshold;
+
         auto& twoStripsReco = tr.createDerivedVar<bool>("twoStripsReco");
         twoStripsReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
         double y_reco=0.0, x_reco = 0.0, x1 = 0.0, y1 = 0.0, x2 = 0.0;
@@ -167,7 +171,6 @@ private:
         const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
         const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
-        const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
         const auto& AmpTopOverAmpTopandBotRight = tr.getVar<double>("AmpTopOverAmpTopandBotRight");
         const auto& AmpTopOverAmpTopandBotLeft = tr.getVar<double>("AmpTopOverAmpTopandBotLeft");
         const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
