@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TF1,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors
+from ROOT import TFile,TTree,TCanvas,TF1,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gStyle
 import array
 
 ##########################
@@ -6,7 +6,7 @@ import array
 ##########################
 def Plot2DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, xAxisRangeHigh, yAxisTitle, yAxisRangeLow, yAxisRangeHigh, effMin, effMax, savePDF=False ) :
 
-    c = TCanvas("cv","cv",800,800)    
+    c = TCanvas("cv","cv",1000,800)    
 
     ratio = num.Clone("ratio")
     ratio.Divide(den)
@@ -33,11 +33,16 @@ def Plot2DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
     ratio.GetYaxis().SetRangeUser(yAxisRangeLow,yAxisRangeHigh)
     c.SetRightMargin(0.18)
     c.SetLeftMargin(0.12)
+    c.SetTopMargin(0.12)
+    c.SetBottomMargin(0.12)
 
-    #title = TLatex()
-    #title.SetTextSize(0.05);
-    #title.SetTextAlign(13);  
-    #title.DrawLatexNDC(.2,.93,topTitle);
+    text = TLatex()
+    text.SetTextSize(0.05)
+    text.DrawLatexNDC(0.12,0.9,"#bf{FNAL 120 GeV proton beam}")
+
+    #text = TLatex()
+    #ext.SetTextSize(0.05)
+    #text.DrawLatexNDC(0.68,0.9,"#bf{FCFDv0}")
 
     c.SaveAs(plotname+".gif")
     if savePDF: c.SaveAs(plotname+".pdf")

@@ -20,6 +20,9 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True,
 
     boxes = []
     for box in boxesInfo:
+        if not box: 
+            print("Warning: Issue getting stripBoxInfo")
+            continue
         xCenter = box.GetMean(1) - shift
         width = box.GetMean(2)
         xmin = xCenter - (widthPercent*width)
