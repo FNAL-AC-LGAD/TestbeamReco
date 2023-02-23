@@ -140,7 +140,8 @@ htemp.Draw()
 
 boxes = getStripBox(inputfile,0.0,1.0,False,18,True,shift)
 for i,box in enumerate(boxes):
-    if (i!=0 and i!=(len(boxes)-1)): box.Draw()
+    # if (i!=0 and i!=(len(boxes)-1)):
+    box.Draw()
 
 legend = TLegend(myStyle.GetPadCenter()-0.36,1-myStyle.GetMargin()-0.01-0.23,myStyle.GetPadCenter()+0.36,1-myStyle.GetMargin()-0.01);
 legend.SetTextFont(myStyle.GetFont())

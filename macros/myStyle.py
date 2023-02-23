@@ -138,23 +138,16 @@ def GetColors(color_blind = False):
 ### Names and strings
 def GetGeometry(name):
     sensor_dict = {}
-    sensor_exists = False
 
-    try:
-        sensor_dict = sensorsGeom2022[RemoveBV(name)]
-        sensor_exists = True
-    except:
-        print("Sensor is not in 2022 list. Trying with 2023 list.")
+    this_name = RemoveBV(name)
 
-    if not sensor_exists:
-        try:
-            sensor_dict = sensorsGeom2023[RemoveBV(name)]
-            sensor_exists = True
-        except:
-            print("Sensor is not in 2023 list.")
+    if (this_name in sensorsGeom2022):
+        sensor_dict = sensorsGeom2022[this_name]
+    elif (this_name in sensorsGeom2023):
+        sensor_dict = sensorsGeom2023[this_name]
+    else:
+        print("Sensor not found in any dictionary :(")
 
-    if not sensor_exists:
-        print("Sensor not found")
     return sensor_dict
 
 def RemoveBV(name):
