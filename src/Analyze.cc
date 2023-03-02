@@ -703,7 +703,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
         if(isPadSensor)      goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
-        bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
+        // bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
         bool hitSensorTightYNoEdgeX = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]] < x && x < stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]] && hitSensorTightY;
         bool pass = goodTrack && hitSensor && goodPhotek; // equivalent to pass_loose
