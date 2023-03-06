@@ -91,6 +91,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
                 utility::makeHisto(my_histos,"ampChargeRatio"+r+s+regionsOfIntrest[k].getName(),"", 50,0.0,10.0);
                 utility::makeHisto(my_histos,"slewrate"+r+s+regionsOfIntrest[k].getName(),"", 100,0.0,400.0);
                 utility::makeHisto(my_histos,"slewRateChargeRatio"+r+s+regionsOfIntrest[k].getName(),"", 100,0.0,30.0);
+                utility::makeHisto(my_histos,"baselineRMSSlewRateRatio"+r+s+regionsOfIntrest[k].getName(),"", 100,0.0,100.0);
                 utility::makeHisto(my_histos,"timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), "", timeDiffNbin,timeDiffLow,timeDiffHigh);
                 utility::makeHisto(my_histos,"timeDiffTracker_channel"+r+s+regionsOfIntrest[k].getName(), "", timeDiffNbin,timeDiffLow,timeDiffHigh);
                 utility::makeHisto(my_histos,"weighted2_timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), "", timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -546,7 +547,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
     const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
-    // const auto& numLGADchannels = tr.getVar<int>("numLGADchannels");
+    const auto& numLGADchannels = tr.getVar<int>("numLGADchannels");
     const auto& sensorCenter = tr.getVar<double>("sensorCenter");
     const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
@@ -576,7 +577,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
     int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
     int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
-    bool plotWaveForm = false;
+    bool plotWaveForm = true;
 
     if(firstFile) InitHistos(tr, geometry);
 
@@ -613,6 +614,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& ampChargeRatioLGAD = tr.getVec<std::vector<double>>("ampChargeRatioLGAD");
         const auto& slewrateLGAD = tr.getVec<std::vector<double>>("slewrateLGAD");
         const auto& slewRateChargeRatioLGAD = tr.getVec<std::vector<double>>("slewRateChargeRatioLGAD");
+        const auto& baselineRMSSlewRateRatioLGAD = tr.getVec<std::vector<double>>("baselineRMSSlewRateRatioLGAD");
         const auto& extraChannelIndex = tr.getVar<int>("extraChannelIndex");
         const auto& photekIndex = tr.getVar<int>("photekIndex");
         const auto& ntracks = tr.getVar<int>("ntracks");
@@ -787,6 +789,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 const auto& ampChargeRatio = ampChargeRatioLGAD[rowIndex][i];
                 const auto& slewrate = slewrateLGAD[rowIndex][i];
                 const auto& slewRateChargeRatio = slewRateChargeRatioLGAD[rowIndex][i];
+                const auto& baselineRMSSlewRateRatio = baselineRMSSlewRateRatioLGAD[rowIndex][i];
                 const auto& stripXPosition = stripCenterXPositionLGAD[rowIndex][i];
                 bool goodNoiseAmp = ampChannel>noiseAmpThreshold;
                 bool goodSignalAmp = ampChannel>signalAmpThreshold;
@@ -837,11 +840,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                         utility::fillHisto(passChannel && goodHit,                                 my_histos, "ampChargeRatio"+r+s+regionsOfIntrest[k].getName(), ampChargeRatio);
                         utility::fillHisto(passChannel && goodHit,                                 my_histos, "slewrate"+r+s+regionsOfIntrest[k].getName(), slewrate);
                         utility::fillHisto(passChannel && goodHit,                                 my_histos, "slewRateChargeRatio"+r+s+regionsOfIntrest[k].getName(), slewRateChargeRatio);
+                        utility::fillHisto(passChannel && goodHit,                                 my_histos, "baselineRMSSlewRateRatio"+r+s+regionsOfIntrest[k].getName(), baselineRMSSlewRateRatio); 
                         utility::fillHisto(passChannel && goodHit,                                 my_histos, "timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), time-photekTime);
                         utility::fillHisto(passChannel && goodHit,                                 my_histos, "timeDiffTracker_channel"+r+s+regionsOfIntrest[k].getName(), timeTracker-photekTime);
                         utility::fillHisto(passChannel && goodHit,                                 my_histos, "weighted2_timeDiff_channel"+r+s+regionsOfIntrest[k].getName(), weighted2_time-photekTime);
                         utility::fillHisto(passChannel && goodHit,                                 my_histos, "weighted2_timeDiff_tracker_channel"+r+s+regionsOfIntrest[k].getName(), weighted2_time_tracker-photekTime);
-                        utility::fillHisto(pass_tightY && goodHit && goodNearHit,           my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s+regionsOfIntrest[k].getName(), x-stripXPosition,fracMaxChannel);
+                        utility::fillHisto(pass_tightY && goodHit && goodNearHit,                  my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s+regionsOfIntrest[k].getName(), x-stripXPosition,fracMaxChannel);
                         utility::fillHisto(passChannel && goodHit,                                 my_3d_histos, "amplitude_vs_xyROI", x,y,maxAmp);
                     }
                 }
