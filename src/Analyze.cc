@@ -546,7 +546,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 {
     const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
     const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
-    // const auto& numLGADchannels = tr.getVar<int>("numLGADchannels");
+    const auto& numLGADchannels = tr.getVar<int>("numLGADchannels");
     const auto& sensorCenter = tr.getVar<double>("sensorCenter");
     const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
