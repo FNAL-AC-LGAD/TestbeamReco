@@ -281,18 +281,21 @@ private:
         
         const auto& slewrate = tr.getVec<float>("risetime");
         auto& corrSlewrate = tr.createDerivedVec<double>("corrSlewrate", slewrate.size());
-        for(unsigned int i = 0; i < slewrate.size(); i++)
+        auto& baselineRMSSlewRateRatio = tr.createDerivedVec<double>("baselineRMSSlewRateRatio",slewrate.size());  
+		for(unsigned int i = 0; i < slewrate.size(); i++)
         {
              corrSlewrate[i] = 1e-9*abs(slewrate[i]);
+			 baselineRMSSlewRateRatio[i] = 1000*(baselineRMS[i]/corrSlewrate[i]);
         }
         utility::remapToLGADgeometry(tr, corrSlewrate, "slewrateLGAD");
+		utility::remapToLGADgeometry(tr, baselineRMSSlewRateRatio, "baselineRMSSlewRateRatioLGAD");
         //utility::remapToLGADgeometry(tr, SlewRate, "slewrateLGAD");
         //Charge, amp/charge ratio
         const auto& integral = tr.getVec<float>("integral");
         auto& charge = tr.createDerivedVec<double>("charge",integral.size());
         auto& AmpChargeRatio = tr.createDerivedVec<double>("AmpChargeRatio",integral.size());
         auto& SlewRateChargeRatio = tr.createDerivedVec<double>("SlewRateChargeRatio",integral.size());
-        for(unsigned int i = 0; i < integral.size(); i++)
+		for(unsigned int i = 0; i < integral.size(); i++)
         {
             charge[i] = -1000*integral[i]*1e9*50/(1.4*4700); //FNAL / UCSC Q ratio is 1.4, using 4700 for both.
             AmpChargeRatio[i] = corrAmp[i]/charge[i];
