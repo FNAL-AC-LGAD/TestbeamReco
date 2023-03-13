@@ -271,10 +271,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"weighted_timeDiff_tracker_vs_x", "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
     utility::makeHisto(my_2d_histos,"clusterSize_vs_x", "; X [mm]; Cluster Size", (xmax-xmin)/xBinSize,xmin,xmax, 8,0.0,8.0);
-    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightTop_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightTop", (xmax-xmin)/xBinSize,xmin,xmax+3.0, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightBot_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightBot", (xmax-xmin)/xBinSize,xmin,xmax+3.0, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotRight_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotRight", (ymax-ymin)/yBinSize,ymin,ymin+3.0, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotLeft_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotLeft", (ymax-ymin)/yBinSize,ymin,ymin+3.0, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightTop_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightTop", (xmax-xmin)/xBinSize,xmin,xmax, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightBot_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightBot", (xmax-xmin)/xBinSize,xmin,xmax, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotRight_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotRight", (ymax-ymin)/yBinSize,ymin,ymax, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotLeft_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotLeft", (ymax-ymin)/yBinSize,ymin,ymax, 25,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax", "",           (5*pitch)/0.01,-2.5*pitch,2.5*pitch, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad1_vs_deltaXmaxneg","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
     utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad2_vs_deltaXmaxpos","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
@@ -571,8 +571,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
     const auto& voltage = tr.getVar<int>("voltage");
 
-    std::vector<int> lowEdgeStrip = indexToGeometryMap.at(lowGoodStripIndex-1);
-    std::vector<int> highEdgeStrip = indexToGeometryMap.at(highGoodStripIndex+1);
+    std::vector<int> lowEdgeStrip  = (isPadSensor) ? indexToGeometryMap.at(lowGoodStripIndex)  : indexToGeometryMap.at(lowGoodStripIndex-1);
+    std::vector<int> highEdgeStrip = (isPadSensor) ? indexToGeometryMap.at(highGoodStripIndex) : indexToGeometryMap.at(highGoodStripIndex+1);
 
     int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
     int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
@@ -706,6 +706,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         // bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
         bool hitSensorTightYNoEdgeX = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]] < x && x < stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]] && hitSensorTightY;
+        if (isPadSensor)    hitSensorTightYNoEdgeX = hitSensorTightY; // Update to use xSlice/ySlice
         bool pass = goodTrack && hitSensor && goodPhotek; // equivalent to pass_loose
         bool pass_loose = goodTrack && hitSensor && goodPhotek; // uses sensorEdges limits
         bool pass_tight = goodTrack && hitSensorTight && goodPhotek; // uses sensorEdgesTight limits (removes half next-to-edge strips)
@@ -1044,10 +1045,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass,                                                                           my_2d_histos, "relFracDC_vs_x_channel_top", x,relFracDC);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_2d_histos, "relFracTot_vs_x", padx, relFrac[amp1Indexes.first][amp1Indexes.second]);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_2d_histos, "relFracTot_vs_x", padxAdj, relFrac[ampIndexesAdjPad.first][ampIndexesAdjPad.second]);
-        utility::fillHisto(pass && goodMaxLGADAmp && (maxAmpinPad1 || maxAmpinPad2),                       my_2d_histos, "AmpLeftOverAmpLeftandRightTop_vs_x", x-sensorCenter,AmpLeftOverAmpLeftandRightTop);
-        utility::fillHisto(pass && goodMaxLGADAmp && (maxAmpinPad3 || maxAmpinPad4),                       my_2d_histos, "AmpLeftOverAmpLeftandRightBot_vs_x", x-sensorCenter,AmpLeftOverAmpLeftandRightBot);
-        utility::fillHisto(pass && goodMaxLGADAmp && (maxAmpinPad2 || maxAmpinPad3),                       my_2d_histos, "AmpTopOverAmpTopandBotRight_vs_y", y-sensorCenterY,AmpTopOverAmpTopandBotRight);
-        utility::fillHisto(pass && goodMaxLGADAmp && (maxAmpinPad1 || maxAmpinPad4),                       my_2d_histos, "AmpTopOverAmpTopandBotLeft_vs_y", y-sensorCenterY,AmpTopOverAmpTopandBotLeft);
+        utility::fillHisto(pass && goodMaxLGADAmp && (maxAmpinPad1 || maxAmpinPad2),                       my_2d_histos, "AmpLeftOverAmpLeftandRightTop_vs_x", x,AmpLeftOverAmpLeftandRightTop);
+        utility::fillHisto(pass && goodMaxLGADAmp && (maxAmpinPad3 || maxAmpinPad4),                       my_2d_histos, "AmpLeftOverAmpLeftandRightBot_vs_x", x,AmpLeftOverAmpLeftandRightBot);
+        utility::fillHisto(pass && goodMaxLGADAmp && (maxAmpinPad2 || maxAmpinPad3),                       my_2d_histos, "AmpTopOverAmpTopandBotRight_vs_y", y,AmpTopOverAmpTopandBotRight);
+        utility::fillHisto(pass && goodMaxLGADAmp && (maxAmpinPad1 || maxAmpinPad4),                       my_2d_histos, "AmpTopOverAmpTopandBotLeft_vs_y", y,AmpTopOverAmpTopandBotLeft);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoGoodHits,                    my_2d_histos, "Amp1OverAmp1and2_vs_deltaXmax", fabs(deltaXmax),Amp1OverAmp1and2);
         utility::fillHisto(pass && maxAmpinPad1 && hitInMiddleofPad,                                       my_2d_histos, "Amp1OverAmp1andTopPad1_vs_deltaXmaxneg", deltaXmaxneg,Amp1OverAmp1andTop);
         utility::fillHisto(pass && maxAmpinPad2 && hitInMiddleofPad,                                       my_2d_histos, "Amp1OverAmp1andTopPad2_vs_deltaXmaxpos", deltaXmaxpos,Amp1OverAmp1andTop);

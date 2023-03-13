@@ -72,8 +72,10 @@ def printProjectionColZ(th3,variable_title,tag,zmin,zmax):
 printProjectionColZ(th3_amplitude_vs_xy,"Mean amplitude [mV]","amp",15,130)
 printProjectionColZ(th3_charge_vs_xy,"Mean charge [fC]","charge",2,30)
 printProjectionColZ(th3_risetime_vs_xy,"Mean risetime [ps]","risetime",400,700)
+printProjectionColZ(th3_risetime_vs_xy,"Mean risetime [ps]","risetimeZoom",200,500)
 printProjectionColZ(th3_ampChargeRatio_vs_xy,"Mean amplitude/charge ratio","ampChargeRatio",1.5,6.5)
 printProjectionColZ(th3_timeDiff_vs_xy,"Mean arrival time (w.r.t MCP) [ps]","meanTime",-200,100)
+printProjectionColZ(th3_timeDiff_vs_xy,"Mean arrival time (w.r.t MCP) [ps]","meanTimeZoom",-100,60)
 printProjectionColZ(th3_deltaX_vs_xy,"deltaX","deltaX",-0.1,0.1)
 printProjectionColZ(th3_deltaY_vs_xy,"deltaY","deltaY",-5,5)
 
