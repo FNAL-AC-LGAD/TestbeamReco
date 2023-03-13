@@ -42,7 +42,6 @@ th3_deltaY_vs_xy = inputfile.Get("deltaY_vs_Xtrack_vs_Ytrack")
 outputfile=TFile("%splotsSimpleMapsvsXY.root"%outdir,"RECREATE")
 
 
-
 def printProjectionColZ(th3,variable_title,tag,zmin,zmax):
 	th2 = th3.Project3DProfile("yx")
 	if "arrival time" in variable_title: th2.Scale(1000)
@@ -62,20 +61,22 @@ def printProjectionColZ(th3,variable_title,tag,zmin,zmax):
 	#myStyle.BeamInfo()
 	myStyle.SensorInfoSmart(dataset)
 
-	canvas.SaveAs(outdir+tag+"vs_xy.gif")
-	canvas.SaveAs(outdir+tag+"vs_xy.pdf")
-	canvas.SaveAs(outdir+tag+"vs_xy.root")
+	canvas.SaveAs(outdir+tag+"_VsXY.gif")
+	canvas.SaveAs(outdir+tag+"_VsXY.pdf")
+	canvas.SaveAs(outdir+tag+"_VsXY.root")
 
 	th2.Write()
 
-
-printProjectionColZ(th3_amplitude_vs_xy,"Mean amplitude [mV]","amp",15,130)
-printProjectionColZ(th3_charge_vs_xy,"Mean charge [fC]","charge",2,30)
-printProjectionColZ(th3_risetime_vs_xy,"Mean risetime [ps]","risetime",400,700)
-printProjectionColZ(th3_risetime_vs_xy,"Mean risetime [ps]","risetimeZoom",200,500)
-printProjectionColZ(th3_ampChargeRatio_vs_xy,"Mean amplitude/charge ratio","ampChargeRatio",1.5,6.5)
-printProjectionColZ(th3_timeDiff_vs_xy,"Mean arrival time (w.r.t MCP) [ps]","meanTime",-200,100)
-printProjectionColZ(th3_timeDiff_vs_xy,"Mean arrival time (w.r.t MCP) [ps]","meanTimeZoom",-100,60)
+printProjectionColZ(th3_amplitude_vs_xy,"Mean amplitude [mV]","amp1",15,130)
+printProjectionColZ(th3_amplitude_vs_xy,"Mean amplitude [mV]","amp2",20,180)
+printProjectionColZ(th3_charge_vs_xy,"Mean charge [fC]","charge1",2,30)
+printProjectionColZ(th3_charge_vs_xy,"Mean charge [fC]","charge2",2,20)
+printProjectionColZ(th3_risetime_vs_xy,"Mean risetime [ps]","risetime1",400,700)
+printProjectionColZ(th3_risetime_vs_xy,"Mean risetime [ps]","risetime2",200,500)
+printProjectionColZ(th3_ampChargeRatio_vs_xy,"Mean amplitude/charge ratio","ampChargeRatio1",1.5,6.5)
+printProjectionColZ(th3_ampChargeRatio_vs_xy,"Mean amplitude/charge ratio","ampChargeRatio2",1.0,10.0)
+printProjectionColZ(th3_timeDiff_vs_xy,"Mean arrival time (w.r.t MCP) [ps]","meanTime1",-200,100)
+printProjectionColZ(th3_timeDiff_vs_xy,"Mean arrival time (w.r.t MCP) [ps]","meanTime2",-100,60)
 printProjectionColZ(th3_deltaX_vs_xy,"deltaX","deltaX",-0.1,0.1)
 printProjectionColZ(th3_deltaY_vs_xy,"deltaY","deltaY",-5,5)
 
