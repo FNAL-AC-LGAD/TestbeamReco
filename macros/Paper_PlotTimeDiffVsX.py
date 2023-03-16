@@ -43,8 +43,12 @@ class HistoInfo:
         return th1_temp
 
     def shift(self):
-        real_center = self.f.Get("stripBoxInfo03").GetMean(1)
-        if not self.f.Get("stripBoxInfo06"): real_center = (self.f.Get("stripBoxInfo02").GetMean(1) + real_center)/2.
+        if ("2x2pad" not in sensor):
+            real_center = self.f.Get("stripBoxInfo03").GetMean(1)
+            if not self.f.Get("stripBoxInfo06"):
+                real_center = (self.f.Get("stripBoxInfo02").GetMean(1) + real_center)/2.
+        else:
+            real_center = 0.0
 
         if ("2p5cm_mixConfig1_W3051" in self.sensor):
             real_center = self.f.Get("stripBoxInfo02").GetMean(1)
@@ -173,9 +177,11 @@ for i in range(0, nXBins+1):
         errorMean = 0.0
 
         minEvtsCut = totalEvents/nXBins
-        if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
+        if i==0:
+            print("%s: nEvents > %.2f (Total events: %i)"%(info.inHistoName, minEvtsCut, totalEvents))
 
-
+        if ("HPK_50um" in dataset):
+            minEvtsCut = 0.7*minEvtsCut
         #Do fit 
         if(nEvents > minEvtsCut):
             tmpHist.Rebin(2)
@@ -202,8 +208,7 @@ for i in range(0, nXBins+1):
                 tmpHist.Draw("hist")
                 fit.Draw("same")
                 canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
-                print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
-
+                print ("Bin: %i (x center = %.3f) -> Resolution: %.3f +/- %.3f"%(i, info.th1.GetXaxis().GetBinCenter(i), value, error))
 
             # print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
         else:
