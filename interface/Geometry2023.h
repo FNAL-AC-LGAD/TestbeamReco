@@ -723,10 +723,8 @@ public:
     double pitch = 0.5;
     double sensorCenter =-1.05; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY =-1.875; // Lab-Tracker's frame -> y_dut
-    std::vector<double> stripCenterXPosition = {0.25,-0.25, -0.25, 0.25, 0.0, 0.0, 0.0, 0.0};
+    std::vector<double> stripCenterXPosition = {0.255,-0.255, -0.255, 0.255, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.25, 0.25, -0.25, -0.25, 0.0, 0.0, 0.0, 0.0};
-    // std::vector<double> stripCenterXPosition = {-1.5,-2.5, -2.5, -1.5, -1.4, 0.0, 0.0, -2.0};
-    //std::vector<double> stripCenterYPosition = {0.0, 10.641, 10.641, 10.141, 10.141, 0.0};
     double alpha =  0.7; // 0.0;
     double beta  =  0.0; // 0.0;
     double gamma =  0.0; // 0.0;
@@ -753,12 +751,13 @@ public:
     //std::vector<std::vector<double>> sensorEdges = {{-3.5 , -4.0}, { 0.5, 0.0}}; //square interior of pads
     // std::vector<std::vector<double>> sensorEdges = {{0.45 , -4.4}, { 1.45, -3.4}}; //square interior of pads
     std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
-    std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.53,-0.01, -0.01, 0.50},{"top_right", 0.01,0.53, -0.01, 0.50},
-                                                    {"bot_left", -0.53,-0.01, -0.55,-0.04},{"bot_right", 0.01,0.53, -0.55,-0.04}};
+    std::vector<std::vector<double>> sensorEdgesTight = {{-0.47, -0.48}, {0.47, 0.43}}; // Sensor's local frame
+    std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.47,-0.05, 0.03, 0.43},{"top_right", 0.07,0.47, 0.03, 0.43},
+                                                    {"bot_left", -0.47,-0.05, -0.48,-0.09},{"bot_right", 0.07,0.47, -0.48,-0.09}};
     // std::vector<std::vector<double>> sensorEdgesExtra = {{1.6 , -4.0}, { 1.9, -3.7}}; //square interior of pads
-    //std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
-    //std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
-    //std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
+    // std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
+    // std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
+    // std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}};
 };
 
 class HPK_30um_500x500um_E600_2x2PadGeometry : public DefaultGeometry
@@ -789,7 +788,7 @@ public:
     double pitch = 0.5;
     double sensorCenter =-1.0; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY =-2.0; // Lab-Tracker's frame -> y_dut
-    std::vector<double> stripCenterXPosition = {0.25,-0.25, -0.25, 0.25, 0.0, 0.0, 0.0, 0.0};
+    std::vector<double> stripCenterXPosition = {0.255,-0.255, -0.255, 0.255, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.25, 0.25, -0.25, -0.25, 0.0, 0.0, 0.0, 0.0};
     double alpha = -0.70; // 0.0;
     double beta  =  0.00; // 0.0;
@@ -815,8 +814,9 @@ public:
     std::vector<double> positionRecoParRight = {-0.046495, -3.91451, 24.6937, -57.5006, 59.3214, -22.163};
     std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
     std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
-    std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.53,-0.01, -0.01, 0.50},{"top_right", 0.01,0.53, -0.01, 0.50},
-                                                    {"bot_left", -0.53,-0.01, -0.55,-0.04},{"bot_right", 0.01,0.53, -0.55,-0.04}};
+    std::vector<std::vector<double>> sensorEdgesTight = {{-0.49, -0.48}, {0.46, 0.44}}; // Sensor's local frame
+    std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.49,-0.06, 0.06, 0.44},{"top_right", 0.05,0.46, 0.06, 0.44},
+                                                    {"bot_left", -0.49,-0.06, -0.48,-0.11},{"bot_right", 0.05,0.46, -0.48,-0.11}};
     // std::vector<std::vector<double>> sensorEdgesTight = {{-999.9, -999.9}, {999.9, 999.9}};
     // std::vector<std::vector<double>> sensorEdgesExtra = {{-0.1 , -4.14}, { 0.45, -3.65}}; //square interior of pads
     //std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
@@ -852,10 +852,8 @@ public:
     double pitch = 0.5;
     double sensorCenter =-2.15; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY =-2.25; // Lab-Tracker's frame -> y_dut
-    std::vector<double> stripCenterXPosition = {0.25,-0.25, -0.25, 0.25, 0.0, 0.0, 0.0, 0.0};
+    std::vector<double> stripCenterXPosition = {0.255,-0.255, -0.255, 0.255, 0.0, 0.0, 0.0, 0.0};
     std::vector<double> stripCenterYPosition = {0.25, 0.25, -0.25, -0.25, 0.0, 0.0, 0.0, 0.0};
-    // std::vector<double> stripCenterXPosition = {-1.5,-2.5, -2.5, -1.5, -1.4, 0.0, 0.0, -2.0};
-    //std::vector<double> stripCenterYPosition = {0.0, 10.641, 10.641, 10.141, 10.141, 0.0};
     double alpha = -0.5; // 0.0;
     double beta  =  0.0; // 0.0;
     double gamma =  0.0; // 0.0;
@@ -882,8 +880,9 @@ public:
     //std::vector<std::vector<double>> sensorEdges = {{-3.5 , -4.0}, { 0.5, 0.0}}; //square interior of pads
     // std::vector<std::vector<double>> sensorEdges = {{-0.6 , -4.75}, { 0.35, -3.8}}; //square interior of pads
     std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
-    std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.53,-0.01, -0.01, 0.50},{"top_right", 0.01,0.53, -0.01, 0.50},
-                                                    {"bot_left", -0.53,-0.01, -0.55,-0.04},{"bot_right", 0.01,0.53, -0.55,-0.04}};
+    std::vector<std::vector<double>> sensorEdgesTight = {{-0.48, -0.48}, {0.48, 0.43}}; // Sensor's local frame
+    std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.48,-0.04, 0.07, 0.43},{"top_right", 0.07,0.48, 0.07, 0.43},
+                                                    {"bot_left", -0.48,-0.04, -0.48,-0.10},{"bot_right", 0.07,0.48, -0.48,-0.10}};
     // std::vector<std::vector<double>> sensorEdgesExtra = {{1.0 , -3.95}, { 1.4, -3.65}}; //square interior of pads
     //std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
     //std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
