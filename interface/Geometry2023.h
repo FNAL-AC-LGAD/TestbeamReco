@@ -277,11 +277,11 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}};
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     int centerGoodStripIndex = 3;
-	double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
-	double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
-	double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
-	double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
-	std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
+    double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
+    double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
+    double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
+    double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
+    std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
 };
 
 
@@ -346,11 +346,11 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     int centerGoodStripIndex = 3;
-	double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
-	double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
-	double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
-	double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
-	std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
+    double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
+    double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
+    double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
+    double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
+    std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
 };
 
 
@@ -416,11 +416,11 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-1.95, -5.0}, {1.95, 5.0}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     int centerGoodStripIndex = 3;
-	double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
-	double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
-	double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
-	double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
-	std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
+    double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
+    double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
+    double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
+    double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
+    std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
 };
 
 
@@ -489,11 +489,11 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-2.4, -5.5}, {2.4, 5.5}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     int centerGoodStripIndex = 3;
-	double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
-	double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
-	double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
-	double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
-	std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
+    double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
+    double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
+    double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
+    double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
+    std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
 };
 
 
@@ -880,3 +880,4 @@ public:
 };
 
 #endif
+
