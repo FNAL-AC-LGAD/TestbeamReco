@@ -736,8 +736,8 @@ public:
     double xBinSize = 0.05;
     double yBinSize = 0.05;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+  double noiseAmpThreshold = 15.0; // 80.0; // 60.0; // 50.0; // 40.0; // 30.0; // 20.0; // 15.0;
+    double signalAmpThreshold = 15.0; // 80.0; // 60.0; // 50.0; // 40.0; // 30.0; // 20.0; // 15.0;
     int minPixHits = 4;
     int minStripHits = 12;
     int CFD_threshold = 50;
@@ -801,8 +801,8 @@ public:
     double xBinSize = 0.05;
     double yBinSize = 0.05;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0;
+    double noiseAmpThreshold = 15.0; // 80.0; // 60.0; // 50.0; // 40.0; // 30.0; // 20.0; // 15.0;
+    double signalAmpThreshold = 15.0; // 80.0; // 60.0; // 50.0; // 40.0; // 30.0; // 20.0; // 15.0;
     int minPixHits = 4;
     int minStripHits = 12;
     int CFD_threshold = 50;
@@ -865,8 +865,8 @@ public:
     double xBinSize = 0.05;
     double yBinSize = 0.05;
     double photekSignalThreshold = 50.0;
-    double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double noiseAmpThreshold = 15.0; // 80.0; // 60.0; // 50.0; // 40.0; // 30.0; // 20.0; // 15.0;
+    double signalAmpThreshold = 15.0; // 80.0; // 60.0; // 50.0; // 40.0; // 30.0; // 20.0; // 15.0;
     int minPixHits = 4;
     int minStripHits = 12;
     int CFD_threshold = 50;
