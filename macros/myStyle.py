@@ -245,8 +245,10 @@ sensorsGeom2023 = { "BNL_50um_1cm_450um_W3051_2_2": {'sensor': "BNL_50um_1cm_450
                     "BNL_20um_1cm_450um_W3075_2_4": {'sensor': "BNL_20um_1cm_450um_W3075", 'pitch': 500, 'stripWidth': 50, "BV": 80, "length": 10.0},
                     "BNL_50um_2p5cm_mixConfig1_W3051_1_4": {'sensor': "BNL_50um_2p5cm_mixConfig1_W3051", 'pitch': 500, 'stripWidth': 100, "BV": 170, "length": 25.0},
                     "BNL_50um_2p5cm_mixConfig2_W3051_1_4": {'sensor': "BNL_50um_2p5cm_mixConfig2_W3051", 'pitch': 500, 'stripWidth': 50, "BV": 170, "length": 25.0},
-                    "HPK_20um_500x500um_2x2pad_E600_FNAL": {'sensor': "HPK_20um_500x500um_2x2pad_E600_FNAL", 'pitch': 500, 'stripWidth': 500, "BV": 100, "length": 5.0},
-                    
+                    "HPK_20um_500x500um_2x2pad_E600_FNAL": {'sensor': "HPK_20um_2x2pad", 'pitch': 500, 'stripWidth': 500, "BV": 105, "length": 0.5},
+                    "HPK_30um_500x500um_2x2pad_E600_FNAL": {'sensor': "HPK_30um_2x2pad", 'pitch': 500, 'stripWidth': 500, "BV": 140, "length": 0.5},
+                    "HPK_50um_500x500um_2x2pad_E600_FNAL": {'sensor': "HPK_50um_2x2pad", 'pitch': 500, 'stripWidth': 500, "BV": 190, "length": 0.5},
+
                     "HPK_W8_18_2_50T_1P0_500P_100M_C600": {'sensor': "HPK_W8_18_2_50T_100M_C600", 'pitch': 500, 'stripWidth': 100, "BV": 208, "length": 10.0},
                     
                     "HPK_W8_17_2_50T_1P0_500P_50M_C600": {'sensor': "HPK_W8_17_2_50T_50M_C600", 'pitch': 500, 'stripWidth': 50, "BV": 206, "length": 10.0},
