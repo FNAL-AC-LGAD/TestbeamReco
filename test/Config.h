@@ -180,7 +180,7 @@ public:
         else if(filetag.find("BNL_500um_squares_175V")                 != std::string::npos) registerGeometry(tr, BNL_500um_squares_Geometry(voltage));
         else if(filetag.find("BNL2021_22_medium_150up_80uw")           != std::string::npos) registerGeometry(tr, BNL2021MediumV2Geometry(voltage));
         else if(filetag.find("IHEP_W1_I_150up_80uw")                   != std::string::npos) registerGeometry(tr, IHEPGeometry(voltage));
-        // 2023 Campaign
+        // 2023 January Campaign
         else if(filetag.find("BNL_50um_1cm_450um_W3051_2_2")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_450um_W3051_2_2_StripsGeometry(voltage));
 		else if(filetag.find("BNL_50um_1cm_400um_W3051_1_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_400um_W3051_1_4_StripsGeometry(voltage));
 		else if(filetag.find("BNL_50um_1cm_450um_W3052_2_4")                 != std::string::npos) registerGeometry(tr, BNL_50um_1cm_450um_W3052_2_4_StripsGeometry(voltage)); 
@@ -195,6 +195,27 @@ public:
 	    else if(filetag.find("HPK_20um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_20um_500x500um_E600_2x2PadGeometry(voltage));
 	    else if(filetag.find("HPK_30um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_30um_500x500um_E600_2x2PadGeometry(voltage));
 	    else if(filetag.find("HPK_50um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_50um_500x500um_E600_2x2PadGeometry(voltage));
+        // 2023 April Campaign  
+
+        // 2023 May Campaign  
+        else if(filetag.find("HPK_W8_18_2_50T_1P0_500P_100M_C600")             != std::string::npos) registerGeometry(tr, HPK_W8_18_2_50T_1P0_500P_100M_C600_StripsGeometry(voltage));
+		
+		else if(filetag.find("HPK_W8_17_2_50T_1P0_500P_50M_C600_206V")         != std::string::npos) registerGeometry(tr, HPK_W8_17_2_50T_1P0_500P_50M_C600_StripsGeometry(voltage));
+	    else if(filetag.find("HPK_W8_17_2_50T_1P0_500P_50M_C600_200V")         != std::string::npos) registerGeometry(tr, HPK_W8_17_2_50T_1P0_500P_50M_C600_StripsGeometry(voltage));	
+        
+        else if(filetag.find("HPK_W4_17_2_50T_1P0_500P_50M_C240_204V")         != std::string::npos) registerGeometry(tr, HPK_W4_17_2_50T_1P0_500P_50M_C240_StripsGeometry(voltage)); 
+
+		else if(filetag.find("HPK_W5_17_2_50T_1P0_500P_50M_E600_190V")         != std::string::npos) registerGeometry(tr, HPK_W5_17_2_50T_1P0_500P_50M_E600_StripsGeometry(voltage));
+		else if(filetag.find("HPK_W5_17_2_50T_1P0_500P_50M_E600_188V")         != std::string::npos) registerGeometry(tr, HPK_W5_17_2_50T_1P0_500P_50M_E600_StripsGeometry(voltage));
+		else if(filetag.find("HPK_W5_17_2_50T_1P0_500P_50M_E600_186V")         != std::string::npos) registerGeometry(tr, HPK_W5_17_2_50T_1P0_500P_50M_E600_StripsGeometry(voltage));
+		else if(filetag.find("HPK_W5_17_2_50T_1P0_500P_50M_E600_192V")         != std::string::npos) registerGeometry(tr, HPK_W5_17_2_50T_1P0_500P_50M_E600_StripsGeometry(voltage));
+		else if(filetag.find("HPK_W5_17_2_50T_1P0_500P_50M_E600_194V")         != std::string::npos) registerGeometry(tr, HPK_W5_17_2_50T_1P0_500P_50M_E600_StripsGeometry(voltage));
+		
+		else if(filetag.find("HPK_W9_15_2_20T_1P0_500P_50M_E600_114V")         != std::string::npos) registerGeometry(tr, HPK_W9_15_2_20T_1P0_500P_50M_E600_StripsGeometry(voltage));
+		else if(filetag.find("HPK_W2_3_2_50T_1P0_500P_50M_E240_180V")          != std::string::npos) registerGeometry(tr, HPK_W2_3_2_50T_1P0_500P_50M_E240_StripsGeometry(voltage));
+		else if(filetag.find("HPK_W9_14_2_20T_1P0_500P_100M_E600_112V")        != std::string::npos) registerGeometry(tr, HPK_W9_14_2_20T_1P0_500P_100M_E600_StripsGeometry(voltage));
+		else if(filetag.find("HPK_KOJI_50T_1P0_80P_60M_E240")                  != std::string::npos) registerGeometry(tr, HPK_KOJI_50T_1P0_80P_60M_E240_StripsGeometry(voltage));
+		else if(filetag.find("HPK_KOJI_20T_1P0_80P_60M_E240")                  != std::string::npos) registerGeometry(tr, HPK_KOJI_20T_1P0_80P_60M_E240_StripsGeometry(voltage));
 		else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
