@@ -1,0 +1,10 @@
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76436_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76435_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76434_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76433_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76432_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76431_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76430_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76429_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76428_info.root
+root://cmseos.fnal.gov//store/group/cmstestbeam/2023_04_ETL_ACLGAD/LecroyScope/RecoData/TimingDAQRECO/RecoWithTracks/v11/run76427_info.root
