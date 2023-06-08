@@ -313,6 +313,14 @@ resolutions2023 = {
                                         'position_oneStrip_StdDev': 0.00,
                                         'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
                                         'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "HPK_30um_500x500um_2x2pad_E600_FNAL_140V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "HPK_50um_500x500um_2x2pad_E600_FNAL_190V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
 }
 
 resolutions2023OneStripChannel = {
@@ -336,7 +344,10 @@ resolutions2023OneStripChannel = {
                                                 'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 "HPK_20um_500x500um_2x2pad_E600_FNAL_105V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
                                                 'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
-
+"HPK_30um_500x500um_2x2pad_E600_FNAL_140V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                                'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"HPK_50um_500x500um_2x2pad_E600_FNAL_190V": {   'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                                'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 }
 
 
