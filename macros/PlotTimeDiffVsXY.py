@@ -97,7 +97,9 @@ for i in range(0, nXBins+1):
             minEvtsCut = totalEvents/(nXBins*(4*nYBins))
             #minEvtsCut = totalEvents/(nXBins*nYBins)
             #print(minEvtsCut, totalEvents)
-            if i==0 and j==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
+            if i==0 and j==0:
+                print("%s: nEvents > %.2f (Total events: %i)"%(info.inHistoName, minEvtsCut, totalEvents))
+
 
 
             #Do fit 
@@ -119,8 +121,9 @@ for i in range(0, nXBins+1):
                     tmpHist.Draw("hist")
                     fit.Draw("same")
                     canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
-                    print ("Bin : " + str(i) + " (x = %.3f"%(info.th1.GetXaxis().GetBinCenter(i)) +") -> Resolution: %.3f +/- %.3f"%(value, error))
-                
+                    print ("Bin: %i (x center = %.3f) -> Resolution: %.3f +/- %.3f"%(i, info.th1.GetXaxis().GetBinCenter(i), value, error))
+
+
                 ##For Debugging
                 #tmpHist.Draw("hist")
                 ##myLanGausFunction.Draw("same")

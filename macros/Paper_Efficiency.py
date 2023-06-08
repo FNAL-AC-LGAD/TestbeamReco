@@ -100,6 +100,8 @@ gStyle.SetOptStat(0)
 efficiency_denominator_global_vs_x = efficiency_denominator_global.ProjectionX("efficiency_vs_x_denominator")#,binY_lowEdge,binY_highEdge)
 
 fine_tune = efficiency_denominator_global_vs_x.GetBinWidth(2)/2.
+if ("2x2pad" in dataset):
+    fine_tune = 0.0
 
 ### Make and save 1D projections (vs X) fullReco Global
 eff_num_tmp = efficiency_fullReco_numerator_global.ProjectionX("efficiency_vs_x_fullReco_numerator_global")
