@@ -266,7 +266,7 @@ public:
 	double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
 	double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
 	double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
-	std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
+    std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
 };
 
 class HPK_W2_3_2_50T_1P0_500P_50M_E240_StripsGeometry: public DefaultGeometry
