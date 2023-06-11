@@ -270,7 +270,7 @@ public:
 };
 
 class HPK_W2_3_2_50T_1P0_500P_50M_E240_StripsGeometry: public DefaultGeometry
-// HPK_W2_3_2_50T_1P0_500P_50M_E240
+// HPK_W2_3_2_50T_1P0_500P_50M_E240_180V
 {
 public:
     // 
@@ -299,21 +299,23 @@ public:
     double pitch = 0.500;
     double sensorCenter  = 0.75; // Lab-Tracker's frame ->  y_dut
     double sensorCenterY = 1.25; // Lab-Tracker's frame -> -x_dut
-	std::vector<double> stripCenterXPosition = {1.525, 1.024, 0.526, 0.027, -0.471, -0.970, -1.470, 0.0};
-	int numLGADchannels = 7;
+    // std::vector<double> stripCenterXPosition = {1.525, 1.024, 0.526, 0.027, -0.471, -0.970, -1.470, 0.0};
+    // std::vector<double> stripCenterXPosition = {1.522, 1.023, 0.525, 0.025, -0.472, -0.972, -1.471, 0.0};
+    std::vector<double> stripCenterXPosition = {1.507, 1.007, 0.508, 0.008, -0.491, -0.991, -1.492, 0.0};
+    int numLGADchannels = 7;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
-    double alpha =  0.00;
-    double beta  =  0.00;
-    double gamma =  0.00;
-    double z_dut =  0.00;
-    double xBinSize = 0.050;
+    double alpha =-0.72; //-0.72; // 0.00;
+    double beta  = 0.00; // 0.00; // 0.00;
+    double gamma = 0.00; // 0.00; // 0.00;
+    double z_dut = 2.22; // 0.00; // 0.00;
+    double xBinSize = 0.050; // 0.025;
     double yBinSize = 0.1;
     double xmin = -2.50; // Sensor's local frame
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.82;
+    double positionRecoMaxPoint = 0.84;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -323,15 +325,17 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-	std::vector<double> positionRecoPar = {0.250000, -0.759111, 2.720336, -28.817118, 125.689631, -198.288382};
-	std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame 
-	std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
+    // std::vector<double> positionRecoPar = {0.250000, -0.759111, 2.720336, -28.817118, 125.689631, -198.288382};
+    // std::vector<double> positionRecoPar = {0.250000, -0.749650, 2.469930, -26.721903, 118.830073, -190.862811};
+    std::vector<double> positionRecoPar = {0.250000, -0.693443, 0.894506, -9.526453, 38.944962, -58.650584};
+    std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     int centerGoodStripIndex = 3;
-	double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
-	double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
-	double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
-	double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
-	std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
+    double leftHighGainX = stripCenterXPosition[centerGoodStripIndex] - (stripWidth/2);
+    double rightHighGainX = stripCenterXPosition[centerGoodStripIndex] + (stripWidth/2);
+    double leftLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) - (stripWidth/2);
+    double rightLowGainX = stripCenterXPosition[centerGoodStripIndex] - (pitch/2) + (stripWidth/2);
+    std::vector<utility::ROI> regionsOfIntrest = {{"highGain", leftHighGainX,rightHighGainX, -4.6,4.6},{"lowGain", leftLowGainX,rightLowGainX, -4.6,4.6}};
 };
 
 class HPK_W9_15_2_20T_1P0_500P_50M_E600_StripsGeometry: public DefaultGeometry
