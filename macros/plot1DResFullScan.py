@@ -5,6 +5,25 @@ ROOT.gROOT.SetBatch(True)
 from array import array
 import myStyle
 
+def enum_folder(mypath):
+# Adds a sequential number to the path
+        # Remove end slash and last digit
+        if mypath[-1] == "/":
+                mypath = mypath[0:-1]
+        if (mypath[-1] == "0") or (mypath[-1] == "1"):
+                mypath = mypath[0:-1]
+        count = 1
+        mypath+="1"
+        # Rename until file number is not found
+        while(os.path.exists(mypath)):
+                # Remove number at the end
+                idx = len(str(count))
+                count+=1
+                mypath = mypath[0:-idx] + str(count)
+        mypath+="/"
+        os.makedirs(mypath)
+        return mypath
+
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -24,24 +43,15 @@ inputfile = ROOT.TFile("%s%s_Align.root"%(outdir,dataset))
 os.system("cp %sAlignBinning.py ."%(outdir))
 from AlignBinning import z_values, alpha_values, beta_values, gamma_values
 
-outdir = os.path.join(outdir,"Scan0/")
+# Create output directory
+outdir = os.path.join(outdir,"Scan")
+outdir = enum_folder(outdir)
+print(outdir)
 
-if not os.path.exists(outdir):
-    print(outdir)
-    os.mkdir(outdir)
-else:
-    while(os.path.exists(outdir)):
-        tmp_list = outdir.split("Scan") # "<path>/ScanNN/" -> ["<path>/", "NN/"]
-        prevpath = tmp_list[0] # "<path>/"
-        num = int(tmp_list[1][0:-1]) # "NN/" -> "NN"
-        outdir = prevpath + "Scan" + str(num+1) + "/" # "<path>/ScanNN+1/"
-    print(outdir)
-    os.mkdir(outdir)
-
-if not no_copy_binning: os.system("cp AlignBinning.py %s"%outdir)
+if not no_copy_binning:
+        os.system("cp AlignBinning.py %s"%outdir)
 
 outputfile=ROOT.TFile("%sFullScan_ZABC.root"%outdir,"RECREATE")
-
 
 def cosmetic_tgraph(graph):
         # graph.SetLineColor(colors[colorindex])
@@ -80,8 +90,6 @@ def plot1D(hists, colors, labels, name, ylab, xlab, bins=100, arange=(0,1)):
         return 1000.*fit.GetParameter(2),1000.*fit.GetParError(2)
 
 def createTGraph(f, out, var_values, var):
-        var_dict = {'Z': ["Z", "mm"], 'A': ["#alpha", "deg"], 'B': ["#beta", "deg"], 'C': ["#gamma", "deg"]}
-
         print("Running over %s var:"%var)
         hists=[]
         for i in range(len(var_values)):
@@ -95,23 +103,12 @@ def createTGraph(f, out, var_values, var):
                 resolutions.append(resolution)
                 res_errs.append(error)
                 print("%i\tres:%0.2f, %s: %0.1f "%(ivar,resolutions[-1],var,var_values[ivar]))
-                # print("res:%0.2f, z: %0.2f, alpha: %0.2f, beta: %0.2f "%(resolutions[-1],z_values[ivar], alpha_values[], beta_values[]))
-
 
         resolution_vs_var = ROOT.TGraphErrors(len(var_values),array("d",var_values),array("d",resolutions),array("d",[0.01 for i in var_values]),array("d",res_errs))
-        resolution_vs_var.SetTitle(";Assigned %s position [%s];Resolution [microns]"%(var_dict[var][0],var_dict[var][1]))
+        resolution_vs_var.SetTitle(";Assigned %s position [%s];Resolution [microns]"%(var_label[var][0],var_label[var][1]))
         cosmetic_tgraph(resolution_vs_var)
 
         c = ROOT.TCanvas("c","c",1000,600)
-
-        fit_limits = { # [fitX_min, fitX_max, guess_par1, guess_par2, guess_par3]
-                "Z": [var_values[0], var_values[-1], -99, -99, -99],
-                # "A": [var_values[0], var_values[-1], 30, -99, -99],
-                "A": [var_values[0], var_values[-1], -99, -99, -99],
-                "B": [var_values[0], var_values[-1], -99, -99, -99],
-                "C": [var_values[0], var_values[-1], -99, -99, -99],
-        }
-
 
         # if var=="A":
         #         fitFunc = ROOT.TF1("","pol2",var_values[0], var_values[-1]);
@@ -125,9 +122,12 @@ def createTGraph(f, out, var_values, var):
         fitFunc.SetParLimits(0,0.0,110.0)
         # fitFunc.SetParLimits(0,0.0,1.e12)
         # fitFunc.SetParLimits(2,0.0,10000)
-        if fit_limits[var][2]!=-99: fitFunc.SetParameter(0,fit_limits[var][2])
-        if fit_limits[var][3]!=-99: fitFunc.SetParameter(1,fit_limits[var][3])
-        if fit_limits[var][4]!=-99: fitFunc.SetParameter(2,fit_limits[var][4])
+        if fit_limits[var][2]!=-99:
+                fitFunc.SetParameter(0,fit_limits[var][2])
+        if fit_limits[var][3]!=-99:
+                fitFunc.SetParameter(1,fit_limits[var][3])
+        if fit_limits[var][4]!=-99:
+                fitFunc.SetParameter(2,fit_limits[var][4])
 
         results = resolution_vs_var.Fit(fitFunc,"Q","",fit_limits[var][0], fit_limits[var][1]);
         #results.Print("V")
@@ -139,11 +139,10 @@ def createTGraph(f, out, var_values, var):
         # else:
         #         print("\tMinimum at: {}".format(-(b)/(2*a)))
 
-        print("\tMinimum at: {}".format(fitFunc.GetMinimumX()))        
+        print("\tMinimum at: %.3f"%(fitFunc.GetMinimumX()))
 
         resolution_vs_var.SetName("TGraph_%s"%var)
         resolution_vs_var.Draw("aep")
-
 
         #mean = myGausFunction.GetParameter(1)
         #meanErr = myGausFunction.GetParError(1)
@@ -164,6 +163,15 @@ def createTGraph(f, out, var_values, var):
         c.SaveAs(outdir+"Scan_"+var+"_fixY.gif")
         # c.SaveAs(outdir+"Scan_"+var+"_fixY.pdf")
 
+
+var_label = {'Z': ["Z", "mm"], 'A': ["#alpha", "deg"], 'B': ["#beta", "deg"], 'C': ["#gamma", "deg"]}
+
+fit_limits = { # [fitX_min, fitX_max, guess_par1, guess_par2, guess_par3]
+        "Z": [z_values[2], z_values[-3], -99, -99, -99],
+        "A": [alpha_values[2], alpha_values[-3], -99, -99, -99],
+        "B": [beta_values[0], beta_values[-1], -99, -99, -99],
+        "C": [gamma_values[0], gamma_values[-1], -99, -99, -99],
+}
 
 createTGraph(inputfile, outputfile, z_values,       "Z")
 createTGraph(inputfile, outputfile, alpha_values,   "A")
