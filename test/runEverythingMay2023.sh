@@ -69,8 +69,8 @@ cd ../test
 cd ../macros
 
 python DoPositionRecoFit.py         -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -A --xmax 0.84 --fitOrder 5
-python PlotAmplitudeVsX.py          -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V --xlength 2.7 --ylength 40.0
-python PlotAmplitudeVsXY.py         -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V --zmin 20.0 --zmax 40.0
+python PlotAmplitudeVsX.py          -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V --xlength 2.7 --ylength 140.0
+python PlotAmplitudeVsXY.py         -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V --zmin 20.0 --zmax 140.0
 python PlotTimeDiffVsX.py           -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V --xlength 2.7 --ylength 100.0
 python PlotTimeDiffVsXY.py          -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V --zmin 25.0 --zmax 75.0
 python PlotTimeDiffVsY.py           -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V --xlength 13.5 --ylength 100.0
@@ -108,8 +108,8 @@ cd ../test
 cd ../macros
 
 python DoPositionRecoFit.py         -D HPK_KOJI_50T_1P0_80P_60M_E240_190V -A --xmax 0.62 --fitOrder 5
-python PlotAmplitudeVsX.py          -D HPK_KOJI_50T_1P0_80P_60M_E240_190V --xlength 0.6 --ylength 40.0
-python PlotAmplitudeVsXY.py         -D HPK_KOJI_50T_1P0_80P_60M_E240_190V --zmin 20.0 --zmax 40.0
+python PlotAmplitudeVsX.py          -D HPK_KOJI_50T_1P0_80P_60M_E240_190V --xlength 0.6 --ylength 100.0
+python PlotAmplitudeVsXY.py         -D HPK_KOJI_50T_1P0_80P_60M_E240_190V --zmin 20.0 --zmax 100.0
 python PlotTimeDiffVsX.py           -D HPK_KOJI_50T_1P0_80P_60M_E240_190V --xlength 0.6 --ylength 100.0
 python PlotTimeDiffVsXY.py          -D HPK_KOJI_50T_1P0_80P_60M_E240_190V --zmin 25.0 --zmax 75.0
 python PlotTimeDiffVsY.py           -D HPK_KOJI_50T_1P0_80P_60M_E240_190V --xlength 13.5 --ylength 100.0
@@ -147,8 +147,8 @@ cd ../test
 cd ../macros
 
 python DoPositionRecoFit.py         -D HPK_KOJI_20T_1P0_80P_60M_E240_112V -A --xmax 0.62 --fitOrder 5
-python PlotAmplitudeVsX.py          -D HPK_KOJI_20T_1P0_80P_60M_E240_112V --xlength 0.6 --ylength 40.0
-python PlotAmplitudeVsXY.py         -D HPK_KOJI_20T_1P0_80P_60M_E240_112V --zmin 20.0 --zmax 40.0
+python PlotAmplitudeVsX.py          -D HPK_KOJI_20T_1P0_80P_60M_E240_112V --xlength 0.6 --ylength 100.0
+python PlotAmplitudeVsXY.py         -D HPK_KOJI_20T_1P0_80P_60M_E240_112V --zmin 20.0 --zmax 100.0
 python PlotTimeDiffVsX.py           -D HPK_KOJI_20T_1P0_80P_60M_E240_112V --xlength 0.6 --ylength 100.0
 python PlotTimeDiffVsXY.py          -D HPK_KOJI_20T_1P0_80P_60M_E240_112V --zmin 25.0 --zmax 75.0
 python PlotTimeDiffVsY.py           -D HPK_KOJI_20T_1P0_80P_60M_E240_112V --xlength 13.5 --ylength 100.0
