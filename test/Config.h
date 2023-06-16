@@ -274,21 +274,27 @@ public:
         //Define betaScan
         double betaMin = -90.0, betaStep = 1.0;
         unsigned int nbetaBins = 181;
-        if (beta_def != 0.0)
+        // Skip beta scan for higher order iteration
+        if (alpha_def != 0.0)
         {
-            betaMin = -1.0, betaStep = 0.05;
-            nbetaBins = 41;
+            betaMin = -1.0, betaStep = 1.0;
+            nbetaBins = 2;
         }
-        else if ((alpha_def != 0.0) && (z_dut_def != 0.0))
-        {
-            betaMin = -3.0, betaStep = 0.1;
-            nbetaBins = 61;
-        }
-        else if (alpha_def != 0.0)
-        {
-            betaMin = -10.0, betaStep = 0.5;
-            nbetaBins = 41;
-        }
+        // if (beta_def != 0.0)
+        // {
+        //     betaMin = -1.0, betaStep = 0.05;
+        //     nbetaBins = 41;
+        // }
+        // else if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        // {
+        //     betaMin = -3.0, betaStep = 0.1;
+        //     nbetaBins = 61;
+        // }
+        // else if (alpha_def != 0.0)
+        // {
+        //     betaMin = -10.0, betaStep = 0.5;
+        //     nbetaBins = 41;
+        // }
 
         std::vector<double> betaScan(nbetaBins);
         pythonBins+="beta_values = [";
@@ -304,16 +310,23 @@ public:
         //Define gammaScan
         double gammaMin = -90.0, gammaStep = 4.0;
         unsigned int ngammaBins = 46;
-        if (gamma_def != 0.0)
+        // Skip gamma scan for higher order iteration
+        if (alpha_def != 0.0)
         {
-            gammaMin = -1.0, gammaStep = 0.05;
-            ngammaBins = 41;
+            gammaMin = -1.0, gammaStep = 1.0;
+            ngammaBins = 2;
         }
-        else if ((alpha_def != 0.0) && (z_dut_def != 0.0))
-        {
-            gammaMin = -8.0, gammaStep = 0.5;
-            ngammaBins = 33;
-        }
+        // if (gamma_def != 0.0)
+        // {
+        //     gammaMin = -1.0, gammaStep = 0.05;
+        //     ngammaBins = 41;
+        // }
+        // else if ((alpha_def != 0.0) && (z_dut_def != 0.0))
+        // {
+        //     gammaMin = -8.0, gammaStep = 0.5;
+        //     ngammaBins = 33;
+        // }
+
         std::vector<double> gammaScan(ngammaBins);
         pythonBins+="gamma_values = [";
         for(unsigned int i = 0; i < ngammaBins; i++) 
