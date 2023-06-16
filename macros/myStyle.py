@@ -267,6 +267,8 @@ sensorsGeom2023 = { "BNL_50um_1cm_450um_W3051_2_2": {'sensor': "BNL_50um_1cm_450
                     "HPK_W9_14_2_20T_1P0_500P_100M_E600":{'sensor': "HPK_W9_14_2_20T_1P0_500P_100M_E600", 'pitch': 500, 'stripWidth': 100, "BV": 112, "length": 10.0},
                     "HPK_KOJI_50T_1P0_80P_60M_E240":{'sensor': "HPK_KOJI_50T_1P0_80P_60M_E240", 'pitch': 80, 'stripWidth': 60, "BV": 190, "length": 10.0},
                     "HPK_KOJI_20T_1P0_80P_60M_E240":{'sensor': "HPK_KOJI_20T_1P0_80P_60M_E240", 'pitch': 80, 'stripWidth': 60, "BV": 112, "length": 10.0},
+                    
+                    "HPK_W9_15_4_20T_0P5_500P_50M_E600":{'sensor': "HPK_W9_15_4_20T_0P5_500P_50M_E600",'pitch': 500, 'stripWidth': 50, "BV": 110, "length": 5.0},
 }
 
 # NEED TO BE UPDATED! ONLY PLACEHOLDERS TO MAKE PAPER_PLOTS MACROS RUN

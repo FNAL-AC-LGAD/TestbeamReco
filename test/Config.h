@@ -216,6 +216,7 @@ public:
 		else if(filetag.find("HPK_W9_14_2_20T_1P0_500P_100M_E600_112V")        != std::string::npos) registerGeometry(tr, HPK_W9_14_2_20T_1P0_500P_100M_E600_StripsGeometry(voltage));
 		else if(filetag.find("HPK_KOJI_50T_1P0_80P_60M_E240")                  != std::string::npos) registerGeometry(tr, HPK_KOJI_50T_1P0_80P_60M_E240_StripsGeometry(voltage));
 		else if(filetag.find("HPK_KOJI_20T_1P0_80P_60M_E240")                  != std::string::npos) registerGeometry(tr, HPK_KOJI_20T_1P0_80P_60M_E240_StripsGeometry(voltage));
+        else if(filetag.find("HPK_W9_15_4_20T_0P5_500P_50M_E600")              != std::string::npos) registerGeometry(tr, HPK_W9_15_4_20T_0P5_500P_50M_E600_StripsGeometry(voltage));
 		else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
