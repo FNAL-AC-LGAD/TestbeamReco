@@ -30,6 +30,7 @@ class HistoInfo:
         self.fine_tune = self.fine_tuning(sensor)
 
     def getTH2(self, f, name, sensor):
+         
         th2 = f.Get(name)
         return th2
 
@@ -68,7 +69,7 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-x','--xlength', dest='xlength', default = 1.7, help="X axis range [-x, x]")
+parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="X axis range [-x, x]")
 parser.add_option('-y','--ylength', dest='ylength', default = 160.0, help="Y axis upper limit")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
@@ -178,10 +179,10 @@ if (is_hotspot):
     hist_twoStrip_fullSnsr = input_fullSnsr.Get("h_twoStrip")
 
 # oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
-try:
-    oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
-except:
-    oneStripResValue_list = myStyle.resolutions2023OneStripChannel[dataset]['resOneStrip']
+#try:
+    #oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
+#except:
+    #oneStripResValue_list = myStyle.resolutions2023OneStripChannel[dataset]['resOneStrip']
 
 
 max_strip_edge = hist_info_twoStrip.f.Get("stripBoxInfo01").GetMean(1) + strip_width/2000.
@@ -205,17 +206,17 @@ oneStripBins = [-0.75, -0.25, 0.25, 0.75] if strip_width==300 else [-1.00, -0.50
 oneStripValues = []
 
 # print("N boxes = %i"%len(boxes))
-for i,box in enumerate(boxes):
-    if (i!=0 and i!=(len(boxes)-1)):
-        oneStripValues.append(oneStripResValue_list[i])
+#for i,box in enumerate(boxes):
+    #if (i!=0 and i!=(len(boxes)-1)):
+        #oneStripValues.append(oneStripResValue_list[i])
 
-oneStripHist = ROOT.TGraph(len(oneStripBins), array('f',oneStripBins), array('f',oneStripValues))
-oneStripHist.SetName("h_oneStrip")
+#oneStripHist = ROOT.TGraph(len(oneStripBins), array('f',oneStripBins), array('f',oneStripValues))
+#oneStripHist.SetName("h_oneStrip")
 # oneStripHist.SetLineWidth(3)
 # oneStripHist.SetLineStyle(1)
-oneStripHist.SetMarkerStyle(33)
-oneStripHist.SetMarkerSize(3)
-oneStripHist.SetMarkerColor(colors[0])
+#oneStripHist.SetMarkerStyle(33)
+#oneStripHist.SetMarkerSize(3)
+#oneStripHist.SetMarkerColor(colors[0])
 
 #loop over X bins
 for i in range(0, nXBins+1):
@@ -381,7 +382,8 @@ binary_readout_res_sensor.Draw("same")
 
 gPad.RedrawAxis("g")
 
-oneStripHist.Draw("P same")
+
+#oneStripHist.Draw("P same")
 hist_info_twoStrip.th1.Draw("hist e same")
 
 legend = TLegend(myStyle.GetPadCenter()-0.25,1-myStyle.GetMargin()-0.385, myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.095)
@@ -393,7 +395,7 @@ legend.SetTextSize(myStyle.GetSize()-4)
 
 legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
 # legend.AddEntry(binary_readout_res_strip_4legend[0], "Width / #sqrt{12}","l")
-legend.AddEntry(oneStripHist, "Exactly one strip observed","P")
+#legend.AddEntry(oneStripHist, "Exactly one strip observed","P")
 # legend.AddEntry(tracker_res, "Tracker resolution","l")
 
 if ('twoStrips' in info.outHistoName):
@@ -411,11 +413,11 @@ myStyle.SensorInfoSmart(dataset)
 
 save_name = "%sPositionRes_vs_x%s"%(outdir,pref_hotspot) if not useTight else "%sPositionRes_vs_x_tight"%(outdir)
 
-canvas.SaveAs("%s.gif"%(save_name))
-canvas.SaveAs("%s.pdf"%(save_name))
+canvas.SaveAs("../output/PositionResolution/"+dataset+"xPsotion.gif")
+canvas.SaveAs("../output/PositionResolution/"+dataset+"xPsotion.pdf")
 expected_res_vs_x.Write()
 hist_info_twoStrip.th1.Clone("h_twoStrip").Write()
-oneStripHist.Write()
+#oneStripHist.Write()
 
 htemp.Delete()
 binary_readout_res_sensor.Write("l_sqrt12")
