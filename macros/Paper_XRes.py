@@ -99,6 +99,11 @@ debugMode = options.debugMode
 is_hotspot = options.hotspot
 pref_hotspot = "_hotspot" if (is_hotspot) else ""
 
+# Define tracker contribution
+# rm_tracker True shows expected and measured curves without tracker component
+rm_tracker = True
+trkr_value = 5 # um
+
 useTight = options.useTight
 tight_ext = "_tight" if useTight else ""
 
@@ -143,11 +148,17 @@ expected_res_vs_x.SetLineStyle(7)
 expected_res_vs_x.SetLineColor(colors[2])
 for ibin in range(expected_res_vs_x.GetNbinsX()+1):
     if mean_amp12_vs_x.GetBinContent(ibin)>0:
+        dXFrac = mean_dXFrac_vs_x.GetBinContent(ibin)
+        noise12 = mean_noise12_vs_x.GetBinContent(ibin)
+        amp1 = mean_amp1_vs_x.GetBinContent(ibin)
+        amp2 = mean_amp2_vs_x.GetBinContent(ibin)
+        amp12 = mean_amp12_vs_x.GetBinContent(ibin)
+        # Without tracker's contribution
+        expected_res = abs(1000*dXFrac * (0.5*noise12) * pow(pow(amp1,2)+pow(amp2,2),0.5) / (amp12)**2)
         # With tracker's contribution of 5 microns
-        # expected_res = math.sqrt(5.**2 + pow(abs(1000*mean_dXFrac_vs_x.GetBinContent(ibin) * (0.5*mean_noise12_vs_x.GetBinContent(ibin)) * pow(pow(mean_amp1_vs_x.GetBinContent(ibin),2)+pow(mean_amp2_vs_x.GetBinContent(ibin),2),0.5) /  (mean_amp12_vs_x.GetBinContent(ibin))**2),2))
-
-        # Without tracker's contribution of 5 microns
-        expected_res = abs(1000*mean_dXFrac_vs_x.GetBinContent(ibin) * (0.5*mean_noise12_vs_x.GetBinContent(ibin)) * pow(pow(mean_amp1_vs_x.GetBinContent(ibin),2)+pow(mean_amp2_vs_x.GetBinContent(ibin),2),0.5) / (mean_amp12_vs_x.GetBinContent(ibin))**2)
+        if not rm_tracker:
+            # expected_res = math.sqrt(5.**2 + pow(abs(1000*dXFrac * (0.5*noise12) * pow(pow(amp1,2)+pow(amp2,2),0.5) / (amp12)**2),2))
+            expected_res = math.sqrt(trkr_value**2 + pow(expected_res,2))
     else:
         expected_res=-10.0
     if ("1cm_500up_300uw" in hist_info_twoStrip.sensor) and (mean_amp12_vs_x.GetBinContent(ibin)>0) and (mean_amp12_vs_x.GetBinContent(ibin+1)<=0):
@@ -179,11 +190,10 @@ if (is_hotspot):
     hist_twoStrip_fullSnsr = input_fullSnsr.Get("h_twoStrip")
 
 # oneStripResValue = myStyle.resolutions2022[dataset]['position_oneStripRMS']
-#try:
-    #oneStripResValue_list = myStyle.resolutions2022OneStripChannel[dataset]['resOneStrip']
-#except:
-    #oneStripResValue_list = myStyle.resolutions2023OneStripChannel[dataset]['resOneStrip']
-
+l_resolution_dicts = [myStyle.resolutions2022OneStripChannel, myStyle.resolutions2023OneStripChannel]
+for r_dict in l_resolution_dicts:
+    if dataset in r_dict:
+        oneStripResValue_list = r_dict[dataset]['resOneStrip']
 
 max_strip_edge = hist_info_twoStrip.f.Get("stripBoxInfo01").GetMean(1) + strip_width/2000.
 if useShift: max_strip_edge -= hist_info_twoStrip.shift()
@@ -238,7 +248,8 @@ for i in range(0, nXBins+1):
 
         minEvtsCut = totalEvents/nXBins
 
-        if i==0: print("%s: nEvents > %.2f (Total events: %i; N bins: %i)"%(info.inHistoName,minEvtsCut,totalEvents,nXBins))
+        if i==0:
+            print("%s: nEvents > %.2f (Total events: %i; N bins: %i)"%(info.inHistoName,minEvtsCut,totalEvents,nXBins))
         #Do fit 
         if(nEvents > minEvtsCut):
             if(info.doFits):
@@ -285,12 +296,13 @@ for i in range(0, nXBins+1):
             # if (("300uw" in dataset) and ((i == (info.th1.FindBin(-max_strip_edge)+1)) or (i == (info.th1.FindBin(max_strip_edge)-1)))):
             #     oneStripHist.SetBinContent(i, -10.0)
 
-        # Removing tracker's contribution of 5 microns
-        if value>5.0:
-            error = error*value/TMath.Sqrt(value*value - 5*5)
-            value = TMath.Sqrt(value*value - 5*5)
-        elif value>0.0:
-            value = 2.0 # to check if there are strange resolution values
+        # Removing tracker's contribution
+        if (value > trkr_value) and rm_tracker:
+            error = error*value/TMath.Sqrt(value*value - trkr_value**2)
+            value = TMath.Sqrt(value*value - trkr_value**2)
+        # Get track of bins with resolution smaller than tracker
+        elif value > 0.0:
+            value = 2.0
             error = 2.0
         # if info.f.Get("stripBoxInfo06") and (i<=info.th1.FindBin(-1.1) or info.th1.FindBin(1.1)<=i):
         #     value = -10.0
@@ -424,4 +436,5 @@ binary_readout_res_sensor.Write("l_sqrt12")
 
 print()
 outputfile.Close()
-if (is_hotspot): input_fullSnsr.Close()
+if (is_hotspot):
+    input_fullSnsr.Close()
