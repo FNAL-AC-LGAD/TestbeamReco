@@ -219,3 +219,9 @@ pm_to_blib
 docker_stderror
 DeepESMCfg*
 TopTaggerCfg*
+
+##VSCode
+*.code-workspace
+
+##Skip unnecessary files
+AlignBinning.py
