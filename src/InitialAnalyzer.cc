@@ -148,7 +148,14 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
 
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
-        bool goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
+        bool goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+        
+        // For Strip sensors tested in April 3rd week of 2023, chi2 < 100.0
+        // bool goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
+
+        // For Pixel sensors tested in April 3rd week of 2023, chi2 < 100.0
+        //bool goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 100.0;
+
         bool pass = goodTrack && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
