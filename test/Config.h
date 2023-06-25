@@ -89,6 +89,7 @@ private:
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
         tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
         tr.registerDerivedVar("uses2022Pix", g.uses2022Pix);
+        tr.registerDerivedVar("usesMay2023Tracker", g.usesMay2023Tracker);
         tr.registerDerivedVar("isHorizontal", g.isHorizontal);
         tr.registerDerivedVar("minPixHits", g.minPixHits);
         tr.registerDerivedVar("minStripHits", g.minStripHits);
