@@ -589,6 +589,7 @@ public:
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
     bool uses2022Pix = true;
+    bool usesMay2023Tracker = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
     int minPixHits = 2;
@@ -645,6 +646,7 @@ public:
     int minStripHits = 6;
     int CFD_threshold = 50;
     bool isPadSensor = true;
+    bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<double> positionRecoParTop = {-0.494315,  1.28059, 1.92055, -9.89445, 11.8025, -4.01589};
@@ -702,6 +704,7 @@ public:
     int minStripHits = 6;
     int CFD_threshold = 50;
     bool isPadSensor = true;
+    bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<double> positionRecoParTop = {-0.494315,  1.28059, 1.92055, -9.89445, 11.8025, -4.01589};
@@ -759,6 +762,7 @@ public:
     int minStripHits = 6;
     int CFD_threshold = 50;
     bool isPadSensor = true;
+    bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<double> positionRecoParTop = {-0.494315,  1.28059, 1.92055, -9.89445, 11.8025, -4.01589};
@@ -816,6 +820,7 @@ public:
     int minStripHits = 6;
     int CFD_threshold = 50;
     bool isPadSensor = true;
+    bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<double> positionRecoParTop = {-0.494315,  1.28059, 1.92055, -9.89445, 11.8025, -4.01589};
@@ -873,6 +878,7 @@ public:
     int minStripHits = 6;
     int CFD_threshold = 50;
     bool isPadSensor = true;
+    bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<double> positionRecoParTop = {-0.494315,  1.28059, 1.92055, -9.89445, 11.8025, -4.01589};
