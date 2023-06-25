@@ -44,17 +44,18 @@ public:
     double xmin =  -1;
     double xmax =  -1;
     double ymin =  -1;
-    double ymax =  -1; 
+    double ymax =  -1;
     double positionRecoMaxPoint = 1.0;
     double photekSignalThreshold = 200.0; //in mV
     double photekSignalMax = 350.0; //in mV
-    double noiseAmpThreshold = 15.0;      //in mV
-    double signalAmpThreshold = 15.0;    //in mV       
-    bool isPadSensor = false; 
+    double noiseAmpThreshold = 15.0; //in mV
+    double signalAmpThreshold = 15.0; //in mV
+    bool isPadSensor = false;
     bool isHPKStrips = false;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = false;
     bool uses2022Pix = false;
+    bool usesMay2023Tracker = false;
     bool isHorizontal = false;
     int minPixHits = 0;
     int minStripHits = 7;
@@ -64,7 +65,7 @@ public:
     std::vector<double> positionRecoParRight = {-1};
     std::vector<double> positionRecoParLeft = {-1};
     std::vector<double> positionRecoParTop = {-1};
-    std::vector<double> positionRecoParBot = {-1}; 
+    std::vector<double> positionRecoParBot = {-1};
     std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};
     std::vector<std::vector<double>> sensorEdgesTight = {{-999.9, -999.9}, {999.9, 999.9}};
     std::vector<std::vector<double>> sensorEdgesExtra = {{-999.9, -999.9}, {999.9, 999.9}};
@@ -108,12 +109,12 @@ public:
     double xmin = -0.15;
     double xmax =  0.85;
     double ymin =  9.5;
-    double ymax = 12.0; 
+    double ymax = 12.0;
     double positionRecoMaxPoint = 0.75;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = voltageDependenceMap[voltage].noiseAmpThreshold;
-    double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold; 
-    bool enablePositionReconstruction = true;   
+    double signalAmpThreshold = voltageDependenceMap[voltage].signalAmpThreshold;
+    bool enablePositionReconstruction = true;
     std::vector<double> positionRecoPar = {0.05, -0.104407, -1.24925, 10.5174, -27.1884};
     std::vector<std::vector<double>> sensorEdges = {{-0.06, 9.8}, { 0.8, 11.6}};
 };
@@ -151,7 +152,7 @@ public:
     double xmin = -6.2;
     double xmax = -4.4;
     double ymin =  9.0;
-    double ymax =  12.5; 
+    double ymax =  12.5;
     double positionRecoMaxPoint = 0.85;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 20.0;
@@ -176,7 +177,7 @@ public:
     // -----------------
     BNL2021MediumGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.888684191}, {2,1.0/1.054804164}, {3,1.0/1.034950947}, {4,1.0/1.0}, {5,1.0/0.991297836}, {6,1.0/0.990204448}, {7,1.0}};
@@ -219,7 +220,7 @@ public:
     // -----------------
     BNL2021NarrowGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,0.0}, {2,0.0}, {3,1.0}, {4,1.0/1.024783}, {5,1.0/1.066005523}, {6,1.0/1.139364787}, {7,1.0}};
@@ -261,15 +262,15 @@ public:
     // ----------
     HPKPadC2Geometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{2,1}}, {4,{2,0}}, {7,{3,0}}};    
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{2,1}}, {4,{2,0}}, {7,{3,0}}};
     std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.935797725}, {2,1.0}, {3,1.0/0.979331568}, {4,1.0/1.021097111}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.4797103988649}, {2,10.5140246761814}, {3,10.4517123511449}, {4,10.4652081424981}, {5,0.0}, {6,0.0}, {7,0.0}};
-    double stripWidth = 0.45; 
+    double stripWidth = 0.45;
     double pitch = 0.5;
     double sensorCenter =-5.773;
-    double sensorCenterY = 10.391; 
+    double sensorCenterY = 10.391;
     std::vector<double> stripCenterXPosition = {0.0, -6.023, -5.523, -5.523, -6.023,  0.0};
     std::vector<double> stripCenterYPosition = {0.0, 10.641, 10.641, 10.141, 10.141, 0.0};
     int numLGADchannels = 4;
@@ -280,10 +281,10 @@ public:
     double xmin = -6.6;
     double xmax = -5.0;
     double ymin =  9.6;
-    double ymax = 11.0; 
+    double ymax = 11.0;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
-    double signalAmpThreshold = 50.0; 
+    double signalAmpThreshold = 50.0;
     bool isPadSensor = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
@@ -300,7 +301,7 @@ public:
     //std::vector<std::vector<double>> sensorEdges = {{-6.25 , 9.85}, { -5.10, 11.0}}; //original version whole sensor
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
     std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
-    std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
+    std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}};
 };
 
 class HPKPadB2Geometry : public DefaultGeometry
@@ -317,15 +318,15 @@ public:
     // ----------
     HPKPadB2Geometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{2,1}}, {4,{2,0}}, {7,{3,0}}};    
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{2,1}}, {4,{2,0}}, {7,{3,0}}};
     std::vector<std::vector<int>> geometry = {{0}, {1,2}, {4,3}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.983042521}, {2,1.0}, {3,1.0/1.02948944}, {4,1.0/1.028227936}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.61949518764660}, {2,10.64806524828680}, {3,10.593269954715}, {4,10.60141636634710}, {5,0.0}, {6,0.0}, {7,0.0}};
-    double stripWidth = 0.45; 
+    double stripWidth = 0.45;
     double pitch = 0.5;
     double sensorCenter =-5.437;
-    double sensorCenterY = 10.132; 
+    double sensorCenterY = 10.132;
     std::vector<double> stripCenterXPosition = {0.0, -5.687, -5.187, -5.187, -5.687, 0.0};
     std::vector<double> stripCenterYPosition = {0.0, 10.382, 10.382, 9.882, 9.882, 0.0}; //will fix this later but code for pad efficiency plots is not fully working
     int numLGADchannels = 4;
@@ -350,7 +351,7 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-5.687 , 9.882}, { -5.187, 10.382}};
     std::vector<std::vector<double>> ySlices = {{9.85, 10.15}, {10.35, 10.65}};
     std::vector<std::vector<double>> xSlices = {{-5.55, -5.25}, {-5.05, -4.75}};
-    std::vector<std::vector<double>> boxes_XY = { {-6.1, -5.8,10.05, 10.35}}; 
+    std::vector<std::vector<double>> boxes_XY = { {-6.1, -5.8,10.05, 10.35}};
 };
 
 class HPKStripsC2WideMetalGeometry : public DefaultGeometry
@@ -371,7 +372,7 @@ public:
     // ----------
     HPKStripsC2WideMetalGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,0}}, {2,{1,1}}, {3,{1,2}}, {4,{1,3}}, {5,{1,4}}, {6,{1,5}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{0}, {1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/0.979851466}, {2,1.0/1.0}, {3,1.0/0.983149499}, {4,1.0/0.977206933}, {5,1.0/0.985974202}, {6,1.0/1.098791332}, {7,1.0}};
@@ -394,7 +395,7 @@ public:
     bool isHPKStrips = true;
     bool isHorizontal = true;
     bool enablePositionReconstruction = true;
-    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166}; 
+    std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
     // std::vector<std::vector<double>> sensorEdges = {{0.2329, 0.260}, {1.005, 4.106}};
     std::vector<std::vector<double>> sensorEdges = {{0.413, 1.000}, {1.005, 4.106}};
 };
@@ -417,14 +418,14 @@ public:
     // ----------
     HPKStripsC2NarrowMetalGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,5}}, {2,{1,4}}, {3,{1,3}}, {4,{1,2}}, {5,{1,1}}, {6,{1,0}}, {7,{2,0}}};    
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{1,5}}, {2,{1,4}}, {3,{1,3}}, {4,{1,2}}, {5,{1,1}}, {6,{1,0}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{0}, {6,5,4,3,2,1}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0/1.026449161}, {2,1.0/1.048446448}, {3,1.0/1.039418742}, {4,1.0/1.026293328}, {5,1.0/1.0}, {6,1.0/1.130503306}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,10.63158422778770}, {2,10.40489295380600}, {3,10.57580707002640}, {4,10.38063146228080}, {5,10.57271716853830}, {6,10.42845270625820}, {7,0.0}};
     double stripWidth = 0.030;
     double pitch = 0.080;
-    std::vector<double> stripCenterXPosition = {0.0, 0.2792, 0.3495, 0.4361, 0.5153, 0.5974, 0.6899, 0.0}; 
+    std::vector<double> stripCenterXPosition = {0.0, 0.2792, 0.3495, 0.4361, 0.5153, 0.5974, 0.6899, 0.0};
     int numLGADchannels = 6;
     double alpha = -0.2;
     double beta  = 0.0;
@@ -502,25 +503,25 @@ public:
     // ----------            -----
     BNLPixelHexGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{1,{0,0}}, {2,{0,1}}, {0,{1,0}}, {6,{1,1}}, {3,{1,2}}, {5,{2,0}}, {4,{2,1}}, {7,{2,0}}};    
+    std::map<int, std::vector<int>> indexToGeometryMap = {{1,{0,0}}, {2,{0,1}}, {0,{1,0}}, {6,{1,1}}, {3,{1,2}}, {5,{2,0}}, {4,{2,1}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{1,2}, {0,6,3}, {5,4}, {7}};
-    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};     
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.0}, {2,0.0}, {3,0.0}, {4,0.0}, {5,0.0}, {6,0.0}, {7,0.0}};
     std::vector<double> stripCenterXPosition = {0.0, 0, 0, 0, 0, 0, 0, 0.0};
-    std::vector<double> stripCenterYPosition = {0.0, 0, 0, 0, 0, 0, 0, 0.0}; 
+    std::vector<double> stripCenterYPosition = {0.0, 0, 0, 0, 0, 0, 0, 0.0};
     int numLGADchannels = 6;
     double gamma = 0.0;
     double xmin = -5.0;
     double xmax =  5.0;
     double ymin = -5.0;
-    double ymax =  5.0; 
+    double ymax =  5.0;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 10.0;
     double signalAmpThreshold = 30.0;
     bool enablePositionReconstruction = false;
     std::vector<double> positionRecoPar = {0.8129, -3.599, 5.735, -3.166};
-    std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};    
+    std::vector<std::vector<double>> sensorEdges = {{-999.9, -999.9}, {999.9, 999.9}};
 };
 
 class HPK2DCLGADGeometry : public DefaultGeometry
@@ -535,7 +536,7 @@ public:
     // -------             -----
     HPK2DCLGADGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {4,{1,0}}, {2,{1,1}}, {7,{2,0}}};    
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {4,{1,0}}, {2,{1,1}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{0,1}, {4,2}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {4,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -543,11 +544,11 @@ public:
     std::vector<double> stripCenterXPosition = {-5.50, -6.00, -6.00, -5.50,  0.0};
     std::vector<double> stripCenterYPosition = {10.57, 10.57, 10.11, 10.11, 0.0};
     int numLGADchannels = 4;
-    double gamma = 0.284886; 
+    double gamma = 0.284886;
     double xmin = -3.0;
     double xmax =  3.0;
     double ymin =  8.0;
-    double ymax =  13.0; 
+    double ymax =  13.0;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 80.0;
@@ -556,7 +557,7 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-2.0 , 9.0}, { 2.0, 13.0}};
     std::vector<std::vector<double>> ySlices = {{10.05, 10.35}, {10.55, 10.85}};
     std::vector<std::vector<double>> xSlices = {{-6.1, -5.8}, {-5.6, -5.3}};
-    std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}}; 
+    std::vector<std::vector<double>> boxes_XY ={{-6.1, -5.8,10.05, 10.35}};
 };
 
 #endif

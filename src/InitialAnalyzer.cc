@@ -86,6 +86,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
     const auto& photekSignalThreshold = tr.getVar<double>("photekSignalThreshold");
     const auto& photekSignalMax = tr.getVar<double>("photekSignalMax");
     const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
+    const auto& usesMay2023Tracker = tr.getVar<bool>("usesMay2023Tracker");
     const auto& minPixHits = tr.getVar<int>("minPixHits");
     const auto& minStripHits = tr.getVar<int>("minStripHits");
     const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
@@ -149,6 +150,8 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+        if (usesMay2023Tracker) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
+
         bool pass = goodTrack && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;

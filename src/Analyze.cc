@@ -37,8 +37,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     double yBinSizePad = 0.5;
 
     int timeDiffNbin = 200; // 200
-    double timeDiffLow = -2.0;
-    double timeDiffHigh = 2.0;
+    double timeDiffLow = -1.0;
+    double timeDiffHigh = 1.0;
     int timeDiffYnbin = 50;
 
     int    bvNbin = 500;
@@ -467,7 +467,13 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-
+   
+    for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+    {
+        utility::makeHisto(my_3d_histos,"timeDiff_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,            timeDiffHigh);
+        utility::makeHisto(my_3d_histos,"timeDiffTracker_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,     timeDiffHigh);
+        utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,      timeDiffLow,timeDiffHigh);
+    }
 
     //Efficiency
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
@@ -569,6 +575,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
     const auto& isHPKStrips = tr.getVar<bool>("isHPKStrips");
     const auto& uses2022Pix = tr.getVar<bool>("uses2022Pix");
+    const auto& usesMay2023Tracker = tr.getVar<bool>("usesMay2023Tracker");
     const auto& minPixHits = tr.getVar<int>("minPixHits");
     const auto& minStripHits = tr.getVar<int>("minStripHits");
     const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
@@ -715,8 +722,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
-        if(isPadSensor)      goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
+        if(isPadSensor) goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+        if(usesMay2023Tracker) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
+        
         // bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
         bool hitSensorTightYNoEdgeX = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]] < x && x < stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]] && hitSensorTightY;
@@ -1311,7 +1320,17 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
         utility::fillHisto(goodTrack,                                                                      my_2d_prof, "efficiency_vs_xy_DCRing", x,y,goodDCAmp);
         utility::fillHisto(goodTrack,                                                                      my_2d_prof, "efficiency_vs_xy_Strip2or5", x,y,goodHitGlobal2and5);
-        
+    
+        for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+        {
+            if(regionsOfIntrest[k].passROI(x,y))
+            {
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "timeDiff_Pixel_vs_xy"+regionsOfIntrest[k].getName(), x,y,maxAmpTime-photekTime);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "timeDiffTracker_Pixel_vs_xy"+regionsOfIntrest[k].getName(), x,y,maxAmpTimeTracker-photekTime);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "weighted2_timeDiff_tracker_Pixel_vs_xy"+regionsOfIntrest[k].getName(), x,y,weighted2_time_tracker-photekTime);
+            }
+        }
+
         // Fill wave form histos once
         bool maxAmpInCenter = maxAmpIndex == 3;// || maxAmpIndex == 3;
         //bool directHit = (abs( corrAmp[2] - corrAmp[4]) / corrAmp[2]) < 0.05;

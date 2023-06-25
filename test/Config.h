@@ -89,6 +89,7 @@ private:
         tr.registerDerivedVar("enablePositionReconstruction", g.enablePositionReconstruction);
         tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
         tr.registerDerivedVar("uses2022Pix", g.uses2022Pix);
+        tr.registerDerivedVar("usesMay2023Tracker", g.usesMay2023Tracker);
         tr.registerDerivedVar("isHorizontal", g.isHorizontal);
         tr.registerDerivedVar("minPixHits", g.minPixHits);
         tr.registerDerivedVar("minStripHits", g.minStripHits);
@@ -216,6 +217,14 @@ public:
 		else if(filetag.find("HPK_W9_14_2_20T_1P0_500P_100M_E600_112V")        != std::string::npos) registerGeometry(tr, HPK_W9_14_2_20T_1P0_500P_100M_E600_StripsGeometry(voltage));
 		else if(filetag.find("HPK_KOJI_50T_1P0_80P_60M_E240")                  != std::string::npos) registerGeometry(tr, HPK_KOJI_50T_1P0_80P_60M_E240_StripsGeometry(voltage));
 		else if(filetag.find("HPK_KOJI_20T_1P0_80P_60M_E240")                  != std::string::npos) registerGeometry(tr, HPK_KOJI_20T_1P0_80P_60M_E240_StripsGeometry(voltage));
+        else if(filetag.find("HPK_W9_15_4_20T_0P5_500P_50M_E600")              != std::string::npos) registerGeometry(tr, HPK_W9_15_4_20T_0P5_500P_50M_E600_StripsGeometry(voltage));
+		
+		else if(filetag.find("HPK_W9_22_3_20T_500x500_150M_E600")              != std::string::npos) registerGeometry(tr, HPK_W9_22_3_20T_500x500_150M_E600_PixelsGeometry(voltage));
+		else if(filetag.find("HPK_W9_23_3_20T_500x500_300M_E600")              != std::string::npos) registerGeometry(tr, HPK_W9_23_3_20T_500x500_300M_E600_PixelsGeometry(voltage));
+        else if(filetag.find("HPK_W11_22_3_20T_500x500_150M_C600")             != std::string::npos) registerGeometry(tr, HPK_W11_22_3_20T_500x500_150M_C600_PixelsGeometry(voltage));
+        else if(filetag.find("HPK_W8_1_1_50T_500x500_150M_C600")               != std::string::npos) registerGeometry(tr, HPK_W8_1_1_50T_500x500_150M_C600_PixelsGeometry(voltage));
+        else if(filetag.find("HPK_W5_1_1_50T_500x500_150M_E600")               != std::string::npos) registerGeometry(tr, HPK_W5_1_1_50T_500x500_150M_E600_PixelsGeometry(voltage));
+
 		else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
