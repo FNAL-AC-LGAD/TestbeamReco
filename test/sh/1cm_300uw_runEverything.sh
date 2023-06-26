@@ -1,6 +1,7 @@
 #!/bin/bash
 ## EIC_W2_1cm_500up_300uw_240V
 
+cd ../../test
 if [ $# == 0 ]
 then
 echo "Running over EIC_W2_1cm_500up_300uw_240V sensor"

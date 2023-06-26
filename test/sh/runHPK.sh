@@ -1,3 +1,4 @@
+cd ../../test
 # HPK_20um_500x500um_2x2pad_E600_FNAL_105V
 echo "Running over HPK_20um_500x500um_2x2pad_E600_FNAL_105V sensor"
 cd ../test

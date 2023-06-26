@@ -1,4 +1,4 @@
-
+cd ../../test
 ## BNL_50um_1cm_450um_W3051_2_2_170V
 echo "Running over BNL_50um_1cm_450um_W3051_2_2_170V sensor"
 cd ../test
