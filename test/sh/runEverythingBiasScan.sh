@@ -1,3 +1,4 @@
+cd ../../test
 ## EIC_W1_1cm_500up_200uw_205V
 echo "Running over EIC_W1_1cm_500up_200uw_205V sensor"
 cd ../test
