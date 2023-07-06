@@ -36,9 +36,6 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
 
-
-
-
     int timeDiffNbin = 800; // 200
     double timeDiffLow = -1.0;
     double timeDiffHigh = 1.0;
