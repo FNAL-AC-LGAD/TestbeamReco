@@ -35,6 +35,7 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
     const auto& xmax = tr.getVar<double>("xmax");
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
+    const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
 
     int timeDiffNbin = 800; // 200
     double timeDiffLow = -1.0;
@@ -44,6 +45,8 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
     //int xBinsDelay = 100; 
     //Time map: use 100 micron bins along strip
 
+    std::string roi_position = "";
+
     int rowIndex = 0;
     for(const auto& row : geometry)
     {
@@ -52,9 +55,20 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
         {
             const auto& r = std::to_string(rowIndex);
             const auto& s = std::to_string(i);
+
             utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
             // utility::makeHisto(my_3d_histos,"timeDiff_coarse_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_3d_histos,"timeDiff_fine_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+            // Run over regions of interest
+            for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+            {
+                roi_position = regionsOfIntrest[k].getName().substr(0,2)
+                if (roi_position[0]==r || roi_position[1]==s)
+                {
+                    utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+regionsOfIntrest[k].getName(),"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
+                }
+            }
         }
         rowIndex++;
     }
@@ -88,9 +102,11 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
     const auto& minStripHits = tr.getVar<int>("minStripHits");
     const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
 
+    const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
+
+    // These indices limits are useful only if isPadSensor is false
     const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
     const auto& highGoodStripIndex = tr.getVar<int>("highGoodStripIndex");
-
     int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
     int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
 
@@ -185,6 +201,14 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 // utility::fillHisto(pass && goodNoiseAmp,                                my_3d_histos, "timeDiff_coarse_vs_xy_channel"+r+s, x,y,time-photekTime);
                 utility::fillHisto(pass && goodNoiseAmp,                                my_3d_histos, "timeDiff_fine_vs_xy_channel"+r+s, x,y,timeTracker-photekTime);
 
+                // Run over regions of interest
+                for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+                {
+                    if(regionsOfIntrest[k].passROI(x,y))
+                    {
+                        utility::fillHisto(pass && goodNoiseAmp, my_3d_histos, "amplitude_vs_xy_channel"+r+s+"_"+regionsOfIntrest[k].getName(), x,y,rawAmpChannel);
+                    }
+                }
             }
             rowIndex++;
         }

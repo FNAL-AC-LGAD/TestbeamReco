@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, TF1
+from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, TF1, TList
 import os
 import EfficiencyUtils
 import langaus
@@ -16,9 +16,22 @@ myStyle.ForceStyle()
 marg = myStyle.GetMargin()
 
 # Define functions
+def create_listofkeys(full_list, name_code):
+    new_list = TList()
+
+    # Loop over all elements and check their names
+    for element in full_list:
+        element_name = element.GetName()
+        if name_code in element_name:
+            # Add the element to the list if it matches the criteria
+            new_list.Add(element)
+
+    return new_list
+
 def fill_th1_amp_vs_axis(h1_fill, hist2d, ffit):
 # Fill h1_fill histogram bin by bin from hist2d (which is amp vs axis)
     last_bin = int(h1_fill.GetXaxis().GetNbins())
+    # coord = h1_fill.GetName()[-11:]
     # Define variables to get max amplitude too
     amp_max, amp_pos = 0.0, 0.0
     for i in range(1, last_bin + 1):
@@ -33,7 +46,7 @@ def fill_th1_amp_vs_axis(h1_fill, hist2d, ffit):
         myMean = tmpHist.GetMean()
         myRMS = tmpHist.GetRMS()
 
-        value = myMean            
+        value = myMean
         nEvents = tmpHist.GetEntries()
 
         # Make fit to obtain a better max amplitude value
@@ -43,15 +56,17 @@ def fill_th1_amp_vs_axis(h1_fill, hist2d, ffit):
                 tmpHist.Rebin(5)
             else:
                 tmpHist.Rebin(10)
+            # tmpHist.Rebin(10)
             
             myLanGausFunction = ffit.fit(tmpHist, fitrange=(myMean-1*myRMS,myMean+3*myRMS))
             myMPV = myLanGausFunction.GetParameter(1)
             value = myMPV
 
-            ##For Debugging
-            #tmpHist.Draw("hist")
-            #myLanGausFunction.Draw("same")
-            #canvas.SaveAs(outdir+"q_"+str(i)+"_"+str(channel)+".gif")
+            # ##For Debugging
+            # tmpHist.Draw("hist")
+            # myLanGausFunction.Draw("same")
+            # q_folder = myStyle.GetPlotsDir(outdir, coord)
+            # canvas.SaveAs("%s/q_%i.gif"%(q_folder, i))
         # Send to zero low populated bins (unwanted points)
         else:
             value = 0.0
