@@ -252,7 +252,6 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"weighted2_timeDiff_tight", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted2_timeDiff_tracker_tight", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-
     utility::makeHisto(my_histos,"weighted_timeDiff_goodSig", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"weighted2_timeDiff_goodSig", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"clusterSize", "; Cluster Size", 8,0.0,8.0);
@@ -261,6 +260,79 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"ampChargeRatio","", 300,0.0,15.0);
     utility::makeHisto(my_histos,"index_diff", "; index1 - index2; Events", 16,-8,8);
 
+    // Overall histograms
+    utility::makeHisto(my_histos,"ampMax_Overall", "", 450, -50.0, 400.0); 
+    utility::makeHisto(my_histos,"risetime_Overall","", 300,0.0,1500.0);
+    utility::makeHisto(my_histos,"charge_Overall","", 300,0.0,150.0);
+    utility::makeHisto(my_histos,"ampChargeRatio_Overall","", 300,0.0,15.0);
+    utility::makeHisto(my_histos,"baselineRMS_Overall","", 300,0.0,15.0);
+    utility::makeHisto(my_histos,"slewrate_Overall","", 300,0.0,400.0);
+    utility::makeHisto(my_histos,"slewRateChargeRatio_Overall","", 300,0.0,50.0);
+    utility::makeHisto(my_histos,"weighted2_jitter_Overall","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_Overall","", 200,0.0,100.0);
+
+    utility::makeHisto(my_histos,"timeDiff_Overall", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiffTracker_Overall", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_Overall", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_tracker_Overall", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_Overall", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_tracker_Overall", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    // Metal hit histograms
+    utility::makeHisto(my_histos,"ampMax_Metal", "", 450, -50.0, 400.0);
+    utility::makeHisto(my_histos,"risetime_Metal","", 300,0.0,1500.0);
+    utility::makeHisto(my_histos,"charge_Metal","", 300,0.0,150.0);
+    utility::makeHisto(my_histos,"ampChargeRatio_Metal","", 300,0.0,15.0);
+    utility::makeHisto(my_histos,"baselineRMS_Metal","", 300,0.0,15.0);
+    utility::makeHisto(my_histos,"slewrate_Metal","", 300,0.0,400.0);
+    utility::makeHisto(my_histos,"slewRateChargeRatio_Metal","", 300,0.0,50.0);
+    utility::makeHisto(my_histos,"weighted2_jitter_Metal","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_Metal","", 200,0.0,100.0);
+
+    utility::makeHisto(my_histos,"timeDiff_Metal", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiffTracker_Metal", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_Metal", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_tracker_Metal", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_Metal", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_tracker_Metal", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    // Gap hit histograms
+    utility::makeHisto(my_histos,"ampMax_Gap", "", 450, -50.0, 400.0); 
+    utility::makeHisto(my_histos,"risetime_Gap","", 300,0.0,1500.0);
+    utility::makeHisto(my_histos,"charge_Gap","", 300,0.0,150.0);
+    utility::makeHisto(my_histos,"ampChargeRatio_Gap","", 300,0.0,15.0);
+    utility::makeHisto(my_histos,"baselineRMS_Gap","", 300,0.0,15.0);
+    utility::makeHisto(my_histos,"slewrate_Gap","", 300,0.0,400.0);
+    utility::makeHisto(my_histos,"slewRateChargeRatio_Gap","", 300,0.0,50.0);
+    utility::makeHisto(my_histos,"weighted2_jitter_Gap","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_Gap","", 200,0.0,100.0); 
+
+    utility::makeHisto(my_histos,"timeDiff_Gap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiffTracker_Gap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_Gap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_tracker_Gap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_Gap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_tracker_Gap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    // Middle gap hit histograms
+    utility::makeHisto(my_histos,"ampMax_MidGap", "", 450, -50.0, 400.0); 
+    utility::makeHisto(my_histos,"risetime_MidGap","", 300,0.0,1500.0);
+    utility::makeHisto(my_histos,"charge_MidGap","", 300,0.0,150.0);
+    utility::makeHisto(my_histos,"ampChargeRatio_MidGap","", 300,0.0,15.0);
+    utility::makeHisto(my_histos,"baselineRMS_MidGap","", 300,0.0,15.0);
+    utility::makeHisto(my_histos,"slewrate_MidGap","", 300,0.0,400.0);
+    utility::makeHisto(my_histos,"slewRateChargeRatio_MidGap","", 300,0.0,50.0);
+    utility::makeHisto(my_histos,"weighted2_jitter_MidGap","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_MidGap","", 200,0.0,100.0); 
+
+    utility::makeHisto(my_histos,"timeDiff_MidGap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"timeDiffTracker_MidGap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_MidGap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted_timeDiff_tracker_MidGap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_MidGap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_histos,"weighted2_timeDiff_tracker_MidGap", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
+
+    // Region of interest (ROI) hit histograms
     for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
     {
         utility::makeHisto(my_histos,"timeDiff_ROI"+regionsOfIntrest[k].getName(), "", timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -502,6 +574,19 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
 
+    // Metal
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_oneStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_twoStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    // Gap
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_oneStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_twoStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    // Middle gap
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_oneStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_twoStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator_coarseBins_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_coarseBins_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_coarseBins_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
@@ -555,6 +640,9 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     //Define TEfficiencies if you are doing trigger studies (for proper error bars) or cut flow charts.
     utility::makeHisto(my_efficiencies,"event_oneStripReco",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_twoStripsReco",";;Events %",9,0,9);
+    utility::makeHisto(my_efficiencies,"event_Metal",";;Events %",9,0,9);
+    utility::makeHisto(my_efficiencies,"event_Gap",";;Events %",9,0,9);
+    utility::makeHisto(my_efficiencies,"event_MidGap",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"efficiency_vs_x","; X [mm]",xbins,xmin,xmax);
     utility::makeHisto(my_efficiencies,"efficiency_vs_xy","; X [mm]; Y [mm]",xbins,xmin,xmax, ybins,ymin,ymax);
     std::cout<<"Finished defining histos"<<std::endl;
@@ -590,7 +678,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& firstFile = tr.getVar<bool>("firstFile");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
     const auto& voltage = tr.getVar<int>("voltage");
-
+    const auto& pitch = tr.getVar<double>("pitch");
+    const auto& xBinSize = tr.getVar<double>("xBinSize");
+    
     std::vector<int> lowEdgeStrip  = (isPadSensor) ? indexToGeometryMap.at(lowGoodStripIndex)  : indexToGeometryMap.at(lowGoodStripIndex-1);
     std::vector<int> highEdgeStrip = (isPadSensor) ? indexToGeometryMap.at(highGoodStripIndex) : indexToGeometryMap.at(highGoodStripIndex+1);
 
@@ -659,6 +749,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& weighted2_time_tracker = tr.getVar<double>("weighted2_time_tracker");
         const auto& weighted_time_goodSig = tr.getVar<double>("weighted_time_goodSig");
         const auto& weighted2_time_goodSig = tr.getVar<double>("weighted2_time_goodSig");
+        const auto& weighted2_jitter = tr.getVar<double>("weighted2_jitter");
+        const auto& weighted2_jitter_NewDef = tr.getVar<double>("weighted2_jitter_NewDef");
 
         const auto& average_time_LGADXY = tr.getVar<double>("average_time_LGADXY");
         const auto& average_time_LGADX = tr.getVar<double>("average_time_LGADX");
@@ -760,6 +852,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool oneStripReco = !goodNeighbour || highFraction;
         bool fullReco = hasGlobalSignal_lowThreshold && (oneStripReco || twoStripsReco);
         bool hitOnMetal = false;
+        bool hitOnMidGap = false;
 
         if(isHPKStrips)
         {
@@ -772,6 +865,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         {
             twoGoodHits = twoGoodHits && goodNeighbour;
         }
+
         int parityMax = parityLGAD[amp1Indexes.first][amp1Indexes.second];
         bool EvenChannel = parityMax == -1;
         bool OddChannel = parityMax == 1;
@@ -826,10 +920,26 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 bool goodNearHit = amp1Indexes.first == rowIndex && (amp1Indexes.second == int(i-1) || amp1Indexes.second == int(i) || amp1Indexes.second == int(i+1));
                 bool goodHit = goodNoiseAmp && goodMaxLGADAmp;
                 if(i==1 || i==4) goodHitGlobal2and5 = goodHitGlobal2and5 || (isMaxChannel && goodHit);
+                
+                // Hit on metal strip
                 if (stripCenterXPositionLGAD[rowIndex][i]!=0.0 && ((stripCenterXPositionLGAD[rowIndex][i]-stripWidth/2.)<x) && (x<(stripCenterXPositionLGAD[rowIndex][i]+stripWidth/2.)))
                 {
                     hitOnMetal = true;
                 }
+                // // TODO: Hit on metal pad
+                // if (isPadSensor && ((stripCenterYPositionLGAD[rowIndex][i]-stripWidth/2.)<y) && (y<(stripCenterYPositionLGAD[rowIndex][i]+stripWidth/2.)))
+                // {
+                //     hitOnMetal = true;
+                // }
+                
+                bool hitOnLeftMidGap = ((stripCenterXPositionLGAD[rowIndex][i]-pitch/2.-xBinSize/2.)<x) && (x<(stripCenterXPositionLGAD[rowIndex][i]-pitch/2.+xBinSize/2.));
+                bool hitOnRightMidGap = ((stripCenterXPositionLGAD[rowIndex][i]+pitch/2.-xBinSize/2.)<x) && (x<(stripCenterXPositionLGAD[rowIndex][i]+pitch/2.+xBinSize/2.));
+ 
+                if (hitOnLeftMidGap || hitOnRightMidGap)
+                {
+                    hitOnMidGap = true;
+                }
+
                 //Adding var specific to having a seperate channel from the rest of the sensor
                 const auto& scopeIndex = geometry[rowIndex][i];
                 if(scopeIndex == extraChannelIndex)
@@ -1047,8 +1157,6 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass_tight && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_histos, "timeDiffTracker_tight", maxAmpTimeTracker-photekTime);
         utility::fillHisto(pass_tight && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_histos, "weighted2_timeDiff_tight", weighted2_time-photekTime);
         utility::fillHisto(pass_tight && maxAmpNotEdgeStrip && goodMaxLGADAmp,                             my_histos, "weighted2_timeDiff_tracker_tight", weighted2_time_tracker-photekTime);
-
-
         
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted_timeDiff_goodSig", weighted_time_goodSig-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "weighted2_timeDiff_goodSig", weighted2_time_goodSig-photekTime);
@@ -1058,6 +1166,75 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "ampChargeRatio", ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "index_diff", amp1Indexes.second - amp2Indexes.second);
 
+        // Overall histograms
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "ampMax_Overall", maxAmp);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "risetime_Overall",risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "charge_Overall",chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "ampChargeRatio_Overall",ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "baselineRMS_Overall",baselineRMS[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "slewrate_Overall", slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "slewRateChargeRatio_Overall", slewRateChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "weighted2_jitter_Overall", weighted2_jitter);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "weighted2_jitter_NewDef_Overall", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "timeDiff_Overall", maxAmpTime-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "timeDiffTracker_Overall", maxAmpTimeTracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "weighted_timeDiff_Overall", weighted_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "weighted_timeDiff_tracker_Overall", weighted_time_tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "weighted2_timeDiff_Overall", weighted2_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                my_histos, "weighted2_timeDiff_tracker_Overall", weighted2_time_tracker-photekTime);
+
+        // Metal hit histograms
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "ampMax_Metal", maxAmp);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "risetime_Metal",risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "charge_Metal",chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "ampChargeRatio_Metal",ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "baselineRMS_Metal",baselineRMS[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "slewrate_Metal", slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "slewRateChargeRatio_Metal", slewRateChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "weighted2_jitter_Metal", weighted2_jitter);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "weighted2_jitter_NewDef_Metal", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "timeDiff_Metal", maxAmpTime-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "timeDiffTracker_Metal", maxAmpTimeTracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "weighted_timeDiff_Metal", weighted_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "weighted_timeDiff_tracker_Metal", weighted_time_tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "weighted2_timeDiff_Metal", weighted2_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,                my_histos, "weighted2_timeDiff_tracker_Metal", weighted2_time_tracker-photekTime);
+
+        // Gap hit histograms
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "ampMax_Gap", maxAmp);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "risetime_Gap",risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "charge_Gap",chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "ampChargeRatio_Gap",ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "baselineRMS_Gap",baselineRMS[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "slewrate_Gap", slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "slewRateChargeRatio_Gap", slewRateChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "weighted2_jitter_Gap", weighted2_jitter);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "weighted2_jitter_NewDef_Gap", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "timeDiff_Gap", maxAmpTime-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "timeDiffTracker_Gap", maxAmpTimeTracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "weighted_timeDiff_Gap", weighted_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "weighted_timeDiff_tracker_Gap", weighted_time_tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "weighted2_timeDiff_Gap", weighted2_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,                my_histos, "weighted2_timeDiff_tracker_Gap", weighted2_time_tracker-photekTime);
+
+        // Middle gap hit histograms
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "ampMax_MidGap", maxAmp);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "risetime_MidGap",risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "charge_MidGap",chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "ampChargeRatio_MidGap",ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "baselineRMS_MidGap",baselineRMS[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "slewrate_MidGap", slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "slewRateChargeRatio_MidGap", slewRateChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "weighted2_jitter_MidGap", weighted2_jitter);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "weighted2_jitter_NewDef_MidGap", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "timeDiff_MidGap", maxAmpTime-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "timeDiffTracker_MidGap", maxAmpTimeTracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "weighted_timeDiff_MidGap", weighted_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "weighted_timeDiff_tracker_MidGap", weighted_time_tracker-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "weighted2_timeDiff_MidGap", weighted2_time-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,                my_histos, "weighted2_timeDiff_tracker_MidGap", weighted2_time_tracker-photekTime);
+
+        // Region of interest (ROI) hit histograms
         for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
         {
             if(regionsOfIntrest[k].passROI(x,y))
@@ -1290,11 +1467,27 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold && twoStripsReco,                          my_2d_histos, "efficiency_vs_xy_twoStrips_numerator", x,y);
         utility::fillHisto(pass && fullReco,                                                               my_2d_histos, "efficiency_vs_xy_fullReco_numerator", x,y);
 
+        // Metal
+        utility::fillHisto(pass && goodMaxLGADAmp && hitOnMetal,                                           my_2d_histos, "efficiency_vs_xy_Metal_numerator", x,y);
+        utility::fillHisto(pass && goodMaxLGADAmp && hitOnMetal && oneStripReco,                           my_2d_histos, "efficiency_vs_xy_Metal_oneStrip_numerator", x,y);
+        utility::fillHisto(pass && goodMaxLGADAmp && hitOnMetal && twoStripsReco,                          my_2d_histos, "efficiency_vs_xy_Metal_twoStrip_numerator", x,y);
+
+        // Gap
+        utility::fillHisto(pass && goodMaxLGADAmp && !hitOnMetal,                                          my_2d_histos, "efficiency_vs_xy_Gap_numerator", x,y);
+        utility::fillHisto(pass && goodMaxLGADAmp && !hitOnMetal && oneStripReco,                          my_2d_histos, "efficiency_vs_xy_Gap_oneStrip_numerator", x,y);
+        utility::fillHisto(pass && goodMaxLGADAmp && !hitOnMetal && twoStripsReco,                         my_2d_histos, "efficiency_vs_xy_Gap_twoStrip_numerator", x,y);
+
+        // Middle gap
+        utility::fillHisto(pass && goodMaxLGADAmp && hitOnMidGap,                                          my_2d_histos, "efficiency_vs_xy_MidGap_numerator", x,y);
+        utility::fillHisto(pass && goodMaxLGADAmp && hitOnMidGap && oneStripReco,                          my_2d_histos, "efficiency_vs_xy_MidGap_oneStrip_numerator", x,y);
+        utility::fillHisto(pass && goodMaxLGADAmp && hitOnMidGap && twoStripsReco,                         my_2d_histos, "efficiency_vs_xy_MidGap_twoStrip_numerator", x,y);
+
         utility::fillHisto(pass,                                                                           my_2d_histos, "efficiency_vs_xy_denominator_coarseBins", x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold,                                           my_2d_histos, "efficiency_vs_xy_numerator_coarseBins", x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold && oneStripReco,                           my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_coarseBins", x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold && twoStripsReco,                          my_2d_histos, "efficiency_vs_xy_twoStrips_numerator_coarseBins", x,y);
 
+        // Multi channel hit study
         utility::fillHisto(pass,                                                                           my_2d_histos, "efficiency_vs_xy_fullReco_Denominator", x,y);  
         utility::fillHisto(pass && allGoodHits,                                                            my_2d_histos, "efficiency_vs_xy_fullReco_Numerator", x,y);
         utility::fillHisto(pass && oneGoodHit,                                                             my_2d_histos, "efficiency_vs_xy_OneGoodHit_Numerator", x,y); 
@@ -1393,6 +1586,30 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && !highFraction,1.0,3); // "Good Amp fraction");
         my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && twoStripsReco,1.0,4); // "TwoStripsReco");
         my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && twoStripsReco && hitOnMetal,1.0,5); // "TwoStripsReco && OnMetal");
+
+        // Hit on metal
+        my_efficiencies["event_Metal"]->SetUseWeightedEvents();
+        my_efficiencies["event_Metal"]->FillWeighted(pass,1.0,0); // "Pass");
+        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip,1.0,1); // "No edge strip");
+        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,1.0,2); // "OnMetal");
+        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal && oneStripReco,1.0,3); // "OneStripReco");
+        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal && twoStripsReco,1.0,4); // "TwoStripsReco");
+
+        // Hit on gap
+        my_efficiencies["event_Gap"]->SetUseWeightedEvents();
+        my_efficiencies["event_Gap"]->FillWeighted(pass,1.0,0); // "Pass");
+        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip,1.0,1); // "No edge strip");
+        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,1.0,2); // "OnGap");
+        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal && oneStripReco,1.0,3); // "OneStripReco");
+        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal && twoStripsReco,1.0,4); // "TwoStripsReco");
+
+        // Hit on middle gap
+        my_efficiencies["event_MidGap"]->SetUseWeightedEvents();
+        my_efficiencies["event_MidGap"]->FillWeighted(pass,1.0,0); // "Pass");
+        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip,1.0,1); // "No edge strip");
+        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,1.0,2); // "OnGap");
+        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap && oneStripReco,1.0,3); // "OneStripReco");
+        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap && twoStripsReco,1.0,4); // "TwoStripsReco");
     } //event loop
 }
 
