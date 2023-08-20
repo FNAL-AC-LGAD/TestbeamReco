@@ -100,11 +100,8 @@ if debugMode:
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
 #loop over X bins
-for i in range(0, nXBins+1):
-    ##For Debugging
-    #if not (i==46 and j==5):
-    #    continue
-
+# Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+for i in range(1, nXBins+1):
     for info in all_histoInfos:
         totalEvents = info.th2.GetEntries()
         tmpHist = info.th2.ProjectionY("py",i,i)
@@ -120,7 +117,6 @@ for i in range(0, nXBins+1):
 
         minEvtsCut = totalEvents/nXBins
         if i==0: print(info.inHistoName,": nEvents >",minEvtsCut,"( total events:",totalEvents,")")
-
 
         #Do fit 
         if(nEvents > minEvtsCut):
