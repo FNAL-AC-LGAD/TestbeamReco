@@ -250,18 +250,14 @@ sensorsGeom2023 = { "BNL_50um_1cm_450um_W3051_2_2": {'sensor': "BNL_50um_1cm_450
                     "HPK_50um_500x500um_2x2pad_E600_FNAL": {'sensor': "HPK_50um_2x2pad", 'pitch': 500, 'stripWidth': 500, "BV": 190, "length": 0.5},
 
                     "HPK_W8_18_2_50T_1P0_500P_100M_C600": {'sensor': "HPK_W8_18_2_50T_100M_C600", 'pitch': 500, 'stripWidth': 100, "BV": 208, "length": 10.0},
-
-                    "HPK_W8_17_2_50T_1P0_500P_50M_C600": {'sensor': "HPK_W8_17_2_50T_50M_C600", 'pitch': 500, 'stripWidth': 50, "BV": 206, "length": 10.0},
-                    "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'sensor': "HPK_W8_17_2_50T_50M_C600", 'pitch': 500, 'stripWidth': 50, "BV": 200, "length": 10.0},
-
+                    # "HPK_W8_17_2_50T_1P0_500P_50M_C600_206V": {'sensor': "HPK_W8_17_2_50T_50M_C600", 'pitch': 500, 'stripWidth': 50, "BV": 206, "length": 10.0},
+                    "HPK_W8_17_2_50T_1P0_500P_50M_C600": {'sensor': "HPK_W8_17_2_50T_50M_C600", 'pitch': 500, 'stripWidth': 50, "BV": 200, "length": 10.0},
                     "HPK_W4_17_2_50T_1P0_500P_50M_C240": {'sensor': "HPK_W4_17_2_50T_1P0_500P_50M_C240", 'pitch': 500, 'stripWidth': 50, "BV": 204, "length": 10.0},
-
                     "HPK_W5_17_2_50T_1P0_500P_50M_E600": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 190, "length": 10.0},
-                    "HPK_W5_17_2_50T_1P0_500P_50M_E600_188V": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 188, "length": 10.0},
-                    "HPK_W5_17_2_50T_1P0_500P_50M_E600_186V": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 186, "length": 10.0},
-                    "HPK_W5_17_2_50T_1P0_500P_50M_E600_192V": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 192, "length": 10.0},
-                    "HPK_W5_17_2_50T_1P0_500P_50M_E600_194V": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 194, "length": 10.0},
-
+                    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_188V": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 188, "length": 10.0},
+                    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_186V": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 186, "length": 10.0},
+                    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_192V": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 192, "length": 10.0},
+                    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_194V": {'sensor': "HPK_W5_17_2_50T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 194, "length": 10.0},
                     "HPK_W9_15_2_20T_1P0_500P_50M_E600":{'sensor': "HPK_W9_15_2_20T_1P0_500P_50M_E600", 'pitch': 500, 'stripWidth': 50, "BV": 114, "length": 10.0},
                     "HPK_W2_3_2_50T_1P0_500P_50M_E240":{'sensor': "HPK_W2_3_2_50T_1P0_500P_50M_E240", 'pitch': 500, 'stripWidth': 50, "BV": 180, "length": 10.0},
                     "HPK_W9_14_2_20T_1P0_500P_100M_E600":{'sensor': "HPK_W9_14_2_20T_1P0_500P_100M_E600", 'pitch': 500, 'stripWidth': 100, "BV": 112, "length": 10.0},
@@ -334,17 +330,18 @@ resolutions2023 = {
                                         'position_oneStrip_StdDev': 0.00,
                                         'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
                                         'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
-    # "HPK_W8_17_2_50T_1P0_500P_50M_C600":,
-    # "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V":,
+    "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
     "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
                                         'position_oneStrip_StdDev': 0.00,
                                         'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
                                         'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600":,
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_188V":,
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_186V":,
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_192V":,
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_194V":,
+    "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                        'position_oneStrip_StdDev': 0.00,
+                                        'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                        'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
     "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
                                           'position_oneStrip_StdDev': 0.00,
                                           'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
@@ -354,6 +351,10 @@ resolutions2023 = {
                                          'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
                                          'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
     "HPK_W9_14_2_20T_1P0_500P_100M_E600_112V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
+                                           'position_oneStrip_StdDev': 0.00,
+                                           'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
+                                           'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
+    "HPK_W9_15_4_20T_0P5_500P_50M_E600_110V": {'position_oneStrip'  : 0.00, 'position_oneStrip_E': 0.00, 'position_oneStripRMS': 0.00,
                                            'position_oneStrip_StdDev': 0.00,
                                            'position_twoStrip'  : 0.00, 'position_twoStrip_E': 0.00,
                                            'efficiency_oneStrip': 0.00, 'efficiency_twoStrip' : 0.00},
@@ -395,20 +396,19 @@ resolutions2023OneStripChannel = {
 
 "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
-# "HPK_W8_17_2_50T_1P0_500P_50M_C600":,
-# "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V":,
+"HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                       'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
                                       'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
-# "HPK_W5_17_2_50T_1P0_500P_50M_E600":,
-# "HPK_W5_17_2_50T_1P0_500P_50M_E600_188V":,
-# "HPK_W5_17_2_50T_1P0_500P_50M_E600_186V":,
-# "HPK_W5_17_2_50T_1P0_500P_50M_E600_192V":,
-# "HPK_W5_17_2_50T_1P0_500P_50M_E600_194V":,
+"HPK_W5_17_2_50T_1P0_500P_50M_E600_190V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                      'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
                                       'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
                                           'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 "HPK_W9_14_2_20T_1P0_500P_100M_E600_112V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
+                                       'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
+"HPK_W9_15_4_20T_0P5_500P_50M_E600_110V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
                                        'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
 "HPK_KOJI_50T_1P0_80P_60M_E240_190V": {'resOneStrip': [-1.00, -1.00, -1.00, -1.00, -1.00, -1.00, -1.00],  ## Std Dev
                                   'errOneStrip': [ 1.00,  1.00,  1.00,  1.00,  1.00,  1.00,  1.00]}, ## Sigma fit
