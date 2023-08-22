@@ -100,7 +100,7 @@ for i in range(0, nXBins+1):
 
     for info in all_histoInfos:
         totalEvents = info.th2.GetEntries()
-        tmpHist = info.th2.ProjectionY("py",i,i) # IMPORTANT: Loop should be over Y-bins and should project X bins!
+        tmpHist = info.th2.ProjectionY("py",i,i)
         myRMS = tmpHist.GetRMS()
         myMean = tmpHist.GetMean()
         nEvents = tmpHist.GetEntries()
