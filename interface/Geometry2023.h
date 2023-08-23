@@ -72,7 +72,7 @@ public:
 };
 
 class HPK_W8_17_2_50T_1P0_500P_50M_C600_StripsGeometry: public DefaultGeometry
-// HPK_W8_17_2_50T_1P0_500P_50M_C600
+// HPK_W8_17_2_50T_1P0_500P_50M_C600_200V
 {
 public:
     // 
@@ -188,7 +188,7 @@ public:
 };
 
 class HPK_W5_17_2_50T_1P0_500P_50M_E600_StripsGeometry: public DefaultGeometry
-// HPK_W5_17_2_50T_1P0_500P_50M_E600
+// HPK_W5_17_2_50T_1P0_500P_50M_E600_190V
 {
 public:
     // 
