@@ -63,10 +63,11 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
             // Run over regions of interest
             for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
             {
-                roi_position = regionsOfIntrest[k].getName().substr(0,2)
-                if (roi_position[0]==r || roi_position[1]==s)
+                roi_position = regionsOfIntrest[k].getName().substr(0,2);
+                bool isSubPad = roi_position[0]==r || roi_position[1]==s;
+                if (isSubPad)
                 {
-                    utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+regionsOfIntrest[k].getName(),"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
+                    utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel_"+regionsOfIntrest[k].getName(),"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
                 }
             }
         }
@@ -204,9 +205,11 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 // Run over regions of interest
                 for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
                 {
-                    if(regionsOfIntrest[k].passROI(x,y))
+                    std::string roi_position = regionsOfIntrest[k].getName().substr(0,2);
+                    bool isSubPad = roi_position[0]==r || roi_position[1]==s;
+                    if(isSubPad && regionsOfIntrest[k].passROI(x,y))
                     {
-                        utility::fillHisto(pass && goodNoiseAmp, my_3d_histos, "amplitude_vs_xy_channel"+r+s+"_"+regionsOfIntrest[k].getName(), x,y,rawAmpChannel);
+                        utility::fillHisto(pass && goodNoiseAmp, my_3d_histos, "amplitude_vs_xy_channel_"+regionsOfIntrest[k].getName(), x,y,rawAmpChannel);
                     }
                 }
             }
