@@ -1,4 +1,5 @@
-from ROOT import TFile,TTree,TCanvas,TH1D,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite
+from ROOT import TFile,TTree,TCanvas,TH1D,TH2F,TLatex,TMath,TEfficiency,\
+    TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite
 import os
 import EfficiencyUtils
 import langaus
@@ -32,87 +33,104 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")   
 
+outdir = myStyle.GetPlotsDir(outdir, "Cutflow/")
 colors = myStyle.GetColors(True)
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor = sensor_Geometry['sensor']
 
-list_cut_name_oneStrip  = ["Pass", "Signal over Noise", "OneStripReco", "High fraction", # "OneStripReco HighThreshold"
-                           "High fraction & Good neighbour", "No good neighbour", "High fraction & No neighbour", "OneStripReco & OnMetal"]
-list_cut_name_twoStrips = ["Pass", "Signal over highThreshold", "Good neighbour", "Good Amp fraction", "TwoStripsReco", "TwoStripsReco & OnMetal"]
+# Define function to extract numbers from graph and draw plots
+def draw_cut_flow(evt_name, evt_graph, list_cuts):
+    canvas = TCanvas("cv","cv",1000,800)
+    canvas.SetGrid(0,1)
+    # gPad.SetTicks(1,1)
+    gStyle.SetOptStat(0)
 
+    # Create 1D histogram
+    hname = "cut_flow_%s"%evt_name
+    htitle = "Cut flow %s;;Events normalized"%evt_name
+    nbins = len(list_cuts)
+    hist = TH1D(hname, htitle, nbins, 0, nbins)
+    hist.GetYaxis().SetRangeUser(0.0, 1.1)
+    l_txt_percentage = []
+
+    # Extract efficiency values from evt_graph and normalize wrt first bin
+    draw_percent = False
+    for c,cut in enumerate(list_cuts):
+        efficiency_value = evt_graph.GetEfficiency(c+1)/evt_graph.GetEfficiency(1)
+        hist.Fill(cut, efficiency_value)
+        hist.SetBinError(c+1, 0)
+
+        # Save percentage to be explicitly written later
+        if draw_percent:
+            str_percentage = "%3.1f%%"%(efficiency_value*100)
+            txt_percentage = TLatex(c+0.5, efficiency_value+0.01, str_percentage)
+            txt_percentage.SetTextAlign(21)
+            txt_percentage.SetTextSize(myStyle.GetSize()-4)
+            l_txt_percentage.append(txt_percentage)
+        draw_percent = True
+    
+    hist.LabelsOption("u")
+    hist.Draw()
+
+    # Define and draw top left label
+    top_left_text = TLatex()
+    top_left_text.SetTextSize(myStyle.GetSize()-4)
+    lpos = 2*myStyle.GetMargin()+0.005
+    bpos = 1-myStyle.GetMargin()+0.01
+    top_left_text.DrawLatexNDC(lpos, bpos, "#bf{%s}"%evt_name)
+
+    for perc in l_txt_percentage:
+        perc.Draw()
+
+    # myStyle.BeamInfo()
+    myStyle.SensorInfoSmart(dataset)
+
+    canvas.SaveAs("%sPlot_cutflow_%s.gif"%(outdir, evt_name))
+    # canvas.SaveAs("%sPlot_cutflow_%s.pdf"%(outdir, evt_name))
+
+    canvas.Clear()
+
+    return hist
+
+# Add name of cut implemented in each bin of the cut flow
+list_cuts_oneStrip  = ["Pass", "Signal over Noise", "OneStripReco",
+                       "High fraction", "High fraction & Good neighbour",
+                       "No good neighbour", "High fraction & No neighbour",
+                       "OneStripReco & OnMetal"]
+list_cuts_twoStrips = ["Pass", "Signal over highThreshold", "Good neighbour",
+                       "Good Amp fraction", "TwoStripsReco",
+                       "TwoStripsReco & OnMetal"]
+list_cuts_Metal = ["Pass", "No edge strip", "Metal",
+                   "OneStripReco", "TwoStripsReco"]
+list_cuts_Gap = ["Pass", "No edge strip", "Gap",
+                 "OneStripReco", "TwoStripsReco"]
+list_cuts_MidGap = ["Pass", "No edge strip", "MidGap",
+                    "OneStripReco", "TwoStripsReco"]
+
+# Retrieve event graphs
 event_oneStripReco  = inputfile.Get("event_oneStripReco")
 event_twoStripsReco = inputfile.Get("event_twoStripsReco")
+event_Metal = inputfile.Get("event_Metal")
+event_Gap = inputfile.Get("event_Gap")
+event_MidGap = inputfile.Get("event_MidGap")
 
+# Create histograms
+h_oneStrip = draw_cut_flow("oneStrip", event_oneStripReco, list_cuts_oneStrip)
+h_twoStrips = draw_cut_flow("twoStrips", event_twoStripsReco, list_cuts_twoStrips)
+h_Metal = draw_cut_flow("Metal", event_Metal, list_cuts_Metal)
+h_Gap = draw_cut_flow("Gap", event_Gap, list_cuts_Gap)
+h_MidGap = draw_cut_flow("MidGap", event_MidGap, list_cuts_MidGap)
 
-# Create 1D histograms
-hist_oneStrip  = TH1D("cutFlow_oneStrip", "Cut flow oneStripReco;;Events %",len(list_cut_name_oneStrip),0,len(list_cut_name_oneStrip))
-hist_oneStrip.GetYaxis().SetRangeUser(0.0, 1.1)
-text_oneStrip = []
-
-hist_twoStrips = TH1D("cutFlow_twoStrips","Cut flow twoStripsReco;;Events %",len(list_cut_name_twoStrips),0,len(list_cut_name_twoStrips))
-hist_twoStrips.GetYaxis().SetRangeUser(0.0, 1.1)
-text_twoStrips = []
-
-for i,cut_name in enumerate(list_cut_name_oneStrip):
-    efficiency_value = event_oneStripReco.GetEfficiency(i+1)/event_oneStripReco.GetEfficiency(1)
-    hist_oneStrip.Fill(cut_name, efficiency_value)
-    hist_oneStrip.SetBinError(i+1, 0)
-    if i>0:
-        text = TLatex(i+0.5,efficiency_value+0.01,"%3.1f%%"%(efficiency_value*100))
-        text.SetTextAlign(21)
-        text.SetTextSize(myStyle.GetSize()-4)
-        text_oneStrip.append(text)
-
-
-for i,cut_name in enumerate(list_cut_name_twoStrips):
-    efficiency_value = event_twoStripsReco.GetEfficiency(i+1)/event_twoStripsReco.GetEfficiency(1)
-    hist_twoStrips.Fill(cut_name, efficiency_value)
-    hist_twoStrips.SetBinError(i+1, 0)
-    if i>0:
-        text = TLatex(i+0.5,efficiency_value+0.01,"%3.1f%%"%(efficiency_value*100))
-        text.SetTextAlign(21)
-        text.SetTextSize(myStyle.GetSize()-4)
-        text_twoStrips.append(text)
-
-left_text = TLatex()
-left_text.SetTextSize(myStyle.GetSize()-4)
-
-canvas = TCanvas("cv","cv",1000,800)
-canvas.SetGrid(0,1)
-# gPad.SetTicks(1,1)
-gStyle.SetOptStat(0)
-
-hist_oneStrip.LabelsOption("u")
-hist_oneStrip.Draw()
-for p in text_oneStrip:
-    p.Draw()
-left_text.DrawLatexNDC(2*myStyle.GetMargin()+0.005,1-myStyle.GetMargin()+0.01,"#bf{One Strip Reco}")
-
-# myStyle.BeamInfo()
-myStyle.SensorInfoSmart(dataset)
-
-canvas.SaveAs(outdir+"PlotCutFlow_one.gif")
-canvas.SaveAs(outdir+"PlotCutFlow_one.pdf")
-
-canvas.Clear()
-
-hist_twoStrips.LabelsOption("u")
-hist_twoStrips.Draw()
-for p in text_twoStrips:
-    p.Draw()
-left_text.DrawLatexNDC(2*myStyle.GetMargin()+0.005,1-myStyle.GetMargin()+0.01,"#bf{Two Strips Reco}")
-
-# myStyle.BeamInfo()
-myStyle.SensorInfoSmart(dataset)
-
-canvas.SaveAs(outdir+"PlotCutFlow_two.gif")
-canvas.SaveAs(outdir+"PlotCutFlow_two.pdf")
+## TODO: Write percentages of interest in the empty sections of the plot
 
 # Save amplitude histograms
-outputfile = TFile("%sPlotCutFlow.root"%(outdir),"RECREATE")
+outputfile = TFile("%sPlot_cutflow.root"%(outdir),"RECREATE")
 
-hist_oneStrip.Write()
-hist_twoStrips.Write()
+h_oneStrip.Write()
+h_twoStrips.Write()
+h_Metal.Write()
+h_Gap.Write()
+h_MidGap.Write()
 
 outputfile.Close()
