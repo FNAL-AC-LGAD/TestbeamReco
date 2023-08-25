@@ -117,6 +117,10 @@ pitch  = sensor_Geometry['pitch']
 strip_width  = sensor_Geometry['stripWidth']
 strip_length  = sensor_Geometry['length']
 
+# Modify time reference (Photek) contribution from resolution results
+rm_tracker = True
+res_photek = 10 # ps
+
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
@@ -127,6 +131,34 @@ tight_ext = "_tight" if useTight else ""
 
 outdir = myStyle.GetPlotsDir(outdir, "Paper_TimeRes/")
 # outdir = myStyle.getOutputDir("Paper2022")
+
+# Save list with histograms to draw
+list_htitles = [
+    # [hist_input_name, short_output_name, y_axis_title]
+    ["timeDiff_vs_xy", "time_diff", "Time resolution [ps]"],
+    ["timeDiffTracker_vs_xy", "time_DiffTracker", "Time resolution [ps]"],
+    ["weighted2_timeDiff_tracker_vs_xy", "weighted2_time_DiffTracker", "Time resolution [ps]"],
+    ["weighted2_timeDiff_LGADXY_vs_xy", "weighted2_time_DiffLGADXY", "Time resolution [ps]"],
+]
+
+# Use tight cut histograms
+if (useTight):
+    print("    Using tight cuts.")
+    for titles in list_htitles:
+        titles[0]+= "%s_tight"
+
+# Use hotspot extension if required
+if (options.hotspot):
+    list_htitles = [["weighted2_timeDiff_tracker_vs_xy_hotspot", "weighted2_time_DiffTracker_hotspot", "Time resolution [ps]"]]
+
+
+# List with histograms using HistoInfo class
+all_histoInfos = []
+for titles in list_htitles:
+    hname, outname, ytitle = titles
+
+# WIP
+
 all_histoInfos = [
     # HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
     # HistoInfo("timeDiffTracker_vs_xy", inputfile, "time_DiffTracker"),
@@ -152,13 +184,10 @@ print("Finished setting up langaus fit class")
 if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "q_resTimeX0/")
 
-#max_strip_edge = all_histoInfos[0].f.Get("stripBoxInfo03").GetMean(1) + strip_width/2000.
-#if useShift: max_strip_edge -= all_histoInfos[0].shift()
-
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
 #loop over X bins
-for i in range(0, nXBins+1):
+for i in range(1, nXBins+1):
     ##For Debugging
     #if not (i==46 and j==5):
     #    continue
@@ -176,12 +205,16 @@ for i in range(0, nXBins+1):
         valueMean = myMean
         errorMean = 0.0
 
+        # Define minimum of bin's entries to be fitted
         minEvtsCut = totalEvents/nXBins
-        if i==0:
-            print("%s: nEvents > %.2f (Total events: %i)"%(info.inHistoName, minEvtsCut, totalEvents))
-
         if ("HPK_50um" in dataset):
             minEvtsCut = 0.7*minEvtsCut
+
+        if i==0:
+            msg_nentries = "%s: nEvents > %.2f "%(info.inHistoName, minEvtsCut)
+            msg_nentries+= "(Total events: %i)"%(totalEvents)
+            print(msg_nentries)
+
         #Do fit 
         if(nEvents > minEvtsCut):
             tmpHist.Rebin(2)
@@ -190,38 +223,40 @@ for i in range(0, nXBins+1):
             tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
             myFitMean = fit.GetParameter(1)
             myFitMeanError = fit.GetParError(1)
-            mySigma = fit.GetParameter(2)
-            mySigmaError = fit.GetParError(2)
-            valueRaw = 1000.0*mySigma
-            value = math.sqrt((valueRaw*valueRaw) - (10.0*10.0))
-            errorRaw = 1000.0*mySigmaError
-            error  = errorRaw*(valueRaw/value)
             valueMean = abs(1000.0*myFitMean)
             errorMean = 1000.0*myFitMeanError
 
-            ##For Debugging
-            #tmpHist.Draw("hist")
-            #fit.Draw("same")
-            #canvas.SaveAs(outdir+"q"+info.outHistoName +"_"+str(i)+".gif")
+            mySigma = fit.GetParameter(2)
+            mySigmaError = fit.GetParError(2)
+            valueRaw = 1000.0*mySigma
+            errorRaw = 1000.0*mySigmaError
+
+            value = math.sqrt((valueRaw*valueRaw) - (10.0*10.0))
+            value = math.sqrt((valueRaw*valueRaw) - (res_photek*res_photek))
+            error  = errorRaw*(valueRaw/value)
+
             
             if (debugMode):
                 tmpHist.Draw("hist")
                 fit.Draw("same")
-                canvas.SaveAs(outdir_q+"q_"+info.outHistoName+str(i)+".gif")
-                print ("Bin: %i (x center = %.3f) -> Resolution: %.3f +/- %.3f"%(i, info.th1.GetXaxis().GetBinCenter(i), value, error))
-
-            # print ("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
+                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info.outHistoName, i))
+                bin_center = info.th1.GetXaxis().GetBinCenter(i)
+                msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
+                msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
+                print(msg_binres)
         else:
-            value = 0.0
             valueMean = 0.0
+            value = 0.0
+            valueRaw = 0.0
 
-        ## Removing telescope contribution
-        #if value!=0.0:
-        #    error = error*value/TMath.Sqrt(value*value - 10*10)
-        #    value = TMath.Sqrt(value*value - 10*10)
+        # Removing telescope contribution
+        if rm_tracker and (value > 0.0):
+            value = math.sqrt((value*value) - (res_photek*res_photek))
+            error  = errorRaw*(valueRaw/value)
 
         info.th1.SetBinContent(i,value)
         info.th1.SetBinError(i,error)
+
         # info.th1Mean.SetBinContent(i,valueMean)
         # info.th1Mean.SetBinError(i,errorMean)
                         

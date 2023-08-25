@@ -69,7 +69,7 @@ def draw_cut_flow(evt_name, evt_graph, list_cuts):
             txt_percentage.SetTextSize(myStyle.GetSize()-4)
             l_txt_percentage.append(txt_percentage)
         draw_percent = True
-    
+
     hist.LabelsOption("u")
     hist.Draw()
 
