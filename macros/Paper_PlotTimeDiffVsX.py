@@ -15,11 +15,10 @@ myStyle.ForceStyle()
 organized_mode=True
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, title="", xlabel="", ylabel="Time resolution [ps]", sensor="", addShift = False):
+    def __init__(self, inHistoName, f, outHistoName, doFits=True, yMax=30.0, ylabel="Time resolution [ps]", sensor="", addShift = False):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
-        self.xlabel = xlabel
         self.ylabel = ylabel
         self.sensor = sensor
         self.th2 = self.getTH2(f, inHistoName, sensor)
@@ -113,9 +112,9 @@ else:
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-pitch  = sensor_Geometry['pitch']
-strip_width  = sensor_Geometry['stripWidth']
-strip_length  = sensor_Geometry['length']
+pitch = sensor_Geometry['pitch']
+strip_width = sensor_Geometry['stripWidth']
+strip_length = sensor_Geometry['length']
 
 # Modify time reference (Photek) contribution from resolution results
 rm_tracker = True
@@ -124,13 +123,13 @@ res_photek = 10 # ps
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
-pref_hotspot = "_hotspot" if (options.hotspot) else ""
+# pref_hotspot = "_hotspot" if (options.hotspot) else ""
 
-useTight = options.useTight
-tight_ext = "_tight" if useTight else ""
+is_tight = options.useTight
+# tight_ext = "_tight" if is_tight else ""
+is_hotspot = options.hotspot
 
-outdir = myStyle.GetPlotsDir(outdir, "Paper_TimeRes/")
-# outdir = myStyle.getOutputDir("Paper2022")
+outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution_Time/")
 
 # Save list with histograms to draw
 list_htitles = [
@@ -142,13 +141,13 @@ list_htitles = [
 ]
 
 # Use tight cut histograms
-if (useTight):
+if (is_tight):
     print("    Using tight cuts.")
     for titles in list_htitles:
         titles[0]+= "%s_tight"
 
 # Use hotspot extension if required
-if (options.hotspot):
+if (is_hotspot):
     list_htitles = [["weighted2_timeDiff_tracker_vs_xy_hotspot", "weighted2_time_DiffTracker_hotspot", "Time resolution [ps]"]]
 
 
@@ -156,33 +155,33 @@ if (options.hotspot):
 all_histoInfos = []
 for titles in list_htitles:
     hname, outname, ytitle = titles
+    info_obj = HistoInfo(hname, inputfile, outname, True,  ylength, ytitle, dataset, useShift)
+    all_histoInfos.append(info_obj)
 
-# WIP
 
-all_histoInfos = [
-    # HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
-    # HistoInfo("timeDiffTracker_vs_xy", inputfile, "time_DiffTracker"),
-    # #HistoInfo("timeDiffLGADXY_vs_xy", inputfile, "time_DiffLGADXY"),
-    # HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_time_DiffTracker"),
-    # HistoInfo("weighted2_timeDiff_LGADXY_vs_xy", inputfile, "weighted2_time_DiffLGADXY"),
-    # #HistoInfo("weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", inputfile, "weighted2_time_DiffLGADX_Even"),
-    HistoInfo("timeDiff_vs_xy%s"%(tight_ext), inputfile, "time_diff", True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
-    HistoInfo("timeDiffTracker_vs_xy%s"%(tight_ext), inputfile, "time_DiffTracker",True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
-    HistoInfo("weighted2_timeDiff_tracker_vs_xy%s%s"%(pref_hotspot,tight_ext), inputfile, "weighted2_time_DiffTracker%s"%pref_hotspot,True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
-    HistoInfo("weighted2_timeDiff_LGADXY_vs_xy%s"%(tight_ext), inputfile, "weighted2_time_DiffLGADXY",True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
-]
+# all_histoInfos = [
+#     # HistoInfo("timeDiff_vs_xy", inputfile, "time_diff"),
+#     # HistoInfo("timeDiffTracker_vs_xy", inputfile, "time_DiffTracker"),
+#     # #HistoInfo("timeDiffLGADXY_vs_xy", inputfile, "time_DiffLGADXY"),
+#     # HistoInfo("weighted2_timeDiff_tracker_vs_xy", inputfile, "weighted2_time_DiffTracker"),
+#     # HistoInfo("weighted2_timeDiff_LGADXY_vs_xy", inputfile, "weighted2_time_DiffLGADXY"),
+#     # #HistoInfo("weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", inputfile, "weighted2_time_DiffLGADX_Even"),
+#     HistoInfo("timeDiff_vs_xy%s"%(tight_ext), inputfile, "time_diff", True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
+#     HistoInfo("timeDiffTracker_vs_xy%s"%(tight_ext), inputfile, "time_DiffTracker",True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
+#     HistoInfo("weighted2_timeDiff_tracker_vs_xy%s%s"%(pref_hotspot,tight_ext), inputfile, "weighted2_time_DiffTracker%s"%pref_hotspot,True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
+#     HistoInfo("weighted2_timeDiff_LGADXY_vs_xy%s"%(tight_ext), inputfile, "weighted2_time_DiffLGADXY",True,  ylength, "", "Track x position [mm]","Time resolution [ps]",dataset, useShift),
+# ]
 
 canvas = TCanvas("cv","cv",1000,800)
-canvas.SetGrid(0,1)
-TH1.SetDefaultSumw2()
-gStyle.SetOptStat(0)
 canvas.SetGrid(0,1)
 TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
 print("Finished setting up langaus fit class")
 
 if debugMode:
-    outdir_q = myStyle.CreateFolder(outdir, "q_resTimeX0/")
+    outdir_q = myStyle.CreateFolder(outdir, "q_ResTimeVsX0/")
+
+### WIP
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
@@ -265,8 +264,6 @@ outputfile = TFile("%stimeDiffVsX%s%s.root"%(outdir,pref_hotspot,tight_ext),"REC
 for info in all_histoInfos:
     #info.th1.Draw("hist e")
     info.th1.SetStats(0)
-    # info.th1.GetXaxis().SetTitle(info.xlabel)
-    # info.th1.GetYaxis().SetTitle(info.ylabel)
     info.th1.SetMinimum(0.0001)
     info.th1.SetMaximum(ylength)
     info.th1.SetLineWidth(3)
@@ -291,10 +288,10 @@ htemp.Draw("AXIS")
 
 gPad.RedrawAxis("g")
 
-    #info.th1.Draw("AXIS same")
-    #info.th1.Draw("hist e same")
-    #myStyle.BeamInfo()
-    #myStyle.SensorInfoSmart(dataset)
+#info.th1.Draw("AXIS same")
+#info.th1.Draw("hist e same")
+#myStyle.BeamInfo()
+#myStyle.SensorInfoSmart(dataset)
 
 canvas.SaveAs(outdir+"TimeRes_vs_x%s%s_"%(pref_hotspot,tight_ext)+info.outHistoName+".gif")
 canvas.SaveAs(outdir+"TimeRes_vs_x%s%s_"%(pref_hotspot,tight_ext)+info.outHistoName+".pdf")
@@ -359,4 +356,3 @@ canvas.SaveAs("%sTimeRes_vs_x%s%s_BothMethods.pdf"%(outdir,pref_hotspot,tight_ex
 hTimeW2Tracker.Clone("h_time").Write()
 
 outputfile.Close()
-
