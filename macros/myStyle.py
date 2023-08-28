@@ -19,15 +19,31 @@ def CreateFolder(outdir, title, overwrite = False):
         os.mkdir(outdir2)
     else:
         if not os.path.exists(outdir2):
-                os.mkdir(outdir2)
-        else:
-            i = 1
-            while(os.path.exists(outdir2)):
-                    outdir2 = outdir2[0:-2] + str(i) + outdir2[-1]
-                    i+=1
             os.mkdir(outdir2)
+        else:
+            enum_folder(outdir2)
     print(outdir2,"created.")
     return outdir2
+
+def enum_folder(mypath):
+# Adds a sequential number to the path
+    # Remove end slash and last digit
+    if mypath[-1] == "/":
+        mypath = mypath[0:-1]
+    if (mypath[-1] == "0") or (mypath[-1] == "1"):
+        mypath = mypath[0:-1]
+
+    count = 0
+    mypath+="0"
+    # Rename until file number is not found
+    while(os.path.exists(mypath)):
+        # Remove number at the end
+        idx = len(str(count))
+        count+=1
+        mypath = mypath[0:-idx] + str(count)
+
+    os.makedirs(mypath)
+    return mypath
 
 def GetPlotsDir(outdir, macro_title):
     outdir_tmp = os.path.join(outdir, macro_title)
