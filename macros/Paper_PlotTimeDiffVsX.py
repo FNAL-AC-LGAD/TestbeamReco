@@ -17,7 +17,7 @@ organized_mode=True
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, yMax=30.0,
                  xlabel = "Track x position [mm]", ylabel="Time resolution [ps]",
-                 sensor="", use_shift = True, center_position=0.0):
+                 sensor="", center_position=0.0):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
@@ -25,16 +25,15 @@ class HistoInfo:
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.sensor = sensor
-        self.use_shift = use_shift
         self.center_position = center_position
         self.th2 = self.getTH2(f, inHistoName, sensor)
-        self.th1 = self.getTH1(self.th2, outHistoName, self.fine_tuning(sensor))
+        self.th1 = self.getTH1(self.th2, outHistoName)
 
     def getTH2(self, f, name, sensor, axis='zx'):
         th3 = f.Get(name)
         th2 = th3.Project3D(axis)
 
-        # Rebin low statistic sensors
+        # Rebin low statistics sensors
         if sensor=="BNL2020":
             th2.RebinX(5)
         elif sensor=="BNL2021":
@@ -44,23 +43,32 @@ class HistoInfo:
 
         return th2
 
-    def getTH1(self, th2, hname, fine_value):
+    def getTH1(self, th2, hname):
         htitle = ";%s;%s"%(self.xlabel, self.ylabel)
         nxbin = th2.GetXaxis().GetNbins()
         xmin, xmax = th2.GetXaxis().GetXmin(), th2.GetXaxis().GetXmax()
-        if self.use_shift:
-            # xmin-= fine_value
-            # xmax-= fine_value
-            xmin-= self.center_position
-            xmax-= self.center_position
-        # Fine tuning --> Makes binning look centered
 
-        # WIP
-        xmin-= fine_value
-        xmax-= fine_value
+        zero_bin = self.th2.GetXaxis().FindBin(0.0)
+        central_bin = self.th2.GetXaxis().FindBin(self.center_position)
+        bin_diff = central_bin - zero_bin
 
+        bin_width = self.th2.GetXaxis().GetBinWidth(zero_bin)
+
+        # Move distribution so that the bin with the center of
+        # the central channel is at zero
+        # print("Zero bin: %i, Real center: %i; Diff: %i"%(zero_bin, central_bin, bin_diff))
+        if (bin_diff != 0.0):
+            xmin-= bin_width*bin_diff
+            xmax-= bin_width*bin_diff
+
+        # Even number of bins have 0.0 as lowedge in zero bin.
+        # Slightly move this bin to make it look symmetric
+        if (self.th2.GetXaxis().GetBinLowEdge(zero_bin) == 0.0):
+            xmin-= bin_width/2.
+            xmax-= bin_width/2.
+
+        # Create and define th1 default style
         th1 = TH1D(hname, htitle, nxbin, xmin, xmax)
-
         th1.SetStats(0)
         th1.SetMinimum(0.0001)
         th1.SetMaximum(self.yMax)
@@ -70,55 +78,6 @@ class HistoInfo:
 
         return th1
 
-    def shift(self):
-        # This shift moves the distributions so that the central channel's center is at zero.
-        # This is not made by default as found in the variable stripCenterXPositionLGAD[], in the Geometry files
-
-        if ("2x2pad" not in sensor):
-            real_center = self.f.Get("stripBoxInfo03").GetMean(1)
-            if not self.f.Get("stripBoxInfo06"):
-                real_center = (self.f.Get("stripBoxInfo02").GetMean(1) + real_center)/2.
-        else:
-            real_center = 0.0
-
-        if ("2p5cm_mixConfig1_W3051" in self.sensor):
-            real_center = self.f.Get("stripBoxInfo02").GetMean(1)
-
-        elif ("2p5cm_mixConfig2_W3051" in self.sensor):
-            real_center = self.f.Get("stripBoxInfo04").GetMean(1)
-
-        return real_center
-
-    def fine_tuning(self, sensor):
-        # value = 0.0
-        value = self.th2.GetXaxis().GetBinWidth(2)/2.
-        if "1cm_500up_300uw" in sensor: value = 0.0
-        elif "1cm_500up_100uw" in sensor: value = self.shift()
-        elif "0p5cm_500up_200uw_1_4" in sensor: value = -value
-        # if sensor=="BNL2020": value = 0.0075
-
-        if ("2p5cm_mixConfig" in sensor):
-            value = self.shift()
-
-        return value
-
-    # def shift(self):
-    #     return self.f.Get("stripBoxInfo03").GetMean(1)
-
-    # #def shift(self):
-    #     #real_center = self.f.Get("stripBoxInfo03").GetMean(1)
-    #     #if not self.f.Get("stripBoxInfo06"): real_center = (self.f.Get("stripBoxInfo02").GetMean(1) + real_center)/2.
-    #     #return real_center
-
-
-    # def getTH1(self, th2, name, centerShift, fine_value):
-    #     th1_temp = TH1D(name,"",th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin()-centerShift-fine_value,th2.GetXaxis().GetXmax()-centerShift-fine_value)
-    #     return th1_temp   
-    
-    # def fine_tuning(self, sensor):
-    #     value = 0.0
-    #     if sensor=="BNL2020": value = 0.0025
-    #     return value
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -126,12 +85,12 @@ parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Limit x
 parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Max TimeResolution value in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
-parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
+# parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 
 options, args = parser.parse_args()
-use_shift = options.noShift
+# use_shift = options.noShift
 dataset = options.Dataset
 outdir=""
 if organized_mode:
@@ -162,13 +121,13 @@ is_tight = options.useTight
 is_hotspot = options.hotspot
 
 
-# Get total number of channels used and central channel
+# Get total number of channels used and central channel's position
 channel_info = []
 for key in inputfile.GetListOfKeys():
     if "stripBoxInfo0" in key.GetName():
         channel_info.append(key.GetName())
 n_channels = len(channel_info)
-
+# print(channel_info)
 # TODO: Update this to work with pads (second index)
 # Even number of bins
 if (n_channels%2 == 0):
@@ -180,7 +139,6 @@ if (n_channels%2 == 0):
 else:
     central_idx =  round((n_channels-1)/2)
     position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
-
 
 outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution_Time/")
 
@@ -195,9 +153,9 @@ list_htitles = [
 
 # Use tight cut histograms
 if (is_tight):
-    print("    Using tight cuts.")
+    print("    Using tight cuts!")
     for titles in list_htitles:
-        titles[0]+= "%s_tight"
+        titles[0]+= "_tight"
 
 # Use hotspot extension if required
 if (is_hotspot):
@@ -209,7 +167,7 @@ all_histoInfos = []
 for titles in list_htitles:
     hname, outname, ytitle = titles
     info_obj = HistoInfo(hname, inputfile, outname, yMax=ylength, ylabel=ytitle,
-                         sensor=dataset, use_shift=use_shift, center_position=position_center)
+                         sensor=dataset, center_position=position_center)
     all_histoInfos.append(info_obj)
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -324,7 +282,7 @@ htemp.SetLineColor(colors[2])
 #     # ymin = info.th1.GetMinimum()
 #     # ymax = ylength
 
-#     #boxes = getStripBox(inputfile,0.0,ymax,False,18,True,this_shift)
+#     #boxes = getStripBox(inputfile, ymin=ymin, ymax=ymax, strips=True, shift=position_center)
 #     #for i,box in enumerate(boxes):
 #         #if (i!=0 and i!=(len(boxes)-1)): box.Draw()
 
@@ -380,7 +338,7 @@ for i,info in enumerate(all_histoInfos):
         gPad.RedrawAxis("g")
 
     hist.Draw("hist e same")
-    legend.AddEntry(hist, legend_name[i])
+    legend.AddEntry(hist, legend_name[i], "lep")
 
     hist.Write()
 
@@ -396,66 +354,6 @@ if (is_hotspot):
 elif (is_tight):
     save_path+= "-tight"
 canvas.SaveAs("%s.gif"%save_path)
-# canvas.SaveAs("%s.pdf"%save_path)
+canvas.SaveAs("%s.pdf"%save_path)
 
 outputfile.Close()
-
-
-
-# hTimeRes =  all_histoInfos[0].th1
-# hTimeTracker = all_histoInfos[1].th1
-# hTimeW2Tracker = all_histoInfos[2].th1
-# hTimeW2LGADXY = all_histoInfos[3].th1
-
-# hTimeRes.SetLineColor(colors[5])
-# hTimeTracker.SetLineColor(kBlack)
-# hTimeW2Tracker.SetLineColor(colors[2])
-# hTimeW2LGADXY.SetLineColor(colors[1])
-
-# #hTimeRes.SetLineStyle(2)
-# #hTimeTracker.SetLineStyle(2)
-# #hTimeW2LGADXY.SetLineStyle(2)
-
-# hTimeRes.SetLineWidth(2)
-# hTimeTracker.SetLineWidth(2)
-# hTimeW2Tracker.SetLineWidth(4)
-# hTimeW2LGADXY.SetLineWidth(2)
-
-# ymin = hTimeRes.GetMinimum()
-# ymax = ylength
-
-
-
-# hTimeRes.Draw("hist e same")
-# hTimeW2LGADXY.Draw("hist e same")
-# hTimeTracker.Draw("hist e same")
-# hTimeW2Tracker.Draw("hist e same")
-# htemp.Draw("AXIS same")
-# gPad.RedrawAxis("g")
-# # legend = TLegend(myStyle.GetPadCenter()-0.15,1-myStyle.GetMargin()-0.80,myStyle.GetPadCenter()+0.25,1-myStyle.GetMargin()-0.60)
-# legend = TLegend(myStyle.GetPadCenter()-0.20,2*myStyle.GetMargin()+0.01,myStyle.GetPadCenter()+0.20,2*myStyle.GetMargin()+0.16)
-# legend.SetBorderSize(0)
-# legend.SetFillColor(kWhite)
-# legend.SetTextFont(myStyle.GetFont())
-# legend.SetTextSize(myStyle.GetSize()-20)
-# #legend.SetFillStyle(0)
-
-# legend.AddEntry(hTimeRes, "Single-channel, no delay correction","lep")
-# legend.AddEntry(hTimeTracker, "Single-channel, tracker delay correction","lep")
-# legend.AddEntry(hTimeW2LGADXY, "Multi-channel, LGAD delay correction","lep")
-# legend.AddEntry(hTimeW2Tracker, "Multi-channel, tracker delay correction","lep")
-# #legend.AddEntry(hTimeW2LGADXY, "Multi-channel, LGAD delay correction","lep")
-
-# htemp.Draw("AXIS same")
-# legend.Draw();
-
-
-# # myStyle.BeamInfo()
-# myStyle.SensorInfoSmart(dataset)
-
-# canvas.SaveAs("%sTimeRes_vs_x%s%s_BothMethods.gif"%(outdir,pref_hotspot,tight_ext))
-# canvas.SaveAs("%sTimeRes_vs_x%s%s_BothMethods.pdf"%(outdir,pref_hotspot,tight_ext))
-
-# hTimeW2Tracker.Clone("h_time").Write()
-
-# outputfile.Close()
