@@ -20,24 +20,31 @@ gROOT.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
 organized_mode=True
 
-# Construct the argument parser
-parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-options, args = parser.parse_args()
 
-dataset = options.Dataset
-outdir=""
-if organized_mode: 
-    outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
-else: 
-    inputfile = TFile("../test/myoutputfile.root")   
+def draw_reco_method_percentage(hist, denominator_bin_name):
+    # Get values
+    bin_pass = hist.GetXaxis().FindBin(denominator_bin_name)
+    bin_one = hist.GetXaxis().FindBin("OneStripReco")
+    bin_two = hist.GetXaxis().FindBin("TwoStripsReco")
 
-outdir = myStyle.GetPlotsDir(outdir, "Cutflow/")
-colors = myStyle.GetColors(True)
+    value_pass = hist.GetBinContent(bin_pass)
+    value_one = hist.GetBinContent(bin_one)
+    value_two = hist.GetBinContent(bin_two)
 
-sensor_Geometry = myStyle.GetGeometry(dataset)
-sensor = sensor_Geometry['sensor']
+    # Get right limit to draw text
+    r_limit = hist.GetXaxis().GetNbins()
+
+    str_oneStrip = "One strip: %3.2f"%(100*value_one/value_pass)
+    txt_oneStrip = TLatex(r_limit-0.02, 1.05, str_oneStrip)
+    txt_oneStrip.SetTextAlign(33)
+    txt_oneStrip.SetTextSize(myStyle.GetSize()-4)
+    txt_oneStrip.Draw()
+
+    str_twoStrip = "Two strip: %3.2f"%(100*value_two/value_pass)
+    txt_twoStrip = TLatex(r_limit-0.02, 0.90, str_twoStrip)
+    txt_twoStrip.SetTextAlign(33)
+    txt_twoStrip.SetTextSize(myStyle.GetSize()-4)
+    txt_twoStrip.Draw()
 
 # Define function to extract numbers from graph and draw plots
 def draw_cut_flow(evt_name, evt_graph, list_cuts):
@@ -63,7 +70,7 @@ def draw_cut_flow(evt_name, evt_graph, list_cuts):
 
         # Save percentage to be explicitly written later
         if draw_percent:
-            str_percentage = "%3.1f%%"%(efficiency_value*100)
+            str_percentage = "%3.2f%%"%(efficiency_value*100)
             txt_percentage = TLatex(c+0.5, efficiency_value+0.01, str_percentage)
             txt_percentage.SetTextAlign(21)
             txt_percentage.SetTextSize(myStyle.GetSize()-4)
@@ -83,15 +90,46 @@ def draw_cut_flow(evt_name, evt_graph, list_cuts):
     for perc in l_txt_percentage:
         perc.Draw()
 
+    b1 = hist.GetXaxis().FindBin("Signal over Noise")
+    b2 = hist.GetXaxis().FindBin("hi")
+    b3 = hist.GetXaxis().FindBin(evt_name)
+    print("Value b1", b1)
+    print("Value b2", b2)
+    print("Value b3", b3) # WIP
+
+    # Draw one and two strip reco efficiency in this region
+    if (hist.GetXaxis().FindBin(evt_name)<nbins):
+        draw_reco_method_percentage(hist, evt_name)
+
     # myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset)
 
     canvas.SaveAs("%sPlot_cutflow_%s.gif"%(outdir, evt_name))
-    # canvas.SaveAs("%sPlot_cutflow_%s.pdf"%(outdir, evt_name))
+    canvas.SaveAs("%sPlot_cutflow_%s.pdf"%(outdir, evt_name))
 
     canvas.Clear()
 
     return hist
+
+
+# Construct the argument parser
+parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+options, args = parser.parse_args()
+
+dataset = options.Dataset
+outdir=""
+if organized_mode:
+    outdir = myStyle.getOutputDir(dataset)
+    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
+else:
+    inputfile = TFile("../test/myoutputfile.root")
+
+outdir = myStyle.GetPlotsDir(outdir, "Cutflow/")
+colors = myStyle.GetColors(True)
+
+sensor_Geometry = myStyle.GetGeometry(dataset)
+sensor = sensor_Geometry['sensor']
 
 # Add name of cut implemented in each bin of the cut flow
 list_cuts_oneStrip  = ["Pass", "Signal over Noise", "OneStripReco",
@@ -121,8 +159,6 @@ h_twoStrips = draw_cut_flow("twoStrips", event_twoStripsReco, list_cuts_twoStrip
 h_Metal = draw_cut_flow("Metal", event_Metal, list_cuts_Metal)
 h_Gap = draw_cut_flow("Gap", event_Gap, list_cuts_Gap)
 h_MidGap = draw_cut_flow("MidGap", event_MidGap, list_cuts_MidGap)
-
-## TODO: Write percentages of interest in the empty sections of the plot
 
 # Save amplitude histograms
 outputfile = TFile("%sPlot_cutflow.root"%(outdir),"RECREATE")
