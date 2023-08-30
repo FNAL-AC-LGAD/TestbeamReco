@@ -256,7 +256,7 @@ for i in range(1, nbins+1):
         # info.th1Mean.SetBinError(i,errorMean)
 
 # Define output file
-output_path = "%sTimeDiffVsX"
+output_path = "%sTimeDiffVsX"%(outdir)
 if (is_hotspot):
     output_path+= "_hotspot"
 elif (is_tight):
