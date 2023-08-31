@@ -640,6 +640,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     //Define TEfficiencies if you are doing trigger studies (for proper error bars) or cut flow charts.
     utility::makeHisto(my_efficiencies,"event_oneStripReco",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_twoStripsReco",";;Events %",9,0,9);
+    utility::makeHisto(my_efficiencies,"event_Overall",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_Metal",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_Gap",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_MidGap",";;Events %",9,0,9);
@@ -1587,29 +1588,40 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && twoStripsReco,1.0,4); // "TwoStripsReco");
         my_efficiencies["event_twoStripsReco"]->FillWeighted(pass && hasGlobalSignal_highThreshold && twoStripsReco && hitOnMetal,1.0,5); // "TwoStripsReco && OnMetal");
 
+        // Hit overall
+        my_efficiencies["event_Overall"]->SetUseWeightedEvents();
+        my_efficiencies["event_Overall"]->FillWeighted(pass,1.0,0); // "Pass");
+        my_efficiencies["event_Overall"]->FillWeighted(pass && maxAmpNotEdgeStrip,1.0,1); // "No edge strip");
+        my_efficiencies["event_Overall"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,1.0,2); // "Noise");
+        my_efficiencies["event_Overall"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && oneStripReco,1.0,3); // "OneStripReco");
+        my_efficiencies["event_Overall"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,1.0,4); // "TwoStripsReco");
+
         // Hit on metal
         my_efficiencies["event_Metal"]->SetUseWeightedEvents();
         my_efficiencies["event_Metal"]->FillWeighted(pass,1.0,0); // "Pass");
         my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip,1.0,1); // "No edge strip");
-        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,1.0,2); // "OnMetal");
-        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal && oneStripReco,1.0,3); // "OneStripReco");
-        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal && twoStripsReco,1.0,4); // "TwoStripsReco");
+        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,1.0,2); // "Noise");
+        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,1.0,3); // "OnMetal");
+        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal && oneStripReco,1.0,4); // "OneStripReco");
+        my_efficiencies["event_Metal"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal && twoStripsReco,1.0,5); // "TwoStripsReco");
 
         // Hit on gap
         my_efficiencies["event_Gap"]->SetUseWeightedEvents();
         my_efficiencies["event_Gap"]->FillWeighted(pass,1.0,0); // "Pass");
         my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip,1.0,1); // "No edge strip");
-        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,1.0,2); // "OnGap");
-        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal && oneStripReco,1.0,3); // "OneStripReco");
-        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal && twoStripsReco,1.0,4); // "TwoStripsReco");
+        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,1.0,2); // "Noise");
+        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,1.0,3); // "OnGap");
+        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal && oneStripReco,1.0,4); // "OneStripReco");
+        my_efficiencies["event_Gap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal && twoStripsReco,1.0,5); // "TwoStripsReco");
 
         // Hit on middle gap
         my_efficiencies["event_MidGap"]->SetUseWeightedEvents();
         my_efficiencies["event_MidGap"]->FillWeighted(pass,1.0,0); // "Pass");
         my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip,1.0,1); // "No edge strip");
-        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,1.0,2); // "OnGap");
-        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap && oneStripReco,1.0,3); // "OneStripReco");
-        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap && twoStripsReco,1.0,4); // "TwoStripsReco");
+        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,1.0,2); // "Noise");
+        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,1.0,3); // "OnGap");
+        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap && oneStripReco,1.0,4); // "OneStripReco");
+        my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap && twoStripsReco,1.0,5); // "TwoStripsReco");
     } //event loop
 }
 
