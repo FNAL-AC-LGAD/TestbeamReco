@@ -32,19 +32,18 @@ def draw_reco_method_percentage(hist, denominator_bin_name):
     value_two = hist.GetBinContent(bin_two)
 
     # Get right limit to draw text
-    r_limit = hist.GetXaxis().GetNbins()
+    r_limit = bin_two
 
-    str_oneStrip = "One strip: %3.2f"%(100*value_one/value_pass)
-    txt_oneStrip = TLatex(r_limit-0.02, 1.05, str_oneStrip)
-    txt_oneStrip.SetTextAlign(33)
-    txt_oneStrip.SetTextSize(myStyle.GetSize()-4)
-    txt_oneStrip.Draw()
+    percent_one = 100*value_one/value_pass
+    percent_two = 100*value_two/value_pass
+    str_recoinfo = "One strip: %3.1f%%   "%(percent_one)
+    str_recoinfo+= "Two strip: %3.1f%%"%(percent_two)
+    txt_recoinfo = TLatex()
+    txt_recoinfo.SetTextAlign(33)
+    txt_recoinfo.SetTextSize(myStyle.GetSize()-4)
+    txt_recoinfo.DrawLatex(r_limit-0.4, 1.05, str_recoinfo)
 
-    str_twoStrip = "Two strip: %3.2f"%(100*value_two/value_pass)
-    txt_twoStrip = TLatex(r_limit-0.02, 0.90, str_twoStrip)
-    txt_twoStrip.SetTextAlign(33)
-    txt_twoStrip.SetTextSize(myStyle.GetSize()-4)
-    txt_twoStrip.Draw()
+    print("\n%s efficiency --> %s"%(denominator_bin_name, str_recoinfo))
 
 # Define function to extract numbers from graph and draw plots
 def draw_cut_flow(evt_name, evt_graph, list_cuts):
@@ -90,15 +89,15 @@ def draw_cut_flow(evt_name, evt_graph, list_cuts):
     for perc in l_txt_percentage:
         perc.Draw()
 
-    b1 = hist.GetXaxis().FindBin("Signal over Noise")
-    b2 = hist.GetXaxis().FindBin("hi")
-    b3 = hist.GetXaxis().FindBin(evt_name)
-    print("Value b1", b1)
-    print("Value b2", b2)
-    print("Value b3", b3) # WIP
-
+    # Loop over the bin labels
+    label_exists = False
+    for bin in range(1, nbins + 1):
+        bin_label = hist.GetXaxis().GetBinLabel(bin)
+        if bin_label == evt_name:
+            label_exists = True
+            break
     # Draw one and two strip reco efficiency in this region
-    if (hist.GetXaxis().FindBin(evt_name)<nbins):
+    if (label_exists):
         draw_reco_method_percentage(hist, evt_name)
 
     # myStyle.BeamInfo()
@@ -139,16 +138,19 @@ list_cuts_oneStrip  = ["Pass", "Signal over Noise", "OneStripReco",
 list_cuts_twoStrips = ["Pass", "Signal over highThreshold", "Good neighbour",
                        "Good Amp fraction", "TwoStripsReco",
                        "TwoStripsReco & OnMetal"]
-list_cuts_Metal = ["Pass", "No edge strip", "Metal",
+list_cuts_Overall = ["Pass", "No edge strip", "Overall",
                    "OneStripReco", "TwoStripsReco"]
-list_cuts_Gap = ["Pass", "No edge strip", "Gap",
+list_cuts_Metal = ["Pass", "No edge strip", "Over noise", "Metal",
+                   "OneStripReco", "TwoStripsReco"]
+list_cuts_Gap = ["Pass", "No edge strip", "Over noise", "Gap",
                  "OneStripReco", "TwoStripsReco"]
-list_cuts_MidGap = ["Pass", "No edge strip", "MidGap",
+list_cuts_MidGap = ["Pass", "No edge strip", "Over noise", "MidGap",
                     "OneStripReco", "TwoStripsReco"]
 
 # Retrieve event graphs
 event_oneStripReco  = inputfile.Get("event_oneStripReco")
 event_twoStripsReco = inputfile.Get("event_twoStripsReco")
+event_Overall = inputfile.Get("event_Overall")
 event_Metal = inputfile.Get("event_Metal")
 event_Gap = inputfile.Get("event_Gap")
 event_MidGap = inputfile.Get("event_MidGap")
@@ -156,6 +158,7 @@ event_MidGap = inputfile.Get("event_MidGap")
 # Create histograms
 h_oneStrip = draw_cut_flow("oneStrip", event_oneStripReco, list_cuts_oneStrip)
 h_twoStrips = draw_cut_flow("twoStrips", event_twoStripsReco, list_cuts_twoStrips)
+h_Overall = draw_cut_flow("Overall", event_Overall, list_cuts_Overall)
 h_Metal = draw_cut_flow("Metal", event_Metal, list_cuts_Metal)
 h_Gap = draw_cut_flow("Gap", event_Gap, list_cuts_Gap)
 h_MidGap = draw_cut_flow("MidGap", event_MidGap, list_cuts_MidGap)
@@ -165,6 +168,7 @@ outputfile = TFile("%sPlot_cutflow.root"%(outdir),"RECREATE")
 
 h_oneStrip.Write()
 h_twoStrips.Write()
+h_Overall.Write()
 h_Metal.Write()
 h_Gap.Write()
 h_MidGap.Write()
