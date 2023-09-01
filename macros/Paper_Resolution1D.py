@@ -15,9 +15,9 @@ ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"z")
 ROOT.gStyle.SetHistLineWidth(2)
 ROOT.gROOT.ForceStyle()
 
-def plot1D(hist, name, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fmin=-1, fmax=1):
+def plot1D(hist, outpath, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fmin=-1, fmax=1):
     # ROOT.gStyle.SetOptFit(1)
-    c = ROOT.TCanvas("c","c",1000,1000)
+    canvas = ROOT.TCanvas("canvas","canvas",1000,1000)
     ROOT.gPad.SetTicks(1,1)
     ROOT.TH1.SetDefaultSumw2()
     #ROOT.gPad.SetLogy()
@@ -29,10 +29,40 @@ def plot1D(hist, name, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fmin=
     hist.Draw('hists e')
     myMean = hist.GetMean()
     myRMS = hist.GetRMS()
+    # # Define fit limits
+    # fit_min = myMean + fmin*myRMS
+    # fit_max = myMean + fmax*myRMS
 
+    # Make fit around maximum bin!
+    bin_max = hist.GetMaximumBin()
+    peak = hist.GetBinCenter(bin_max)
     # Define fit limits
-    fit_min = myMean + fmin*myRMS
-    fit_max = myMean + fmax*myRMS
+    fit_min = peak + fmin*myRMS
+    fit_max = peak + fmax*myRMS
+
+    # Avoid limit to get lower than 20% of the peak (problems with the Gaussian fit)
+    print("-------------------------------")
+    value_max = hist.GetBinContent(bin_max)
+    # Correct left edge if needed
+    bin_left = hist.FindBin(fit_min)
+    value_left = hist.GetBinContent(bin_left)
+    str_limit_left = " >> Left limit: %2.4f"%(fit_min)
+    while (value_left < 0.2*value_max):
+        fit_min = hist.GetBinLowEdge(bin_left+1)
+        value_left = hist.GetBinContent(bin_left + 1)
+        bin_left+=1
+        str_limit_left+= " -> %2.4f"%(fit_min)
+    print(str_limit_left)
+    # Correct right edge if needed
+    bin_right = hist.FindBin(fit_max)
+    value_right = hist.GetBinContent(bin_right)
+    str_limit_right = " >> Right limit: %2.4f"%(fit_max)
+    while (value_right < 0.2*value_max):
+        fit_max = hist.GetBinLowEdge(bin_right)
+        value_right = hist.GetBinContent(bin_right)
+        bin_right-=1
+        str_limit_right+= " -> %2.4f"%(fit_max)
+    print(str_limit_right)
 
     fit = ROOT.TF1("fit", "gaus", fit_min, fit_max)
     fit.SetLineColor(ROOT.kRed)
@@ -40,9 +70,9 @@ def plot1D(hist, name, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fmin=
     hist.Fit(fit, "Q", "", fit_min, fit_max)
     fit.Draw("same")
 
-    # c.Print("%s.png"%(name))
-    c.Print("%s.gif"%(name))
-    # c.Print("%s.pdf"%(name))
+    # canvas.SaveAs("%s.png"%(outpath))
+    # canvas.SaveAs("%s.gif"%(outpath))
+    canvas.SaveAs("%s.pdf"%(outpath))
 
 def getHisto(f, name, rebin, color):
     h = f.Get(name)
@@ -53,7 +83,7 @@ def getHisto(f, name, rebin, color):
     return h
 
 # Limits of the fits used in the deltaX one and two strip reconstruction methods
-# The limits are defined such that [fmin, fmax] gives the limits --> [myMean + (fmin)*myRMS, myMean + (fmax)*myRMS]
+# The limits are defined such that [fmin, fmax] gives the limits --> [max_bin_center + (fmin)*myRMS, max_bin_center + (fmax)*myRMS]
 fit_limits = {
     ## 2022 sensors
     "EIC_W2_1cm_500up_300uw_240V": {'one': [-2.7,2.7], 'two': [-0.8,0.8]},
@@ -81,23 +111,24 @@ fit_limits = {
 
     # HPK May 2023
     "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    # "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    # "HPK_W8_17_2_50T_1P0_500P_50M_C600_206V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+    "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
     "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+    "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
     "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
     "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
     "HPK_W9_14_2_20T_1P0_500P_100M_E600_112V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
     "HPK_KOJI_50T_1P0_80P_60M_E240_190V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
     "HPK_KOJI_20T_1P0_80P_60M_E240_112V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
+    "HPK_W9_15_4_20T_0P5_500P_50M_E600_110V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
 }
 
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-a', dest='plotAll', action='store_true', default = False, help="Draw all channels")
-parser.add_option('-m', '--min', dest='min', default=-1.0, type="float", help="Low limit of the fit (fmin): myMean + (fmin)*myRMS.")
-parser.add_option('-M', '--max', dest='max', default=1.0, type="float", help="High limit of the fit (fmax): myMean + (fmax)*myRMS.")
+parser.add_option('-a', dest='all_quantities', action='store_true', default = False, help="Draw all histograms (not only the most important ones)")
+parser.add_option('-c', dest='each_channel', action='store_true', default = False, help="Draw one strip reco for each channel")
+parser.add_option('-m', '--min', dest='min', default=-1.0, type="float", help="Low limit of the fit (fmin): max_bin_center + (fmin)*myRMS.")
+parser.add_option('-M', '--max', dest='max', default=1.0, type="float", help="High limit of the fit (fmax): max_bin_center + (fmax)*myRMS.")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
@@ -106,6 +137,9 @@ dataset = options.Dataset
 fitmin = options.min
 fitmax = options.max
 
+plot_all_hists = options.all_quantities
+use_each_channel = options.each_channel
+
 is_tight = options.useTight
 
 outdir=""
@@ -113,8 +147,6 @@ outdir = myStyle.getOutputDir(dataset)
 inputfile = ROOT.TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution1D/")
-
-# channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5),(0,6)]
 
 limits_one = fit_limits[dataset]['one']
 limits_two = fit_limits[dataset]['two']
@@ -145,53 +177,47 @@ if (is_tight):
             titles[0]+= "_tight"
             titles[1]+= "-tight"
 
+# TODO: Update this to work with pads (second index)
+if use_each_channel:
+    # Skip if tight cuts are required
+    if (is_tight):
+        print(" >> Tight cut is not compatible with 'each channel'. Skipping.")
+    else:
+        for i in range(8):
+            hname = "deltaX_oneStrip0%i"%i
+            hist = inputfile.Get(hname)
+            if hist:
+                channel_element = [hname, "deltaX_oneStripCh0%i"%i, "tracker"]
+                list_htitles.append(channel_element)
+
+# TODO: Update this to work with pads (second index)
+if plot_all_hists:
+    # Skip if tight cuts are required
+    if (is_tight):
+        print(" >> Tight cut is not compatible with 'all histograms'. Skipping.")
+    else:
+        for i in range(8):
+            hname = "timeDiffTracker_channel0%i"%i
+            hist = inputfile.Get(hname)
+            if hist:
+                list_htitles.append(["timeDiffTracker_channel0%i"%i, "time_trackerCh0%i"%i, "photek"])
+                list_htitles.append(["weighted2_timeDiff_tracker_channel0%i"%i, "weighted2_time_trackerCh0%i"%i, "photek"])
 
 # Create plots
 for info in list_htitles:
     hname, out_name, ref = info
-    x_title = "%s - %s "%(out_name, ref)
+    out_path = "%s%s"%(outdir, out_name)
+    x_title = "%s - %s "%(out_name.replace("-tight", ""), ref)
     # Units
-    x_title+= "[ps]" if "time" in hname else "[#mum]"
+    x_title+= "[ns]" if "time" in hname else "[mm]"
+
+    # Choose correct fit limits
+    fmin, fmax = fitmin, fitmax
+    if "deltaX_" in hname:
+        if "oneStrip" in hname:
+            fmin, fmax = limits_one[0], limits_one[1]
+        elif "twoStrip" in hname:
+            fmin, fmax = limits_two[0], limits_two[1]
 
     hist = inputfile.Get(hname)
-    plot1D(hist, out_name, x_title, "Events", fmin=, fmax=)
-    # WIP
-
-
-
-
-
-# hists = [('deltaX%s'%tight_ext,'deltaX',"tracker",fitmin,fitmax),
-#         ('deltaX_oneStrip%s'%tight_ext,'deltaX_oneStrip',"tracker",range_oneS[0],range_oneS[1]),
-#         ('deltaX_oneStrip_onMetal%s'%tight_ext,'deltaX_oneStrip_onMetal',"tracker",range_oneS[0],range_oneS[1]),
-#         ('deltaX_twoStrips%s'%tight_ext,'deltaX_twoStrips',"tracker",range_twoS[0],range_twoS[1]), # ('deltaX_twoStrips_noMetal','deltaX_twoStrips_noMetal',"tracker"),
-#         ("timeDiff%s"%tight_ext,"time","photek",fitmin,fitmax), ("weighted2_timeDiff%s"%tight_ext,"weighted2Time","photek",fitmin,fitmax),
-#         ("timeDiffTracker%s"%tight_ext,"time_tracker","photek",fitmin,fitmax), ("weighted2_timeDiff_tracker%s"%tight_ext,"weighted2_time_tracker","photek",fitmin,fitmax),
-#         ('deltaY','deltaY','tracker',fitmin,fitmax),
-#         ('deltaY_oneStrip','deltaY_oneStrip','tracker',fitmin,fitmax),
-#         ('deltaY_twoStrips','deltaY_twoStrips','tracker',fitmin,fitmax),
-# ]
-
-hists += list(('deltaX_oneStrip{0}{1}'.format(t[0],t[1]),'deltaX_oneStripCh0%i'%(t[1]),'tracker',range_oneS[0],range_oneS[1]) for t in channelMap)
-
-if options.plotAll:
-    hists += list(('weighted_timeDiff_channel{0}{1}'.format(t[0],t[1]),'weightedTime','photek') for t in channelMap)
-    hists += list(('timeDiff_channel{0}{1}'.format(t[0],t[1]),'time','photek') for t in channelMap)
-    hists += [("weighted_timeDiff","weightedTime","photek"), ("timeDiff_amp2","time","photek"), ("timeDiff_amp3","time","photek")]
-    hists += [('deltaX_TopRow','deltaX_TopRow',"tracker"), ('deltaX_BotRow','deltaX_BotRow',"tracker"), ('deltaY_RightCol','deltaY_RightCol',"tracker"), ('deltaY_LeftCol','deltaY_LeftCol',"tracker")]
-    hists += [("weighted_timeDiff_goodSig","weighted_goodSig","photek"), ("weighted2_timeDiff_goodSig","weighted2_goodSig","photek")]
-
-nEntries = {}
-for t in hists:
-    h = inputfile.Get(t[0])
-    if h:
-        plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], runPad, 100, (0,1), t[3], t[4])
-
-        if (t[0] in ['deltaX_oneStrip%s'%tight_ext,'deltaX_twoStrips%s'%tight_ext]):
-            # print("* Number of entries in",t[0],":",h.GetEntries())
-            nEntries[t[0]] = h.GetEntries()
-
-## Get fraction of events per reconstruction method
-for reco_method in nEntries:
-    print("\t* {0}: {1}/{2} ({3:.2f} %)".format(reco_method, nEntries[reco_method], sum(nEntries.values()), 100*nEntries[reco_method]/sum(nEntries.values())))
-print()
+    plot1D(hist, out_path, x_title, "Events", fmin=fmin, fmax=fmax)
