@@ -66,16 +66,10 @@ list_amplitude_vs_xy.append(amplitude_vs_xy_temp.Clone("amplitude_vs_xy"))
 canvas = TCanvas("cv","cv",800,800)
 fit = langaus.LanGausFit()
 
-#loop over X,Y bins
-for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()):
-    for j in range(1, amplitude_vs_xy_temp.GetYaxis().GetNbins()):
-#for i in range(amplitude_vs_xy.GetXaxis().FindFixBin(-2.6), amplitude_vs_xy.GetXaxis().FindFixBin(-2.0)):
-#    for j in range(amplitude_vs_xy.GetYaxis().FindFixBin(-3.0), amplitude_vs_xy.GetYaxis().FindFixBin(9.0)):
-
-        ##For Debugging
-        #if not (i==46 and j==5):
-        #    continue
-
+# Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()+1):
+    # Loop over Y-bins
+    for j in range(1, amplitude_vs_xy_temp.GetYaxis().GetNbins()+1):
         for channel in range(0, len(list_amplitude_vs_xy)):
             tmpHist = th3_amplitude_vs_xy_ch[channel].ProjectionZ("pz",i,i,j,j)
             myMean = tmpHist.GetMean()
@@ -100,7 +94,7 @@ for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()):
                 ##For Debugging
                 #tmpHist.Draw("hist")
                 #myLanGausFunction.Draw("same")
-                #canvas.SaveAs("q_"+str(i)+"_"+str(j)+".gif")
+                #canvas.SaveAs(outdir+"q_"+str(i)+"_"+str(j)+".gif")
 
             #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             # if tmpHist.GetEntries()>20: 
