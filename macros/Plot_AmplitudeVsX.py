@@ -79,18 +79,12 @@ canvas = TCanvas("cv","cv",1000,800)
 maxAmpChannels = []
 maxAmpALL = 0
 n_channels = 0
-#loop over X,Y bins
 for channel in range(0, len(list_amplitude_vs_x)):
     # print("Channel : " + str(channel))
     maxAmp = 0
     totalEvents = list_th2_amplitude_vs_x[channel].GetEntries()
-    for i in range(1, list_amplitude_vs_x[channel].GetXaxis().GetNbins()):
-        #print ("Bin " + str(i))
-
-        ##For Debugging
-        #if not (i==46 and j==5):
-        #    continue
-
+    # Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+    for i in range(1, list_amplitude_vs_x[channel].GetXaxis().GetNbins()+1):
         tmpHist = list_th2_amplitude_vs_x[channel].ProjectionY("py",i,i)
         myTotalEvents=tmpHist.Integral()
         myMean = tmpHist.GetMean()

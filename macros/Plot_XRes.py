@@ -147,7 +147,9 @@ expected_res_vs_x = ROOT.TH1F("h_exp","",nbinsx,low_x,high_x)
 expected_res_vs_x.SetLineWidth(3)
 expected_res_vs_x.SetLineStyle(7)
 expected_res_vs_x.SetLineColor(colors[2])
-for ibin in range(expected_res_vs_x.GetNbinsX()+1):
+
+# Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+for ibin in range(1,expected_res_vs_x.GetNbinsX()+1):
     if mean_amp12_vs_x.GetBinContent(ibin)>0:
         dXFrac = mean_dXFrac_vs_x.GetBinContent(ibin)
         noise12 = mean_noise12_vs_x.GetBinContent(ibin)
@@ -212,12 +214,8 @@ nXBins = hist_info_twoStrip.th2.GetXaxis().GetNbins()
 this_shift = hist_info_twoStrip.shift() if useShift else 0
 boxes = getStripBox(inputfile,0.0,hist_info_twoStrip.yMax,False,18,True,this_shift)
 
-#loop over X bins
-for i in range(0, nXBins+1):
-    ##For Debugging
-    #if not (i==46 and j==5):
-    #    continue
-
+# Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+for i in range(1, nXBins+1):
     for info in all_histoInfos:
         totalEvents = info.th2.GetEntries()
         tmpHist = info.th2.ProjectionY("py",i,i)

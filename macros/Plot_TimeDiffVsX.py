@@ -158,11 +158,7 @@ if debugMode:
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
 #loop over X bins
-for i in range(0, nXBins+1):
-    ##For Debugging
-    #if not (i==46 and j==5):
-    #    continue
-
+for i in range(1, nXBins+1):
     for info in all_histoInfos:
         totalEvents = info.th2.GetEntries()
         tmpHist = info.th2.ProjectionY("py",i,i)

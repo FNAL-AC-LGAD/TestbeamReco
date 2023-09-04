@@ -106,7 +106,7 @@ for i,item in enumerate(sensor_list):
     legend.AddEntry(th1_YRes, myStyle.GetGeometry(item)["sensor"],"L")
     # th1_YRes.Write()
 
-legend.Draw();
+legend.Draw()
 
 myStyle.BeamInfo()
 
