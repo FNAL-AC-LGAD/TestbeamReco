@@ -10,8 +10,8 @@ import os
 
 # python3 GeneralSummaryPlots.py -y ymin -Y ymax -v y_axis_variable -g x_variable(geometical variable)
 # python3 GeneralSummaryPlots.py -y 0 -Y 100 -v time_resolution -e time_resolution_E -g width
-# The code takes the valius for y from the dictionary resolutions202- located in myStyle.py
-# The code takes the valius for x from the dictionary geometry202- located in myStyle.py
+# The code takes the values for y from the dictionary resolutions202- located in myStyle.py
+# The code takes the values for x from the dictionary geometry202- located in myStyle.py
 
 
 def shiftOverlappingPoints(x_values, x_offset):
@@ -32,7 +32,7 @@ def shiftOverlappingPoints(x_values, x_offset):
                     x_values[j] = x_val + shift
 
 
-# Generae a list with all the sensor that obey certain conditions
+# Generae a list with all the sensors that obey certain conditions
 # sensorDic: dictionary with the sensor (sensorsGeom2023)
 # conditions: dictionary with the conditions ex: {"length":10, "manufacter":"HPK"}
 def GetSensorList(sensorDic, conditions):
@@ -102,12 +102,12 @@ axis_label_dic = {"pitch": "Pitch [\mum]",
                   "baseline_rms": "BaseLine RMS [mv]",
                   "baseline_rms_m": "BaseLine RMS metal [mv]",
                   "baseline_rms_g": "BaseLine RMS gap [mv]",
-                  "efficiency_twoStrip": "Two strip efficency",
-                  "efficiency_twoStrip_m": "Two strip efficency metal",
-                  "efficiency_twoStrip_g": "Two strip efficency gap",
-                  "efficiency_oneStrip": "One strip efficency",
-                  "efficiency_oneStrip_m": "One strip efficency metal",
-                  "efficiency_oneStrip_g": "One strip efficency gap"
+                  "efficiency_twoStrip": "Two strip efficiency",
+                  "efficiency_twoStrip_m": "Two strip efficiency metal",
+                  "efficiency_twoStrip_g": "Two strip efficiency gap",
+                  "efficiency_oneStrip": "One strip efficiency",
+                  "efficiency_oneStrip_m": "One strip efficiency metal",
+                  "efficiency_oneStrip_g": "One strip efficiency gap"
                   }
 
 color_dic = {'HPK_W8_18_2_50T_1P0_500P_100M_C600_208V': colors[0],
