@@ -34,7 +34,7 @@ def shiftOverlappingPoints(x_values, x_offset):
 
 # Generae a list with all the sensors that obey certain conditions
 # sensorDic: dictionary with the sensor (sensorsGeom2023)
-# conditions: dictionary with the conditions ex: {"length":10, "manufacter":"HPK"}
+# conditions: dictionary with the conditions ex: {"length":10, "manufacturer":"HPK"}
 def GetSensorList(sensorDic, conditions):
 
     returnList = []
@@ -46,7 +46,7 @@ def GetSensorList(sensorDic, conditions):
 
         for condition, value in conditions.items():
 
-            if condition == "manufacter":
+            if condition == "manufacturer":
                 if value in sensor:
                     counter += 1
                 continue
@@ -145,7 +145,7 @@ parser.add_option('-g', "--gvariable", dest='gvariable',
                   default="", help="geometical variable(x axis)")
 options, args = parser.parse_args()
 
-conditions = {"length": 10.0, "manufacter": "HPK", "pitch": 500}
+conditions = {"length": 10.0, "manufacturer": "HPK", "pitch": 500}
 
 y_upper_limit = options.ymax
 y_lower_limit = options.ymin
