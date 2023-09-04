@@ -93,12 +93,8 @@ if debugMode:
         os.mkdir(outdir_q)
 
 nXBins = all_histoInfos[0].th2.GetXaxis().GetNbins()
-#loop over X bins
-for i in range(0, nXBins+1):
-    ##For Debugging
-    #if not (i==46 and j==5):
-    #    continue
-
+# Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+for i in range(1, nXBins+1):
     for hist in all_histoInfos:
         totalEvents = hist.th2.GetEntries()
         tmpHist = hist.th2.ProjectionY("py",i,i)

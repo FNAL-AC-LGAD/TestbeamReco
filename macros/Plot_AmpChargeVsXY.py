@@ -101,14 +101,10 @@ canvas = TCanvas("cv","cv",800,800)
 fit = langaus.LanGausFit()
 
 for i_name,this_list_XY in enumerate(list_XY_maps):
-    #loop over X,Y bins
-    for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()):
-        for j in range(1, amplitude_vs_xy_temp.GetYaxis().GetNbins()):
-
-            ##For Debugging
-            #if not (i==46 and j==5):
-            #    continue
-
+    # Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+    for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()+1):
+        # Loop over Y-bins
+        for j in range(1, amplitude_vs_xy_temp.GetYaxis().GetNbins()+1):
             for ch,this_xy in enumerate(this_list_XY):
                 tmpHist = list_th3_vs_xy[i_name][ch].ProjectionZ("pz",i,i,j,j)
                 myMean = tmpHist.GetMean()

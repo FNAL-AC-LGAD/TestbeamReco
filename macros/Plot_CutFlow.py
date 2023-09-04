@@ -20,7 +20,6 @@ gROOT.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
 organized_mode=True
 
-
 def draw_reco_method_percentage(hist, denominator_bin_name):
     # Get values
     bin_pass = hist.GetXaxis().FindBin(denominator_bin_name)

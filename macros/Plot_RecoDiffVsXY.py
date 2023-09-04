@@ -56,13 +56,10 @@ gPad.SetBottomMargin(0.12)
 gPad.SetTicks(1,1)
 print("Finished setting up langaus fit class")
 
-#loop over X bins
-for i in range(0, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
-    for j in range(0, all_histoInfos[0].th2.GetYaxis().GetNbins()+1):
-        ##For Debugging
-        #if not (i==46 and j==5):
-        #    continue
-        
+# Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+for i in range(1, all_histoInfos[0].th2.GetXaxis().GetNbins()+1):
+    # Loop over Y-bins
+    for j in range(1, all_histoInfos[0].th2.GetYaxis().GetNbins()+1):
         for info in all_histoInfos:
             tmpHist = info.th3.ProjectionZ("pz",i,i,j,j)
             myMean = tmpHist.GetMean()

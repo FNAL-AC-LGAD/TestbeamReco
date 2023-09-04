@@ -141,6 +141,7 @@ if options.plotAll:
     hists += [('deltaX_TopRow','deltaX_TopRow',"tracker"), ('deltaX_BotRow','deltaX_BotRow',"tracker"), ('deltaY_RightCol','deltaY_RightCol',"tracker"), ('deltaY_LeftCol','deltaY_LeftCol',"tracker")]
     hists += [("weighted_timeDiff_goodSig","weighted_goodSig","photek"), ("weighted2_timeDiff_goodSig","weighted2_goodSig","photek")]
 
+
 nEntries = {}
 for t in hists:
     h = inputfile.Get(t[0])
@@ -154,4 +155,5 @@ for t in hists:
 ## Get fraction of events per reconstruction method
 for reco_method in nEntries:
     print("\t* {0}: {1}/{2} ({3:.2f} %)".format(reco_method, nEntries[reco_method], sum(nEntries.values()), 100*nEntries[reco_method]/sum(nEntries.values())))
+
 print()
