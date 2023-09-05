@@ -15,6 +15,22 @@ ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"z")
 ROOT.gStyle.SetHistLineWidth(2)
 ROOT.gROOT.ForceStyle()
 
+
+def get_existing_indices(inputfile, prename):
+    list_indices = []
+    # Loop over all possible names and save only those existing!
+    for i in range(8):
+        for j in range(8):
+            channel = "%i%i"%(i, j)
+            hname = "%s%s"%(prename, channel)
+            hist = inputfile.Get(hname)
+            if not hist:
+                continue
+
+            list_indices.append(channel)
+
+    return list_indices
+
 def plot1D(hist, outpath, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fmin=-1, fmax=1):
     # ROOT.gStyle.SetOptFit(1)
     canvas = ROOT.TCanvas("canvas","canvas",1000,1000)
@@ -177,31 +193,31 @@ if (is_tight):
             titles[0]+= "_tight"
             titles[1]+= "-tight"
 
-# TODO: Update this to work with pads (second index)
+# Run over every single channel
 if use_each_channel:
     # Skip if tight cuts are required
     if (is_tight):
         print(" >> Tight cut is not compatible with 'each channel'. Skipping.")
     else:
-        for i in range(8):
-            hname = "deltaX_oneStrip0%i"%i
-            hist = inputfile.Get(hname)
-            if hist:
-                channel_element = [hname, "deltaX_oneStripCh0%i"%i, "tracker"]
-                list_htitles.append(channel_element)
+        indices_one = get_existing_indices(inputfile, "deltaX_oneStrip")
 
-# TODO: Update this to work with pads (second index)
+        for index in indices_one:
+            channel_element = ["deltaX_oneStrip%s"%index, "deltaX_oneStripCh%s"%index, "tracker"]
+            list_htitles.append(channel_element)
+
 if plot_all_hists:
     # Skip if tight cuts are required
     if (is_tight):
         print(" >> Tight cut is not compatible with 'all histograms'. Skipping.")
     else:
-        for i in range(8):
-            hname = "timeDiffTracker_channel0%i"%i
-            hist = inputfile.Get(hname)
-            if hist:
-                list_htitles.append(["timeDiffTracker_channel0%i"%i, "time_trackerCh0%i"%i, "photek"])
-                list_htitles.append(["weighted2_timeDiff_tracker_channel0%i"%i, "weighted2_time_trackerCh0%i"%i, "photek"])
+        indices_time = get_existing_indices(inputfile, "timeDiffTracker_channel")
+
+        for index in indices_time:
+            channel_element = ["timeDiffTracker_channel%s"%index, "time_trackerCh%s"%index, "photek"]
+            list_htitles.append(channel_element)
+
+            channel_element = ["weighted2_timeDiff_tracker_channel%s"%index, "weighted2_time_trackerCh%s"%index, "photek"]
+            list_htitles.append(channel_element)
 
 # Create plots
 for info in list_htitles:

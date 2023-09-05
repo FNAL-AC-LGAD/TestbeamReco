@@ -14,6 +14,22 @@ myStyle.ForceStyle()
 
 organized_mode=True
 
+def get_existing_indices(inputfile, prename):
+    list_indices = []
+    # Loop over all possible names and save only those existing!
+    for i in range(8):
+        for j in range(8):
+            channel = "%i%i"%(i, j)
+            hname = "%s%s"%(prename, channel)
+            hist = inputfile.Get(hname)
+            if not hist:
+                continue
+
+            list_indices.append(channel)
+
+    return list_indices
+
+
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, yMax=30.0,
                  xlabel = "Track x position [mm]", ylabel="Time resolution [ps]",
@@ -85,12 +101,12 @@ parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Limit x
 parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Max TimeResolution value in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
-# parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
+parser.add_option('-p', dest='isPad', action='store_true', default = False, help="Sensor has pads")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 
 options, args = parser.parse_args()
-# use_shift = options.noShift
+is_pad = options.isPad
 dataset = options.Dataset
 outdir=""
 if organized_mode:
@@ -114,31 +130,56 @@ res_photek = 10 # ps
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
-# pref_hotspot = "_hotspot" if (options.hotspot) else ""
 
 is_tight = options.useTight
-# tight_ext = "_tight" if is_tight else ""
 is_hotspot = options.hotspot
 
 
 # Get total number of channels used and central channel's position
-channel_info = []
-for key in inputfile.GetListOfKeys():
-    if "stripBoxInfo0" in key.GetName():
-        channel_info.append(key.GetName())
-n_channels = len(channel_info)
-# print(channel_info)
-# TODO: Update this to work with pads (second index)
-# Even number of bins
-if (n_channels%2 == 0):
-    central_idx = round(n_channels/2)
-    l_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx-1)).GetMean(1)
-    r_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx)).GetMean(1)
-    position_center = (l_channel + r_channel)/2
-# Odd number of bins
+indices = get_existing_indices(inputfile, "stripBoxInfo")
+# Strip sensor
+if not is_pad:
+    n_channels = len(indices)
+    # Even number of channels
+    if (n_channels%2 == 0):
+        central_idx = round(n_channels/2)
+        l_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx-1)).GetMean(1)
+        r_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx)).GetMean(1)
+        position_center = (l_channel + r_channel)/2
+    # Odd number of channels
+    else:
+        central_idx =  round((n_channels-1)/2)
+        position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
+# Pad sensor
 else:
-    central_idx =  round((n_channels-1)/2)
-    position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
+    # By default the center is chosen along the x direction
+    # TODO: Do the same for the y direction
+
+    ref_dict = {}
+    for i,j in indices:
+        if i not in ref_dict:
+            ref_dict[i] = 0
+        ref_dict[i]+= 1
+
+    ref_row = ref_dict["0"]
+    for row in ref_dict:
+        if ref_dict[row] != ref_row:
+            print(" >> Rows with different number of columns.")
+            print(ref_dict)
+            exit()
+
+    # Use first row to select center
+    n_channels = ref_dict["0"]
+    # Even number of columns
+    if (n_channels%2 == 0):
+        central_idx = round(n_channels/2)
+        l_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx-1)).GetMean(1)
+        r_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx)).GetMean(1)
+        position_center = (l_channel + r_channel)/2
+    # Odd number of columns
+    else:
+        central_idx =  round((n_channels-1)/2)
+        position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
 
 outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution_Time/")
 
@@ -184,9 +225,9 @@ nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
 #loop over X bins
 for i in range(1, nbins+1):
-    for info in all_histoInfos:
-        totalEvents = info.th2.GetEntries()
-        tmpHist = info.th2.ProjectionY("py",i,i)
+    for info_entry in all_histoInfos:
+        totalEvents = info_entry.th2.GetEntries()
+        tmpHist = info_entry.th2.ProjectionY("py",i,i)
         myRMS = tmpHist.GetRMS()
         myMean = tmpHist.GetMean()
         nEvents = tmpHist.GetEntries()
@@ -203,7 +244,7 @@ for i in range(1, nbins+1):
             minEvtsCut = 0.7*minEvtsCut
 
         if i==0:
-            msg_nentries = "%s: nEvents > %.2f "%(info.inHistoName, minEvtsCut)
+            msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
             msg_nentries+= "(Total events: %i)"%(totalEvents)
             print(msg_nentries)
 
@@ -230,8 +271,8 @@ for i in range(1, nbins+1):
             if (debugMode):
                 tmpHist.Draw("hist")
                 fit.Draw("same")
-                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info.outHistoName, i))
-                bin_center = info.th1.GetXaxis().GetBinCenter(i)
+                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
+                bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
                 msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
                 msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
                 print(msg_binres)
@@ -245,11 +286,11 @@ for i in range(1, nbins+1):
             value = math.sqrt((value*value) - (res_photek*res_photek))
             error  = errorRaw*(valueRaw/value)
 
-        info.th1.SetBinContent(i,value)
-        info.th1.SetBinError(i,error)
+        info_entry.th1.SetBinContent(i,value)
+        info_entry.th1.SetBinError(i,error)
 
-        # info.th1Mean.SetBinContent(i,valueMean)
-        # info.th1Mean.SetBinError(i,errorMean)
+        # info_entry.th1Mean.SetBinContent(i,valueMean)
+        # info_entry.th1Mean.SetBinError(i,errorMean)
 
 # Define output file
 output_path = "%sTimeDiffVsX"%(outdir)
@@ -319,8 +360,8 @@ legend.SetFillColor(kWhite)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-20)
 
-for i,info in enumerate(all_histoInfos):
-    hist = info.th1
+for i,info_entry in enumerate(all_histoInfos):
+    hist = info_entry.th1
     hist.SetLineColor(sub_colors[i])
     hist.SetLineWidth(sub_widths[i])
     ymin = hist.GetMinimum()
