@@ -58,3 +58,28 @@ def get_central_channel_position(inputfile, direction="x"):
         position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
 
     return position_center
+
+# Get limits to draw th2 projection properly aligned w.r.t. channel's boxes drawn
+def get_shifted_limits(th2, center_position):
+    xmin, xmax = th2.GetXaxis().GetXmin(), th2.GetXaxis().GetXmax()
+
+    zero_bin = th2.GetXaxis().FindBin(0.0)
+    central_bin = th2.GetXaxis().FindBin(center_position)
+    bin_diff = central_bin - zero_bin
+
+    bin_width = th2.GetXaxis().GetBinWidth(zero_bin)
+
+    # Move distribution so that the bin with the center of
+    # the central channel is at zero
+    # print("Zero bin: %i, Real center: %i; Diff: %i"%(zero_bin, central_bin, bin_diff))
+    if (bin_diff != 0.0):
+        xmin-= bin_width*bin_diff
+        xmax-= bin_width*bin_diff
+
+    # Even number of bins have 0.0 as lowedge in zero bin.
+    # Slightly move this bin to make it look symmetric
+    if (th2.GetXaxis().GetBinLowEdge(zero_bin) == 0.0):
+        xmin-= bin_width/2.
+        xmax-= bin_width/2.
+
+    return xmin, xmax

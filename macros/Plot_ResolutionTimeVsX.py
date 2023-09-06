@@ -28,7 +28,7 @@ class HistoInfo:
         self.sensor = sensor
         self.center_position = center_position
         self.th2 = self.getTH2(f, inHistoName, sensor)
-        self.th1 = self.getTH1(self.th2, outHistoName)
+        self.th1 = self.getTH1(outHistoName)
 
     def getTH2(self, f, name, sensor, axis='zx'):
         th3 = f.Get(name)
@@ -44,29 +44,10 @@ class HistoInfo:
 
         return th2
 
-    def getTH1(self, th2, hname):
+    def getTH1(self, hname):
         htitle = ";%s;%s"%(self.xlabel, self.ylabel)
-        nxbin = th2.GetXaxis().GetNbins()
-        xmin, xmax = th2.GetXaxis().GetXmin(), th2.GetXaxis().GetXmax()
-
-        zero_bin = self.th2.GetXaxis().FindBin(0.0)
-        central_bin = self.th2.GetXaxis().FindBin(self.center_position)
-        bin_diff = central_bin - zero_bin
-
-        bin_width = self.th2.GetXaxis().GetBinWidth(zero_bin)
-
-        # Move distribution so that the bin with the center of
-        # the central channel is at zero
-        # print("Zero bin: %i, Real center: %i; Diff: %i"%(zero_bin, central_bin, bin_diff))
-        if (bin_diff != 0.0):
-            xmin-= bin_width*bin_diff
-            xmax-= bin_width*bin_diff
-
-        # Even number of bins have 0.0 as lowedge in zero bin.
-        # Slightly move this bin to make it look symmetric
-        if (self.th2.GetXaxis().GetBinLowEdge(zero_bin) == 0.0):
-            xmin-= bin_width/2.
-            xmax-= bin_width/2.
+        nxbin = self.th2.GetXaxis().GetNbins()
+        xmin, xmax = mf.get_shifted_limits(self.th2, self.center_position)
 
         # Create and define th1 default style
         th1 = TH1D(hname, htitle, nxbin, xmin, xmax)
