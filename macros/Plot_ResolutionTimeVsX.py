@@ -3,7 +3,8 @@ import os
 import optparse
 from stripBox import getStripBox
 import myStyle
-import math 
+import math
+import myFunctions as mf
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -13,22 +14,6 @@ colors = myStyle.GetColors(True)
 myStyle.ForceStyle()
 
 organized_mode=True
-
-def get_existing_indices(inputfile, prename):
-    list_indices = []
-    # Loop over all possible names and save only those existing!
-    for i in range(8):
-        for j in range(8):
-            channel = "%i%i"%(i, j)
-            hname = "%s%s"%(prename, channel)
-            hist = inputfile.Get(hname)
-            if not hist:
-                continue
-
-            list_indices.append(channel)
-
-    return list_indices
-
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, yMax=30.0,
@@ -101,12 +86,12 @@ parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Limit x
 parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Max TimeResolution value in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
-parser.add_option('-p', dest='isPad', action='store_true', default = False, help="Sensor has pads")
+parser.add_option('-Y', '--alongY',dest='centerAlongY', action='store_true', default = False, help="Center plots in Y direction (for pads only)")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 
 options, args = parser.parse_args()
-is_pad = options.isPad
+use_center_y = options.centerAlongY
 dataset = options.Dataset
 outdir=""
 if organized_mode:
@@ -134,52 +119,10 @@ debugMode = options.debugMode
 is_tight = options.useTight
 is_hotspot = options.hotspot
 
-
-# Get total number of channels used and central channel's position
-indices = get_existing_indices(inputfile, "stripBoxInfo")
-# Strip sensor
-if not is_pad:
-    n_channels = len(indices)
-    # Even number of channels
-    if (n_channels%2 == 0):
-        central_idx = round(n_channels/2)
-        l_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx-1)).GetMean(1)
-        r_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx)).GetMean(1)
-        position_center = (l_channel + r_channel)/2
-    # Odd number of channels
-    else:
-        central_idx =  round((n_channels-1)/2)
-        position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
-# Pad sensor
-else:
-    # By default the center is chosen along the x direction
-    # TODO: Do the same for the y direction
-
-    ref_dict = {}
-    for i,j in indices:
-        if i not in ref_dict:
-            ref_dict[i] = 0
-        ref_dict[i]+= 1
-
-    ref_row = ref_dict["0"]
-    for row in ref_dict:
-        if ref_dict[row] != ref_row:
-            print(" >> Rows with different number of columns.")
-            print(ref_dict)
-            exit()
-
-    # Use first row to select center
-    n_channels = ref_dict["0"]
-    # Even number of columns
-    if (n_channels%2 == 0):
-        central_idx = round(n_channels/2)
-        l_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx-1)).GetMean(1)
-        r_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx)).GetMean(1)
-        position_center = (l_channel + r_channel)/2
-    # Odd number of columns
-    else:
-        central_idx =  round((n_channels-1)/2)
-        position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
+# Get position of the central channel in the direction requested
+# (x is default and y should be useful for pads only)
+direction = "x" if not use_center_y else "y"
+position_center = mf.get_central_channel_position(inputfile, direction)
 
 outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution_Time/")
 
@@ -194,7 +137,7 @@ list_htitles = [
 
 # Use tight cut histograms
 if (is_tight):
-    print("    Using tight cuts!")
+    print(" >> Using tight cuts!")
     for titles in list_htitles:
         titles[0]+= "_tight"
 
@@ -227,6 +170,7 @@ nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 for i in range(1, nbins+1):
     for info_entry in all_histoInfos:
         totalEvents = info_entry.th2.GetEntries()
+        # TODO: Add support for px projection in case of use of use_center_y option
         tmpHist = info_entry.th2.ProjectionY("py",i,i)
         myRMS = tmpHist.GetRMS()
         myMean = tmpHist.GetMean()

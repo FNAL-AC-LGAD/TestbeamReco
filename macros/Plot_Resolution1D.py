@@ -1,6 +1,7 @@
 import ROOT
 import optparse
 import myStyle
+import myFunctions as mf
 
 ROOT.gROOT.SetBatch(True)
 
@@ -15,21 +16,6 @@ ROOT.gStyle.SetLabelSize(myStyle.GetSize()-10,"z")
 ROOT.gStyle.SetHistLineWidth(2)
 ROOT.gROOT.ForceStyle()
 
-
-def get_existing_indices(inputfile, prename):
-    list_indices = []
-    # Loop over all possible names and save only those existing!
-    for i in range(8):
-        for j in range(8):
-            channel = "%i%i"%(i, j)
-            hname = "%s%s"%(prename, channel)
-            hist = inputfile.Get(hname)
-            if not hist:
-                continue
-
-            list_indices.append(channel)
-
-    return list_indices
 
 def plot1D(hist, outpath, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fmin=-1, fmax=1):
     # ROOT.gStyle.SetOptFit(1)
@@ -199,7 +185,7 @@ if use_each_channel:
     if (is_tight):
         print(" >> Tight cut is not compatible with 'each channel'. Skipping.")
     else:
-        indices_one = get_existing_indices(inputfile, "deltaX_oneStrip")
+        indices_one = mf.get_existing_indices(inputfile, "deltaX_oneStrip")
 
         for index in indices_one:
             channel_element = ["deltaX_oneStrip%s"%index, "deltaX_oneStripCh%s"%index, "tracker"]
@@ -210,7 +196,7 @@ if plot_all_hists:
     if (is_tight):
         print(" >> Tight cut is not compatible with 'all histograms'. Skipping.")
     else:
-        indices_time = get_existing_indices(inputfile, "timeDiffTracker_channel")
+        indices_time = mf.get_existing_indices(inputfile, "timeDiffTracker_channel")
 
         for index in indices_time:
             channel_element = ["timeDiffTracker_channel%s"%index, "time_trackerCh%s"%index, "photek"]
