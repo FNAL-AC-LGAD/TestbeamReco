@@ -17,7 +17,7 @@ organized_mode=True
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, yMax=30.0,
-                 xlabel = "Track x position [mm]", ylabel="Time resolution [ps]",
+                 xlabel="Track x position [mm]", ylabel="Time resolution [ps]",
                  sensor="", center_position=0.0):
         self.inHistoName = inHistoName
         self.f = f

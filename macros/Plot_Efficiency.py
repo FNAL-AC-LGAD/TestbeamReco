@@ -43,9 +43,6 @@ direction = "x" if not use_center_y else "y"
 position_center = mf.get_central_channel_position(inputfile, direction)
 
 # list_thresholds = ["_lowThreshold", "_highThreshold"]
-
-# tight_ext = "_tight" if useTight else ""
-# list_recoMethod = ["", "_noNeighb", "_highFrac", "_oneStrip", "_twoStrips"]
 list_cuts = ["", "_noNeighb", "_highFrac", "_oneStrip", "_twoStrips"]
 
 # Get 2D efficiency maps
