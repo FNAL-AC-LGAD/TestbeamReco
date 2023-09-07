@@ -269,10 +269,11 @@ htemp.Draw("AXIS")
 
 sub_colors = [colors[5], kBlack, colors[1], colors[2]]
 sub_widths = [2, 2, 2, 4]
-legend_name = ["Single-channel, no delay correction",
-                "Single-channel, tracker delay correction",
-                "Multi-channel, LGAD delay correction",
-                "Multi-channel, tracker delay correction",]
+legend_name = [
+    "Single-channel, no delay correction",
+    "Single-channel, tracker delay correction",
+    "Multi-channel, LGAD delay correction",
+    "Multi-channel, tracker delay correction",]
 if is_hotspot:
     legend_name = ["Multi-channel, tracker delay correction"]
 
