@@ -22,15 +22,15 @@ python Plot_RecoDiffVsY.py          -D BNL_50um_1cm_450um_W3051_2_2_170V --xleng
 python Plot_CutFlow.py              -D BNL_50um_1cm_450um_W3051_2_2_170V
 
 # Paper plots
-python Plot_1DRes.py                -D BNL_50um_1cm_450um_W3051_2_2_170V
+python Plot_Resolution1D.py         -D BNL_50um_1cm_450um_W3051_2_2_170V
 python Plot_Efficiency.py           -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5
-python Plot_XRes.py                 -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5
-python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5 -y 150
+python Plot_ResolutionXRecoVsX.py   -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5
+python Plot_ResolutionTimeVsX.py    -D BNL_50um_1cm_450um_W3051_2_2_170V -x 2.5 -y 150
 
-python Plot_1DRes.py                -D BNL_50um_1cm_450um_W3051_2_2_170V -t
+python Plot_Resolution1D.py         -D BNL_50um_1cm_450um_W3051_2_2_170V -t
 python Plot_Efficiency.py           -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2.5
-python Plot_XRes.py                 -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2.5
-python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2.5 -y 150
+python Plot_ResolutionXRecoVsX.py   -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2.5
+python Plot_ResolutionTimeVsX.py    -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2.5 -y 150
 
 
 # ## BNL_50um_1cm_400um_W3051_1_4_160V
@@ -56,15 +56,15 @@ python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2
 # python Plot_CutFlow.py              -D BNL_50um_1cm_400um_W3051_1_4_160V
 
 # # Paper plots
-# python Plot_1DRes.py                -D BNL_50um_1cm_400um_W3051_1_4_160V
+# python Plot_Resolution1D.py         -D BNL_50um_1cm_400um_W3051_1_4_160V
 # python Plot_Efficiency.py           -D BNL_50um_1cm_400um_W3051_1_4_160V -x 2.5
-# python Plot_XRes.py                 -D BNL_50um_1cm_400um_W3051_1_4_160V -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_400um_W3051_1_4_160V -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_50um_1cm_400um_W3051_1_4_160V -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_50um_1cm_400um_W3051_1_4_160V -x 2.5 -y 150
 
-# python Plot_1DRes.py                -D BNL_50um_1cm_400um_W3051_1_4_160V -t
+# python Plot_Resolution1D.py         -D BNL_50um_1cm_400um_W3051_1_4_160V -t
 # python Plot_Efficiency.py           -D BNL_50um_1cm_400um_W3051_1_4_160V -t -x 2.5
-# python Plot_XRes.py                 -D BNL_50um_1cm_400um_W3051_1_4_160V -t -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_400um_W3051_1_4_160V -t -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_50um_1cm_400um_W3051_1_4_160V -t -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_50um_1cm_400um_W3051_1_4_160V -t -x 2.5 -y 150
 
 
 # ## BNL_50um_1cm_450um_W3052_2_4_185V
@@ -90,15 +90,15 @@ python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2
 # python Plot_CutFlow.py              -D BNL_50um_1cm_450um_W3052_2_4_185V
 
 # # Paper plots
-# python Plot_1DRes.py                -D BNL_50um_1cm_450um_W3052_2_4_185V
+# python Plot_Resolution1D.py         -D BNL_50um_1cm_450um_W3052_2_4_185V
 # python Plot_Efficiency.py           -D BNL_50um_1cm_450um_W3052_2_4_185V -x 2.5
-# python Plot_XRes.py                 -D BNL_50um_1cm_450um_W3052_2_4_185V -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3052_2_4_185V -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_50um_1cm_450um_W3052_2_4_185V -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_50um_1cm_450um_W3052_2_4_185V -x 2.5 -y 150
 
-# python Plot_1DRes.py                -D BNL_50um_1cm_450um_W3052_2_4_185V -t
+# python Plot_Resolution1D.py         -D BNL_50um_1cm_450um_W3052_2_4_185V -t
 # python Plot_Efficiency.py           -D BNL_50um_1cm_450um_W3052_2_4_185V -t -x 2.5
-# python Plot_XRes.py                 -D BNL_50um_1cm_450um_W3052_2_4_185V -t -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3052_2_4_185V -t -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_50um_1cm_450um_W3052_2_4_185V -t -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_50um_1cm_450um_W3052_2_4_185V -t -x 2.5 -y 150
 
 
 # ## BNL_20um_1cm_400um_W3074_1_4_95V
@@ -124,15 +124,15 @@ python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2
 # python Plot_CutFlow.py              -D BNL_20um_1cm_400um_W3074_1_4_95V
 
 # # Paper plots
-# python Plot_1DRes.py                -D BNL_20um_1cm_400um_W3074_1_4_95V
+# python Plot_Resolution1D.py         -D BNL_20um_1cm_400um_W3074_1_4_95V
 # python Plot_Efficiency.py           -D BNL_20um_1cm_400um_W3074_1_4_95V -x 2.5
-# python Plot_XRes.py                 -D BNL_20um_1cm_400um_W3074_1_4_95V -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_20um_1cm_400um_W3074_1_4_95V -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_20um_1cm_400um_W3074_1_4_95V -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_20um_1cm_400um_W3074_1_4_95V -x 2.5 -y 150
 
-# python Plot_1DRes.py                -D BNL_20um_1cm_400um_W3074_1_4_95V -t
+# python Plot_Resolution1D.py         -D BNL_20um_1cm_400um_W3074_1_4_95V -t
 # python Plot_Efficiency.py           -D BNL_20um_1cm_400um_W3074_1_4_95V -t -x 2.5
-# python Plot_XRes.py                 -D BNL_20um_1cm_400um_W3074_1_4_95V -t -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_20um_1cm_400um_W3074_1_4_95V -t -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_20um_1cm_400um_W3074_1_4_95V -t -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_20um_1cm_400um_W3074_1_4_95V -t -x 2.5 -y 150
 
 
 # ## BNL_20um_1cm_400um_W3075_1_2_80V
@@ -158,15 +158,15 @@ python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2
 # python Plot_CutFlow.py              -D BNL_20um_1cm_400um_W3075_1_2_80V
 
 # # Paper plots
-# python Plot_1DRes.py                -D BNL_20um_1cm_400um_W3075_1_2_80V
+# python Plot_Resolution1D.py         -D BNL_20um_1cm_400um_W3075_1_2_80V
 # python Plot_Efficiency.py           -D BNL_20um_1cm_400um_W3075_1_2_80V -x 2.5
-# python Plot_XRes.py                 -D BNL_20um_1cm_400um_W3075_1_2_80V -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_20um_1cm_400um_W3075_1_2_80V -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_20um_1cm_400um_W3075_1_2_80V -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_20um_1cm_400um_W3075_1_2_80V -x 2.5 -y 150
 
-# python Plot_1DRes.py                -D BNL_20um_1cm_400um_W3075_1_2_80V -t
+# python Plot_Resolution1D.py         -D BNL_20um_1cm_400um_W3075_1_2_80V -t
 # python Plot_Efficiency.py           -D BNL_20um_1cm_400um_W3075_1_2_80V -t -x 2.5
-# python Plot_XRes.py                 -D BNL_20um_1cm_400um_W3075_1_2_80V -t -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_20um_1cm_400um_W3075_1_2_80V -t -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_20um_1cm_400um_W3075_1_2_80V -t -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_20um_1cm_400um_W3075_1_2_80V -t -x 2.5 -y 150
 
 
 # ## BNL_20um_1cm_450um_W3074_2_1_95V
@@ -192,15 +192,15 @@ python Plot_TimeDiffVsX.py          -D BNL_50um_1cm_450um_W3051_2_2_170V -t -x 2
 # python Plot_CutFlow.py              -D BNL_20um_1cm_450um_W3074_2_1_95V
 
 # # Paper plots
-# python Plot_1DRes.py                -D BNL_20um_1cm_450um_W3074_2_1_95V
+# python Plot_Resolution1D.py         -D BNL_20um_1cm_450um_W3074_2_1_95V
 # python Plot_Efficiency.py           -D BNL_20um_1cm_450um_W3074_2_1_95V -x 2.5
-# python Plot_XRes.py                 -D BNL_20um_1cm_450um_W3074_2_1_95V -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_20um_1cm_450um_W3074_2_1_95V -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_20um_1cm_450um_W3074_2_1_95V -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_20um_1cm_450um_W3074_2_1_95V -x 2.5 -y 150
 
-# python Plot_1DRes.py                -D BNL_20um_1cm_450um_W3074_2_1_95V -t
+# python Plot_Resolution1D.py         -D BNL_20um_1cm_450um_W3074_2_1_95V -t
 # python Plot_Efficiency.py           -D BNL_20um_1cm_450um_W3074_2_1_95V -t -x 2.5
-# python Plot_XRes.py                 -D BNL_20um_1cm_450um_W3074_2_1_95V -t -x 2.5
-# python Plot_TimeDiffVsX.py          -D BNL_20um_1cm_450um_W3074_2_1_95V -t -x 2.5 -y 150
+# python Plot_ResolutionXRecoVsX.py   -D BNL_20um_1cm_450um_W3074_2_1_95V -t -x 2.5
+# python Plot_ResolutionTimeVsX.py    -D BNL_20um_1cm_450um_W3074_2_1_95V -t -x 2.5 -y 150
 
 
 ## BNL_20um_1cm_450um_W3075_2_4_80V
@@ -226,15 +226,15 @@ python Plot_RecoDiffVsY.py          -D BNL_20um_1cm_450um_W3075_2_4_80V --xlengt
 python Plot_CutFlow.py              -D BNL_20um_1cm_450um_W3075_2_4_80V
 
 # Paper plots
-python Plot_1DRes.py                -D BNL_20um_1cm_450um_W3075_2_4_80V
+python Plot_Resolution1D.py         -D BNL_20um_1cm_450um_W3075_2_4_80V
 python Plot_Efficiency.py           -D BNL_20um_1cm_450um_W3075_2_4_80V -x 2.5
-python Plot_XRes.py                 -D BNL_20um_1cm_450um_W3075_2_4_80V -x 2.5
-python Plot_TimeDiffVsX.py          -D BNL_20um_1cm_450um_W3075_2_4_80V -x 2.5 -y 150
+python Plot_ResolutionXRecoVsX.py   -D BNL_20um_1cm_450um_W3075_2_4_80V -x 2.5
+python Plot_ResolutionTimeVsX.py    -D BNL_20um_1cm_450um_W3075_2_4_80V -x 2.5 -y 150
 
-python Plot_1DRes.py                -D BNL_20um_1cm_450um_W3075_2_4_80V -t
+python Plot_Resolution1D.py         -D BNL_20um_1cm_450um_W3075_2_4_80V -t
 python Plot_Efficiency.py           -D BNL_20um_1cm_450um_W3075_2_4_80V -t -x 2.5
-python Plot_XRes.py                 -D BNL_20um_1cm_450um_W3075_2_4_80V -t -x 2.5
-python Plot_TimeDiffVsX.py          -D BNL_20um_1cm_450um_W3075_2_4_80V -t -x 2.5 -y 150
+python Plot_ResolutionXRecoVsX.py   -D BNL_20um_1cm_450um_W3075_2_4_80V -t -x 2.5
+python Plot_ResolutionTimeVsX.py    -D BNL_20um_1cm_450um_W3075_2_4_80V -t -x 2.5 -y 150
 
 
 ## BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V
@@ -260,15 +260,15 @@ python Plot_RecoDiffVsY.py          -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V 
 python Plot_CutFlow.py              -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V
 
 # Paper plots
-python Plot_1DRes.py                -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V
+python Plot_Resolution1D.py         -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V
 python Plot_Efficiency.py           -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7
-python Plot_XRes.py                 -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7
-python Plot_TimeDiffVsX.py          -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7 -y 150
+python Plot_ResolutionXRecoVsX.py   -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7
+python Plot_ResolutionTimeVsX.py    -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -x 2.7 -y 150
 
-python Plot_1DRes.py                -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -t
+python Plot_Resolution1D.py         -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -t
 python Plot_Efficiency.py           -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -t -x 2.7
-python Plot_XRes.py                 -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -t -x 2.7
-python Plot_TimeDiffVsX.py          -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -t -x 2.7 -y 150
+python Plot_ResolutionXRecoVsX.py   -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -t -x 2.7
+python Plot_ResolutionTimeVsX.py    -D BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V -t -x 2.7 -y 150
 
 
 ## BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V
@@ -294,13 +294,13 @@ python Plot_RecoDiffVsY.py          -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V 
 python Plot_CutFlow.py              -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V
 
 # Paper plots
-python Plot_1DRes.py                -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V
+python Plot_Resolution1D.py         -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V
 python Plot_Efficiency.py           -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7
-python Plot_XRes.py                 -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7
-python Plot_TimeDiffVsX.py          -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -y 150
+python Plot_ResolutionXRecoVsX.py   -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7
+python Plot_ResolutionTimeVsX.py    -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -x 2.7 -y 150
 
-python Plot_1DRes.py                -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -t
+python Plot_Resolution1D.py         -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -t
 python Plot_Efficiency.py           -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -t -x 2.7
-python Plot_XRes.py                 -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -t -x 2.7
-python Plot_TimeDiffVsX.py          -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -t -x 2.7 -y 150
+python Plot_ResolutionXRecoVsX.py   -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -t -x 2.7
+python Plot_ResolutionTimeVsX.py    -D BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V -t -x 2.7 -y 150
 

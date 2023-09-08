@@ -139,7 +139,6 @@ canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
 TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
-print("Finished setting up langaus fit class")
 
 if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "q_ResTimeVsX0/")
@@ -147,7 +146,7 @@ if debugMode:
 # Get total number of bins in x-axis to loop over (all hists have the same number, in principle)
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
-#loop over X bins
+# Loop over X bins
 for i in range(1, nbins+1):
     for info_entry in all_histoInfos:
         totalEvents = info_entry.th2.GetEntries()
@@ -192,7 +191,7 @@ for i in range(1, nbins+1):
             value = valueRaw
             error  = errorRaw
 
-            
+            # For Debugging
             if (debugMode):
                 tmpHist.Draw("hist")
                 fit.Draw("same")
@@ -211,8 +210,8 @@ for i in range(1, nbins+1):
             value = math.sqrt((value*value) - (res_photek*res_photek))
             error  = errorRaw*(valueRaw/value)
 
-        info_entry.th1.SetBinContent(i,value)
-        info_entry.th1.SetBinError(i,error)
+        info_entry.th1.SetBinContent(i, value)
+        info_entry.th1.SetBinError(i, error)
 
         # info_entry.th1Mean.SetBinContent(i,valueMean)
         # info_entry.th1Mean.SetBinError(i,errorMean)
@@ -282,7 +281,7 @@ pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
 legend = TLegend(pad_center-0.20, 2*pad_margin+0.01, pad_center+0.20, 2*pad_margin+0.16)
 legend.SetBorderSize(0)
-legend.SetFillColor(kWhite)
+# legend.SetFillColor(kWhite)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-20)
 
