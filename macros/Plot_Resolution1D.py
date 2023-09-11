@@ -35,7 +35,7 @@ def plot1D(hist, outpath, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fm
     # fit_min = myMean + fmin*myRMS
     # fit_max = myMean + fmax*myRMS
 
-    # Make fit around maximum bin!
+    # Make fit around peak of the distribution!
     bin_max = hist.GetMaximumBin()
     peak = hist.GetBinCenter(bin_max)
     # Define fit limits
@@ -68,7 +68,6 @@ def plot1D(hist, outpath, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fm
 
     fit = ROOT.TF1("fit", "gaus", fit_min, fit_max)
     fit.SetLineColor(ROOT.kRed)
-    #fit.Draw("same")
     hist.Fit(fit, "Q", "", fit_min, fit_max)
     fit.Draw("same")
 
@@ -154,19 +153,20 @@ limits_one = fit_limits[dataset]['one']
 limits_two = fit_limits[dataset]['two']
 
 # Save list with histograms to draw
+# TODO: Add missing histograms (one_strip Gap and two_strip Metal)
 list_htitles = [
     # [hist_input_name, x_axis_title/output_name, reference]
     ["deltaX_oneStrip", "deltaX_oneStrip", "tracker"],
     ["deltaX_oneStrip_onMetal", "deltaX_oneStrip_onMetal", "tracker"],
     ["deltaX_twoStrips", "deltaX_twoStrips", "tracker"],
-    # ["deltaX_twoStrips_noMetal", "deltaX_twoStrips_noMetal", "tracker"],
+    ["deltaX_twoStrips_noMetal", "deltaX_twoStrips_noMetal", "tracker"],
     ["timeDiff", "time", "photek"],
     ["timeDiffTracker", "time_tracker", "photek"],
     ["weighted2_timeDiff", "weighted2Time", "photek"],
     ["weighted2_timeDiff_tracker", "weighted2_time_tracker", "photek"],
-    ["deltaY", "deltaY", "tracker"],
-    ["deltaY_oneStrip", "deltaY_oneStrip", "tracker"],
-    ["deltaY_twoStrips", "deltaY_twoStrips", "tracker"],
+    # ["deltaY", "deltaY", "tracker"],
+    # ["deltaY_oneStrip", "deltaY_oneStrip", "tracker"],
+    # ["deltaY_twoStrips", "deltaY_twoStrips", "tracker"],
 ]
 
 # Use tight cut histograms
