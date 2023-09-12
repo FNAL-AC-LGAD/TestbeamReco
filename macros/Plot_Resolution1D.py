@@ -157,9 +157,9 @@ limits_two = fit_limits[dataset]['two']
 list_htitles = [
     # [hist_input_name, x_axis_title/output_name, reference]
     ["deltaX_oneStrip", "deltaX_oneStrip", "tracker"],
-    ["deltaX_oneStrip_onMetal", "deltaX_oneStrip_onMetal", "tracker"],
+    ["deltaX_oneStrip_Metal", "deltaX_oneStrip_Metal", "tracker"],
     ["deltaX_twoStrips", "deltaX_twoStrips", "tracker"],
-    ["deltaX_twoStrips_noMetal", "deltaX_twoStrips_noMetal", "tracker"],
+    ["deltaX_twoStrips_Gap", "deltaX_twoStrips_Gap", "tracker"],
     ["timeDiff", "time", "photek"],
     ["timeDiffTracker", "time_tracker", "photek"],
     ["weighted2_timeDiff", "weighted2Time", "photek"],

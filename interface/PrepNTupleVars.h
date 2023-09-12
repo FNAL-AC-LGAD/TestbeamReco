@@ -170,26 +170,26 @@ private:
         for(auto row : rawAmpLGAD){totRawAmpLGAD += std::accumulate(row.begin(), row.end(), 0.0);}
         tr.registerDerivedVar("totRawAmpLGAD", totRawAmpLGAD);
 
-        // Cut to get hits that only go through active sensor
+        // Check whether a hit was in the active region of the sensor or not
         const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
         const auto& sensorEdgesExtra = tr.getVar<std::vector<std::vector<double>>>("sensorEdgesExtra");
-        bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
-        bool hitSensorExtra = sensorEdgesExtra[0][0] < x && x < sensorEdgesExtra[1][0] &&  sensorEdgesExtra[0][1] < y && y < sensorEdgesExtra[1][1];
-        tr.registerDerivedVar("hitSensor", hitSensor);
-        tr.registerDerivedVar("hitSensorExtra", hitSensorExtra);
-
         const auto& sensorEdgesTight = tr.getVar<std::vector<std::vector<double>>>("sensorEdgesTight");
 
+        bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
+        bool hitSensorExtra = sensorEdgesExtra[0][0] < x && x < sensorEdgesExtra[1][0] &&  sensorEdgesExtra[0][1] < y && y < sensorEdgesExtra[1][1];
         bool hitSensorTightY = sensorEdgesTight[0][1] < y && y < sensorEdgesTight[1][1];
-        tr.registerDerivedVar("hitSensorTightY", hitSensorTightY);
         bool hitSensorTight = sensorEdgesTight[0][0] < x && x < sensorEdgesTight[1][0] &&  hitSensorTightY;
+
+        tr.registerDerivedVar("hitSensor", hitSensor);
+        tr.registerDerivedVar("hitSensorExtra", hitSensorExtra);
+        tr.registerDerivedVar("hitSensorTightY", hitSensorTightY);
         tr.registerDerivedVar("hitSensorTight", hitSensorTight);
 
-        // Hit through active sensor for scan vars
-        auto& hitSensorZ = tr.createDerivedVec<bool>("hitSensorZ",zScan.size());
-        auto& hitSensorA = tr.createDerivedVec<bool>("hitSensorA",alphaScan.size());
-        auto& hitSensorB = tr.createDerivedVec<bool>("hitSensorB",betaScan.size());
-        auto& hitSensorC = tr.createDerivedVec<bool>("hitSensorC",gammaScan.size());
+        // Check hits in the active region with different sensor's orientations (used in Alignment)
+        auto& hitSensorZ = tr.createDerivedVec<bool>("hitSensorZ", zScan.size());
+        auto& hitSensorA = tr.createDerivedVec<bool>("hitSensorA", alphaScan.size());
+        auto& hitSensorB = tr.createDerivedVec<bool>("hitSensorB", betaScan.size());
+        auto& hitSensorC = tr.createDerivedVec<bool>("hitSensorC", gammaScan.size());
 
         for(unsigned int i = 0; i < zScan.size(); i++)
         {

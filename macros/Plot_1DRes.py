@@ -123,8 +123,8 @@ range_twoS = fit_range[dataset]['two']
 
 hists = [('deltaX%s'%tight_ext,'deltaX',"tracker",fitmin,fitmax),
         ('deltaX_oneStrip%s'%tight_ext,'deltaX_oneStrip',"tracker",range_oneS[0],range_oneS[1]),
-        ('deltaX_oneStrip_onMetal%s'%tight_ext,'deltaX_oneStrip_onMetal',"tracker",range_oneS[0],range_oneS[1]),
-        ('deltaX_twoStrips%s'%tight_ext,'deltaX_twoStrips',"tracker",range_twoS[0],range_twoS[1]), # ('deltaX_twoStrips_noMetal','deltaX_twoStrips_noMetal',"tracker"),
+        ('deltaX_oneStrip_Metal%s'%tight_ext,'deltaX_oneStrip_Metal',"tracker",range_oneS[0],range_oneS[1]),
+        ('deltaX_twoStrips%s'%tight_ext,'deltaX_twoStrips',"tracker",range_twoS[0],range_twoS[1]), # ('deltaX_twoStrips_Gap','deltaX_twoStrips_Gap',"tracker"),
         ("timeDiff%s"%tight_ext,"time","photek",fitmin,fitmax), ("weighted2_timeDiff%s"%tight_ext,"weighted2Time","photek",fitmin,fitmax),
         ("timeDiffTracker%s"%tight_ext,"time_tracker","photek",fitmin,fitmax), ("weighted2_timeDiff_tracker%s"%tight_ext,"weighted2_time_tracker","photek",fitmin,fitmax),
         ('deltaY','deltaY','tracker',fitmin,fitmax),
