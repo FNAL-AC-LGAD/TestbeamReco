@@ -1,6 +1,7 @@
 import ROOT
 import optparse
 import myStyle
+import math
 import myFunctions as mf
 
 ROOT.gROOT.SetBatch(True)
@@ -17,7 +18,35 @@ ROOT.gStyle.SetHistLineWidth(2)
 ROOT.gROOT.ForceStyle()
 
 
-def plot1D(hist, outpath, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fmin=-1, fmax=1):
+def correct_limits(hist, peak_bin, vmin, vmax):
+    # Avoid limits to go beyond 20% of the peak (to avoid problems with the Gaussian fit)
+    peak_value = hist.GetBinContent(peak_bin)
+
+    # Correct left edge if needed
+    bin_left = hist.FindBin(vmin)
+    value_left = hist.GetBinContent(bin_left)
+    str_limit_left = " >> Left limit: %2.4f"%(vmin)
+    while (value_left < 0.2*peak_value):
+        vmin = hist.GetBinLowEdge(bin_left+1)
+        value_left = hist.GetBinContent(bin_left + 1)
+        bin_left+= 1
+        str_limit_left+= " -> %2.4f"%(vmin)
+    # print(str_limit_left)
+
+    # Correct right edge if needed
+    bin_right = hist.FindBin(vmax)
+    value_right = hist.GetBinContent(bin_right)
+    str_limit_right = " >> Right limit: %2.4f"%(vmax)
+    while (value_right < 0.2*peak_value):
+        vmax = hist.GetBinLowEdge(bin_right)
+        value_right = hist.GetBinContent(bin_right)
+        bin_right-= 1
+        str_limit_right+= " -> %2.4f"%(vmax)
+    # print(str_limit_right)
+
+    return vmin, vmax
+
+def plot1D(hist, outpath, xTitle, yTitle="Events", pads=False, bins=100, arange=(0,1), fmin=-1, fmax=1, tracker_res=0.0):
     # ROOT.gStyle.SetOptFit(1)
     canvas = ROOT.TCanvas("canvas","canvas",1000,1000)
     ROOT.gPad.SetTicks(1,1)
@@ -25,55 +54,54 @@ def plot1D(hist, outpath, xTitle, yTitle, pads=False, bins=100, arange=(0,1), fm
     #ROOT.gPad.SetLogy()
     # ROOT.gROOT.ForceStyle()
 
+    hname = hist.GetName()
+    print("----------------------------------------")
+    print(" Resolution: %s"%(hname))
+
     hist.Rebin(2)
     hist.GetXaxis().SetTitle(xTitle)
     hist.GetYaxis().SetTitle(yTitle)
     hist.Draw('hists e')
     myMean = hist.GetMean()
     myRMS = hist.GetRMS()
+    myRMS_Error = hist.GetRMSError()
     # # Define fit limits
     # fit_min = myMean + fmin*myRMS
     # fit_max = myMean + fmax*myRMS
 
     # Make fit around peak of the distribution!
-    bin_max = hist.GetMaximumBin()
-    peak = hist.GetBinCenter(bin_max)
+    peak_bin = hist.GetMaximumBin()
+    peak = hist.GetBinCenter(peak_bin)
     # Define fit limits
     fit_min = peak + fmin*myRMS
     fit_max = peak + fmax*myRMS
-
-    # Avoid limit to get lower than 20% of the peak (problems with the Gaussian fit)
-    print("-------------------------------")
-    value_max = hist.GetBinContent(bin_max)
-    # Correct left edge if needed
-    bin_left = hist.FindBin(fit_min)
-    value_left = hist.GetBinContent(bin_left)
-    str_limit_left = " >> Left limit: %2.4f"%(fit_min)
-    while (value_left < 0.2*value_max):
-        fit_min = hist.GetBinLowEdge(bin_left+1)
-        value_left = hist.GetBinContent(bin_left + 1)
-        bin_left+=1
-        str_limit_left+= " -> %2.4f"%(fit_min)
-    print(str_limit_left)
-    # Correct right edge if needed
-    bin_right = hist.FindBin(fit_max)
-    value_right = hist.GetBinContent(bin_right)
-    str_limit_right = " >> Right limit: %2.4f"%(fit_max)
-    while (value_right < 0.2*value_max):
-        fit_max = hist.GetBinLowEdge(bin_right)
-        value_right = hist.GetBinContent(bin_right)
-        bin_right-=1
-        str_limit_right+= " -> %2.4f"%(fit_max)
-    print(str_limit_right)
+    fit_min, fit_max = correct_limits(hist, peak_bin, fit_min, fit_max)
 
     fit = ROOT.TF1("fit", "gaus", fit_min, fit_max)
     fit.SetLineColor(ROOT.kRed)
     hist.Fit(fit, "Q", "", fit_min, fit_max)
     fit.Draw("same")
 
+    # Print resolution value
+    use_RMS = "oneStrip" in hname
+    value_type = "from fit" if not use_RMS else "RMS"
+    sigma = 1000.*fit.GetParameter(2) if not use_RMS else 1000.*myRMS
+    sigma_error = 1000.*fit.GetParError(2) if not use_RMS else 1000.*myRMS_Error
+
+    msg_resolution = " >> Value %s: %.2f +- %.2f"%(value_type, sigma, sigma_error)
+    if (tracker_res < sigma):
+        sigma = math.sqrt(sigma**2 - tracker_res**2)
+        msg_resolution+= " (Removing %.1f from tracker: %.2f)"%(tracker_res, sigma)
+    else:
+        msg_resolution+= " (!) Value smaller than reference (!)"
+
+    print(msg_resolution)
+
+    # Save plots
     # canvas.SaveAs("%s.png"%(outpath))
     # canvas.SaveAs("%s.gif"%(outpath))
     canvas.SaveAs("%s.pdf"%(outpath))
+
 
 def getHisto(f, name, rebin, color):
     h = f.Get(name)
@@ -152,13 +180,18 @@ outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution1D/")
 limits_one = fit_limits[dataset]['one']
 limits_two = fit_limits[dataset]['two']
 
+# Modify tracker and time reference (Photek) contribution to be removed in quadrature
+res_tracker = 5 # um
+res_photek = 10 # ps
+
 # Save list with histograms to draw
-# TODO: Add missing histograms (one_strip Gap and two_strip Metal)
 list_htitles = [
     # [hist_input_name, x_axis_title/output_name, reference]
     ["deltaX_oneStrip", "deltaX_oneStrip", "tracker"],
-    ["deltaX_oneStrip_Metal", "deltaX_oneStrip_Metal", "tracker"],
     ["deltaX_twoStrips", "deltaX_twoStrips", "tracker"],
+    ["deltaX_oneStrip_Metal", "deltaX_oneStrip_Metal", "tracker"],
+    ["deltaX_twoStrips_Metal", "deltaX_twoStrips_Metal", "tracker"],
+    ["deltaX_oneStrip_Gap", "deltaX_oneStrip_Gap", "tracker"],
     ["deltaX_twoStrips_Gap", "deltaX_twoStrips_Gap", "tracker"],
     ["timeDiff", "time", "photek"],
     ["timeDiffTracker", "time_tracker", "photek"],
@@ -221,5 +254,8 @@ for info in list_htitles:
         elif "twoStrip" in hname:
             fmin, fmax = limits_two[0], limits_two[1]
 
+    # Value to remove in quadrature
+    tracker_component = res_photek if "photek" in ref else res_tracker
+
     hist = inputfile.Get(hname)
-    plot1D(hist, out_path, x_title, "Events", fmin=fmin, fmax=fmax)
+    plot1D(hist, out_path, x_title, fmin=fmin, fmax=fmax, tracker_res=tracker_component)
