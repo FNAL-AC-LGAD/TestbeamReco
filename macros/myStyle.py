@@ -295,7 +295,7 @@ sensorsGeom2023 = {
     "HPK_W5_1_1_50T_500x500_150M_E600" :{'sensor': "HPK_W5_1_1_50T_500x500_150M_E600",'pitch': 500, 'stripWidth': 150, "BV": 185, "length": 5.0, "thickness": 50, "width": 150, "resistivity": "C", "capacitance": 600},
 }
 
-# NEED TO BE UPDATED! ONLY PLACEHOLDERS TO MAKE PAPER_PLOTS MACROS RUN
+# NOTE: Resolution values does NOT have tracker component removed
 # 'position_oneStrip': Std Dev from fit, 'position_oneStrip_E': Statistical error from fit, 'position_oneStripRMS': RMS WITH OnMetal cut,
 # 'position_oneStrip_StdDev': RMS WITHOUT OnMetal cut (This is the value used in the paper)
 resolutions2023 = {

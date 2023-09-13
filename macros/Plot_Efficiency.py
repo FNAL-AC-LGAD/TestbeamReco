@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle
+from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, TLine, kGray
 import os
 import optparse
 import EfficiencyUtils
@@ -140,6 +140,13 @@ boxes = getStripBox(inputfile, ymin=0.0, ymax=1.0, shift=position_center)
 for i,box in enumerate(boxes):
     # if (i!=0 and i!=(len(boxes)-1)):
     box.Draw()
+
+# Draw reference line at Efficiency = 1.0
+reference_line = TLine(xmin, 1.0, xmax, 1.0)
+reference_line.SetLineWidth(2)
+reference_line.SetLineStyle(7)
+reference_line.SetLineColor(kGray+2)
+reference_line.Draw()
 
 # Define legend
 pad_center = myStyle.GetPadCenter()
