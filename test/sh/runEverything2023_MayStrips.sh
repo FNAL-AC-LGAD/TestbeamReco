@@ -23,7 +23,7 @@ python Plot_RecoDiffVsY.py          -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V -
 python Plot_CutFlow.py              -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V
+python Plot_Resolution1D.py         -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V -c
 python Plot_Efficiency.py           -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V -x 2.7 -y 100
@@ -57,7 +57,7 @@ python Plot_RecoDiffVsY.py          -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V --
 python Plot_CutFlow.py              -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V
+python Plot_Resolution1D.py         -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V -c
 python Plot_Efficiency.py           -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V -x 2.7 -y 100
@@ -91,7 +91,7 @@ python Plot_RecoDiffVsY.py          -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V --
 python Plot_CutFlow.py              -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V
+python Plot_Resolution1D.py         -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V -c
 python Plot_Efficiency.py           -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V -x 2.7 -y 100
@@ -125,7 +125,7 @@ python Plot_RecoDiffVsY.py          -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V --
 python Plot_CutFlow.py              -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V
+python Plot_Resolution1D.py         -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -c
 python Plot_Efficiency.py           -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -x 2.7 -y 100
@@ -134,6 +134,9 @@ python Plot_Resolution1D.py         -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -t
 python Plot_Efficiency.py           -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -t -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -t -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -t -x 2.7 -y 100
+
+# Get summary for best performance sensors only
+python Plot_Summary_XRes_Time.py    -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -x 2.7
 
 
 # HPK_W2_3_2_50T_1P0_500P_50M_E240_180V
@@ -159,7 +162,7 @@ python Plot_RecoDiffVsY.py          -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V --x
 python Plot_CutFlow.py              -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V
+python Plot_Resolution1D.py         -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -c
 python Plot_Efficiency.py           -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -x 2.7 -y 100
@@ -168,6 +171,9 @@ python Plot_Resolution1D.py         -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -t
 python Plot_Efficiency.py           -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -t -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -t -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -t -x 2.7 -y 100
+
+# Get summary for best performance sensors only
+python Plot_Summary_XRes_Time.py    -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V -x 2.7
 
 
 # HPK_W9_15_2_20T_1P0_500P_50M_E600_114V
@@ -193,7 +199,7 @@ python Plot_RecoDiffVsY.py          -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V --
 python Plot_CutFlow.py              -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V
+python Plot_Resolution1D.py         -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V -c
 python Plot_Efficiency.py           -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V -x 2.7 -y 100
@@ -227,7 +233,7 @@ python Plot_RecoDiffVsY.py          -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V -
 python Plot_CutFlow.py              -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V
+python Plot_Resolution1D.py         -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V -c
 python Plot_Efficiency.py           -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V -x 2.7 -y 100
@@ -261,7 +267,7 @@ python Plot_RecoDiffVsY.py          -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V --
 python Plot_CutFlow.py              -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V
+python Plot_Resolution1D.py         -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V -c
 python Plot_Efficiency.py           -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V -x 2.7
 python Plot_ResolutionXRecoVsX.py   -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V -x 2.7
 python Plot_ResolutionTimeVsX.py    -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V -x 2.7 -y 100
@@ -295,7 +301,7 @@ python Plot_RecoDiffVsY.py          -D HPK_KOJI_50T_1P0_80P_60M_E240_190V --xlen
 python Plot_CutFlow.py              -D HPK_KOJI_50T_1P0_80P_60M_E240_190V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_KOJI_50T_1P0_80P_60M_E240_190V
+python Plot_Resolution1D.py         -D HPK_KOJI_50T_1P0_80P_60M_E240_190V -c
 python Plot_Efficiency.py           -D HPK_KOJI_50T_1P0_80P_60M_E240_190V -x 0.6
 python Plot_ResolutionXRecoVsX.py   -D HPK_KOJI_50T_1P0_80P_60M_E240_190V -x 0.6 -y 50
 python Plot_ResolutionTimeVsX.py    -D HPK_KOJI_50T_1P0_80P_60M_E240_190V -x 0.6 -y 100
@@ -329,7 +335,7 @@ python Plot_RecoDiffVsY.py          -D HPK_KOJI_20T_1P0_80P_60M_E240_112V --xlen
 python Plot_CutFlow.py              -D HPK_KOJI_20T_1P0_80P_60M_E240_112V
 
 # Paper plots
-python Plot_Resolution1D.py         -D HPK_KOJI_20T_1P0_80P_60M_E240_112V
+python Plot_Resolution1D.py         -D HPK_KOJI_20T_1P0_80P_60M_E240_112V -c
 python Plot_Efficiency.py           -D HPK_KOJI_20T_1P0_80P_60M_E240_112V -x 0.6
 python Plot_ResolutionXRecoVsX.py   -D HPK_KOJI_20T_1P0_80P_60M_E240_112V -x 0.6 -y 50
 python Plot_ResolutionTimeVsX.py    -D HPK_KOJI_20T_1P0_80P_60M_E240_112V -x 0.6 -y 100
