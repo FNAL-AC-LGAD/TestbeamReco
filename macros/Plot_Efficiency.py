@@ -32,7 +32,7 @@ if organized_mode:
 else: 
     inputfile = TFile("../test/myoutputfile.root")
 
-outdir = myStyle.GetPlotsDir(outdir, "Paper_Efficiency/")
+outdir = myStyle.GetPlotsDir(outdir, "Efficiency/")
 
 xmin = float(options.xLow) if options.xLow else -float(options.xlength)
 xmax = float(options.xHigh) if options.xHigh else float(options.xlength)

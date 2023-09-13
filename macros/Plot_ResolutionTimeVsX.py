@@ -105,7 +105,7 @@ is_hotspot = options.hotspot
 direction = "x" if not use_center_y else "y"
 position_center = mf.get_central_channel_position(inputfile, direction)
 
-outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution_Time/")
+outdir = myStyle.GetPlotsDir(outdir, "Resolution_Time/")
 
 # Save list with histograms to draw
 list_htitles = [

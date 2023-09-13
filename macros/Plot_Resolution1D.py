@@ -175,7 +175,7 @@ outdir=""
 outdir = myStyle.getOutputDir(dataset)
 inputfile = ROOT.TFile("%s%s_Analyze.root"%(outdir,dataset))
 
-outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution1D/")
+outdir = myStyle.GetPlotsDir(outdir, "Resolution1D/")
 
 limits_one = fit_limits[dataset]['one']
 limits_two = fit_limits[dataset]['two']

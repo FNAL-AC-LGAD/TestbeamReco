@@ -69,12 +69,10 @@ parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="X axis 
 parser.add_option('-y','--ylength', dest='ylength', default = 160.0, help="Y axis upper limit")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
-# parser.add_option('-n', dest='noShift', action='store_false', default = True, help="Do not apply shift (this gives an asymmetric distribution in general)")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
 
-# useShift = options.noShift
 dataset = options.Dataset
 outdir = myStyle.getOutputDir(dataset)
 inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
@@ -101,7 +99,7 @@ is_hotspot = options.hotspot
 # Get position of the central channel in the "x" direction
 position_center = mf.get_central_channel_position(inputfile, "x")
 
-outdir = myStyle.GetPlotsDir(outdir, "Paper_Resolution_X/")
+outdir = myStyle.GetPlotsDir(outdir, "Resolution_X/")
 
 # Save list with histograms to draw
 list_htitles = [
