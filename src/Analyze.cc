@@ -859,7 +859,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //       The pass_tightY bool removes a small portion at the top and bottom of the channels (defined in sensorEdgesTight)
         //       The pass_tight does the same + removes half of the GOOD channels at the edges (note these
         //      are not the channels at the edges, but beside them.) For example, if the channels are 01234,
-        //      0 and 4 would be The Edges, and 1 and 3 would be The GOOD Channels half-removed by this bool)
+        //      0 and 4 would be The Edges, and 1 and 3 would be The GOOD Channels half-removed by this bool.
         //       The pass_NoXYEdges_NoPhotek bool removes the top/bot portions and The Edges (0 and 4 in the example),
         //      and no Photek hit is required (Used in Efficiency histograms only, due to issues with sensors bigger than Photek)
         //       The pass_NoXYEdges removes The Edges in a similar way, but requires a Photek hit too

@@ -177,8 +177,13 @@ inputfile = ROOT.TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 outdir = myStyle.GetPlotsDir(outdir, "Resolution1D/")
 
-limits_one = fit_limits[dataset]['one']
-limits_two = fit_limits[dataset]['two']
+if dataset in fit_limits:
+    limits_one = fit_limits[dataset]['one']
+    limits_two = fit_limits[dataset]['two']
+else:
+    print(" >> Using default fit limits.")
+    limits_one = [-2.0, 2.0]
+    limits_two = [-1.1, 1.1]
 
 # Modify tracker and time reference (Photek) contribution to be removed in quadrature
 res_tracker = 5 # um
