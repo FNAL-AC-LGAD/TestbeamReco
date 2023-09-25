@@ -102,6 +102,8 @@ def plot1D(hist, outpath, xTitle, yTitle="Events", pads=False, bins=100, arange=
     # canvas.SaveAs("%s.gif"%(outpath))
     canvas.SaveAs("%s.pdf"%(outpath))
 
+    return hist
+
 
 def getHisto(f, name, rebin, color):
     h = f.Get(name)
@@ -216,6 +218,14 @@ if (is_tight):
         if "deltaY" not in hname:
             titles[0]+= "_tight"
             titles[1]+= "-tight"
+else:
+    list_htitles+= [
+        ["weighted2_timeDiff_tracker_Overall", "weighted2_time_tracker_Overall", "photek"],
+        ["weighted2_timeDiff_tracker_Metal", "weighted2_time_tracker_Metal", "photek"],
+        ["weighted2_timeDiff_tracker_Gap", "weighted2_time_tracker_Gap", "photek"],
+        ["weighted2_timeDiff_tracker_MidGap", "weighted2_time_tracker_MidGap", "photek"],
+    ]
+
 
 # Run over every single channel
 if use_each_channel:
@@ -243,6 +253,14 @@ if plot_all_hists:
             channel_element = ["weighted2_timeDiff_tracker_channel%s"%index, "weighted2_time_trackerCh%s"%index, "photek"]
             list_htitles.append(channel_element)
 
+# Define output file
+output_path = "%sResolutionValues"%(outdir)
+if (is_tight):
+    output_path+= "_tight"
+output_path+= ".root"
+
+outputfile = ROOT.TFile(output_path,"RECREATE")
+
 # Create plots
 for info in list_htitles:
     hname, out_name, ref = info
@@ -263,4 +281,8 @@ for info in list_htitles:
     tracker_component = res_photek if "photek" in ref else res_tracker
 
     hist = inputfile.Get(hname)
-    plot1D(hist, out_path, x_title, fmin=fmin, fmax=fmax, tracker_res=tracker_component)
+    hfinal = plot1D(hist, out_path, x_title, fmin=fmin, fmax=fmax, tracker_res=tracker_component)
+
+    hfinal.Write()
+
+outputfile.Close()
