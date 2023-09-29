@@ -38,6 +38,23 @@ inputfile_eff = ROOT.TFile("%sPlot_cutflow.root"%(outdir_efficiency), "READ")
 # <efficiency one strip>, <efficiency two strip>
 
 for reg in regions:
+    # One strip resolution per channel (only once)
+    if reg == "Overall":
+        info_channels = []
+        indices = mf.get_existing_indices(inputfile_res1d, "deltaX_oneStrip")
+        for idx in indices:
+            hres_onestrip = inputfile_res1d.Get("deltaX_oneStrip%s"%idx)
+            value = 1000 * hres_onestrip.GetStdDev()
+            info_channels.append(value)
+
+        # Output line for mySensorInfo.py
+        print("\tOne strip info per channel:")
+        info_str = "\t\"%s\": ["%(myStyle.RemoveBV(dataset))
+        for val in info_channels:
+            info_str+= "%.1f, "%(val)
+        info_str = info_str[:-2] + "],"
+        print(info_str)
+
     info = {}
     print("    # %s region"%(reg))
 
@@ -72,17 +89,18 @@ for reg in regions:
     info["two_eff"] = 100 * value_two / value_pass
     
     # Output line for mySensorInfo.py
-    info_str = "\t\"%s\": ["%(sensor_name)
+    info_str = "\t\"%s\": ["%(myStyle.RemoveBV(dataset))
     for key in ["one_res", "two_res", "time_res", "one_eff", "two_eff"]:
         info_str+= "%.1f, "%(info[key])
     info_str = info_str[:-2] + "],"
     print(info_str)
 
     # Ouput for Latex table
-    info_tex = "\t%s & %.0f \\pm 1 &"%(reg, info["time_res"])
+    info_tex = "\t%s & %.0f $\\pm$ 1 &"%(reg, info["time_res"])
     for key in ["one_res", "one_eff", "two_res", "two_eff"]:
         info_tex+= " %.1f &"%(info[key])
     print(info_tex)
+
 
 inputfile_res1d.Close()
 inputfile_res1d_tight.Close()
