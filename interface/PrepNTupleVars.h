@@ -177,7 +177,7 @@ private:
 
         bool hitSensor = sensorEdges[0][0] < x && x < sensorEdges[1][0] &&  sensorEdges[0][1] < y && y < sensorEdges[1][1];
         bool hitSensorExtra = sensorEdgesExtra[0][0] < x && x < sensorEdgesExtra[1][0] &&  sensorEdgesExtra[0][1] < y && y < sensorEdgesExtra[1][1];
-        bool hitSensorTightY = sensorEdgesTight[0][1] < y && y < sensorEdgesTight[1][1];
+        bool hitSensorTightY = sensorEdgesTight[0][1] < y && y < sensorEdgesTight[1][1] && sensorEdges[0][0] < x && x < sensorEdges[1][0]; // The x cut is added so that hits outside the sensor are not registered
         bool hitSensorTight = sensorEdgesTight[0][0] < x && x < sensorEdgesTight[1][0] &&  hitSensorTightY;
 
         tr.registerDerivedVar("hitSensor", hitSensor);
