@@ -1,6 +1,9 @@
 
-# 2023 Sensors
-# ------------
+# --------------------
+# --------------------
+# (!) 2023 Sensors (!)
+# --------------------
+# --------------------
 
 # Geometry
 # --------
@@ -33,13 +36,8 @@ geometry2023_default = {
     # HPK strips
     "HPK_W8_18_2_50T_1P0_500P_100M_C600": ["HPK_W8_18_2_50T_100M_C600", 500, 100, 10.0, 208, 50, "C", 600],
     "HPK_W8_17_2_50T_1P0_500P_50M_C600": ["HPK_W8_17_2_50T_50M_C600", 500, 50, 10.0, 206, 50, "C", 600],
-    # "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": ["HPK_W8_17_2_50T_50M_C600", 500, 50, 10.0, 200, 50, "C", 600],
     "HPK_W4_17_2_50T_1P0_500P_50M_C240": ["HPK_W4_17_2_50T_1P0_500P_50M_C240", 500, 50, 10.0, 204, 50, "C", 240],
     "HPK_W5_17_2_50T_1P0_500P_50M_E600": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 190, 50, "E", 600],
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_188V": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 188, 50 , "E", 600],
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_186V": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 186, 50, "E", 600],
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_192V": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 192, 50, "E", 600],
-    # "HPK_W5_17_2_50T_1P0_500P_50M_E600_194V": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 194, 50, "E", 600],
     "HPK_W2_3_2_50T_1P0_500P_50M_E240": ["HPK_W2_3_2_50T_1P0_500P_50M_E240", 500, 50, 10.0, 180, 50, "E", 240],
     "HPK_W9_15_2_20T_1P0_500P_50M_E600": ["HPK_W9_15_2_20T_1P0_500P_50M_E600", 500, 50, 10.0, 114, 20, "E", 600],
     "HPK_W9_14_2_20T_1P0_500P_100M_E600": ["HPK_W9_14_2_20T_1P0_500P_100M_E600", 500, 100, 10.0, 112, 20, "E", 600],
@@ -65,7 +63,7 @@ for key, info in geometry2023_default.items():
 
 # Resolutions and efficiency
 # --------------------------
-# NOTE: Resolution values does NOT have tracker component removed
+# NOTE: Resolution values do NOT have tracker component removed
 # Overall: <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Overall = {
     # BNL strips
@@ -342,7 +340,7 @@ for sensor in resolutions2023_Overall:
 
 # One strip resolution per channel
 # --------------------------------
-# NOTE: Resolution values does NOT have tracker component removed
+# NOTE: Resolution values do NOT have tracker component removed
 resolutions2023_onestrip = {
     # BNL strips
     "BNL_50um_1cm_450um_W3051_2_2": [],
@@ -384,7 +382,7 @@ resolutions2023OneStripChannel = {}
 for key, res_list in resolutions2023_onestrip.items():
     info_dict = {}
     if not res_list:
-        # print(" (!) Sensor %s is empty (!)"%sensor)
+        # print(" (!) Sensor %s per channel resolution is empty (!)"%sensor)
         continue
     info_dict["resOneStrip"], info_dict["resolution_onestrip"] = res_list, res_list
     info_dict["errOneStrip"] = [-1.0] * len(res_list)
@@ -463,4 +461,103 @@ for key, values in characteristics2023_biasscan_Overall.items():
     variableInfo2023_biasScan[key] = info_dict
 
 # TODO: Add dictionary with Metal and Gap values when they are implemented in pads
+
+
+
+
+# --------------------
+# --------------------
+# (!) 2022 Sensors (!)
+# --------------------
+# --------------------
+
+# Geometry
+# --------
+# {<sensor name_long>, <sensor name_short/label>, <pitch [um]>, <width [um]>, <length [mm]>,
+#  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>}
+
+geometry2022_default = {
+    "EIC_W2_1cm_500up_300uw": ["BNL 10-300", 500, 300, 10.0, 240, 0.0, "Null", "Null"],
+    "EIC_W1_1cm_500up_200uw": ["BNL 10-200", 500, 200, 10.0, 255, 0.0, "Null", "Null"],
+    "EIC_W2_1cm_500up_100uw": ["BNL 10-100", 500, 100, 10.0, 220, 0.0, "Null", "Null"],
+    "EIC_W1_1cm_100up_50uw": ["EIC_1cm_100up_50uw", 100, 50, 10.0, 240, 0.0, "Null", "Null"],
+    "EIC_W1_1cm_200up_100uw": ["EIC_1cm_200up_100uw", 200, 100, 10.0, 240, 0.0, "Null", "Null"],
+    "EIC_W1_1cm_300up_150uw": ["EIC_1cm_300up_150uw", 300, 150, 10.0, 240, 0.0, "Null", "Null"],
+    "EIC_W1_UCSC_2p5cm_500up_200uw": ["EIC_2p5cm_UCSC_500up_200uw", 500, 200, 25.0, 330, 0.0, "Null", "Null"],
+    "EIC_W1_2p5cm_500up_200uw": ["BNL 25-200", 500, 200, 25.0, 215, 0.0, "Null", "Null"],
+    "HPK_Eb_1cm_80up_45uw": ["HPK_Eb_80up_45uw", 80, 45, 10.0, 170, 0.0, "Null", "Null"],
+    "EIC_W1_0p5cm_500up_200uw_1_7": ["EIC_1_7_0p5cm_500up_200uw", 500, 200, 5.0, 240, 0.0, "Null", "Null"],
+    "EIC_W1_0p5cm_500up_200uw_1_4": ["BNL 5-200", 500, 200, 5.0, 245, 0.0, "Null", "Null"],
+    "BNL_500um_squares_175V": ["BNL_squares_1cm_500up_300uw", 500, 100, 0.0, 175, 0.0, "Null", "Null"],
+    "BNL2021_22_medium_150up_80uw": ["BNL2021_V2_150up_80uw", 150, 80, 0.0, 285, 0.0, "Null", "Null"],
+    "IHEP_W1_I_150up_80uw": ["IHEP_1cm_150up_80uw", 150, 80, 0.0, 185, 0.0, "Null", "Null"],
+}
+
+sensorsGeom2022 = {}
+for key, info in geometry2022_default.items():
+    info_dict = {}
+    info_dict["sensor"] = info[0]
+    info_dict["pitch"] = info[1]
+    info_dict["stripWidth"], info_dict["width"] = info[2], info[2]
+    info_dict["length"] = info[3]
+    info_dict["BV"], info_dict["voltage"] = info[4], info[4]
+    info_dict["thickness"] = info[5]
+    info_dict["resistivity"] = info[6]
+    info_dict["capacitance"] = info[7]
+
+    sensorsGeom2022[key] = info_dict
+
+
+# Resolutions and efficiency
+# --------------------------
+# NOTE: Resolution values do NOT have tracker component removed
+# NOTE 2: Time resolution was set according to paper's table. Missing numbers are set to 0.0
+# <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
+resolutions2022_Overall = {
+    "EIC_W2_1cm_500up_300uw": [82.71, 15.74, 36.0, 0.51, 0.49],
+    "EIC_W1_1cm_500up_200uw": [81.86, 18.49, 32.0, 0.43, 0.57],
+    "EIC_W2_1cm_500up_100uw": [68.89, 19.23, 35.0, 0.23, 0.77],
+    "EIC_W1_2p5cm_500up_200uw": [128.10, 31.32, 51.0, 0.82, 0.18],
+    "EIC_W1_0p5cm_500up_200uw_1_4": [60.93, 11.76, 30.0, 0.35, 0.65],
+    "HPK_Eb_1cm_80up_45uw": [13.83, 9.36, 0.0, 0.50, 0.50],
+    "BNL2021_22_medium_150up_80uw": [22.35, 8.01, 0.0, 0.50, 0.50],
+}
+
+resolutions2022 = {}
+for sensor in resolutions2022_Overall:
+    info_dict = {}
+
+    info_dict["position_oneStrip"], info_dict["position_oneStripRMS"] = res[0], res[0]
+    info_dict["res_one_strip"] = res[0]
+    info_dict["position_twoStrip"], info_dict["res_two_strip"] = res[1], res[1]
+    info_dict["time_resolution"], info_dict["res_time"] = res[2], res[2]
+    info_dict["efficiency_oneStrip"], info_dict["efficiency_one_strip"] = res[3], res[3]
+    info_dict["efficiency_twoStrip"], info_dict["efficiency_two_strip"] = res[4], res[4]
+
+    resolutions2022[sensor] = info_dict
+
+
+# One strip resolution per channel
+# --------------------------------
+# NOTE: Resolution values do NOT have tracker component removed
+resolutions2022_onestrip = {
+    "EIC_W2_1cm_500up_300uw": [0.00, 81.75, 83.41, 83.40, 82.10, 0.00, 0.00],
+    "EIC_W1_1cm_500up_200uw": [0.00, 76.99, 81.69, 79.00, 82.88, 84.76, 0.00],
+    "EIC_W2_1cm_500up_100uw": [0.00, 66.17, 68.40, 66.86, 68.28, 72.04, 0.00],
+    "EIC_W1_2p5cm_500up_200uw": [],
+    "EIC_W1_0p5cm_500up_200uw_1_4": [],
+    "HPK_Eb_1cm_80up_45uw": [],
+    "BNL2021_22_medium_150up_80uw": [],
+}
+
+resolutions2022OneStripChannel = {}
+for key, res_list in resolutions2022_onestrip.items():
+    info_dict = {}
+    if not res_list:
+        # print(" (!) Sensor %s per channel resolution is empty (!)"%sensor)
+        continue
+    info_dict["resOneStrip"], info_dict["resolution_onestrip"] = res_list, res_list
+    info_dict["errOneStrip"] = [1.0] * len(res_list)
+
+    resolutions2022OneStripChannel[key] = info_dict
 

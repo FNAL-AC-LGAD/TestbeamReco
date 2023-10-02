@@ -172,18 +172,11 @@ for ibin in range(1,hist_expected.GetNbinsX()+1):
 boxes = getStripBox(inputfile, ymax=ylength, shift=position_center)
 
 use_one_strip = True
-dict_one_strip_resolutions = dict(myStyle.resolutions2022OneStripChannel)
-dict_one_strip_resolutions.update(myStyle.resolutions2023OneStripChannel)
-
-if dataset in dict_one_strip_resolutions:
-    list_one_strip_values = dict_one_strip_resolutions[dataset]['resOneStrip']
-else:
-    print(" >> Sensor not found in One strip Reco dictionary. Please, add sensor with a default number if needed.")
-    exit()
+dict_one_strip_info = myStyle.GetResolutions(dataset, per_channel=True)
 
 list_positions = []
 list_values = []
-for i, value in enumerate(list_one_strip_values):
+for i, value in enumerate(dict_one_strip_info["resolution_onestrip"]):
     if value > 0.0:
         # Removing tracker's contribution
         if rm_tracker and (value > trkr_value):
