@@ -185,6 +185,13 @@ list_positions = []
 list_values = []
 for i, value in enumerate(list_one_strip_values):
     if value > 0.0:
+        # Removing tracker's contribution
+        if rm_tracker and (value > trkr_value):
+            value = TMath.Sqrt(value**2 - trkr_value**2)
+        # Mark bins with resolution smaller than tracker
+        elif (trkr_value > value):
+            value = 1.0
+
         box = boxes[i]
         x_position = (box.GetX1() + box.GetX2())/2.
         list_positions.append(x_position)
