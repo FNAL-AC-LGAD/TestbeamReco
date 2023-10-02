@@ -16,13 +16,14 @@ parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="Limit x
 parser.add_option('--xHigh', dest='xHigh', default = None, help="Limit x-axis in final plot")
 parser.add_option('--xLow',  dest='xLow',  default = None, help="Limit x-axis in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-# parser.add_option('-o', dest='Overall', action='store_true', default = False, help="Draw Overall efficiency (from Global) in 1DProjection")
+parser.add_option('-c', dest='each_channel', action='store_true', default = False, help="Draw efficiency for each channel")
 parser.add_option('-Y', '--alongY',dest='centerAlongY', action='store_true', default = False, help="Center plots in Y direction (for pads only)")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
 use_center_y = options.centerAlongY
+use_each_channel = options.each_channel
 is_tight = options.useTight
 
 outdir=""
@@ -80,12 +81,15 @@ for hname, outname in list_hnames2d:
     list_th2_efficiency.append(th2_efficiency)
 
     # Run over each channel
+    if not use_each_channel:
+        continue
+
     if not indices:
-        indices = mf.get_existing_indices(inputfile, "")
+        indices = mf.get_existing_indices(inputfile, "efficiency_vs_xy_numerator_channel")
 
     for idx in indices:
         hname_ch = "%s_channel%s"%(hname, idx)
-        outpath_ch = "%s%s-Ch%s"%(outpath, idx)
+        outpath_ch = "%s-Ch%s"%(outpath, idx)
         htitle_ch = "%s - Channel %s"%(htitle, idx)
 
         th2_efficiency = inputfile.Get(hname_ch)

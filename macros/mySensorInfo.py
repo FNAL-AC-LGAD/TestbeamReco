@@ -318,7 +318,7 @@ for sensor in resolutions2023_Overall:
     for i, reg in enumerate(region):
         res = list_res[i]
         if not res:
-            # print(" (!) Sensor %s is empty (!)"%sensor)
+            # print(" (!) Sensor %s resolution is empty (!)"%sensor)
             continue
         info_dict["position_oneStrip%s"%reg], info_dict["position_oneStripRMS%s"%reg] = res[0], res[0]
         info_dict["res_one_strip%s"%reg] = res[0]
@@ -328,6 +328,9 @@ for sensor in resolutions2023_Overall:
         info_dict["efficiency_twoStrip%s"%reg], info_dict["efficiency_two_strip%s"%reg] = res[4], res[4]
 
         char = list_char[i]
+        if not char:
+            # print(" (!) Sensor %s characteristic is empty (!)"%sensor)
+            continue
         info_dict["jitter%s"%reg] = char[0]
         info_dict["amp_max%s"%reg] = char[1]
         info_dict["rise_time%s"%reg] = char[2]
