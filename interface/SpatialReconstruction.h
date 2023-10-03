@@ -169,8 +169,8 @@ private:
         const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
         const auto& positionRecoParBot = tr.getVar<std::vector<double>>("positionRecoParBot");
         const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
-        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
-        const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
+        // const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        // const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
         const auto& AmpTopOverAmpTopandBotRight = tr.getVar<double>("AmpTopOverAmpTopandBotRight");
         const auto& AmpTopOverAmpTopandBotLeft = tr.getVar<double>("AmpTopOverAmpTopandBotLeft");
         const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
