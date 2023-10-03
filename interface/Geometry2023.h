@@ -624,9 +624,10 @@ public:
     std::map<int, double> timeCalibrationCorrection = {{0,0.51724}, {1,0.63723}, {2,0.0}, {3,0.77677}, {4,0.67601}, {5,0.61875}, {6,0.55879}, {7,0.0}};
     double stripWidth = 0.150;
     double pitch = 0.500;
-    double sensorCenter = 1.30; // Lab-Tracker's frame ->  y_dut
-    double sensorCenterY = -0.95; // Lab-Tracker's frame -> -x_dut
-    std::vector<double> stripCenterXPosition = {-1.5,-2.5, -2.5, -1.5, -1.4, 0.0, 0.0, -2.0};
+    double sensorCenter = 1.30; // Lab-Tracker's frame ->  x_dut
+    double sensorCenterY = -0.95; // Lab-Tracker's frame -> y_dut
+    std::vector<double> stripCenterXPosition = {0.55, 0.05, 0.0, -0.45, -0.45, 0.05, 0.55, 0.0};
+    std::vector<double> stripCenterYPosition = {0.25, 0.25, 0.0, 0.25, -0.25, -0.25, -0.25, 0.0};
     double alpha = 0.0;
     double beta  = 0.0;
     double gamma = 0.0;
@@ -653,8 +654,11 @@ public:
     std::vector<double> positionRecoParBot = {-0.0849671, -3.72958, 25.6829, -63.7924, 70.3368, -28.3888};
     std::vector<double> positionRecoParRight = {-0.046495, -3.91451, 24.6937, -57.5006, 59.3214, -22.163};
     std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
+    std::vector<std::vector<double>> xSlices = {{0.80, 1.00}, {1.25, 1.45}, {1.75, 1.95}}; // Raw data coordinates
+    std::vector<std::vector<double>> ySlices = {{-0.80, -0.60}, {-1.30, -1.10}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
     std::vector<std::vector<double>> sensorEdgesExtra = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[4], stripCenterYPosition[4]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
     std::vector<utility::ROI> regionsOfIntrest = {{"MetalAndGap", -0.70,0.70, -0.4,-0.1}, {"Half", -0.70,0.70, -0.25, 0.25}};
 };
 
@@ -742,7 +746,8 @@ public:
     double pitch = 0.500;
     double sensorCenter = 1.20; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY = -0.8; // Lab-Tracker's frame -> y_dut
-    std::vector<double> stripCenterXPosition = {-1.5,-2.5, -2.5, -1.5, -1.4, 0.0, 0.0, -2.0};
+    std::vector<double> stripCenterXPosition = {0.588, 0.082, 0.0, -0.403, -0.404, 0.085, 0.583, 0.0};
+    std::vector<double> stripCenterYPosition = {0.250, 0.250, 0.0, 0.249, -0.249, -0.253, -0.253, 0.0};
     double alpha = 0.0;
     double beta  = 0.0;
     double gamma = 0.0;
@@ -769,13 +774,11 @@ public:
     std::vector<double> positionRecoParBot = {-0.0849671, -3.72958, 25.6829, -63.7924, 70.3368, -28.3888};
     std::vector<double> positionRecoParRight = {-0.046495, -3.91451, 24.6937, -57.5006, 59.3214, -22.163};
     std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
+    std::vector<std::vector<double>> xSlices = {{0.70, 0.90}, {1.20, 1.40}, {1.65, 1.85}}; // Raw data coordinates
+    std::vector<std::vector<double>> ySlices = {{-0.65, -0.45}, {-1.15, -0.95}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
     std::vector<std::vector<double>> sensorEdgesExtra = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
-    std::vector<utility::ROI> regionsOfIntrest = {{"0X_Top", -0.70,0.70, 0.0,0.5},
-                                                  {"1X_Bot", -0.70,0.70, -0.5,0.0},
-                                                  {"Y0_Left", -0.70,0.20, -0.9,0.9},
-                                                  {"Y1_Central", -0.30,0.30, -0.9,0.9},
-                                                  {"Y2_Right", 0.20,0.70, -0.9,0.9}};
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[4], stripCenterYPosition[4]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
 };
 
 class HPK_W8_1_1_50T_500x500_150M_C600_PixelsGeometry : public DefaultGeometry
