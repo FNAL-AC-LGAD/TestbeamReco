@@ -11,6 +11,7 @@ import mySensorInfo as msi
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 colors = myStyle.GetColors(True)
+colors = [colors[1], colors[4], colors[2]]
 
 ## Defining Style
 myStyle.ForceStyle()
@@ -42,9 +43,9 @@ datasets = [
 
 variables = ["time_resolution", "jitter", "amp_max", "risetime", "baseline"]
 y_label = ["Time resolution [ps]", "Jitter [ps]", "Amplitude peak [mV]",
-           "Risetime [ps] (10 to 90\%)", "Baseline RMS [mV]"]
-y_top_limit = [70, 0, 210, 800, 0]
-colors = [kBlack, ROOT.kRed, ROOT.kGreen]
+           "Risetime [ps] (10 to 90%)", "Baseline RMS [mV]"]
+y_low_limit = [0, 0, 0, 200, 1.4]
+y_top_limit = [70, 0, 210, 800, 2.6]
 
 outdir = myStyle.getOutputDir("Paper2023")
 outdir = myStyle.GetPlotsDir(outdir, "Bias_scan/")
@@ -82,8 +83,13 @@ for i, var in enumerate(variables):
                 idx = j
                 break
 
+        value = sensor_info[var]
+        # Remove tracker component
+        if "time_resolution" in var:
+            value = math.sqrt(value**2 - 10**2)
+
         x_volts[idx].append(sensor_geometry["voltage"])
-        y_values[idx].append(sensor_info[var])
+        y_values[idx].append(value)
 
     hists = []
     for j, thickness in enumerate(subsets):
@@ -99,7 +105,7 @@ for i, var in enumerate(variables):
         ymax = max(y_values[j]) if (ymax < max(y_values[j])) else ymax
 
     htemp.GetYaxis().SetTitle(y_label[i])
-    ymin = 0.0 if "risetime" not in var else 200
+    ymin = y_low_limit[i]
     ymax = y_top_limit[i] if y_top_limit[i] else 1.7*ymax
     htemp.GetYaxis().SetRangeUser(ymin, ymax)
 
