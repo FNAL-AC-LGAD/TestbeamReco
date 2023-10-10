@@ -969,15 +969,16 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 {
                     hitOnMetal = true;
                 }
-                // // TODO: Hit on metal pad
-                // if (isPadSensor && ((stripCenterYPositionLGAD[rowIndex][i]-stripWidth/2.)<y) && (y<(stripCenterYPositionLGAD[rowIndex][i]+stripWidth/2.)))
-                // {
-                //     hitOnMetal = true;
-                // }
+                // Hit on metal pad
+                if (isPadSensor && hitOnMetal && ((stripCenterYPositionLGAD[rowIndex][i]-stripWidth/2.)<y) && (y<(stripCenterYPositionLGAD[rowIndex][i]+stripWidth/2.)))
+                {
+                    hitOnMetal = true;
+                }
                 
                 bool hitOnLeftMidGap = ((stripCenterXPositionLGAD[rowIndex][i]-pitch/2.-xBinSize/2.)<x) && (x<(stripCenterXPositionLGAD[rowIndex][i]-pitch/2.+xBinSize/2.));
                 bool hitOnRightMidGap = ((stripCenterXPositionLGAD[rowIndex][i]+pitch/2.-xBinSize/2.)<x) && (x<(stripCenterXPositionLGAD[rowIndex][i]+pitch/2.+xBinSize/2.));
  
+                // TODO: Extend mid gap definition to pad sensors
                 if (hitOnLeftMidGap || hitOnRightMidGap)
                 {
                     hitOnMidGap = true;
