@@ -1,7 +1,7 @@
 # TestbeamReco
 
 ## Setup
-This initial setup must be done only once
+This initial setup must be done once only
 ```
 cd <WorkingArea>
 git clone git@github.com:FNAL-AC-LGAD/TestbeamReco.git
@@ -23,38 +23,35 @@ Example of running MyAnalysis interactively
 ```
 cd <WorkingArea>/TestbeamReco/test
 source setup.sh
-./MyAnalysis -A Analyze -D EIC_W1_1cm_255V -E 100001
+./MyAnalysis -A Analyze -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -E 100001
 ```
-
-Can find all dataset names in [`sampleCollections.cfg`](./test/sampleCollections.cfg) and  [`sampleSets.cfg`](./test/sampleSets.cfg) inside the `test` directory.
+In this example, `-A` selects the analyzer among a pre-defined list, `-D` is the dataset name (can be found in [`sampleCollections.cfg`](./test/sampleCollections.cfg) and  [`sampleSets.cfg`](./test/sampleSets.cfg)), and `-E` is the number of entries to analyze from the dataset (if it is not given or higher than the total, it will stop at the final entry automatically).
 
 
 ## Making plots
 
-Recipe to make plots for:
-* EIC 1cm long strip 500um pitch 200um metal width (EIC_W1_1cm_500up_200uw_255V)
+The analyzer returns a rough version of the plots of interest. To obtain the final plots with a defined style we use a set of python macros.
+
+Using a sensor as reference (HPK_W5_17_2_50T_1P0_500P_50M_E600_190V), the recipe to make some plots of interest is:
 ```
 cd <WorkingArea>/TestbeamReco/test
-./MyAnalysis -A Analyze -D EIC_W1_1cm_255V
+./MyAnalysis -A Analyze -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V
 cd ../macros
 
-python DoPositionRecoFit.py -D EIC_W1_1cm_500up_200uw_255V -A --xmax 0.81 --fitOrder 5
-python PlotAmplitudeVsX.py  -D EIC_W1_1cm_500up_200uw_255V --xlength 2.5 --ylength 90.0
-python PlotAmplitudeVsXY.py -D EIC_W1_1cm_500up_200uw_255V --zmin 20.0 --zmax 90.0
-python PlotTimeDiffVsX.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 2.5 --ylength 150.0
-python PlotTimeDiffVsXY.py  -D EIC_W1_1cm_500up_200uw_255V --zmin 25.0 --zmax 75.0
-python PlotTimeDiffVsY.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 5.2 --ylength 150.0
-python PlotTimeMeanVsXY.py  -D EIC_W1_1cm_500up_200uw_255V --zmin -0.5 --zmax 0.5
-python PlotSimpleXYMaps.py  -D EIC_W1_1cm_500up_200uw_255V
-python PlotRecoDiffVsXY.py  -D EIC_W1_1cm_500up_200uw_255V --zmin 0.0 --zmax 100.0
-python PlotRecoDiffVsX.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 2.5 --ylength 150.0
-python PlotEfficiency.py    -D EIC_W1_1cm_500up_200uw_255V -x 2.5
-python plot1DRes.py         -D EIC_W1_1cm_500up_200uw_255V
-python PlotRecoDiffVsY.py   -D EIC_W1_1cm_500up_200uw_255V --xlength 10.0 --ylength 3500.0
+python DoPositionRecoFit.py       -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -A --xmax 0.85 --fitOrder 5
+python Plot_AmplitudeVsX.py       -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V --xlength 2.7 --ylength 170.0
+python Plot_SimpleXYMaps.py       -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V
+python Plot_CutFlow.py            -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V
+python Plot_Resolution1D.py       -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -t
+python Plot_Efficiency.py         -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -t -x 2.7
+python Plot_ResolutionXRecoVsX.py -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -t -x 2.7
+python Plot_ResolutionTimeVsX.py  -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V -t -x 2.7 -y 100
 ```
 
-To get all plots for all sensors, run:
+The whole analysis for a specific set of sensors can be obtained by using one of the bash scripts found [`here`](./test/sh/).
+Example:
 ```
-cd <WorkingArea>/TestbeamReco/test
-./runEverything.sh
+cd <WorkingArea>/TestbeamReco/test/sh/
+./runEverything2023_MayStrips.sh
 ```
+Feel free to edit the lists in the scripts to run a subset only if required.
