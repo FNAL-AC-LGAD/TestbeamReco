@@ -45,7 +45,7 @@ variables = ["time_resolution", "jitter", "amp_max", "risetime", "baseline"]
 y_label = ["Time resolution [ps]", "Jitter [ps]", "Amplitude peak [mV]",
            "Risetime [ps] (10 to 90%)", "Baseline RMS [mV]"]
 y_low_limit = [0, 0, 0, 200, 1.4]
-y_top_limit = [70, 0, 210, 800, 2.6]
+y_top_limit = [70, 0, 230, 800, 2.6]
 
 outdir = myStyle.getOutputDir("Paper2023")
 outdir = myStyle.GetPlotsDir(outdir, "Bias_scan/")
