@@ -124,12 +124,13 @@ for i, var in enumerate(variables):
     for j, hist in enumerate(hists):
         thick = hist.GetName().split("_")[-1]
         hist.Draw("SAME P")
-        legend_title = "HPK %s FNAL board"%thick
+        legend_title = "HPK %s #mum FNAL board"%(thick[:-2])
         legend.AddEntry(hist, legend_title, "p")
 
     legend.Draw()
 
     myStyle.BeamInfo()
+    myStyle.SensorInfo("HPK 2x2 pad production")
     canvas.SaveAs("%s%s.gif"%(outdir, var))
     canvas.SaveAs("%s%s.pdf"%(outdir, var))
 
