@@ -1,12 +1,8 @@
 
-# --------------------
-# --------------------
-# (!) 2023 Sensors (!)
-# --------------------
-# --------------------
-
-# Geometry
-# --------
+################################################################################
+# --------------------------  (!) 2023 Sensors (!)  -------------------------- #
+################################################################################
+##################################  Geometry  ##################################
 # {<sensor name_long>, <sensor name_short/label>, <pitch [um]>, <width [um]>, <length [mm]>,
 #  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>}
 geometry2023_default = {
@@ -60,11 +56,10 @@ for key, info in geometry2023_default.items():
 
     sensorsGeom2023[key] = info_dict
 
-
-# Resolutions and efficiency
-# --------------------------
+#########################  Resolutions and efficiency  #########################
 # NOTE: Resolution values do NOT have tracker component removed
-# Overall: <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
+###############################---  Overall  ---################################
+# <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Overall = {
     # BNL strips
     "BNL_50um_1cm_450um_W3051_2_2": [],
@@ -102,7 +97,8 @@ resolutions2023_Overall = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [109.4, 20.2, 37.4, 63.9, 36.1],
 }
 
-# Metal: <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
+################################---  Metal  ---#################################
+# <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Metal = {
     # BNL strips
     "BNL_50um_1cm_450um_W3051_2_2": [],
@@ -140,7 +136,8 @@ resolutions2023_Metal = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [19.7, 27.1, 24.9, 97.2, 2.8],
 }
 
-# Gap: <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
+#################################---  Gap  ---##################################
+# <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Gap = {
     # BNL strips
     "BNL_50um_1cm_450um_W3051_2_2": [],
@@ -190,9 +187,9 @@ resolutions2023_Gap = {
     # "HPK_KOJI_20T_1P0_80P_60M_E240": [309.5, 5.5, 29.9, 3.5, 96.5],
 }
 
-# Characterization
-# ----------------
-# Overall: <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
+##############################  Characterization  ##############################
+###############################---  Overall  ---################################
+# <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Overall = {
     # BNL strips
     "BNL_50um_1cm_450um_W3051_2_2": [],
@@ -230,7 +227,8 @@ characteristics2023_Overall = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [],
 }
 
-# Metal: <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
+################################---  Metal  ---#################################
+# <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Metal = {
     # BNL strips
     "BNL_50um_1cm_450um_W3051_2_2": [],
@@ -268,7 +266,8 @@ characteristics2023_Metal = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [],
 }
 
-# Gap: <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
+#################################---  Gap  ---##################################
+# <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Gap = {
     # BNL strips
     "BNL_50um_1cm_450um_W3051_2_2": [],
@@ -337,9 +336,7 @@ for sensor in resolutions2023_Overall:
 
     resolutions2023[sensor] = info_dict
 
-
-# One strip resolution per channel
-# --------------------------------
+######################  One strip resolution per channel  ######################
 # NOTE: Resolution values do NOT have tracker component removed
 resolutions2023_onestrip = {
     # BNL strips
@@ -390,10 +387,10 @@ for key, res_list in resolutions2023_onestrip.items():
     resolutions2023OneStripChannel[key] = info_dict
 
 
-
-
-# Bias scan geometry
-# ------------------
+################################################################################
+# ----------------  (!) Bias scan January 2023 2x2 pads (!)  ----------------- #
+################################################################################
+##################################  Geometry  ##################################
 # List with all voltages used in each sensor
 geometry2023_biasscan = {
     # HPK pads (January)
@@ -419,10 +416,8 @@ for key, voltages in geometry2023_biasscan.items():
         new_key = "%s_%iV"%(key, volt)
         sensorsGeom2023_biasScan[new_key] = info_dict
 
-
-# Bias scan characterization
-# --------------------------
-# Overall: <time res [ps]>, <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
+##########################  Characterization overall  ##########################
+# <time res [ps]>, <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_biasscan_Overall = {
     # HPK pads (January)
     "HPK_50um_500x500um_2x2pad_E600_FNAL_190V": [40.80, 9.88, 155.77, 566.57, 1.89, 40.10],
@@ -464,15 +459,10 @@ for key, values in characteristics2023_biasscan_Overall.items():
 
 
 
-
-# --------------------
-# --------------------
-# (!) 2022 Sensors (!)
-# --------------------
-# --------------------
-
-# Geometry
-# --------
+################################################################################
+# --------------------------  (!) 2022 Sensors (!)  -------------------------- #
+################################################################################
+##################################  Geometry  ##################################
 # {<sensor name_long>, <sensor name_short/label>, <pitch [um]>, <width [um]>, <length [mm]>,
 #  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>}
 
@@ -507,11 +497,9 @@ for key, info in geometry2022_default.items():
 
     sensorsGeom2022[key] = info_dict
 
-
-# Resolutions and efficiency
-# --------------------------
+#########################  Resolutions and efficiency  #########################
 # NOTE: Resolution values do NOT have tracker component removed
-# NOTE 2: Time resolution was set according to paper's table. Missing numbers are set to 0.0
+# NOTE 2: Time resolution values were set according to paper's table. Missing numbers are set to 0.0
 # <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2022_Overall = {
     "EIC_W2_1cm_500up_300uw": [82.71, 15.74, 36.0, 0.51, 0.49],
@@ -536,9 +524,7 @@ for sensor in resolutions2022_Overall:
 
     resolutions2022[sensor] = info_dict
 
-
-# One strip resolution per channel
-# --------------------------------
+######################  One strip resolution per channel  ######################
 # NOTE: Resolution values do NOT have tracker component removed
 resolutions2022_onestrip = {
     "EIC_W2_1cm_500up_300uw": [0.00, 81.75, 83.41, 83.40, 82.10, 0.00, 0.00],
