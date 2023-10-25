@@ -1,5 +1,6 @@
 from ROOT import TFile,TTree,TCanvas,TF1,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,gStyle
 import array
+import myFunctions as mf
 
 ##########################
 #2D Efficiency 
@@ -549,22 +550,19 @@ def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
 
     return effGraph
 
-def Make1DEfficiencyHist( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, xAxisRangeHigh, shift=0.0, fine_tune = 0.0) :
+def Make1DEfficiencyHist(num, den, plotname, topTitle="", xAxisTitle="", xAxisRangeLow=0, xAxisRangeHigh=0, shift=0.0, center=0) :
 
     nbins = num.GetXaxis().GetNbins()
-    xmin_lim = num.GetXaxis().GetBinLowEdge(1) + fine_tune
-    xmax_lim = num.GetXaxis().GetBinUpEdge(nbins) + fine_tune
+    xmin, xmax = mf.get_shifted_limits(num, center)
 
-    this_hist = TH1F("h%s"%plotname,topTitle, nbins,xmin_lim,xmax_lim)
+    this_hist = TH1F("h%s"%plotname, topTitle, nbins, xmin, xmax)
 
     for b in range(1,nbins+1):
-
-        xtemp = num.GetXaxis().GetBinCenter(b) - shift
-
+        xtemp = num.GetXaxis().GetBinCenter(b)
         ratio = 0
 
-        n1 = int(num.GetBinContent(b));
-        n2 = int(den.GetBinContent(b));
+        n1 = int(num.GetBinContent(b))
+        n2 = int(den.GetBinContent(b))
         #print ("numerator: " + str(n1) + " and denominator: " + str(n2))
         if (n1 > n2):
             n1 = n2
@@ -577,6 +575,6 @@ def Make1DEfficiencyHist( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLo
         ytemp = ratio
         this_bin = num.GetXaxis().FindBin(xtemp)
 
-        if (0<this_bin and this_bin<nbins+1): this_hist.SetBinContent(this_bin,ytemp)
+        this_hist.SetBinContent(this_bin,ytemp)
 
     return this_hist

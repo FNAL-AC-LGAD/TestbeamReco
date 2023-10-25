@@ -169,8 +169,8 @@ private:
         const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
         const auto& positionRecoParBot = tr.getVar<std::vector<double>>("positionRecoParBot");
         const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
-        const auto& sensorCenter = tr.getVar<double>("sensorCenter");
-        const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
+        // const auto& sensorCenter = tr.getVar<double>("sensorCenter");
+        // const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
         const auto& AmpTopOverAmpTopandBotRight = tr.getVar<double>("AmpTopOverAmpTopandBotRight");
         const auto& AmpTopOverAmpTopandBotLeft = tr.getVar<double>("AmpTopOverAmpTopandBotLeft");
         const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
@@ -178,7 +178,7 @@ private:
           	
         if(enablePositionReconstructionPad)
         {	  
-            x1 = sensorCenter;
+            x1 = 0.0;
             
             //use the poly fit function
             auto dXTop = getDX(positionRecoParTop, AmpLeftOverAmpLeftandRightTop);
@@ -187,7 +187,7 @@ private:
             
             x_reco = x1 + dX;
            
-            y1 = sensorCenterY;
+            y1 = 0.0;
             auto dYRight = getDX(positionRecoParRight, AmpTopOverAmpTopandBotRight);
             auto dYLeft = getDX(positionRecoParLeft, AmpTopOverAmpTopandBotLeft);
             auto dY = (amp1Indexes.second == 0) ? dYLeft : dYRight;

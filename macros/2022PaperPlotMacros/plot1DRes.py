@@ -98,7 +98,7 @@ outdir = myStyle.GetPlotsDir(outdir, "1DRes/")
 channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
 
 hists = [('deltaX','deltaX',"tracker"), ('deltaX_oneStrip','deltaX_oneStrip',"tracker"), ('deltaX_twoStrips','deltaX_twoStrips',"tracker"),
-        ('deltaX_oneStrip_onMetal','deltaX_oneStrip_onMetal',"tracker"), ('deltaX_twoStrips_noMetal','deltaX_twoStrips_noMetal',"tracker"),
+        ('deltaX_oneStrip_Metal','deltaX_oneStrip_Metal',"tracker"), ('deltaX_twoStrips_Gap','deltaX_twoStrips_Gap',"tracker"),
         ("timeDiff","time","photek"), ("weighted2_timeDiff","weighted2Time","photek"),
         ("timeDiffTracker","time_tracker","photek"), ("weighted2_timeDiff_tracker","weighted2_time_tracker","photek"),
         ('deltaY','deltaY','tracker')

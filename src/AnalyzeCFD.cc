@@ -133,13 +133,13 @@ void AnalyzeCFD::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>
     utility::makeHisto(my_histos,"ampRank6", "", 450, -50.0, 400.0);
     utility::makeHisto(my_histos,"deltaX", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaX_noNeighb", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
-    utility::makeHisto(my_histos,"deltaX_noNeighb_onMetal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+    utility::makeHisto(my_histos,"deltaX_noNeighb_Metal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaX_highFrac", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
-    utility::makeHisto(my_histos,"deltaX_highFrac_onMetal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+    utility::makeHisto(my_histos,"deltaX_highFrac_Metal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaX_oneStrip", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
-    utility::makeHisto(my_histos,"deltaX_oneStrip_onMetal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+    utility::makeHisto(my_histos,"deltaX_oneStrip_Metal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaX_twoStrips", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
-    utility::makeHisto(my_histos,"deltaX_twoStrips_noMetal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+    utility::makeHisto(my_histos,"deltaX_twoStrips_Gap", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaXBasic", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaYBasic", "; Y_{reco} - Y_{track} [mm]; Events", 200,-30.5,30.5);
     utility::makeHisto(my_histos,"dXdFrac", "; dX/dFraction [mm]; Events", 200,-19.0,1.0);
@@ -600,13 +600,13 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "deltaX", x_reco-x);
 
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && !goodNeighbour,               my_histos, "deltaX_noNeighb", x_reco-x);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && !goodNeighbour && hitOnMetal, my_histos, "deltaX_noNeighb_onMetal", x_reco-x);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && !goodNeighbour && hitOnMetal, my_histos, "deltaX_noNeighb_Metal", x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && highFraction,                 my_histos, "deltaX_highFrac", x_reco-x);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && highFraction && hitOnMetal,   my_histos, "deltaX_highFrac_onMetal", x_reco-x);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && highFraction && hitOnMetal,   my_histos, "deltaX_highFrac_Metal", x_reco-x);
         utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodOverNoiseAmp && oneStripReco,          my_histos, "deltaX_oneStrip", x_reco-x);
-        utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodOverNoiseAmp && oneStripReco && hitOnMetal,my_histos, "deltaX_oneStrip_onMetal", x_reco-x);
+        utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodOverNoiseAmp && oneStripReco && hitOnMetal,my_histos, "deltaX_oneStrip_Metal", x_reco-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "deltaX_twoStrips", x_reco-x);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && !hitOnMetal,   my_histos, "deltaX_twoStrips_noMetal", x_reco-x);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && !hitOnMetal,   my_histos, "deltaX_twoStrips_Gap", x_reco-x);
 
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "deltaXBasic", x_reco_basic-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp  && twoGoodChannel,                my_histos, "deltaYBasic", y_reco_basic-y);

@@ -71,66 +71,77 @@ tsize = myStyle.GetSize()
 ROOT.gROOT.ForceStyle()
 colors = myStyle.GetColors(True)
 
-dict_resolutions = myStyle.resolutions2023
+# dict_resolutions = myStyle.resolutions2023
 outdir = myStyle.getOutputDir("Paper2023")
 os.makedirs(outdir + "/SummaryPlots", exist_ok=True)
 
-axis_label_dic = {"pitch": "Pitch [\mum]",
-                  "length": "Strip length [mm]",
-                  "width": "Metal width [\mum]",
-                  "capacitance": "Capacitance [pC]",
-                  "thickness": "Thickness [\mum]",
-                  "resistivity": "Resistivity [\Omega\\\square]",
-                  "time_resolution": "Time resolution [ps]",
-                  "time_resolution_m": "Time resolution metal [ps]",
-                  "time_resolution_g": "Time resolution gap [ps]",
-                  "spatial_resolution": "Spatial resolution [ps]",
-                  "spatial_resolution_m": "Spatial resolution metal [ps]",
-                  "spatial_resolution_g": "Spatial resolution gap [ps]",
-                  "jitter": "Jitter [ps]",
-                  "jitter_m": "Jitter metal [ps]",
-                  "jitter_g": "Jitter gap [ps]",
-                  "rise_time": "Rise Time [ps]",
-                  "rise_time_m": "Rise Time metal [ps]",
-                  "rise_time_g": "Rise Time gap [ps]",
-                  "amp_max": "Amp max [mV]",
-                  "amp_max_m": "Amp max [mV]",
-                  "amp_max_g": "Amp max [mV]",
-                  "charge": "Charge [fC]",
-                  "charge_m": "Charge metal [fC]",
-                  "charge_g": "Charge gap [fC]",
-                  "baseline_rms": "BaseLine RMS [mv]",
-                  "baseline_rms_m": "BaseLine RMS metal [mv]",
-                  "baseline_rms_g": "BaseLine RMS gap [mv]",
-                  "efficiency_twoStrip": "Two strip efficiency",
-                  "efficiency_twoStrip_m": "Two strip efficiency metal",
-                  "efficiency_twoStrip_g": "Two strip efficiency gap",
-                  "efficiency_oneStrip": "One strip efficiency",
-                  "efficiency_oneStrip_m": "One strip efficiency metal",
-                  "efficiency_oneStrip_g": "One strip efficiency gap"
-                  }
+axis_label_dic = {
+    "pitch": "Pitch [\mum]",
+    "length": "Strip length [mm]",
+    "width": "Metal width [\mum]",
+    "capacitance": "Capacitance [pC]",
+    "thickness": "Thickness [\mum]",
+    "resistivity": "Resistivity [\Omega\\\square]",
+    "time_resolution": "Time resolution [ps]",
+    "time_resolution_m": "Time resolution metal [ps]",
+    "time_resolution_g": "Time resolution gap [ps]",
+    "spatial_resolution": "Spatial resolution [ps]",
+    "spatial_resolution_m": "Spatial resolution metal [ps]",
+    "spatial_resolution_g": "Spatial resolution gap [ps]",
+    "jitter": "Jitter [ps]",
+    "jitter_m": "Jitter metal [ps]",
+    "jitter_g": "Jitter gap [ps]",
+    "rise_time": "Rise Time [ps]",
+    "rise_time_m": "Rise Time metal [ps]",
+    "rise_time_g": "Rise Time gap [ps]",
+    "amp_max": "Amp max [mV]",
+    "amp_max_m": "Amp max [mV]",
+    "amp_max_g": "Amp max [mV]",
+    "charge": "Charge [fC]",
+    "charge_m": "Charge metal [fC]",
+    "charge_g": "Charge gap [fC]",
+    "baseline_rms": "BaseLine RMS [mv]",
+    "baseline_rms_m": "BaseLine RMS metal [mv]",
+    "baseline_rms_g": "BaseLine RMS gap [mv]",
+    "efficiency_twoStrip": "Two strip efficiency",
+    "efficiency_twoStrip_m": "Two strip efficiency metal",
+    "efficiency_twoStrip_g": "Two strip efficiency gap",
+    "efficiency_oneStrip": "One strip efficiency",
+    "efficiency_oneStrip_m": "One strip efficiency metal",
+    "efficiency_oneStrip_g": "One strip efficiency gap"
+}
 
-color_dic = {'HPK_W8_18_2_50T_1P0_500P_100M_C600_208V': colors[0],
-             'HPK_W9_14_2_20T_1P0_500P_100M_E600_112V': colors[0],
-             'HPK_W8_17_2_50T_1P0_500P_50M_C600_206V': colors[1],
-             'HPK_W5_17_2_50T_1P0_500P_50M_E600_190V': colors[1],
-             'HPK_W4_17_2_50T_1P0_500P_50M_C240_204V': colors[2],
-             'HPK_W2_3_2_50T_1P0_500P_50M_E240_180V': colors[2],
-             'HPK_W9_15_2_20T_1P0_500P_50M_E600_114V': colors[3],
-             'HPK_KOJI_50T_1P0_80P_60M_E240_190V': colors[4],
-             'HPK_KOJI_20T_1P0_80P_60M_E240_112V': colors[4]
-             }
+color_dic = {
+    'HPK_W8_18_2_50T_1P0_500P_100M_C600_208V': colors[0],
+    'HPK_W9_14_2_20T_1P0_500P_100M_E600_112V': colors[0],
+    'HPK_W8_17_2_50T_1P0_500P_50M_C600_206V': colors[1],
+    'HPK_W5_17_2_50T_1P0_500P_50M_E600_190V': colors[1],
+    'HPK_W4_17_2_50T_1P0_500P_50M_C240_204V': colors[2],
+    'HPK_W2_3_2_50T_1P0_500P_50M_E240_180V': colors[2],
+    'HPK_W9_15_2_20T_1P0_500P_50M_E600_114V': colors[3],
+    'HPK_KOJI_50T_1P0_80P_60M_E240_190V': colors[4],
+    'HPK_KOJI_20T_1P0_80P_60M_E240_112V': colors[4],
 
-marker_dic = {'HPK_W8_18_2_50T_1P0_500P_100M_C600_208V': 20,
-              'HPK_W9_14_2_20T_1P0_500P_100M_E600_112V': 24,
-              'HPK_W8_17_2_50T_1P0_500P_50M_C600_206V': 20,
-              'HPK_W5_17_2_50T_1P0_500P_50M_E600_190V': 24,
-              'HPK_W4_17_2_50T_1P0_500P_50M_C240_204V': 20,
-              'HPK_W2_3_2_50T_1P0_500P_50M_E240_180V': 24,
-              'HPK_W9_15_2_20T_1P0_500P_50M_E600_114V': 21,
-              'HPK_KOJI_50T_1P0_80P_60M_E240_190V': 20,
-              'HPK_KOJI_20T_1P0_80P_60M_E240_112V': 24
-              }
+    "HPK_50um_500x500um_2x2pad_E600_FNAL_190V": colors[0],
+    "HPK_30um_500x500um_2x2pad_E600_FNAL_140V": colors[1],
+    "HPK_20um_500x500um_2x2pad_E600_FNAL_105V": colors[2],
+}
+
+marker_dic = {
+    'HPK_W8_18_2_50T_1P0_500P_100M_C600_208V': 20,
+    'HPK_W9_14_2_20T_1P0_500P_100M_E600_112V': 24,
+    'HPK_W8_17_2_50T_1P0_500P_50M_C600_206V': 20,
+    'HPK_W5_17_2_50T_1P0_500P_50M_E600_190V': 24,
+    'HPK_W4_17_2_50T_1P0_500P_50M_C240_204V': 20,
+    'HPK_W2_3_2_50T_1P0_500P_50M_E240_180V': 24,
+    'HPK_W9_15_2_20T_1P0_500P_50M_E600_114V': 21,
+    'HPK_KOJI_50T_1P0_80P_60M_E240_190V': 20,
+    'HPK_KOJI_20T_1P0_80P_60M_E240_112V': 24,
+
+    "HPK_50um_500x500um_2x2pad_E600_FNAL_190V": 20,
+    "HPK_30um_500x500um_2x2pad_E600_FNAL_140V": 21,
+    "HPK_20um_500x500um_2x2pad_E600_FNAL_105V": 24,
+}
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-y', '--ymin', dest='ymin', default=-140.0, type="float",
@@ -155,8 +166,12 @@ y_variable_error_name = options.variableError
 # y_variable_name = "efficiency_twoStrip"
 # y_variable_error_name = "efficiency_twoStrip_error"
 
-list_of_sensors = GetSensorList(myStyle.sensorsGeom2023, conditions)
-
+# list_of_sensors = GetSensorList(myStyle.sensorsGeom2023, conditions)
+list_of_sensors = [
+    "HPK_50um_500x500um_2x2pad_E600_FNAL_190V",
+    "HPK_30um_500x500um_2x2pad_E600_FNAL_140V",
+    "HPK_20um_500x500um_2x2pad_E600_FNAL_105V",
+]
 
 geometry_variable = []
 
@@ -172,7 +187,7 @@ positionres_weighteduncert = [0.5]*len(list_of_sensors)
 
 for name in list_of_sensors:
     geometry_variable.append(myStyle.GetGeometry(name)[geometry_variable_name])
-    sensor_info = dict_resolutions[name]
+    sensor_info = myStyle.GetResolutions(name)
 
     y_variable = sensor_info[y_variable_name]
     y_variable_metal = sensor_info[y_variable_name + "_m"]
@@ -230,7 +245,7 @@ hdummy = ROOT.TH1D("", "", 1, 0.9*geometry_variable.min(),
                    1.05*geometry_variable.max())
 hdummy.GetXaxis().SetTitle(axis_label_dic[geometry_variable_name])
 hdummy.GetYaxis().SetTitle(axis_label_dic[y_variable_name])
-hdummy.GetYaxis().SetTitleOffset(1.4)
+hdummy.GetYaxis().SetTitleOffset(1.01)
 # hdummy.SetMaximum(90.0)
 hdummy.SetMaximum(y_upper_limit)
 print(y_upper_limit)

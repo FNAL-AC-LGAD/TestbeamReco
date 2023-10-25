@@ -69,7 +69,7 @@ for var in range(len(qty)):
             else:
                 value = myMean
             gaussian.Draw("same")
-        
+
         print(qty[var]," = ",datasets[iter]," : ",value)
         hist.GetXaxis().SetTitle("Counts")
         hist.GetXaxis().SetTitle("Qty")
