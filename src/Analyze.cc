@@ -734,6 +734,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         /*const auto& channel = tr.getVecVec<float>("channel");
         const auto& time_real = tr.getVecVec<float>("time");*/
         const auto& corrAmp = tr.getVec<double>("corrAmp");
+        // const auto& corrAmpDefault = tr.getVec<double>("corrAmpDefault");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
         const auto& rawAmpLGAD = tr.getVec<std::vector<float>>("rawAmpLGAD");
         const auto& corrTime = tr.getVec<double>("corrTime");
@@ -864,7 +865,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //      and no Photek hit is required (Used in Efficiency histograms only, due to issues with sensors bigger than Photek)
         //       The pass_NoXYEdges removes The Edges in a similar way, but requires a Photek hit too
         bool pass = goodTrack && hitSensor && goodPhotek;
-        bool pass_loose = goodTrack && hitSensor && goodPhotek;
+        // bool pass_loose = goodTrack && hitSensor && goodPhotek;
         bool pass_tightY = goodTrack && hitSensorTightY && goodPhotek;
         bool pass_tight = goodTrack && hitSensorTight && goodPhotek;
         bool pass_NoXYEdges_NoPhotek = goodTrack && hitSensorNoEdges;

@@ -167,17 +167,22 @@ def GetGeometry(name):
     return sensor_dict
 
 def RemoveBV(name):
-    name_split=name.split('_')
-    if name_split[-1][-1]=="V":
-        name='_'.join(str(name_split[i]) for i in range(len(name_split)-1))
+    last_element = name.split('_')[-1]
+    if (last_element[-1] == "V"):
+        name = name.replace("_%s"%last_element, "")
+
     return name
 
 def GetBV(name):
-    name_split=name.split('_')
-    if name_split[-1][-1]=="V":
-        return name_split[-1]
+    last_element = name.split('_')[-1]
+    if (last_element[-1] == "V"):
+        biasvolt = last_element[:-1]
     else:
-        return ""
+        geometry = GetGeometry(name)
+        biasvolt = str(geometry["BV"])
+        print("  >> Bias voltage not given! Using default value: %s V."%biasvolt)
+
+    return biasvolt
 
 def GetResolutions(name, per_channel=False):
     key_name = RemoveBV(name)
