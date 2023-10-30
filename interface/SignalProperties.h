@@ -15,7 +15,7 @@ private:
     {
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");       
-        const auto& isPadSensor = tr.getVar<bool>("isPadSensor"); 
+        const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& baselineRMS = tr.getVec<std::vector<float>>("baselineRMS");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
@@ -27,11 +27,14 @@ private:
         const auto& x = tr.getVar<double>("x");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
         const auto& extraChannelIndex = tr.getVar<int>("extraChannelIndex");
+        const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
 
-        //Find max channel and 2nd,3rd channels
+        // Find max channel and 2nd,3rd channels
+        int n2 = 2, n3 = 3;
+        if (enablePositionReconstructionPad) n2 = 3, n3 = 5; // 2nd,3rd are different when adding pad signals
         const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1, corrAmp[extraChannelIndex]);
-        const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, 2, corrAmp[extraChannelIndex]);
-        const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, 3, corrAmp[extraChannelIndex]);
+        const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, n2, corrAmp[extraChannelIndex]);
+        const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, n3, corrAmp[extraChannelIndex]);
         const auto amp4Indexes = utility::findNthRankChannel(ampLGAD, 4, corrAmp[extraChannelIndex]);
         const auto amp5Indexes = utility::findNthRankChannel(ampLGAD, 5, corrAmp[extraChannelIndex]);
         const auto amp6Indexes = utility::findNthRankChannel(ampLGAD, 6, corrAmp[extraChannelIndex]);

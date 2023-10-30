@@ -46,6 +46,8 @@ public:
     double ymin =  -1;
     double ymax =  -1;
     double positionRecoMaxPoint = 1.0;
+    double positionRecoMaxPointRow = 1.0;
+    double positionRecoMaxPointCol = 1.0;
     double photekSignalThreshold = 200.0; //in mV
     double photekSignalMax = 350.0; //in mV
     double noiseAmpThreshold = 15.0; //in mV
@@ -62,6 +64,8 @@ public:
     int CFD_threshold = 20;
     std::vector<std::string> CFD_list = {"5","10","15","20","25","30","35","40","50","60"};
     std::vector<double> positionRecoPar = {-1};
+    std::vector<double> positionRecoParRow = {-1};
+    std::vector<double> positionRecoParCol = {-1};
     std::vector<double> positionRecoParRight = {-1};
     std::vector<double> positionRecoParLeft = {-1};
     std::vector<double> positionRecoParTop = {-1};

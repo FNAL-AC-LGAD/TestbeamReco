@@ -378,9 +378,8 @@ resolutions2023_onestrip = {
 resolutions2023OneStripChannel = {}
 for key, res_list in resolutions2023_onestrip.items():
     info_dict = {}
-    if not res_list:
-        # print(" (!) Sensor %s per channel resolution is empty (!)"%sensor)
-        continue
+    # if not res_list:
+    #     print(" (!) Sensor %s per channel resolution is empty (!)"%sensor)
     info_dict["resOneStrip"], info_dict["resolution_onestrip"] = res_list, res_list
     info_dict["errOneStrip"] = [-1.0] * len(res_list)
 
@@ -539,9 +538,8 @@ resolutions2022_onestrip = {
 resolutions2022OneStripChannel = {}
 for key, res_list in resolutions2022_onestrip.items():
     info_dict = {}
-    if not res_list:
-        # print(" (!) Sensor %s per channel resolution is empty (!)"%sensor)
-        continue
+    # if not res_list:
+    #    print(" (!) Sensor %s per channel resolution is empty (!)"%sensor)
     info_dict["resOneStrip"], info_dict["resolution_onestrip"] = res_list, res_list
     info_dict["errOneStrip"] = [1.0] * len(res_list)
 

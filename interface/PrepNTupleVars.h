@@ -31,18 +31,106 @@ private:
         return smear;
     }
 
+    void fillAmplitudeVec(NTupleReader& tr, std::string var_name, std::vector<std::vector<int>> list_indices) const
+    {
+        const auto& corrAmpDef = tr.getVec<double>("corrAmpDefault");
+        const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
+        const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
+        // auto& new_amp = tr.createDerivedVec<double>("amp_row", corrAmpDef.size());
+        // auto& new_amp = tr.createDerivedVec<double>("amp_col", corrAmpDef.size());
+        auto& new_amp = tr.createDerivedVec<double>(var_name, corrAmpDef.size());
+
+        // Skip calculation if not needed
+        if (!enablePositionReconstructionPad)
+        {
+            for (unsigned int i = 0; i < corrAmpDef.size(); i++)
+            {
+                new_amp.at(i) = corrAmpDef.at(i);
+            }
+        }
+        else
+        {
+            for (const auto& group : list_indices)
+            {
+                double amp_sum = 0.0, amp_sqrsum = 0.0;
+                bool negValue = false, overThreshold = false;
+                for (const auto& idx : group)
+                {
+                    if (corrAmpDef.at(idx) < 0.0) negValue = true;
+                    if (corrAmpDef.at(idx) >= noiseAmpThreshold) overThreshold = true;
+
+                    amp_sum+= corrAmpDef.at(idx);
+                    amp_sqrsum+= corrAmpDef.at(idx)*corrAmpDef.at(idx);
+                }
+                bool quadSum = negValue || !overThreshold;
+                // Fill
+                for (const auto& idx : group)
+                {
+                    double value = amp_sum;
+                    if (quadSum) value = std::sqrt(amp_sqrsum);
+                    new_amp.at(idx) = value;
+                }
+            }
+            // Use default value if not summing
+            for (unsigned int i = 0; i < new_amp.size(); i++)
+            {
+                if (!new_amp.at(i)) new_amp.at(i) = corrAmpDef.at(i);
+            }
+        }
+    }
+
+    void addAmplitudeRowCol(NTupleReader& tr) const
+    {
+        const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
+        // const auto& n_row = tr.getVar("n_row")
+        const auto& n_col = tr.getVar<int>("n_col");
+        // ex. geometry = {{3,1,0}, {4,5,6}, {7}};
+        std::vector<std::vector<int>> list_rows; // {{3,1,0}, {4,5,6}};
+        std::vector<std::vector<int>> list_cols(n_col); // {{3,4}, {1,5}, {0,6}};
+        // Fill lists with indices
+        for (const auto& row : geometry)
+        {
+            if (row.size() < 2) continue;
+            list_rows.emplace_back(row);
+
+            for(unsigned int i = 0; i < row.size(); i++)
+            {
+                list_cols[i].emplace_back(row[i]);
+            }
+        }
+        fillAmplitudeVec(tr, "ampRow", list_rows);
+        fillAmplitudeVec(tr, "ampCol", list_cols);
+
+        const auto& ampRow = tr.getVec<double>("ampRow");
+        const auto& ampCol = tr.getVec<double>("ampCol");
+        utility::remapToLGADgeometry(tr, ampRow, "ampRowLGAD");
+        utility::remapToLGADgeometry(tr, ampCol, "ampColLGAD");
+
+        // This will leave corrAmp as the usual quantity for strips and
+        // will use the column-added quantity for pads
+        auto& corrAmp = tr.createDerivedVec<double>("corrAmp", ampCol.size());
+        for(unsigned int i = 0; i < ampCol.size(); i++)
+        {
+            corrAmp.at(i) = ampCol.at(i);
+        }
+    }
+
     void applyAmplitudeCorrection(NTupleReader& tr) const
     {     
         const auto& ampCorrectionFactors = tr.getVar<std::map<int,double>>("amplitudeCorrectionFactor");
-        auto& corrAmp = tr.createDerivedVec<double>("corrAmp");
+        auto& corrAmpDefault = tr.createDerivedVec<double>("corrAmpDefault");
         const auto& amp = tr.getVec<float>("amp");
         
         int counter = 0;
         for(auto thisAmp : amp) 
         {
-            corrAmp.emplace_back(getSmear(1.0, 0.2)*thisAmp*ampCorrectionFactors.at(counter));
+            corrAmpDefault.emplace_back(getSmear(1.0, 0.2)*thisAmp*ampCorrectionFactors.at(counter));
             counter++;
         }
+        utility::remapToLGADgeometry(tr, corrAmpDefault, "ampDefaultLGAD");
+
+        // Add amplitude in the same row/column
+        addAmplitudeRowCol(tr);
     }
 
     // Translate hit position from tracker's coordinates to local/sensor's frame by rotating around lab axes Z(alpha) -> Y(beta) -> X(gamma)
@@ -163,9 +251,13 @@ private:
         }
 
         // Correct amp and map raw amplitude
-        applyAmplitudeCorrection(tr);
         const auto& amp = tr.getVec<float>("amp");
         const auto& rawAmpLGAD = utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
+        // tr.registerDerivedVar("n_row", static_cast<int>(rawAmpLGAD.size()));
+        tr.registerDerivedVar("n_col", static_cast<int>(rawAmpLGAD[0].size()));
+
+        applyAmplitudeCorrection(tr);
+
         double totRawAmpLGAD = 0.0;
         for(auto row : rawAmpLGAD){totRawAmpLGAD += std::accumulate(row.begin(), row.end(), 0.0);}
         tr.registerDerivedVar("totRawAmpLGAD", totRawAmpLGAD);
