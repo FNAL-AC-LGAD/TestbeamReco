@@ -853,7 +853,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         // bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
         bool hitSensorNoEdges = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]] < x && x < stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]] && hitSensorTightY;
-        if (isPadSensor) {hitSensorNoEdges = hitSensorTightY;} // Update to use xSlice/ySlice
+        if (isPadSensor) {hitSensorNoEdges = hitSensorTight;}
 
         // --- Good hit ---
         // NOTE: The sensorEdges limits defined in Geometry are used in pass and pass_loose.
