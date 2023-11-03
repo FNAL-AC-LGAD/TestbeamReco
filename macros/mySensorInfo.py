@@ -4,42 +4,42 @@
 ################################################################################
 ##################################  Geometry  ##################################
 # {<sensor name_long>, <sensor name_short/label>, <pitch [um]>, <width [um]>, <length [mm]>,
-#  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>}
+#  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>, tag}
 geometry2023_default = {
     # BNL strips
-    "BNL_50um_1cm_450um_W3051_2_2": ["BNL_50um_1cm_450um_W3051", 500, 50, 10.0, 170, 50, "Null", "Null"],
-    "BNL_50um_1cm_400um_W3051_1_4": ["BNL_50um_1cm_400um_W3051", 500, 100, 10.0, 160, 50, "Null", "Null"],
-    "BNL_50um_1cm_450um_W3052_2_4": ["BNL_50um_1cm_450um_W3052", 500, 50, 10.0, 185, 50, "Null", "Null"],
-    "BNL_20um_1cm_400um_W3074_1_4": ["BNL_20um_1cm_400um_W3074", 500, 100, 10.0, 95, 20 , "Null", "Null"],
-    "BNL_20um_1cm_400um_W3075_1_2": ["BNL_20um_1cm_400um_W3075", 500, 100, 10.0, 80, 20, "Null", "Null"],
-    "BNL_20um_1cm_450um_W3074_2_1": ["BNL_20um_1cm_450um_W3074", 500, 50, 10.0, 95, 20, "Null", "Null"],
-    "BNL_20um_1cm_450um_W3075_2_4": ["BNL_20um_1cm_450um_W3075", 500, 50, 10.0, 80, 20, "Null", "Null"],
-    "BNL_50um_2p5cm_mixConfig1_W3051_1_4": ["BNL_50um_2p5cm_mixConfig1_W3051", 500, 100, 25.0, 170, 50, "Null", "Null"],
-    "BNL_50um_2p5cm_mixConfig2_W3051_1_4": ["BNL_50um_2p5cm_mixConfig2_W3051", 500, 50, 25.0, 170, 50, "Null", "Null"],
+    "BNL_50um_1cm_450um_W3051_2_2": ["BNL_50um_1cm_450um_W3051", 500, 50, 10.0, 170, 50, "Null", "Null", "SB3"],
+    "BNL_50um_1cm_400um_W3051_1_4": ["BNL_50um_1cm_400um_W3051", 500, 100, 10.0, 160, 50, "Null", "Null", "SB7"],
+    "BNL_50um_1cm_450um_W3052_2_4": ["BNL_50um_1cm_450um_W3052", 500, 50, 10.0, 185, 50, "Null", "Null", "SB4"],
+    "BNL_20um_1cm_400um_W3074_1_4": ["BNL_20um_1cm_400um_W3074", 500, 100, 10.0, 95, 20, "Null", "Null", "SB5"],
+    "BNL_20um_1cm_400um_W3075_1_2": ["BNL_20um_1cm_400um_W3075", 500, 100, 10.0, 80, 20, "Null", "Null", "SB6"],
+    "BNL_20um_1cm_450um_W3074_2_1": ["BNL_20um_1cm_450um_W3074", 500, 50, 10.0, 95, 20, "Null", "Null", "SB1"],
+    "BNL_20um_1cm_450um_W3075_2_4": ["BNL_20um_1cm_450um_W3075", 500, 50, 10.0, 80, 20, "Null", "Null", "SB2"],
+    "BNL_50um_2p5cm_mixConfig1_W3051_1_4": ["BNL_50um_2p5cm_mixConfig1_W3051", 500, 100, 25.0, 170, 50, "Null", "Null", "Null"],
+    "BNL_50um_2p5cm_mixConfig2_W3051_1_4": ["BNL_50um_2p5cm_mixConfig2_W3051", 500, 50, 25.0, 170, 50, "Null", "Null", "Null"],
 
     # HPK pads (January)
-    "HPK_20um_500x500um_2x2pad_E600_FNAL": ["HPK_20um_2x2pad", 500, 500, 0.5, 105, 20, "E", 600],
-    "HPK_30um_500x500um_2x2pad_E600_FNAL": ["HPK_30um_2x2pad", 500, 500, 0.5, 140, 30, "E", 600],
-    "HPK_50um_500x500um_2x2pad_E600_FNAL": ["HPK_50um_2x2pad", 500, 500, 0.5, 190, 50, "E", 600],
+    "HPK_20um_500x500um_2x2pad_E600_FNAL": ["HPK_20um_2x2pad", 500, 500, 0.5, 105, 20, "E", 600, "SHP1"],
+    "HPK_30um_500x500um_2x2pad_E600_FNAL": ["HPK_30um_2x2pad", 500, 500, 0.5, 140, 30, "E", 600, "SHP2"],
+    "HPK_50um_500x500um_2x2pad_E600_FNAL": ["HPK_50um_2x2pad", 500, 500, 0.5, 190, 50, "E", 600, "SHP3"],
 
     # HPK pads (May)
-    "HPK_W9_22_3_20T_500x500_150M_E600": ["HPK_W9_22_3_20T_500x500_150M_E600", 500, 150, 5.0, 112, 20, "E", 600],
-    "HPK_W9_23_3_20T_500x500_300M_E600": ["HPK_W9_23_3_20T_500x500_300M_E600", 500, 300, 5.0, 112, 20, "E" , 600],
-    "HPK_W11_22_3_20T_500x500_150M_C600": ["HPK_W11_22_3_20T_500x500_150M_C600", 500, 150, 5.0, 116, 20, "C", 600],
-    "HPK_W8_1_1_50T_500x500_150M_C600": ["HPK_W8_1_1_50T_500x500_150M_C600", 500, 150, 5.0, 200, 50, "C", 600],
-    "HPK_W5_1_1_50T_500x500_150M_E600": ["HPK_W5_1_1_50T_500x500_150M_E600", 500, 150, 5.0, 185, 50, "C", 600],
+    "HPK_W9_22_3_20T_500x500_150M_E600": ["HPK_W9_22_3_20T_500x500_150M_E600", 500, 150, 5.0, 112, 20, "E", 600, "SHP5"],
+    "HPK_W9_23_3_20T_500x500_300M_E600": ["HPK_W9_23_3_20T_500x500_300M_E600", 500, 300, 5.0, 112, 20, "E", 600, "SHP8"],
+    "HPK_W11_22_3_20T_500x500_150M_C600": ["HPK_W11_22_3_20T_500x500_150M_C600", 500, 150, 5.0, 116, 20, "C", 600, "SHP4"],
+    "HPK_W8_1_1_50T_500x500_150M_C600": ["HPK_W8_1_1_50T_500x500_150M_C600", 500, 150, 5.0, 200, 50, "C", 600, "SHP6"],
+    "HPK_W5_1_1_50T_500x500_150M_E600": ["HPK_W5_1_1_50T_500x500_150M_E600", 500, 150, 5.0, 185, 50, "C", 600, "SHP7"],
 
     # HPK strips
-    "HPK_W8_18_2_50T_1P0_500P_100M_C600": ["HPK_W8_18_2_50T_100M_C600", 500, 100, 10.0, 208, 50, "C", 600],
-    "HPK_W8_17_2_50T_1P0_500P_50M_C600": ["HPK_W8_17_2_50T_50M_C600", 500, 50, 10.0, 206, 50, "C", 600],
-    "HPK_W4_17_2_50T_1P0_500P_50M_C240": ["HPK_W4_17_2_50T_1P0_500P_50M_C240", 500, 50, 10.0, 204, 50, "C", 240],
-    "HPK_W5_17_2_50T_1P0_500P_50M_E600": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 190, 50, "E", 600],
-    "HPK_W2_3_2_50T_1P0_500P_50M_E240": ["HPK_W2_3_2_50T_1P0_500P_50M_E240", 500, 50, 10.0, 180, 50, "E", 240],
-    "HPK_W9_15_2_20T_1P0_500P_50M_E600": ["HPK_W9_15_2_20T_1P0_500P_50M_E600", 500, 50, 10.0, 114, 20, "E", 600],
-    "HPK_W9_14_2_20T_1P0_500P_100M_E600": ["HPK_W9_14_2_20T_1P0_500P_100M_E600", 500, 100, 10.0, 112, 20, "E", 600],
-    "HPK_KOJI_50T_1P0_80P_60M_E240": ["HPK_50T_1P0_80P_60M_E240", 80, 60, 10.0, 190, 50, "E", 240],
-    "HPK_KOJI_20T_1P0_80P_60M_E240": ["HPK_20T_1P0_80P_60M_E240", 80, 60, 10.0, 112, 20, "E", 240],
-    "HPK_W9_15_4_20T_0P5_500P_50M_E600": ["HPK_W9_15_4_20T_0P5_500P_50M_E600", 500, 50, 5.0, 110, 20, "E", 600],
+    "HPK_W8_18_2_50T_1P0_500P_100M_C600": ["HPK_W8_18_2_50T_100M_C600", 500, 100, 10.0, 208, 50, "C", 600, "SHW8"],
+    "HPK_W8_17_2_50T_1P0_500P_50M_C600": ["HPK_W8_17_2_50T_50M_C600", 500, 50, 10.0, 206, 50, "C", 600, "SHW4"],
+    "HPK_W4_17_2_50T_1P0_500P_50M_C240": ["HPK_W4_17_2_50T_1P0_500P_50M_C240", 500, 50, 10.0, 204, 50, "C", 240, "SHW3"],
+    "HPK_W5_17_2_50T_1P0_500P_50M_E600": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 190, 50, "E", 600, "SHW6"],
+    "HPK_W2_3_2_50T_1P0_500P_50M_E240": ["HPK_W2_3_2_50T_1P0_500P_50M_E240", 500, 50, 10.0, 180, 50, "E", 240, "SHW5"],
+    "HPK_W9_15_2_20T_1P0_500P_50M_E600": ["HPK_W9_15_2_20T_1P0_500P_50M_E600", 500, 50, 10.0, 114, 20, "E", 600, "SHW2"],
+    "HPK_W9_14_2_20T_1P0_500P_100M_E600": ["HPK_W9_14_2_20T_1P0_500P_100M_E600", 500, 100, 10.0, 112, 20, "E", 600, "SHW7"],
+    "HPK_KOJI_50T_1P0_80P_60M_E240": ["HPK_50T_1P0_80P_60M_E240", 80, 60, 10.0, 190, 50, "E", 240, "SHN2"],
+    "HPK_KOJI_20T_1P0_80P_60M_E240": ["HPK_20T_1P0_80P_60M_E240", 80, 60, 10.0, 112, 20, "E", 240, "SHN1"],
+    "HPK_W9_15_4_20T_0P5_500P_50M_E600": ["HPK_W9_15_4_20T_0P5_500P_50M_E600", 500, 50, 5.0, 110, 20, "E", 600, "SHW1"],
 }
 
 sensorsGeom2023 = {}
@@ -52,13 +52,19 @@ for key, info in geometry2023_default.items():
     info_dict["BV"], info_dict["voltage"] = info[4], info[4]
     info_dict["thickness"] = info[5]
     info_dict["resistivity"] = info[6]
+    info_dict["resistivityNumber"] = 0
+    if info[6] == "E":
+        info_dict["resistivityNumber"] = 1600
+    if info[6] == "C":
+        info_dict["resistivityNumber"] = 400
     info_dict["capacitance"] = info[7]
+    info_dict["tag"] = info[8]
 
     sensorsGeom2023[key] = info_dict
 
 #########################  Resolutions and efficiency  #########################
 # NOTE: Resolution values do NOT have tracker component removed
-###############################---  Overall  ---################################
+############################### ---  Overall  ---################################
 # <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Overall = {
     # BNL strips
@@ -97,7 +103,7 @@ resolutions2023_Overall = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [109.4, 20.2, 37.4, 63.9, 36.1],
 }
 
-################################---  Metal  ---#################################
+################################ ---  Metal  ---#################################
 # <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Metal = {
     # BNL strips
@@ -136,7 +142,7 @@ resolutions2023_Metal = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [19.7, 27.1, 24.9, 97.2, 2.8],
 }
 
-#################################---  Gap  ---##################################
+################################# ---  Gap  ---##################################
 # <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Gap = {
     # BNL strips
@@ -188,7 +194,7 @@ resolutions2023_Gap = {
 }
 
 ##############################  Characterization  ##############################
-###############################---  Overall  ---################################
+############################### ---  Overall  ---################################
 # <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Overall = {
     # BNL strips
@@ -227,7 +233,7 @@ characteristics2023_Overall = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [],
 }
 
-################################---  Metal  ---#################################
+################################ ---  Metal  ---#################################
 # <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Metal = {
     # BNL strips
@@ -266,7 +272,7 @@ characteristics2023_Metal = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [],
 }
 
-#################################---  Gap  ---##################################
+################################# ---  Gap  ---##################################
 # <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Gap = {
     # BNL strips
@@ -310,29 +316,36 @@ region = ["", "_o", "_m", "_g"]
 resolutions2023 = {}
 for sensor in resolutions2023_Overall:
     info_dict = {}
-    list_res = [resolutions2023_Overall[sensor], resolutions2023_Overall[sensor], resolutions2023_Metal[sensor], resolutions2023_Gap[sensor]]
-    list_char = [characteristics2023_Overall[sensor], characteristics2023_Overall[sensor], characteristics2023_Metal[sensor], characteristics2023_Gap[sensor]]
+    list_res = [resolutions2023_Overall[sensor], resolutions2023_Overall[sensor],
+                resolutions2023_Metal[sensor], resolutions2023_Gap[sensor]]
+    list_char = [characteristics2023_Overall[sensor], characteristics2023_Overall[sensor],
+                 characteristics2023_Metal[sensor], characteristics2023_Gap[sensor]]
     for i, reg in enumerate(region):
         res = list_res[i]
         if not res:
             # print(" (!) Sensor %s resolution is empty (!)"%sensor)
             continue
-        info_dict["position_oneStrip%s"%reg], info_dict["position_oneStripRMS%s"%reg] = res[0], res[0]
-        info_dict["res_one_strip%s"%reg] = res[0]
-        info_dict["position_twoStrip%s"%reg], info_dict["res_two_strip%s"%reg] = res[1], res[1]
-        info_dict["time_resolution%s"%reg], info_dict["res_time%s"%reg] = res[2], res[2]
-        info_dict["efficiency_oneStrip%s"%reg], info_dict["efficiency_one_strip%s"%reg] = res[3], res[3]
-        info_dict["efficiency_twoStrip%s"%reg], info_dict["efficiency_two_strip%s"%reg] = res[4], res[4]
+        info_dict["position_oneStrip%s" %
+                  reg], info_dict["position_oneStripRMS%s" % reg] = res[0], res[0]
+        info_dict["res_one_strip%s" % reg] = res[0]
+        info_dict["position_twoStrip%s" %
+                  reg], info_dict["res_two_strip%s" % reg] = res[1], res[1]
+        info_dict["time_resolution%s" %
+                  reg], info_dict["res_time%s" % reg] = res[2], res[2]
+        info_dict["efficiency_oneStrip%s" %
+                  reg], info_dict["efficiency_one_strip%s" % reg] = res[3], res[3]
+        info_dict["efficiency_twoStrip%s" %
+                  reg], info_dict["efficiency_two_strip%s" % reg] = res[4], res[4]
 
         char = list_char[i]
         if not char:
             # print(" (!) Sensor %s characteristic is empty (!)"%sensor)
             continue
-        info_dict["jitter%s"%reg] = char[0]
-        info_dict["amp_max%s"%reg] = char[1]
-        info_dict["rise_time%s"%reg] = char[2]
-        info_dict["baseline_rms%s"%reg] = char[3]
-        info_dict["charge%s"%reg] = char[4]
+        info_dict["jitter%s" % reg] = char[0]
+        info_dict["amp_max%s" % reg] = char[1]
+        info_dict["rise_time%s" % reg] = char[2]
+        info_dict["baseline_rms%s" % reg] = char[3]
+        info_dict["charge%s" % reg] = char[4]
 
     resolutions2023[sensor] = info_dict
 
@@ -404,7 +417,7 @@ for key, voltages in geometry2023_biasscan.items():
     info = geometry2023_default[key]
     for volt in voltages:
         info_dict = {}
-        info_dict["sensor"] = "%s_%iV"%(info[0], volt)
+        info_dict["sensor"] = "%s_%iV" % (info[0], volt)
         info_dict["pitch"] = info[1]
         info_dict["stripWidth"], info_dict["width"] = info[2], info[2]
         info_dict["length"] = info[3]
@@ -413,7 +426,7 @@ for key, voltages in geometry2023_biasscan.items():
         info_dict["resistivity"] = info[6]
         info_dict["capacitance"] = info[7]
 
-        new_key = "%s_%iV"%(key, volt)
+        new_key = "%s_%iV" % (key, volt)
         sensorsGeom2023_biasScan[new_key] = info_dict
 
 ##########################  Characterization overall  ##########################
@@ -456,7 +469,6 @@ for key, values in characteristics2023_biasscan_Overall.items():
     variableInfo2023_biasScan[key] = info_dict
 
 # TODO: Add dictionary with Metal and Gap values when they are implemented in pads
-
 
 
 ################################################################################
@@ -546,4 +558,3 @@ for key, res_list in resolutions2022_onestrip.items():
     info_dict["errOneStrip"] = [1.0] * len(res_list)
 
     resolutions2022OneStripChannel[key] = info_dict
-
