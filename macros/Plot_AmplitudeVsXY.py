@@ -12,6 +12,8 @@ colors = myStyle.GetColors(True)
 
 ## Defining Style
 myStyle.ForceStyle()
+marginR = 3 * myStyle.GetMargin()
+myStyle.ChangeMargins(mright=marginR)
 
 
 class HistoInfo:
