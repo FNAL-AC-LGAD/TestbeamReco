@@ -1,20 +1,20 @@
 import ROOT
 
-def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True, shift=0.0):
+def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18,
+                strips=True, shift=0.0, pitch=0.0):
     
-    if strips == True :
+    if (strips == True):
+        boxesInfo = []
+        # NOTE: Pads use the first row position only
+        for i in range(7):
+            bname = "stripBoxInfo0%i"%i
+            if (f.Get(bname)):
+                boxesInfo.append(f.Get(bname))
+    else:
         boxesInfo = []
         boxesInfo.append(f.Get("stripBoxInfo00"))
         boxesInfo.append(f.Get("stripBoxInfo01"))
-        boxesInfo.append(f.Get("stripBoxInfo02"))
-        boxesInfo.append(f.Get("stripBoxInfo03"))
-        boxesInfo.append(f.Get("stripBoxInfo04"))
-        boxesInfo.append(f.Get("stripBoxInfo05"))
-        if (f.Get("stripBoxInfo06")): boxesInfo.append(f.Get("stripBoxInfo06"))
-    else :
-        boxesInfo = []
-        boxesInfo.append(f.Get("stripBoxInfo00"))
-        boxesInfo.append(f.Get("stripBoxInfo01"))
+        print(" << WARNING >> Pads now follow the same treatment as strips.")
         
     widthPercent = 0.001 if getCenter else 0.5
 
@@ -24,6 +24,9 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18, strips=True,
             print("Warning: Issue getting stripBoxInfo")
             continue
         xCenter = box.GetMean(1) - shift
+        # Use ideal position if pitch is given
+        if pitch:
+            xCenter = round(xCenter/pitch) * pitch
         width = box.GetMean(2)
         xmin = xCenter - (widthPercent*width)
         xmax = xCenter + (widthPercent*width)
