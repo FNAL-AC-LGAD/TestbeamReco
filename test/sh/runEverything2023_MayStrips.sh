@@ -373,7 +373,7 @@ cd ../../test
 HPK_500P=('HPK_W8_18_2_50T_1P0_500P_100M_C600_208V' 'HPK_W8_17_2_50T_1P0_500P_50M_C600_200V' 'HPK_W4_17_2_50T_1P0_500P_50M_C240_204V' 'HPK_W5_17_2_50T_1P0_500P_50M_E600_190V' 'HPK_W2_3_2_50T_1P0_500P_50M_E240_180V' 'HPK_W9_15_2_20T_1P0_500P_50M_E600_114V' 'HPK_W9_14_2_20T_1P0_500P_100M_E600_112V' 'HPK_W9_15_4_20T_0P5_500P_50M_E600_110V')
 
 for sensor in "${HPK_500P[@]}"; do
-    echo "Running over ${sensor} sensor"
+    printf "\nRunning over ${sensor} sensor\n"
     cd ../test
     ./MyAnalysis -A InitialAnalyzer -D ${sensor}
     cd ../macros
@@ -383,8 +383,6 @@ for sensor in "${HPK_500P[@]}"; do
     ./MyAnalysis -A Analyze -D ${sensor}
     cd ../macros
 
-    python Plot_AmplitudeVsX.py         -D ${sensor} --xlength 1.9 --ylength 170.0
-    python Plot_AmplitudeVsXY.py        -D ${sensor} --zmin 20.0 --zmax 170.0
     python Plot_SimpleXYMaps.py         -D ${sensor}
     python Plot_AmpChargeVsXY.py        -D ${sensor}
     # python Plot_RecoDiffVsXY.py         -D ${sensor} --zmin 0.0 --zmax 100.0
@@ -392,11 +390,15 @@ for sensor in "${HPK_500P[@]}"; do
     python Plot_CutFlow.py              -D ${sensor}
 
     # Paper plots
+    python Plot_AmplitudeVsX.py         -D ${sensor} -x 1.9 -y 200.0
+    python Plot_AmplitudeVsXY.py        -D ${sensor} -z 0.0 -Z 200.0
     python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 1.9
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 1.9
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 1.9 -y 100
 
+    python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 1.9 -y 200.0
+    python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 1.9
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 1.9
@@ -425,7 +427,7 @@ python Plot_Summary_XRes_Time.py    -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V    
 HPK_80P=('HPK_KOJI_50T_1P0_80P_60M_E240_190V' 'HPK_KOJI_20T_1P0_80P_60M_E240_112V')
 
 for sensor in "${HPK_80P[@]}"; do
-    echo "Running over ${sensor} sensor"
+    printf "\nRunning over ${sensor} sensor\n"
     cd ../test
     ./MyAnalysis -A InitialAnalyzer -D ${sensor}
     cd ../macros
@@ -436,8 +438,6 @@ for sensor in "${HPK_80P[@]}"; do
     cd ../macros
 
     python DoPositionRecoFit.py         -D ${sensor} -A --xmax 0.62 --fitOrder 5
-    python Plot_AmplitudeVsX.py         -D ${sensor} --xlength 0.6 --ylength 100.0
-    python Plot_AmplitudeVsXY.py        -D ${sensor} --zmin 20.0 --zmax 100.0
     python Plot_SimpleXYMaps.py         -D ${sensor}
     python Plot_AmpChargeVsXY.py        -D ${sensor}
     # python Plot_RecoDiffVsXY.py         -D ${sensor} --zmin 0.0 --zmax 100.0
@@ -445,11 +445,15 @@ for sensor in "${HPK_80P[@]}"; do
     python Plot_CutFlow.py              -D ${sensor}
 
     # Paper plots
+    python Plot_AmplitudeVsX.py         -D ${sensor} -x 0.6 -y 200.0
+    python Plot_AmplitudeVsXY.py        -D ${sensor} -z 0.0 -Z 200.0
     python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 0.6
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.6 -y 50
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.6 -y 100
 
+    python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 0.6 -y 200.0
+    python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.6
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.6 -y 50
