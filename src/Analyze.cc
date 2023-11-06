@@ -563,6 +563,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"deltaX_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #X_{reco} - X_{track} [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,-0.5,0.5);
     utility::makeHisto(my_3d_histos,"deltaY_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,-30.5,30.5);
     utility::makeHisto(my_3d_histos,"risetime_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
+    utility::makeHisto(my_3d_histos,"risetime_vs_xy_tight","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
     utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,50.0);
     utility::makeHisto(my_3d_histos,"charge_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,150.0);
     utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,50.0);
@@ -1418,6 +1419,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass_tight && goodMaxLGADAmp,                                                   my_3d_histos, "amplitudeDefault_vs_xy_tight", x,y,maxAmpDefaultLGAD);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "baselineRMS_vs_xy", x,y,baselineMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "risetime_vs_xy", x,y,risetimeMaxChannel);
+        utility::fillHisto(pass_tight && goodMaxLGADAmp,                                                   my_3d_histos, "risetime_vs_xy_tight", x,y,risetimeMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "charge_vs_xy", x,y,chargeMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "ampChargeRatio_vs_xy", x,y,ampChargeRatioMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "slewRate_vs_xy", x,y,slewrateMaxChannel);

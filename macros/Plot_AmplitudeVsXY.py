@@ -103,6 +103,7 @@ list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
     ["amplitude_vs_xy", "Amplitude", "MPV signal amplitude [mV]"],
     ["amplitudeDefault_vs_xy", "AmplitudeDefault", "MPV signal amplitude [mV]"],
+    ["risetime_vs_xy", "Risetime", "Risetime [ps]"],
 ]
 
 # TODO: Add per channel plots
@@ -121,6 +122,9 @@ if (is_tight):
 all_histoInfos = []
 for titles in list_htitles:
     hname, outname, ztitle = titles
+    if not (inputfile.Get(hname)):
+        print(" >> Histogram %s does not exist! Skipping."%hname)
+        continue
     info_obj = HistoInfo(hname, inputfile, outname, zmin=zmin, zmax=zmax, zlabel=ztitle,
                          sensor=dataset) #, center_position=position_center)
     all_histoInfos.append(info_obj)
@@ -179,11 +183,14 @@ outputfile = TFile(output_path,"RECREATE")
 
 for i,info_entry in enumerate(all_histoInfos):
     hist = info_entry.th2
+    if ("Risetime" in hist.GetName()):
+        hist.SetMinimum(0.0)
+        hist.SetMaximum(1000.0)
     hist.Draw("colz")
     hist.Write()
 
     # myStyle.BeamInfo()
-    myStyle.SensorInfoSmart(dataset)
+    myStyle.SensorInfoSmart(dataset, mright=marginR)
 
     save_path = "%s%s_vs_xy"%(outdir, info_entry.outHistoName)
     if (is_tight):

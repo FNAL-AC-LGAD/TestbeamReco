@@ -52,8 +52,12 @@ class HistoInfo:
         # Create and define th1 default style
         th1 = TH1D(hname, htitle, nxbin, xmin, xmax)
         # th1.SetStats(0)
-        th1.SetMinimum(0.0001)
-        th1.SetMaximum(self.yMax)
+        if ("Risetime" in th1.GetName()):
+            th1.SetMinimum(0.0)
+            th1.SetMaximum(1000.0)
+        else:
+            th1.SetMinimum(0.0001)
+            th1.SetMaximum(self.yMax)
         # th1.SetLineWidth(3)
         # th1.SetLineColor(kBlack)
         # # th1.GetXaxis().SetRangeUser(-xlength,xlength)
@@ -96,6 +100,7 @@ list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
     ["amplitude_vs_xy", "Amplitude", "MPV signal amplitude [mV]"],
     ["amplitudeDefault_vs_xy", "AmplitudeDefault", "MPV signal amplitude [mV]"],
+    ["risetime_vs_xy", "Risetime", "Risetime [ps]"],
 ]
 
 # TODO: Add per channel plots
@@ -114,6 +119,9 @@ if (is_tight):
 all_histoInfos = []
 for titles in list_htitles:
     hname, outname, ytitle = titles
+    if not (inputfile.Get(hname)):
+        print(" >> Histogram %s does not exist! Skipping."%hname)
+        continue
     info_obj = HistoInfo(hname, inputfile, outname, yMax=ylength, ylabel=ytitle,
                          sensor=dataset, center_position=position_center)
     all_histoInfos.append(info_obj)
@@ -208,10 +216,15 @@ for i,info_entry in enumerate(all_histoInfos):
     hist = info_entry.th1
     hist.SetLineColor(colors[0])
     hist.SetLineWidth(2)
+
     ymin = hist.GetMinimum()
     ymax = hist.GetMaximum()
 
-    htemp.Draw("AXIS")
+    haxis = htemp.Clone()
+    haxis.SetMinimum(ymin)
+    haxis.SetMaximum(ymax)
+
+    haxis.Draw("AXIS")
     # Define and draw gray bars in the background (Position of metallic sections)
     boxes = getStripBox(inputfile, ymin=ymin, ymax=ymax, strips=True,
                         shift=position_center, pitch=pitch/1000.)
@@ -224,7 +237,7 @@ for i,info_entry in enumerate(all_histoInfos):
 
     hist.Write()
 
-    htemp.Draw("AXIS same")
+    haxis.Draw("AXIS same")
     # legend.Draw()
 
     # myStyle.BeamInfo()
