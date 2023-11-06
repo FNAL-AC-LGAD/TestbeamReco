@@ -70,6 +70,7 @@ parser.add_option('-d', dest='debugMode', action='store_true', default = False, 
 parser.add_option('-Y', '--alongY',dest='centerAlongY', action='store_true', default = False, help="Center plots in Y direction (for pads only)")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
+parser.add_option('-a', dest='plotAll', action='store_true', default = False, help="Plot no delay correction and LGAD correction too")
 
 options, args = parser.parse_args()
 use_center_y = options.centerAlongY
@@ -98,6 +99,7 @@ ylength = float(options.ylength)
 debugMode = options.debugMode
 
 is_tight = options.useTight
+show_all = options.plotAll
 is_hotspot = options.hotspot
 
 # Get position of the central channel in the direction requested
@@ -300,10 +302,13 @@ for i,info_entry in enumerate(all_histoInfos):
             box.Draw()
         gPad.RedrawAxis("g")
 
+    hist.Write()
+
+    # Skip some histograms if not needed
+    if (not show_all and ("Tracker" not in info_entry.outHistoName)):
+        continue
     hist.Draw("hist e same")
     legend.AddEntry(hist, legend_name[i], "lep")
-
-    hist.Write()
 
 htemp.Draw("AXIS same")
 legend.Draw()
