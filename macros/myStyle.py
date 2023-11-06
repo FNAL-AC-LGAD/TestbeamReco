@@ -5,7 +5,6 @@ import mySensorInfo as msi
 ## Define global variables
 marg=0.05
 font=43 # Helvetica
-# tsize=32
 tsize=38 #35
 
 ### Paths and directories' functions
@@ -99,21 +98,23 @@ def ForceStyle():
     ROOT.gROOT.ForceStyle()
 
 
-def BeamInfo():
+def BeamInfo(mtop=marg, mleft=2*marg):
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
-    text.DrawLatexNDC(2*marg+0.005,1-marg+0.01,"#bf{FNAL 120 GeV proton beam}")
+    text.DrawLatexNDC(mleft+0.005, 1-mtop+0.01, "#bf{FNAL 120 GeV proton beam}")
 
-def SensorInfo(sensor="Name", bias_voltage="", write_bv=True,adjustleft=0):
+def SensorInfo(sensor="Name", bias_voltage="", write_bv=True, adjustleft=0, mtop=marg, mright=2*marg):
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
     text.SetTextAlign(31)
-    if bias_voltage:
-        text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor) + ", "+str(bias_voltage)+"}")
-    else:
-        text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor)+"}")
 
-def SensorInfoSmart(dataset, adjust=0.00):
+    string = "#bf{%s}"%sensor
+    if bias_voltage:
+        string = "%s, %s}"%(string[:-1], bias_voltage)
+
+    text.DrawLatexNDC(1-mright-0.005-adjustleft, 1-mtop+0.01, string)
+
+def SensorInfoSmart(dataset, adjust=0.0, mtop=marg, mright=2*marg):
     name ="Not defined"
     bias_voltage = "X"
 
@@ -121,10 +122,20 @@ def SensorInfoSmart(dataset, adjust=0.00):
         name = GetGeometry(dataset)['sensor']
         bias_voltage = GetBV(dataset)
 
-    SensorInfo(name,bias_voltage,True,adjust)
+    SensorInfo(name, bias_voltage, True, adjust, mtop, mright)
 
 
-### Return-value functions
+### Change global values functions
+def ChangeMargins(mtop=marg, mright=marg, mbot=2*marg, mleft=2*marg):
+    ROOT.gStyle.SetPadTopMargin(mtop)
+    ROOT.gStyle.SetPadRightMargin(mright)
+    ROOT.gStyle.SetPadBottomMargin(mbot)
+    ROOT.gStyle.SetPadLeftMargin(mleft)
+
+    ROOT.gROOT.ForceStyle()
+
+
+### Return global values functions
 def GetMargin():
     return marg
 
@@ -134,8 +145,9 @@ def GetFont():
 def GetSize():
     return tsize
 
-def GetPadCenter():
-    return (1 + marg)/2
+def GetPadCenter(mleft=2*marg, mright=marg):
+    center = 1/2 + mleft/2 - mright/2
+    return center
 
 
 ### Colors
@@ -167,17 +179,22 @@ def GetGeometry(name):
     return sensor_dict
 
 def RemoveBV(name):
-    name_split=name.split('_')
-    if name_split[-1][-1]=="V":
-        name='_'.join(str(name_split[i]) for i in range(len(name_split)-1))
+    last_element = name.split('_')[-1]
+    if (last_element[-1] == "V"):
+        name = name.replace("_%s"%last_element, "")
+
     return name
 
 def GetBV(name):
-    name_split=name.split('_')
-    if name_split[-1][-1]=="V":
-        return name_split[-1]
+    last_element = name.split('_')[-1]
+    if (last_element[-1] == "V"):
+        biasvolt = last_element[:-1]
     else:
-        return ""
+        geometry = GetGeometry(name)
+        biasvolt = str(geometry["BV"])
+        print("  >> Bias voltage not given! Using default value: %s V."%biasvolt)
+
+    return biasvolt
 
 def GetResolutions(name, per_channel=False):
     key_name = RemoveBV(name)

@@ -45,7 +45,7 @@ class HistoInfo:
         th2 = f.Get(name)
 
         return th2
-    
+
     def getTH1(self, hname):
         htitle = ";%s;%s"%(self.xlabel, self.ylabel)
         nxbin = self.th2.GetXaxis().GetNbins()
@@ -242,7 +242,7 @@ for i in range(1, nbins+1):
         # Define minimum of bin's entries to be fitted
         minEvtsCut = totalEvents/nbins
 
-        if i==0:
+        if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
             msg_nentries+= "(Total events: %i)"%(totalEvents)
             print(msg_nentries)

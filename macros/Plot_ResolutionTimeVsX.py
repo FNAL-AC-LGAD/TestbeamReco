@@ -167,7 +167,7 @@ for i in range(1, nbins+1):
         if ("HPK_50um" in dataset):
             minEvtsCut = 0.7*minEvtsCut
 
-        if i==0:
+        if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
             msg_nentries+= "(Total events: %i)"%(totalEvents)
             print(msg_nentries)
@@ -266,6 +266,7 @@ htemp.SetLineColor(colors[2])
 # Draw ALL values in the same canvas
 htemp.Draw("AXIS")
 
+# TODO: Remove unnecessary histograms!
 sub_colors = [colors[5], kBlack, colors[1], colors[2]]
 sub_widths = [2, 2, 2, 4]
 legend_name = [

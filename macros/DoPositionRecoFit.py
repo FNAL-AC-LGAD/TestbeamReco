@@ -126,7 +126,7 @@ string_for_geo = string_for_geo.replace(", }","}")
 
 print(string_for_geo)
 
-width = (inputfile.Get("stripBoxInfo03")).GetMean(2)
+width = (inputfile.Get("stripBoxInfo00")).GetMean(2)
 #boxes = stripBox.getStripBoxForRecoFit(width, pitch, 0.6*pitch, xmax, xmin)
 boxes = stripBox.getStripBoxForRecoFit(width, pitch, 0.6*pitch, 1.0, xmin)
 for box in boxes:
