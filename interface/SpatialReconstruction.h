@@ -64,7 +64,7 @@ private:
 
         auto& twoStripsReco = tr.createDerivedVar<bool>("twoStripsReco");
         twoStripsReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
-        double y_reco=0.0, x_reco = 0.0, x1 = 0.0, y1 = 0.0, x2 = 0.0;
+        double y_reco=0.0, x_reco = 0.0, x1 = 0.0, x2 = 0.0; // , y1 = 0.0, y2 = 0.0,
         double x_reco_basic = 0.0, y_reco_basic = 0.0;
         double dXdFrac = 0.0;
         if(enablePositionReconstruction)
@@ -80,12 +80,12 @@ private:
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 
+            //Define slope of poly fit function
+            dXdFrac = getDXDerivative(positionRecoPar, Amp1OverAmp1and2, 0.5);
+
             //Define basic x reco
             double xBasic = (1.0 - Amp1OverAmp1and2)*pitch;
             x_reco_basic = (x2>x1) ? x1 + xBasic : x1 - xBasic;
-
-            //Define slope of poly fit function
-            dXdFrac = getDXDerivative(positionRecoPar, Amp1OverAmp1and2, 0.5);
 
             //Define basic y reco
             double vX =  2.0;
@@ -164,36 +164,52 @@ private:
         utility::remapToLGADgeometry(tr, corrTimeTrackerX,      "timeTrackerX");
 
         // Position resolution for the pad sensors
-        const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
-        const auto& positionRecoParLeft = tr.getVar<std::vector<double>>("positionRecoParLeft");
-        const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
-        const auto& positionRecoParBot = tr.getVar<std::vector<double>>("positionRecoParBot");
+        // const auto& positionRecoParRow = tr.getVar<std::vector<double>>("positionRecoParRow");
+        const auto& positionRecoParCol = tr.getVar<std::vector<double>>("positionRecoParCol");
+        // // const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
+        // // const auto& positionRecoParLeft = tr.getVar<std::vector<double>>("positionRecoParLeft");
+        // // const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
+        // // const auto& positionRecoParBot = tr.getVar<std::vector<double>>("positionRecoParBot");
         const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
-        // const auto& sensorCenter = tr.getVar<double>("sensorCenter");
-        // const auto& sensorCenterY = tr.getVar<double>("sensorCenterY");
-        const auto& AmpTopOverAmpTopandBotRight = tr.getVar<double>("AmpTopOverAmpTopandBotRight");
-        const auto& AmpTopOverAmpTopandBotLeft = tr.getVar<double>("AmpTopOverAmpTopandBotLeft");
-        const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
-        const auto& AmpLeftOverAmpLeftandRightBot = tr.getVar<double>("AmpLeftOverAmpLeftandRightBot");
+        // // const auto& AmpTopOverAmpTopandBotRight = tr.getVar<double>("AmpTopOverAmpTopandBotRight");
+        // // const auto& AmpTopOverAmpTopandBotLeft = tr.getVar<double>("AmpTopOverAmpTopandBotLeft");
+        // // const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
+        // // const auto& AmpLeftOverAmpLeftandRightBot = tr.getVar<double>("AmpLeftOverAmpLeftandRightBot");
+        const auto& positionRecoMaxPointCol = tr.getVar<double>("positionRecoMaxPointCol");
+        // const auto& positionRecoMaxPointRow = tr.getVar<double>("positionRecoMaxPointRow");
           	
+        // if(enablePositionReconstructionPad)
+        // {
+        //     x1 = 0.0;
+
+        //     //use the poly fit function
+        //     auto dXTop = getDX(positionRecoParTop, AmpLeftOverAmpLeftandRightTop);
+        //     auto dXBot = getDX(positionRecoParBot, AmpLeftOverAmpLeftandRightBot);
+        //     auto dX = (amp1Indexes.first ==0) ? dXTop : dXBot;
+
+        //     x_reco = x1 + dX;
+
+        //     y1 = 0.0;
+        //     auto dYRight = getDX(positionRecoParRight, AmpTopOverAmpTopandBotRight);
+        //     auto dYLeft = getDX(positionRecoParLeft, AmpTopOverAmpTopandBotLeft);
+        //     auto dY = (amp1Indexes.second == 0) ? dYLeft : dYRight;
+
+        //     y_reco = dY + y1;
+        // } //if enabled position reconstruction
+
         if(enablePositionReconstructionPad)
-        {	  
-            x1 = 0.0;
-            
-            //use the poly fit function
-            auto dXTop = getDX(positionRecoParTop, AmpLeftOverAmpLeftandRightTop);
-            auto dXBot = getDX(positionRecoParBot, AmpLeftOverAmpLeftandRightBot);
-            auto dX = (amp1Indexes.first ==0) ? dXTop : dXBot;
-            
-            x_reco = x1 + dX;
-           
-            y1 = 0.0;
-            auto dYRight = getDX(positionRecoParRight, AmpTopOverAmpTopandBotRight);
-            auto dYLeft = getDX(positionRecoParLeft, AmpTopOverAmpTopandBotLeft);
-            auto dY = (amp1Indexes.second == 0) ? dYLeft : dYRight;
-            
-            y_reco = dY + y1;                                            
-        } //if enabled position reconstruction
+        {
+            assert(Amp1OverAmp1and2 >= 0);
+            assert(Amp1OverAmp1and2 <= 1);
+            x1 = stripCenterXPositionLGAD[0][maxAmpIndex];
+            x2 = stripCenterXPositionLGAD[0][Amp2Index];
+            auto dX = getDX(positionRecoParCol, Amp1OverAmp1and2, 0.5);
+            dX = (goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPointCol)) ? dX : 0.0;
+
+            x_reco = (x2>x1) ? x1+dX : x1-dX;
+
+            dXdFrac = getDXDerivative(positionRecoParCol, Amp1OverAmp1and2, 0.5);
+        } // if enabled position reconstruction
 
         tr.registerDerivedVar("x_reco", x_reco);
         tr.registerDerivedVar("x_reco_basic", x_reco_basic);

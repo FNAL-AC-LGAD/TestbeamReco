@@ -151,17 +151,18 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             }*/
 
             //Define 3D histograms
-            utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
+            utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
             
-            utility::makeHisto(my_3d_histos,"baselineRMSNew_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 300,0,50 );
-            utility::makeHisto(my_3d_histos,"amplitudeNew_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 300,0,500 );
+            utility::makeHisto(my_3d_histos,"baselineRMSNew_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 300,0,50);
+            utility::makeHisto(my_3d_histos,"amplitudeNew_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 300,0,500);
 
-            utility::makeHisto(my_3d_histos,"amplitudeTop_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeBot_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500 );
-            utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitudeTop_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitudeBot_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
             utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_3d_histos,"risetime_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 300,0.0,1500.0);
@@ -439,7 +440,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 
 
     //Global 3D histograms
-    utility::makeHisto(my_3d_histos,"amplitude_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
+    utility::makeHisto(my_3d_histos,"amplitude_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amplitude_vs_xy_tight","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy_tight","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"amplitude_vs_xyROI","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
     utility::makeHisto(my_3d_histos,"totgoodamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"totamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
@@ -559,6 +563,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"deltaX_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #X_{reco} - X_{track} [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,-0.5,0.5);
     utility::makeHisto(my_3d_histos,"deltaY_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,-30.5,30.5);
     utility::makeHisto(my_3d_histos,"risetime_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
+    utility::makeHisto(my_3d_histos,"risetime_vs_xy_tight","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
     utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,50.0);
     utility::makeHisto(my_3d_histos,"charge_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,150.0);
     utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,50.0);
@@ -734,7 +739,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         /*const auto& channel = tr.getVecVec<float>("channel");
         const auto& time_real = tr.getVecVec<float>("time");*/
         const auto& corrAmp = tr.getVec<double>("corrAmp");
+        // const auto& corrAmpDefault = tr.getVec<double>("corrAmpDefault");
         const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
+        const auto& ampDefaultLGAD = tr.getVec<std::vector<double>>("ampDefaultLGAD");
         const auto& rawAmpLGAD = tr.getVec<std::vector<float>>("rawAmpLGAD");
         const auto& corrTime = tr.getVec<double>("corrTime");
         const auto& timeLGAD = tr.getVec<std::vector<double>>("timeLGAD");
@@ -796,6 +803,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& hitSensorTightY = tr.getVar<bool>("hitSensorTightY");
         const auto& hitSensorTight = tr.getVar<bool>("hitSensorTight");
         const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
+        const auto& maxAmpDefaultLGAD = tr.getVar<double>("maxAmpDefaultLGAD");
         const auto& relFracDC = tr.getVar<double>("relFracDC");
         const auto& relFrac = tr.getVec<std::vector<double>>("relFrac");
         const auto& fracMax = tr.getVec<std::vector<double>>("fracMax");
@@ -813,6 +821,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& amp4Indexes = tr.getVar<std::pair<int,int>>("amp4Indexes");
         const auto& amp5Indexes = tr.getVar<std::pair<int,int>>("amp5Indexes");
         const auto& amp6Indexes = tr.getVar<std::pair<int,int>>("amp6Indexes");
+        const auto& ampDef1Indexes = tr.getVar<std::pair<int,int>>("ampDef1Indexes");
         const auto& ampIndexesAdjPad = tr.getVar<std::pair<int,int>>("ampIndexesAdjPad");
         const auto& deltaXmax = tr.getVar<double>("deltaXmax");
         const auto& deltaXmaxpos = tr.getVar<double>("deltaXmaxpos");
@@ -852,7 +861,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         // bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
         bool hitSensorNoEdges = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]] < x && x < stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]] && hitSensorTightY;
-        if (isPadSensor) {hitSensorNoEdges = hitSensorTightY;} // Update to use xSlice/ySlice
+        if (isPadSensor) {hitSensorNoEdges = hitSensorTight;}
 
         // --- Good hit ---
         // NOTE: The sensorEdges limits defined in Geometry are used in pass and pass_loose.
@@ -864,7 +873,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //      and no Photek hit is required (Used in Efficiency histograms only, due to issues with sensors bigger than Photek)
         //       The pass_NoXYEdges removes The Edges in a similar way, but requires a Photek hit too
         bool pass = goodTrack && hitSensor && goodPhotek;
-        bool pass_loose = goodTrack && hitSensor && goodPhotek;
+        // bool pass_loose = goodTrack && hitSensor && goodPhotek;
         bool pass_tightY = goodTrack && hitSensorTightY && goodPhotek;
         bool pass_tight = goodTrack && hitSensorTight && goodPhotek;
         bool pass_NoXYEdges_NoPhotek = goodTrack && hitSensorNoEdges;
@@ -924,6 +933,15 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         double amp2 = ampLGAD[amp2Indexes.first][amp2Indexes.second];
         double amp2Time = timeLGAD[amp2Indexes.first][amp2Indexes.second];
         double amp3Time = timeLGAD[amp3Indexes.first][amp3Indexes.second];
+
+        // Signal characteristics
+        double risetimeMaxChannel = risetimeLGAD[ampDef1Indexes.first][ampDef1Indexes.second];
+        double chargeMaxChannel = chargeLGAD[ampDef1Indexes.first][ampDef1Indexes.second];
+        double ampChargeRatioMaxChannel = ampChargeRatioLGAD[ampDef1Indexes.first][ampDef1Indexes.second];
+        double baselineMaxChannel = baselineRMS[ampDef1Indexes.first][ampDef1Indexes.second];
+        double slewrateMaxChannel = slewrateLGAD[ampDef1Indexes.first][ampDef1Indexes.second];
+        double slewRateChargeRatioMaxChannel = slewRateChargeRatioLGAD[ampDef1Indexes.first][ampDef1Indexes.second];
+
         double firstEvent = tr.isFirstEvent();
 
         //******************************************************************
@@ -941,6 +959,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 auto passChannel = pass;
                 const auto& maxAmpStr = std::to_string(maxAmpIndex);
                 const auto& ampChannel = ampLGAD[rowIndex][i];
+                const auto& ampDefaultChannel = ampDefaultLGAD[rowIndex][i];
                 const auto& relFracChannel = relFrac[rowIndex][i];
                 const auto& fracMaxChannel = fracMax[rowIndex][i];
                 const auto& rawAmpChannel = rawAmpLGAD[rowIndex][i];
@@ -1076,6 +1095,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 }*/
                 utility::fillHisto(passChannel,                                                    my_3d_histos, "baselineRMS_vs_xy_channel"+r+s, x,y,noise);
                 utility::fillHisto(passChannel && goodHit,                                         my_3d_histos, "amplitude_vs_xy_channel"+r+s, x,y,ampChannel);
+                utility::fillHisto(passChannel && goodHit,                                         my_3d_histos, "amplitudeDefault_vs_xy_channel"+r+s, x,y,ampDefaultChannel);
      
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_3d_histos, "baselineRMSNew_vs_xy_channel"+r+s, x,y,noise);
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_3d_histos, "amplitudeNew_vs_xy_channel"+r+s, x,y,ampChannel);
@@ -1258,52 +1278,52 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
         // --- General quantities ---
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "clusterSize", clusterSize);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "charge", chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "risetime", risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "ampChargeRatio", ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "charge", chargeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "risetime", risetimeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "ampChargeRatio", ampChargeRatioMaxChannel);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "index_diff", amp1Indexes.second - amp2Indexes.second);
 
         // Overall
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "ampMax_Overall", maxAmp);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "risetime_Overall",risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "charge_Overall",chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "ampChargeRatio_Overall",ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "baselineRMS_Overall",baselineRMS[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "slewrate_Overall", slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "slewRateChargeRatio_Overall", slewRateChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "risetime_Overall",risetimeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "charge_Overall",chargeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "ampChargeRatio_Overall",ampChargeRatioMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "baselineRMS_Overall",baselineMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "slewrate_Overall", slewrateMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "slewRateChargeRatio_Overall", slewRateChargeRatioMaxChannel);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "weighted2_jitter_Overall", weighted2_jitter);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                            my_histos, "weighted2_jitter_NewDef_Overall", weighted2_jitter_NewDef);
 
         // Metal
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "ampMax_Metal", maxAmp);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "risetime_Metal",risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "charge_Metal",chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "ampChargeRatio_Metal",ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "baselineRMS_Metal",baselineRMS[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "slewrate_Metal", slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "slewRateChargeRatio_Metal", slewRateChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "risetime_Metal",risetimeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "charge_Metal",chargeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "ampChargeRatio_Metal",ampChargeRatioMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "baselineRMS_Metal",baselineMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "slewrate_Metal", slewrateMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "slewRateChargeRatio_Metal", slewRateChargeRatioMaxChannel);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "weighted2_jitter_Metal", weighted2_jitter);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMetal,              my_histos, "weighted2_jitter_NewDef_Metal", weighted2_jitter_NewDef);
 
         // Gap
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "ampMax_Gap", maxAmp);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "risetime_Gap",risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "charge_Gap",chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "ampChargeRatio_Gap",ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "baselineRMS_Gap",baselineRMS[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "slewrate_Gap", slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "slewRateChargeRatio_Gap", slewRateChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "risetime_Gap",risetimeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "charge_Gap",chargeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "ampChargeRatio_Gap",ampChargeRatioMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "baselineRMS_Gap",baselineMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "slewrate_Gap", slewrateMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "slewRateChargeRatio_Gap", slewRateChargeRatioMaxChannel);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "weighted2_jitter_Gap", weighted2_jitter);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && !hitOnMetal,             my_histos, "weighted2_jitter_NewDef_Gap", weighted2_jitter_NewDef);
 
         // Middle gap
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "ampMax_MidGap", maxAmp);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "risetime_MidGap",risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "charge_MidGap",chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "ampChargeRatio_MidGap",ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "baselineRMS_MidGap",baselineRMS[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "slewrate_MidGap", slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "slewRateChargeRatio_MidGap", slewRateChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "risetime_MidGap",risetimeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "charge_MidGap",chargeMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "ampChargeRatio_MidGap",ampChargeRatioMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "baselineRMS_MidGap",baselineMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "slewrate_MidGap", slewrateMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "slewRateChargeRatio_MidGap", slewRateChargeRatioMaxChannel);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "weighted2_jitter_MidGap", weighted2_jitter);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && hitOnMidGap,             my_histos, "weighted2_jitter_NewDef_MidGap", weighted2_jitter_NewDef);
 
@@ -1394,11 +1414,15 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
         // Save 3d histos
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "amplitude_vs_xy", x,y,maxAmp);
-        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "baselineRMS_vs_xy", x,y,baselineRMS[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "risetime_vs_xy", x,y,risetimeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "charge_vs_xy", x,y,chargeLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "ampChargeRatio_vs_xy", x,y,ampChargeRatioLGAD[amp1Indexes.first][amp1Indexes.second]);
-        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "slewRate_vs_xy", x,y,slewrateLGAD[amp1Indexes.first][amp1Indexes.second]);
+        utility::fillHisto(pass_tight && goodMaxLGADAmp,                                                   my_3d_histos, "amplitude_vs_xy_tight", x,y,maxAmp);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "amplitudeDefault_vs_xy", x,y,maxAmpDefaultLGAD); // These may be removed and leave maxAmpDefaultLGAD in "amplitude_vs_xy"
+        utility::fillHisto(pass_tight && goodMaxLGADAmp,                                                   my_3d_histos, "amplitudeDefault_vs_xy_tight", x,y,maxAmpDefaultLGAD);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "baselineRMS_vs_xy", x,y,baselineMaxChannel);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "risetime_vs_xy", x,y,risetimeMaxChannel);
+        utility::fillHisto(pass_tight && goodMaxLGADAmp,                                                   my_3d_histos, "risetime_vs_xy_tight", x,y,risetimeMaxChannel);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "charge_vs_xy", x,y,chargeMaxChannel);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "ampChargeRatio_vs_xy", x,y,ampChargeRatioMaxChannel);
+        utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "slewRate_vs_xy", x,y,slewrateMaxChannel);
 
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "totgoodamplitude_vs_xy", x,y,totGoodAmpLGAD);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "totamplitude_vs_xy", x,y,totAmpLGAD);

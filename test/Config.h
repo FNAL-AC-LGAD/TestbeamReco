@@ -80,6 +80,8 @@ private:
         tr.registerDerivedVar("ymin", g.ymin);
         tr.registerDerivedVar("ymax", g.ymax);
         tr.registerDerivedVar("positionRecoMaxPoint", g.positionRecoMaxPoint);
+        tr.registerDerivedVar("positionRecoMaxPointRow", g.positionRecoMaxPointRow);
+        tr.registerDerivedVar("positionRecoMaxPointCol", g.positionRecoMaxPointCol);
         tr.registerDerivedVar("photekSignalThreshold", g.photekSignalThreshold);
         tr.registerDerivedVar("photekSignalMax", g.photekSignalMax);
         tr.registerDerivedVar("noiseAmpThreshold", g.noiseAmpThreshold);
@@ -94,6 +96,8 @@ private:
         tr.registerDerivedVar("minPixHits", g.minPixHits);
         tr.registerDerivedVar("minStripHits", g.minStripHits);
         tr.registerDerivedVar("positionRecoPar", g.positionRecoPar);
+        tr.registerDerivedVar("positionRecoParRow", g.positionRecoParRow);
+        tr.registerDerivedVar("positionRecoParCol", g.positionRecoParCol);
         tr.registerDerivedVar("positionRecoParRight", g.positionRecoParRight);
         tr.registerDerivedVar("positionRecoParLeft", g.positionRecoParLeft);
         tr.registerDerivedVar("positionRecoParTop", g.positionRecoParTop);

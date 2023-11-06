@@ -14,11 +14,12 @@ private:
     void signalProperties([[maybe_unused]] NTupleReader& tr)
     {
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
-        const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");       
-        const auto& isPadSensor = tr.getVar<bool>("isPadSensor"); 
+        const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
+        const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
         const auto& corrAmp = tr.getVec<double>("corrAmp");
         const auto& baselineRMS = tr.getVec<std::vector<float>>("baselineRMS");
         const auto& ampLGAD = utility::remapToLGADgeometry(tr, corrAmp, "ampLGAD");
+        const auto& ampDefaultLGAD = tr.getVec<std::vector<double>>("ampDefaultLGAD");
         const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
         const auto& stripCenterYPosition = tr.getVar<std::vector<double>>("stripCenterYPosition");
         const auto& stripCenterXPositionLGAD = utility::remapToLGADgeometry(tr, stripCenterXPosition, "stripCenterXPositionLGAD");
@@ -27,11 +28,14 @@ private:
         const auto& x = tr.getVar<double>("x");
         const auto& sensorCenter = tr.getVar<double>("sensorCenter");
         const auto& extraChannelIndex = tr.getVar<int>("extraChannelIndex");
+        const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
 
-        //Find max channel and 2nd,3rd channels
+        // Find max channel and 2nd,3rd channels
+        int n2 = 2, n3 = 3;
+        if (enablePositionReconstructionPad) n2 = 3, n3 = 5; // 2nd,3rd are different when adding pad signals
         const auto amp1Indexes = utility::findNthRankChannel(ampLGAD, 1, corrAmp[extraChannelIndex]);
-        const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, 2, corrAmp[extraChannelIndex]);
-        const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, 3, corrAmp[extraChannelIndex]);
+        const auto amp2Indexes = utility::findNthRankChannel(ampLGAD, n2, corrAmp[extraChannelIndex]);
+        const auto amp3Indexes = utility::findNthRankChannel(ampLGAD, n3, corrAmp[extraChannelIndex]);
         const auto amp4Indexes = utility::findNthRankChannel(ampLGAD, 4, corrAmp[extraChannelIndex]);
         const auto amp5Indexes = utility::findNthRankChannel(ampLGAD, 5, corrAmp[extraChannelIndex]);
         const auto amp6Indexes = utility::findNthRankChannel(ampLGAD, 6, corrAmp[extraChannelIndex]);
@@ -41,6 +45,10 @@ private:
         tr.registerDerivedVar("amp4Indexes", amp4Indexes);
         tr.registerDerivedVar("amp5Indexes", amp5Indexes);
         tr.registerDerivedVar("amp6Indexes", amp6Indexes);
+
+        // This is the index previous to add signals in pads
+        const auto ampDef1Indexes = utility::findNthRankChannel(ampDefaultLGAD, 1, corrAmp[extraChannelIndex]);
+        tr.registerDerivedVar("ampDef1Indexes", ampDef1Indexes);
 
         std::pair<int,int> ampIndexesTop;
         if(amp1Indexes.first == 0 && amp1Indexes.second == 0)
@@ -65,7 +73,7 @@ private:
         std::pair<int,int> ampIndexesAdjPad;
         if (amp1Indexes.first == 0)
         {
-            ampIndexesAdjPad = ampIndexesTop; 
+            ampIndexesAdjPad = ampIndexesTop;
         }
         else if (amp1Indexes.first == 1)
         {
@@ -73,11 +81,14 @@ private:
         }
 
         tr.registerDerivedVar("ampIndexesAdjPad", ampIndexesAdjPad);
+
         //Find max LGAD amp
         double maxAmpLGAD = ampLGAD[amp1Indexes.first][amp1Indexes.second];
         tr.registerDerivedVar("maxAmpLGAD", maxAmpLGAD);
-        
-        //Find  amplitude related variables
+        double maxAmpDefaultLGAD = ampDefaultLGAD[ampDef1Indexes.first][ampDef1Indexes.second];
+        tr.registerDerivedVar("maxAmpDefaultLGAD", maxAmpDefaultLGAD);
+
+        // Find  amplitude related variables
         double totAmpLGAD = 0.0;
         double totGoodAmpLGAD = 0.0;
         bool hasGlobalSignal_highThreshold = false;
@@ -96,7 +107,7 @@ private:
 
                 if(amp > noiseAmpThreshold) 
                 {
-                    hasGlobalSignal_lowThreshold = true; 
+                    hasGlobalSignal_lowThreshold = true;
                     //clusterSize++;
                 }
 
@@ -117,45 +128,45 @@ private:
         auto& fracMax = tr.createDerivedVec<std::vector<double>>("fracMax", ampLGAD);
         for(auto& row : fracMax){ for(auto& amp : row) amp /= maxAmpLGAD;}
 
-   
+
         //Find rel fraction of DC amp vs. LGAD amp
         tr.registerDerivedVar("relFracDC", corrAmp[0]/totAmpLGAD);
 
         //Compute position-sensitive variablei
         double padx = 0;
         double padxAdj = 0;
-        
+
         if (amp1Indexes.first == 0 && amp1Indexes.second == 0)
         {
             padx = x-sensorCenter;
-            padxAdj =  -(x-sensorCenter);    
+            padxAdj =  -(x-sensorCenter);
         }
         else if (amp1Indexes.first == 0 && amp1Indexes.second == 1)
         {
-            padx = -(x-sensorCenter);   
-            padxAdj = x-sensorCenter;   
+            padx = -(x-sensorCenter);
+            padxAdj = x-sensorCenter;
         }
         else if (amp1Indexes.first == 1 && amp1Indexes.second == 1)
         {
             padx = -(x-sensorCenter);
-            padxAdj = x-sensorCenter; 
+            padxAdj = x-sensorCenter;
         }
         else if (amp1Indexes.first == 1 && amp1Indexes.second == 0)
         {
             padx = x-sensorCenter;
             padxAdj = -(x-sensorCenter);
         }
-    
+
         int maxAmpIndex = amp1Indexes.second;
         int Amp2Index = amp2Indexes.second;
         double Amp1 = stayPositive(ampLGAD[amp1Indexes.first][amp1Indexes.second]);
         double Amp2 = stayPositive(ampLGAD[amp2Indexes.first][amp2Indexes.second]);
         double Amp3 = stayPositive(ampLGAD[amp3Indexes.first][amp3Indexes.second]);
         double AmpTop = stayPositive(ampLGAD[ampIndexesTop.first][ampIndexesTop.second]);
-        double AmpBot = stayPositive(ampLGAD[ampIndexesBot.first][ampIndexesBot.second]); 
+        double AmpBot = stayPositive(ampLGAD[ampIndexesBot.first][ampIndexesBot.second]);
         double AmpAdjPad =  stayPositive(ampLGAD[ampIndexesAdjPad.first][ampIndexesAdjPad.second]);
-        double AmpLeftTop = 0;         
-        double AmpLeftBot = 0; 
+        double AmpLeftTop = 0;
+        double AmpLeftBot = 0;
         double AmpRightTop = 0;
         double AmpRightBot = 0;
         double Noise1 = stayPositive(baselineRMS[amp1Indexes.first][amp1Indexes.second]);
@@ -193,7 +204,7 @@ private:
         double deltaXmaxneg = -999;
         double deltaXmaxTopPad = 0;
         double deltaXmaxBotPad = 0;
-        double deltaXmaxAdjPad = 0; 
+        double deltaXmaxAdjPad = 0;
 
         if (deltaXmax >= 0)
         {   
@@ -202,9 +213,9 @@ private:
         else
         {
             deltaXmaxneg = deltaXmax;
-        }   
-      
- 
+        }
+
+
         if (amp1Indexes.first==0 && amp1Indexes.second==0)
         {
             deltaXmaxTopPad = deltaXmaxneg;
@@ -213,8 +224,8 @@ private:
         {
             deltaXmaxTopPad = deltaXmaxpos;
         }
-        
-         if (amp1Indexes.first==1 && amp1Indexes.second==0)
+
+        if (amp1Indexes.first==1 && amp1Indexes.second==0)
         {
             deltaXmaxBotPad = deltaXmaxneg;
         }
@@ -225,13 +236,13 @@ private:
 
         if (amp1Indexes.first==0)
         {
-            deltaXmaxAdjPad = deltaXmaxTopPad; 
+            deltaXmaxAdjPad = deltaXmaxTopPad;
         } 
         else if (amp1Indexes.first==1)
         { 
             deltaXmaxAdjPad = deltaXmaxBotPad;
         }
-       
+
         tr.registerDerivedVar("maxAmpIndex", maxAmpIndex);
         tr.registerDerivedVar("padx", padx);
         tr.registerDerivedVar("padxAdj", padxAdj);
