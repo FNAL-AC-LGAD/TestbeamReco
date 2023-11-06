@@ -108,7 +108,8 @@ outputfile = TFile(output_path,"RECREATE")
 # Make 1D projection
 projX_efficiency_denominator = th2_efficiency_denominator.ProjectionX()
 
-list_legend_overall = ["One or more strips reconstruction", "Exactly one strip reconstruction", "Two strip reconstruction"]
+# list_legend_overall = ["One or more strips reconstruction", "Exactly one strip reconstruction", "Two strip reconstruction"]
+list_legend_overall = ["One or more channels reconstruction", "Exactly one channel reconstruction", "Two channels reconstruction"]
 list_names_overall = ["_fullReco_numerator", "_oneStrip_numerator", "_twoStrips_numerator"]
 sub_colors = [colors[4], colors[0], colors[2]]
 list_th1_overall = [0, 0, 0]
