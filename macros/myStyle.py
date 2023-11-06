@@ -103,18 +103,18 @@ def BeamInfo(mtop=marg, mleft=2*marg):
     text.SetTextSize(tsize-4)
     text.DrawLatexNDC(mleft+0.005, 1-mtop+0.01, "#bf{FNAL 120 GeV proton beam}")
 
-def SensorInfo(sensor="Name", bias_voltage="", write_bv=True, adjustleft=0, mtop=marg, mright=2*marg):
+def SensorInfo(sensor="Name", bias_voltage="", write_bv=True, adjustleft=0, mtop=marg, mright=marg):
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
     text.SetTextAlign(31)
 
     string = "#bf{%s}"%sensor
     if bias_voltage:
-        string = "%s, %s}"%(string[:-1], bias_voltage)
+        string = "%s, %sV}"%(string[:-1], bias_voltage)
 
     text.DrawLatexNDC(1-mright-0.005-adjustleft, 1-mtop+0.01, string)
 
-def SensorInfoSmart(dataset, adjust=0.0, mtop=marg, mright=2*marg):
+def SensorInfoSmart(dataset, adjust=0.0, mtop=marg, mright=marg):
     name ="Not defined"
     bias_voltage = "X"
 
