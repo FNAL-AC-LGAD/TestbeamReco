@@ -16,8 +16,8 @@ myStyle.ForceStyle()
 
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName, yMax=30.0,
-                 xlabel="", ylabel="Position resolution [#mum]",
+    def __init__(self, inHistoName, f, outHistoName, yMax=150,
+                 xlabel="", ylabel="Amplitude [mV]",
                  sensor="", center_position = 0.0):
         self.inHistoName = inHistoName
         self.f = f
@@ -52,12 +52,8 @@ class HistoInfo:
         # Create and define th1 default style
         th1 = TH1D(hname, htitle, nxbin, xmin, xmax)
         # th1.SetStats(0)
-        if ("Risetime" in th1.GetName()):
-            th1.SetMinimum(0.0)
-            th1.SetMaximum(1000.0)
-        else:
-            th1.SetMinimum(0.0001)
-            th1.SetMaximum(self.yMax)
+        th1.SetMinimum(0.1)
+        th1.SetMaximum(self.yMax)
         # th1.SetLineWidth(3)
         # th1.SetLineColor(kBlack)
         # # th1.GetXaxis().SetRangeUser(-xlength,xlength)
@@ -99,8 +95,7 @@ outdir = myStyle.GetPlotsDir(outdir, "Amplitude/")
 list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
     ["amplitude_vs_xy", "Amplitude", "MPV signal amplitude [mV]"],
-    ["amplitudeDefault_vs_xy", "AmplitudeDefault", "MPV signal amplitude [mV]"],
-    ["risetime_vs_xy", "Risetime", "Risetime [ps]"],
+    ["amplitudeDefault_vs_xy", "AmplitudeDefault", "MPV signal amplitude [mV]"]
 ]
 
 # TODO: Add per channel plots
@@ -131,7 +126,7 @@ canvas.SetGrid(0,1)
 gStyle.SetOptStat(0)
 
 if debugMode:
-    outdir_q = myStyle.CreateFolder(outdir, "q_AmpVsX0/")
+    outdir_q = myStyle.CreateFolder(outdir, "Amp_vs_X_fits0/")
 
 # Get total number of bins in x-axis to loop over (all hists have the same number, in principle)
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
@@ -151,7 +146,9 @@ for i in range(1, nbins+1):
         value = myMean
 
         # Define minimum of bin's entries to be fitted
-        minEvtsCut = totalEvents/nbins
+        minEvtsCut = 0.15*totalEvents/nbins
+        # if("20T" in dataset):
+        #     minEvtsCut = 0.3*totalEvents/nbins
 
         if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
@@ -160,13 +157,13 @@ for i in range(1, nbins+1):
 
         #Do fit
         if(nEvents > minEvtsCut):
-            # tmpHist.Rebin(2)
-            if (myMean > 50):
-                tmpHist.Rebin(5)
-            else:
-                tmpHist.Rebin(10)
+            tmpHist.Rebin(2)
+            # if (myMean > 50):
+            #     tmpHist.Rebin(5)
+            # else:
+            #     tmpHist.Rebin(10)
 
-            myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-1*myRMS, myMean+3*myRMS))
+            myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-1.5*myRMS, myMean+3*myRMS))
             myMPV = myLanGausFunction.GetParameter(1)
             value = myMPV
 
@@ -245,7 +242,7 @@ for i,info_entry in enumerate(all_histoInfos):
 
     save_path = "%s%s_vs_x"%(outdir, info_entry.outHistoName)
     if (is_tight):
-        save_path+= "-tight"
+        save_path+= "_tight"
     canvas.SaveAs("%s.gif"%save_path)
     canvas.SaveAs("%s.pdf"%save_path)
 
