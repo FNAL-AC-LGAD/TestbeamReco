@@ -21,7 +21,7 @@ def CreateFolder(outdir, title, overwrite = False):
         if not os.path.exists(outdir2):
             os.mkdir(outdir2)
         else:
-            enum_folder(outdir2)
+            outdir2 = enum_folder(outdir2)
     print(outdir2,"created.")
     return outdir2
 
@@ -41,7 +41,8 @@ def enum_folder(mypath):
         idx = len(str(count))
         count+=1
         mypath = mypath[0:-idx] + str(count)
-
+    # Add forward slash at the end
+    mypath = mypath+"/"
     os.makedirs(mypath)
     return mypath
 
@@ -124,6 +125,11 @@ def SensorInfoSmart(dataset, adjust=0.0, mtop=marg, mright=2*marg):
 
     SensorInfo(name, bias_voltage, True, adjust, mtop, mright)
 
+def SensorProductionInfo(sensor="Name",adjustleft=0):
+    text = ROOT.TLatex()
+    text.SetTextSize(tsize-4)
+    text.SetTextAlign(31)
+    text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor)+"}")
 
 ### Change global values functions
 def ChangeMargins(mtop=marg, mright=marg, mbot=2*marg, mleft=2*marg):
