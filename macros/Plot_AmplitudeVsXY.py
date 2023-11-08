@@ -102,7 +102,7 @@ outdir = myStyle.GetPlotsDir(outdir, "Amplitude/")
 list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
     ["amplitude_vs_xy", "Amplitude", "MPV signal amplitude [mV]"],
-    ["amplitudeDefault_vs_xy", "AmplitudeDefault", "MPV signal amplitude [mV]"],
+    ["amplitudeNoSum_vs_xy", "AmplitudeNoSum", "MPV signal amplitude [mV]"],
     ["risetime_vs_xy", "Risetime", "Risetime [ps]"],
 ]
 

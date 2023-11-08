@@ -70,6 +70,7 @@ parser.add_option('-d', dest='debugMode', action='store_true', default = False, 
 parser.add_option('-Y', '--alongY',dest='centerAlongY', action='store_true', default = False, help="Center plots in Y direction (for pads only)")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
+parser.add_option('-n', dest='useNoSum', action='store_true', default = False, help="Use no sum column")
 parser.add_option('-a', dest='plotAll', action='store_true', default = False, help="Plot no delay correction and LGAD correction too")
 
 options, args = parser.parse_args()
@@ -99,6 +100,7 @@ ylength = float(options.ylength)
 debugMode = options.debugMode
 
 is_tight = options.useTight
+noSum = options.useNoSum
 show_all = options.plotAll
 is_hotspot = options.hotspot
 
@@ -123,6 +125,10 @@ if (is_tight):
     print(" >> Using tight cuts!")
     for titles in list_htitles:
         titles[0]+= "_tight"
+elif (noSum):
+    print(" >> Using no sum.")
+    for titles in list_htitles:
+        titles[0]+= "_NoSum"
 
 # Use hotspot extension if required
 if (is_hotspot):
@@ -224,6 +230,8 @@ if (is_hotspot):
     output_path+= "_hotspot"
 elif (is_tight):
     output_path+= "_tight"
+elif (noSum):
+    output_path+= "_noSum"
 output_path+= ".root"
 
 outputfile = TFile(output_path,"RECREATE")
@@ -321,6 +329,8 @@ if (is_hotspot):
     save_path+= "-hotspot"
 elif (is_tight):
     save_path+= "-tight"
+elif (noSum):
+    save_path+= "_noSum"
 canvas.SaveAs("%s.gif"%save_path)
 canvas.SaveAs("%s.pdf"%save_path)
 
