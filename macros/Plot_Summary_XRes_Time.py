@@ -58,7 +58,7 @@ if not os.path.exists(input_path_position):
     exit()
 
 inputfile_position = TFile(input_path_position, "READ")
-hResolution_position = inputfile_position.Get("track_twoStrips_tight")
+hResolution_position = inputfile_position.Get("track_twoStrip_tight")
 hResolution_position.SetLineWidth(3)
 hResolution_position.SetLineColor(colors[2])
 

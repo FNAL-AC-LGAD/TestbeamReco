@@ -104,20 +104,20 @@ outdir = myStyle.GetPlotsDir(outdir, "Resolution_X/")
 # Save list with histograms to draw
 list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
-    ["deltaX_vs_Xtrack_twoStrips", "track_twoStrips", "Position resolution [#mum]"],
-    ["deltaX_vs_Xtrack_noNeighb", "track_twoStrips_noNeighb", "Position resolution [#mum]"],
-    ["deltaX_vs_Xtrack_highFrac", "track_twoStrips_highFrac", "Position resolution [#mum]"],
+    ["deltaX_vs_Xtrack_twoStrip", "track_twoStrip", "Position resolution [#mum]"],
+    ["deltaX_vs_Xtrack_noNeighb", "track_twoStrip_noNeighb", "Position resolution [#mum]"],
+    ["deltaX_vs_Xtrack_highFrac", "track_twoStrip_highFrac", "Position resolution [#mum]"],
     ["deltaX_vs_Xtrack_oneStrip", "track_oneStrip", "Position resolution [#mum]"],
 ]
 
 # Use tight cut histograms
 if (is_tight):
     print(" >> Using tight cuts!")
-    list_htitles = [["deltaX_vs_Xtrack_twoStrips_tight", "track_twoStrips_tight", "Position resolution [#mum]"]]
+    list_htitles = [["deltaX_vs_Xtrack_twoStrip_tight", "track_twoStrip_tight", "Position resolution [#mum]"]]
 
 # Use hotspot extension if required
 if (is_hotspot):
-    list_htitles = [["deltaX_vs_Xtrack_twoStrips_hotspot", "track_twoStrips_hotspot", "Position resolution [#mum]"]]
+    list_htitles = [["deltaX_vs_Xtrack_twoStrip_hotspot", "track_twoStrip_hotspot", "Position resolution [#mum]"]]
 
 # List with histograms using HistoInfo class
 all_histoInfos = []
@@ -231,6 +231,7 @@ for i in range(1, nbins+1):
         totalEvents = info_entry.th2.GetEntries()
         tmpHist = info_entry.th2.ProjectionY("py",i,i)
         myMean = tmpHist.GetMean()
+        # myMean = 0.0
         myRMS = tmpHist.GetRMS()
         myRMSError = tmpHist.GetRMSError()
         nEvents = tmpHist.GetEntries()
@@ -252,6 +253,8 @@ for i in range(1, nbins+1):
             # tmpHist.Rebin(2)
             
             fit = TF1('fit','gaus',fitlow,fithigh)
+            # if "twoStrip" in info_entry.inHistoName:
+            #     fit.SetParameter(1, 0.0)
             tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
             myMPV = fit.GetParameter(1)
             mySigma = fit.GetParameter(2)
@@ -332,7 +335,7 @@ for i,info_entry in enumerate(all_histoInfos):
     legend.AddEntry(line_binary_readout, "Pitch / #sqrt{12}", "l")
 
     # Draw all other elements with Two Strip Reconstructed histogram only
-    if "twoStrips" in info_entry.inHistoName:
+    if "twoStrip" in info_entry.inHistoName:
         # Get correct legend for Two Strip Reco
         this_legend = "Two strip observed"
 
@@ -363,7 +366,7 @@ for i,info_entry in enumerate(all_histoInfos):
 
     save_path = "%sPositionResolution_vs_x"%(outdir)
     # Choose another name if not Two Strip Reconstructed histogram
-    if "twoStrips" not in info_entry.inHistoName:
+    if "twoStrip" not in info_entry.inHistoName:
         save_path = "%sPosRes-%s"%(outdir, this_legend)
     if (is_hotspot):
         save_path+= "-hotspot"

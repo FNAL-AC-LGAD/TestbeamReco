@@ -72,10 +72,10 @@ private:
         int distance = abs(amp1Indexes.first - amp2Indexes.first) + abs(amp1Indexes.second - amp2Indexes.second);
         if (enablePositionReconstructionPad) distance = abs(ampCol1Indexes.second - ampCol2Indexes.second);
         bool goodNeighbour = (distance==1) && ampColLGAD[ampCol2Indexes.first][ampCol2Indexes.second]>noiseAmpThreshold;
-        bool twoStripsReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
+        bool twoStripReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
 
         tr.registerDerivedVar("goodNeighbour", goodNeighbour);
-        tr.registerDerivedVar("twoStripsReco", twoStripsReco);
+        tr.registerDerivedVar("twoStripReco", twoStripReco);
 
         double y_reco=0.0, x_reco = 0.0, x1 = 0.0, x2 = 0.0; // , y1 = 0.0, y2 = 0.0,
         double x_reco_basic = 0.0, y_reco_basic = 0.0;
@@ -152,7 +152,7 @@ private:
             //Is this a good default?
             double lgadX_corr = default_corr;
          
-            if (twoStripsReco)
+            if (twoStripReco)
             {
                lgadX_trackerY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
                lgadX_lgadY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y_reco, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);

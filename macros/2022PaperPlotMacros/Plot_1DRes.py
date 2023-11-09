@@ -124,12 +124,12 @@ range_twoS = fit_range[dataset]['two']
 hists = [('deltaX%s'%tight_ext,'deltaX',"tracker",fitmin,fitmax),
         ('deltaX_oneStrip%s'%tight_ext,'deltaX_oneStrip',"tracker",range_oneS[0],range_oneS[1]),
         ('deltaX_oneStrip_Metal%s'%tight_ext,'deltaX_oneStrip_Metal',"tracker",range_oneS[0],range_oneS[1]),
-        ('deltaX_twoStrips%s'%tight_ext,'deltaX_twoStrips',"tracker",range_twoS[0],range_twoS[1]), # ('deltaX_twoStrips_Gap','deltaX_twoStrips_Gap',"tracker"),
+        ('deltaX_twoStrip%s'%tight_ext,'deltaX_twoStrip',"tracker",range_twoS[0],range_twoS[1]), # ('deltaX_twoStrip_Gap','deltaX_twoStrip_Gap',"tracker"),
         ("timeDiff%s"%tight_ext,"time","photek",fitmin,fitmax), ("weighted2_timeDiff%s"%tight_ext,"weighted2Time","photek",fitmin,fitmax),
         ("timeDiffTracker%s"%tight_ext,"time_tracker","photek",fitmin,fitmax), ("weighted2_timeDiff_tracker%s"%tight_ext,"weighted2_time_tracker","photek",fitmin,fitmax),
         ('deltaY','deltaY','tracker',fitmin,fitmax),
         ('deltaY_oneStrip','deltaY_oneStrip','tracker',fitmin,fitmax),
-        ('deltaY_twoStrips','deltaY_twoStrips','tracker',fitmin,fitmax),
+        ('deltaY_twoStrip','deltaY_twoStrip','tracker',fitmin,fitmax),
 ]
 
 hists += list(('deltaX_oneStrip{0}{1}'.format(t[0],t[1]),'deltaX_oneStripCh0%i'%(t[1]),'tracker',range_oneS[0],range_oneS[1]) for t in channelMap)
@@ -148,7 +148,7 @@ for t in hists:
     if h:
         plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], runPad, 100, (0,1), t[3], t[4])
 
-        if (t[0] in ['deltaX_oneStrip%s'%tight_ext,'deltaX_twoStrips%s'%tight_ext]):
+        if (t[0] in ['deltaX_oneStrip%s'%tight_ext,'deltaX_twoStrip%s'%tight_ext]):
             # print("* Number of entries in",t[0],":",h.GetEntries())
             nEntries[t[0]] = h.GetEntries()
 

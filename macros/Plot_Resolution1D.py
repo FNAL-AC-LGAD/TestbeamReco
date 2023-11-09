@@ -195,18 +195,18 @@ res_photek = 10 # ps
 list_htitles = [
     # [hist_input_name, x_axis_title/output_name, reference]
     ["deltaX_oneStrip", "deltaX_oneStrip", "tracker"],
-    ["deltaX_twoStrips", "deltaX_twoStrips", "tracker"],
+    ["deltaX_twoStrip", "deltaX_twoStrip", "tracker"],
     ["deltaX_oneStrip_Metal", "deltaX_oneStrip_Metal", "tracker"],
-    ["deltaX_twoStrips_Metal", "deltaX_twoStrips_Metal", "tracker"],
+    ["deltaX_twoStrip_Metal", "deltaX_twoStrip_Metal", "tracker"],
     ["deltaX_oneStrip_Gap", "deltaX_oneStrip_Gap", "tracker"],
-    ["deltaX_twoStrips_Gap", "deltaX_twoStrips_Gap", "tracker"],
+    ["deltaX_twoStrip_Gap", "deltaX_twoStrip_Gap", "tracker"],
     ["timeDiff", "time", "photek"],
     ["timeDiffTracker", "time_tracker", "photek"],
     ["weighted2_timeDiff", "weighted2Time", "photek"],
     ["weighted2_timeDiff_tracker", "weighted2_time_tracker", "photek"],
     # ["deltaY", "deltaY", "tracker"],
     # ["deltaY_oneStrip", "deltaY_oneStrip", "tracker"],
-    # ["deltaY_twoStrips", "deltaY_twoStrips", "tracker"],
+    # ["deltaY_twoStrip", "deltaY_twoStrip", "tracker"],
 ]
 
 # Use tight cut histograms

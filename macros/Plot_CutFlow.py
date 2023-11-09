@@ -24,7 +24,7 @@ def draw_reco_method_percentage(hist, denominator_bin_name):
     # Get values
     bin_pass = hist.GetXaxis().FindBin(denominator_bin_name)
     bin_one = hist.GetXaxis().FindBin("OneStripReco")
-    bin_two = hist.GetXaxis().FindBin("TwoStripsReco")
+    bin_two = hist.GetXaxis().FindBin("TwoStripReco")
 
     value_pass = hist.GetBinContent(bin_pass)
     value_one = hist.GetBinContent(bin_one)
@@ -130,25 +130,25 @@ sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor = sensor_Geometry['sensor']
 
 # Add name of cut implemented in each bin of the cut flow
-list_cuts_oneStrip  = ["Pass", "Signal over Noise", "OneStripReco",
-                       "High fraction", "High fraction & Good neighbour",
-                       "No good neighbour", "High fraction & No neighbour",
-                       "OneStripReco & OnMetal"]
-list_cuts_twoStrips = ["Pass", "Signal over highThreshold", "Good neighbour",
-                       "Good Amp fraction", "TwoStripsReco",
-                       "TwoStripsReco & OnMetal"]
+list_cuts_oneStrip = ["Pass", "Signal over Noise", "OneStripReco",
+                      "High fraction", "High fraction & Good neighbour",
+                      "No good neighbour", "High fraction & No neighbour",
+                      "OneStripReco & OnMetal"]
+list_cuts_twoStrip = ["Pass", "Signal over highThreshold", "Good neighbour",
+                      "Good Amp fraction", "TwoStripReco",
+                      "TwoStripReco & OnMetal"]
 list_cuts_Overall = ["Pass", "No edge strip", "Overall",
-                   "OneStripReco", "TwoStripsReco"]
+                   "OneStripReco", "TwoStripReco"]
 list_cuts_Metal = ["Pass", "No edge strip", "Over noise", "Metal",
-                   "OneStripReco", "TwoStripsReco"]
+                   "OneStripReco", "TwoStripReco"]
 list_cuts_Gap = ["Pass", "No edge strip", "Over noise", "Gap",
-                 "OneStripReco", "TwoStripsReco"]
+                 "OneStripReco", "TwoStripReco"]
 list_cuts_MidGap = ["Pass", "No edge strip", "Over noise", "MidGap",
-                    "OneStripReco", "TwoStripsReco"]
+                    "OneStripReco", "TwoStripReco"]
 
 # Retrieve event graphs
-event_oneStripReco  = inputfile.Get("event_oneStripReco")
-event_twoStripsReco = inputfile.Get("event_twoStripsReco")
+event_oneStripReco = inputfile.Get("event_oneStripReco")
+event_twoStripReco = inputfile.Get("event_twoStripReco")
 event_Overall = inputfile.Get("event_Overall")
 event_Metal = inputfile.Get("event_Metal")
 event_Gap = inputfile.Get("event_Gap")
@@ -156,7 +156,7 @@ event_MidGap = inputfile.Get("event_MidGap")
 
 # Create histograms
 h_oneStrip = draw_cut_flow("oneStrip", event_oneStripReco, list_cuts_oneStrip)
-h_twoStrips = draw_cut_flow("twoStrips", event_twoStripsReco, list_cuts_twoStrips)
+h_twoStrip = draw_cut_flow("twoStrip", event_twoStripReco, list_cuts_twoStrip)
 h_Overall = draw_cut_flow("Overall", event_Overall, list_cuts_Overall)
 h_Metal = draw_cut_flow("Metal", event_Metal, list_cuts_Metal)
 h_Gap = draw_cut_flow("Gap", event_Gap, list_cuts_Gap)
@@ -166,7 +166,7 @@ h_MidGap = draw_cut_flow("MidGap", event_MidGap, list_cuts_MidGap)
 outputfile = TFile("%sPlot_cutflow.root"%(outdir),"RECREATE")
 
 h_oneStrip.Write()
-h_twoStrips.Write()
+h_twoStrip.Write()
 h_Overall.Write()
 h_Metal.Write()
 h_Gap.Write()

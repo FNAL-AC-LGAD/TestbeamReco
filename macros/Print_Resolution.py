@@ -66,7 +66,7 @@ for reg in regions:
     
     # Resolution
     name_onestrip = "deltaX_oneStrip%s"%(res_region)
-    name_twostrip = "deltaX_twoStrips%s_tight"%(res_region)
+    name_twostrip = "deltaX_twoStrip%s_tight"%(res_region)
     name_time = "weighted2_timeDiff_tracker_%s"%reg if reg != "Overall" else "weighted2_timeDiff_tracker_tight"
     inputfile_time = inputfile_res1d if reg != "Overall" else inputfile_res1d_tight
 
@@ -79,7 +79,7 @@ for reg in regions:
     hist_eff = inputfile_eff.Get(name_eff)
     bin_pass = hist_eff.GetXaxis().FindBin(reg)
     bin_one = hist_eff.GetXaxis().FindBin("OneStripReco")
-    bin_two = hist_eff.GetXaxis().FindBin("TwoStripsReco")
+    bin_two = hist_eff.GetXaxis().FindBin("TwoStripReco")
 
     value_pass = hist_eff.GetBinContent(bin_pass)
     value_one = hist_eff.GetBinContent(bin_one)
