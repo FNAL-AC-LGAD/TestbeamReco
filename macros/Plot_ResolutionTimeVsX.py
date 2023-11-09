@@ -13,7 +13,6 @@ colors = myStyle.GetColors(True)
 ## Defining Style
 myStyle.ForceStyle()
 
-organized_mode=True
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, yMax=30.0,
@@ -76,13 +75,9 @@ parser.add_option('-a', dest='plotAll', action='store_true', default = False, he
 options, args = parser.parse_args()
 use_center_y = options.centerAlongY
 dataset = options.Dataset
-outdir=""
-if organized_mode:
-    outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
-else:
-    inputfile = TFile("../test/myoutputfile.root")
 
+outdir = myStyle.getOutputDir(dataset)
+inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
