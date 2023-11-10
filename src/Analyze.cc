@@ -1159,7 +1159,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(passChannel && goodNoiseAmp && !goodNeighbour && isMaxChannel,  my_2d_histos, "efficiency_vs_xy_noNeighb_numerator_channel"+r+s, x,y);
                 utility::fillHisto(passChannel && goodNoiseAmp && highFraction && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_highFrac_numerator_channel"+r+s, x,y);
                 utility::fillHisto(passChannel && goodNoiseAmp && oneStripReco && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_channel"+r+s, x,y);
-                utility::fillHisto(passChannel && goodNoiseAmp && twoStripReco && isMaxChannel,   my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_channel"+r+s, x,y);
+                utility::fillHisto(passChannel && goodNoiseAmp && twoStripReco && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_channel"+r+s, x,y);
                 utility::fillHisto(passChannel && fullReco_ch,                                     my_2d_histos, "efficiency_vs_xy_fullReco_numerator_channel"+r+s, x,y);
 
                 utility::fillHisto(passChannel && goodPhotek && isMaxChannel,                      my_2d_prof, "efficiency_vs_xy_prof_channel"+r+s, x,y,goodHit);
@@ -1168,7 +1168,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && !goodNeighbour,      my_2d_prof,"efficiency_vs_xy_noNeighb_prof", x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && highFraction,        my_2d_prof, "efficiency_vs_xy_highFrac_prof", x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && oneStripReco,        my_2d_prof, "efficiency_vs_xy_oneStrip_prof", x,y,goodHit);
-                utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && twoStripReco,       my_2d_prof, "efficiency_vs_xy_twoStrip_prof", x,y,goodHit);
+                utility::fillHisto(goodTrack && goodPhotek && isMaxChannel && twoStripReco,        my_2d_prof, "efficiency_vs_xy_twoStrip_prof", x,y,goodHit);
 
                 utility::fillHisto(goodTrack && isMaxChannel,                                      my_efficiencies, "efficiency_vs_x", goodHit,x);
                 utility::fillHisto(goodTrack && isMaxChannel,                                      my_efficiencies, "efficiency_vs_xy", goodHit,x,y);
@@ -1178,7 +1178,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass_NoXYEdges_NoPhotek && goodNoiseAmp && !goodNeighbour && isMaxChannel,  my_2d_histos, "efficiency_vs_xy_noNeighb_numerator_tight_channel"+r+s, x,y);
                 utility::fillHisto(pass_NoXYEdges_NoPhotek && goodNoiseAmp && highFraction && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_highFrac_numerator_tight_channel"+r+s, x,y);
                 utility::fillHisto(pass_NoXYEdges_NoPhotek && goodNoiseAmp && oneStripReco && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_tight_channel"+r+s, x,y);
-                utility::fillHisto(pass_NoXYEdges_NoPhotek && goodNoiseAmp && twoStripReco && isMaxChannel,   my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_tight_channel"+r+s, x,y);
+                utility::fillHisto(pass_NoXYEdges_NoPhotek && goodNoiseAmp && twoStripReco && isMaxChannel,    my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_tight_channel"+r+s, x,y);
                 utility::fillHisto(pass_NoXYEdges_NoPhotek && fullReco_ch,                                     my_2d_histos, "efficiency_vs_xy_fullReco_numerator_tight_channel"+r+s, x,y);
 
 
@@ -1192,31 +1192,31 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit && !goodNeighbour,                     my_histos, "deltaX_noNeighb", x_reco-x);
         utility::fillHisto(pass && goodAmpColHit && highFraction,                       my_histos, "deltaX_highFrac", x_reco-x);
         utility::fillHisto(pass_tightY && goodAmpColHit && oneStripReco,                my_histos, "deltaX_oneStrip", x_reco-x);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                      my_histos, "deltaX_twoStrip", x_reco-x);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_histos, "deltaX_twoStrip", x_reco-x);
 
         utility::fillHisto(pass_tight && goodAmpColHit,                                 my_histos, "deltaX_tight", x_reco-x);
         utility::fillHisto(pass_tight && goodAmpColHit && oneStripReco,                 my_histos, "deltaX_oneStrip_tight", x_reco-x);
-        utility::fillHisto(pass_tight && goodAmpColHit && twoStripReco,                my_histos, "deltaX_twoStrip_tight", x_reco-x);
+        utility::fillHisto(pass_tight && goodAmpColHit && twoStripReco,                 my_histos, "deltaX_twoStrip_tight", x_reco-x);
 
         // Metal
         utility::fillHisto(pass && goodAmpColHit && !goodNeighbour && hitOnMetal,       my_histos, "deltaX_noNeighb_Metal", x_reco-x);
         utility::fillHisto(pass && goodAmpColHit && highFraction && hitOnMetal,         my_histos, "deltaX_highFrac_Metal", x_reco-x);
         utility::fillHisto(pass_tightY && goodAmpColHit && oneStripReco && hitOnMetal,  my_histos, "deltaX_oneStrip_Metal", x_reco-x);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && hitOnMetal,        my_histos, "deltaX_twoStrip_Metal", x_reco-x);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && hitOnMetal,         my_histos, "deltaX_twoStrip_Metal", x_reco-x);
 
         utility::fillHisto(pass_tight && goodAmpColHit && hitOnMetal,                   my_histos, "deltaX_Metal_tight", x_reco-x);
         utility::fillHisto(pass_tight && goodAmpColHit && oneStripReco && hitOnMetal,   my_histos, "deltaX_oneStrip_Metal_tight", x_reco-x);
-        utility::fillHisto(pass_tight && goodAmpColHit && twoStripReco && hitOnMetal,  my_histos, "deltaX_twoStrip_Metal_tight", x_reco-x);
+        utility::fillHisto(pass_tight && goodAmpColHit && twoStripReco && hitOnMetal,   my_histos, "deltaX_twoStrip_Metal_tight", x_reco-x);
 
         // Gap
         utility::fillHisto(pass && goodAmpColHit && !goodNeighbour && !hitOnMetal,      my_histos, "deltaX_noNeighb_Gap", x_reco-x);
         utility::fillHisto(pass && goodAmpColHit && highFraction && !hitOnMetal,        my_histos, "deltaX_highFrac_Gap", x_reco-x);
         utility::fillHisto(pass_tightY && goodAmpColHit && oneStripReco && !hitOnMetal, my_histos, "deltaX_oneStrip_Gap", x_reco-x);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && !hitOnMetal,       my_histos, "deltaX_twoStrip_Gap", x_reco-x);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && !hitOnMetal,        my_histos, "deltaX_twoStrip_Gap", x_reco-x);
 
         utility::fillHisto(pass_tight && goodAmpColHit && !hitOnMetal,                  my_histos, "deltaX_Gap_tight", x_reco-x);
         utility::fillHisto(pass_tight && goodAmpColHit && oneStripReco && !hitOnMetal,  my_histos, "deltaX_oneStrip_Gap_tight", x_reco-x);
-        utility::fillHisto(pass_tight && goodAmpColHit && twoStripReco && !hitOnMetal, my_histos, "deltaX_twoStrip_Gap_tight", x_reco-x);
+        utility::fillHisto(pass_tight && goodAmpColHit && twoStripReco && !hitOnMetal,  my_histos, "deltaX_twoStrip_Gap_tight", x_reco-x);
 
 
         utility::fillHisto(pass && goodAmpColHit,                                       my_histos, "deltaXBasic", x_reco_basic-x);
@@ -1227,7 +1227,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
         utility::fillHisto(pass && goodAmpHit && twoGoodChannel,                        my_histos, "deltaY", y_reco-y);
         utility::fillHisto(pass && goodAmpHit && oneStripReco && twoGoodChannel,        my_histos, "deltaY_oneStrip", y_reco-y);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco && twoGoodChannel,       my_histos, "deltaY_twoStrip", y_reco-y);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco && twoGoodChannel,        my_histos, "deltaY_twoStrip", y_reco-y);
         utility::fillHisto(pass && goodAmpHit && (maxAmpinPad2 || maxAmpinPad3) && twoGoodChannel, my_histos, "deltaY_RightCol", y_reco-y);
         utility::fillHisto(pass && goodAmpHit && (maxAmpinPad1 || maxAmpinPad4) && twoGoodChannel, my_histos, "deltaY_LeftCol", y_reco-y);
         utility::fillHisto(pass && goodAmpHit,                      my_histos, "chi2", chi2);
@@ -1263,12 +1263,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit,                   my_histos, "average_timeDiff_LGADXY", average_time_LGADXY-photekTime);
         utility::fillHisto(pass && goodAmpColHit,                   my_histos, "average_timeDiff_LGADX", average_time_LGADX-photekTime);
    
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,  my_histos, "weighted_timeDiff_LGADXY_2Strip", weighted_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,  my_histos, "weighted_timeDiff_LGADX_2Strip", weighted_time_LGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,  my_histos, "weighted2_timeDiff_LGADXY_2Strip", weighted2_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,  my_histos, "weighted2_timeDiff_LGADX_2Strip", weighted2_time_LGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,  my_histos, "average_timeDiff_LGADXY_2Strip", average_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,  my_histos, "average_timeDiff_LGADX_2Strip", average_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,   my_histos, "weighted_timeDiff_LGADXY_2Strip", weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,   my_histos, "weighted_timeDiff_LGADX_2Strip", weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,   my_histos, "weighted2_timeDiff_LGADXY_2Strip", weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,   my_histos, "weighted2_timeDiff_LGADX_2Strip", weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,   my_histos, "average_timeDiff_LGADXY_2Strip", average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,   my_histos, "average_timeDiff_LGADX_2Strip", average_time_LGADX-photekTime);
  
         utility::fillHisto(pass && goodAmpColHit,                   my_histos, "timeDiff_amp2", amp2Time-photekTime);
         utility::fillHisto(pass && goodAmpColHit,                   my_histos, "timeDiff_amp3", amp3Time-photekTime);
@@ -1401,7 +1401,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodAmpColHit,                       my_histos, "weighted2_timeDiff_tracker_ROI"+regionsOfIntrest[k].getName(), weighted2_time_tracker-photekTime);
                 if (regionsOfIntrest[k].getName()=="hotspot")
                 {
-                    utility::fillHisto(pass && goodAmpColHit && twoStripReco,  my_2d_histos, "deltaX_vs_Xtrack_twoStrip_hotspot", x,x_reco-x);
+                    utility::fillHisto(pass && goodAmpColHit && twoStripReco,   my_2d_histos, "deltaX_vs_Xtrack_twoStrip_hotspot", x,x_reco-x);
                     utility::fillHisto(pass && goodAmpColHit,                   my_3d_histos, "weighted2_timeDiff_tracker_vs_xy_hotspot", x,y,weighted2_time_tracker-photekTime);
                 }
             }
@@ -1437,36 +1437,36 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit && !goodNeighbour,                     my_2d_histos, "deltaX_vs_Xtrack_noNeighb", x,x_reco-x);
         utility::fillHisto(pass && goodAmpColHit && highFraction,                       my_2d_histos, "deltaX_vs_Xtrack_highFrac", x,x_reco-x);
         utility::fillHisto(pass && goodAmpColHit && oneStripReco,                       my_2d_histos, "deltaX_vs_Xtrack_oneStrip", x,x_reco-x);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                      my_2d_histos, "deltaX_vs_Xtrack_twoStrip", x,x_reco-x);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                      my_2d_histos, "Amp12_vs_x", x, Amp12);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                      my_2d_histos, "Amp1_vs_x", x, ampColLGAD1st);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                      my_2d_histos, "Amp2_vs_x", x, ampColLGAD2nd);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                      my_2d_histos, "BaselineRMS12_vs_x", x, Noise12);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                      my_2d_histos, "dXdFrac_vs_Xtrack", x,dXdFrac);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "deltaX_vs_Xtrack_twoStrip", x,x_reco-x);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "Amp12_vs_x", x, Amp12);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "Amp1_vs_x", x, ampColLGAD1st);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "Amp2_vs_x", x, ampColLGAD2nd);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "BaselineRMS12_vs_x", x, Noise12);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "dXdFrac_vs_Xtrack", x,dXdFrac);
 
 
-        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,            my_2d_histos, "deltaX_vs_Xtrack_twoStrip_tight", x,x_reco-x);
-        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,            my_2d_histos, "Amp12_vs_x_tight", x, Amp12);
-        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,            my_2d_histos, "Amp1_vs_x_tight", x, ampColLGAD1st);
-        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,            my_2d_histos, "Amp2_vs_x_tight", x, ampColLGAD2nd);
-        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,            my_2d_histos, "BaselineRMS12_vs_x_tight", x, Noise12);
-        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,            my_2d_histos, "dXdFrac_vs_Xtrack_tight", x,dXdFrac);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,             my_2d_histos, "deltaX_vs_Xtrack_twoStrip_tight", x,x_reco-x);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,             my_2d_histos, "Amp12_vs_x_tight", x, Amp12);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,             my_2d_histos, "Amp1_vs_x_tight", x, ampColLGAD1st);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,             my_2d_histos, "Amp2_vs_x_tight", x, ampColLGAD2nd);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,             my_2d_histos, "BaselineRMS12_vs_x_tight", x, Noise12);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit && twoStripReco,             my_2d_histos, "dXdFrac_vs_Xtrack_tight", x,dXdFrac);
 
 
         utility::fillHisto(pass && goodAmpColHit,                                       my_2d_histos, "deltaX_vs_Xreco", x_reco,x_reco-x);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco  && twoGoodChannel,      my_2d_histos, "deltaY_vs_Xtrack", x,y_reco-y);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco  && twoGoodChannel,      my_2d_histos, "deltaY_vs_Ytrack", y,y_reco-y);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco  && twoGoodChannel,      my_2d_histos, "deltaY_vs_Ytrack_1cm", y,y_reco-y);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco,                         my_histos, "y", y);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco,                         my_histos, "y_reco", y_reco);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco,                         my_histos, "ratioe", y/y_reco);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco  && twoGoodChannel,      my_2d_histos, "deltaY_vs_Yreco", y_reco,y_reco-y);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco  && twoGoodChannel,       my_2d_histos, "deltaY_vs_Xtrack", x,y_reco-y);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco  && twoGoodChannel,       my_2d_histos, "deltaY_vs_Ytrack", y,y_reco-y);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco  && twoGoodChannel,       my_2d_histos, "deltaY_vs_Ytrack_1cm", y,y_reco-y);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco,                          my_histos, "y", y);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco,                          my_histos, "y_reco", y_reco);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco,                          my_histos, "ratioe", y/y_reco);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco  && twoGoodChannel,       my_2d_histos, "deltaY_vs_Yreco", y_reco,y_reco-y);
         utility::fillHisto(pass && goodAmpColHit,                                       my_2d_histos, "deltaXmax_vs_Xtrack", x,deltaXmax);
         utility::fillHisto(pass && goodAmpColHit,                                       my_2d_histos, "deltaXmax_vs_Xreco", x_reco,deltaXmax);
         utility::fillHisto(pass && goodAmpColHit,                                       my_2d_histos, "weighted_timeDiff_vs_x", x,weighted_time-photekTime);
         utility::fillHisto(pass && goodAmpColHit,                                       my_2d_histos, "weighted_timeDiff_tracker_vs_x", x,weighted_time_tracker-photekTime);
         utility::fillHisto(pass && goodAmpColHit,                                       my_2d_histos, "Xreco_vs_Xtrack", x,x_reco);
-        utility::fillHisto(pass && goodAmpHit && twoStripReco,                         my_2d_histos, "Yreco_vs_Ytrack", y,y_reco);
+        utility::fillHisto(pass && goodAmpHit && twoStripReco,                          my_2d_histos, "Yreco_vs_Ytrack", y,y_reco);
         // utility::fillHisto(pass && highRelAmp1,                                                            my_2d_histos, "deltaX_vs_Xtrack_A1OverA12Above0p75", x,x_reco-x);
         
         utility::fillHisto(pass && goodAmpColHit,                                       my_2d_histos, "deltaX_vs_amplitude1", ampColLGAD1st,x_reco-x);
@@ -1519,23 +1519,23 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit && EvenChannel,                    my_3d_histos, "timeDiffLGADX_vs_xy_Even", x,y,maxAmpTimeLGADX-photekTime);
         utility::fillHisto(pass && goodAmpColHit && EvenChannel,                    my_3d_histos, "timeDiffTrackerX_vs_xy_Even", x,y,maxAmpTimeTrackerX-photekTime);
 
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip", x,y,maxAmpTimeLGADXTrackerY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip", x,y,maxAmpTimeLGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip", x,y,maxAmpTimeLGADXY0-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "timeDiffLGADX_vs_xy_2Strip", x,y,maxAmpTimeLGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip", x,y,maxAmpTimeTrackerX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip", x,y,maxAmpTimeLGADXTrackerY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "timeDiffLGADX_vs_xy_2Strip", x,y,maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip", x,y,maxAmpTimeTrackerX-photekTime);
 
-        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,    my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXTrackerY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,    my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,    my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXY0-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,    my_3d_histos, "timeDiffLGADX_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,    my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip_Odd", x,y,maxAmpTimeTrackerX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,     my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXTrackerY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,     my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,     my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,     my_3d_histos, "timeDiffLGADX_vs_xy_2Strip_Odd", x,y,maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && OddChannel && twoStripReco,     my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip_Odd", x,y,maxAmpTimeTrackerX-photekTime);
 
-        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,   my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXTrackerY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,   my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,   my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXY0-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,   my_3d_histos, "timeDiffLGADX_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,   my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip_Even", x,y,maxAmpTimeTrackerX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,    my_3d_histos, "timeDiffLGADXTrackerY_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXTrackerY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,    my_3d_histos, "timeDiffLGADXY_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,    my_3d_histos, "timeDiffLGADXY0_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADXY0-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,    my_3d_histos, "timeDiffLGADX_vs_xy_2Strip_Even", x,y,maxAmpTimeLGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && EvenChannel && twoStripReco,    my_3d_histos, "timeDiffTrackerX_vs_xy_2Strip_Even", x,y,maxAmpTimeTrackerX-photekTime);
 
         utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "timeDiff_vs_xy_amp2", x,y,amp2Time-photekTime);
         utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "timeDiff_vs_xy_amp3", x,y,amp3Time-photekTime);
@@ -1579,26 +1579,26 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit && EvenChannel,                    my_3d_histos, "average_timeDiff_LGADXY_vs_xy_Even", x,y,average_time_LGADXY-photekTime);
         utility::fillHisto(pass && goodAmpColHit && EvenChannel,                    my_3d_histos, "average_timeDiff_LGADX_vs_xy_Even", x,y,average_time_LGADX-photekTime);
 
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip", x,y,weighted_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip", x,y,weighted2_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip", x,y,weighted_time_LGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip", x,y,weighted2_time_LGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip", x,y,average_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                  my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip", x,y,average_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco,                   my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip", x,y,average_time_LGADX-photekTime);
 
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,    my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,weighted_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,    my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,weighted2_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,    my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,weighted_time_LGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,    my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,weighted2_time_LGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,    my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,average_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,    my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,average_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,     my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,     my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,     my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,     my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,     my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip_Odd", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && OddChannel,     my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip_Odd", x,y,average_time_LGADX-photekTime);
 
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,   my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,weighted_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,   my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,weighted2_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,   my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,weighted_time_LGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,   my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,weighted2_time_LGADX-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,   my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,average_time_LGADXY-photekTime);
-        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,   my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,average_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,    my_3d_histos, "weighted_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,    my_3d_histos, "weighted2_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,    my_3d_histos, "weighted_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,    my_3d_histos, "weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,    my_3d_histos, "average_timeDiff_LGADXY_vs_xy_2Strip_Even", x,y,average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && goodAmpColHit && twoStripReco && EvenChannel,    my_3d_histos, "average_timeDiff_LGADX_vs_xy_2Strip_Even", x,y,average_time_LGADX-photekTime);
 
         utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "weighted_timeDiff_goodSig_vs_xy", x,y,weighted_time_goodSig-photekTime);
         utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "weighted2_timeDiff_goodSig_vs_xy", x,y,weighted2_time_goodSig-photekTime);
@@ -1629,33 +1629,33 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodOverNoiseAmpCol && !goodNeighbour,           my_2d_histos, "efficiency_vs_xy_noNeighb_numerator", x,y);
         utility::fillHisto(pass && goodOverNoiseAmpCol && highFraction,             my_2d_histos, "efficiency_vs_xy_highFrac_numerator", x,y);
         utility::fillHisto(pass && goodOverNoiseAmpCol && oneStripReco,             my_2d_histos, "efficiency_vs_xy_oneStrip_numerator", x,y);
-        utility::fillHisto(pass && goodOverNoiseAmpCol && twoStripReco,            my_2d_histos, "efficiency_vs_xy_twoStrip_numerator", x,y);
+        utility::fillHisto(pass && goodOverNoiseAmpCol && twoStripReco,             my_2d_histos, "efficiency_vs_xy_twoStrip_numerator", x,y);
         utility::fillHisto(pass && fullReco,                                        my_2d_histos, "efficiency_vs_xy_fullReco_numerator", x,y);
 
         // TEST: No Sum
-        utility::fillHisto(pass && goodOverNoiseAmp,                                my_2d_histos, "efficiency_vs_xy_NoSum_numerator", x,y);
-        utility::fillHisto(pass && goodOverNoiseAmp && oneStripReco,                my_2d_histos, "efficiency_vs_xy_NoSum_oneStrip_numerator", x,y);
-        utility::fillHisto(pass && goodOverNoiseAmp && twoStripReco,               my_2d_histos, "efficiency_vs_xy_NoSum_twoStrip_numerator", x,y);
+        utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmp,                 my_2d_histos, "efficiency_vs_xy_NoSum_numerator", x,y);
+        utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmp && oneStripReco, my_2d_histos, "efficiency_vs_xy_NoSum_oneStrip_numerator", x,y);
+        utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmp && twoStripReco, my_2d_histos, "efficiency_vs_xy_NoSum_twoStrip_numerator", x,y);
 
         // Metal
         utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMetal,                   my_2d_histos, "efficiency_vs_xy_Metal_numerator", x,y);
         utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMetal && oneStripReco,   my_2d_histos, "efficiency_vs_xy_Metal_oneStrip_numerator", x,y);
-        utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMetal && twoStripReco,  my_2d_histos, "efficiency_vs_xy_Metal_twoStrip_numerator", x,y);
+        utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMetal && twoStripReco,   my_2d_histos, "efficiency_vs_xy_Metal_twoStrip_numerator", x,y);
 
         // Gap
         utility::fillHisto(pass && goodOverNoiseAmpCol && !hitOnMetal,                  my_2d_histos, "efficiency_vs_xy_Gap_numerator", x,y);
         utility::fillHisto(pass && goodOverNoiseAmpCol && !hitOnMetal && oneStripReco,  my_2d_histos, "efficiency_vs_xy_Gap_oneStrip_numerator", x,y);
-        utility::fillHisto(pass && goodOverNoiseAmpCol && !hitOnMetal && twoStripReco, my_2d_histos, "efficiency_vs_xy_Gap_twoStrip_numerator", x,y);
+        utility::fillHisto(pass && goodOverNoiseAmpCol && !hitOnMetal && twoStripReco,  my_2d_histos, "efficiency_vs_xy_Gap_twoStrip_numerator", x,y);
 
         // Middle gap
         utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMidGap,                  my_2d_histos, "efficiency_vs_xy_MidGap_numerator", x,y);
         utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMidGap && oneStripReco,  my_2d_histos, "efficiency_vs_xy_MidGap_oneStrip_numerator", x,y);
-        utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMidGap && twoStripReco, my_2d_histos, "efficiency_vs_xy_MidGap_twoStrip_numerator", x,y);
+        utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMidGap && twoStripReco,  my_2d_histos, "efficiency_vs_xy_MidGap_twoStrip_numerator", x,y);
 
         utility::fillHisto(pass,                                                        my_2d_histos, "efficiency_vs_xy_denominator_coarseBins", x,y);
         utility::fillHisto(pass && goodOverNoiseAmpCol,                                 my_2d_histos, "efficiency_vs_xy_numerator_coarseBins", x,y);
         utility::fillHisto(pass && goodOverNoiseAmpCol && oneStripReco,                 my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_coarseBins", x,y);
-        utility::fillHisto(pass && goodOverNoiseAmpCol && twoStripReco,                my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_coarseBins", x,y);
+        utility::fillHisto(pass && goodOverNoiseAmpCol && twoStripReco,                 my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_coarseBins", x,y);
 
         // Multi channel hit study
         utility::fillHisto(pass,                                                        my_2d_histos, "efficiency_vs_xy_fullReco_Denominator", x,y);
@@ -1672,13 +1672,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol && !goodNeighbour,    my_2d_histos, "efficiency_vs_xy_noNeighb_numerator_tight", x,y);
         utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol && highFraction,      my_2d_histos, "efficiency_vs_xy_highFrac_numerator_tight", x,y);
         utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol && oneStripReco,      my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_tight", x,y);
-        utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol && twoStripReco,     my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_tight", x,y);
+        utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol && twoStripReco,      my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_tight", x,y);
         utility::fillHisto(pass_NoXYEdges_NoPhotek && fullReco,                                 my_2d_histos, "efficiency_vs_xy_fullReco_numerator_tight", x,y);
 
         utility::fillHisto(pass_NoXYEdges_NoPhotek,                                             my_2d_histos, "efficiency_vs_xy_denominator_coarseBins_tight", x,y);
         utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol,                      my_2d_histos, "efficiency_vs_xy_numerator_coarseBins_tight", x,y);
         utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol && oneStripReco,      my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_coarseBins_tight", x,y);
-        utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol && twoStripReco,     my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_coarseBins_tight", x,y);
+        utility::fillHisto(pass_NoXYEdges_NoPhotek && goodOverNoiseAmpCol && twoStripReco,      my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_coarseBins_tight", x,y);
 
 
         utility::fillHisto(goodTrack,                                                           my_2d_prof, "efficiency_vs_xy_DCRing", x,y,goodDCAmp);

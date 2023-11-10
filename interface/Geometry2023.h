@@ -640,7 +640,7 @@ public:
     double yBinSize = 0.050;
     double xBinSize_delay_corr = 0.050;
     double yBinSize_delay_corr = 0.050;
-    double positionRecoMaxPointCol = 0.87; // 0.87;
+    double positionRecoMaxPointCol = 0.83; // 0.84;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 15.0;
@@ -651,7 +651,7 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -0.650091, 2.981788, -23.277060, 84.742927, -112.339669};
+    std::vector<double> positionRecoParCol = {0.250000, -0.799820, 6.173329, -50.093476, 183.145262, -244.383245};
     std::vector<std::vector<double>> xSlices = {{0.80, 1.00}, {1.25, 1.45}, {1.75, 1.95}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.80, -0.60}, {-1.30, -1.10}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
@@ -764,7 +764,7 @@ public:
     double yBinSize = 0.050;
     double xBinSize_delay_corr = 0.050;
     double yBinSize_delay_corr = 0.050;
-    double positionRecoMaxPointCol = 0.84; // 0.84;
+    double positionRecoMaxPointCol = 0.81; // 0.84;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 15.0;
@@ -775,7 +775,7 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -0.901967, 7.164893, -56.484378, 195.379476, -243.826927};
+    std::vector<double> positionRecoParCol = {0.250000, -1.063382, 12.004629, -103.303789, 376.826502, -487.471421};
     std::vector<std::vector<double>> xSlices = {{0.70, 0.90}, {1.20, 1.40}, {1.65, 1.85}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.65, -0.45}, {-1.15, -0.95}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
@@ -834,7 +834,7 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -1.077580, 9.840887, -73.644392, 240.305608, -294.869989};
+    std::vector<double> positionRecoParCol = {0.250000, -0.980465, 8.088825, -60.699625, 199.028843, -248.247343};
     std::vector<std::vector<double>> xSlices = {{0.65, 0.85}, {1.10, 1.30}, {1.55, 1.75}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.90, -0.70}, {-1.40, -1.20}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
@@ -894,7 +894,7 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -0.651622, 3.021338, -17.518266, 40.841486, -36.691619};
+    std::vector<double> positionRecoParCol = {0.250000, -0.654670, 3.097194, -18.156571, 42.335163, -36.740634};
     std::vector<std::vector<double>> xSlices = {{1.15, 1.35}, {1.65, 1.85}, {2.05, 2.25}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.65, -0.45}, {-1.10, -0.90}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
