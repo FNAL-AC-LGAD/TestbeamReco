@@ -30,9 +30,9 @@ legend2 = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.2,1-myStyle
 
 #Make final plots
 # Varying resistivity and capacitance
-sensors = ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"]
-tag = ["400 #Omega/sq 240 pF/mm2 (W4)", "1600 #Omega/sq 240 pF/mm2 (W2)", "400 #Omega/sq 600 pF/mm2 (W8)", "1600 #Omega/sq 600 pF/mm2 (W5)"]
-ylength = 160
+# sensors = ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"]
+# tag = ["400 #Omega/sq 240 pF/mm2 (W4)", "1600 #Omega/sq 240 pF/mm2 (W2)", "400 #Omega/sq 600 pF/mm2 (W8)", "1600 #Omega/sq 600 pF/mm2 (W5)"]
+# ylength = 160
 
 # HPK Varying thickness
 # sensors = ["HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V"]
@@ -46,9 +46,9 @@ ylength = 160
 # xlength = 0.25
 
 # BNL and HPK Varying metal widths
-# sensors = ["BNL_50um_1cm_400um_W3051_1_4_160V", "BNL_50um_1cm_450um_W3051_2_2_170V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"]
-# tag = ["BNL 100 #mum srip width", "BNL 50 #mum strip width", "HPK 50 #mum strip width", "HPK 100 #mum strip width"]
-# ylength = 100
+sensors = ["BNL_50um_1cm_400um_W3051_1_4_160V", "BNL_50um_1cm_450um_W3051_2_2_170V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"]
+tag = ["BNL 100 #mum srip width", "BNL 50 #mum strip width", "HPK 50 #mum strip width", "HPK 100 #mum strip width"]
+ylength = 100
 
 hname = "Amplitude"
 ymin = 1
@@ -114,7 +114,7 @@ totalAmplitude_vs_x.Draw("AXIS same")
 
 # myStyle.SensorInfoSmart(dataset)
 
-canvas.SaveAs("../HPK_Amplitude_vs_x_ResCap.png")
+# canvas.SaveAs("../HPK_Amplitude_vs_x_ResCap.png")
 # canvas.SaveAs("../HPK_Amplitude_vs_x_thickness.png")
 # canvas.SaveAs("../Koji_Amplitude_vs_x_thickness.png")
-# canvas.SaveAs("../BNL_and_HPK_Amplitude_vs_x_MetalWidth.png")
+canvas.SaveAs("../BNL_and_HPK_Amplitude_vs_x_MetalWidth.png")
