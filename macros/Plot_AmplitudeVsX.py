@@ -92,34 +92,39 @@ position_center = mf.get_central_channel_position(inputfile, "x")
 outdir = myStyle.GetPlotsDir(outdir, "Amplitude/")
 
 # Save list with histograms to draw
-list_htitles = [
+list_overall_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
     ["amplitude_vs_xy", "Amplitude", "MPV signal amplitude [mV]"],
     ["amplitudeNoSum_vs_xy", "AmplitudeNoSum", "MPV signal amplitude [mV]"]
 ]
 
-# TODO: Add per channel plots
-# indices = mf.get_existing_indices(inputfile, "amplitude_vs_xy_channel")
-# for index in indices:
-#     channel_element = ["amplitude_vs_xy_channel%s"%index, "deltaX_oneStripCh%s"%index, "tracker"]
-#     list_htitles.append(channel_element)
+# Amplitude per channel
+list_channel_htitles = []
+indices = mf.get_existing_indices(inputfile, "amplitude_vs_xy_channel")
+for index in indices:
+    channel_element = ["amplitude_vs_xy_channel%s"%index, "Amplitude_ch%s"%index, "MPV signal amplitude [mV]"]
+    list_channel_htitles.append(channel_element)
+    ncol = int(index[1])+1 if index[0] != "0" else 3
 
 # Use tight cut histograms
 if (is_tight):
     print(" >> Using tight cuts!")
-    for titles in list_htitles:
+    for titles in list_overall_htitles:
         titles[0]+= "_tight"
 
 # List with histograms using HistoInfo class
-all_histoInfos = []
-for titles in list_htitles:
+histoInfo_overall, histoInfo_channel = [], []
+for titles in (list_overall_htitles + list_channel_htitles):
     hname, outname, ytitle = titles
     if not (inputfile.Get(hname)):
         print(" >> Histogram %s does not exist! Skipping."%hname)
         continue
     info_obj = HistoInfo(hname, inputfile, outname, yMax=ylength, ylabel=ytitle,
                          sensor=dataset, center_position=position_center)
-    all_histoInfos.append(info_obj)
+    if titles in list_overall_htitles:
+        histoInfo_overall.append(info_obj)
+    elif titles in list_channel_htitles:
+        histoInfo_channel.append(info_obj)
 
 canvas = TCanvas("cv","cv",1000,800)
 canvas.SetGrid(0,1)
@@ -129,6 +134,7 @@ if debugMode:
     outdir_q = myStyle.CreateFolder(outdir, "Amp_vs_X_fits0/")
 
 # Get total number of bins in x-axis to loop over (all hists have the same number, in principle)
+all_histoInfos = histoInfo_overall + histoInfo_channel
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
 print("Setting up Langaus")
@@ -199,17 +205,8 @@ htemp.GetYaxis().SetRangeUser(0.0, ylength)
 htemp.GetYaxis().SetTitle("MPV signal amplitude [mV]")
 htemp.SetLineColor(colors[2])
 
-# TODO: Add function that changes the margins and updates GetMargin() and GetCenter()
-# Define legend
-pad_center = myStyle.GetPadCenter()
-pad_margin = myStyle.GetMargin()
-# legend = TLegend(pad_center-0.20, 2*pad_margin+0.01, pad_center+0.20, 2*pad_margin+0.16)
-# legend.SetBorderSize(0)
-# # legend.SetFillColor(kWhite)
-# legend.SetTextFont(myStyle.GetFont())
-# legend.SetTextSize(myStyle.GetSize()-20)
-
-for i,info_entry in enumerate(all_histoInfos):
+# Draw overall amplitude vs X
+for i,info_entry in enumerate(histoInfo_overall):
     hist = info_entry.th1
     hist.SetLineColor(colors[0])
     hist.SetLineWidth(2)
@@ -248,4 +245,43 @@ for i,info_entry in enumerate(all_histoInfos):
 
     canvas.Clear()
 
+# Draw all amplitude per channel vs X
+# Define legend
+pcenter = myStyle.GetPadCenter()
+pmargin = myStyle.GetMargin()
+legend = TLegend(pcenter-0.30, 1-pmargin-0.23, pcenter+0.30, 1-pmargin-0.01)
+legend.SetBorderSize(0)
+# legend.SetFillColor(kWhite)
+legend.SetTextFont(myStyle.GetFont())
+legend.SetTextSize(myStyle.GetSize()-4)
+legend.SetNColumns(ncol)
+
+htemp.Draw("AXIS")
+for box in boxes:
+    box.Draw()
+gPad.RedrawAxis("g")
+
+for i,info_entry in enumerate(histoInfo_channel):
+    hist = info_entry.th1
+    hist.SetLineColor(colors[i])
+    hist.SetLineWidth(2)
+    hist.Draw("hist same")
+
+    idx = indices[i]
+    ltitle = "Pad %s"%(idx) if "10" in indices else "Strip %i"%(int(idx[1])+1)
+    legend.AddEntry(hist, ltitle, "lep")
+
+    hist.Write()
+
+htemp.Draw("AXIS same")
+legend.Draw()
+
+# myStyle.BeamInfo()
+myStyle.SensorInfoSmart(dataset)
+
+save_path = "%sAmplitudeAllChannels_vs_x"%(outdir)
+canvas.SaveAs("%s.gif"%save_path)
+canvas.SaveAs("%s.pdf"%save_path)
+
+canvas.Clear()
 outputfile.Close()
