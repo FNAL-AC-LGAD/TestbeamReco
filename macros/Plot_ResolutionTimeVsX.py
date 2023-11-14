@@ -62,8 +62,8 @@ class HistoInfo:
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-x','--xlength', dest='xlength', default = 4.0, help="Limit x-axis in final plot")
-parser.add_option('-y','--ylength', dest='ylength', default = 200.0, help="Max TimeResolution value in final plot")
+parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="Limit x-axis in final plot")
+parser.add_option('-y','--ylength', dest='ylength', default = 100.0, help="Max TimeResolution value in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-Y', '--alongY',dest='centerAlongY', action='store_true', default = False, help="Center plots in Y direction (for pads only)")

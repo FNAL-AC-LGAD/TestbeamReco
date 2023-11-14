@@ -101,7 +101,7 @@ for hname, outname in list_hnames2d:
         list_th2_efficiency_channel.append(th2_efficiency)
 
 # Define output file
-output_path = "%sEfficiency"%(outdir)
+output_path = "%sEfficiencyVsX"%(outdir)
 if (noSum):
     output_path+= "_NoSum"
 elif (is_tight):
@@ -184,9 +184,9 @@ myStyle.SensorInfoSmart(dataset)
 
 save_path = "%sEfficiencyAll_vs_x"%(outdir)
 if (noSum):
-    save_path+= "-NoSum"
+    save_path+= "_NoSum"
 elif (is_tight):
-    save_path+= "-tight"
+    save_path+= "_tight"
 canvas.SaveAs("%s.gif"%save_path)
 canvas.SaveAs("%s.pdf"%save_path)
 

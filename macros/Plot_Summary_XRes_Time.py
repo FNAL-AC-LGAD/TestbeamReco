@@ -50,7 +50,7 @@ position_center = mf.get_central_channel_position(inputfile, "x")
 # ---------------------------------
 
 # Define input file
-indir_position = myStyle.GetPlotsDir(outdir, "Resolution_X/")
+indir_position = myStyle.GetPlotsDir(outdir, "Resolution_Pos/")
 input_path_position = "%sPositionResVsX_tight.root"%(indir_position)
 
 if not os.path.exists(input_path_position):
