@@ -188,7 +188,7 @@ for sensor in "${HPK_2x3pad[@]}"; do
     ./MyAnalysis -A Analyze -D ${sensor}
     cd ../macros
 
-    # python DoPositionRecoFit.py         -D ${sensor} -A --xmax 0.84 --fitOrder 5
+    # python DoPositionRecoFit.py         -D ${sensor} --xmax 0.84 --fitOrder 5
     # python Plot_TimeDiffVsXY.py         -D ${sensor} --zmin 10.0 --zmax 50.0
     # python Plot_TimeDiffVsY.py          -D ${sensor} --xlength 1.0 --ylength 100.0
     python Plot_SimpleXYMaps.py         -D ${sensor}
@@ -203,15 +203,24 @@ for sensor in "${HPK_2x3pad[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 1.1
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 1.1
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 1.1 -y 50
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 1.1 -y 60
 
     python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 1.1 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 1.1
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 1.1
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 1.1 -y 50
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 1.1 -y 60
+
+    python Plot_Efficiency.py           -D ${sensor} -n -x 1.1
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 1.1 -y 60
 
     # python Print_Resolution.py          -D ${sensor}
 done
 
+cd ../macros
+# # DoPositionRecoFit
+python DoPositionRecoFit.py     -D HPK_W9_22_3_20T_500x500_150M_E600_112V   --xmax 0.84 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W11_22_3_20T_500x500_150M_C600_116V  --xmax 0.84 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W8_1_1_50T_500x500_150M_C600_200V    --xmax 0.82 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W5_1_1_50T_500x500_150M_E600_185V    --xmax 0.86 --fitOrder 5
