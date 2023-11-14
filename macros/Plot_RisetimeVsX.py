@@ -17,7 +17,7 @@ myStyle.ForceStyle()
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, yMax=150,
-                 xlabel="", ylabel="Amplitude [mV]",
+                 xlabel="", ylabel="Risetime [ps]",
                  sensor="", center_position = 0.0):
         self.inHistoName = inHistoName
         self.f = f
@@ -64,9 +64,9 @@ class HistoInfo:
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="Limit x-axis in final plot")
-parser.add_option('-y','--ylength', dest='ylength', default = 150, help="Max Amp value in final plot")
+parser.add_option('-y','--ylength', dest='ylength', default = 1000, help="Max risetime value in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
+parser.add_option('-d', dest='debugMode', action='store_true', default = True, help="Run debug mode")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
 
@@ -89,20 +89,13 @@ is_tight = options.useTight
 # Get position of the central channel in the "x" direction
 position_center = mf.get_central_channel_position(inputfile, "x")
 
-outdir = myStyle.GetPlotsDir(outdir, "Amplitude/")
+outdir = myStyle.GetPlotsDir(outdir, "Risetime/")
 
 # Save list with histograms to draw
 list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
-    ["amplitude_vs_xy", "Amplitude", "MPV signal amplitude [mV]"],
-    ["amplitudeDefault_vs_xy", "AmplitudeDefault", "MPV signal amplitude [mV]"]
+    ["risetime_vs_xy", "Risetime", "MPV risetime [ps]"]
 ]
-
-# TODO: Add per channel plots
-# indices = mf.get_existing_indices(inputfile, "amplitude_vs_xy_channel")
-# for index in indices:
-#     channel_element = ["amplitude_vs_xy_channel%s"%index, "deltaX_oneStripCh%s"%index, "tracker"]
-#     list_htitles.append(channel_element)
 
 # Use tight cut histograms
 if (is_tight):
@@ -126,7 +119,7 @@ canvas.SetGrid(0,1)
 gStyle.SetOptStat(0)
 
 if debugMode:
-    outdir_q = myStyle.CreateFolder(outdir, "Amp_vs_X_fits0/")
+    outdir_q = myStyle.CreateFolder(outdir, "Risetime_vs_X_fits0/")
 
 # Get total number of bins in x-axis to loop over (all hists have the same number, in principle)
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
@@ -146,11 +139,12 @@ for i in range(1, nbins+1):
         value = myMean
 
         # Define minimum of bin's entries to be fitted
-        minEvtsCut = 0.5*totalEvents/nbins
+        minEvtsCut = totalEvents/nbins
         if("20T" in dataset):
             minEvtsCut = 0.3*totalEvents/nbins
         if(is_tight):
-            minEvtsCut = 0
+            minEvtsCut = 300
+
         if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
             msg_nentries+= "(Total events: %i)"%(totalEvents)
@@ -159,10 +153,6 @@ for i in range(1, nbins+1):
         #Do fit
         if(nEvents > minEvtsCut):
             tmpHist.Rebin(2)
-            # if (myMean > 50):
-            #     tmpHist.Rebin(5)
-            # else:
-            #     tmpHist.Rebin(10)
 
             myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-1.5*myRMS, myMean+3*myRMS))
             myMPV = myLanGausFunction.GetParameter(1)
@@ -175,8 +165,8 @@ for i in range(1, nbins+1):
                 canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
                 bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
                 msg_amp = "Bin: %i (x center = %.3f)"%(i, bin_center)
-                # msg_amp+= " -> Amplitude: %.3f mV"%(value)
-                msg_amp+= " -> Entries: %.3f"%(tmpHist.GetEntries())
+                # msg_amp+= " -> Risetime: %.3f ps"%(value)
+                msg_amp+= " -> Events: %.3f"%(tmpHist.GetEntries())
                 print(msg_amp)
         else:
             value = 0.0
@@ -186,7 +176,7 @@ for i in range(1, nbins+1):
         info_entry.th1.SetBinContent(i, value)
 
 # Define output file
-output_path = "%sAmplitudeVsX"%(outdir)
+output_path = "%sRisetimeVsX"%(outdir)
 if (is_tight):
     output_path+= "_tight"
 output_path+= ".root"
@@ -198,7 +188,7 @@ htemp = TH1F("htemp", "", 1, -xlength, xlength)
 htemp.SetStats(0)
 htemp.GetXaxis().SetTitle("Track x position [mm]")
 htemp.GetYaxis().SetRangeUser(0.0, ylength)
-htemp.GetYaxis().SetTitle("MPV signal amplitude [mV]")
+htemp.GetYaxis().SetTitle("MPV risetime [ps]")
 htemp.SetLineColor(colors[2])
 
 # TODO: Add function that changes the margins and updates GetMargin() and GetCenter()
