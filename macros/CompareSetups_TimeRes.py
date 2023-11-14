@@ -31,25 +31,30 @@ legend = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.35,1-myStyle
 legend.SetNColumns(2)
 legend2 = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.25,1-myStyle.GetMargin()-0.02,1-myStyle.GetMargin()-0.05)
 
+
 #Make final plots
+
 # Varying resistivity and capacitance
-# sensors = ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"]
-# tag = ["400 #Omega/sq 240 pF/mm2 (W4)", "1600 #Omega/sq 240 pF/mm2 (W2)", "400 #Omega/sq 600 pF/mm2 (W8)", "1600 #Omega/sq 600 pF/mm2 (W5)"]
-# ylength = 70
+sensors = ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"]
+tag = ["400 #Omega/sq 240 pF/mm2 (W4)", "1600 #Omega/sq 240 pF/mm2 (W2)", "400 #Omega/sq 600 pF/mm2 (W8)", "1600 #Omega/sq 600 pF/mm2 (W5)"]
+ylength = 70
+SaveName = "HPK_TimeResolution_vs_x_ResCap.png"
 
 # HPK Varying thickness
 # sensors = ["HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V"]
 # tag = ["50 #mum active thickness", "20 #mum active thickness"]
 # ylength = 150
+# SaveName = "HPK_TimeResolution_vs_x_thickness.png"
 
 # KOJI Varying thickness
-sensors = ["HPK_KOJI_50T_1P0_80P_60M_E240_190V", "HPK_KOJI_20T_1P0_80P_60M_E240_112V"]
-tag = ["50 #mum active thickness", "20 #mum active thickness"]
-tag = ["50 #mum active thickness", "20 #mum active thickness"]
-xlength = 0.25
-ylength = 65
+# sensors = ["HPK_KOJI_50T_1P0_80P_60M_E240_190V", "HPK_KOJI_20T_1P0_80P_60M_E240_112V"]
+# tag = ["50 #mum active thickness", "20 #mum active thickness"]
+# tag = ["50 #mum active thickness", "20 #mum active thickness"]
+# xlength = 0.25
+# ylength = 65
+# SaveName = "Koji_TimeResolution_vs_x_thickness.png"
 
-hname = "weighted2_time_diffTracker"
+hname = "Time_DiffW2Tracker"
 hname2 = "jitter_vs_x"
 tag2 = ["Time resolution", "Jitter"]#, "Time resolution - Jitter (quadrature)"]
 ymin = 1
@@ -83,7 +88,7 @@ plotList_TR_vs_x2 = []
 # plotList_TR_vs_x3 = []
 
 for i in range(len(sensors)):
-   plotfile.append(TFile("../output/"+sensors[i]+"/TimeRes/timeDiffVsXandY.root","READ"))
+   plotfile.append(TFile("../output/"+sensors[i]+"/Resolution_Time/TimeDiffVsX_tight.root","READ"))
    plotList_TR_vs_x.append(plotfile[i].Get(hname))
    plotList_TR_vs_x[i].SetLineWidth(3)
    if("thickness" in tag[0]):
@@ -97,7 +102,7 @@ legend2.Draw()
 
 if("thickness" in tag[0]):
    for i in range(len(sensors)):
-      plotfile2.append(TFile("../output/"+sensors[i]+"/PlotJitterVsX.root","READ"))
+      plotfile2.append(TFile("../output/"+sensors[i]+"/Jitter/JitterVsX.root","READ"))
       plotList_TR_vs_x2.append(plotfile2[i].Get(hname2))
       # plotList_TR_vs_x3.append(plotList_TR_vs_x2[i].Clone("landau_vs_x"))
       plotList_TR_vs_x2[i].SetLineWidth(3)
@@ -128,6 +133,4 @@ myStyle.SensorProductionInfo(sensor_prod)
 totalTR_vs_x.Draw("AXIS same")
 # myStyle.SensorInfoSmart(dataset)
 
-# canvas.SaveAs("../HPK_TimeResolution_vs_x_ResCap.png")
-# canvas.SaveAs("../HPK_TimeResolution_vs_x_thickness.png")
-canvas.SaveAs("../Koji_TimeResolution_vs_x_thickness.png")
+canvas.SaveAs("../"+SaveName)

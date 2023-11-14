@@ -27,12 +27,13 @@ gPad.SetTicks(1,1)
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
-parser.add_option('-m', dest='minEventsCut', default = 100, help="Minimum events requirement")
+parser.add_option('-m', dest='minCut_user', default = 1000, help="Minimum events requirement")
 options, args = parser.parse_args()
 
 fit = langaus.LanGausFit()
 
 dataset = options.Dataset
+minCut_user = options.minCut_user
 debugMode = options.debugMode
 outdir=""
 if organized_mode: 
@@ -73,7 +74,7 @@ for i in range(1,hist.GetXaxis().GetNbins()+1):
     nEvents = tmpHist.GetEntries()
     minEvtsCut = myTotalEvents/nXBins
 
-    if(nEvents>minEventsCut):
+    if(nEvents>minCut_user):
         tmpHist.Rebin(2)
         myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-1.5*myRMS,myMean+3*myRMS))
         myMPV = myLanGausFunction.GetParameter(1)
