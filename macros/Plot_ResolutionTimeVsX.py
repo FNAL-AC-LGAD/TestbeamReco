@@ -308,7 +308,7 @@ for i,info_entry in enumerate(all_histoInfos):
     hist.Write()
 
     # Skip some histograms if not needed
-    if (not show_all and ("Tracker" not in info_entry.outHistoName)):
+    if (not show_all and ("LGADXY" in info_entry.outHistoName)):
         continue
     hist.Draw("hist e same")
     legend.AddEntry(hist, legend_name[i], "lep")
