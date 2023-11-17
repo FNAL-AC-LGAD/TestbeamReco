@@ -50,7 +50,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.7;
+    double positionRecoMaxPoint = 0.70; // 0.71;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -60,7 +60,7 @@ public:
     int minPixHits = 3;
     int minStripHits = 8;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -1.164642, 2.136270, -18.028266, 29.883977};
+    std::vector<double> positionRecoPar = {0.250000, -1.152450, 1.628628, -12.547487, 12.409411};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     // int centerGoodStripIndex = 3;
@@ -172,7 +172,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.70;
+    double positionRecoMaxPoint = 0.69;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -182,7 +182,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -1.147503, -0.798801, 7.368874, -38.344067};
+    std::vector<double> positionRecoPar = {0.250000, -1.102187, -2.496727, 25.676521, -97.950055};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -240,7 +240,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.609789, -0.026359, -3.221913, 19.537329, -35.866120};
+    std::vector<double> positionRecoPar = {0.250000, -0.623392, 0.074807, -3.237477, 17.697710, -31.574229};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -404,7 +404,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.81;
+    double positionRecoMaxPoint = 0.85;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -414,7 +414,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.555752, -0.084502, -2.616577, 21.159629, -51.815129};
+    std::vector<double> positionRecoPar = {0.250000, -0.556451, -0.373801, 1.428454, 3.830588, -16.306163};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -465,7 +465,7 @@ public:
     double xmax =  0.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.62; // 0.56;
+    double positionRecoMaxPoint = 0.62;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -525,7 +525,7 @@ public:
     double xmax =  0.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.62; // 0.59;
+    double positionRecoMaxPoint = 0.62;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -535,7 +535,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.040000, -0.220255, -0.639081, -3.339341, 116.405885, -847.047372};
+    std::vector<double> positionRecoPar = {0.040000, -0.220506, -0.626693, -3.596348, 117.512250, -841.237998};
     std::vector<std::vector<double>> sensorEdges = {{-0.30, -4.70}, {0.30, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -595,7 +595,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.544982, 0.673392, -6.332684, 22.878158, -28.155588};
+    std::vector<double> positionRecoPar = {0.250000, -0.543402, 0.639837, -6.105570, 22.185985, -27.380118};
     std::vector<std::vector<double>> sensorEdges = {{-1.80, -2.35}, {1.80, 2.45}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
