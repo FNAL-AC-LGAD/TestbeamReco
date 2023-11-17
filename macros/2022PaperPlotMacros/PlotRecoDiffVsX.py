@@ -80,10 +80,10 @@ all_histoInfos = [
     HistoInfo("deltaXBasic_vs_Xtrack",   inputfile, "trackBasic", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaYBasic_vs_Xtrack",   inputfile, "trackBasic", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_twoStrip",   inputfile, "track_twoStrip", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrip [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
     HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "rms_track_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "rms_track_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
+    HistoInfo("deltaX_vs_Xtrack_twoStrip",   inputfile, "rms_track_twoStrip", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrip RMS [#mum]",sensor),
     # HistoInfo("deltaXmax_vs_Xtrack",   inputfile, "maxtrack", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
@@ -185,7 +185,7 @@ for i in range(0, nXBins+1):
         else:
             value = 0.0
             error = 0.0
-            if "track_twoStrips" in info.outHistoName:
+            if "track_twoStrip" in info.outHistoName:
                 expected_res_vs_x.SetBinContent(i,0)
 
         # Removing tracker's contribution of 5 microns
@@ -266,7 +266,7 @@ for info in all_histoInfos:
 
     if ('oneStrip' in info.outHistoName):
         legend.AddEntry(info.th1, "One strip reconstruction")
-    elif ('twoStrips' in info.outHistoName):
+    elif ('twoStrip' in info.outHistoName):
         legend.AddEntry(info.th1, "Two strips reconstruction")
         expected_res_vs_x.Draw("hist same")
         legend.AddEntry(expected_res_vs_x,"Expected resolution")

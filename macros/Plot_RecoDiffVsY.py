@@ -79,10 +79,10 @@ all_histoInfos = [
     HistoInfo("deltaY_vs_Ytrack_1cm",   inputfile, "track_1cm", True,  ylength, "", "Track y position [mm]","Position resolution [mm]",sensor),
     HistoInfo("deltaYBasic_vs_Ytrack",   inputfile, "trackBasic", True,  ylength, "", "Track y position [mm]","Position resolution [mm]",sensor),
     #HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution_oneStrip [#mum]",sensor),
-    #HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "track_twoStrips", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrips [#mum]",sensor),
+    #HistoInfo("deltaX_vs_Xtrack_twoStrip",   inputfile, "track_twoStrip", True,  ylength, "", "Track x position [mm]","Position resolution_twoStrip [#mum]",sensor),
     #HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
     #HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "rms_track_oneStrip", False,  ylength, "", "Track x position [mm]","Position resolution_oneStrip RMS [#mum]",sensor),
-    #HistoInfo("deltaX_vs_Xtrack_twoStrips",   inputfile, "rms_track_twoStrips", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrips RMS [#mum]",sensor),
+    #HistoInfo("deltaX_vs_Xtrack_twoStrip",   inputfile, "rms_track_twoStrip", False,  ylength, "", "Track x position [mm]","Position resolution_twoStrip RMS [#mum]",sensor),
     # HistoInfo("deltaXmax_vs_Xtrack",   inputfile, "maxtrack", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xreco",    inputfile, "reco",  True, ylength, "", "Reconstructed x position [mm]","Position resolution [#mum]",sensor),
 ]
@@ -165,7 +165,7 @@ for i in range(1, nXBins+1):
             value = 3.0
             error = 0.0
 
-            #if "track_twoStrips" in info.outHistoName:
+            #if "track_twoStrip" in info.outHistoName:
             expected_res_vs_y.SetBinContent(i,0)
 
         # Removing telescope contribution

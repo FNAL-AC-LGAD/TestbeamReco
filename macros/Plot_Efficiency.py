@@ -7,7 +7,6 @@ import myStyle
 import myFunctions as mf
 
 gROOT.SetBatch( True )
-organized_mode=True
 colors = myStyle.GetColors(True)
 
 # Construct the argument parser
@@ -19,19 +18,17 @@ parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which deter
 parser.add_option('-c', dest='each_channel', action='store_true', default = False, help="Draw efficiency for each channel")
 parser.add_option('-Y', '--alongY',dest='centerAlongY', action='store_true', default = False, help="Center plots in Y direction (for pads only)")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
+parser.add_option('-n', dest='useNoSum', action='store_true', default = False, help="Use no sum column")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
 use_center_y = options.centerAlongY
 use_each_channel = options.each_channel
 is_tight = options.useTight
+noSum = options.useNoSum
 
-outdir=""
-if organized_mode: 
-    outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
-else: 
-    inputfile = TFile("../test/myoutputfile.root")
+outdir = myStyle.getOutputDir(dataset)
+inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 outdir = myStyle.GetPlotsDir(outdir, "Efficiency/")
 
@@ -43,9 +40,6 @@ xmax = float(options.xHigh) if options.xHigh else float(options.xlength)
 direction = "x" if not use_center_y else "y"
 position_center = mf.get_central_channel_position(inputfile, direction)
 
-# list_thresholds = ["_lowThreshold", "_highThreshold"]
-list_cuts = ["", "_noNeighb", "_highFrac", "_oneStrip", "_twoStrips"]
-
 # Get 2D efficiency maps
 list_hnames2d = [
     # [hist_input_name, short_output_name]
@@ -53,7 +47,7 @@ list_hnames2d = [
     ["efficiency_vs_xy_fullReco_numerator", "EfficiencyFullReco_vs_xy"]
 ]
 
-for cut in list_cuts:
+for cut in ["", "_noNeighb", "_highFrac", "_oneStrip", "_twoStrip"]:
     pair_name = ["efficiency_vs_xy%s_numerator"%cut, "Efficiency_vs_xy%s"%cut]
     list_hnames2d.append(pair_name)
 
@@ -66,6 +60,13 @@ if (is_tight):
 
 hname_denominator,_ = list_hnames2d.pop(0)
 th2_efficiency_denominator = inputfile.Get(hname_denominator)
+
+# Use NoSum efficiency instead!
+if (noSum):
+    for cut in ["", "_oneStrip", "_twoStrip"]:
+        pair_name_nosum = ["efficiency_vs_xy_NoSum%s_numerator"%cut, "Efficiency_vs_xy_NoSum%s"%cut]
+        list_hnames2d.append(pair_name_nosum)
+
 
 list_th2_efficiency = []
 list_th2_efficiency_channel = []
@@ -81,7 +82,7 @@ for hname, outname in list_hnames2d:
     list_th2_efficiency.append(th2_efficiency)
 
     # Run over each channel
-    if not use_each_channel:
+    if (not use_each_channel) or (noSum):
         continue
 
     if not indices:
@@ -93,13 +94,17 @@ for hname, outname in list_hnames2d:
         htitle_ch = "%s - Channel %s"%(htitle, idx)
 
         th2_efficiency = inputfile.Get(hname_ch)
+        if not th2_efficiency:
+            continue
         EfficiencyUtils.Plot2DEfficiency(th2_efficiency, th2_efficiency_denominator, outpath_ch, htitle_ch,
                                          "X [mm]", xmin, xmax, "Y [mm]", -20, 20, 0.0, 1.0)
         list_th2_efficiency_channel.append(th2_efficiency)
 
 # Define output file
 output_path = "%sEfficiencyVsX"%(outdir)
-if (is_tight):
+if (noSum):
+    output_path+= "_NoSum"
+elif (is_tight):
     output_path+= "_tight"
 output_path+= ".root"
 
@@ -110,7 +115,7 @@ projX_efficiency_denominator = th2_efficiency_denominator.ProjectionX()
 
 # list_legend_overall = ["One or more strips reconstruction", "Exactly one strip reconstruction", "Two strip reconstruction"]
 list_legend_overall = ["One or more channels reconstruction", "Exactly one channel reconstruction", "Two channels reconstruction"]
-list_names_overall = ["_fullReco_numerator", "_oneStrip_numerator", "_twoStrips_numerator"]
+list_names_overall = ["_fullReco_numerator", "_oneStrip_numerator", "_twoStrip_numerator"]
 sub_colors = [colors[4], colors[0], colors[2]]
 list_th1_overall = [0, 0, 0]
 list_test_overall = []
@@ -124,8 +129,11 @@ for th2 in list_th2:
     th1_efficiency = EfficiencyUtils.Make1DEfficiencyHist(projX_efficiency, projX_efficiency_denominator, new_hname, center=position_center)
     th1_efficiency.Write()
 
+    if ("channel" in hname.lower()):
+        continue
+
     for i, name_overall in enumerate(list_names_overall):
-        if (name_overall in hname) and ("channel" not in hname):
+        if (name_overall in hname):
             list_th1_overall[i] = th1_efficiency
             list_test_overall.append(th1_efficiency)
 
@@ -175,13 +183,15 @@ legend.Draw()
 myStyle.SensorInfoSmart(dataset)
 
 save_path = "%sEfficiencyAll_vs_x"%(outdir)
-if (is_tight):
+if (noSum):
+    save_path+= "_NoSum"
+elif (is_tight):
     save_path+= "_tight"
 canvas.SaveAs("%s.gif"%save_path)
 canvas.SaveAs("%s.pdf"%save_path)
 
 # TODO: Save coarseBins histograms too (is this needed?)
-# list_hist_coarse_bin = ["efficiency_vs_xy_numerator_coarseBins%s"%tight_ext, "efficiency_vs_xy_oneStrip_numerator_coarseBins%s"%tight_ext, "efficiency_vs_xy_twoStrips_numerator_coarseBins%s"%tight_ext]
+# list_hist_coarse_bin = ["efficiency_vs_xy_numerator_coarseBins%s"%tight_ext, "efficiency_vs_xy_oneStrip_numerator_coarseBins%s"%tight_ext, "efficiency_vs_xy_twoStrip_numerator_coarseBins%s"%tight_ext]
 # list_name_coarse_bin = ["efficiency_vs_x_coarseBins", "efficiency_vs_x_oneStrip_coarseBins", "efficiency_vs_x_twoStrip_coarseBins"]
 # list_good_hists = []
 

@@ -97,8 +97,8 @@ outdir = myStyle.GetPlotsDir(outdir, "1DRes/")
 
 channelMap = [(0,0),(0,1),(1,0),(1,1)] if options.runPad else [(0,0),(0,1),(0,2),(0,3),(0,4),(0,5)]
 
-hists = [('deltaX','deltaX',"tracker"), ('deltaX_oneStrip','deltaX_oneStrip',"tracker"), ('deltaX_twoStrips','deltaX_twoStrips',"tracker"),
-        ('deltaX_oneStrip_Metal','deltaX_oneStrip_Metal',"tracker"), ('deltaX_twoStrips_Gap','deltaX_twoStrips_Gap',"tracker"),
+hists = [('deltaX','deltaX',"tracker"), ('deltaX_oneStrip','deltaX_oneStrip',"tracker"), ('deltaX_twoStrip','deltaX_twoStrip',"tracker"),
+        ('deltaX_oneStrip_Metal','deltaX_oneStrip_Metal',"tracker"), ('deltaX_twoStrip_Gap','deltaX_twoStrip_Gap',"tracker"),
         ("timeDiff","time","photek"), ("weighted2_timeDiff","weighted2Time","photek"),
         ("timeDiffTracker","time_tracker","photek"), ("weighted2_timeDiff_tracker","weighted2_time_tracker","photek"),
         ('deltaY','deltaY','tracker')
@@ -115,7 +115,7 @@ for t in hists:
     h = inputfile.Get(t[0])
     plot1D([h], [ROOT.kBlack], [t[1]], outdir+t[0], 'Events', t[1]+' - '+t[2], runPad, 100, (0,1), fitmin, fitmax)
 
-    if (t[0] in ['deltaX_oneStrip','deltaX_twoStrips']):
+    if (t[0] in ['deltaX_oneStrip','deltaX_twoStrip']):
         # print("* Number of entries in",t[0],":",h.GetEntries())
         nEntries[t[0]] = h.GetEntries()
 

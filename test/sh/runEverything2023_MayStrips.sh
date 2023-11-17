@@ -366,7 +366,6 @@ cd ../../test
 # python Print_Resolution.py          -D HPK_KOJI_20T_1P0_80P_60M_E240_112V
 
 
-
 # HPK 500um Pitch sensors
 # -----------------------
 
@@ -403,22 +402,21 @@ for sensor in "${HPK_500P[@]}"; do
     python Plot_Efficiency.py           -D ${sensor} -t -x 1.9
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 1.9
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 1.9 -y 100
+
+    # # Summary (Important ones: HPK_W5_17_2_50T_1P0_500P_50M_E600_190V and HPK_W2_3_2_50T_1P0_500P_50M_E240_180V)
+    python Plot_Summary_XRes_Time.py    -D ${sensor}   -x 1.9
 done
 
 cd ../macros
-# DoPositionRecoFit
-python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  -A --xmax 0.70 --fitOrder 4
-python DoPositionRecoFit.py     -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V   -A --xmax 0.71 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   -A --xmax 0.70 --fitOrder 4
-python DoPositionRecoFit.py     -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V   -A --xmax 0.85 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V    -A --xmax 0.84 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V   -A --xmax 0.85 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V  -A --xmax 0.81 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V   -A --xmax 0.93 --fitOrder 5
-
-# Resolution summary
-python Plot_Summary_XRes_Time.py    -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V   -x 1.9
-python Plot_Summary_XRes_Time.py    -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V    -x 1.9
+# # DoPositionRecoFit
+python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  --xmax 0.71 --fitOrder 4
+python DoPositionRecoFit.py     -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V   --xmax 0.71 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   --xmax 0.69 --fitOrder 4
+python DoPositionRecoFit.py     -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V   --xmax 0.85 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V    --xmax 0.84 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V   --xmax 0.85 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V  --xmax 0.85 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V   --xmax 0.93 --fitOrder 5
 
 
 # HPK narrow pitch sensors
@@ -437,7 +435,7 @@ for sensor in "${HPK_80P[@]}"; do
     ./MyAnalysis -A Analyze -D ${sensor}
     cd ../macros
 
-    python DoPositionRecoFit.py         -D ${sensor} -A --xmax 0.62 --fitOrder 5
+    python DoPositionRecoFit.py         -D ${sensor} --xmax 0.62 --fitOrder 5
     python Plot_SimpleXYMaps.py         -D ${sensor}
     python Plot_AmpChargeVsXY.py        -D ${sensor}
     # python Plot_RecoDiffVsXY.py         -D ${sensor} --zmin 0.0 --zmax 100.0
@@ -458,13 +456,17 @@ for sensor in "${HPK_80P[@]}"; do
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.6
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.6 -y 50
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.6 -y 100
+
+    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 0.6
 done
 
 # Print resolution values at the end
 for sensor in "${HPK_500P[@]}"; do
+    cd ../macros
     python Print_Resolution.py          -D ${sensor}
 done
 
 for sensor in "${HPK_80P[@]}"; do
+    cd ../macros
     python Print_Resolution.py          -D ${sensor}
 done

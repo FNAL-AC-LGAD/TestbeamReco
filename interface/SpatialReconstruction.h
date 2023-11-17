@@ -38,16 +38,17 @@ private:
     {
 
 	//******************************************************************
-	//Position Reconstruction
+	//  Position Reconstruction
 	//******************************************************************
+        // General variables
         const auto& enablePositionReconstruction = tr.getVar<bool>("enablePositionReconstruction");
         const auto& positionRecoPar = tr.getVar<std::vector<double>>("positionRecoPar");
-        const auto& ampLGAD = tr.getVec<std::vector<double>>("ampLGAD");
+        const auto& ampColLGAD = tr.getVec<std::vector<double>>("ampColLGAD");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
-        const auto& Amp2Index = tr.getVar<int>("Amp2Index");
+        // const auto& Amp2Index = tr.getVar<int>("Amp2Index");
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& Amp1OverAmp1and2 = tr.getVar<double>("Amp1OverAmp1and2");
-        //const auto& x = tr.getVar<double>("x");
+        // const auto& x = tr.getVar<double>("x");
         const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
         const auto& pitch = tr.getVar<double>("pitch");
         const auto& noiseAmpThreshold = tr.getVar<double>("noiseAmpThreshold");
@@ -56,14 +57,26 @@ private:
         std::vector<int> parity = {-1,1,-1,1,-1,1,-1,1};
         const auto& parityLGAD = utility::remapToLGADgeometry(tr, parity, "parityLGAD");
 
-        auto& goodNeighbour = tr.createDerivedVar<bool>("goodNeighbour");
+        // Pad variables
+        const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
+        const auto& positionRecoParCol = tr.getVar<std::vector<double>>("positionRecoParCol");
+        // const auto& positionRecoParRow = tr.getVar<std::vector<double>>("positionRecoParRow");
+        const auto& positionRecoMaxPointCol = tr.getVar<double>("positionRecoMaxPointCol");
+        // const auto& positionRecoMaxPointRow = tr.getVar<double>("positionRecoMaxPointRow");
+
+        // Define booleans for X reco
         const auto& amp1Indexes = tr.getVar<std::pair<int,int>>("amp1Indexes");
         const auto& amp2Indexes = tr.getVar<std::pair<int,int>>("amp2Indexes");
+        const auto& ampCol1Indexes = tr.getVar<std::pair<int,int>>("ampCol1Indexes");
+        const auto& ampCol2Indexes = tr.getVar<std::pair<int,int>>("ampCol2Indexes");
         int distance = abs(amp1Indexes.first - amp2Indexes.first) + abs(amp1Indexes.second - amp2Indexes.second);
-        goodNeighbour = distance==1 && ampLGAD[amp2Indexes.first][amp2Indexes.second]>noiseAmpThreshold;
+        if (enablePositionReconstructionPad) distance = abs(ampCol1Indexes.second - ampCol2Indexes.second);
+        bool goodNeighbour = (distance==1) && ampColLGAD[ampCol2Indexes.first][ampCol2Indexes.second]>noiseAmpThreshold;
+        bool twoStripReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
 
-        auto& twoStripsReco = tr.createDerivedVar<bool>("twoStripsReco");
-        twoStripsReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
+        tr.registerDerivedVar("goodNeighbour", goodNeighbour);
+        tr.registerDerivedVar("twoStripReco", twoStripReco);
+
         double y_reco=0.0, x_reco = 0.0, x1 = 0.0, x2 = 0.0; // , y1 = 0.0, y2 = 0.0,
         double x_reco_basic = 0.0, y_reco_basic = 0.0;
         double dXdFrac = 0.0;
@@ -71,8 +84,8 @@ private:
         {	  
             assert(Amp1OverAmp1and2 >= 0); //make sure a1/(a1+a2) is a sensible number
             assert(Amp1OverAmp1and2 <= 1);
-            x1 = stripCenterXPositionLGAD[0][maxAmpIndex];
-            x2 = stripCenterXPositionLGAD[0][Amp2Index];
+            x1 = stripCenterXPositionLGAD[amp1Indexes.first][amp1Indexes.second];
+            x2 = stripCenterXPositionLGAD[amp2Indexes.first][amp2Indexes.second];
 
             //use the poly fit function
             auto dX = getDX(positionRecoPar, Amp1OverAmp1and2, 0.5);
@@ -100,7 +113,7 @@ private:
             //use lookup table for y reco
             if(y_timeDiff_ampFrac)
             {
-                int ibin = y_timeDiff_ampFrac->FindBin(Amp1OverAmp1and2,deltaT);
+                int ibin = y_timeDiff_ampFrac->FindBin(Amp1OverAmp1and2, deltaT);
                 int xbin = utility::findBin(y_timeDiff_ampFrac, Amp1OverAmp1and2, "X");
                 //int ibin = y_timeDiff_ampFrac->FindBin(x,deltaT);
                 //int xbin = utility::findBin(y_timeDiff_ampFrac, x, "X");
@@ -116,30 +129,30 @@ private:
                 y_reco *= parityLGAD[0][maxAmpIndex];
             }
 
-        } //if enabled position reconstruction
+        } // if enabled position reconstruction
 
 
-        //Compute time resolution using reco positions
-        const auto& y = tr.getVar<double>("y");
+        // Compute time resolution using reco positions
         const auto& x = tr.getVar<double>("x");
+        const auto& y = tr.getVar<double>("y");
         const auto& corrTime = tr.getVec<double>("corrTime");
         auto& corrTimeLGADXTrackerY = tr.createDerivedVec<double>("corrTimeLGADXTrackY");
         auto& corrTimeLGADXY = tr.createDerivedVec<double>("corrTimeLGADXY");
-        auto& corrTimeLGADXY0 = tr.createDerivedVec<double>("corrTimeLGADXY0");     
+        auto& corrTimeLGADXY0 = tr.createDerivedVec<double>("corrTimeLGADXY0");
         auto& corrTimeLGADX = tr.createDerivedVec<double>("corrTimeLGADX");
-        auto& corrTimeTrackerX = tr.createDerivedVec<double>("corrTimeTrackerX");   
+        auto& corrTimeTrackerX = tr.createDerivedVec<double>("corrTimeTrackerX");
           
         uint counter = 0;
         for(auto thisTime : corrTime)
         {
-            double default_corr =  utility::getTrackerTimeCorr<TProfile2D>(x1, 0.0, thisTime, counter, v_timeDiff_coarse_vs_xy_channel); 
+            double default_corr =  utility::getTrackerTimeCorr<TProfile2D>(x1, 0.0, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
             double lgadX_trackerY_corr = default_corr;
             double lgadX_lgadY_corr =  default_corr;
             double lgadX_lgadY0_corr = default_corr;
             //Is this a good default?
             double lgadX_corr = default_corr;
          
-            if (twoStripsReco)
+            if (twoStripReco)
             {
                lgadX_trackerY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
                lgadX_lgadY_corr = utility::getTrackerTimeCorr<TProfile2D>(x_reco, y_reco, thisTime, counter, v_timeDiff_coarse_vs_xy_channel);
@@ -160,24 +173,24 @@ private:
         utility::remapToLGADgeometry(tr, corrTimeLGADXTrackerY, "timeLGADXTrackerY");
         utility::remapToLGADgeometry(tr, corrTimeLGADXY,        "timeLGADXY");
         utility::remapToLGADgeometry(tr, corrTimeLGADXY0,       "timeLGADXY0");
-        utility::remapToLGADgeometry(tr, corrTimeLGADX,         "timeLGADX");   
+        utility::remapToLGADgeometry(tr, corrTimeLGADX,         "timeLGADX");
         utility::remapToLGADgeometry(tr, corrTimeTrackerX,      "timeTrackerX");
 
-        // Position resolution for the pad sensors
-        // const auto& positionRecoParRow = tr.getVar<std::vector<double>>("positionRecoParRow");
-        const auto& positionRecoParCol = tr.getVar<std::vector<double>>("positionRecoParCol");
-        // // const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
-        // // const auto& positionRecoParLeft = tr.getVar<std::vector<double>>("positionRecoParLeft");
-        // // const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
-        // // const auto& positionRecoParBot = tr.getVar<std::vector<double>>("positionRecoParBot");
-        const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
-        // // const auto& AmpTopOverAmpTopandBotRight = tr.getVar<double>("AmpTopOverAmpTopandBotRight");
-        // // const auto& AmpTopOverAmpTopandBotLeft = tr.getVar<double>("AmpTopOverAmpTopandBotLeft");
-        // // const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
-        // // const auto& AmpLeftOverAmpLeftandRightBot = tr.getVar<double>("AmpLeftOverAmpLeftandRightBot");
-        const auto& positionRecoMaxPointCol = tr.getVar<double>("positionRecoMaxPointCol");
-        // const auto& positionRecoMaxPointRow = tr.getVar<double>("positionRecoMaxPointRow");
-          	
+        // Position X reconstruction for pad sensors
+        // const auto& enablePositionReconstructionPad = tr.getVar<bool>("enablePositionReconstructionPad");
+        // const auto& positionRecoParCol = tr.getVar<std::vector<double>>("positionRecoParCol");
+        // // const auto& positionRecoParRow = tr.getVar<std::vector<double>>("positionRecoParRow");
+        // const auto& positionRecoMaxPointCol = tr.getVar<double>("positionRecoMaxPointCol");
+        // // const auto& positionRecoMaxPointRow = tr.getVar<double>("positionRecoMaxPointRow");
+
+        // const auto& positionRecoParRight = tr.getVar<std::vector<double>>("positionRecoParRight");
+        // const auto& positionRecoParLeft = tr.getVar<std::vector<double>>("positionRecoParLeft");
+        // const auto& positionRecoParTop = tr.getVar<std::vector<double>>("positionRecoParTop");
+        // const auto& positionRecoParBot = tr.getVar<std::vector<double>>("positionRecoParBot");
+        // const auto& AmpTopOverAmpTopandBotRight = tr.getVar<double>("AmpTopOverAmpTopandBotRight");
+        // const auto& AmpTopOverAmpTopandBotLeft = tr.getVar<double>("AmpTopOverAmpTopandBotLeft");
+        // const auto& AmpLeftOverAmpLeftandRightTop = tr.getVar<double>("AmpLeftOverAmpLeftandRightTop");
+        // const auto& AmpLeftOverAmpLeftandRightBot = tr.getVar<double>("AmpLeftOverAmpLeftandRightBot");
         // if(enablePositionReconstructionPad)
         // {
         //     x1 = 0.0;
@@ -195,14 +208,14 @@ private:
         //     auto dY = (amp1Indexes.second == 0) ? dYLeft : dYRight;
 
         //     y_reco = dY + y1;
-        // } //if enabled position reconstruction
+        // } // if enabled position reconstruction
 
         if(enablePositionReconstructionPad)
         {
             assert(Amp1OverAmp1and2 >= 0);
             assert(Amp1OverAmp1and2 <= 1);
-            x1 = stripCenterXPositionLGAD[0][maxAmpIndex];
-            x2 = stripCenterXPositionLGAD[0][Amp2Index];
+            x1 = stripCenterXPositionLGAD[ampCol1Indexes.first][ampCol1Indexes.second];
+            x2 = stripCenterXPositionLGAD[ampCol2Indexes.first][ampCol2Indexes.second]; // This assumes both rows to be perfectly aligned
             auto dX = getDX(positionRecoParCol, Amp1OverAmp1and2, 0.5);
             dX = (goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPointCol)) ? dX : 0.0;
 

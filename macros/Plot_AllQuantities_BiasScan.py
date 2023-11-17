@@ -120,7 +120,7 @@ for reg in regions:
             canvas.SaveAs("%s%s_%s.gif"%(outdir, reg, var))
         mySensorInfo_txt = mySensorInfo_txt[:-2]
         mySensorInfo_txt+= "],\n"
-    print("||||||||||||||||||||||||||||||||")
+    print("-"*45)
     print("Region: %s"%reg)
     print(mySensorInfo_txt)
-    print("||||||||||||||||||||||||||||||||")
+    print("-"*45)

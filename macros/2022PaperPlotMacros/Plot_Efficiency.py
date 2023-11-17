@@ -33,7 +33,7 @@ shift = inputfile.Get("stripBoxInfo03").GetMean(1)
 
 # list_thresholds = ["_lowThreshold", "_highThreshold"]
 list_thresholds = [""]
-list_recoMethod = ["", "_noNeighb", "_highFrac", "_oneStrip", "_twoStrips"]
+list_recoMethod = ["", "_noNeighb", "_highFrac", "_oneStrip", "_twoStrip"]
 
 list_efficiency_numerator_global = []
 
@@ -221,7 +221,7 @@ legend = TLegend(myStyle.GetPadCenter()-0.3,1-myStyle.GetMargin()-0.01-0.23,mySt
 # index_LowThre = list_thresholds.index("_lowThreshold")
 # index_HigThre = list_thresholds.index("_highThreshold")
 index_RecoOne = list_recoMethod.index("_oneStrip")
-index_RecoTwo = list_recoMethod.index("_twoStrips")
+index_RecoTwo = list_recoMethod.index("_twoStrip")
 
 # Draw OneStripReco Global
 hist_Global_OneStrip = list_efficiency_vs_x_project_global[index_RecoOne] # + index_LowThre*len(list_recoMethod)]
@@ -230,12 +230,12 @@ hist_Global_OneStrip.SetLineWidth(2)
 hist_Global_OneStrip.SetLineColor(colors[0])
 legend.AddEntry(hist_Global_OneStrip, "One strip reconstruction")
 
-# Draw TwoStripsReco Global
-hist_Global_TwoStrips = list_efficiency_vs_x_project_global[index_RecoTwo] # + index_HigThre*len(list_recoMethod)]
-hist_Global_TwoStrips.Draw("LPsame")
-hist_Global_TwoStrips.SetLineWidth(2)
-hist_Global_TwoStrips.SetLineColor(colors[2])
-legend.AddEntry(hist_Global_TwoStrips, "Two strips reconstruction")
+# Draw TwoStripReco Global
+hist_Global_TwoStrip = list_efficiency_vs_x_project_global[index_RecoTwo] # + index_HigThre*len(list_recoMethod)]
+hist_Global_TwoStrip.Draw("LPsame")
+hist_Global_TwoStrip.SetLineWidth(2)
+hist_Global_TwoStrip.SetLineColor(colors[2])
+legend.AddEntry(hist_Global_TwoStrip, "Two strips reconstruction")
 
 # Draw FullReco Global
 efficiency_vs_x_project_fullReco_global.Draw("LPsame")

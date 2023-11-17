@@ -129,7 +129,7 @@ for sensor in "${HPK_2x2pad[@]}"; do
     ./MyAnalysis -A Analyze -D ${sensor}
     cd ../macros
 
-    python DoPositionRecoFit.py         -D ${sensor} -A --xmax 0.70 --fitOrder 4
+    # python DoPositionRecoFit.py         -D ${sensor} --xmax 0.70 --fitOrder 4
     # python Plot_TimeDiffVsXY.py         -D ${sensor} --zmin 10.0 --zmax 50.0
     # python Plot_TimeDiffVsY.py          -D ${sensor} --xlength 1.0 --ylength 100.0
     python Plot_SimpleXYMaps.py         -D ${sensor}
@@ -152,6 +152,9 @@ for sensor in "${HPK_2x2pad[@]}"; do
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.7
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 50
+
+    python Plot_Efficiency.py           -D ${sensor} -n -x 0.7
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 0.7 -y 50
 done
 # commentout
 
@@ -182,14 +185,14 @@ for sensor in "${HPK_50um_500x500um_2x2pad_E600[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 50
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 60
 
     python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 0.7 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 50
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 60
 done
 
 
@@ -219,14 +222,14 @@ for sensor in "${HPK_30um_500x500um_2x2pad_E600[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 50
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 60
 
     python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 0.7 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 50
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 60
 done
 
 
@@ -259,14 +262,14 @@ for sensor in "${HPK_20um_500x500um_2x2pad_E600[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 50
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 60
 
     python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 0.7 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 50
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 60
 done
 
 # Get characteristic values (say, jitter, resolutions, amplitudes, etc.) for all sensors

@@ -13,7 +13,6 @@ colors = myStyle.GetColors(True)
 ## Defining Style
 myStyle.ForceStyle()
 
-organized_mode=True
 
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, yMax=30.0,
@@ -70,18 +69,15 @@ parser.add_option('-d', dest='debugMode', action='store_true', default = False, 
 parser.add_option('-Y', '--alongY',dest='centerAlongY', action='store_true', default = False, help="Center plots in Y direction (for pads only)")
 parser.add_option('-g', '--hot', dest='hotspot', action='store_true', default = False, help="Use hotspot")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
+parser.add_option('-n', dest='useNoSum', action='store_true', default = False, help="Use no sum column")
 parser.add_option('-a', dest='plotAll', action='store_true', default = False, help="Plot no delay correction and LGAD correction too")
 
 options, args = parser.parse_args()
 use_center_y = options.centerAlongY
 dataset = options.Dataset
-outdir=""
-if organized_mode:
-    outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
-else:
-    inputfile = TFile("../test/myoutputfile.root")
 
+outdir = myStyle.getOutputDir(dataset)
+inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
@@ -99,6 +95,7 @@ ylength = float(options.ylength)
 debugMode = options.debugMode
 
 is_tight = options.useTight
+noSum = options.useNoSum
 show_all = options.plotAll
 is_hotspot = options.hotspot
 
@@ -123,6 +120,10 @@ if (is_tight):
     print(" >> Using tight cuts!")
     for titles in list_htitles:
         titles[0]+= "_tight"
+elif (noSum):
+    print(" >> Using no sum.")
+    for titles in list_htitles:
+        titles[0]+= "_NoSum"
 
 # Use hotspot extension if required
 if (is_hotspot):
@@ -224,6 +225,8 @@ if (is_hotspot):
     output_path+= "_hotspot"
 elif (is_tight):
     output_path+= "_tight"
+elif (noSum):
+    output_path+= "_noSum"
 output_path+= ".root"
 
 outputfile = TFile(output_path,"RECREATE")
@@ -305,7 +308,7 @@ for i,info_entry in enumerate(all_histoInfos):
     hist.Write()
 
     # Skip some histograms if not needed
-    if (not show_all and ("Tracker" not in info_entry.outHistoName)):
+    if (not show_all and ("LGADXY" in info_entry.outHistoName)):
         continue
     hist.Draw("hist e same")
     legend.AddEntry(hist, legend_name[i], "lep")
@@ -321,6 +324,8 @@ if (is_hotspot):
     save_path+= "-hotspot"
 elif (is_tight):
     save_path+= "-tight"
+elif (noSum):
+    save_path+= "_noSum"
 canvas.SaveAs("%s.gif"%save_path)
 canvas.SaveAs("%s.pdf"%save_path)
 

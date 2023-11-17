@@ -50,7 +50,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.7;
+    double positionRecoMaxPoint = 0.70; // 0.71;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -60,7 +60,7 @@ public:
     int minPixHits = 3;
     int minStripHits = 8;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -1.164642, 2.136270, -18.028266, 29.883977};
+    std::vector<double> positionRecoPar = {0.250000, -1.152450, 1.628628, -12.547487, 12.409411};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     // int centerGoodStripIndex = 3;
@@ -172,7 +172,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.70;
+    double positionRecoMaxPoint = 0.69;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -182,7 +182,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -1.147503, -0.798801, 7.368874, -38.344067};
+    std::vector<double> positionRecoPar = {0.250000, -1.102187, -2.496727, 25.676521, -97.950055};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -240,7 +240,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.609789, -0.026359, -3.221913, 19.537329, -35.866120};
+    std::vector<double> positionRecoPar = {0.250000, -0.623392, 0.074807, -3.237477, 17.697710, -31.574229};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -404,7 +404,7 @@ public:
     double xmax =  2.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.81;
+    double positionRecoMaxPoint = 0.85;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -414,7 +414,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.555752, -0.084502, -2.616577, 21.159629, -51.815129};
+    std::vector<double> positionRecoPar = {0.250000, -0.556451, -0.373801, 1.428454, 3.830588, -16.306163};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -465,7 +465,7 @@ public:
     double xmax =  0.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.62; // 0.56;
+    double positionRecoMaxPoint = 0.62;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -525,7 +525,7 @@ public:
     double xmax =  0.50; // Sensor's local frame
     double ymin = -5.25; // Sensor's local frame
     double ymax =  5.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.62; // 0.59;
+    double positionRecoMaxPoint = 0.62;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -535,7 +535,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.040000, -0.220255, -0.639081, -3.339341, 116.405885, -847.047372};
+    std::vector<double> positionRecoPar = {0.040000, -0.220506, -0.626693, -3.596348, 117.512250, -841.237998};
     std::vector<std::vector<double>> sensorEdges = {{-0.30, -4.70}, {0.30, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -595,7 +595,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.544982, 0.673392, -6.332684, 22.878158, -28.155588};
+    std::vector<double> positionRecoPar = {0.250000, -0.543402, 0.639837, -6.105570, 22.185985, -27.380118};
     std::vector<std::vector<double>> sensorEdges = {{-1.80, -2.35}, {1.80, 2.45}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -640,7 +640,7 @@ public:
     double yBinSize = 0.050;
     double xBinSize_delay_corr = 0.050;
     double yBinSize_delay_corr = 0.050;
-    double positionRecoMaxPointCol = 0.87; // 0.87;
+    double positionRecoMaxPointCol = 0.83; // 0.84;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 15.0;
@@ -651,7 +651,7 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -0.650091, 2.981788, -23.277060, 84.742927, -112.339669};
+    std::vector<double> positionRecoParCol = {0.250000, -0.799820, 6.173329, -50.093476, 183.145262, -244.383245};
     std::vector<std::vector<double>> xSlices = {{0.80, 1.00}, {1.25, 1.45}, {1.75, 1.95}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.80, -0.60}, {-1.30, -1.10}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
@@ -764,7 +764,7 @@ public:
     double yBinSize = 0.050;
     double xBinSize_delay_corr = 0.050;
     double yBinSize_delay_corr = 0.050;
-    double positionRecoMaxPointCol = 0.84; // 0.84;
+    double positionRecoMaxPointCol = 0.81; // 0.84;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 15.0;
@@ -775,7 +775,7 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -0.901967, 7.164893, -56.484378, 195.379476, -243.826927};
+    std::vector<double> positionRecoParCol = {0.250000, -1.063382, 12.004629, -103.303789, 376.826502, -487.471421};
     std::vector<std::vector<double>> xSlices = {{0.70, 0.90}, {1.20, 1.40}, {1.65, 1.85}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.65, -0.45}, {-1.15, -0.95}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
@@ -834,7 +834,7 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -1.077580, 9.840887, -73.644392, 240.305608, -294.869989};
+    std::vector<double> positionRecoParCol = {0.250000, -0.980465, 8.088825, -60.699625, 199.028843, -248.247343};
     std::vector<std::vector<double>> xSlices = {{0.65, 0.85}, {1.10, 1.30}, {1.55, 1.75}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.90, -0.70}, {-1.40, -1.20}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
@@ -894,7 +894,7 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -0.651622, 3.021338, -17.518266, 40.841486, -36.691619};
+    std::vector<double> positionRecoParCol = {0.250000, -0.654670, 3.097194, -18.156571, 42.335163, -36.740634};
     std::vector<std::vector<double>> xSlices = {{1.15, 1.35}, {1.65, 1.85}, {2.05, 2.25}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.65, -0.45}, {-1.10, -0.90}}; // Raw data coordinates
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
@@ -1637,8 +1637,10 @@ public:
     double xmax =  0.7;
     double ymin = -0.7;
     double ymax =  0.7;
-    double xBinSize = 0.050;
-    double yBinSize = 0.050;
+    double xBinSize = 0.025;
+    double yBinSize = 0.025;
+    double xBinSize_delay_corr = 0.050;
+    double yBinSize_delay_corr = 0.050;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 15.0;
@@ -1699,8 +1701,10 @@ public:
     double xmax =  0.7;
     double ymin = -0.7;
     double ymax =  0.7;
-    double xBinSize = 0.050;
-    double yBinSize = 0.050;
+    double xBinSize = 0.025;
+    double yBinSize = 0.025;
+    double xBinSize_delay_corr = 0.050;
+    double yBinSize_delay_corr = 0.050;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 15.0;
@@ -1761,8 +1765,10 @@ public:
     double xmax =  0.7;
     double ymin = -0.7;
     double ymax =  0.7;
-    double xBinSize = 0.050;
-    double yBinSize = 0.050;
+    double xBinSize = 0.025;
+    double yBinSize = 0.025;
+    double xBinSize_delay_corr = 0.050;
+    double yBinSize_delay_corr = 0.050;
     double photekSignalThreshold = 50.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 15.0;

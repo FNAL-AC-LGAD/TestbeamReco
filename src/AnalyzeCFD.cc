@@ -101,7 +101,7 @@ void AnalyzeCFD::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrip_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
             utility::makeHisto(my_2d_prof,  "efficiency_vs_xy_prof_channel"+r+s, "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);
 
@@ -138,14 +138,14 @@ void AnalyzeCFD::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>
     utility::makeHisto(my_histos,"deltaX_highFrac_Metal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaX_oneStrip", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaX_oneStrip_Metal", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
-    utility::makeHisto(my_histos,"deltaX_twoStrips", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
-    utility::makeHisto(my_histos,"deltaX_twoStrips_Gap", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+    utility::makeHisto(my_histos,"deltaX_twoStrip", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+    utility::makeHisto(my_histos,"deltaX_twoStrip_Gap", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaXBasic", "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
     utility::makeHisto(my_histos,"deltaYBasic", "; Y_{reco} - Y_{track} [mm]; Events", 200,-30.5,30.5);
     utility::makeHisto(my_histos,"dXdFrac", "; dX/dFraction [mm]; Events", 200,-19.0,1.0);
     utility::makeHisto(my_histos,"deltaY", "; Y_{reco} - Y_{track} [mm]; Events", 200,-30.5,30.5);
     utility::makeHisto(my_histos,"deltaY_oneStrip", "; Y_{reco} - Y_{track} [mm]; Events", 200,-30.5,30.5);
-    utility::makeHisto(my_histos,"deltaY_twoStrips", "; Y_{reco} - Y_{track} [mm]; Events", 200,-30.5,30.5);
+    utility::makeHisto(my_histos,"deltaY_twoStrip", "; Y_{reco} - Y_{track} [mm]; Events", 200,-30.5,30.5);
     utility::makeHisto(my_histos,"timePhotek", "", 500, -225.0, -175.0);
     utility::makeHisto(my_histos,"timeDiff", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_histos,"timeDiffTracker", "", timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -212,8 +212,8 @@ void AnalyzeCFD::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_noNeighb", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_highFrac", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrips", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrips_hotspot", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrip", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrip_hotspot", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
 
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xreco", "; X_{reco} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaY_vs_Yreco", "; Y_{reco} [mm]; #Y_{reco} - Y_{track} [mm]", (ymax-ymin)/yBinSize,ymin,ymax, 200,-30.5,30.5);
@@ -276,20 +276,20 @@ void AnalyzeCFD::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
 
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrip_numerator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
 
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_EdgeCut_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_noNeighb_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_highFrac_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_oneStrip_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
-    utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_twoStrips_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
+    utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_twoStrip_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
 
     //Define 2d prof
     utility::makeHisto(my_2d_prof,"efficiency_vs_xy_DCRing", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);
@@ -303,7 +303,7 @@ void AnalyzeCFD::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>
        
     //Define TEfficiencies if you are doing trigger studies (for proper error bars) or cut flow charts.
     utility::makeHisto(my_efficiencies,"event_oneStripReco",";;Events %",9,0,9);
-    utility::makeHisto(my_efficiencies,"event_twoStripsReco",";;Events %",9,0,9);
+    utility::makeHisto(my_efficiencies,"event_twoStripReco",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"efficiency_vs_x","; X [mm]",xbins,xmin,xmax);
     utility::makeHisto(my_efficiencies,"efficiency_vs_xy","; X [mm]; Y [mm]",xbins,xmin,xmax, ybins,ymin,ymax);
     std::cout<<"Finished defining histos"<<std::endl;
@@ -452,10 +452,10 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
 
         bool highRelAmp1 = Amp1OverAmp1and2>=0.75;
         bool twoGoodHits = ampLGAD[amp1Indexes.first][amp1Indexes.second] > noiseAmpThreshold && ampLGAD[amp2Indexes.first][amp2Indexes.second] > noiseAmpThreshold;
-        bool twoStripsReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
+        bool twoStripReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
         bool highFraction = Amp1OverAmp1and2 > positionRecoMaxPoint;
         bool oneStripReco = !goodNeighbour || highFraction;
-        bool fullReco = hasGlobalSignal_lowThreshold && (oneStripReco || twoStripsReco);
+        bool fullReco = hasGlobalSignal_lowThreshold && (oneStripReco || twoStripReco);
         bool hitOnMetal = false;
 
         if(isHPKStrips)
@@ -518,7 +518,7 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
                 double time_30mV = timeLGAD_30mV[rowIndex][i];
                 double timeTracker = timeLGADTracker[rowIndex][i];
                 bool isMaxChannel = amp1Indexes.first == rowIndex && amp1Indexes.second == int(i);
-                bool fullReco_ch = isMaxChannel && (goodSignalAmp && (oneStripReco || twoStripsReco));
+                bool fullReco_ch = isMaxChannel && (goodSignalAmp && (oneStripReco || twoStripReco));
                 bool goodNearHit = amp1Indexes.first == rowIndex && (amp1Indexes.second == int(i-1) || amp1Indexes.second == int(i) || amp1Indexes.second == int(i+1));
                 bool goodHit = goodNoiseAmp && goodMaxLGADAmp;
                 if(i==1 || i==4) goodHitGlobal2and5 = goodHitGlobal2and5 || (isMaxChannel && goodHit);
@@ -580,7 +580,7 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(pass && goodNoiseAmp && !goodNeighbour,                  my_2d_histos, "efficiency_vs_xy_noNeighb_numerator_channel"+r+s, x,y);
                 utility::fillHisto(pass && goodNoiseAmp && highFraction,                    my_2d_histos, "efficiency_vs_xy_highFrac_numerator_channel"+r+s, x,y);
                 utility::fillHisto(pass && goodNoiseAmp && oneStripReco,                    my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_channel"+r+s, x,y);
-                utility::fillHisto(pass && goodNoiseAmp && twoStripsReco,                   my_2d_histos, "efficiency_vs_xy_twoStrips_numerator_channel"+r+s, x,y);
+                utility::fillHisto(pass && goodNoiseAmp && twoStripReco,                   my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_channel"+r+s, x,y);
                 utility::fillHisto(pass && fullReco_ch,                                     my_2d_histos, "efficiency_vs_xy_fullReco_numerator_channel"+r+s, x,y);
 
                 utility::fillHisto(goodTrack && goodPhotek,                                 my_2d_prof, "efficiency_vs_xy_prof_channel"+r+s, x,y,ampChannel > signalAmpThreshold);
@@ -589,7 +589,7 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(goodTrack && goodPhotek && !goodNeighbour,               my_2d_prof, "efficiency_vs_xy_noNeighb_prof",  x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && highFraction,                 my_2d_prof, "efficiency_vs_xy_highFrac_prof",  x,y,goodHit);
                 utility::fillHisto(goodTrack && goodPhotek && oneStripReco,                 my_2d_prof, "efficiency_vs_xy_oneStrip_prof",  x,y,goodHit);
-                utility::fillHisto(goodTrack && goodPhotek && twoStripsReco,                my_2d_prof, "efficiency_vs_xy_twoStrips_prof", x,y,goodHit);
+                utility::fillHisto(goodTrack && goodPhotek && twoStripReco,                my_2d_prof, "efficiency_vs_xy_twoStrip_prof", x,y,goodHit);
 
                 utility::fillHisto(goodTrack,                                               my_efficiencies, "efficiency_vs_x", goodHit,x);
                 utility::fillHisto(goodTrack,                                               my_efficiencies, "efficiency_vs_xy", goodHit,x,y);
@@ -605,15 +605,15 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodOverNoiseAmp && highFraction && hitOnMetal,   my_histos, "deltaX_highFrac_Metal", x_reco-x);
         utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodOverNoiseAmp && oneStripReco,          my_histos, "deltaX_oneStrip", x_reco-x);
         utility::fillHisto(pass_tightY && maxAmpNotEdgeStrip && goodOverNoiseAmp && oneStripReco && hitOnMetal,my_histos, "deltaX_oneStrip_Metal", x_reco-x);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "deltaX_twoStrips", x_reco-x);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && !hitOnMetal,   my_histos, "deltaX_twoStrips_Gap", x_reco-x);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco,                  my_histos, "deltaX_twoStrip", x_reco-x);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco && !hitOnMetal,   my_histos, "deltaX_twoStrip_Gap", x_reco-x);
 
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "deltaXBasic", x_reco_basic-x);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp  && twoGoodChannel,                my_histos, "deltaYBasic", y_reco_basic-y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "dXdFrac", dXdFrac);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoGoodChannel,                 my_histos, "deltaY", y_reco-y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && oneStripReco && twoGoodChannel, my_histos, "deltaY_oneStrip", y_reco-y);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco && twoGoodChannel,my_histos, "deltaY_twoStrips", y_reco-y);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco && twoGoodChannel,my_histos, "deltaY_twoStrip", y_reco-y);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "chi2", chi2);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "ntracks_alt", ntracks_alt);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "nplanes", nplanes);
@@ -643,12 +643,12 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "average_timeDiff_LGADXY", average_time_LGADXY-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "average_timeDiff_LGADX", average_time_LGADX-photekTime);
    
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "weighted_timeDiff_LGADXY_2Strip", weighted_time_LGADXY-photekTime);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "weighted_timeDiff_LGADX_2Strip", weighted_time_LGADX-photekTime);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "weighted2_timeDiff_LGADXY_2Strip", weighted2_time_LGADXY-photekTime);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "weighted2_timeDiff_LGADX_2Strip", weighted2_time_LGADX-photekTime);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "average_timeDiff_LGADXY_2Strip", average_time_LGADXY-photekTime);
-        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripsReco,                  my_histos, "average_timeDiff_LGADX_2Strip", average_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco,                  my_histos, "weighted_timeDiff_LGADXY_2Strip", weighted_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco,                  my_histos, "weighted_timeDiff_LGADX_2Strip", weighted_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco,                  my_histos, "weighted2_timeDiff_LGADXY_2Strip", weighted2_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco,                  my_histos, "weighted2_timeDiff_LGADX_2Strip", weighted2_time_LGADX-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco,                  my_histos, "average_timeDiff_LGADXY_2Strip", average_time_LGADXY-photekTime);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp && twoStripReco,                  my_histos, "average_timeDiff_LGADX_2Strip", average_time_LGADX-photekTime);
      
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff_amp2", amp2Time-photekTime);
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_histos, "timeDiff_amp3", amp3Time-photekTime);
@@ -681,27 +681,27 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodOverNoiseAmp && !goodNeighbour,                                     my_2d_histos, "deltaX_vs_Xtrack_noNeighb", x,x_reco-x);
         utility::fillHisto(pass && goodOverNoiseAmp && highFraction,                                       my_2d_histos, "deltaX_vs_Xtrack_highFrac", x,x_reco-x);
         utility::fillHisto(pass && goodOverNoiseAmp && oneStripReco,                                       my_2d_histos, "deltaX_vs_Xtrack_oneStrip", x,x_reco-x);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                                        my_2d_histos, "deltaX_vs_Xtrack_twoStrips", x,x_reco-x);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                                        my_2d_histos, "Amp12_vs_x", x, Amp12);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                                        my_2d_histos, "Amp1_vs_x", x, maxAmp);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                                        my_2d_histos, "Amp2_vs_x", x, amp2);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                                        my_2d_histos, "BaselineRMS12_vs_x", x, Noise12);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                                        my_2d_histos, "dXdFrac_vs_Xtrack", x,dXdFrac);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                                        my_2d_histos, "deltaX_vs_Xtrack_twoStrip", x,x_reco-x);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                                        my_2d_histos, "Amp12_vs_x", x, Amp12);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                                        my_2d_histos, "Amp1_vs_x", x, maxAmp);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                                        my_2d_histos, "Amp2_vs_x", x, amp2);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                                        my_2d_histos, "BaselineRMS12_vs_x", x, Noise12);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                                        my_2d_histos, "dXdFrac_vs_Xtrack", x,dXdFrac);
 
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_2d_histos, "deltaX_vs_Xreco", x_reco,x_reco-x);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco  && twoGoodChannel,my_2d_histos, "deltaY_vs_Xtrack", x,y_reco-y);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco  && twoGoodChannel,my_2d_histos, "deltaY_vs_Ytrack", y,y_reco-y);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco  && twoGoodChannel,my_2d_histos, "deltaY_vs_Ytrack_1cm", y,y_reco-y);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                  my_histos, "y", y);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                  my_histos, "y_reco", y_reco);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                  my_histos, "ratioe", y/y_reco);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco  && twoGoodChannel,my_2d_histos, "deltaY_vs_Yreco", y_reco,y_reco-y);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco  && twoGoodChannel,my_2d_histos, "deltaY_vs_Xtrack", x,y_reco-y);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco  && twoGoodChannel,my_2d_histos, "deltaY_vs_Ytrack", y,y_reco-y);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco  && twoGoodChannel,my_2d_histos, "deltaY_vs_Ytrack_1cm", y,y_reco-y);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                  my_histos, "y", y);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                  my_histos, "y_reco", y_reco);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                  my_histos, "ratioe", y/y_reco);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco  && twoGoodChannel,my_2d_histos, "deltaY_vs_Yreco", y_reco,y_reco-y);
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_2d_histos, "deltaXmax_vs_Xtrack", x,deltaXmax);
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_2d_histos, "deltaXmax_vs_Xreco", x_reco,deltaXmax);
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_2d_histos, "weighted_timeDiff_vs_x", x,weighted_time-photekTime);
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_2d_histos, "weighted_timeDiff_tracker_vs_x", x,weighted_time_tracker-photekTime);
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_2d_histos, "Xreco_vs_Xtrack", x,x_reco);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco,                  my_2d_histos, "Yreco_vs_Ytrack", y,y_reco);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco,                  my_2d_histos, "Yreco_vs_Ytrack", y,y_reco);
         // utility::fillHisto(pass && highRelAmp1,                                                            my_2d_histos, "deltaX_vs_Xtrack_A1OverA12Above0p75", x,x_reco-x);
         
         utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_2d_histos, "deltaX_vs_amplitude1", maxAmp,x_reco-x);
@@ -743,7 +743,7 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_3d_histos, "weighted_timeDiff_goodSig_vs_xy", x,y,weighted_time_goodSig-photekTime);
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_timeDiff_goodSig_vs_xy", x,y,weighted2_time_goodSig-photekTime);
         utility::fillHisto(pass && goodMaxLGADAmp,                                   my_3d_histos, "deltaX_vs_Xtrack_vs_Ytrack", x,y,x_reco-x);
-        utility::fillHisto(pass && goodMaxLGADAmp && twoStripsReco  && twoGoodChannel,my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack", x,y,y_reco-y);
+        utility::fillHisto(pass && goodMaxLGADAmp && twoStripReco  && twoGoodChannel,my_3d_histos, "deltaY_vs_Xtrack_vs_Ytrack", x,y,y_reco-y);
 
         // Save profiles and efficiency histos using pass, i.e. tight edges cut
         utility::fillHisto(pass,                                                     my_1d_prof, "Xtrack_vs_Amp1OverAmp123_prof", x,Amp1OverAmp123);
@@ -757,13 +757,13 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold && !goodNeighbour,                         my_2d_histos, "efficiency_vs_xy_noNeighb_numerator", x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold && highFraction,                           my_2d_histos, "efficiency_vs_xy_highFrac_numerator", x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold && oneStripReco,                           my_2d_histos, "efficiency_vs_xy_oneStrip_numerator", x,y);
-        utility::fillHisto(pass && hasGlobalSignal_lowThreshold && twoStripsReco,                          my_2d_histos, "efficiency_vs_xy_twoStrips_numerator", x,y);
+        utility::fillHisto(pass && hasGlobalSignal_lowThreshold && twoStripReco,                          my_2d_histos, "efficiency_vs_xy_twoStrip_numerator", x,y);
         utility::fillHisto(pass && fullReco,                                                               my_2d_histos, "efficiency_vs_xy_fullReco_numerator", x,y);
 
         utility::fillHisto(pass,                                                                           my_2d_histos, "efficiency_vs_xy_denominator_coarseBins", x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold,                                           my_2d_histos, "efficiency_vs_xy_numerator_coarseBins", x,y);
         utility::fillHisto(pass && hasGlobalSignal_lowThreshold && oneStripReco,                           my_2d_histos, "efficiency_vs_xy_oneStrip_numerator_coarseBins", x,y);
-        utility::fillHisto(pass && hasGlobalSignal_lowThreshold && twoStripsReco,                          my_2d_histos, "efficiency_vs_xy_twoStrips_numerator_coarseBins", x,y);
+        utility::fillHisto(pass && hasGlobalSignal_lowThreshold && twoStripReco,                          my_2d_histos, "efficiency_vs_xy_twoStrip_numerator_coarseBins", x,y);
 
         utility::fillHisto(goodTrack,                                                                      my_2d_prof, "efficiency_vs_xy_DCRing", x,y,goodDCAmp);
         utility::fillHisto(goodTrack,                                                                      my_2d_prof, "efficiency_vs_xy_Strip2or5", x,y,goodHitGlobal2and5);

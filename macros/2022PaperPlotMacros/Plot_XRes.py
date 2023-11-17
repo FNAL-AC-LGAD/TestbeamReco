@@ -112,13 +112,13 @@ all_histoInfos = [
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "track", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaY_vs_Xtrack",   inputfile, "track", True,  2500, "", "Track x position [mm]","Position resolution [#mum]",sensor),
     # HistoInfo("deltaX_vs_Xtrack_oneStrip",   inputfile, "track_oneStrip", True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",sensor),
-    HistoInfo("deltaX_vs_Xtrack_twoStrips%s"%pref_hotspot,   inputfile, "track_twoStrips%s"%pref_hotspot, True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
+    HistoInfo("deltaX_vs_Xtrack_twoStrip%s"%pref_hotspot,   inputfile, "track_twoStrip%s"%pref_hotspot, True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
     # HistoInfo("deltaX_vs_Xtrack",   inputfile, "rms_track", False,  ylength, "", "Track x position [mm]","Position resolution RMS [#mum]",sensor),
 ]
 
 if useTight:
     all_histoInfos = [
-        HistoInfo("deltaX_vs_Xtrack_twoStrips_tight",   inputfile, "track_twoStrips%s"%pref_hotspot, True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
+        HistoInfo("deltaX_vs_Xtrack_twoStrip_tight",   inputfile, "track_twoStrip%s"%pref_hotspot, True,  ylength, "", "Track x position [mm]","Position resolution [#mum]",dataset, useShift),
     ]
 
 hist_info_twoStrip = all_histoInfos[0]
@@ -268,7 +268,7 @@ for i in range(1, nXBins+1):
             # value = TMath.Sqrt(oneStripRes*oneStripRes - 5*5)
             value = -10.0
             error = 0
-            # if "track_twoStrips" in info.outHistoName:
+            # if "track_twoStrip" in info.outHistoName:
             #     ## Add metal width/sqrt(12) as expected resolution in metal region
             #     # expected_res_vs_x.SetBinContent(i,strip_width/TMath.Sqrt(12))
             #     expected_res_vs_x.SetBinContent(i,-10.0)
@@ -410,7 +410,7 @@ if showOneStrip:
     legend.AddEntry(oneStripHist, "Exactly one strip observed","P")
 # legend.AddEntry(tracker_res, "Tracker resolution","l")
 
-if ('twoStrips' in info.outHistoName):
+if ('twoStrip' in info.outHistoName):
     expected_res_vs_x.Draw("hist same")
     legend.AddEntry(expected_res_vs_x,"Two strip expected","l")
     legend.AddEntry(hist_info_twoStrip.th1, "Two strip observed","l")
