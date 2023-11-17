@@ -99,7 +99,7 @@ is_hotspot = options.hotspot
 # Get position of the central channel in the "x" direction
 position_center = mf.get_central_channel_position(inputfile, "x")
 
-outdir = myStyle.GetPlotsDir(outdir, "Resolution_X/")
+outdir = myStyle.GetPlotsDir(outdir, "Resolution_Pos/")
 
 # Save list with histograms to draw
 list_htitles = [
@@ -241,6 +241,9 @@ for i in range(1, nbins+1):
 
         # Define minimum of bin's entries to be fitted
         minEvtsCut = totalEvents/nbins
+        if("HPK_W9_15_2" in dataset):
+            minEvtsCut = 0.25*totalEvents/nbins
+
 
         if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
@@ -366,9 +369,9 @@ for i,info_entry in enumerate(all_histoInfos):
     if "twoStrips" not in info_entry.inHistoName:
         save_path = "%sPosRes-%s"%(outdir, this_legend)
     if (is_hotspot):
-        save_path+= "-hotspot"
+        save_path+= "_hotspot"
     elif (is_tight):
-        save_path+= "-tight"
+        save_path+= "_tight"
     canvas.SaveAs("%s.gif"%save_path)
     canvas.SaveAs("%s.pdf"%save_path)
     

@@ -102,21 +102,21 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 
             //Define 2D histograms
             utility::makeHisto(my_2d_histos,"AmpOverMaxAmp_vs_x_channel"+r+s, "; X [mm]; ampOverMaxAmp", 171,-0.855,0.855, 101,0.0,1.01);
-            utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-            // utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel"+r+s+"_NearHit", "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-            utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_top"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-            utility::makeHisto(my_2d_histos,"delay_vs_x_channel_top"+r+s, "; X [mm]; Arrival time [ns]", (xmax-xmin)/xBinSize,xmin,xmax, 100,-11,-10);
-            utility::makeHisto(my_2d_histos,"timeDiff_vs_x_channel"+r+s, "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-            utility::makeHisto(my_2d_histos,"timeDiffTracker_vs_x_channel"+r+s, "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-            utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_bottom"+r+s, "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-            utility::makeHisto(my_2d_histos,"relFrac_vs_y_channel"+r+s, "; Y [mm]; relFrac", (ymax-ymin)/yBinSize,ymin,ymax, 100,0.0,1.0);
-            utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s, "; X_{track} - X_{Max Strip} [mm]; Amp_{Max} / Amp_{Max} + Amp_{2}", (5*pitch)/0.02,-2.5*pitch,2.5*pitch, 100,0.0,1.0);
+            utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel"+r+s, "; X [mm]; relFrac", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
+            // utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel"+r+s+"_NearHit", "; X [mm]; relFrac", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
+            utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_top"+r+s, "; X [mm]; relFrac", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
+            utility::makeHisto(my_2d_histos,"delay_vs_x_channel_top"+r+s, "; X [mm]; Arrival time [ns]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,-11,-10);
+            utility::makeHisto(my_2d_histos,"timeDiff_vs_x_channel"+r+s, "", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_2d_histos,"timeDiffTracker_vs_x_channel"+r+s, "", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_2d_histos,"relFrac_vs_x_channel_bottom"+r+s, "; X [mm]; relFrac", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
+            utility::makeHisto(my_2d_histos,"relFrac_vs_y_channel"+r+s, "; Y [mm]; relFrac", std::round((ymax-ymin)/yBinSize),ymin,ymax, 100,0.0,1.0);
+            utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s, "; X_{track} - X_{Max Strip} [mm]; Amp_{Max} / Amp_{Max} + Amp_{2}", std::round((5*pitch)/0.02),-2.5*pitch,2.5*pitch, 100,0.0,1.0);
             utility::makeHisto(my_2d_histos,"risetime_vs_amp"+r+s, "; amp [mV]; risetime [ps]", 100,0.0,150.0, 100,100.0,1500.0);
-            utility::makeHisto(my_2d_histos,"baselineRMS_vs_x_channel"+r+s, "; X [mm]; amp", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-            utility::makeHisto(my_2d_histos,"amp_vs_x_channel"+r+s, "; X [mm]; amp", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-            utility::makeHisto(my_2d_histos,"amp_vs_y_channel"+r+s, "; Y [mm]; amp", (ymax-ymin)/yBinSize,ymin,ymax, 250,0.0,500);
-            utility::makeHisto(my_2d_histos,"amp_vs_x_channel_top"+r+s, "; X [mm]; amp", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-            utility::makeHisto(my_2d_histos,"amp_vs_x_channel_bottom"+r+s, "; X [mm]; amp", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
+            utility::makeHisto(my_2d_histos,"baselineRMS_vs_x_channel"+r+s, "; X [mm]; amp", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+            utility::makeHisto(my_2d_histos,"amp_vs_x_channel"+r+s, "; X [mm]; amp", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+            utility::makeHisto(my_2d_histos,"amp_vs_y_channel"+r+s, "; Y [mm]; amp", std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0.0,500);
+            utility::makeHisto(my_2d_histos,"amp_vs_x_channel_top"+r+s, "; X [mm]; amp", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+            utility::makeHisto(my_2d_histos,"amp_vs_x_channel_bottom"+r+s, "; X [mm]; amp", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
             utility::makeHisto(my_2d_histos,"stripBoxInfo"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);
             utility::makeHisto(my_2d_histos,"stripBoxInfoY"+r+s, "", 1,-9999.0,9999.0, 1,-9999.9,9999.9);
 
@@ -126,21 +126,21 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_2d_histos,"baselineRMS_vs_BV_channel"+r+s, "; BV [V]; amp [mV]"     , bvNbin,bvLow,bvHigh, 250,0.0,250); 
             utility::makeHisto(my_2d_histos,"slewrate_vs_BV_channel"+r+s,    "; BV [V]; slewrate"     , bvNbin,bvLow,bvHigh, 300,0.0,400.0); 
 
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
             utility::makeHisto(my_2d_prof,  "efficiency_vs_xy_prof_channel"+r+s, "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);
 
 
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+            utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
 
 
             /*for (unsigned int ch = 0; ch < row.size(); ch++)
@@ -151,24 +151,24 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             }*/
 
             //Define 3D histograms
-            utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-            utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
             
-            utility::makeHisto(my_3d_histos,"baselineRMSNew_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 300,0,50);
-            utility::makeHisto(my_3d_histos,"amplitudeNew_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 300,0,500);
+            utility::makeHisto(my_3d_histos,"baselineRMSNew_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 300,0,50);
+            utility::makeHisto(my_3d_histos,"amplitudeNew_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 300,0,500);
 
-            utility::makeHisto(my_3d_histos,"amplitudeTop_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
-            utility::makeHisto(my_3d_histos,"amplitudeBot_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
-            utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
-            utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
-            utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-            utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-            utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-            utility::makeHisto(my_3d_histos,"risetime_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 300,0.0,1500.0);
-            utility::makeHisto(my_3d_histos,"charge_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,150.0);
-            utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,100.0);
-            utility::makeHisto(my_3d_histos,"slewRate_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,500.0);
+            utility::makeHisto(my_3d_histos,"amplitudeTop_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSizePad),xmin,xmax, std::round((ymax-ymin)/yBinSizePad),ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitudeBot_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSizePad),xmin,xmax, std::round((ymax-ymin)/yBinSizePad),ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitudeLeft_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSizePad),xmin,xmax, std::round((ymax-ymin)/yBinSizePad),ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"amplitudeRight_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSizePad),xmin,xmax, std::round((ymax-ymin)/yBinSizePad),ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"raw_amp_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+            utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+            utility::makeHisto(my_3d_histos,"risetime_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 300,0.0,1500.0);
+            utility::makeHisto(my_3d_histos,"charge_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,150.0);
+            utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,100.0);
+            utility::makeHisto(my_3d_histos,"slewRate_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,500.0);
         }
         rowIndex++;
     }
@@ -372,266 +372,267 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     }
 
     //Global 2D histograms
-    utility::makeHisto(my_2d_histos,"relFracTot_vs_x", "; X [mm]; relFracTot", (xmax-xmin)/xBinSize,-0.4,0.4, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"relFracMaxAmp_vs_x", "; X [mm]; relFrac", (xmax-xmin)/xBinSize,-0.4,0.4, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"relFracDC_vs_x_channel_top", "; X [mm]; relFrac", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"weighted_timeDiff_vs_x", "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_2d_histos,"weighted_timeDiff_tracker_vs_x", "", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_2d_histos,"relFracTot_vs_x", "; X [mm]; relFracTot", std::round((xmax-xmin)/xBinSize),-0.4,0.4, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"relFracMaxAmp_vs_x", "; X [mm]; relFrac", std::round((xmax-xmin)/xBinSize),-0.4,0.4, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"relFracDC_vs_x_channel_top", "; X [mm]; relFrac", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"weighted_timeDiff_vs_x", "", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_2d_histos,"weighted_timeDiff_tracker_vs_x", "", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_2d_histos,"clusterSize_vs_x", "; X [mm]; Cluster Size", (xmax-xmin)/xBinSize,xmin,xmax, 8,0.0,8.0);
-    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightTop_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightTop", (xmax-xmin)/xBinSize,xmin,xmax, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightBot_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightBot", (xmax-xmin)/xBinSize,xmin,xmax, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotRight_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotRight", (ymax-ymin)/yBinSize,ymin,ymax, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotLeft_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotLeft", (ymax-ymin)/yBinSize,ymin,ymax, 25,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax", "",           (5*pitch)/0.01,-2.5*pitch,2.5*pitch, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad1_vs_deltaXmaxneg","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad2_vs_deltaXmaxpos","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad3_vs_deltaXmaxpos","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad4_vs_deltaXmaxneg","",   pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTop_vs_deltaXmaxTopPad","",    pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBot_vs_deltaXmaxBotPad","",    pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andAdjPad_vs_deltaXmaxAdjPad","", pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andAdjPad_vs_x","",               pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp1OverAmp123_vs_deltaXmax",          "",    pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp2OverAmp2and3_vs_deltaXmax",        "",    pitch/0.02,-pitch/2.0,pitch/2.0, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Amp12_vs_x", "; X [mm]; Sum Amp12", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-    utility::makeHisto(my_2d_histos,"Amp1_vs_x", "; X [mm]; Amp1", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-    utility::makeHisto(my_2d_histos,"Amp2_vs_x", "; X [mm]; Amp2", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-    utility::makeHisto(my_2d_histos,"BaselineRMS12_vs_x", "; X [mm]; Noise Sum 12", (xmax-xmin)/xBinSize,xmin,xmax, 40,0.0,10);
+    utility::makeHisto(my_2d_histos,"clusterSize_vs_x", "; X [mm]; Cluster Size", std::round((xmax-xmin)/xBinSize),xmin,xmax, 8,0.0,8.0);
+    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightTop_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightTop", std::round((xmax-xmin)/xBinSize),xmin,xmax, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpLeftOverAmpLeftandRightBot_vs_x", "; X [mm]; AmpLeftoverAmpLeftandRightBot", std::round((xmax-xmin)/xBinSize),xmin,xmax, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotRight_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotRight", std::round((ymax-ymin)/yBinSize),ymin,ymax, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"AmpTopOverAmpTopandBotLeft_vs_y", "; Y [mm]; AmpTopOverAmpTopandBotLeft", std::round((ymax-ymin)/yBinSize),ymin,ymax, 25,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1and2_vs_deltaXmax", "",           std::round((5*pitch)/0.01),-2.5*pitch,2.5*pitch, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad1_vs_deltaXmaxneg","",   std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTopPad2_vs_deltaXmaxpos","",   std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad3_vs_deltaXmaxpos","",   std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBotPad4_vs_deltaXmaxneg","",   std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andTop_vs_deltaXmaxTopPad","",    std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andBot_vs_deltaXmaxBotPad","",    std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andAdjPad_vs_deltaXmaxAdjPad","", std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp1andAdjPad_vs_x","",               std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp1OverAmp123_vs_deltaXmax",          "",    std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp2OverAmp2and3_vs_deltaXmax",        "",    std::round(pitch/0.02),-pitch/2.0,pitch/2.0, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Amp12_vs_x", "; X [mm]; Sum Amp12", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+    utility::makeHisto(my_2d_histos,"Amp1_vs_x", "; X [mm]; Amp1", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+    utility::makeHisto(my_2d_histos,"Amp2_vs_x", "; X [mm]; Amp2", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+    utility::makeHisto(my_2d_histos,"BaselineRMS12_vs_x", "; X [mm]; Noise Sum 12", std::round((xmax-xmin)/xBinSize),xmin,xmax, 40,0.0,10);
 
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaY_vs_Xtrack", "; X_{track} [mm]; #Y_{reco} - Y_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-30.5,30.5);
-    utility::makeHisto(my_2d_histos,"deltaY_vs_Ytrack", "; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]", ((ymax-ymin)/.4),ymin,ymax, 200,-30.5,30.5);
-    utility::makeHisto(my_2d_histos,"deltaY_vs_Ytrack_1cm", "; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]", (8.8/0.4),-4.4,4.4, 200,-30.5,30.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaY_vs_Xtrack", "; X_{track} [mm]; #Y_{reco} - Y_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-30.5,30.5);
+    utility::makeHisto(my_2d_histos,"deltaY_vs_Ytrack", "; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]", std::round((ymax-ymin)/.4),ymin,ymax, 200,-30.5,30.5);
+    utility::makeHisto(my_2d_histos,"deltaY_vs_Ytrack_1cm", "; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]", std::round(8.8/0.4),-4.4,4.4, 200,-30.5,30.5);
     utility::makeHisto(my_histos,"y", "; Y_{track} [mm]; Events", 100,-5.5,5.5);
     utility::makeHisto(my_histos,"y_reco", "; Y_{reco} [mm]; Events", 100,-5.5,5.5);
     utility::makeHisto(my_histos,"ratioe", "; Y_{track}/Y_{reco}; Events", 200,-20.5,20.5);
-    utility::makeHisto(my_2d_histos,"deltaXBasic_vs_Xtrack", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaYBasic_vs_Xtrack", "; X_{track} [mm]; #Y_{reco} - Y_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-30.5,30.5);
-    utility::makeHisto(my_2d_histos,"deltaYBasic_vs_Ytrack", "; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]", (ymax-ymin)/yBinSize,ymin,ymax, 200,-30.5,30.5);
-    utility::makeHisto(my_2d_histos,"dXdFrac_vs_Xtrack", "; X_{track} [mm]; dX/dFraction [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 500,-19.0,1.0);
+    utility::makeHisto(my_2d_histos,"deltaXBasic_vs_Xtrack", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaYBasic_vs_Xtrack", "; X_{track} [mm]; #Y_{reco} - Y_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-30.5,30.5);
+    utility::makeHisto(my_2d_histos,"deltaYBasic_vs_Ytrack", "; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]", std::round((ymax-ymin)/yBinSize),ymin,ymax, 200,-30.5,30.5);
+    utility::makeHisto(my_2d_histos,"dXdFrac_vs_Xtrack", "; X_{track} [mm]; dX/dFraction [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 500,-19.0,1.0);
 
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_noNeighb", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_highFrac", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrips", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrips_hotspot", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_noNeighb", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_highFrac", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrips", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrips_hotspot", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
 
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xreco", "; X_{reco} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaY_vs_Yreco", "; Y_{reco} [mm]; #Y_{reco} - Y_{track} [mm]", (ymax-ymin)/yBinSize,ymin,ymax, 200,-30.5,30.5);
-    utility::makeHisto(my_2d_histos,"deltaXmax_vs_Xtrack", "; X_{track} [mm]; #X_{max} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaXmax_vs_Xreco", "; X_{reco} [mm]; #X_{max} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    // utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_A1OverA12Above0p75", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xreco", "; X_{reco} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaY_vs_Yreco", "; Y_{reco} [mm]; #Y_{reco} - Y_{track} [mm]", std::round((ymax-ymin)/yBinSize),ymin,ymax, 200,-30.5,30.5);
+    utility::makeHisto(my_2d_histos,"deltaXmax_vs_Xtrack", "; X_{track} [mm]; #X_{max} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaXmax_vs_Xreco", "; X_{reco} [mm]; #X_{max} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    // utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_A1OverA12Above0p75", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_amplitude1", "; amp; #X_{reco} - X_{track} [mm]", 500,0,500, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_amplitude2", "; amp; #X_{reco} - X_{track} [mm]", 500,0,500, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"Xreco_vs_Xtrack", "; X_{track} [mm]; #X_{reco} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (xmax-xmin)/xBinSize,xmin,xmax);
-    utility::makeHisto(my_2d_histos,"Yreco_vs_Ytrack", "; Y_{track} [mm]; #Y_{reco} [mm]", (ymax-ymin)/yBinSize,ymin,ymax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp1OverAmp123", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + A_{3})", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp2OverAmp123", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + A_{3})", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
-    utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp3OverAmp123", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + m_{3})", (xmax-xmin)/xBinSize,xmin,xmax, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Xreco_vs_Xtrack", "; X_{track} [mm]; #X_{reco} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((xmax-xmin)/xBinSize),xmin,xmax);
+    utility::makeHisto(my_2d_histos,"Yreco_vs_Ytrack", "; Y_{track} [mm]; #Y_{reco} [mm]", std::round((ymax-ymin)/yBinSize),ymin,ymax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp1OverAmp123", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + A_{3})", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp2OverAmp123", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + A_{3})", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
+    utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp3OverAmp123", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + m_{3})", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
 
 
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrips_tight", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"Amp12_vs_x_tight", "; X [mm]; Sum Amp12", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-    utility::makeHisto(my_2d_histos,"Amp1_vs_x_tight", "; X [mm]; Amp1", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-    utility::makeHisto(my_2d_histos,"Amp2_vs_x_tight", "; X [mm]; Amp2", (xmax-xmin)/xBinSize,xmin,xmax, 250,0.0,500);
-    utility::makeHisto(my_2d_histos,"BaselineRMS12_vs_x_tight", "; X [mm]; Noise Sum 12", (xmax-xmin)/xBinSize,xmin,xmax, 40,0.0,10);
-    utility::makeHisto(my_2d_histos,"dXdFrac_vs_Xtrack_tight", "; X_{track} [mm]; dX/dFraction [mm]", (xmax-xmin)/xBinSize,xmin,xmax, 500,-19.0,1.0);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrips_tight", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"Amp12_vs_x_tight", "; X [mm]; Sum Amp12", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+    utility::makeHisto(my_2d_histos,"Amp1_vs_x_tight", "; X [mm]; Amp1", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+    utility::makeHisto(my_2d_histos,"Amp2_vs_x_tight", "; X [mm]; Amp2", std::round((xmax-xmin)/xBinSize),xmin,xmax, 250,0.0,500);
+    utility::makeHisto(my_2d_histos,"BaselineRMS12_vs_x_tight", "; X [mm]; Noise Sum 12", std::round((xmax-xmin)/xBinSize),xmin,xmax, 40,0.0,10);
+    utility::makeHisto(my_2d_histos,"dXdFrac_vs_Xtrack_tight", "; X_{track} [mm]; dX/dFraction [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 500,-19.0,1.0);
 
 
     //Global 3D histograms
-    utility::makeHisto(my_3d_histos,"amplitude_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"amplitude_vs_xy_tight","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy_tight","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"amplitude_vs_xyROI","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500 );
-    utility::makeHisto(my_3d_histos,"totgoodamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"totamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"totamplitudePad_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSizePad,xmin,xmax, (ymax-ymin)/yBinSizePad,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"totrawamplitude_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"amp123_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
-    utility::makeHisto(my_3d_histos,"amp12_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amplitude_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amplitude_vs_xy_tight","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amplitudeDefault_vs_xy_tight","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amplitude_vs_xyROI","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500 );
+    utility::makeHisto(my_3d_histos,"totgoodamplitude_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"totamplitude_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"totamplitudePad_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSizePad),xmin,xmax, std::round((ymax-ymin)/yBinSizePad),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"totrawamplitude_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amp123_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"amp12_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
     
-    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiff_Even_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiff_Odd_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);   
+    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiff_Even_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiff_Odd_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);   
  
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
-    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
    
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXTrackerY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADXY0_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffLGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTrackerX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp2", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp3", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp2", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_amp3", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_hotspot", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_hotspot", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_tracker_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_TrackerX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_TrackerX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_TrackerX_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_TrackerX_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);    
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip_Odd", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADXY_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"average_timeDiff_LGADX_vs_xy_2Strip_Even", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-    utility::makeHisto(my_3d_histos,"weighted_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"deltaX_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #X_{reco} - X_{track} [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,-0.5,0.5);
-    utility::makeHisto(my_3d_histos,"deltaY_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 200,-30.5,30.5);
-    utility::makeHisto(my_3d_histos,"risetime_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
-    utility::makeHisto(my_3d_histos,"risetime_vs_xy_tight","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,1500.0);
-    utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 150,0.0,50.0);
-    utility::makeHisto(my_3d_histos,"charge_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,150.0);
-    utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,50.0);
-    utility::makeHisto(my_3d_histos,"slewRate_vs_xy","; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax,300,0.0,500.0);
+    utility::makeHisto(my_3d_histos,"weighted_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_goodSig_vs_xy", "; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"deltaX_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #X_{reco} - X_{track} [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200,-0.5,0.5);
+    utility::makeHisto(my_3d_histos,"deltaY_vs_Xtrack_vs_Ytrack", "; X_{track} [mm]; Y_{track} [mm]; #Y_{reco} - Y_{track} [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200,-30.5,30.5);
+    utility::makeHisto(my_3d_histos,"risetime_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 150,0.0,1500.0);
+    utility::makeHisto(my_3d_histos,"risetime_vs_xy_tight","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 150,0.0,1500.0);
+    utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 150,0.0,50.0);
+    utility::makeHisto(my_3d_histos,"charge_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,150.0);
+    utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,50.0);
+    utility::makeHisto(my_3d_histos,"slewRate_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,500.0);
+    utility::makeHisto(my_3d_histos,"weighted2_jitter_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200.0, 0.0, 200.0);
 
-    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
-    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
+    utility::makeHisto(my_3d_histos,"weighted2_timeDiff_LGADXY_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
    
     for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
     {
-        utility::makeHisto(my_3d_histos,"timeDiff_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,            timeDiffHigh);
-        utility::makeHisto(my_3d_histos,"timeDiffTracker_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,     timeDiffHigh);
-        utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,      timeDiffLow,timeDiffHigh);
+        utility::makeHisto(my_3d_histos,"timeDiff_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,            timeDiffHigh);
+        utility::makeHisto(my_3d_histos,"timeDiffTracker_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,     timeDiffHigh);
+        utility::makeHisto(my_3d_histos,"weighted2_timeDiff_tracker_Pixel_vs_xy"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,      timeDiffLow,timeDiffHigh);
     }
 
     //Efficiency
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    // utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_denominator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    // utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_denominator", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
 
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_coarseBins", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator_coarseBins", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_coarseBins", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_coarseBins", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_coarseBins", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
 
 
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    // utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_denominator_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_tight", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator_tight", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_numerator_tight", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    // utility::makeHisto(my_2d_histos,"efficiencyDC_vs_xy_denominator_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_tight", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_tight", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_highFrac_numerator_tight", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_tight", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_tight", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_tight", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
 
     // Metal
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_oneStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_twoStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_oneStrip_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Metal_twoStrip_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
     // Gap
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_oneStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_twoStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_oneStrip_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_Gap_twoStrip_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
     // Middle gap
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_oneStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_twoStrip_numerator", "; X [mm]; Y [mm]", 2*(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_oneStrip_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_MidGap_twoStrip_numerator", "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
 
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator_coarseBins_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_coarseBins_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_coarseBins_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_coarseBins_tight", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_denominator_coarseBins_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_coarseBins_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_oneStrip_numerator_coarseBins_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrips_numerator_coarseBins_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
 
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_Denominator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_Numerator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_OneGoodHit_Numerator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_TwoGoodHit_Numerator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_ThreeGoodHit_Numerator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
-    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_FourGoodHit_Numerator", "; X [mm]; Y [mm]", (xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_Denominator", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_Numerator", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_OneGoodHit_Numerator", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_TwoGoodHit_Numerator", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_ThreeGoodHit_Numerator", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    utility::makeHisto(my_2d_histos,"efficiency_vs_xy_FourGoodHit_Numerator", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
 
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_EdgeCut_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
@@ -645,10 +646,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_prof,"efficiency_vs_xy_Strip2or5", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax);
     
     //Define 1d prof
-    utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp1OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
-    utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp2OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
-    utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp3OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
-    utility::makeHisto(my_1d_prof,"clusterSize_vs_x_prof", "; X [mm]; Cluster Size", (xmax-xmin)/xBinSize,xmin,xmax);
+    utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp1OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", std::round((xmax-xmin)/xBinSize),xmin,xmax);
+    utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp2OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", std::round((xmax-xmin)/xBinSize),xmin,xmax);
+    utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp3OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", std::round((xmax-xmin)/xBinSize),xmin,xmax);
+    utility::makeHisto(my_1d_prof,"clusterSize_vs_x_prof", "; X [mm]; Cluster Size", std::round((xmax-xmin)/xBinSize),xmin,xmax);
     utility::makeHisto(my_1d_prof,"waveProf0", "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf1", "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
     utility::makeHisto(my_1d_prof,"waveProf2", "; Time [ns]; Voltage [mV]", 500,0.0,25.0);
@@ -1423,6 +1424,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "charge_vs_xy", x,y,chargeMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "ampChargeRatio_vs_xy", x,y,ampChargeRatioMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "slewRate_vs_xy", x,y,slewrateMaxChannel);
+        utility::fillHisto(pass && maxAmpNotEdgeStrip && goodMaxLGADAmp,                                   my_3d_histos, "weighted2_jitter_vs_xy", x,y,weighted2_jitter);
 
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "totgoodamplitude_vs_xy", x,y,totGoodAmpLGAD);
         utility::fillHisto(pass && goodMaxLGADAmp,                                                         my_3d_histos, "totamplitude_vs_xy", x,y,totAmpLGAD);

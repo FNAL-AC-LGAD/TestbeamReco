@@ -356,7 +356,7 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -0.629151, -0.330539, 2.348626, -4.694552, -3.942263};
+    std::vector<double> positionRecoPar = {0.250000, -0.639735, -0.431173, 3.227442, -8.977157, 11.446396};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };
@@ -1788,4 +1788,3 @@ public:
 };
 
 #endif
-
