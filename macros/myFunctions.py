@@ -1,4 +1,5 @@
 import ROOT
+import myStyle
 
 # Get list of all pairs of indices saved in histograms
 # with name <prename> in <inputfile>
@@ -83,3 +84,39 @@ def get_shifted_limits(th2, center_position):
         xmax-= bin_width/2.
 
     return xmin, xmax
+
+# return a list with the legends dependening on the sensors and variables
+# receive a list of sensors and a list of variables as arguments
+# if you want resistivity and capacitance, put it in the end of the list and in that order
+# example: [("HPK_W9_22_3_20T_500x500_150M_E600", "HPK_W9_23_3_20T_500x500_300M_E600",
+    # "HPK_W8_1_1_50T_500x500_150M_C600"], ["pitch", "length", "resistivityNumber", "capacitance"]))
+
+
+def get_legend_comparation_plots(sensors, variables):
+
+    # Define the units of each variable
+    variablesUnits = {}
+    variablesUnits["pitch"] = " \mum "
+    variablesUnits["stripWidth"], variablesUnits["width"] = " \mum ", " \mum "
+    variablesUnits["length"] = " mm "
+    variablesUnits["BV"], variablesUnits["voltage"] = " mV ", " mV "
+    variablesUnits["thickness"] = " \mum "
+    variablesUnits["resistivity"] = ""
+    variablesUnits["resistivityNumber"] = "\Omega\\\square"
+    variablesUnits["capacitance"] = ""
+
+    sensor_legend_list = []
+
+    for sensor in sensors:
+
+        # add the tag of the sensor first
+        geometry = myStyle.GetGeometry(sensor)
+        sensor_legend = geometry['tag'] + ": "
+        for variable in variables:
+
+            # add the variables
+            sensor_legend+= str(geometry[variable]) + variablesUnits[variable]
+
+        sensor_legend_list.append(sensor_legend)
+
+    return sensor_legend_list

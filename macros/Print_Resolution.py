@@ -11,17 +11,21 @@ myStyle.ForceStyle()
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+parser.add_option('-A', dest='AllRegions', action='store_true', default = False, help="Get results for all regions")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
+all_regions = options.AllRegions
 outdir = myStyle.getOutputDir(dataset)
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor_name = sensor_Geometry["sensor"]
 
-regions = ["Overall", "Metal", "Gap", "MidGap"]
+regions = ["Overall"]
+if all_regions:
+    regions+= ["Metal", "Gap", "MidGap"]
 
-print(" >> Sensor info summary to be saved in mySensorInfo.py")
+print("\t\tSensor %s summary info to be saved in mySensorInfo.py\n"%(myStyle.RemoveBV(dataset)))
 
 # Resolution values
 # -----------------
@@ -48,15 +52,14 @@ for reg in regions:
             info_channels.append(value)
 
         # Output line for mySensorInfo.py
-        print("\tOne strip info per channel:")
-        info_str = "\t\"%s\": ["%(myStyle.RemoveBV(dataset))
+        info_str = " > One strip info per channel: ["
         for val in info_channels:
-            info_str+= "%.1f, "%(val)
+            info_str+= "%.0f, "%(val)
         info_str = info_str[:-2] + "],"
         print(info_str)
 
     info = {}
-    print("    # %s region"%(reg))
+    print(" > %s region:"%(reg))
 
     res_region = "_%s"%reg
     if reg == "MidGap":
@@ -89,16 +92,20 @@ for reg in regions:
     info["two_eff"] = 100 * value_two / value_pass
     
     # Output line for mySensorInfo.py
-    info_str = "\t\"%s\": ["%(myStyle.RemoveBV(dataset))
+    info_str = "    - List format: ["
     for key in ["one_res", "two_res", "time_res", "one_eff", "two_eff"]:
-        info_str+= "%.1f, "%(info[key])
+        info_str+= "%.0f, "%(info[key])
     info_str = info_str[:-2] + "],"
     print(info_str)
 
     # Ouput for Latex table
-    info_tex = "\t%s & %.0f $\\pm$ 1 &"%(reg, info["time_res"])
+    info_tex = "    - LaTeX format: %s & %.0f $\\pm$ 1 &"%(reg, info["time_res"])
     for key in ["one_res", "one_eff", "two_res", "two_eff"]:
-        info_tex+= " %.1f &"%(info[key])
+        info_tex+= " %.0f"%(info[key])
+        if "eff" in key:
+            info_tex+= "\\%"
+        info_tex+= " &"
+    info_tex+= "\n"
     print(info_tex)
 
 
