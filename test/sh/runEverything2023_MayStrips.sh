@@ -366,7 +366,6 @@ cd ../../test
 # python Print_Resolution.py          -D HPK_KOJI_20T_1P0_80P_60M_E240_112V
 
 
-
 # HPK 500um Pitch sensors
 # -----------------------
 
@@ -410,13 +409,13 @@ done
 
 cd ../macros
 # # DoPositionRecoFit
-python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  --xmax 0.70 --fitOrder 4
+python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  --xmax 0.71 --fitOrder 4
 python DoPositionRecoFit.py     -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V   --xmax 0.71 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   --xmax 0.70 --fitOrder 4
+python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   --xmax 0.69 --fitOrder 4
 python DoPositionRecoFit.py     -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V   --xmax 0.85 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V    --xmax 0.84 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V   --xmax 0.85 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V  --xmax 0.81 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V  --xmax 0.85 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V   --xmax 0.93 --fitOrder 5
 
 
@@ -463,9 +462,11 @@ done
 
 # Print resolution values at the end
 for sensor in "${HPK_500P[@]}"; do
+    cd ../macros
     python Print_Resolution.py          -D ${sensor}
 done
 
 for sensor in "${HPK_80P[@]}"; do
+    cd ../macros
     python Print_Resolution.py          -D ${sensor}
 done
