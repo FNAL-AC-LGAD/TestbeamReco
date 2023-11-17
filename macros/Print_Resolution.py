@@ -94,7 +94,7 @@ for reg in regions:
     # Output line for mySensorInfo.py
     info_str = "    - List format: ["
     for key in ["one_res", "two_res", "time_res", "one_eff", "two_eff"]:
-        info_str+= "%.0f, "%(info[key])
+        info_str+= "%.1f, "%(info[key])
     info_str = info_str[:-2] + "],"
     print(info_str)
 
