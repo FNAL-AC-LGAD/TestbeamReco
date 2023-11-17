@@ -55,7 +55,7 @@ for key, info in geometry2023_default.items():
     info_dict["resistivityNumber"] = 0
     if info[6] == "E":
         info_dict["resistivityNumber"] = 1600
-    if info[6] == "C":
+    elif info[6] == "C":
         info_dict["resistivityNumber"] = 400
     info_dict["capacitance"] = info[7]
     info_dict["tag"] = info[8]
@@ -64,7 +64,7 @@ for key, info in geometry2023_default.items():
 
 #########################  Resolutions and efficiency  #########################
 # NOTE: Resolution values do NOT have tracker component removed
-############################### ---  Overall  ---################################
+###############################---  Overall  ---################################
 # <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Overall = {
     # BNL strips
@@ -103,7 +103,7 @@ resolutions2023_Overall = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [109.4, 20.2, 37.4, 63.9, 36.1],
 }
 
-################################ ---  Metal  ---#################################
+################################---  Metal  ---#################################
 # <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Metal = {
     # BNL strips
@@ -142,7 +142,7 @@ resolutions2023_Metal = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [19.7, 27.1, 24.9, 97.2, 2.8],
 }
 
-################################# ---  Gap  ---##################################
+#################################---  Gap  ---##################################
 # <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Gap = {
     # BNL strips
@@ -194,7 +194,7 @@ resolutions2023_Gap = {
 }
 
 ##############################  Characterization  ##############################
-############################### ---  Overall  ---################################
+###############################---  Overall  ---################################
 # <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Overall = {
     # BNL strips
@@ -233,7 +233,7 @@ characteristics2023_Overall = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [],
 }
 
-################################ ---  Metal  ---#################################
+################################---  Metal  ---#################################
 # <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Metal = {
     # BNL strips
@@ -272,7 +272,7 @@ characteristics2023_Metal = {
     "HPK_W9_15_4_20T_0P5_500P_50M_E600": [],
 }
 
-################################# ---  Gap  ---##################################
+#################################---  Gap  ---##################################
 # <jitter [ps]>, <amp max [mV]>, <risetime [ps]>, <baseline_rms [mV]>, <charge [fC]>
 characteristics2023_Gap = {
     # BNL strips
@@ -325,27 +325,27 @@ for sensor in resolutions2023_Overall:
         if not res:
             # print(" (!) Sensor %s resolution is empty (!)"%sensor)
             continue
-        info_dict["position_oneStrip%s" %
-                  reg], info_dict["position_oneStripRMS%s" % reg] = res[0], res[0]
-        info_dict["res_one_strip%s" % reg] = res[0]
-        info_dict["position_twoStrip%s" %
-                  reg], info_dict["res_two_strip%s" % reg] = res[1], res[1]
-        info_dict["time_resolution%s" %
-                  reg], info_dict["res_time%s" % reg] = res[2], res[2]
-        info_dict["efficiency_oneStrip%s" %
-                  reg], info_dict["efficiency_one_strip%s" % reg] = res[3], res[3]
-        info_dict["efficiency_twoStrip%s" %
-                  reg], info_dict["efficiency_two_strip%s" % reg] = res[4], res[4]
+        info_dict["position_oneStrip%s"%reg] = res[0]
+        info_dict["position_oneStripRMS%s"%reg] = res[0]
+        info_dict["res_one_strip%s"%reg] = res[0]
+        info_dict["position_twoStrip%s"%reg] = res[1]
+        info_dict["res_two_strip%s"%reg] = res[1]
+        info_dict["time_resolution%s"%reg] = res[2]
+        info_dict["res_time%s"%reg] = res[2]
+        info_dict["efficiency_oneStrip%s"%reg] = res[3]
+        info_dict["efficiency_one_strip%s"%reg] = res[3]
+        info_dict["efficiency_twoStrip%s"%reg] = res[4]
+        info_dict["efficiency_two_strip%s"%reg] = res[4]
 
         char = list_char[i]
         if not char:
             # print(" (!) Sensor %s characteristic is empty (!)"%sensor)
             continue
-        info_dict["jitter%s" % reg] = char[0]
-        info_dict["amp_max%s" % reg] = char[1]
-        info_dict["rise_time%s" % reg] = char[2]
-        info_dict["baseline_rms%s" % reg] = char[3]
-        info_dict["charge%s" % reg] = char[4]
+        info_dict["jitter%s"%reg] = char[0]
+        info_dict["amp_max%s"%reg] = char[1]
+        info_dict["rise_time%s"%reg] = char[2]
+        info_dict["baseline_rms%s"%reg] = char[3]
+        info_dict["charge%s"%reg] = char[4]
 
     resolutions2023[sensor] = info_dict
 
@@ -416,16 +416,22 @@ for key, voltages in geometry2023_biasscan.items():
     info = geometry2023_default[key]
     for volt in voltages:
         info_dict = {}
-        info_dict["sensor"] = "%s_%iV" % (info[0], volt)
+        info_dict["sensor"] = "%s_%iV"%(info[0], volt)
         info_dict["pitch"] = info[1]
         info_dict["stripWidth"], info_dict["width"] = info[2], info[2]
         info_dict["length"] = info[3]
         info_dict["BV"], info_dict["voltage"] = volt, volt
         info_dict["thickness"] = info[5]
         info_dict["resistivity"] = info[6]
+        info_dict["resistivityNumber"] = 0
+        if info[6] == "E":
+            info_dict["resistivityNumber"] = 1600
+        elif info[6] == "C":
+            info_dict["resistivityNumber"] = 400
         info_dict["capacitance"] = info[7]
+        info_dict["tag"] = info[8]
 
-        new_key = "%s_%iV" % (key, volt)
+        new_key = "%s_%iV"%(key, volt)
         sensorsGeom2023_biasScan[new_key] = info_dict
 
 ##########################  Characterization overall  ##########################
@@ -504,7 +510,13 @@ for key, info in geometry2022_default.items():
     info_dict["BV"], info_dict["voltage"] = info[4], info[4]
     info_dict["thickness"] = info[5]
     info_dict["resistivity"] = info[6]
-    info_dict["capacitance"] = info[7]
+    info_dict["resistivityNumber"] = 0
+    if info[6] == "E":
+        info_dict["resistivityNumber"] = 1600
+    elif info[6] == "C":
+        info_dict["resistivityNumber"] = 400
+    info_dict["capacitance"] = info[7] if info[7] != "Null" else 0
+    info_dict["tag"] = info[0]
 
     sensorsGeom2022[key] = info_dict
 

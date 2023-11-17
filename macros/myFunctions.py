@@ -1,17 +1,16 @@
 import ROOT
-import mySensorInfo
+import myStyle
 
 # Get list of all pairs of indices saved in histograms
 # with name <prename> in <inputfile>
-
 
 def get_existing_indices(inputfile, prename):
     list_indices = []
     # Loop over all possible names and save only those existing!
     for i in range(8):
         for j in range(8):
-            channel = "%i%i" % (i, j)
-            hname = "%s%s" % (prename, channel)
+            channel = "%i%i"%(i, j)
+            hname = "%s%s"%(prename, channel)
             hist = inputfile.Get(hname)
             if not hist:
                 continue
@@ -19,7 +18,6 @@ def get_existing_indices(inputfile, prename):
             list_indices.append(channel)
 
     return list_indices
-
 
 def get_central_channel_position(inputfile, direction="x"):
     # Get total number of channels used
@@ -39,7 +37,7 @@ def get_central_channel_position(inputfile, direction="x"):
 
         if key not in n_channels_paired_with:
             n_channels_paired_with[key] = 0
-        n_channels_paired_with[key] += 1
+        n_channels_paired_with[key]+= 1
 
     # Using the first column or row as reference
     n_subchannels = n_channels_paired_with["0"]
@@ -51,23 +49,19 @@ def get_central_channel_position(inputfile, direction="x"):
             exit()
 
     # Even number of columns
-    if (n_subchannels % 2 == 0):
+    if (n_subchannels%2 == 0):
         central_idx = round(n_subchannels/2)
-        l_channel = inputfile.Get("stripBoxInfo0%i" %
-                                  (central_idx-1)).GetMean(1)
-        r_channel = inputfile.Get("stripBoxInfo0%i" % (central_idx)).GetMean(1)
+        l_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx-1)).GetMean(1)
+        r_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx)).GetMean(1)
         position_center = (l_channel + r_channel)/2
     # Odd number of columns
     else:
         central_idx = round((n_subchannels-1)/2)
-        position_center = (inputfile.Get("stripBoxInfo0%i" %
-                           central_idx)).GetMean(1)
+        position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
 
     return position_center
 
 # Get limits to draw th2 projection properly aligned w.r.t. channel's boxes drawn
-
-
 def get_shifted_limits(th2, center_position):
     xmin, xmax = th2.GetXaxis().GetXmin(), th2.GetXaxis().GetXmax()
 
@@ -81,19 +75,19 @@ def get_shifted_limits(th2, center_position):
     # the central channel is at zero
     # print("Zero bin: %i, Real center: %i; Diff: %i"%(zero_bin, central_bin, bin_diff))
     if (bin_diff != 0.0):
-        xmin -= bin_width*bin_diff
-        xmax -= bin_width*bin_diff
+        xmin-= bin_width*bin_diff
+        xmax-= bin_width*bin_diff
 
     # Even number of bins have 0.0 as lowedge in zero bin.
     # Slightly move this bin to make it look symmetric
     if (th2.GetXaxis().GetBinLowEdge(zero_bin) == 0.0):
-        xmin -= bin_width/2.
-        xmax -= bin_width/2.
+        xmin-= bin_width/2.
+        xmax-= bin_width/2.
 
     return xmin, xmax
 
-# return a list with the legends dependening the sensors and variables
-# recive a list of sensors and a list of variables as arguments
+# return a list with the legends dependening on the sensors and variables
+# receive a list of sensors and a list of variables as arguments
 # if you want resistivity and capacitance, put it in the end of the list and in that order
 # example: [("HPK_W9_22_3_20T_500x500_150M_E600", "HPK_W9_23_3_20T_500x500_300M_E600",
     # "HPK_W8_1_1_50T_500x500_150M_C600"], ["pitch", "length", "resistivityNumber", "capacitance"]))
@@ -116,13 +110,13 @@ def get_legend_comparation_plots(sensors, variables):
 
     for sensor in sensors:
 
-        # add the tag od the sensor first
-        sensor_legend = mySensorInfo.sensorsGeom2023[sensor]['tag'] + ": "
+        # add the tag of the sensor first
+        geometry = myStyle.GetGeometry(sensor)
+        sensor_legend = geometry['tag'] + ": "
         for variable in variables:
 
             # add the variables
-            sensor_legend += str(
-                mySensorInfo.sensorsGeom2023[sensor][variable]) + variablesUnits[variable]
+            sensor_legend+= str(geometry[variable]) + variablesUnits[variable]
 
         sensor_legend_list.append(sensor_legend)
 
