@@ -3,6 +3,7 @@ import myStyle
 
 # Get list of all pairs of indices saved in histograms
 # with name <prename> in <inputfile>
+
 def get_existing_indices(inputfile, prename):
     list_indices = []
     # Loop over all possible names and save only those existing!
@@ -25,7 +26,7 @@ def get_central_channel_position(inputfile, direction="x"):
     # Create a dictionary to get the number of columns (rows) associated with
     # each row (column). The later is chosen with the input <direction>.
     n_channels_paired_with = {}
-    for i,j in indices:
+    for i, j in indices:
         if direction is "x":
             key = i
         elif direction is "y":
@@ -55,7 +56,7 @@ def get_central_channel_position(inputfile, direction="x"):
         position_center = (l_channel + r_channel)/2
     # Odd number of columns
     else:
-        central_idx =  round((n_subchannels-1)/2)
+        central_idx = round((n_subchannels-1)/2)
         position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
 
     return position_center
