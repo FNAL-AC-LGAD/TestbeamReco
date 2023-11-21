@@ -127,6 +127,10 @@ for titles in list_htitles:
                          sensor=dataset, center_position=position_center)
     all_histoInfos.append(info_obj)
 
+# Define bin limit of the histograms drawn
+plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1))
+if ("pad" not in dataset) and ("500x500" not in dataset):
+    plot_xlimit-= pitch/(2. * 1000)
 
 # Get histograms for Expected Resolution of Two strip Reconstruction
 # ------------------------------------------------------------------
@@ -146,7 +150,7 @@ hist_expected.SetLineStyle(7)
 hist_expected.SetLineColor(colors[2])
 
 # Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
-for ibin in range(1,hist_expected.GetNbinsX()+1):
+for ibin in range(1, hist_expected.GetNbinsX()+1):
     if mean_amp12_vs_x.GetBinContent(ibin) > 0:
         dXFrac = mean_dXFrac_vs_x.GetBinContent(ibin)
         noise12 = mean_noise12_vs_x.GetBinContent(ibin)
@@ -162,6 +166,10 @@ for ibin in range(1,hist_expected.GetNbinsX()+1):
     # Adding tracker contribution
     if (not rm_tracker) and (value_expected > 0.0):
         value_expected = math.sqrt(trkr_value**2 + value_expected**2)
+
+    # Fill only when inside limits
+    if not mf.is_inside_limits(ibin, hist_expected, xmax=plot_xlimit):
+        continue
 
     hist_expected.SetBinContent(ibin, value_expected)
 
@@ -245,7 +253,6 @@ for i in range(1, nbins+1):
         if("HPK_W9_15_2" in dataset):
             minEvtsCut = 0.25*totalEvents/nbins
 
-
         if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
             msg_nentries+= "(Total events: %i)"%(totalEvents)
@@ -284,8 +291,13 @@ for i in range(1, nbins+1):
             value = TMath.Sqrt(value**2 - trkr_value**2)
         # Mark bins with resolution smaller than tracker
         elif (trkr_value > value) and (value > 0.0):
+            print("  WARNING: Bin %i got resolution smaller than tracker (%.3f)"%(i, value))
             value = 2.0
             error = 2.0
+
+        # Fill only when inside limits
+        if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
+            continue
 
         info_entry.th1.SetBinContent(i, value)
         info_entry.th1.SetBinError(i, error)

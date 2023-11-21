@@ -86,6 +86,15 @@ def get_shifted_limits(th2, center_position):
 
     return xmin, xmax
 
+def is_inside_limits(this_bin, hist, xmax, xmin=0):
+    if not xmin:
+        xmin = -xmax
+    bin_min = hist.GetXaxis().FindBin(xmin)
+    bin_max = hist.GetXaxis().FindBin(xmax)
+
+    return (bin_min < this_bin) and (this_bin < bin_max)
+
+
 # return a list with the legends dependening on the sensors and variables
 # receive a list of sensors and a list of variables as arguments
 # if you want resistivity and capacitance, put it in the end of the list and in that order

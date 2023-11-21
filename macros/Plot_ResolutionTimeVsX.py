@@ -82,8 +82,8 @@ inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-pitch = sensor_Geometry['pitch']
-strip_width = sensor_Geometry['stripWidth']
+pitch = sensor_Geometry['pitch']/1000.
+strip_width = sensor_Geometry['stripWidth']/1000.
 strip_length = sensor_Geometry['length']
 
 # Modify time reference (Photek) contribution from resolution results
@@ -149,6 +149,10 @@ if debugMode:
 # Get total number of bins in x-axis to loop over (all hists have the same number, in principle)
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
+plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1))
+if ("pad" not in dataset) and ("500x500" not in dataset):
+    plot_xlimit-= pitch/2.
+
 # Loop over X bins
 for i in range(1, nbins+1):
     for info_entry in all_histoInfos:
@@ -169,6 +173,10 @@ for i in range(1, nbins+1):
         minEvtsCut = totalEvents/nbins
         if ("HPK_50um" in dataset):
             minEvtsCut = 0.7*minEvtsCut
+        if("20T" in dataset):
+            minEvtsCut = 0.3*totalEvents/nbins
+        # if(is_tight):
+        #     minEvtsCut = 0
 
         if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
@@ -201,7 +209,8 @@ for i in range(1, nbins+1):
                 canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
                 bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
                 msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
-                msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
+                # msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
+                msg_binres+= " -> Entries: %.3f"%(tmpHist.GetEntries())
                 print(msg_binres)
         else:
             valueMean = 0.0
@@ -212,6 +221,10 @@ for i in range(1, nbins+1):
         if rm_tracker and (value > 0.0):
             value = math.sqrt((value*value) - (res_photek*res_photek))
             error  = errorRaw*(valueRaw/value)
+
+        # Fill only when inside limits
+        if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
+            continue
 
         info_entry.th1.SetBinContent(i, value)
         info_entry.th1.SetBinError(i, error)
