@@ -376,7 +376,7 @@ for i,info_entry in enumerate(all_histoInfos):
     htemp.Draw("AXIS same")
     legend.Draw()
 
-    # myStyle.BeamInfo()
+    myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset)
 
     save_path = "%sPositionResolution_vs_x"%(outdir)
