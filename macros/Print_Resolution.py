@@ -54,7 +54,7 @@ for reg in regions:
         # Output line for mySensorInfo.py
         info_str = " > One strip info per channel: ["
         for val in info_channels:
-            info_str+= "%.0f, "%(val)
+            info_str+= "%.1f, "%(val)
         info_str = info_str[:-2] + "],"
         print(info_str)
 
