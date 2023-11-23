@@ -86,7 +86,7 @@ outdir = myStyle.GetPlotsDir(outdir, "Jitter/")
 # Save list with histograms to draw
 list_overall_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
-    ["weighted2_jitter_vs_xy", "weighted2_jitter", "MPV signal amplitude [mV]"],
+    ["weighted2_jitter_vs_xy", "jitter_vs_x", "MPV signal amplitude [mV]"],
 ]
 
 # Use tight cut histograms
@@ -231,7 +231,7 @@ for i,info_entry in enumerate(all_histoInfos):
     myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset)
 
-    save_path = "%s%s_vs_x"%(outdir, info_entry.outHistoName)
+    save_path = "%s%s"%(outdir, info_entry.outHistoName)
     if (is_tight):
         save_path+= "_tight"
     canvas.SaveAs("%s.gif"%save_path)
