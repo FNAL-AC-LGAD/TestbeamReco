@@ -18,8 +18,8 @@ colors = myStyle.GetColors(True)
 ## Defining Style
 myStyle.ForceStyle()
 
-outdir = myStyle.getOutputDir("Paper_plots")
-outdir = myStyle.GetPlotsDir(outdir, "")
+outdir = myStyle.getOutputDir("Paper2023")
+outdir = myStyle.GetPlotsDir(outdir, "CFD/")
 
 Resolution_values_W5 = [66.02, 49.81, 39.71, 36.67, 36.20, 35.98, 35.79, 36.40, 37.84, 41.67]
 Resolution_values_W9 = [87.43, 76.65, 58.75, 52.31, 51.84, 52.77, 54.56, 57.69, 67.42, 75.54]
