@@ -72,10 +72,13 @@ private:
         int distance = abs(amp1Indexes.first - amp2Indexes.first) + abs(amp1Indexes.second - amp2Indexes.second);
         if (enablePositionReconstructionPad) distance = abs(ampCol1Indexes.second - ampCol2Indexes.second);
         bool goodNeighbour = (distance==1) && ampColLGAD[ampCol2Indexes.first][ampCol2Indexes.second]>noiseAmpThreshold;
-        bool twoStripReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
+        double recoMaxPoint = (positionRecoMaxPoint * enablePositionReconstruction) + (positionRecoMaxPointCol * enablePositionReconstructionPad);
+        bool twoStripReco = goodNeighbour && (Amp1OverAmp1and2 < recoMaxPoint);
 
         tr.registerDerivedVar("goodNeighbour", goodNeighbour);
+        tr.registerDerivedVar("recoMaxPoint", recoMaxPoint);
         tr.registerDerivedVar("twoStripReco", twoStripReco);
+        tr.registerDerivedVar("oneStripReco", !twoStripReco);
 
         double y_reco=0.0, x_reco = 0.0, x1 = 0.0, x2 = 0.0; // , y1 = 0.0, y2 = 0.0,
         double x_reco_basic = 0.0, y_reco_basic = 0.0;
@@ -89,7 +92,7 @@ private:
 
             //use the poly fit function
             auto dX = getDX(positionRecoPar, Amp1OverAmp1and2, 0.5);
-            dX = (goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint)) ? dX : 0.0;
+            dX = (twoStripReco) ? dX : 0.0;
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 
@@ -217,7 +220,7 @@ private:
             x1 = stripCenterXPositionLGAD[ampCol1Indexes.first][ampCol1Indexes.second];
             x2 = stripCenterXPositionLGAD[ampCol2Indexes.first][ampCol2Indexes.second]; // This assumes both rows to be perfectly aligned
             auto dX = getDX(positionRecoParCol, Amp1OverAmp1and2, 0.5);
-            dX = (goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPointCol)) ? dX : 0.0;
+            dX = (twoStripReco) ? dX : 0.0;
 
             x_reco = (x2>x1) ? x1+dX : x1-dX;
 
