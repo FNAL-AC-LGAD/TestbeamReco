@@ -139,6 +139,7 @@ for sensor in "${HPK_2x2pad[@]}"; do
     python Plot_CutFlow.py              -D ${sensor}
 
     # Paper plots
+    python Plot_RisetimeVsX.py          -D ${sensor} -x 0.7
     python Plot_JitterVsX.py            -D ${sensor} -x 0.7
     python Plot_AmplitudeVsX.py         -D ${sensor} -x 0.7 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -z 0.0 -Z 200.0
@@ -147,6 +148,7 @@ for sensor in "${HPK_2x2pad[@]}"; do
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.7
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 50
 
+    python Plot_RisetimeVsX.py          -D ${sensor} -t -x 0.7
     python Plot_JitterVsX.py            -D ${sensor} -t -x 0.7
     python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 0.7 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0

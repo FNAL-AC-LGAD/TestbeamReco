@@ -330,6 +330,7 @@ for sensor in "${BNL_strips[@]}"; do
     python Plot_CutFlow.py              -D ${sensor}
 
     # Paper plots
+    python Plot_RisetimeVsX.py          -D ${sensor} -x 2.6
     python Plot_JitterVsX.py            -D ${sensor} -x 2.6
     python Plot_AmplitudeVsX.py         -D ${sensor} -x 2.6 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -z 0.0 -Z 200.0
@@ -338,6 +339,7 @@ for sensor in "${BNL_strips[@]}"; do
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 2.6
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 2.6 -y 100
 
+    python Plot_RisetimeVsX.py          -D ${sensor} -t -x 2.6
     python Plot_JitterVsX.py            -D ${sensor} -t -x 2.6
     python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 2.6 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0

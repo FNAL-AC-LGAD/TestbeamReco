@@ -373,13 +373,13 @@ HPK_500P=('HPK_W8_18_2_50T_1P0_500P_100M_C600_208V' 'HPK_W8_17_2_50T_1P0_500P_50
 
 for sensor in "${HPK_500P[@]}"; do
     printf "\nRunning over ${sensor} sensor\n"
-    cd ../test
-    ./MyAnalysis -A InitialAnalyzer -D ${sensor}
-    cd ../macros
-    python FindDelayCorrections.py -D ${sensor}
-    python FindInputHistos4YReco.py -D ${sensor} -I
-    cd ../test
-    ./MyAnalysis -A Analyze -D ${sensor}
+    # cd ../test
+    # ./MyAnalysis -A InitialAnalyzer -D ${sensor}
+    # cd ../macros
+    # python FindDelayCorrections.py -D ${sensor}
+    # python FindInputHistos4YReco.py -D ${sensor} -I
+    # cd ../test
+    # ./MyAnalysis -A Analyze -D ${sensor}
     cd ../macros
 
     python Plot_SimpleXYMaps.py         -D ${sensor}
@@ -389,6 +389,7 @@ for sensor in "${HPK_500P[@]}"; do
     python Plot_CutFlow.py              -D ${sensor}
 
     # Paper plots
+    python Plot_RisetimeVsX.py          -D ${sensor} -x 1.9
     python Plot_JitterVsX.py            -D ${sensor} -x 1.9
     python Plot_AmplitudeVsX.py         -D ${sensor} -x 1.9 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -z 0.0 -Z 200.0
@@ -397,6 +398,7 @@ for sensor in "${HPK_500P[@]}"; do
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 1.9
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 1.9 -y 100
 
+    python Plot_RisetimeVsX.py          -D ${sensor} -t -x 1.9
     python Plot_JitterVsX.py            -D ${sensor} -t -x 1.9
     python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 1.9 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
@@ -445,6 +447,7 @@ for sensor in "${HPK_80P[@]}"; do
     python Plot_CutFlow.py              -D ${sensor}
 
     # Paper plots
+    python Plot_RisetimeVsX.py          -D ${sensor} -x 0.6
     python Plot_JitterVsX.py            -D ${sensor} -x 0.6
     python Plot_AmplitudeVsX.py         -D ${sensor} -x 0.6 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -z 0.0 -Z 200.0
@@ -453,6 +456,7 @@ for sensor in "${HPK_80P[@]}"; do
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.6 -y 50
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.6 -y 100
 
+    python Plot_RisetimeVsX.py          -D ${sensor} -t -x 0.6
     python Plot_JitterVsX.py            -D ${sensor} -t -x 0.6
     python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 0.6 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
