@@ -75,7 +75,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_histos,"ampChargeRatio"+r+s,"", 300,0.0,15.0);
             utility::makeHisto(my_histos,"slewrate"+r+s,"", 300,0.0,400.0);
             utility::makeHisto(my_histos,"slewRateChargeRatio"+r+s,"", 300,0.0,30.0);
-            utility::makeHisto(my_histos,"deltaX_oneStrip"+r+s, "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+            utility::makeHisto(my_histos,"deltaX_oneStrip"+r+s, "; X_{reco} - X_{track} [mm]; Events", 200, -pitch, pitch);
 
             for (unsigned int ch = 0; ch < row.size(); ch++)
             {
@@ -1073,7 +1073,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "slewRateChargeRatio"+r+s, slewRateChargeRatio);
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "slewrate"+r+s, slewrate);
                 
-                utility::fillHisto(pass_tightY && isMaxChannel && goodOverNoiseAmp && oneStripReco,my_histos, "deltaX_oneStrip"+r+s, x_reco-x);
+                utility::fillHisto(pass_NoXYEdges && isMaxChannel && goodOverNoiseAmp && oneStripReco, my_histos, "deltaX_oneStrip"+r+s, x_reco-x);
                 for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
                 {
                     if(regionsOfIntrest[k].passROI(x,y))
