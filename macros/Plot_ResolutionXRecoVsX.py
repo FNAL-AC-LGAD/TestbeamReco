@@ -128,7 +128,7 @@ for titles in list_htitles:
     all_histoInfos.append(info_obj)
 
 # Define bin limit of the histograms drawn
-plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1))
+plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center)
 if ("pad" not in dataset) and ("500x500" not in dataset):
     plot_xlimit-= pitch/(2. * 1000)
 

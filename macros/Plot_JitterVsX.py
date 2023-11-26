@@ -115,7 +115,7 @@ if debugMode:
 
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
-plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1))
+plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center)
 if ("pad" not in dataset) and ("500x500" not in dataset):
     plot_xlimit-= pitch/(2. * 1000)
 
