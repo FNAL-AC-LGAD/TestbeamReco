@@ -31,42 +31,48 @@ canvas = TCanvas("cv","cv",1000,800)
 
 
 
-sensors_list = [# Varying thickness
-                ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
-                # Varying thickness KOJI
-                ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"]
-               ]
+sensors_list = [
+    # Varying thickness
+    ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+    # Varying thickness KOJI
+    ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"]
+]
 
-saveName_list = [# Varying thickness
-                 "../output/compare/HPK_PosResolution_vs_x_thickness",
-                 # Varying thickness KOJI
-                 "../output/compare/Koji_PosResolution_vs_x_thickness"
-                ]
+saveName_list = [
+    # Varying thickness
+    "../output/compare/HPK_PosResolution_vs_x_thickness",
+    # Varying thickness KOJI
+    "../output/compare/Koji_PosResolution_vs_x_thickness"
+]
 
-xlength_list = [# Varying thickness
-                1.5,
-                # Varying thickness KOJI
-                0.35
-               ]
+xlength_list = [
+    # Varying thickness
+    1.5,
+    # Varying thickness KOJI
+    0.35
+]
 
-ylength_list = [# Varying thickness
-                250,
-                # Varying thickness KOJI
-                90
-               ]
+ylength_list = [
+    # Varying thickness
+    250,
+    # Varying thickness KOJI
+    90
+]
 
 
-pitch_list = [# Varying thickness
-              500,
-              # Varying thickness KOJI
-              80
-             ]
+pitch_list = [
+    # Varying thickness
+    500,
+    # Varying thickness KOJI
+    80
+]
 
-yoffset_list = [# Varying thickness
-                20,
-                # Varying thickness KOJI
-                10
-               ]
+yoffset_list = [
+    # Varying thickness
+    20,
+    # Varying thickness KOJI
+    10
+]
 
 
 

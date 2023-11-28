@@ -45,36 +45,41 @@ sensor_reco = { "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V": {'recomax': 0.7, 'reco
                
 #Make final plots
 
-sensors_list = [#BNL and HPK sensors - different metal widths
-                [ "BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
-              # Varying resistivity and capacitance
-                ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
-              ]
+sensors_list = [
+    #BNL and HPK sensors - different metal widths
+    [ "BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
+    # Varying resistivity and capacitance
+    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+]
 
 
-tagVar_list = [#BNL and HPK sensors - different metal widths
-               ["width"],
-              # Varying resistivity and capacitance
-               ["resistivityNumber", "capacitance"]
-              ]
+tagVar_list = [
+    #BNL and HPK sensors - different metal widths
+    ["width"],
+    # Varying resistivity and capacitance
+    ["resistivityNumber", "capacitance"]
+]
 
-saveName_list = [#BNL and HPK sensors - different metal widths
-                 "../output/compare/BNL_and_HPK_PosFit_vs_MetalWidth",
-                 # Varying resistivity and capacitance
-                 "../output/compare/HPK_PosFit_vs_ResCap"
-                ]
+saveName_list = [
+    #BNL and HPK sensors - different metal widths
+    "../output/compare/BNL_and_HPK_PosFit_vs_MetalWidth",
+    # Varying resistivity and capacitance
+    "../output/compare/HPK_PosFit_vs_ResCap"
+]
 
-maxWidth_list = [#BNL and HPK sensors - different metal widths
-                 100,
-                 # Varying resistivity and capacitance
-                 50
-                ]
+maxWidth_list = [
+    #BNL and HPK sensors - different metal widths
+    100,
+    # Varying resistivity and capacitance
+    50
+]
 
-xmax_list = [#BNL and HPK sensors - different metal widths
-             0.82,
-             # Varying resistivity and capacitance
-             0.9
-            ]
+xmax_list = [
+    #BNL and HPK sensors - different metal widths
+    0.82,
+    # Varying resistivity and capacitance
+    0.9
+]
 
 
 

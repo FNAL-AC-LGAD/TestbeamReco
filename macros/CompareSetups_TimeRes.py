@@ -31,54 +31,57 @@ colors = myStyle.GetColors(True)
 canvas = TCanvas("cv","cv",1000,800)
 
 
-sensors_list = [# Varying resistivity and capacitance
-                ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
-                # HPK Varying thickness
-                ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
-                # KOJI Varying thickness
-                [ "HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
-                # HPK pads Varying thickness and resistyvity
-                ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
-                # HPK pads Varying metal width 
-                # ["HPK_W9_22_3_20T_500x500_150M_E600_112V","HPK_W9_23_3_20T_500x500_300M_E600_112V" ]
-               ]
+sensors_list = [
+    # Varying resistivity and capacitance
+    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+    # HPK Varying thickness
+    ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+    # KOJI Varying thickness
+    [ "HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
+    # HPK pads Varying thickness and resistyvity
+    ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
+    # HPK pads Varying metal width 
+    # ["HPK_W9_22_3_20T_500x500_150M_E600_112V","HPK_W9_23_3_20T_500x500_300M_E600_112V" ]
+]
 
-tagVar_list = [# Varying resistivity and capacitance
-               ["resistivityNumber", "capacitance"],
-               # HPK Varying thickness
-               ["thickness"],
-               # KOJI Varying thickness
-               ["thickness"],
-                # HPK pads Varying thickness and resistyvity 
-               ["thickness", "resistivityNumber"],
-                # HPK pads Varying metal width 
-               # ["width"],
-              ]
+tagVar_list = [
+    # Varying resistivity and capacitance
+    ["resistivityNumber", "capacitance"],
+    # HPK Varying thickness
+    ["thickness"],
+    # KOJI Varying thickness
+    ["thickness"],
+    # HPK pads Varying thickness and resistyvity 
+    # ["width"],
+]
 
-ylength_list = [# Varying resistivity and capacitance
-               70,
-               # HPK Varying thickness
-               160,
-               # KOJI Varying thickness
-               65,
-                # HPK pads Varying thickness and resistyvity 
-               100,
-                # HPK pads Varying metal width 
-                # 100
-              ]
+ylength_list = [
+    # Varying resistivity and capacitance
+    70,
+    # HPK Varying thickness
+    160,
+    # KOJI Varying thickness
+    65,
+    # HPK pads Varying thickness and resistyvity 
+    100,
+    # HPK pads Varying metal width 
+    # 100
+]
 
 
-saveName_list = [# Varying resistivity and capacitance
-                 "../output/compare/HPK_TimeResolution_vs_x_ResCap",
-                 # HPK Varying thickness
-                 "../output/compare/HPK_TimeResolution_vs_x_thickness",
-                 # KOJI Varying thickness
-                 "../output/compare/Koji_TimeResolution_vs_x_thickness",
-                # HPK pads Varying thickness and resistyvity
-                 "../output/compare/HPK_Pads_TimeResolution_vs_x_thicknessRes",
-                # HPK pads Varying metal width 
-                 # "../output/compare/HPK_Pads_TimeResolution_vs_x_width"
-                 ]
+saveName_list = [
+    # Varying resistivity and capacitance
+    "../output/compare/HPK_TimeResolution_vs_x_ResCap",
+    # HPK Varying thickness
+    "../output/compare/HPK_TimeResolution_vs_x_thickness",
+    # KOJI Varying thickness
+    "../output/compare/Koji_TimeResolution_vs_x_thickness",
+    # HPK pads Varying thickness and resistyvity
+    "../output/compare/HPK_Pads_TimeResolution_vs_x_thicknessRes",
+    # HPK pads Varying metal width 
+    # "../output/compare/HPK_Pads_TimeResolution_vs_x_width"
+]
+
 #Make final plots
 
 hname = "Time_DiffW2Tracker"
