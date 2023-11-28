@@ -155,8 +155,9 @@ left_axis.Draw()
 right_axis.Draw()
 legend.Draw()
 
-# myStyle.BeamInfo()
-myStyle.SensorInfoSmart(dataset, pad_margin)
+myStyle.BeamInfo()
+myStyle.SensorInfoSmart(dataset, pad_margin, isParperPlot = True)
+# myStyle.SensorInfoSmart(dataset, pad_margin)
 
 outdir_summary = myStyle.GetPlotsDir(outdir, "Resolution_Summary/")
 save_path = "%sResolutionSummary_vs_x"%(outdir_summary)

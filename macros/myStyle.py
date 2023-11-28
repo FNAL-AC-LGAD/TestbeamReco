@@ -115,13 +115,17 @@ def SensorInfo(sensor="Name", bias_voltage="", write_bv=True, adjustleft=0, mtop
 
     text.DrawLatexNDC(1-mright-0.005-adjustleft, 1-mtop+0.01, string)
 
-def SensorInfoSmart(dataset, adjust=0.0, mtop=marg, mright=marg):
+def SensorInfoSmart(dataset, adjust=0.0, mtop=marg, mright=marg, isParperPlot = False):
     name ="Not defined"
     bias_voltage = "X"
 
     if GetGeometry(dataset):
-        name = GetGeometry(dataset)['sensor']
+        if isParperPlot:
+            name = GetGeometry(dataset)['tag']
+        else:
+            name = GetGeometry(dataset)['sensor']
         bias_voltage = GetBV(dataset)
+    
 
     SensorInfo(name, bias_voltage, True, adjust, mtop, mright)
 
