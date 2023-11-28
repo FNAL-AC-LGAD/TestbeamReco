@@ -23,7 +23,6 @@ parser.add_option('-x','--xlength', dest='xlength', default = 1.25, help="Limit 
 parser.add_option('-y','--ylength', dest='ylength', default = 120, help="Max Amp value in final plot")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
-ylength = float(options.ylength)
 colors = myStyle.GetColors(True)
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -33,13 +32,15 @@ os.makedirs("../output/compare/", exist_ok=True)
 
 
 sensors_list = [ # Varying resistivity and capacitance
-                ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+                ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
                 #HPK Varying thickness
-                ["HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V"],
+                ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
                 # KOJI Varying thickness
-                ["HPK_KOJI_50T_1P0_80P_60M_E240_190V", "HPK_KOJI_20T_1P0_80P_60M_E240_112V"],
+                ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
                 # BNL and HPK Varying metal widths
-                ["BNL_50um_1cm_400um_W3051_1_4_160V", "BNL_50um_1cm_450um_W3051_2_2_170V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"]
+                [ "BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
+                # HPK pads Varying thickness and resistyvity
+                ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
         ]
 tagVar_list = [ # Varying resistivity and capacitance
              ["resistivityNumber", "capacitance"],
@@ -48,8 +49,10 @@ tagVar_list = [ # Varying resistivity and capacitance
                 # KOJI Varying thickness
             ["thickness"],
                 # BNL and HPK Varying metal widths
-            ["width"]
-        ]
+            ["width"],
+                # HPK pads Varying thickness and resistyvity
+            ["thickness", "resistivityNumber"]
+        ] 
 
 ylength_list = [ # Varying resistivity and capacitance 
                 190,
@@ -58,7 +61,9 @@ ylength_list = [ # Varying resistivity and capacitance
                 # KOJI Varying thickness
                 100,
                 # BNL and HPK Varying metal widths
-                100
+                100,
+                # HPK pads Varying thickness and resistyvity
+                220
         ]
 
 saveName_list = [ # Varying resistivity and capacitance 
@@ -68,40 +73,13 @@ saveName_list = [ # Varying resistivity and capacitance
                 # KOJI Varying thickness
                 "../output/compare/Koji_Amplitude_vs_x_thicknessg",
                 # BNL and HPK Varying metal widths
-                "../output/compare/BNL_and_HPK_Amplitude_vs_x_MetalWidth"
+                "../output/compare/BNL_and_HPK_Amplitude_vs_x_MetalWidth",
+                # HPK pads Varying thickness and resistyvity
+                "../output/compare/HPK_Pads_Amplitude_vs_x_ThicknessRes"
         ]
 
 #Make final plots
-# Varying resistivity and capacitance
-# sensors = ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"]
-# # tag = ["400 #Omega/sq 240 pF/mm2 (W4)", "1600 #Omega/sq 240 pF/mm2 (W2)", "400 #Omega/sq 600 pF/mm2 (W8)", "1600 #Omega/sq 600 pF/mm2 (W5)"]
-# tag = get_legend_comparation_plots(sensors, ["resistivityNumber", "capacitance"])
-# ylength = 160
-# saveName = "../HPK_Amplitude_vs_x_ResCap.png"
 
-# HPK Varying thickness
-# sensors = ["HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V"]
-# # tag = ["50 #mum active thickness", "20 #mum active thickness"]
-# tag = get_legend_comparation_plots(sensors, ["thickness"])
-# ylength = 160
-# saveName = "../HPK_Amplitude_vs_x_thickness.png"
-
-# KOJI Varying thickness
-# sensors = ["HPK_KOJI_50T_1P0_80P_60M_E240_190V", "HPK_KOJI_20T_1P0_80P_60M_E240_112V"]
-# #tag = ["50 #mum active thickness", "20 #mum active thickness"]
-# tag = get_legend_comparation_plots(sensors, ["thickness"])
-# ylength = 120
-# xlength = 0.25
-# saveName = "../Koji_Amplitude_vs_x_thickness.png"
-
-# BNL and HPK Varying metal widths
-# sensors = ["BNL_50um_1cm_400um_W3051_1_4_160V", "BNL_50um_1cm_450um_W3051_2_2_170V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"]
-# # tag = ["BNL 100 #mum srip width", "BNL 50 #mum strip width", "HPK 50 #mum strip width", "HPK 100 #mum strip width"]
-# tag = get_legend_comparation_plots(sensors, ["width"])
-# ylength = 100
-# saveName = "../BNL_and_HPK_Amplitude_vs_x_MetalWidth.png"
-
-hname = "Amplitude"
 ymin = 1
 
 
@@ -115,13 +93,19 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     legend2.SetTextFont(myStyle.GetFont())
     legend2.SetTextSize(myStyle.GetSize()-4)
 
+    xlength = float(options.xlength)
     sensor_prod="BNL & HPK Production"
+    hname = "AmplitudeNoSum"
     if ("BNL" in sensors[0]):
        sensor_prod = "BNL & HPK Production"
     else:
        sensor_prod = "HPK Production"
     if ("KOJI" in sensors[0]):
         xlength = 0.25
+    
+    if ("500x500" in sensors[0]):
+        xlength = 0.8
+
 
     tag = get_legend_comparation_plots(sensors, tagVars)
      
@@ -136,9 +120,13 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
 
 
     inputfile = TFile("../output/%s/%s_Analyze.root"%(sensors[len(sensors)-2],sensors[len(sensors)-2]),"READ")
-    shift = inputfile.Get("stripBoxInfo03").GetMean(1)
-    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, shift)
-    for box in boxes[1:len(boxes)-1]:
+    # shift = inputfile.Get("stripBoxInfo03").GetMean(1)
+    geometry = myStyle.GetGeometry(sensors[0])
+    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, pitch = geometry["pitch"]/1000.0 )
+    # boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, shift)
+    if ("500x500" not in sensors[0]):
+        boxes = boxes[1:len(boxes)-1]
+    for box in boxes:
        box.Draw()
 
 # Draw dotted line for 100 micron strip width
