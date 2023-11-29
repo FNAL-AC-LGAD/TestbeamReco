@@ -94,16 +94,75 @@ def is_inside_limits(this_bin, hist, xmax, xmin=0):
 
     return (bin_min < this_bin) and (this_bin < bin_max)
 
+def first_common_non_empty_x(list_histograms, first = True):
+    # Find first or last (first = True or False) common non empty bin of the histograms listed
+    nbins = list_histograms[0].GetXaxis().GetNbins()
+
+    x_filled = 0.0
+    at_least_one_empty = True
+    infor = 1 if first else nbins
+    endfor = nbins+1 if first else 0
+    step = 1 if first else -1
+
+    # Use first histogram as reference without loss of generality
+    for i in range(infor, endfor, step):
+        value = list_histograms[0].GetBinContent(i)
+        if value > 0.0:
+            # First non empty bin
+            bin_non_empty = i
+            x_filled = list_histograms[0].GetBinCenter(bin_non_empty)
+            break
+
+    while(at_least_one_empty):
+        if (bin_non_empty >= nbins or bin_non_empty <= 0):
+            print("Something went wrong :C All bins seem to be empty.")
+            exit()
+
+        # List with all values in bin non empty
+        list_values = []
+        for hist in list_histograms:
+            ibin = hist.FindBin(x_filled)
+            value = hist.GetBinContent(ibin)
+            list_values.append(value)
+
+        # Save value if all values are non zero
+        if all(v > 0.0 for v in list_values):
+            previous_bin = bin_non_empty - step
+            x_filled = list_histograms[0].GetBinCenter(previous_bin)
+            at_least_one_empty = False
+        else:
+            bin_non_empty+= step
+            x_filled = list_histograms[0].GetBinCenter(bin_non_empty)
+
+    return x_filled
+
+def same_limits_compare(list_histograms):
+    nbins = list_histograms[0].GetXaxis().GetNbins()
+
+    xfirst = abs(first_common_non_empty_x(list_histograms, True))
+    xlast = abs(first_common_non_empty_x(list_histograms, False))
+    x_simmetric_limit = xfirst if xfirst < xlast else xlast
+
+    for hist in list_histograms:
+        for i in range(1, nbins+1):
+            # Fill only when inside limits
+            if is_inside_limits(i, hist, xmax=x_simmetric_limit):
+                continue
+
+            value = hist.GetBinContent(i)
+            if value:
+                hist.SetBinContent(i, 0.0)
+
+    return list_histograms
 
 # return a list with the legends dependening on the sensors and variables
 # receive a list of sensors and a list of variables as arguments
 # if you want resistivity and capacitance, put it in the end of the list and in that order
 # example: [("HPK_W9_22_3_20T_500x500_150M_E600", "HPK_W9_23_3_20T_500x500_300M_E600",
-    # "HPK_W8_1_1_50T_500x500_150M_C600"], ["pitch", "length", "resistivityNumber", "capacitance"]))
+#    "HPK_W8_1_1_50T_500x500_150M_C600"], ["pitch", "length", "resistivityNumber", "capacitance"]))
 
 
 def get_legend_comparation_plots(sensors, variables):
-
     # Define the units of each variable
     variablesUnits = {}
     variablesUnits["pitch"] = " #mum "
@@ -125,31 +184,24 @@ def get_legend_comparation_plots(sensors, variables):
     variablesName["resistivity"] = ""
     variablesName["resistivityNumber"] = " resistivity"
     variablesName["capacitance"] = " capacitance"
-    
 
     sensor_legend_list = []
-
     for sensor in sensors:
-
         # add the tag of the sensor first
         geometry = myStyle.GetGeometry(sensor)
         sensor_legend = geometry['tag'] + ": "
         for variable in variables:
-
             # add the variables
-            sensor_legend+= str(geometry[variable]) + variablesUnits[variable] 
+            sensor_legend+= str(geometry[variable]) + variablesUnits[variable]
             # if len(variables) < 2:
                 # sensor_legend+= variablesName[variable]
-
         sensor_legend_list.append(sensor_legend)
-    
-    
+
     legendHeader = "Varying"
     for i, variable in enumerate(variables):
         legendHeader += variablesName[variable]
         if i == len(variables) - 2 and len(variables) > 1 :
             legendHeader += " and"
-
 
     legendHeader = "#bf{%s}"%legendHeader
     sensor_legend_list.append(legendHeader)
