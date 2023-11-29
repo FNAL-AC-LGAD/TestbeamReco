@@ -1,21 +1,18 @@
 from ROOT import TFile,TLine,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, kBlack
 import os
-# import EfficiencyUtils
 import langaus
 import optparse
-import time
 from stripBox import getStripBox
 import myStyle
 from  builtins import any
 from myFunctions import get_legend_comparation_plots
 
-gROOT.SetBatch( True )
+gROOT.SetBatch(True)
 gStyle.SetOptFit(1011)
 
 ## Defining Style
 myStyle.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
-organized_mode=True
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -39,6 +36,7 @@ sensors_list = [
     # BNL and HPK Varying metal widths
     #[ "BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
 ]
+
 tagVar_list = [
     # Varying resistivity and capacitance
     ["resistivityNumber", "capacitance"],
@@ -73,12 +71,8 @@ saveName_list = [
 ]
 
 #Make final plots
-
 ymin = 1
-
-
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
-
     yLegend = 0.026*len(sensors)
     legend2 = TLegend(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.2-yLegend,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.03)
     legend2.SetBorderSize(1)
@@ -95,7 +89,6 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         sensor_prod = "HPK Production"
     if ("KOJI" in sensors[0]):
         xlength = 0.25
-    
     if ("500x500" in sensors[0]):
         xlength = 0.8
 
@@ -115,12 +108,12 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     inputfile = TFile("../output/%s/%s_Analyze.root"%(sensors[len(sensors)-2],sensors[len(sensors)-2]),"READ")
     # shift = inputfile.Get("stripBoxInfo03").GetMean(1)
     geometry = myStyle.GetGeometry(sensors[0])
-    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, pitch = geometry["pitch"]/1000.0 )
+    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, pitch = geometry["pitch"]/1000.0)
     # boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, shift)
     if ("500x500" not in sensors[0]):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
-       box.Draw()
+        box.Draw()
 
     # Draw dotted line for 100 micron strip width
     if(any("100M" in iter for iter in sensors)):
@@ -170,4 +163,3 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     inputfile.Close()
     canvas.Clear()
     legend2.Clear()
-

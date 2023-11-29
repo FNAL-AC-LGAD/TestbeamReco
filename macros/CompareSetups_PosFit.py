@@ -8,8 +8,7 @@ from myFunctions import get_legend_comparation_plots
 
 myStyle.ForceStyle()
 gStyle.SetOptStat(0)
-organized_mode=True
-gROOT.SetBatch( True )
+gROOT.SetBatch(True)
 tsize = myStyle.GetSize()
 
 ROOT.gStyle.SetLabelSize(tsize-10,"x")
@@ -34,16 +33,16 @@ colors = myStyle.GetColors(True)
 
 os.makedirs("../output/compare/", exist_ok=True)
 
-sensor_reco = { "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V": {'recomax': 0.7, 'recoPars':[0.250000, -1.147503, -0.798801, 7.368874, -38.344067]},
-                "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V": {'recomax': 0.84, 'recoPars':[0.250000, -0.693443, 0.894506, -9.526453, 38.944962, -58.650584]},
-                "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'recomax': 0.71, 'recoPars':[0.250000, -1.162898, 0.988027, -6.238384, 17.134867, -89.438984]},
-                "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V": {'recomax': 0.85, 'recoPars':[0.250000, -0.609789, -0.026359, -3.221913, 19.537329, -35.866120]},
-                "BNL_50um_1cm_400um_W3051_1_4_160V": {'recomax': 0.78, 'recoPars':[0.250000, -0.718665, -0.139214, 1.987639, -8.425333, -2.053463]},
-                "BNL_50um_1cm_450um_W3051_2_2_170V": {'recomax': 0.79, 'recoPars':[0.250000, -0.779099, 0.955034, -12.717777, 62.983960, -115.093931]},
-                "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'recomax': 0.71, 'recoPars':[0.250000, -1.162898, 0.988027, -6.238384, 17.134867, -89.438984]},
-                "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V": {'recomax': 0.7, 'recoPars':[0.250000, -1.164642, 2.136270, -18.028266, 29.883977]}}
-               
-#Make final plots
+sensor_reco = {
+    "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V": {'recomax': 0.7, 'recoPars':[0.250000, -1.147503, -0.798801, 7.368874, -38.344067]},
+    "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V": {'recomax': 0.84, 'recoPars':[0.250000, -0.693443, 0.894506, -9.526453, 38.944962, -58.650584]},
+    "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'recomax': 0.71, 'recoPars':[0.250000, -1.162898, 0.988027, -6.238384, 17.134867, -89.438984]},
+    "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V": {'recomax': 0.85, 'recoPars':[0.250000, -0.609789, -0.026359, -3.221913, 19.537329, -35.866120]},
+    "BNL_50um_1cm_400um_W3051_1_4_160V": {'recomax': 0.78, 'recoPars':[0.250000, -0.718665, -0.139214, 1.987639, -8.425333, -2.053463]},
+    "BNL_50um_1cm_450um_W3051_2_2_170V": {'recomax': 0.79, 'recoPars':[0.250000, -0.779099, 0.955034, -12.717777, 62.983960, -115.093931]},
+    "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'recomax': 0.71, 'recoPars':[0.250000, -1.162898, 0.988027, -6.238384, 17.134867, -89.438984]},
+    "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V": {'recomax': 0.7, 'recoPars':[0.250000, -1.164642, 2.136270, -18.028266, 29.883977]}
+}
 
 sensors_list = [
     #BNL and HPK sensors - different metal widths
@@ -51,7 +50,6 @@ sensors_list = [
     # Varying resistivity and capacitance
     ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
 ]
-
 
 tagVar_list = [
     #BNL and HPK sensors - different metal widths
@@ -81,8 +79,6 @@ xmax_list = [
     0.9
 ]
 
-
-
 canvas = TCanvas("cv","cv",1000,800)
 
 pitch = 500 #um
@@ -92,14 +88,12 @@ ymin=0.001
 ymax=0.33*y_scale
 
 
-
 for sensors, tagVars, saveName, maxWidth, xmax in zip(sensors_list, tagVar_list, saveName_list, maxWidth_list, xmax_list):
-
     sensor_prod="BNL and HPK Production"
     if ("BNL" in sensors[0]):
-       sensor_prod = "BNL & HPK Production"
+        sensor_prod = "BNL & HPK Production"
     else:
-       sensor_prod = "HPK Production"
+        sensor_prod = "HPK Production"
 
     tag = get_legend_comparation_plots(sensors, tagVars)
 
@@ -121,7 +115,7 @@ for sensors, tagVars, saveName, maxWidth, xmax in zip(sensors_list, tagVar_list,
 
     boxes = stripBox.getStripBoxForRecoFit(maxWidth, pitch, ymax, xmax, xmin)
     for box in boxes:
-            box.DrawClone("same")
+        box.DrawClone("same")
 
     for i,item in enumerate(sensors):
         sensor_Geometry = myStyle.GetGeometry(item)
@@ -134,13 +128,12 @@ for sensors, tagVars, saveName, maxWidth, xmax in zip(sensors_list, tagVar_list,
 
 
     # legend = TLegend(1-myStyle.GetMargin()-0.65,1-myStyle.GetMargin()-0.25,1-myStyle.GetMargin()-0.05,1-myStyle.GetMargin()-0.05)
-# legend.SetBorderSize(0)
-# legend.SetFillColor(ROOT.kWhite)
+    # legend.SetBorderSize(0)
+    # legend.SetFillColor(ROOT.kWhite)
     # legend.SetTextFont(myStyle.GetFont())
     # legend.SetTextSize(myStyle.GetSize()-4)
-# legend.SetFillStyle(0)
+    # legend.SetFillStyle(0)
 
-    
     yLegend = 0.026*len(sensors)
     legend = TLegend(1-myStyle.GetMargin()-0.7,1-myStyle.GetMargin()-0.2-yLegend,1-myStyle.GetMargin()-0.08,1-myStyle.GetMargin()-0.03)
     legend.SetBorderSize(1)
@@ -175,8 +168,6 @@ for sensors, tagVars, saveName, maxWidth, xmax in zip(sensors_list, tagVar_list,
     canvas.SaveAs(saveName + ".pdf")
     canvas.Clear()
     legend.Clear()
-
-
 
 # BNL sensors - different metal widths
 # sensors = ["BNL_50um_1cm_400um_W3051_1_4_160V", "BNL_50um_1cm_450um_W3051_2_2_170V"]

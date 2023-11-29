@@ -1,20 +1,17 @@
 from ROOT import TFile,TLine,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, kBlack
 import os
-import EfficiencyUtils
 import langaus
 import optparse
-import time
 from stripBox import getStripBox
 import myStyle
 from myFunctions import get_legend_comparation_plots
 
-gROOT.SetBatch( True )
+gROOT.SetBatch(True)
 gStyle.SetOptFit(1011)
 
 ## Defining Style
 myStyle.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
-organized_mode=True
 
 os.makedirs("../output/compare/", exist_ok=True)
 
@@ -28,8 +25,6 @@ xlength = float(options.xlength)
 ylength = float(options.ylength)
 colors = myStyle.GetColors(True)
 canvas = TCanvas("cv","cv",1000,800)
-
-
 
 sensors_list = [
     # Varying thickness
@@ -75,16 +70,14 @@ yoffset_list = [
 ]
 
 
-
 for sensors, saveName, xlength, ylength, pitch, yoffset in zip(sensors_list,saveName_list, xlength_list, ylength_list, pitch_list, yoffset_list):
-
     plotfile = []
     inputfile = []
     hists_oneStrip = []
     hists_twoStrip = []
     shift = []
     ymin = 1
-    
+
     tag = get_legend_comparation_plots(sensors, ["thickness"])
 
     for i in range(len(sensors)):
@@ -96,9 +89,9 @@ for sensors, saveName, xlength, ylength, pitch, yoffset in zip(sensors_list,save
 
     sensor_prod="test"
     if ("BNL" in sensors[0]):
-       sensor_prod = "BNL Production"
+        sensor_prod = "BNL Production"
     else:
-       sensor_prod = "HPK Production"
+        sensor_prod = "HPK Production"
 
     XRes_vs_x = TH1F("htemp","",1,-xlength,xlength)
     XRes_vs_x.Draw("hist")
@@ -112,7 +105,7 @@ for sensors, saveName, xlength, ylength, pitch, yoffset in zip(sensors_list,save
 
     boxes = getStripBox(inputfile[0],ymin,ylength-yoffset,False, 18, True, shift[0])
     for box in boxes[1:len(boxes)-1]:
-       box.Draw()
+        box.Draw()
     XRes_vs_x.Draw("AXIS same")
     XRes_vs_x.Draw("hist same")
 
@@ -124,8 +117,8 @@ for sensors, saveName, xlength, ylength, pitch, yoffset in zip(sensors_list,save
     legend.SetNColumns(1)
     legend.SetTextFont(myStyle.GetFont())
     legend.SetTextSize(myStyle.GetSize()-4)
-# legend.SetBorderSize(0)
-# legend.SetFillColor(kWhite)
+    # legend.SetBorderSize(0)
+    # legend.SetFillColor(kWhite)
 
     binary_readout_res_sensor = TLine(-xlength,pitch/TMath.Sqrt(12), xlength,pitch/TMath.Sqrt(12))
     binary_readout_res_sensor.SetLineWidth(3)
@@ -156,10 +149,8 @@ for sensors, saveName, xlength, ylength, pitch, yoffset in zip(sensors_list,save
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
     XRes_vs_x.Draw("AXIS same")
-# myStyle.SensorInfoSmart(dataset)
+    # myStyle.SensorInfoSmart(dataset)
 
-# canvas.SaveAs("../HPK_PosResolution_vs_x_thickness.png")
-# canvas.SaveAs("../Koji_PosResolution_vs_x_thickness.png")
     canvas.SaveAs(saveName + ".png")
     canvas.SaveAs(saveName + ".pdf")
     for i in range(len(plotfile)):

@@ -1,20 +1,17 @@
 from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, kBlack
 import os
-import EfficiencyUtils
 import langaus
 import optparse
-import time
 from stripBox import getStripBox
 import myStyle
 from myFunctions import get_legend_comparation_plots
 
-gROOT.SetBatch( True )
+gROOT.SetBatch(True)
 gStyle.SetOptFit(1011)
 
 ## Defining Style
 myStyle.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
-organized_mode=True
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
@@ -77,27 +74,25 @@ saveName_list = [
 
 
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
-    
-
     yLegend = 0.026*len(sensors)
     legend = TLegend(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.2-yLegend,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.03)
     legend.SetBorderSize(1)
     legend.SetLineColor(kBlack)
     legend.SetTextFont(myStyle.GetFont())
     legend.SetTextSize(myStyle.GetSize()-4)
-   
+
     hname = "Risetime"
     ymin = 1
 
     sensor_prod="test"
     if ("BNL" in sensors[0]):
-       sensor_prod = "BNL Production"
+        sensor_prod = "BNL Production"
     else:
-       sensor_prod = "HPK Production"
+        sensor_prod = "HPK Production"
 
     if ("KOJI" in sensors[0]):
-       xlength = 0.25
-    
+        xlength = 0.25
+
     tag = get_legend_comparation_plots(sensors, tagVars)
 
     totalRisetime_vs_x = TH1F("htemp","",1,-xlength,xlength)
@@ -114,24 +109,24 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     # shift = inputfile.Get("stripBoxInfo03").GetMean(1)
     # boxes = getStripBox(inputfile,ymin,ylength-60.0,False, 18, True, shift)
     # for box in boxes[1:len(boxes)-1]:
-       # box.Draw()
+    #     box.Draw()
     geometry = myStyle.GetGeometry(sensors[0])
-    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, pitch = geometry["pitch"]/1000.0 )
+    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, pitch = geometry["pitch"]/1000.0)
     # boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, shift)
     if ("500x500" not in sensors[0]):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
-       box.Draw()
+        box.Draw()
 
     plotfile = []
     plotList_Risetime_vs_x = []
     for i in range(len(sensors)):
-       plotfile.append(TFile("../output/"+sensors[i]+"/Risetime/RisetimeVsX_tight.root","READ"))
-       plotList_Risetime_vs_x.append(plotfile[i].Get(hname))
-       plotList_Risetime_vs_x[i].SetLineWidth(3)
-       plotList_Risetime_vs_x[i].SetLineColor(colors[i*2])
-       plotList_Risetime_vs_x[i].Draw("hist same")
-       legend.AddEntry(plotList_Risetime_vs_x[i], tag[i])
+        plotfile.append(TFile("../output/"+sensors[i]+"/Risetime/RisetimeVsX_tight.root","READ"))
+        plotList_Risetime_vs_x.append(plotfile[i].Get(hname))
+        plotList_Risetime_vs_x[i].SetLineWidth(3)
+        plotList_Risetime_vs_x[i].SetLineColor(colors[i*2])
+        plotList_Risetime_vs_x[i].Draw("hist same")
+        legend.AddEntry(plotList_Risetime_vs_x[i], tag[i])
 
     legendHeader = tag[-1]
     legend.SetHeader(legendHeader, "C")
@@ -139,11 +134,11 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
     totalRisetime_vs_x.Draw("AXIS same")
-# myStyle.SensorInfoSmart(dataset)
+    # myStyle.SensorInfoSmart(dataset)
 
-# canvas.SaveAs("../HPK_Risetime_vs_x_ResCap.png")
-# canvas.SaveAs("../HPK_Risetime_vs_x_thickness.png")
-# canvas.SaveAs("../Koji_Risetime_vs_x_thickness.png")
+    # canvas.SaveAs("../HPK_Risetime_vs_x_ResCap.png")
+    # canvas.SaveAs("../HPK_Risetime_vs_x_thickness.png")
+    # canvas.SaveAs("../Koji_Risetime_vs_x_thickness.png")
     canvas.SaveAs(saveName + ".png")
     canvas.SaveAs(saveName + ".pdf")
     for i in range(len(plotfile)):
