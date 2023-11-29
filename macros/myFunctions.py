@@ -106,14 +106,26 @@ def get_legend_comparation_plots(sensors, variables):
 
     # Define the units of each variable
     variablesUnits = {}
-    variablesUnits["pitch"] = " \mum "
-    variablesUnits["stripWidth"], variablesUnits["width"] = " \mum ", " \mum "
+    variablesUnits["pitch"] = " #mum "
+    variablesUnits["stripWidth"], variablesUnits["width"] = " #mum ", " #mum "
     variablesUnits["length"] = " mm "
     variablesUnits["BV"], variablesUnits["voltage"] = " mV ", " mV "
-    variablesUnits["thickness"] = " \mum "
+    variablesUnits["thickness"] = " #mum "
     variablesUnits["resistivity"] = ""
-    variablesUnits["resistivityNumber"] = "\Omega\\\square"
-    variablesUnits["capacitance"] = ""
+    variablesUnits["resistivityNumber"] = " #Omega/sq "
+    variablesUnits["capacitance"] = " pF/mm2 "
+
+    # Define the units of each variable
+    variablesName = {}
+    variablesName["pitch"] = "pitch"
+    variablesName["stripWidth"], variablesName["width"] = " metal width ", " metal width "
+    variablesName["length"] = "strip length"
+    variablesName["BV"], variablesUnits["voltage"] = " voltage ", " voltage "
+    variablesName["thickness"] = " active thickness"
+    variablesName["resistivity"] = ""
+    variablesName["resistivityNumber"] = " resistivity"
+    variablesName["capacitance"] = " capacitance"
+    
 
     sensor_legend_list = []
 
@@ -125,8 +137,21 @@ def get_legend_comparation_plots(sensors, variables):
         for variable in variables:
 
             # add the variables
-            sensor_legend+= str(geometry[variable]) + variablesUnits[variable]
+            sensor_legend+= str(geometry[variable]) + variablesUnits[variable] 
+            # if len(variables) < 2:
+                # sensor_legend+= variablesName[variable]
 
         sensor_legend_list.append(sensor_legend)
+    
+    
+    legendHeader = "Varying"
+    for i, variable in enumerate(variables):
+        legendHeader += variablesName[variable]
+        if i == len(variables) - 2 and len(variables) > 1 :
+            legendHeader += " and"
+
+
+    legendHeader = "#bf{%s}"%legendHeader
+    sensor_legend_list.append(legendHeader)
 
     return sensor_legend_list
