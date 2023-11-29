@@ -48,7 +48,7 @@ tagVar_list = [
     # KOJI Varying thickness
     ["thickness"],
     # HPK pads Varying thickness and resistyvity
-    # ["width"],
+    ["thickness", "resistivityNumber"],
 ]
 
 ylength_list = [
@@ -83,7 +83,6 @@ hname = "Time_DiffW2Tracker"
 hname2 = "weighted2_jitter"
 tag2 = ["Time resolution", "Jitter"]#, "Time resolution - Jitter (quadrature)"]
 ymin = 1
-
 
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
     xlength = float(options.xlength)
