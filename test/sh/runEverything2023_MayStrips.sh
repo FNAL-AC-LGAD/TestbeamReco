@@ -373,13 +373,13 @@ HPK_500P=('HPK_W8_18_2_50T_1P0_500P_100M_C600_208V' 'HPK_W8_17_2_50T_1P0_500P_50
 
 for sensor in "${HPK_500P[@]}"; do
     printf "\nRunning over ${sensor} sensor\n"
-    # cd ../test
-    # ./MyAnalysis -A InitialAnalyzer -D ${sensor}
-    # cd ../macros
-    # python FindDelayCorrections.py -D ${sensor}
-    # python FindInputHistos4YReco.py -D ${sensor} -I
-    # cd ../test
-    # ./MyAnalysis -A Analyze -D ${sensor}
+    cd ../test
+    ./MyAnalysis -A InitialAnalyzer -D ${sensor}
+    cd ../macros
+    python FindDelayCorrections.py -D ${sensor}
+    python FindInputHistos4YReco.py -D ${sensor} -I
+    cd ../test
+    ./MyAnalysis -A Analyze -D ${sensor}
     cd ../macros
 
     python Plot_SimpleXYMaps.py         -D ${sensor}
@@ -412,7 +412,7 @@ for sensor in "${HPK_500P[@]}"; do
 done
 
 cd ../macros
-# # DoPositionRecoFit
+# DoPositionRecoFit
 python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  --xmax 0.71 --fitOrder 4
 python DoPositionRecoFit.py     -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V   --xmax 0.71 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   --xmax 0.69 --fitOrder 4

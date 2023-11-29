@@ -224,7 +224,7 @@ for sensor in "${HPK_2x3pad[@]}"; do
 done
 
 cd ../macros
-# # DoPositionRecoFit
+# DoPositionRecoFit
 python DoPositionRecoFit.py     -D HPK_W9_22_3_20T_500x500_150M_E600_112V   --xmax 0.84 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W9_23_3_20T_500x500_300M_E600_112V   --xmax 0.87 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W11_22_3_20T_500x500_150M_C600_116V  --xmax 0.84 --fitOrder 5
