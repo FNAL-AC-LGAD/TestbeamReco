@@ -103,7 +103,7 @@ for sensors, tagVars, saveName, maxWidth, xmax in zip(sensors_list, tagVar_list,
     temp_hist.GetYaxis().SetTitle("Position [#mum]")
     temp_hist.Draw("axis")
 
-# Add second axis at the right
+    # Add second axis at the right
     right_axis = ROOT.TGaxis(xmax,0.0001,xmax, ymax,0.0001, ymax/pitch,510,"+L")
     right_axis.UseCurrentStyle()
     right_axis.SetTitle("Pitch fraction")
