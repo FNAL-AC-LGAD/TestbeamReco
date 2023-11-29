@@ -5,7 +5,7 @@ import optparse
 from stripBox import getStripBox
 import myStyle
 from  builtins import any
-from myFunctions import get_legend_comparation_plots
+import myFunctions as mf
 
 gROOT.SetBatch(True)
 gStyle.SetOptFit(1011)
@@ -17,7 +17,7 @@ myStyle.ForceStyle()
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 1.25, help="Limit x-axis in final plot")
-parser.add_option('-y','--ylength', dest='ylength', default = 120, help="Max Amp value in final plot")
+# parser.add_option('-y','--ylength', dest='ylength', default = 120, help="Max Amp value in final plot")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
 colors = myStyle.GetColors(True)
@@ -34,7 +34,7 @@ sensors_list = [
     # KOJI Varying thickness
     ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # BNL and HPK Varying metal widths
-    #[ "BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
+    # ["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
 ]
 
 tagVar_list = [
@@ -93,7 +93,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         xlength = 0.8
 
 
-    tag = get_legend_comparation_plots(sensors, tagVars)
+    tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
     totalAmplitude_vs_x = TH1F("htemp","",1,-xlength,xlength)
     totalAmplitude_vs_x.Draw("AXIS")
@@ -106,10 +106,8 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
 
 
     inputfile = TFile("../output/%s/%s_Analyze.root"%(sensors[len(sensors)-2],sensors[len(sensors)-2]),"READ")
-    # shift = inputfile.Get("stripBoxInfo03").GetMean(1)
     geometry = myStyle.GetGeometry(sensors[0])
-    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, pitch = geometry["pitch"]/1000.0)
-    # boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, shift)
+    boxes = getStripBox(inputfile, ymin, ylength-30, False, 18, True, pitch = geometry["pitch"]/1000.0)
     if ("500x500" not in sensors[0]):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
@@ -143,9 +141,13 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
             plotList_amplitude_vs_x[i].SetLineColor(colors[i*2])
         else:
             plotList_amplitude_vs_x[i].SetLineColor(colors[i+1])
-        plotList_amplitude_vs_x[i].Draw("hist same")
+        # plotList_amplitude_vs_x[i].Draw("hist same")
         lengendEntry = legend2.AddEntry(plotList_amplitude_vs_x[i], tag[i])
         # lengendEntry.SetTextAlign(22)
+
+    plotList_amplitude_vs_x = mf.same_limits_compare(plotList_amplitude_vs_x)
+    for hist in plotList_amplitude_vs_x:
+        hist.Draw("hist same")
 
     legend2.Draw()
     myStyle.BeamInfo()

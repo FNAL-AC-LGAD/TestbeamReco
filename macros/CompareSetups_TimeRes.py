@@ -79,8 +79,7 @@ saveName_list = [
 
 #Make final plots
 hname = "Time_DiffW2Tracker"
-# hname2 = "jitter_vs_x"
-hname2 = "weighted2_jitter"
+hname2 = "jitter_vs_x"
 tag2 = ["Time resolution", "Jitter"]#, "Time resolution - Jitter (quadrature)"]
 ymin = 1
 

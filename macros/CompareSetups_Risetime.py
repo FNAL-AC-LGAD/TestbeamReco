@@ -20,7 +20,6 @@ parser.add_option('-x','--xlength', dest='xlength', default = 1.25, help="Limit 
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
-# ylength = float(options.ylength)
 colors = myStyle.GetColors(True)
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -106,13 +105,8 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     totalRisetime_vs_x.GetYaxis().SetRangeUser(ymin, ylength)
 
     inputfile = TFile("../output/%s/%s_Analyze.root"%(sensors[0],sensors[0]),"READ")
-    # shift = inputfile.Get("stripBoxInfo03").GetMean(1)
-    # boxes = getStripBox(inputfile,ymin,ylength-60.0,False, 18, True, shift)
-    # for box in boxes[1:len(boxes)-1]:
-    #     box.Draw()
     geometry = myStyle.GetGeometry(sensors[0])
-    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, pitch = geometry["pitch"]/1000.0)
-    # boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, shift)
+    boxes = getStripBox(inputfile, ymin, ylength-30, False, 18, True, pitch = geometry["pitch"]/1000.0)
     if ("500x500" not in sensors[0]):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
@@ -136,9 +130,6 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     totalRisetime_vs_x.Draw("AXIS same")
     # myStyle.SensorInfoSmart(dataset)
 
-    # canvas.SaveAs("../HPK_Risetime_vs_x_ResCap.png")
-    # canvas.SaveAs("../HPK_Risetime_vs_x_thickness.png")
-    # canvas.SaveAs("../Koji_Risetime_vs_x_thickness.png")
     canvas.SaveAs(saveName + ".png")
     canvas.SaveAs(saveName + ".pdf")
     for i in range(len(plotfile)):
