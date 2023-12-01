@@ -172,7 +172,7 @@ def get_legend_comparation_plots(sensors, variables):
     variablesUnits["thickness"] = " #mum "
     variablesUnits["resistivity"] = ""
     variablesUnits["resistivityNumber"] = " #Omega/sq "
-    variablesUnits["capacitance"] = " pF/mm2 "
+    variablesUnits["capacitance"] = " pF/mm^{2} "
 
     # Define the units of each variable
     variablesName = {}
