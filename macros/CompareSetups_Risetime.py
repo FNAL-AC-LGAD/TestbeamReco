@@ -4,7 +4,7 @@ import langaus
 import optparse
 from stripBox import getStripBox
 import myStyle
-from myFunctions import get_legend_comparation_plots
+import myFunctions as mf
 
 gROOT.SetBatch(True)
 gStyle.SetOptFit(1011)
@@ -17,15 +17,9 @@ myStyle.ForceStyle()
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 1.25, help="Limit x-axis in final plot")
 # parser.add_option('-y','--ylength', dest='ylength', default = 999, help="Max Risetime value in final plot")
-parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
 colors = myStyle.GetColors(True)
-
-canvas = TCanvas("cv","cv",1000,800)
-
-os.makedirs("../output/compare/", exist_ok=True)
-#Make final plots
 
 sensors_list = [
     # varying resistivity and capacitance
@@ -62,78 +56,94 @@ ylength_list = [
 
 saveName_list = [
     # varying resistivity and capacitance
-    "../output/compare/HPK_Risetime_vs_x_ResCap",
+    "HPK_Risetime_vs_x_ResCap",
     # HPK Varying thickness
-    "../output/compare/HPK_Risetime_vs_x_thickness",
+    "HPK_Risetime_vs_x_thickness",
     # KOJI Varying thickness
-    "../output/compare/Koji_Risetime_vs_x_thickness",
+    "Koji_Risetime_vs_x_thickness",
     # HPK pads Varying thickness and resistyvity
-    "../output/compare/HPK_Padds_Risetime_vs_x_thicknessRes",
+    "HPK_Padds_Risetime_vs_x_thicknessRes",
 ]
 
+outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
+outdir = myStyle.GetPlotsDir(outdir, "RisetimeVsX/")
+
+ymin = 1
+pad_margin = myStyle.GetMargin()
+
+canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
+    sensor_reference = sensors[0]
+
     yLegend = 0.026*len(sensors)
-    legend = TLegend(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.2-yLegend,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.03)
+    legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
     legend.SetBorderSize(1)
     legend.SetLineColor(kBlack)
     legend.SetTextFont(myStyle.GetFont())
     legend.SetTextSize(myStyle.GetSize()-4)
 
-    hname = "Risetime"
-    ymin = 1
-
-    sensor_prod="test"
-    if ("BNL" in sensors[0]):
-        sensor_prod = "BNL Production"
-    else:
-        sensor_prod = "HPK Production"
-
-    if ("KOJI" in sensors[0]):
+    xlength = float(options.xlength)
+    if ("500x500" in sensor_reference):
+        xlength = 0.8
+    elif ("KOJI" in sensor_reference):
         xlength = 0.25
 
-    tag = get_legend_comparation_plots(sensors, tagVars)
+    tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
-    totalRisetime_vs_x = TH1F("htemp","",1,-xlength,xlength)
-    totalRisetime_vs_x.Draw("AXIS")
-    totalRisetime_vs_x.SetStats(0)
-    totalRisetime_vs_x.SetTitle("")
-    totalRisetime_vs_x.GetXaxis().SetTitle("Track x position [mm]")
-    totalRisetime_vs_x.GetYaxis().SetTitle("Risetime [ps]")
-    totalRisetime_vs_x.GetYaxis().SetTitleOffset(1)
-    totalRisetime_vs_x.SetLineWidth(3)
-    totalRisetime_vs_x.GetYaxis().SetRangeUser(ymin, ylength)
+    haxis = TH1F("htemp","",1,-xlength,xlength)
+    haxis.Draw("AXIS")
+    haxis.SetStats(0)
+    haxis.SetTitle("")
+    haxis.GetXaxis().SetTitle("Track x position [mm]")
+    haxis.GetYaxis().SetTitle("Risetime [ps]")
+    # haxis.GetYaxis().SetTitleOffset(1)
+    haxis.SetLineWidth(3)
+    haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
-    inputfile = TFile("../output/%s/%s_Analyze.root"%(sensors[0],sensors[0]),"READ")
-    geometry = myStyle.GetGeometry(sensors[0])
-    boxes = getStripBox(inputfile, ymin, ylength-30, False, 18, True, pitch = geometry["pitch"]/1000.0)
-    if ("500x500" not in sensors[0]):
+    infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
+    geometry = myStyle.GetGeometry(sensor_reference)
+    boxes = getStripBox(infile_reference, ymin, ylength-30, pitch = geometry["pitch"]/1000.0)
+    if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
         box.Draw()
 
     plotfile = []
-    plotList_Risetime_vs_x = []
-    for i in range(len(sensors)):
-        plotfile.append(TFile("../output/"+sensors[i]+"/Risetime/RisetimeVsX_tight.root","READ"))
-        plotList_Risetime_vs_x.append(plotfile[i].Get(hname))
-        plotList_Risetime_vs_x[i].SetLineWidth(3)
-        plotList_Risetime_vs_x[i].SetLineColor(colors[i*2])
-        plotList_Risetime_vs_x[i].Draw("hist same")
-        legend.AddEntry(plotList_Risetime_vs_x[i], tag[i])
+    list_risetime_vs_x = []
+    for i, sname in enumerate(sensors):
+        inName = "../output/"+sname+"/Risetime/RisetimeVsX_tight.root"
+        inFile = TFile(inName,"READ")
+        hRisetime = inFile.Get("Risetime")
+        hRisetime.SetLineWidth(3)
+        hRisetime.SetLineColor(colors[i*2])
+
+        lengendEntry = legend.AddEntry(hRisetime, tag[i])
+        plotfile.append(inFile)
+        list_risetime_vs_x.append(hRisetime)
+
+    pruned_risetime_vs_x = mf.same_limits_compare(list_risetime_vs_x)
+    for hist in pruned_risetime_vs_x:
+        hist.Draw("hist same")
 
     legendHeader = tag[-1]
     legend.SetHeader(legendHeader, "C")
     legend.Draw()
+
+    sensor_prod="HPK production"
+    if ("BNL" in sensor_reference):
+        sensor_prod = "BNL production"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
-    totalRisetime_vs_x.Draw("AXIS same")
-    # myStyle.SensorInfoSmart(dataset)
 
-    canvas.SaveAs(saveName + ".png")
-    canvas.SaveAs(saveName + ".pdf")
-    for i in range(len(plotfile)):
-        plotfile[i].Close()
-    inputfile.Close()
+    haxis.Draw("AXIS same")
+
+    canvas.SaveAs("%s%s.png"%(outdir, saveName))
+    canvas.SaveAs("%s%s.pdf"%(outdir, saveName))
+
+    for file in plotfile:
+        file.Close()
+    infile_reference.Close()
     canvas.Clear()
     legend.Clear()
+    haxis.Delete()

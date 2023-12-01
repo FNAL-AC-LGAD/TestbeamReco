@@ -22,10 +22,6 @@ options, args = parser.parse_args()
 xlength = float(options.xlength)
 colors = myStyle.GetColors(True)
 
-canvas = TCanvas("cv","cv",1000,800)
-
-os.makedirs("../output/compare/", exist_ok=True)
-
 sensors_list = [
     # Varying resistivity and capacitance
     ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
@@ -61,54 +57,54 @@ ylength_list = [
 
 saveName_list = [
     # Varying resistivity and capacitance
-    "../output/compare/HPK_Amplitude_vs_x_ResCap",
+    "HPK_Amplitude_vs_x_ResCap",
     # HPK Varying thickness
-    "../output/compare/HPK_Amplitude_vs_x_thickness",
+    "HPK_Amplitude_vs_x_thickness",
     # KOJI Varying thickness
-    "../output/compare/Koji_Amplitude_vs_x_thicknessg",
+    "Koji_Amplitude_vs_x_thickness",
     # BNL and HPK Varying metal widths
-    # "../output/compare/BNL_and_HPK_Amplitude_vs_x_MetalWidth",
+    # "BNL_and_HPK_Amplitude_vs_x_MetalWidth",
 ]
 
-#Make final plots
+outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
+outdir = myStyle.GetPlotsDir(outdir, "AmplitudeVsX/")
+
 ymin = 1
+pad_margin = myStyle.GetMargin()
+
+canvas = TCanvas("cv","cv",1000,800)
+
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
+    sensor_reference = sensors[0]
+
     yLegend = 0.026*len(sensors)
-    legend2 = TLegend(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.2-yLegend,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.03)
+    legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
     legend2.SetBorderSize(1)
     legend2.SetLineColor(kBlack)
     legend2.SetTextFont(myStyle.GetFont())
     legend2.SetTextSize(myStyle.GetSize()-4)
 
     xlength = float(options.xlength)
-    sensor_prod="BNL & HPK Production"
-    hname = "AmplitudeNoSum"
-    if ("BNL" in sensors[0]):
-        sensor_prod = "BNL & HPK Production"
-    else:
-        sensor_prod = "HPK Production"
-    if ("KOJI" in sensors[0]):
-        xlength = 0.25
-    if ("500x500" in sensors[0]):
+    if ("500x500" in sensor_reference):
         xlength = 0.8
-
+    elif ("KOJI" in sensor_reference):
+        xlength = 0.25
 
     tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
-    totalAmplitude_vs_x = TH1F("htemp","",1,-xlength,xlength)
-    totalAmplitude_vs_x.Draw("AXIS")
-    totalAmplitude_vs_x.SetStats(0)
-    totalAmplitude_vs_x.SetTitle("")
-    totalAmplitude_vs_x.GetXaxis().SetTitle("Track x position [mm]")
-    totalAmplitude_vs_x.GetYaxis().SetTitle("MPV signal amplitude [mV]")
-    totalAmplitude_vs_x.SetLineWidth(3)
-    totalAmplitude_vs_x.GetYaxis().SetRangeUser(ymin, ylength)
+    haxis = TH1F("htemp","",1,-xlength,xlength)
+    haxis.Draw("AXIS")
+    haxis.SetStats(0)
+    haxis.SetTitle("")
+    haxis.GetXaxis().SetTitle("Track x position [mm]")
+    haxis.GetYaxis().SetTitle("MPV signal amplitude [mV]")
+    haxis.SetLineWidth(3)
+    haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
-
-    inputfile = TFile("../output/%s/%s_Analyze.root"%(sensors[len(sensors)-2],sensors[len(sensors)-2]),"READ")
-    geometry = myStyle.GetGeometry(sensors[0])
-    boxes = getStripBox(inputfile, ymin, ylength-30, False, 18, True, pitch = geometry["pitch"]/1000.0)
-    if ("500x500" not in sensors[0]):
+    infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
+    geometry = myStyle.GetGeometry(sensor_reference)
+    boxes = getStripBox(infile_reference, ymin, ylength-30, pitch = geometry["pitch"]/1000.0)
+    if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
         box.Draw()
@@ -132,36 +128,44 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
                 vertical_line2.DrawClone("same")
 
     plotfile = []
-    plotList_amplitude_vs_x = []
-    for i in range(len(sensors)):
-        plotfile.append(TFile("../output/"+sensors[i]+"/Amplitude/AmplitudeVsX_tight.root","READ"))
-        plotList_amplitude_vs_x.append(plotfile[i].Get(hname))
-        plotList_amplitude_vs_x[i].SetLineWidth(3)
+    list_amplitude_vs_x = []
+    for i, sname in enumerate(sensors):
+        inName = "../output/"+sname+"/Amplitude/AmplitudeVsX_tight.root"
+        inFile = TFile(inName,"READ")
+        hAmp = inFile.Get("AmplitudeNoSum")
+        hAmp.SetLineWidth(3)
         if("thickness" in tagVars[0]):
-            plotList_amplitude_vs_x[i].SetLineColor(colors[i*2])
+            hAmp.SetLineColor(colors[i*2])
         else:
-            plotList_amplitude_vs_x[i].SetLineColor(colors[i+1])
-        # plotList_amplitude_vs_x[i].Draw("hist same")
-        lengendEntry = legend2.AddEntry(plotList_amplitude_vs_x[i], tag[i])
+            hAmp.SetLineColor(colors[i+1])
+
+        lengendEntry = legend2.AddEntry(hAmp, tag[i])
         # lengendEntry.SetTextAlign(22)
+        plotfile.append(inFile)
+        list_amplitude_vs_x.append(hAmp)
 
-    plotList_amplitude_vs_x = mf.same_limits_compare(plotList_amplitude_vs_x)
-    for hist in plotList_amplitude_vs_x:
+    pruned_amplitude_vs_x = mf.same_limits_compare(list_amplitude_vs_x)
+    for hist in pruned_amplitude_vs_x:
         hist.Draw("hist same")
-
-    legend2.Draw()
-    myStyle.BeamInfo()
-    myStyle.SensorProductionInfo(sensor_prod)
-    totalAmplitude_vs_x.Draw("AXIS same")
 
     legendHeader = tag[-1]
     legend2.SetHeader(legendHeader, "C")
-    # myStyle.SensorInfoSmart(dataset)
-   
-    canvas.SaveAs(saveName + ".png")
-    canvas.SaveAs(saveName + ".pdf")
-    for i in range(len(plotfile)):
-        plotfile[i].Close()
-    inputfile.Close()
+    legend2.Draw()
+
+    sensor_prod="HPK production"
+    if ("BNL" in sensor_reference):
+        sensor_prod = "BNL & HPK production"
+    myStyle.BeamInfo()
+    myStyle.SensorProductionInfo(sensor_prod)
+
+    haxis.Draw("AXIS same")
+
+    canvas.SaveAs("%s%s.png"%(outdir, saveName))
+    canvas.SaveAs("%s%s.pdf"%(outdir, saveName))
+
+    for file in plotfile:
+        file.Close()
+    infile_reference.Close()
     canvas.Clear()
     legend2.Clear()
+    haxis.Delete()

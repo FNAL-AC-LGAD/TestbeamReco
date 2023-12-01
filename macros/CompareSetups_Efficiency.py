@@ -5,7 +5,7 @@ import optparse
 from stripBox import getStripBox
 import myStyle
 from  builtins import any
-from myFunctions import get_legend_comparation_plots
+import myFunctions as mf
 
 gROOT.SetBatch(True)
 gStyle.SetOptFit(1011)
@@ -17,14 +17,9 @@ myStyle.ForceStyle()
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 1.75, help="Limit x-axis in final plot")
-parser.add_option('-y','--ylength', dest='ylength', default = 1.4, help="Max Efficiency in final plot")
+# parser.add_option('-y','--ylength', dest='ylength', default = 1.4, help="Max Efficiency in final plot")
 options, args = parser.parse_args()
-ylength = float(options.ylength)
 colors = myStyle.GetColors(True)
-
-canvas = TCanvas("cv","cv",1000,800)
-
-os.makedirs("../output/compare/", exist_ok=True)
 
 sensors_list = [
     # BNL and HPK sensors - different metal widths
@@ -50,60 +45,57 @@ tagVar_list = [
 
 saveName_list = [
     # BNL and HPK sensors - different metal widths
-    "../output/compare/BNL_and_HPK_Efficiency_vs_x_MetalWidth",
+    "BNL_and_HPK_Efficiency_vs_x_MetalWidth",
     #Varying resistivity and capacitance
-    "../output/compare/HPK_Efficiency_vs_x_ResCap",
+    "HPK_Efficiency_vs_x_ResCap",
     #HPK Varying thickness
-    "../output/compare/HPK_efficiency_vs_x_thickness",
+    "HPK_efficiency_vs_x_thickness",
     # HPK pads Varying thickness and resistyvity
-    "../output/compare/HPK_Pads_efficiency_vs_x_ThicknessRes"
+    "HPK_Pads_efficiency_vs_x_ThicknessRes"
 ]
 
-#Make final plots
+outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
+outdir = myStyle.GetPlotsDir(outdir, "EfficiencyVsX/")
+
+ymin = 0.01
+pad_margin = myStyle.GetMargin()
+
+canvas = TCanvas("cv","cv",1000,800)
+
 for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
-    hname = "hefficiency_vs_x_twoStrip_numerator_tight"
-    ymin = 0.01
-
-    xlength = float(options.xlength)
-    sensor_prod="BNL & HPK Production"
-    if ("BNL" in sensors[0]):
-        sensor_prod = "BNL & HPK Production"
-    else:
-        sensor_prod = "HPK Production"
-
-    if ("KOJI" in sensors[0]):
-        xlength = 0.35
-
-    if ("500x500" in sensors[0]):
-        xlength = 0.8
-
-    ylength = 1.3 + 0.1*len(sensors)
+    sensor_reference = sensors[0]
 
     yLegend = 0.026*len(sensors)
-    legend2 = TLegend(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.2-yLegend,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.03)
+    legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
     legend2.SetBorderSize(1)
     legend2.SetLineColor(kBlack)
     legend2.SetTextFont(myStyle.GetFont())
     legend2.SetTextSize(myStyle.GetSize()-4)
-    
-    tag = get_legend_comparation_plots(sensors,tagVars)
 
-    totalEfficiency_vs_x = TH1F("htemp","",1,-xlength,xlength)
-    totalEfficiency_vs_x.Draw("AXIS")
-    totalEfficiency_vs_x.SetStats(0)
-    totalEfficiency_vs_x.SetTitle("")
-    totalEfficiency_vs_x.GetXaxis().SetTitle("Track x position [mm]")
-    totalEfficiency_vs_x.GetYaxis().SetTitle("Two-strip efficiency")
-    if ("500x500" in sensors[0]):
-        totalEfficiency_vs_x.GetYaxis().SetTitle("Two-channel efficiency")
-    totalEfficiency_vs_x.SetLineWidth(3)
-    totalEfficiency_vs_x.GetYaxis().SetRangeUser(ymin, ylength)
+    xlength = float(options.xlength)
+    if ("500x500" in sensor_reference):
+        xlength = 0.8
+    elif ("KOJI" in sensor_reference):
+        xlength = 0.35
 
-    inputfile = TFile("../output/%s/%s_Analyze.root"%(sensors[len(sensors)-2],sensors[len(sensors)-2]),"READ")
-    # shift = inputfile.Get("stripBoxInfo03").GetMean(1)
-    geometry = myStyle.GetGeometry(sensors[0])
-    boxes = getStripBox(inputfile,ymin,ylength - 0.4,False, 18, True, pitch = geometry["pitch"]/1000.0)
+    tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
+    ylength = 1.3 + 0.1*len(sensors)
+
+    haxis = TH1F("htemp","",1,-xlength,xlength)
+    haxis.Draw("AXIS")
+    haxis.SetStats(0)
+    haxis.SetTitle("")
+    haxis.GetXaxis().SetTitle("Track x position [mm]")
+    haxis.GetYaxis().SetTitle("Two-strip efficiency")
+    if ("500x500" in sensor_reference):
+        haxis.GetYaxis().SetTitle("Two-channel efficiency")
+    haxis.SetLineWidth(3)
+    haxis.GetYaxis().SetRangeUser(ymin, ylength)
+
+    infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
+    geometry = myStyle.GetGeometry(sensor_reference)
+    boxes = getStripBox(infile_reference, ymin, ylength-0.4, pitch = geometry["pitch"]/1000.0)
     for box in boxes:
         box.Draw()
 
@@ -126,17 +118,24 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
                 vertical_line2.DrawClone("same")
 
     plotfile = []
-    plotList_Efficiency_vs_x = []
-    for i in range(len(sensors)):
-        plotfile.append(TFile("../output/"+sensors[i]+"/Efficiency/EfficiencyVsX_tight.root","READ"))
-        plotList_Efficiency_vs_x.append(plotfile[i].Get(hname))
-        plotList_Efficiency_vs_x[i].SetLineWidth(3)
-        if("thickness" in tag[0]):
-            plotList_Efficiency_vs_x[i].SetLineColor(colors[i*2])
+    list_efficiency_vs_x = []
+    for i, sname in enumerate(sensors):
+        inName = "../output/"+sname+"/Efficiency/EfficiencyVsX_tight.root"
+        inFile = TFile(inName,"READ")
+        hEff = inFile.Get("hefficiency_vs_x_twoStrip_numerator_tight")
+        hEff.SetLineWidth(3)
+        if("thickness" in tagVars[0]): # Check this
+            hEff.SetLineColor(colors[i*2])
         else:
-            plotList_Efficiency_vs_x[i].SetLineColor(colors[i+1])
-        plotList_Efficiency_vs_x[i].Draw("hist same")
-        legend2.AddEntry(plotList_Efficiency_vs_x[i], tag[i])
+            hEff.SetLineColor(colors[i+1])
+        legend2.AddEntry(hEff, tag[i])
+
+        plotfile.append(inFile)
+        list_efficiency_vs_x.append(hEff)
+
+    pruned_efficiency_vs_x = mf.same_limits_compare(list_efficiency_vs_x)
+    for hist in pruned_efficiency_vs_x:
+        hist.Draw("hist same")
 
     horizontal_line = TLine(-xlength, 1, xlength, 1)
     horizontal_line.SetLineWidth(3)
@@ -147,28 +146,22 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
 
     legendHeader = tag[-1]
     legend2.SetHeader(legendHeader, "C")
-    
     legend2.Draw()
+
+    sensor_prod="HPK production"
+    if ("BNL" in sensor_reference):
+        sensor_prod = "BNL & HPK production"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
-    totalEfficiency_vs_x.Draw("AXIS same")
 
-    # canvas.SaveAs("../BNL_and_HPK_Efficiency_vs_x_MetalWidth.png")
-    # canvas.SaveAs("../HPK_Efficiency_vs_x_ResCap.png")
-    # canvas.SaveAs("../hpk_efficiency_vs_x_thickness.png")
-    # canvas.SaveAs("../BNL_and_HPK_Amplitude_vs_x_MetalWidth.png")
-    canvas.SaveAs(saveName + ".png")
-    canvas.SaveAs(saveName + ".pdf")
-    for i in range(len(plotfile)):
-        plotfile[i].Close()
-    inputfile.Close()
+    haxis.Draw("AXIS same")
+
+    canvas.SaveAs("%s%s.png"%(outdir, saveName))
+    canvas.SaveAs("%s%s.pdf"%(outdir, saveName))
+
+    for file in plotfile:
+        file.Close()
+    infile_reference.Close()
     canvas.Clear()
     legend2.Clear()
-
-# BNL sensors - different metal widths
-# sensors = ["BNL_50um_1cm_400um_W3051_1_4_160V", "BNL_50um_1cm_450um_W3051_2_2_170V"]
-# tag = ["100 #mum strip width", "50 #mum strip width]
-
-# HPK sensors - different metal widths
-# sensors = ["HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V", "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W9_14_2_20T_1P0_500P_100M_E600_112V"]
-# tag = ["W8 (17,2): 50M C600 50T", "W8 (18,2): 100M C600 50T", "W9 (15,2): 50M E600 20T", "W9 (14,2): 100M E600 20T"]
+    haxis.Delete()

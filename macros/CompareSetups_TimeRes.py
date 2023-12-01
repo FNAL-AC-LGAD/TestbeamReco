@@ -5,7 +5,7 @@ import optparse
 from stripBox import getStripBox
 import myStyle
 import math
-from myFunctions import get_legend_comparation_plots
+import myFunctions as mf
 
 gROOT.SetBatch(True)
 gStyle.SetOptFit(1011)
@@ -13,19 +13,26 @@ gStyle.SetOptFit(1011)
 ## Defining Style
 myStyle.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
-os.makedirs("../output/compare/", exist_ok=True)
+
+# # Removed. Check if needed to be re-implemented
+# def remove_jitter(hTime, hJitter, new_hist):
+#     nbins = hJitter.GetXaxis().GetNbins()
+#     for i in range(1, nbins+1):
+#         jitter = hJitter.GetBinContent(i)
+#         time = hTime.GetBinContent(i)
+#         value = 0
+#         if (time >= jitter):
+#             value = math.sqrt(time**2 - jitter**2)
+
+#         new_hist.SetBinContent(i, value)
 
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 1.5, help="Limit x-axis in final plot")
-parser.add_option('-y','--ylength', dest='ylength', default = 150, help="Max TR value in final plot")
-parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+# parser.add_option('-y','--ylength', dest='ylength', default = 150, help="Max TR value in final plot")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
-ylength = float(options.ylength)
 colors = myStyle.GetColors(True)
-
-canvas = TCanvas("cv","cv",1000,800)
 
 sensors_list = [
     # Varying resistivity and capacitance
@@ -66,145 +73,130 @@ ylength_list = [
 
 saveName_list = [
     # Varying resistivity and capacitance
-    "../output/compare/HPK_TimeResolution_vs_x_ResCap",
+    "HPK_TimeResolution_vs_x_ResCap",
     # HPK Varying thickness
-    "../output/compare/HPK_TimeResolution_vs_x_thickness",
+    "HPK_TimeResolution_vs_x_thickness",
     # KOJI Varying thickness
-    "../output/compare/Koji_TimeResolution_vs_x_thickness",
+    "Koji_TimeResolution_vs_x_thickness",
     # HPK pads Varying thickness and resistyvity
-    "../output/compare/HPK_Pads_TimeResolution_vs_x_thicknessRes",
+    "HPK_Pads_TimeResolution_vs_x_thicknessRes",
     # HPK pads Varying metal width 
-    # "../output/compare/HPK_Pads_TimeResolution_vs_x_width"
+    # "HPK_Pads_TimeResolution_vs_x_width"
 ]
 
-#Make final plots
-hname = "Time_DiffW2Tracker"
-hname2 = "jitter_vs_x"
-tag2 = ["Time resolution", "Jitter"]#, "Time resolution - Jitter (quadrature)"]
+outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
+outdir = myStyle.GetPlotsDir(outdir, "ResolutionTimeVsX/")
+
 ymin = 1
+pad_margin = myStyle.GetMargin()
+
+canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
-    xlength = float(options.xlength)
-    sensor_prod="test"
-    if ("BNL" in sensors[0]):
-        sensor_prod = "BNL Production"
-    else:
-        sensor_prod = "HPK Production"
-    if ("KOJI" in sensors[0]):
-        xlength = 0.25
-        hname2 = "jitter_vs_x"
+    sensor_reference = sensors[0]
 
-    if ("500x500" in sensors[0]):
-        xlength = 0.8
-
-    legend = TLegend(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.35,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.25)
+    legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.35, 1-pad_margin-0.065, 1-pad_margin-0.25)
     legend.SetNColumns(2)
     # legend.SetBorderSize(1)
     # legend.SetLineColor(kBlack)
 
     yLegend = 0.026*len(sensors)
-    legend2 = TLegend(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.2-yLegend,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.03)
+    legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
     # legend2.SetBorderSize(1)
     legend2.SetLineColor(kBlack)
     legend2.SetTextFont(myStyle.GetFont())
     legend2.SetTextSize(myStyle.GetSize()-4)
 
-    tag = get_legend_comparation_plots(sensors, tagVars)
+    xlength = float(options.xlength)
+    if ("500x500" in sensor_reference):
+        xlength = 0.8
+    elif ("KOJI" in sensor_reference):
+        xlength = 0.25
 
-    totalTR_vs_x = TH1F("htemp","",1,-xlength,xlength)
-    totalTR_vs_x.Draw("AXIS")
-    totalTR_vs_x.SetStats(0)
-    totalTR_vs_x.SetTitle("")
-    totalTR_vs_x.GetXaxis().SetTitle("Track x position [mm]")
-    totalTR_vs_x.GetYaxis().SetTitle("Time resolution [ps]")
-    totalTR_vs_x.SetLineWidth(3)
-    totalTR_vs_x.GetYaxis().SetRangeUser(ymin, ylength)
+    tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
-    inputfile = TFile("../output/%s/%s_Analyze.root"%(sensors[0],sensors[0]),"READ")
-    geometry = myStyle.GetGeometry(sensors[0])
-    boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, pitch = geometry["pitch"]/1000.0)
-    # boxes = getStripBox(inputfile,ymin,ylength- 30,False, 18, True, shift)
-    if ("500x500" not in sensors[0]):
+    haxis = TH1F("htemp","",1,-xlength,xlength)
+    haxis.Draw("AXIS")
+    haxis.SetStats(0)
+    haxis.SetTitle("")
+    haxis.GetXaxis().SetTitle("Track x position [mm]")
+    haxis.GetYaxis().SetTitle("Time resolution [ps]")
+    haxis.SetLineWidth(3)
+    haxis.GetYaxis().SetRangeUser(ymin, ylength)
+
+    infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
+    geometry = myStyle.GetGeometry(sensor_reference)
+    boxes = getStripBox(infile_reference, ymin, ylength-30, pitch = geometry["pitch"]/1000.0)
+    if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
         box.Draw()
 
     plotfile = []
-    plotfile2 = []
-    plotList_TR_vs_x = []
-    plotList_TR_vs_x2 = []
-    # plotList_TR_vs_x3 = []
-
-    for i in range(len(sensors)):
-        plotfile.append(TFile("../output/"+sensors[i]+"/Resolution_Time/TimeDiffVsX_tight.root","READ"))
-        plotList_TR_vs_x.append(plotfile[i].Get(hname))
-        plotList_TR_vs_x[i].SetLineWidth(3)
-        if("thickness" in tag[0]):
-            plotList_TR_vs_x[i].SetLineColor(colors[i*2])
+    list_time_vs_x = []
+    list_jitter_vs_x = []
+    for i, sname in enumerate(sensors):
+        inName = "../output/"+sname+"/Resolution_Time/TimeDiffVsX_tight.root"
+        inFile = [TFile(inName,"READ")]
+        hTime = inFile[0].Get("Time_DiffW2Tracker")
+        hTime.SetLineWidth(3)
+        if("thickness" in tagVars[0]):
+            hTime.SetLineColor(colors[i*2])
         else:
-            plotList_TR_vs_x[i].SetLineColor(colors[i+1])
-        plotList_TR_vs_x[i].Draw("hist same")
-        legend2.AddEntry(plotList_TR_vs_x[i], tag[i])
+            hTime.SetLineColor(colors[i+1])
 
+        lengendEntry = legend2.AddEntry(hTime, tag[i])
 
-    # if("thickness" in tag[0]):
-    # if("thickness" in tagVars[0]):
-    if(("thickness" in tagVars[0]) and ("500x500" not in sensors[0])):
-        for i in range(len(sensors)):
-            plotfile2.append(TFile("../output/"+sensors[i]+"/Jitter/JitterVsX.root","READ"))
-            print("../output/"+sensors[i]+"/Jitter/JitterVsX.root")
+        if(("thickness" in tagVars[0]) and ("500x500" not in sensor_reference)):
+            inName = "../output/"+sname+"/Jitter/JitterVsX.root"
+            inFile.append(TFile(inName,"READ"))
+            hJitter = inFile[1].Get("jitter_vs_x")
+            hJitter.SetLineWidth(3)
+            hJitter.SetLineStyle(2)
+            hJitter.SetLineColor(colors[i*2])
 
-            plotList_TR_vs_x2.append(plotfile2[i].Get(hname2))
-            # plotList_TR_vs_x3.append(plotList_TR_vs_x2[i].Clone("landau_vs_x"))
-            plotList_TR_vs_x2[i].SetLineWidth(3)
-            plotList_TR_vs_x2[i].SetLineStyle(2)
-            plotList_TR_vs_x2[i].SetLineColor(colors[i*2])
-            plotList_TR_vs_x2[i].Draw("hist same")
-            for number in range(1, plotList_TR_vs_x2[i].GetXaxis().GetNbins()+1):
-                j = plotList_TR_vs_x2[i].GetBinContent(number)
-                t = plotList_TR_vs_x[i].GetBinContent(number)
-                if (t>=j):
-                    l = math.sqrt(t*t - j*j)
-                else:
-                    l = 0
-                # plotList_TR_vs_x3[i].SetBinContent(number, l)
+            list_jitter_vs_x.append(hJitter)
+        plotfile.append(inFile)
+        list_time_vs_x.append(hTime)
 
-            # plotList_TR_vs_x3[i].SetLineWidth(5)
-            # plotList_TR_vs_x3[i].SetLineStyle(3)
-            # plotList_TR_vs_x3[i].SetLineColor(colors[i*2])
-            # plotList_TR_vs_x3[i].Draw("hist same")
-        legend.AddEntry(plotList_TR_vs_x[0], tag2[0])
-        legend.AddEntry(plotList_TR_vs_x2[0], tag2[1])
-        # legend.AddEntry(plotList_TR_vs_x3[0], tag2[2])
-        # legend.SetTextSize(26)
-        legendBox = TPaveText(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.03,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.35, "NDC")
+    pruned_time_vs_x = mf.same_limits_compare(list_time_vs_x + list_jitter_vs_x)
+    for hist in pruned_time_vs_x:
+        hist.Draw("hist same")
+
+    # Draw legend
+    if list_jitter_vs_x:
+        legend.AddEntry(list_time_vs_x[0], "Time resolution")
+        legend.AddEntry(list_jitter_vs_x[0], "Jitter")
+        legendBox = TPaveText(2*pad_margin+0.065, 1-pad_margin-0.03, 1-pad_margin-0.065, 1-pad_margin-0.35, "NDC")
         legendBox.SetBorderSize(1)
         legendBox.SetLineColor(kBlack)
         legendBox.SetFillColor(0)
-        legendBox.SetFillColorAlpha(0,0.)
+        legendBox.SetFillColorAlpha(0, 0.0)
         legend.Draw()
         legend2.Draw()
         legendBox.Draw("same")
-
     else:
         legend2.SetBorderSize(1)
         legend2.Draw()
 
-
     legendHeader = tag[-1]
     legend2.SetHeader(legendHeader, "C")
+
+    sensor_prod="HPK production"
+    if ("BNL" in sensor_reference):
+        sensor_prod = "BNL production"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
-    totalTR_vs_x.Draw("AXIS same")
-    # myStyle.SensorInfoSmart(dataset)
 
-    canvas.SaveAs(saveName + ".png")
-    canvas.SaveAs(saveName + ".pdf")
-    for i in range(len(plotfile)):
-        plotfile[i].Close()
-    for i in range(len(plotfile2)):
-        plotfile2[i].Close()
-    inputfile.Close()
+    haxis.Draw("AXIS same")
+
+    canvas.SaveAs("%s%s.png"%(outdir, saveName))
+    canvas.SaveAs("%s%s.pdf"%(outdir, saveName))
+    for files in plotfile:
+        for f in files:
+            f.Close()
+    infile_reference.Close()
     canvas.Clear()
     legend.Clear()
     legend2.Clear()
+    haxis.Delete()

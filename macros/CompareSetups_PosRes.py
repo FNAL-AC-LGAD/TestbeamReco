@@ -4,7 +4,7 @@ import langaus
 import optparse
 from stripBox import getStripBox
 import myStyle
-from myFunctions import get_legend_comparation_plots
+import myFunctions as mf
 
 gROOT.SetBatch(True)
 gStyle.SetOptFit(1011)
@@ -13,18 +13,13 @@ gStyle.SetOptFit(1011)
 myStyle.ForceStyle()
 # gStyle.SetTitleYOffset(1.1)
 
-os.makedirs("../output/compare/", exist_ok=True)
-
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 1.5, help="Limit x-axis in final plot")
-parser.add_option('-y','--ylength', dest='ylength', default = 200, help="Max Amp value in final plot")
-parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
+# parser.add_option('-y','--ylength', dest='ylength', default = 200, help="Max Amp value in final plot")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
-ylength = float(options.ylength)
 colors = myStyle.GetColors(True)
-canvas = TCanvas("cv","cv",1000,800)
 
 sensors_list = [
     # Varying thickness
@@ -35,9 +30,9 @@ sensors_list = [
 
 saveName_list = [
     # Varying thickness
-    "../output/compare/HPK_PosResolution_vs_x_thickness",
+    "HPK_PosResolution_vs_x_thickness",
     # Varying thickness KOJI
-    "../output/compare/Koji_PosResolution_vs_x_thickness"
+    "Koji_PosResolution_vs_x_thickness"
 ]
 
 xlength_list = [
@@ -54,14 +49,6 @@ ylength_list = [
     90
 ]
 
-
-pitch_list = [
-    # Varying thickness
-    500,
-    # Varying thickness KOJI
-    80
-]
-
 yoffset_list = [
     # Varying thickness
     20,
@@ -69,49 +56,19 @@ yoffset_list = [
     10
 ]
 
+outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
+outdir = myStyle.GetPlotsDir(outdir, "ResolutionPosVsX/")
 
-for sensors, saveName, xlength, ylength, pitch, yoffset in zip(sensors_list,saveName_list, xlength_list, ylength_list, pitch_list, yoffset_list):
-    plotfile = []
-    inputfile = []
-    hists_oneStrip = []
-    hists_twoStrip = []
-    shift = []
-    ymin = 1
+ymin = 1
+pad_margin = myStyle.GetMargin()
 
-    tag = get_legend_comparation_plots(sensors, ["thickness"])
+canvas = TCanvas("cv","cv",1000,800)
 
-    for i in range(len(sensors)):
-        plotfile.append(TFile("../output/"+sensors[i]+"/Resolution_Pos/PositionResVsX_tight.root","READ"))
-        inputfile.append(TFile("../output/"+sensors[i]+"/"+sensors[i]+"_Analyze.root","READ"))
-        shift.append(inputfile[i].Get("stripBoxInfo03").GetMean(1))
-        hists_oneStrip.append(plotfile[i].Get("h_one_strip"))
-        hists_twoStrip.append(plotfile[i].Get("track_twoStrip_tight"))
+for sensors, saveName, xlength, ylength, yoffset in zip(sensors_list,saveName_list, xlength_list, ylength_list, yoffset_list):
+    sensor_reference = sensors[0]
 
-    sensor_prod="test"
-    if ("BNL" in sensors[0]):
-        sensor_prod = "BNL Production"
-    else:
-        sensor_prod = "HPK Production"
-
-    XRes_vs_x = TH1F("htemp","",1,-xlength,xlength)
-    XRes_vs_x.Draw("hist")
-    XRes_vs_x.SetStats(0)
-    XRes_vs_x.SetTitle("")
-    XRes_vs_x.GetXaxis().SetTitle("Track x position [mm]")
-    XRes_vs_x.GetYaxis().SetTitle("Position resolution [um]")
-    XRes_vs_x.SetLineWidth(2)
-    XRes_vs_x.GetXaxis().SetRangeUser(-xlength, xlength)
-    XRes_vs_x.GetYaxis().SetRangeUser(ymin, ylength)
-
-    boxes = getStripBox(inputfile[0],ymin,ylength-yoffset,False, 18, True, shift[0])
-    for box in boxes[1:len(boxes)-1]:
-        box.Draw()
-    XRes_vs_x.Draw("AXIS same")
-    XRes_vs_x.Draw("hist same")
-
-    # legend = TLegend(2*myStyle.GetMargin()+0.02,1-myStyle.GetMargin()-0.25,1-myStyle.GetMargin()-0.1,1-myStyle.GetMargin()-0.05)
     yLegend = 0.026*len(sensors)
-    legend = TLegend(2*myStyle.GetMargin()+0.065,1-myStyle.GetMargin()-0.3-yLegend,1-myStyle.GetMargin()-0.065,1-myStyle.GetMargin()-0.03)
+    legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.3-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
     legend.SetBorderSize(1)
     legend.SetLineColor(kBlack)
     legend.SetNColumns(1)
@@ -120,41 +77,79 @@ for sensors, saveName, xlength, ylength, pitch, yoffset in zip(sensors_list,save
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
 
-    binary_readout_res_sensor = TLine(-xlength,pitch/TMath.Sqrt(12), xlength,pitch/TMath.Sqrt(12))
+    tag = mf.get_legend_comparation_plots(sensors, ["thickness"])
+
+    haxis = TH1F("htemp","",1,-xlength,xlength)
+    haxis.Draw("AXIS")
+    haxis.SetStats(0)
+    haxis.SetTitle("")
+    haxis.GetXaxis().SetTitle("Track x position [mm]")
+    haxis.GetYaxis().SetTitle("Position resolution [#mum]")
+    haxis.SetLineWidth(1)
+    haxis.GetYaxis().SetRangeUser(ymin, ylength)
+
+    infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
+    geometry = myStyle.GetGeometry(sensor_reference)
+    pitch = geometry["pitch"]
+    boxes = getStripBox(infile_reference, ymin, ylength-yoffset, pitch = pitch/1000.0)
+    if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
+        boxes = boxes[1:len(boxes)-1]
+    for box in boxes:
+        box.Draw()
+
+    binary_readout_res_sensor = TLine(-xlength, pitch/TMath.Sqrt(12), xlength, pitch/TMath.Sqrt(12))
     binary_readout_res_sensor.SetLineWidth(3)
     binary_readout_res_sensor.SetLineStyle(7)
-    binary_readout_res_sensor.SetLineColor(kBlack) #kGreen+2 #(TColor.GetColor(136,34,85))
+    binary_readout_res_sensor.SetLineColor(kBlack)
     binary_readout_res_sensor.Draw("same")
     legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
 
-    for i in range(len(hists_twoStrip)):
-        hists_twoStrip[i].Draw("hist same")
-        hists_twoStrip[i].SetLineWidth(3)
-        legend.AddEntry(hists_twoStrip[i],tag[i]+' - Two strip')
-        hists_twoStrip[i].SetLineColor(colors[i*2])
+    plotfile = []
+    list_OneStrip_vs_x = []
+    list_TwoStrip_vs_x = []
+    for i, sname in enumerate(sensors):
+        inName = "../output/"+sname+"/Resolution_Pos/PositionResVsX_tight.root"
+        inFile = TFile(inName,"READ")
+        hOneStrip = inFile.Get("h_one_strip")
+        hTwoStrip = inFile.Get("track_twoStrip_tight")
 
-    for i in range(len(hists_oneStrip)):
-        hists_oneStrip[i].Draw("P same")
-        hists_oneStrip[i].SetLineStyle(1)
-        hists_oneStrip[i].SetMarkerStyle(33)
-        hists_oneStrip[i].SetMarkerSize(3)
-        legend.AddEntry(hists_oneStrip[i],tag[i]+' - Exactly one strip', "P")
-        hists_oneStrip[i].SetMarkerColor(colors[i*2])
+        hOneStrip.Draw("P same")
+        hOneStrip.SetLineStyle(1)
+        hOneStrip.SetMarkerStyle(33)
+        hOneStrip.SetMarkerSize(3)
+        hOneStrip.SetMarkerColor(colors[i*2])
+        legend.AddEntry(hOneStrip, tag[i]+' - Exactly one strip', "P")
+
+        hTwoStrip.SetLineWidth(3)
+        hTwoStrip.SetLineColor(colors[i*2])
+        legend.AddEntry(hTwoStrip, tag[i]+' - Two strip')
+
+        plotfile.append(inFile)
+        list_OneStrip_vs_x.append(hOneStrip)
+        list_TwoStrip_vs_x.append(hTwoStrip)
+
+    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x)
+    for hist in pruned_TwoStrip_vs_x:
+        hist.Draw("hist same")
 
     legendHeader = tag[-1]
     legend.SetHeader(legendHeader, "C")
     legend.Draw()
-    XRes_vs_x.SetMaximum(ylength)
 
+    sensor_prod="HPK production"
+    if ("BNL" in sensor_reference):
+        sensor_prod = "BNL production"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
-    XRes_vs_x.Draw("AXIS same")
-    # myStyle.SensorInfoSmart(dataset)
 
-    canvas.SaveAs(saveName + ".png")
-    canvas.SaveAs(saveName + ".pdf")
-    for i in range(len(plotfile)):
-        plotfile[i].Close()
-        inputfile[i].Close()
+    haxis.Draw("AXIS same")
+
+    canvas.SaveAs("%s%s.png"%(outdir, saveName))
+    canvas.SaveAs("%s%s.pdf"%(outdir, saveName))
+
+    for file in plotfile:
+        file.Close()
+    infile_reference.Close()
     canvas.Clear()
     legend.Clear()
+    haxis.Delete()
