@@ -23,12 +23,14 @@ colors = myStyle.GetColors(True)
 
 sensors_list = [
     # BNL and HPK sensors - different metal widths
-    [ "BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
+    ["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
     # Varying resistivity and capacitance
     ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # HPK Varying thickness
     ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
-    # HPK pads Varying thickness and resistyvity
+    # KOJI Varying thickness
+    ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
+    # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
 ]
 
@@ -39,8 +41,10 @@ tagVar_list = [
     ["resistivityNumber", "capacitance"],
     #HPK Varying thickness
     ["thickness"],
-    # HPK pads Varying thickness and resistyvity
-    ["thickness", "resistivityNumber"]
+    # KOJI Varying thickness
+    ["thickness"],
+    # HPK pads Varying thickness and resistivity
+    ["thickness", "resistivityNumber"],
 ]
 
 saveName_list = [
@@ -50,8 +54,10 @@ saveName_list = [
     "HPK_Efficiency_vs_x_ResCap",
     #HPK Varying thickness
     "HPK_efficiency_vs_x_thickness",
-    # HPK pads Varying thickness and resistyvity
-    "HPK_Pads_efficiency_vs_x_ThicknessRes"
+    # KOJI Varying thickness
+    "Koji_efficiency_vs_x_thickness",
+    # HPK pads Varying thickness and resistivity
+    "HPK_Pads_efficiency_vs_x_ThicknessRes",
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")

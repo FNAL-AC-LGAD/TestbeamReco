@@ -41,7 +41,7 @@ sensors_list = [
     ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # KOJI Varying thickness
     [ "HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
-    # HPK pads Varying thickness and resistyvity
+    # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
     # HPK pads Varying metal width 
     # ["HPK_W9_22_3_20T_500x500_150M_E600_112V","HPK_W9_23_3_20T_500x500_300M_E600_112V" ]
@@ -54,7 +54,7 @@ tagVar_list = [
     ["thickness"],
     # KOJI Varying thickness
     ["thickness"],
-    # HPK pads Varying thickness and resistyvity
+    # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
 ]
 
@@ -65,7 +65,7 @@ ylength_list = [
     160,
     # KOJI Varying thickness
     65,
-    # HPK pads Varying thickness and resistyvity
+    # HPK pads Varying thickness and resistivity
     100,
     # HPK pads Varying metal width 
     # 100
@@ -78,7 +78,7 @@ saveName_list = [
     "HPK_TimeResolution_vs_x_thickness",
     # KOJI Varying thickness
     "Koji_TimeResolution_vs_x_thickness",
-    # HPK pads Varying thickness and resistyvity
+    # HPK pads Varying thickness and resistivity
     "HPK_Pads_TimeResolution_vs_x_thicknessRes",
     # HPK pads Varying metal width 
     # "HPK_Pads_TimeResolution_vs_x_width"
