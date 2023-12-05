@@ -310,7 +310,7 @@ cd ../../test
 # -----------------------
 
 # BNL_strips=('BNL_50um_1cm_450um_W3051_2_2_170V' 'BNL_50um_1cm_400um_W3051_1_4_160V' 'BNL_50um_1cm_450um_W3052_2_4_185V' 'BNL_20um_1cm_400um_W3074_1_4_95V' 'BNL_20um_1cm_400um_W3075_1_2_80V' 'BNL_20um_1cm_450um_W3074_2_1_95V' 'BNL_20um_1cm_450um_W3075_2_4_80V' 'BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V' 'BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V')
-BNL_strips=('BNL_50um_1cm_450um_W3051_2_2_170V' 'BNL_20um_1cm_450um_W3075_2_4_80V' 'BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V' 'BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V')
+BNL_strips=('BNL_50um_1cm_450um_W3051_2_2_170V' 'BNL_50um_1cm_400um_W3051_1_4_160V' 'BNL_20um_1cm_450um_W3075_2_4_80V')
 
 for sensor in "${BNL_strips[@]}"; do
     printf "\nRunning over ${sensor} sensor\n"
