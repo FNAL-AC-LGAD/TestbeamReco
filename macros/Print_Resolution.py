@@ -8,6 +8,28 @@ ROOT.gROOT.SetBatch(True)
 
 myStyle.ForceStyle()
 
+
+def get_edge_indices(indices_list):
+    is_edge = True
+    row, col = 9, int(indices[-1][1])
+    edge_indices = []
+    for idx in indices_list:
+        # Left edge when moving to a new row
+        if row != int(idx[0]):
+            row = int(idx[0])
+            is_edge = True
+        # Right edge when in last column (!) assuming all rows have the same number (!)
+        elif int(idx[1]) == col:
+            is_edge = True
+        else:
+            is_edge = False
+
+        if is_edge:
+            edge_indices.append(idx)
+
+    return edge_indices
+
+
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
@@ -20,6 +42,8 @@ outdir = myStyle.getOutputDir(dataset)
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor_name = sensor_Geometry["sensor"]
+
+res_photek = 10 # ps
 
 regions = ["Overall"]
 if all_regions:
@@ -46,9 +70,17 @@ for reg in regions:
     if reg == "Overall":
         info_channels = []
         indices = mf.get_existing_indices(inputfile_res1d, "deltaX_oneStrip")
+        edge_indices = get_edge_indices(indices)
+
         for idx in indices:
             hres_onestrip = inputfile_res1d.Get("deltaX_oneStrip%s"%idx)
             value = 1000 * hres_onestrip.GetStdDev()
+
+            # Approximate appropriate std dev for edge channels (with only half of the channel info)
+            if idx in edge_indices:
+                mean = 1000 * hres_onestrip.GetMean()
+                value = math.sqrt(value**2 + mean**2)
+
             info_channels.append(value)
 
         # Output line for mySensorInfo.py
@@ -70,8 +102,8 @@ for reg in regions:
     # Resolution
     name_onestrip = "deltaX_oneStrip%s"%(res_region)
     name_twostrip = "deltaX_twoStrip%s_tight"%(res_region)
-    name_time = "weighted2_timeDiff_tracker_%s"%reg if reg != "Overall" else "weighted2_timeDiff_tracker_tight"
-    inputfile_time = inputfile_res1d if reg != "Overall" else inputfile_res1d_tight
+    name_time = "weighted2_timeDiff_tracker_tight" if reg == "Overall" else "weighted2_timeDiff_tracker_%s"%reg
+    inputfile_time = inputfile_res1d_tight if reg == "Overall" else inputfile_res1d
 
     info["one_res"] = 1000 * inputfile_res1d.Get(name_onestrip).GetStdDev()
     info["two_res"] = 1000 * inputfile_res1d_tight.Get(name_twostrip).GetFunction("fit").GetParameter(2)
@@ -99,13 +131,17 @@ for reg in regions:
     print(info_str)
 
     # Ouput for Latex table
-    info_tex = "    - LaTeX format: %s & %.0f $\\pm$ 1 &"%(reg, info["time_res"])
+    info["time_res"] = math.sqrt(info["time_res"]**2 - res_photek**2)
+    info_tex = "    - LaTeX format: "
+    if all_regions:
+        info_tex+= "%s "%(reg)
+    info_tex+= "& %.0f $\\pm$ 1 &"%(info["time_res"])
     for key in ["one_res", "one_eff", "two_res", "two_eff"]:
         info_tex+= " %.0f"%(info[key])
         if "eff" in key:
             info_tex+= "\\%"
         info_tex+= " &"
-    info_tex+= "\n"
+    info_tex+= " %%%% Time reference contribution removed (%.0f [ps])\n"%res_photek
     print(info_tex)
 
 
