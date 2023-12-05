@@ -100,12 +100,15 @@ for reg in regions:
         res_region = ""
     
     # Resolution
-    name_onestrip = "deltaX_oneStrip%s"%(res_region)
+    # NOTE: One strip tight distribution might look assymetric for some sensors, but this is because of the tight
+    # cut that removes half of the channels at the edges. Since we care about the RMS this does not impact the result.
+    # Moreover, the RMS of the tight cut matches in a better way with the value per channel!
+    name_onestrip = "deltaX_oneStrip%s_tight"%(res_region)
     name_twostrip = "deltaX_twoStrip%s_tight"%(res_region)
     name_time = "weighted2_timeDiff_tracker_tight" if reg == "Overall" else "weighted2_timeDiff_tracker_%s"%reg
     inputfile_time = inputfile_res1d_tight if reg == "Overall" else inputfile_res1d
 
-    info["one_res"] = 1000 * inputfile_res1d.Get(name_onestrip).GetStdDev()
+    info["one_res"] = 1000 * inputfile_res1d_tight.Get(name_onestrip).GetStdDev()
     info["two_res"] = 1000 * inputfile_res1d_tight.Get(name_twostrip).GetFunction("fit").GetParameter(2)
     info["time_res"] = 1000 * inputfile_time.Get(name_time).GetFunction("fit").GetParameter(2)
 
