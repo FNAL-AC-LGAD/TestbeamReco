@@ -8,28 +8,6 @@ ROOT.gROOT.SetBatch(True)
 
 myStyle.ForceStyle()
 
-
-def get_edge_indices(indices_list):
-    is_edge = True
-    row, col = 9, int(indices[-1][1])
-    edge_indices = []
-    for idx in indices_list:
-        # Left edge when moving to a new row
-        if row != int(idx[0]):
-            row = int(idx[0])
-            is_edge = True
-        # Right edge when in last column (!) assuming all rows have the same number (!)
-        elif int(idx[1]) == col:
-            is_edge = True
-        else:
-            is_edge = False
-
-        if is_edge:
-            edge_indices.append(idx)
-
-    return edge_indices
-
-
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
@@ -68,9 +46,11 @@ inputfile_eff = ROOT.TFile("%sPlot_cutflow.root"%(outdir_efficiency), "READ")
 for reg in regions:
     # One strip resolution per channel (only once)
     if reg == "Overall":
-        info_channels = []
         indices = mf.get_existing_indices(inputfile_res1d, "deltaX_oneStrip")
-        edge_indices = get_edge_indices(indices)
+        edge_indices = mf.get_edge_indices(indices)
+
+        n_row, n_col = mf.get_n_row_col(indices)
+        info_channels = [[0] * n_col for i in range(n_row)]
 
         for idx in indices:
             hres_onestrip = inputfile_res1d.Get("deltaX_oneStrip%s"%idx)
@@ -80,13 +60,16 @@ for reg in regions:
             if idx in edge_indices:
                 mean = 1000 * hres_onestrip.GetMean()
                 value = math.sqrt(value**2 + mean**2)
-
-            info_channels.append(value)
+            r, c = int(idx[0]), int(idx[1])
+            info_channels[r][c] = value
 
         # Output line for mySensorInfo.py
         info_str = " > One strip info per channel: ["
-        for val in info_channels:
-            info_str+= "%.1f, "%(val)
+        for row in info_channels:
+            info_str+= "["
+            for v in row:
+                info_str+= "%.1f, "%(v)
+            info_str = info_str[:-2] + "], "
         info_str = info_str[:-2] + "],"
         print(info_str)
 

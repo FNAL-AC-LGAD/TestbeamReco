@@ -19,6 +19,33 @@ def get_existing_indices(inputfile, prename):
 
     return list_indices
 
+def get_n_row_col(indices_list):
+    # NOTE: This assumes all rows have the same length
+    last_idx = indices_list[-1]
+    n_row, n_col = int(last_idx[0]) + 1, int(last_idx[1]) +1
+
+    return n_row, n_col
+
+def get_edge_indices(indices_list):
+    is_edge = True
+    row, col = 9, int(indices_list[-1][1])
+    edge_indices = []
+    for idx in indices_list:
+        # Left edge when moving to a new row
+        if row != int(idx[0]):
+            row = int(idx[0])
+            is_edge = True
+        # Right edge when in last column (!) assuming all rows have the same number (!)
+        elif int(idx[1]) == col:
+            is_edge = True
+        else:
+            is_edge = False
+
+        if is_edge:
+            edge_indices.append(idx)
+
+    return edge_indices
+
 def get_central_channel_position(inputfile, direction="x"):
     # Get total number of channels used
     indices = get_existing_indices(inputfile, "stripBoxInfo")

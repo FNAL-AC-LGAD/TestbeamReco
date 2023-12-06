@@ -25,35 +25,54 @@ sensors_list = [
     # Varying thickness
     ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # Varying thickness KOJI
-    ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"]
+    ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
+    # HPK pads Varying thickness and resistivity
+    ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
+]
+
+tagVar_list = [
+    # Varying thickness
+    ["thickness"],
+    # Varying thickness KOJI
+    ["thickness"],
+    # HPK pads Varying thickness and resistivity
+    ["thickness", "resistivityNumber"],
 ]
 
 saveName_list = [
     # Varying thickness
     "HPK_PosResolution_vs_x_thickness",
     # Varying thickness KOJI
-    "Koji_PosResolution_vs_x_thickness"
+    "Koji_PosResolution_vs_x_thickness",
+    # HPK pads Varying thickness and resistivity
+    "HPK_Pads_PosResolution_vs_x_thicknessRes",
 ]
 
 xlength_list = [
     # Varying thickness
     1.5,
     # Varying thickness KOJI
-    0.35
+    0.35,
+    # HPK pads Varying thickness and resistivity
+    0.8,
 ]
 
 ylength_list = [
     # Varying thickness
     250,
     # Varying thickness KOJI
-    90
+    90,
+    # HPK pads Varying thickness and resistivity
+    200,
 ]
 
 yoffset_list = [
     # Varying thickness
     20,
     # Varying thickness KOJI
-    10
+    10,
+    # HPK pads Varying thickness and resistivity
+    10,
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
@@ -64,7 +83,7 @@ pad_margin = myStyle.GetMargin()
 
 canvas = TCanvas("cv","cv",1000,800)
 
-for sensors, saveName, xlength, ylength, yoffset in zip(sensors_list,saveName_list, xlength_list, ylength_list, yoffset_list):
+for sensors, tagVars, saveName, xlength, ylength, yoffset in zip(sensors_list, tagVar_list, saveName_list, xlength_list, ylength_list, yoffset_list):
     sensor_reference = sensors[0]
 
     yLegend = 0.026*len(sensors)
@@ -77,7 +96,7 @@ for sensors, saveName, xlength, ylength, yoffset in zip(sensors_list,saveName_li
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
 
-    tag = mf.get_legend_comparation_plots(sensors, ["thickness"])
+    tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
     haxis = TH1F("htemp","",1,-xlength,xlength)
     haxis.Draw("AXIS")

@@ -182,18 +182,27 @@ boxes = getStripBox(inputfile, ymax=ylength, shift=position_center)
 use_one_strip = True
 dict_one_strip_info = myStyle.GetResolutions(dataset, per_channel=True)
 
+edge_indices = mf.get_edge_indices(mf.get_existing_indices(inputfile, "stripBoxInfo"))
 list_positions = []
 list_values = []
-for i, value in enumerate(dict_one_strip_info["resolution_onestrip"]):
-    if value > 0.0:
-        # Removing tracker's contribution
-        if rm_tracker and (value > trkr_value):
-            value = TMath.Sqrt(value**2 - trkr_value**2)
-        # Mark bins with resolution smaller than tracker
-        elif (trkr_value > value):
-            value = 1.0
+is_pad = len(dict_one_strip_info["resolution_onestrip"]) > 1
+for r, row in enumerate(dict_one_strip_info["resolution_onestrip"]):
+    for c, value in enumerate(row):
+        idx = "%i%i"%(r,c)
+        if not is_pad and idx in edge_indices:
+            continue
+        if value < 0.0:
+            continue
 
-        box = boxes[i]
+        # Removing tracker's contribution
+        if rm_tracker:
+            if (value > trkr_value):
+                value = TMath.Sqrt(value**2 - trkr_value**2)
+            # Mark bins with resolution smaller than tracker
+            else:
+                value = 1.0
+
+        box = boxes[c]
         x_position = (box.GetX1() + box.GetX2())/2.
         list_positions.append(x_position)
         list_values.append(value)
@@ -321,6 +330,8 @@ htemp.GetXaxis().SetTitle("Track x position [mm]")
 htemp.GetYaxis().SetRangeUser(0.0, ylength)
 htemp.GetYaxis().SetTitle("Position resolution [#mum]")
 
+legend_reco = "strip" if not is_pad else "channel"
+
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
 for i,info_entry in enumerate(all_histoInfos):
@@ -352,17 +363,19 @@ for i,info_entry in enumerate(all_histoInfos):
     # Draw all other elements with Two Strip Reconstructed histogram only
     if "twoStrip" in info_entry.inHistoName:
         # Get correct legend for Two Strip Reco
-        this_legend = "Two strip observed"
+        this_legend = "Two %s observed"%(legend_reco)
 
         # Add one strip resolution
         if use_one_strip:
             hist_one_strip.Draw("P SAME")
-            legend.AddEntry(hist_one_strip, "Exactly one strip observed", "P")
+            entry_one = "Exactly one %s observed"%(legend_reco)
+            legend.AddEntry(hist_one_strip, entry_one, "P")
             hist_one_strip.Write()
 
         # Add two strips expected resolution
         hist_expected.Draw("HIST SAME")
-        legend.AddEntry(hist_expected, "Two strip expected", "l")
+        entry_expected = "Two %s expected"%(legend_reco)
+        legend.AddEntry(hist_expected, entry_expected, "l")
         hist_expected.Write()
     # If not twoStrip, set a default title for the legend
     else:
@@ -377,7 +390,7 @@ for i,info_entry in enumerate(all_histoInfos):
     legend.Draw()
 
     myStyle.BeamInfo()
-    myStyle.SensorInfoSmart(dataset)
+    myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
 
     save_path = "%sPositionResolution_vs_x"%(outdir)
     # Choose another name if not Two Strip Reconstructed histogram
