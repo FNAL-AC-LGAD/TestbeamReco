@@ -330,7 +330,7 @@ htemp.Draw("AXIS same")
 legend.Draw()
 
 myStyle.BeamInfo()
-myStyle.SensorInfoSmart(dataset)
+myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
 
 save_path = "%sTimeResolution_vs_x-AllMethods"%(outdir)
 if (is_hotspot):
