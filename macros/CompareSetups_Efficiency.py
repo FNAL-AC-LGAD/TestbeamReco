@@ -36,7 +36,7 @@ sensors_list = [
 
 tagVar_list = [
     # BNL and HPK sensors - different metal widths
-    ["width"],
+    ["manufacturer", "width"],
     # Varying resistivity and capacitance
     ["resistivityNumber", "capacitance"],
     #HPK Varying thickness
@@ -154,9 +154,9 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     legend2.SetHeader(legendHeader, "C")
     legend2.Draw()
 
-    sensor_prod="HPK production"
-    if ("BNL" in sensor_reference):
-        sensor_prod = "BNL & HPK production"
+    sensor_prod="Strip sensors"
+    if ("500x500" in sensor_reference):
+        sensor_prod = "Pixel sensors"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
 

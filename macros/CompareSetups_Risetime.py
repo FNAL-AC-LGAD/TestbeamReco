@@ -130,9 +130,9 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     legend.SetHeader(legendHeader, "C")
     legend.Draw()
 
-    sensor_prod="HPK production"
-    if ("BNL" in sensor_reference):
-        sensor_prod = "BNL production"
+    sensor_prod="Strip sensors"
+    if ("500x500" in sensor_reference):
+        sensor_prod = "Pixel sensors"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
 
