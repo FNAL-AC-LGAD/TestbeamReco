@@ -43,7 +43,7 @@ tagVar_list = [
     # KOJI Varying thickness
     ["thickness"],
     # BNL and HPK Varying metal widths
-    ["width"],
+    ["manufacturer", "width"],
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
 ]
@@ -160,9 +160,10 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     legend2.SetHeader(legendHeader, "C")
     legend2.Draw()
 
-    sensor_prod="HPK production"
-    if ("BNL" in sensor_reference):
-        sensor_prod = "BNL & HPK production"
+    # sensor_prod="HPK production"
+    sensor_prod="Strip sensors"
+    if ("500x500" in sensor_reference):
+        sensor_prod = "Pixel sensors"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
 

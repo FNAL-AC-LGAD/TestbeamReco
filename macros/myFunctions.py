@@ -155,11 +155,14 @@ def same_limits_compare(list_histograms):
 
     return list_histograms
 
-# return a list with the legends dependening on the sensors and variables
+
+
+
+# Return a list with the legends dependening on the sensors and variables
 # receive a list of sensors and a list of variables as arguments
-# if you want resistivity and capacitance, put it in the end of the list and in that order
 # example: [("HPK_W9_22_3_20T_500x500_150M_E600", "HPK_W9_23_3_20T_500x500_300M_E600",
-#    "HPK_W8_1_1_50T_500x500_150M_C600"], ["pitch", "length", "resistivityNumber", "capacitance"]))
+#    "HPK_W8_1_1_50T_500x500_150M_C600"], ["resistivityNumber", "capacitance"]))
+# The last entrie of the list is the legend header: "Varying (variables)"
 
 
 def get_legend_comparation_plots(sensors, variables):
@@ -174,7 +177,7 @@ def get_legend_comparation_plots(sensors, variables):
     variablesUnits["resistivityNumber"] = " #Omega/sq "
     variablesUnits["capacitance"] = " pF/mm^{2} "
 
-    # Define the units of each variable
+    # Define the name use in the legend of each variable
     variablesName = {}
     variablesName["pitch"] = "pitch"
     variablesName["stripWidth"], variablesName["width"] = " metal width ", " metal width "
@@ -184,25 +187,31 @@ def get_legend_comparation_plots(sensors, variables):
     variablesName["resistivity"] = ""
     variablesName["resistivityNumber"] = " resistivity"
     variablesName["capacitance"] = " capacitance"
+    variablesName["manufacturer"] = " manufacturer"
 
+    # Generate the list of legend entries
     sensor_legend_list = []
     for sensor in sensors:
-        # add the tag of the sensor first
+        sensor_legend = ""
         geometry = myStyle.GetGeometry(sensor)
-        sensor_legend = geometry['tag'] + ": "
         for variable in variables:
             # add the variables
-            sensor_legend+= str(geometry[variable]) + variablesUnits[variable]
-            # if len(variables) < 2:
-                # sensor_legend+= variablesName[variable]
+            if variable == "manufacturer":
+                sensor_legend+= sensor[:3] + " "
+            else:
+                sensor_legend+= str(geometry[variable]) + variablesUnits[variable]
+        # add the tag of the sensor at the end
+        sensor_legend += " (" + geometry['tag'] + ")"
         sensor_legend_list.append(sensor_legend)
 
+    # Add the Legend header at the end of the list
+    if "manufacturer" in variables:
+        variables.remove("manufacturer")
     legendHeader = "Varying"
     for i, variable in enumerate(variables):
         legendHeader += variablesName[variable]
         if i == len(variables) - 2 and len(variables) > 1 :
             legendHeader += " and"
-
     legendHeader = "#bf{%s}"%legendHeader
     sensor_legend_list.append(legendHeader)
 
