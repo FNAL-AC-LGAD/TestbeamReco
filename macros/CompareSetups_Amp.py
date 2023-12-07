@@ -33,6 +33,8 @@ sensors_list = [
     ["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
+    # HPK pads Varying metal widths
+    ["HPK_W9_23_3_20T_500x500_300M_E600_112V", "HPK_W9_22_3_20T_500x500_150M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -46,6 +48,8 @@ tagVar_list = [
     ["manufacturer", "width"],
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
+    # HPK pads Varying metal widths
+    ["width"],
 ]
 
 ylength_list = [
@@ -58,6 +62,8 @@ ylength_list = [
     # BNL and HPK Varying metal widths
     100,
     # HPK pads Varying thickness and resistivity
+    200,
+    # HPK pads Varying metal widths
     200,
 ]
 
@@ -72,6 +78,8 @@ saveName_list = [
     "BNL_and_HPK_Amplitude_vs_x_MetalWidth",
     # HPK pads Varying thickness and resistivity
     "HPK_Pads_Amplitude_vs_x_thicknessRes",
+    # HPK pads Varying metal widths
+    "HPK_Pads_Amplitude_vs_x_MetalWidth",
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
@@ -84,6 +92,7 @@ canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
     sensor_reference = sensors[0]
+    treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
 
     yLegend = 0.026*len(sensors)
     legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
@@ -97,6 +106,8 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         xlength = 0.8
     elif ("KOJI" in sensor_reference):
         xlength = 0.25
+    if ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensor_reference):
+        xlength = 0.50
 
     tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
@@ -117,23 +128,20 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     for box in boxes:
         box.Draw()
 
-    # Draw dotted line for 100 micron strip width
-    if(any("100M" in iter for iter in sensors)):
-        if(any("50M" in iter for iter in sensors)):
-            for i in range(1,6):
-                vertical_line = TLine((i-3)*0.5-0.05, 0, (i-3)*0.5-0.05, ylength-10)
+    # Draw dotted line for different strip widths
+    if ("width" in tagVars):
+        for i, sensor in enumerate(sensors):
+            swidth = myStyle.GetGeometry(sensor)["width"]/1000.
+            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            for box in boxes:
+                vertical_line = TLine()
                 vertical_line.SetLineWidth(2)
-                vertical_line.SetLineColor(14)
-                vertical_line.SetLineColorAlpha(14,0.4)
+                vertical_line.SetLineColor(this_color)
+                vertical_line.SetLineColorAlpha(this_color, 0.4)
                 vertical_line.SetLineStyle(9)
-                vertical_line.DrawClone("same")
-
-                vertical_line2 = TLine((i-3)*0.5+0.05, 0, (i-3)*0.5+0.05, ylength-10)
-                vertical_line2.SetLineWidth(2)
-                vertical_line2.SetLineColor(14)
-                vertical_line2.SetLineColorAlpha(14,0.4)
-                vertical_line2.SetLineStyle(9)
-                vertical_line2.DrawClone("same")
+                center = (box.GetX1() + box.GetX2())/2.
+                vertical_line.DrawLine(center-swidth/2., ymin, center-swidth/2., ylength-10)
+                vertical_line.DrawLine(center+swidth/2., ymin, center+swidth/2., ylength-10)
 
     plotfile = []
     list_amplitude_vs_x = []
@@ -141,19 +149,20 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         inName = "../output/"+sname+"/Amplitude/AmplitudeVsX_tight.root"
         inFile = TFile(inName,"READ")
         hAmp = inFile.Get("AmplitudeNoSum")
-        hAmp.SetLineWidth(3)
-        if("thickness" in tagVars[0]):
-            hAmp.SetLineColor(colors[i*2])
-        else:
-            hAmp.SetLineColor(colors[i+1])
 
-        lengendEntry = legend2.AddEntry(hAmp, tag[i])
-        # lengendEntry.SetTextAlign(22)
         plotfile.append(inFile)
         list_amplitude_vs_x.append(hAmp)
 
-    pruned_amplitude_vs_x = mf.same_limits_compare(list_amplitude_vs_x)
-    for hist in pruned_amplitude_vs_x:
+    pruned_amplitude_vs_x = mf.same_limits_compare(list_amplitude_vs_x, treat_as_2x2)
+    for i, hist in enumerate(pruned_amplitude_vs_x):
+        hist.SetLineWidth(3)
+        if("thickness" in tagVars):
+            hist.SetLineColor(colors[i*2])
+        else:
+            hist.SetLineColor(colors[i+1])
+
+        lengendEntry = legend2.AddEntry(hist, tag[i])
+        # lengendEntry.SetTextAlign(22)
         hist.Draw("hist same")
 
     legendHeader = tag[-1]

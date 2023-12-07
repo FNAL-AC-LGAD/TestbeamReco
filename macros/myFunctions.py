@@ -107,6 +107,7 @@ def get_shifted_limits(th2, center_position):
 
     # Even number of bins have 0.0 as lowedge in zero bin.
     # Slightly move this bin to make it look symmetric
+    # TODO: Re-run with this line commented out and check differences
     if (th2.GetXaxis().GetBinLowEdge(zero_bin) == 0.0):
         xmin-= bin_width/2.
         xmax-= bin_width/2.
@@ -163,14 +164,31 @@ def first_common_non_empty_x(list_histograms, first = True):
 
     return x_filled
 
-def same_limits_compare(list_histograms):
+def same_limits_compare(list_histograms, diff_columns = False):
     nbins = list_histograms[0].GetXaxis().GetNbins()
+
+    # NOTE: This section moves the center of a 3x2 pad to be in the middle of
+    # the first gap, in order to be compared with a 2x2 one. (!) The first
+    # element is assumed to be the HPK_W9_23_3_20T_500x500_300M_E600_112V sensor
+    if diff_columns:
+        for i, h in enumerate(list_histograms[1:]):
+            new_min, new_max = get_shifted_limits(h, -0.250)
+            nxbin = h.GetXaxis().GetNbins()
+            th1 = ROOT.TH1D("hist%i"%(i+1), "", nxbin, new_min, new_max)
+            for j in range(1, nxbin+1):
+                th1.SetBinContent(j, h.GetBinContent(j))
+                th1.SetBinError(j, h.GetBinError(j))
+
+            list_histograms[i+1] = th1
 
     xfirst = abs(first_common_non_empty_x(list_histograms, True))
     xlast = abs(first_common_non_empty_x(list_histograms, False))
     x_simmetric_limit = xfirst if xfirst < xlast else xlast
 
     for hist in list_histograms:
+        if hist.GetXaxis().GetNbins() != nbins:
+            nbins = hist.GetXaxis().GetNbins()
+            print(" (!) Beware, sensors with different binning are being compared!")
         for i in range(1, nbins+1):
             # Fill only when inside limits
             if is_inside_limits(i, hist, xmax=x_simmetric_limit):

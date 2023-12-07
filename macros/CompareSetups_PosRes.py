@@ -28,6 +28,8 @@ sensors_list = [
     ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
+    # HPK pads Varying metal widths
+    ["HPK_W9_23_3_20T_500x500_300M_E600_112V", "HPK_W9_22_3_20T_500x500_150M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -37,6 +39,8 @@ tagVar_list = [
     ["thickness"],
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
+    # HPK pads Varying metal widths
+    ["width"],
 ]
 
 saveName_list = [
@@ -46,15 +50,8 @@ saveName_list = [
     "Koji_PosResolution_vs_x_thickness",
     # HPK pads Varying thickness and resistivity
     "HPK_Pads_PosResolution_vs_x_thicknessRes",
-]
-
-xlength_list = [
-    # Varying thickness
-    1.5,
-    # Varying thickness KOJI
-    0.35,
-    # HPK pads Varying thickness and resistivity
-    0.8,
+    # HPK pads Varying metal widths
+    "HPK_Pads_PosResolution_vs_x_MetalWidth",
 ]
 
 ylength_list = [
@@ -63,7 +60,9 @@ ylength_list = [
     # Varying thickness KOJI
     90,
     # HPK pads Varying thickness and resistivity
-    200,
+    300,
+    # HPK pads Varying metal widths
+    300,
 ]
 
 yoffset_list = [
@@ -72,6 +71,8 @@ yoffset_list = [
     # Varying thickness KOJI
     10,
     # HPK pads Varying thickness and resistivity
+    10,
+    # HPK pads Varying metal widths
     10,
 ]
 
@@ -83,8 +84,9 @@ pad_margin = myStyle.GetMargin()
 
 canvas = TCanvas("cv","cv",1000,800)
 
-for sensors, tagVars, saveName, xlength, ylength, yoffset in zip(sensors_list, tagVar_list, saveName_list, xlength_list, ylength_list, yoffset_list):
+for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_list, saveName_list, ylength_list, yoffset_list):
     sensor_reference = sensors[0]
+    treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
 
     yLegend = 0.026*len(sensors)
     legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.3-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
@@ -95,6 +97,14 @@ for sensors, tagVars, saveName, xlength, ylength, yoffset in zip(sensors_list, t
     legend.SetTextSize(myStyle.GetSize()-4)
     # legend.SetBorderSize(0)
     # legend.SetFillColor(kWhite)
+
+    xlength = float(options.xlength)
+    if ("500x500" in sensor_reference):
+        xlength = 0.8
+    elif ("KOJI" in sensor_reference):
+        xlength = 0.25
+    if ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensor_reference):
+        xlength = 0.50
 
     tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
@@ -116,6 +126,21 @@ for sensors, tagVars, saveName, xlength, ylength, yoffset in zip(sensors_list, t
     for box in boxes:
         box.Draw()
 
+    # Draw dotted line for different strip widths
+    if ("width" in tagVars):
+        for i, sensor in enumerate(sensors):
+            swidth = myStyle.GetGeometry(sensor)["width"]/1000.
+            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            for box in boxes:
+                vertical_line = TLine()
+                vertical_line.SetLineWidth(2)
+                vertical_line.SetLineColor(this_color)
+                vertical_line.SetLineColorAlpha(this_color, 0.4)
+                vertical_line.SetLineStyle(9)
+                center = (box.GetX1() + box.GetX2())/2.
+                vertical_line.DrawLine(center-swidth/2., ymin, center-swidth/2., ylength-10)
+                vertical_line.DrawLine(center+swidth/2., ymin, center+swidth/2., ylength-10)
+
     binary_readout_res_sensor = TLine(-xlength, pitch/TMath.Sqrt(12), xlength, pitch/TMath.Sqrt(12))
     binary_readout_res_sensor.SetLineWidth(3)
     binary_readout_res_sensor.SetLineStyle(7)
@@ -132,24 +157,30 @@ for sensors, tagVars, saveName, xlength, ylength, yoffset in zip(sensors_list, t
         hOneStrip = inFile.Get("h_one_strip")
         hTwoStrip = inFile.Get("track_twoStrip_tight")
 
-        hOneStrip.Draw("P same")
-        hOneStrip.SetLineStyle(1)
-        hOneStrip.SetMarkerStyle(33)
-        hOneStrip.SetMarkerSize(3)
-        hOneStrip.SetMarkerColor(colors[i*2])
-        legend.AddEntry(hOneStrip, tag[i]+' - Exactly one strip', "P")
-
-        hTwoStrip.SetLineWidth(3)
-        hTwoStrip.SetLineColor(colors[i*2])
-        legend.AddEntry(hTwoStrip, tag[i]+' - Two strip')
-
         plotfile.append(inFile)
         list_OneStrip_vs_x.append(hOneStrip)
         list_TwoStrip_vs_x.append(hTwoStrip)
 
-    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x)
-    for hist in pruned_TwoStrip_vs_x:
-        hist.Draw("hist same")
+    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x, treat_as_2x2)
+    for i, hist_two in enumerate(pruned_TwoStrip_vs_x):
+        hist_one = list_OneStrip_vs_x[i]
+        hist_one.Draw("P same")
+        hist_one.SetLineStyle(1)
+        hist_one.SetMarkerStyle(33)
+        hist_one.SetMarkerSize(3)
+        if("thickness" in tagVars):
+            hist_one.SetMarkerColor(colors[i*2])
+        else:
+            hist_one.SetMarkerColor(colors[i+1])
+        legend.AddEntry(hist_one, tag[i]+' - Exactly one strip', "P")
+
+        hist_two.SetLineWidth(3)
+        if("thickness" in tagVars):
+            hist_two.SetLineColor(colors[i*2])
+        else:
+            hist_two.SetLineColor(colors[i+1])
+        legend.AddEntry(hist_two, tag[i]+' - Two strip')
+        hist_two.Draw("hist same")
 
     legendHeader = tag[-1]
     legend.SetHeader(legendHeader, "C")

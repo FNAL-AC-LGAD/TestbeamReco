@@ -32,6 +32,8 @@ sensors_list = [
     ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
+    # HPK pads Varying metal widths
+    ["HPK_W9_23_3_20T_500x500_300M_E600_112V", "HPK_W9_22_3_20T_500x500_150M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -45,6 +47,8 @@ tagVar_list = [
     ["thickness"],
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
+    # HPK pads Varying metal widths
+    ["width"],
 ]
 
 saveName_list = [
@@ -58,6 +62,8 @@ saveName_list = [
     "Koji_efficiency_vs_x_thickness",
     # HPK pads Varying thickness and resistivity
     "HPK_Pads_efficiency_vs_x_ThicknessRes",
+    # HPK pads Varying metal widths
+    "HPK_Pads_efficiency_vs_x_MetalWidth",
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
@@ -70,6 +76,7 @@ canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     sensor_reference = sensors[0]
+    treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
 
     yLegend = 0.026*len(sensors)
     legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
@@ -83,6 +90,8 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         xlength = 0.8
     elif ("KOJI" in sensor_reference):
         xlength = 0.35
+    if ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensor_reference):
+        xlength = 0.50
 
     tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
@@ -101,27 +110,24 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
 
     infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
     geometry = myStyle.GetGeometry(sensor_reference)
-    boxes = getStripBox(infile_reference, ymin, ylength-0.4, pitch = geometry["pitch"]/1000.0)
+    boxes = getStripBox(infile_reference, ymin, 1.0, pitch = geometry["pitch"]/1000.0)
     for box in boxes:
         box.Draw()
 
-    # Draw dotted line for 100 micron strip width
-    if(any("100M" in iter for iter in sensors)):
-        if(any("50M" in iter for iter in sensors)):
-            for i in range(7):
-                vertical_line = TLine((i-3)*0.5-0.05, 0, (i-3)*0.5-0.05, 1)
+    # Draw dotted line for different strip widths
+    if ("width" in tagVars):
+        for i, sensor in enumerate(sensors):
+            swidth = myStyle.GetGeometry(sensor)["width"]/1000.
+            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            for box in boxes:
+                vertical_line = TLine()
                 vertical_line.SetLineWidth(2)
-                vertical_line.SetLineColor(14)
-                vertical_line.SetLineColorAlpha(14,0.4)
+                vertical_line.SetLineColor(this_color)
+                vertical_line.SetLineColorAlpha(this_color, 0.4)
                 vertical_line.SetLineStyle(9)
-                vertical_line.DrawClone("same")
-
-                vertical_line2 = TLine((i-3)*0.5+0.05, 0, (i-3)*0.5+0.05, 1)
-                vertical_line2.SetLineWidth(2)
-                vertical_line2.SetLineColor(14)
-                vertical_line2.SetLineColorAlpha(14,0.4)
-                vertical_line2.SetLineStyle(9)
-                vertical_line2.DrawClone("same")
+                center = (box.GetX1() + box.GetX2())/2.
+                vertical_line.DrawLine(center-swidth/2., ymin, center-swidth/2., 1.0)
+                vertical_line.DrawLine(center+swidth/2., ymin, center+swidth/2., 1.0)
 
     plotfile = []
     list_efficiency_vs_x = []
@@ -129,18 +135,19 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         inName = "../output/"+sname+"/Efficiency/EfficiencyVsX_tight.root"
         inFile = TFile(inName,"READ")
         hEff = inFile.Get("hefficiency_vs_x_twoStrip_numerator_tight")
-        hEff.SetLineWidth(3)
-        if("thickness" in tagVars[0]): # Check this
-            hEff.SetLineColor(colors[i*2])
-        else:
-            hEff.SetLineColor(colors[i+1])
-        legend2.AddEntry(hEff, tag[i])
 
         plotfile.append(inFile)
         list_efficiency_vs_x.append(hEff)
 
-    pruned_efficiency_vs_x = mf.same_limits_compare(list_efficiency_vs_x)
-    for hist in pruned_efficiency_vs_x:
+    pruned_efficiency_vs_x = mf.same_limits_compare(list_efficiency_vs_x, treat_as_2x2)
+    for i, hist in enumerate(pruned_efficiency_vs_x):
+        hist.SetLineWidth(3)
+        if("thickness" in tagVars):
+            hist.SetLineColor(colors[i*2])
+        else:
+            hist.SetLineColor(colors[i+1])
+
+        legend2.AddEntry(hist, tag[i])
         hist.Draw("hist same")
 
     horizontal_line = TLine(-xlength, 1, xlength, 1)

@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, kBlack, kGreen, TPaveText 
+from ROOT import TFile,TLine,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, kBlack, kGreen, TPaveText
 import os
 import langaus
 import optparse
@@ -43,8 +43,8 @@ sensors_list = [
     [ "HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
-    # HPK pads Varying metal width 
-    # ["HPK_W9_22_3_20T_500x500_150M_E600_112V","HPK_W9_23_3_20T_500x500_300M_E600_112V" ]
+    # HPK pads Varying metal widths
+    ["HPK_W9_23_3_20T_500x500_300M_E600_112V", "HPK_W9_22_3_20T_500x500_150M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -56,6 +56,8 @@ tagVar_list = [
     ["thickness"],
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
+    # HPK pads Varying metal widths
+    ["width"],
 ]
 
 ylength_list = [
@@ -67,8 +69,8 @@ ylength_list = [
     65,
     # HPK pads Varying thickness and resistivity
     100,
-    # HPK pads Varying metal width 
-    # 100
+    # HPK pads Varying metal width
+    100
 ]
 
 saveName_list = [
@@ -80,8 +82,8 @@ saveName_list = [
     "Koji_TimeResolution_vs_x_thickness",
     # HPK pads Varying thickness and resistivity
     "HPK_Pads_TimeResolution_vs_x_thicknessRes",
-    # HPK pads Varying metal width 
-    # "HPK_Pads_TimeResolution_vs_x_width"
+    # HPK pads Varying metal widths
+    "HPK_Pads_TimeResolution_vs_x_MetalWidth",
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
@@ -94,6 +96,7 @@ canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
     sensor_reference = sensors[0]
+    treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
 
     legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.35, 1-pad_margin-0.065, 1-pad_margin-0.25)
     legend.SetNColumns(2)
@@ -112,6 +115,8 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         xlength = 0.8
     elif ("KOJI" in sensor_reference):
         xlength = 0.25
+    if ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensor_reference):
+        xlength = 0.50
 
     tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
@@ -132,6 +137,21 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     for box in boxes:
         box.Draw()
 
+    # Draw dotted line for different strip widths
+    if ("width" in tagVars):
+        for i, sensor in enumerate(sensors):
+            swidth = myStyle.GetGeometry(sensor)["width"]/1000.
+            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            for box in boxes:
+                vertical_line = TLine()
+                vertical_line.SetLineWidth(2)
+                vertical_line.SetLineColor(this_color)
+                vertical_line.SetLineColorAlpha(this_color, 0.4)
+                vertical_line.SetLineStyle(9)
+                center = (box.GetX1() + box.GetX2())/2.
+                vertical_line.DrawLine(center-swidth/2., ymin, center-swidth/2., ylength-10)
+                vertical_line.DrawLine(center+swidth/2., ymin, center+swidth/2., ylength-10)
+
     plotfile = []
     list_time_vs_x = []
     list_jitter_vs_x = []
@@ -139,33 +159,33 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         inName = "../output/"+sname+"/Resolution_Time/TimeDiffVsX_tight.root"
         inFile = [TFile(inName,"READ")]
         hTime = inFile[0].Get("Time_DiffW2Tracker")
-        hTime.SetLineWidth(3)
-        if("thickness" in tagVars[0]):
-            hTime.SetLineColor(colors[i*2])
-        else:
-            hTime.SetLineColor(colors[i+1])
-
-        lengendEntry = legend2.AddEntry(hTime, tag[i])
 
         if(("thickness" in tagVars[0]) and ("500x500" not in sensor_reference)):
             inName = "../output/"+sname+"/Jitter/JitterVsX.root"
             inFile.append(TFile(inName,"READ"))
             hJitter = inFile[1].Get("jitter_vs_x")
-            hJitter.SetLineWidth(3)
             hJitter.SetLineStyle(2)
-            hJitter.SetLineColor(colors[i*2])
 
             list_jitter_vs_x.append(hJitter)
         plotfile.append(inFile)
         list_time_vs_x.append(hTime)
 
-    pruned_time_vs_x = mf.same_limits_compare(list_time_vs_x + list_jitter_vs_x)
-    for hist in pruned_time_vs_x:
+    pruned_time_vs_x = mf.same_limits_compare(list_time_vs_x + list_jitter_vs_x, treat_as_2x2)
+    for i, hist in enumerate(pruned_time_vs_x):
+        idx = i%len(list_time_vs_x)
+        hist.SetLineWidth(3)
+        if("thickness" in tagVars):
+            hist.SetLineColor(colors[idx*2])
+        else:
+            hist.SetLineColor(colors[idx+1])
+
+        if i < len(list_time_vs_x):
+            lengendEntry = legend2.AddEntry(hist, tag[idx])
         hist.Draw("hist same")
 
     # Draw legend
     if list_jitter_vs_x:
-        legend.AddEntry(list_time_vs_x[0], "Time resolution")
+        legend.AddEntry(pruned_time_vs_x[0], "Time resolution")
         legend.AddEntry(list_jitter_vs_x[0], "Jitter")
         legendBox = TPaveText(2*pad_margin+0.065, 1-pad_margin-0.03, 1-pad_margin-0.065, 1-pad_margin-0.35, "NDC")
         legendBox.SetBorderSize(1)
