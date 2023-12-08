@@ -200,7 +200,20 @@ public:
 	    else if(filetag.find("HPK_20um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_20um_500x500um_E600_2x2PadGeometry(voltage));
 	    else if(filetag.find("HPK_30um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_30um_500x500um_E600_2x2PadGeometry(voltage));
 	    else if(filetag.find("HPK_50um_500x500um_2x2pad_E600_FNAL")          != std::string::npos) registerGeometry(tr, HPK_50um_500x500um_E600_2x2PadGeometry(voltage));
-        // 2023 April Campaign  
+        
+        // 2023 Campaign - April
+		else if(filetag.find("BNL_30um_5mm_500um_W3104")                     != std::string::npos) registerGeometry(tr, BNL_30um_5mm_500um_W3104_StripsGeometry(voltage));
+		else if(filetag.find("BNL_30um_5mm_700um_W3104")                     != std::string::npos) registerGeometry(tr, BNL_30um_5mm_700um_W3104_StripsGeometry(voltage));
+		else if(filetag.find("BNL_20um_5mm_700um_W3080")                     != std::string::npos) registerGeometry(tr, BNL_20um_5mm_700um_W3080_StripsGeometry(voltage));
+		else if(filetag.find("BNL_20um_5mm_500um_W3080")                     != std::string::npos) registerGeometry(tr, BNL_20um_5mm_500um_W3080_StripsGeometry(voltage));
+        else if(filetag.find("BNL_30um_500x500_SmallSquare_W3104")           != std::string::npos) registerGeometry(tr, BNL_30um_500x500_SmallSquare_W3104_PixelsGeometry(voltage));
+		else if(filetag.find("BNL_20um_500x500_SmallSquare_W3080")           != std::string::npos) registerGeometry(tr, BNL_20um_500x500_SmallSquare_W3080_PixelsGeometry(voltage));
+		else if(filetag.find("BNL_30um_500x500_LargeSquare_W3104")           != std::string::npos) registerGeometry(tr, BNL_30um_500x500_LargeSquare_W3104_PixelsGeometry(voltage));
+		else if(filetag.find("BNL_20um_500x500_LargeSquare_W3080")           != std::string::npos) registerGeometry(tr, BNL_20um_500x500_LargeSquare_W3080_PixelsGeometry(voltage));
+		else if(filetag.find("BNL_30um_500x500_SquaredCircle_W3104")         != std::string::npos) registerGeometry(tr, BNL_30um_500x500_SquaredCircle_W3104_PixelsGeometry(voltage));
+        else if(filetag.find("BNL_20um_500x500_SquaredCircle_W3080")         != std::string::npos) registerGeometry(tr, BNL_20um_500x500_SquaredCircle_W3080_PixelsGeometry(voltage));
+		else if(filetag.find("BNL_30um_500x500_Cross_W3104")                 != std::string::npos) registerGeometry(tr, BNL_30um_500x500_Cross_W3104_PixelsGeometry(voltage));
+		else if(filetag.find("BNL_20um_500x500_Cross_W3080")                 != std::string::npos) registerGeometry(tr, BNL_20um_500x500_Cross_W3080_PixelsGeometry(voltage));
 
         // 2023 May Campaign  
         else if(filetag.find("HPK_W8_18_2_50T_1P0_500P_100M_C600")             != std::string::npos) registerGeometry(tr, HPK_W8_18_2_50T_1P0_500P_100M_C600_StripsGeometry(voltage));
