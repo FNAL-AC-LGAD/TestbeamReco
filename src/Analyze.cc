@@ -588,6 +588,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,50.0);
     utility::makeHisto(my_3d_histos,"slewRate_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,500.0);
     utility::makeHisto(my_3d_histos,"weighted2_jitter_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200.0, 0.0, 200.0);
+    utility::makeHisto(my_3d_histos,"weighted2_jitter_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200.0, 0.0, 200.0);
 
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -1487,6 +1488,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "ampChargeRatio_vs_xy", x,y,ampChargeRatioMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "slewRate_vs_xy", x,y,slewrateMaxChannel);
         utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "weighted2_jitter_vs_xy", x,y,weighted2_jitter);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit,                         my_3d_histos, "weighted2_jitter_vs_xy_tight", x,y,weighted2_jitter);
 
 
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "totgoodamplitude_vs_xy", x,y,totGoodAmpLGAD);
