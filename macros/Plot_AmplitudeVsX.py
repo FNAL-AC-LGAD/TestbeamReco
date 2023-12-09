@@ -137,6 +137,10 @@ if debugMode:
 all_histoInfos = histoInfo_overall + histoInfo_channel
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
+plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center)
+if ("pad" not in dataset) and ("500x500" not in dataset):
+    plot_xlimit-= pitch/(2 * 1000.)
+
 print("Setting up Langaus")
 fit = langaus.LanGausFit()
 print("Setup Langaus")
@@ -188,6 +192,10 @@ for i in range(1, nbins+1):
             value = 0.0
 
         value = value if (value>0.0) else 0.0
+
+        # Fill only when inside limits
+        if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
+            continue
 
         info_entry.th1.SetBinContent(i, value)
 

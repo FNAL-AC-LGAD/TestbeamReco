@@ -66,7 +66,7 @@ parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="Limit x-axis in final plot")
 parser.add_option('-y','--ylength', dest='ylength', default = 1000, help="Max risetime value in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-d', dest='debugMode', action='store_true', default = True, help="Run debug mode")
+parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
 

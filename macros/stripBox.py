@@ -26,7 +26,8 @@ def getStripBox(f, ymin=0.0, ymax=100.0, getCenter=False, color=18,
         xCenter = box.GetMean(1) - shift
         # Use ideal position if pitch is given
         if pitch:
-            xCenter = round(xCenter/pitch) * pitch
+            position_ref = pitch if (len(boxesInfo)%2 == 1) else pitch/2
+            xCenter = round(xCenter/position_ref) * position_ref
         width = box.GetMean(2)
         xmin = xCenter - (widthPercent*width)
         xmax = xCenter + (widthPercent*width)

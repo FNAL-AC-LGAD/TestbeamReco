@@ -86,7 +86,7 @@ strip_length = sensor_Geometry['length']
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
-rm_tracker = True
+rm_tracker = False
 trkr_value = 5 # um
 
 xlength = float(options.xlength)
@@ -127,6 +127,10 @@ for titles in list_htitles:
                          sensor=dataset, center_position=position_center)
     all_histoInfos.append(info_obj)
 
+# Define bin limit of the histograms drawn
+plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center)
+if ("pad" not in dataset) and ("500x500" not in dataset):
+    plot_xlimit-= pitch/(2. * 1000)
 
 # Get histograms for Expected Resolution of Two strip Reconstruction
 # ------------------------------------------------------------------
@@ -146,7 +150,7 @@ hist_expected.SetLineStyle(7)
 hist_expected.SetLineColor(colors[2])
 
 # Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
-for ibin in range(1,hist_expected.GetNbinsX()+1):
+for ibin in range(1, hist_expected.GetNbinsX()+1):
     if mean_amp12_vs_x.GetBinContent(ibin) > 0:
         dXFrac = mean_dXFrac_vs_x.GetBinContent(ibin)
         noise12 = mean_noise12_vs_x.GetBinContent(ibin)
@@ -163,6 +167,10 @@ for ibin in range(1,hist_expected.GetNbinsX()+1):
     if (not rm_tracker) and (value_expected > 0.0):
         value_expected = math.sqrt(trkr_value**2 + value_expected**2)
 
+    # Fill only when inside limits
+    if not mf.is_inside_limits(ibin, hist_expected, xmax=plot_xlimit):
+        continue
+
     hist_expected.SetBinContent(ibin, value_expected)
 
 
@@ -174,18 +182,27 @@ boxes = getStripBox(inputfile, ymax=ylength, shift=position_center)
 use_one_strip = True
 dict_one_strip_info = myStyle.GetResolutions(dataset, per_channel=True)
 
+edge_indices = mf.get_edge_indices(mf.get_existing_indices(inputfile, "stripBoxInfo"))
 list_positions = []
 list_values = []
-for i, value in enumerate(dict_one_strip_info["resolution_onestrip"]):
-    if value > 0.0:
-        # Removing tracker's contribution
-        if rm_tracker and (value > trkr_value):
-            value = TMath.Sqrt(value**2 - trkr_value**2)
-        # Mark bins with resolution smaller than tracker
-        elif (trkr_value > value):
-            value = 1.0
+is_pad = len(dict_one_strip_info["resolution_onestrip"]) > 1
+for r, row in enumerate(dict_one_strip_info["resolution_onestrip"]):
+    for c, value in enumerate(row):
+        idx = "%i%i"%(r,c)
+        if not is_pad and idx in edge_indices:
+            continue
+        if value < 0.0:
+            continue
 
-        box = boxes[i]
+        # Removing tracker's contribution
+        if rm_tracker:
+            if (value > trkr_value):
+                value = TMath.Sqrt(value**2 - trkr_value**2)
+            # Mark bins with resolution smaller than tracker
+            else:
+                value = 1.0
+
+        box = boxes[c]
         x_position = (box.GetX1() + box.GetX2())/2.
         list_positions.append(x_position)
         list_values.append(value)
@@ -245,7 +262,6 @@ for i in range(1, nbins+1):
         if("HPK_W9_15_2" in dataset):
             minEvtsCut = 0.25*totalEvents/nbins
 
-
         if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
             msg_nentries+= "(Total events: %i)"%(totalEvents)
@@ -284,8 +300,13 @@ for i in range(1, nbins+1):
             value = TMath.Sqrt(value**2 - trkr_value**2)
         # Mark bins with resolution smaller than tracker
         elif (trkr_value > value) and (value > 0.0):
+            print("  WARNING: Bin %i got resolution smaller than tracker (%.3f)"%(i, value))
             value = 2.0
             error = 2.0
+
+        # Fill only when inside limits
+        if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
+            continue
 
         info_entry.th1.SetBinContent(i, value)
         info_entry.th1.SetBinError(i, error)
@@ -308,6 +329,8 @@ htemp.SetStats(0)
 htemp.GetXaxis().SetTitle("Track x position [mm]")
 htemp.GetYaxis().SetRangeUser(0.0, ylength)
 htemp.GetYaxis().SetTitle("Position resolution [#mum]")
+
+legend_reco = "strip" if not is_pad else "channel"
 
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
@@ -340,17 +363,19 @@ for i,info_entry in enumerate(all_histoInfos):
     # Draw all other elements with Two Strip Reconstructed histogram only
     if "twoStrip" in info_entry.inHistoName:
         # Get correct legend for Two Strip Reco
-        this_legend = "Two strip observed"
+        this_legend = "Two %s observed"%(legend_reco)
 
         # Add one strip resolution
         if use_one_strip:
             hist_one_strip.Draw("P SAME")
-            legend.AddEntry(hist_one_strip, "Exactly one strip observed", "P")
+            entry_one = "Exactly one %s observed"%(legend_reco)
+            legend.AddEntry(hist_one_strip, entry_one, "P")
             hist_one_strip.Write()
 
         # Add two strips expected resolution
         hist_expected.Draw("HIST SAME")
-        legend.AddEntry(hist_expected, "Two strip expected", "l")
+        entry_expected = "Two %s expected"%(legend_reco)
+        legend.AddEntry(hist_expected, entry_expected, "l")
         hist_expected.Write()
     # If not twoStrip, set a default title for the legend
     else:
@@ -364,8 +389,8 @@ for i,info_entry in enumerate(all_histoInfos):
     htemp.Draw("AXIS same")
     legend.Draw()
 
-    # myStyle.BeamInfo()
-    myStyle.SensorInfoSmart(dataset)
+    myStyle.BeamInfo()
+    myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
 
     save_path = "%sPositionResolution_vs_x"%(outdir)
     # Choose another name if not Two Strip Reconstructed histogram

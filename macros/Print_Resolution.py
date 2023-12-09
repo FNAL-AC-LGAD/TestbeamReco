@@ -21,6 +21,8 @@ outdir = myStyle.getOutputDir(dataset)
 sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor_name = sensor_Geometry["sensor"]
 
+res_photek = 10 # ps
+
 regions = ["Overall"]
 if all_regions:
     regions+= ["Metal", "Gap", "MidGap"]
@@ -44,17 +46,30 @@ inputfile_eff = ROOT.TFile("%sPlot_cutflow.root"%(outdir_efficiency), "READ")
 for reg in regions:
     # One strip resolution per channel (only once)
     if reg == "Overall":
-        info_channels = []
         indices = mf.get_existing_indices(inputfile_res1d, "deltaX_oneStrip")
+        edge_indices = mf.get_edge_indices(indices)
+
+        n_row, n_col = mf.get_n_row_col(indices)
+        info_channels = [[0] * n_col for i in range(n_row)]
+
         for idx in indices:
             hres_onestrip = inputfile_res1d.Get("deltaX_oneStrip%s"%idx)
             value = 1000 * hres_onestrip.GetStdDev()
-            info_channels.append(value)
+
+            # Approximate appropriate std dev for edge channels (with only half of the channel info)
+            if idx in edge_indices:
+                mean = 1000 * hres_onestrip.GetMean()
+                value = math.sqrt(value**2 + mean**2)
+            r, c = int(idx[0]), int(idx[1])
+            info_channels[r][c] = value
 
         # Output line for mySensorInfo.py
         info_str = " > One strip info per channel: ["
-        for val in info_channels:
-            info_str+= "%.0f, "%(val)
+        for row in info_channels:
+            info_str+= "["
+            for v in row:
+                info_str+= "%.1f, "%(v)
+            info_str = info_str[:-2] + "], "
         info_str = info_str[:-2] + "],"
         print(info_str)
 
@@ -68,12 +83,15 @@ for reg in regions:
         res_region = ""
     
     # Resolution
-    name_onestrip = "deltaX_oneStrip%s"%(res_region)
+    # NOTE: One strip tight distribution might look assymetric for some sensors, but this is because of the tight
+    # cut that removes half of the channels at the edges. Since we care about the RMS this does not impact the result.
+    # Moreover, the RMS of the tight cut matches in a better way with the value per channel!
+    name_onestrip = "deltaX_oneStrip%s_tight"%(res_region)
     name_twostrip = "deltaX_twoStrip%s_tight"%(res_region)
-    name_time = "weighted2_timeDiff_tracker_%s"%reg if reg != "Overall" else "weighted2_timeDiff_tracker_tight"
-    inputfile_time = inputfile_res1d if reg != "Overall" else inputfile_res1d_tight
+    name_time = "weighted2_timeDiff_tracker_tight" if reg == "Overall" else "weighted2_timeDiff_tracker_%s"%reg
+    inputfile_time = inputfile_res1d_tight if reg == "Overall" else inputfile_res1d
 
-    info["one_res"] = 1000 * inputfile_res1d.Get(name_onestrip).GetStdDev()
+    info["one_res"] = 1000 * inputfile_res1d_tight.Get(name_onestrip).GetStdDev()
     info["two_res"] = 1000 * inputfile_res1d_tight.Get(name_twostrip).GetFunction("fit").GetParameter(2)
     info["time_res"] = 1000 * inputfile_time.Get(name_time).GetFunction("fit").GetParameter(2)
 
@@ -99,13 +117,17 @@ for reg in regions:
     print(info_str)
 
     # Ouput for Latex table
-    info_tex = "    - LaTeX format: %s & %.0f $\\pm$ 1 &"%(reg, info["time_res"])
+    info["time_res"] = math.sqrt(info["time_res"]**2 - res_photek**2)
+    info_tex = "    - LaTeX format: "
+    if all_regions:
+        info_tex+= "%s "%(reg)
+    info_tex+= "& %.0f $\\pm$ 1 &"%(info["time_res"])
     for key in ["one_res", "one_eff", "two_res", "two_eff"]:
         info_tex+= " %.0f"%(info[key])
         if "eff" in key:
             info_tex+= "\\%"
         info_tex+= " &"
-    info_tex+= "\n"
+    info_tex+= " %%%% Time reference contribution removed (%.0f [ps])\n"%res_photek
     print(info_tex)
 
 

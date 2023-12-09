@@ -19,6 +19,33 @@ def get_existing_indices(inputfile, prename):
 
     return list_indices
 
+def get_n_row_col(indices_list):
+    # NOTE: This assumes all rows have the same length
+    last_idx = indices_list[-1]
+    n_row, n_col = int(last_idx[0]) + 1, int(last_idx[1]) +1
+
+    return n_row, n_col
+
+def get_edge_indices(indices_list):
+    is_edge = True
+    row, col = 9, int(indices_list[-1][1])
+    edge_indices = []
+    for idx in indices_list:
+        # Left edge when moving to a new row
+        if row != int(idx[0]):
+            row = int(idx[0])
+            is_edge = True
+        # Right edge when in last column (!) assuming all rows have the same number (!)
+        elif int(idx[1]) == col:
+            is_edge = True
+        else:
+            is_edge = False
+
+        if is_edge:
+            edge_indices.append(idx)
+
+    return edge_indices
+
 def get_central_channel_position(inputfile, direction="x"):
     # Get total number of channels used
     indices = get_existing_indices(inputfile, "stripBoxInfo")
@@ -80,21 +107,110 @@ def get_shifted_limits(th2, center_position):
 
     # Even number of bins have 0.0 as lowedge in zero bin.
     # Slightly move this bin to make it look symmetric
+    # TODO: Re-run with this line commented out and check differences
     if (th2.GetXaxis().GetBinLowEdge(zero_bin) == 0.0):
         xmin-= bin_width/2.
         xmax-= bin_width/2.
 
     return xmin, xmax
 
-# return a list with the legends dependening on the sensors and variables
+def is_inside_limits(this_bin, hist, xmax, xmin=0):
+    if not xmin:
+        xmin = -xmax
+    bin_min = hist.GetXaxis().FindBin(xmin)
+    bin_max = hist.GetXaxis().FindBin(xmax)
+
+    return (bin_min < this_bin) and (this_bin < bin_max)
+
+def first_common_non_empty_x(list_histograms, first = True):
+    # Find first or last (first = True or False) common non empty bin of the histograms listed
+    nbins = list_histograms[0].GetXaxis().GetNbins()
+
+    x_filled = 0.0
+    at_least_one_empty = True
+    infor = 1 if first else nbins
+    endfor = nbins+1 if first else 0
+    step = 1 if first else -1
+
+    # Use first histogram as reference without loss of generality
+    for i in range(infor, endfor, step):
+        value = list_histograms[0].GetBinContent(i)
+        if value > 0.0:
+            # First non empty bin
+            bin_non_empty = i
+            x_filled = list_histograms[0].GetBinCenter(bin_non_empty)
+            break
+
+    while(at_least_one_empty):
+        if (bin_non_empty >= nbins or bin_non_empty <= 0):
+            print("Something went wrong :C All bins seem to be empty.")
+            exit()
+
+        # List with all values in bin non empty
+        list_values = []
+        for hist in list_histograms:
+            ibin = hist.FindBin(x_filled)
+            value = hist.GetBinContent(ibin)
+            list_values.append(value)
+
+        # Save value if all values are non zero
+        if all(v > 0.0 for v in list_values):
+            previous_bin = bin_non_empty - step
+            x_filled = list_histograms[0].GetBinCenter(previous_bin)
+            at_least_one_empty = False
+        else:
+            bin_non_empty+= step
+            x_filled = list_histograms[0].GetBinCenter(bin_non_empty)
+
+    return x_filled
+
+def same_limits_compare(list_histograms, diff_columns = False):
+    nbins = list_histograms[0].GetXaxis().GetNbins()
+
+    # NOTE: This section moves the center of a 3x2 pad to be in the middle of
+    # the first gap, in order to be compared with a 2x2 one. (!) The first
+    # element is assumed to be the HPK_W9_23_3_20T_500x500_300M_E600_112V sensor
+    if diff_columns:
+        for i, h in enumerate(list_histograms[1:]):
+            new_min, new_max = get_shifted_limits(h, -0.250)
+            nxbin = h.GetXaxis().GetNbins()
+            th1 = ROOT.TH1D("hist%i"%(i+1), "", nxbin, new_min, new_max)
+            for j in range(1, nxbin+1):
+                th1.SetBinContent(j, h.GetBinContent(j))
+                th1.SetBinError(j, h.GetBinError(j))
+
+            list_histograms[i+1] = th1
+
+    xfirst = abs(first_common_non_empty_x(list_histograms, True))
+    xlast = abs(first_common_non_empty_x(list_histograms, False))
+    x_simmetric_limit = xfirst if xfirst < xlast else xlast
+
+    for hist in list_histograms:
+        if hist.GetXaxis().GetNbins() != nbins:
+            nbins = hist.GetXaxis().GetNbins()
+            print(" (!) Beware, sensors with different binning are being compared!")
+        for i in range(1, nbins+1):
+            # Fill only when inside limits
+            if is_inside_limits(i, hist, xmax=x_simmetric_limit):
+                continue
+
+            value = hist.GetBinContent(i)
+            if value:
+                hist.SetBinContent(i, 0.0)
+
+    return list_histograms
+
+
+
+
+# Return a list with the legends dependening on the sensors and variables
 # receive a list of sensors and a list of variables as arguments
-# if you want resistivity and capacitance, put it in the end of the list and in that order
 # example: [("HPK_W9_22_3_20T_500x500_150M_E600", "HPK_W9_23_3_20T_500x500_300M_E600",
-    # "HPK_W8_1_1_50T_500x500_150M_C600"], ["pitch", "length", "resistivityNumber", "capacitance"]))
+#    "HPK_W8_1_1_50T_500x500_150M_C600"], ["resistivityNumber", "capacitance"]))
+# The last entrie of the list is the legend header: "Varying (variables)"
 
 
 def get_legend_comparation_plots(sensors, variables):
-
     # Define the units of each variable
     variablesUnits = {}
     variablesUnits["pitch"] = " #mum "
@@ -104,9 +220,9 @@ def get_legend_comparation_plots(sensors, variables):
     variablesUnits["thickness"] = " #mum "
     variablesUnits["resistivity"] = ""
     variablesUnits["resistivityNumber"] = " #Omega/sq "
-    variablesUnits["capacitance"] = " pF/mm2 "
+    variablesUnits["capacitance"] = " pF/mm^{2} "
 
-    # Define the units of each variable
+    # Define the name use in the legend of each variable
     variablesName = {}
     variablesName["pitch"] = "pitch"
     variablesName["stripWidth"], variablesName["width"] = " metal width ", " metal width "
@@ -116,32 +232,31 @@ def get_legend_comparation_plots(sensors, variables):
     variablesName["resistivity"] = ""
     variablesName["resistivityNumber"] = " resistivity"
     variablesName["capacitance"] = " capacitance"
-    
+    variablesName["manufacturer"] = " manufacturer"
 
+    # Generate the list of legend entries
     sensor_legend_list = []
-
     for sensor in sensors:
-
-        # add the tag of the sensor first
+        sensor_legend = ""
         geometry = myStyle.GetGeometry(sensor)
-        sensor_legend = geometry['tag'] + ": "
         for variable in variables:
-
             # add the variables
-            sensor_legend+= str(geometry[variable]) + variablesUnits[variable] 
-            # if len(variables) < 2:
-                # sensor_legend+= variablesName[variable]
-
+            if variable == "manufacturer":
+                sensor_legend+= sensor[:3] + " "
+            else:
+                sensor_legend+= str(geometry[variable]) + variablesUnits[variable]
+        # add the tag of the sensor at the end
+        sensor_legend += " (" + geometry['tag'] + ")"
         sensor_legend_list.append(sensor_legend)
-    
-    
+
+    # Add the Legend header at the end of the list
+    if "manufacturer" in variables:
+        variables.remove("manufacturer")
     legendHeader = "Varying"
     for i, variable in enumerate(variables):
         legendHeader += variablesName[variable]
         if i == len(variables) - 2 and len(variables) > 1 :
             legendHeader += " and"
-
-
     legendHeader = "#bf{%s}"%legendHeader
     sensor_legend_list.append(legendHeader)
 

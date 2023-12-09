@@ -75,7 +75,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_histos,"ampChargeRatio"+r+s,"", 300,0.0,15.0);
             utility::makeHisto(my_histos,"slewrate"+r+s,"", 300,0.0,400.0);
             utility::makeHisto(my_histos,"slewRateChargeRatio"+r+s,"", 300,0.0,30.0);
-            utility::makeHisto(my_histos,"deltaX_oneStrip"+r+s, "; X_{reco} - X_{track} [mm]; Events", 200,-0.5,0.5);
+            utility::makeHisto(my_histos,"deltaX_oneStrip"+r+s, "; X_{reco} - X_{track} [mm]; Events", 200, -pitch, pitch);
 
             for (unsigned int ch = 0; ch < row.size(); ch++)
             {
@@ -733,7 +733,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     const auto& usesMay2023Tracker = tr.getVar<bool>("usesMay2023Tracker");
     const auto& minPixHits = tr.getVar<int>("minPixHits");
     const auto& minStripHits = tr.getVar<int>("minStripHits");
-    const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
+    // const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
     //const auto& xSlices = tr.getVar<std::vector<std::vector<double>>>("xSlices");
     const auto& ySlices = tr.getVar<std::vector<std::vector<double>>>("ySlices");
     const auto& sensorEdges = tr.getVar<std::vector<std::vector<double>>>("sensorEdges");
@@ -889,7 +889,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& stripCenterXPositionLGAD = tr.getVec<std::vector<double>>("stripCenterXPositionLGAD");
         const auto& stripCenterYPositionLGAD = tr.getVec<std::vector<double>>("stripCenterYPositionLGAD");
         const auto& goodNeighbour = tr.getVar<bool>("goodNeighbour");
+        const auto& recoMaxPoint = tr.getVar<double>("recoMaxPoint");
         const auto& twoStripReco = tr.getVar<bool>("twoStripReco");
+        const auto& oneStripReco = tr.getVar<bool>("oneStripReco");
         const auto& parityLGAD = tr.getVec<std::vector<int>>("parityLGAD");
         const auto& twoGoodChannel = tr.getVar<bool>("twoGoodChannel"); // Timing requirement
 
@@ -903,7 +905,14 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         
         // bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
         bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
-        bool hitSensorNoEdges = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]] < x && x < stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]] && hitSensorTightY;
+        double edge_left = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]];
+        double edge_right = stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]];
+        if (edge_left > edge_right)
+        {
+            edge_right = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]];
+            edge_left = stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]];
+        }
+        bool hitSensorNoEdges = edge_left < x && x < edge_right && hitSensorTightY;
         if (isPadSensor) {hitSensorNoEdges = hitSensorTight;}
 
         // --- Good hit ---
@@ -945,9 +954,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool threeGoodHits = ampLGAD[amp1Indexes.first][amp1Indexes.second] > noiseAmpThreshold && ampLGAD[amp2Indexes.first][amp2Indexes.second] > noiseAmpThreshold && ampLGAD[amp3Indexes.first][amp3Indexes.second] > noiseAmpThreshold;
         bool fourGoodHits = ampLGAD[amp1Indexes.first][amp1Indexes.second] > noiseAmpThreshold && ampLGAD[amp2Indexes.first][amp2Indexes.second] > noiseAmpThreshold && ampLGAD[amp3Indexes.first][amp3Indexes.second] > noiseAmpThreshold && ampLGAD[amp4Indexes.first][amp4Indexes.second] > noiseAmpThreshold;
         bool allGoodHits = oneGoodHit || twoGoodHits || threeGoodHits || fourGoodHits;
-        bool highFraction = Amp1OverAmp1and2 > positionRecoMaxPoint;
-        bool oneStripReco = !goodNeighbour || highFraction;
-        // bool twoStripReco = goodNeighbour && (Amp1OverAmp1and2 < positionRecoMaxPoint);
+        bool highFraction = Amp1OverAmp1and2 > recoMaxPoint;
         bool fullReco = hasGlobalSignal_lowThreshold && (oneStripReco || twoStripReco);
         bool hitOnMetal = false;
         bool hitOnMidGap = false;
@@ -1073,7 +1080,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "slewRateChargeRatio"+r+s, slewRateChargeRatio);
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_histos, "slewrate"+r+s, slewrate);
                 
-                utility::fillHisto(pass_tightY && isMaxChannel && goodOverNoiseAmp && oneStripReco,my_histos, "deltaX_oneStrip"+r+s, x_reco-x);
+                utility::fillHisto(pass_NoXYEdges && isMaxChannel && goodOverNoiseAmp && oneStripReco, my_histos, "deltaX_oneStrip"+r+s, x_reco-x);
                 for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
                 {
                     if(regionsOfIntrest[k].passROI(x,y))
