@@ -71,13 +71,13 @@ for key, info in geometry2023_default.items():
 # <one strip reco RMS [um]>, <two strip reco fit [um]>, <time [ps]>, <efficiency one strip>, <efficiency two strip>
 resolutions2023_Overall = {
     # BNL strips
-    "BNL_50um_1cm_450um_W3051_2_2": [],
-    "BNL_50um_1cm_400um_W3051_1_4": [],
+    "BNL_50um_1cm_450um_W3051_2_2": [48.5, 22.3, 44.3, 13.7, 86.3],
+    "BNL_50um_1cm_400um_W3051_1_4": [51.0, 20.5, 42.5, 20.4, 79.6],
     "BNL_50um_1cm_450um_W3052_2_4": [],
     "BNL_20um_1cm_400um_W3074_1_4": [],
     "BNL_20um_1cm_400um_W3075_1_2": [],
     "BNL_20um_1cm_450um_W3074_2_1": [],
-    "BNL_20um_1cm_450um_W3075_2_4": [],
+    "BNL_20um_1cm_450um_W3075_2_4": [106.1, 32.4, 47.1, 92.2, 7.8],
     "BNL_50um_2p5cm_mixConfig1_W3051_1_4": [],
     "BNL_50um_2p5cm_mixConfig2_W3051_1_4": [],
 
@@ -356,13 +356,13 @@ for sensor in resolutions2023_Overall:
 # NOTE: Resolution values do NOT have tracker component removed
 resolutions2023_onestrip = {
     # BNL strips
-    "BNL_50um_1cm_450um_W3051_2_2": [],
-    "BNL_50um_1cm_400um_W3051_1_4": [],
+    "BNL_50um_1cm_450um_W3051_2_2": [[51.4, 49.4, 49.5, 48.1, 49.3, 47.7, 55.2]],
+    "BNL_50um_1cm_400um_W3051_1_4": [[48.9, 50.9, 52.2, 50.8, 50.3, 48.8, 54.5]],
     "BNL_50um_1cm_450um_W3052_2_4": [],
     "BNL_20um_1cm_400um_W3074_1_4": [],
     "BNL_20um_1cm_400um_W3075_1_2": [],
     "BNL_20um_1cm_450um_W3074_2_1": [],
-    "BNL_20um_1cm_450um_W3075_2_4": [],
+    "BNL_20um_1cm_450um_W3075_2_4": [[110.6, 102.6, 103.2, 102.1, 105.2, 105.7, 95.4]],
     "BNL_50um_2p5cm_mixConfig1_W3051_1_4": [],
     "BNL_50um_2p5cm_mixConfig2_W3051_1_4": [],
 
