@@ -1495,7 +1495,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "ampChargeRatio_vs_xy", x,y,ampChargeRatioMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "slewRate_vs_xy", x,y,slewrateMaxChannel);
         utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "weighted2_jitter_vs_xy", x,y,weighted2_jitter);
-        utility::fillHisto(pass_tight && goodAmpColHit,                             my_3d_histos, "weighted2_jitter_vs_xy_tight", x,y,weighted2_jitter);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit,                         my_3d_histos, "weighted2_jitter_vs_xy_tight", x,y,weighted2_jitter);
 
 
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "totgoodamplitude_vs_xy", x,y,totGoodAmpLGAD);
