@@ -10,6 +10,12 @@ from array import array
 import myFunctions as mf
 import mySensorInfo as msi
 
+parser = optparse.OptionParser("usage: %prog [options]\n")
+parser.add_option('-o', dest='Type', default = "", help="Sensor type, strips or pixels")
+options, args = parser.parse_args()
+
+sensor_type = options.Type
+
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 colors = myStyle.GetColors(True)
@@ -21,9 +27,18 @@ myStyle.ForceStyle()
 outdir = myStyle.getOutputDir("Paper2023")
 outdir = myStyle.GetPlotsDir(outdir, "CFD/")
 
-Resolution_values_W5 = [66.02, 49.81, 39.71, 36.67, 36.20, 35.98, 35.79, 36.40, 37.84, 41.67]
-Resolution_values_W9 = [87.43, 76.65, 58.75, 52.31, 51.84, 52.77, 54.56, 57.69, 67.42, 75.54]
-CFD_values = [5, 10, 20, 30, 35, 40, 50, 60, 70, 80]
+if(sensor_type=='s'):
+    # Strips W5_17_2 and W9_15_2
+    Resolution_values_W5 = [65.88, 49.4, 38.37, 36.49, 35.55, 35.02, 34.74, 34.54, 35.06, 36.52, 40.22]
+    Resolution_values_W9 = [90.59, 74.88, 55.06, 51.2, 49.11, 47.89, 47.99, 50.58, 54.0, 55.93, 66.41]
+    suffix = "_strips"
+if(sensor_type=='p'):
+    # Pads W5_1_1 and W9_22_3
+    Resolution_values_W5 = [48.81, 37.74, 32.21, 32.05, 32.28, 32.69, 33.27, 33.79, 33.83, 34.66, 37.43]
+    Resolution_values_W9 = [62.29, 41.19, 31.76, 31.44, 32.07, 31.46, 32.6, 34.73, 36.11, 40.17, 48.33]
+    suffix = "_pads"
+
+CFD_values = [5, 10, 20, 25, 30, 35, 40, 50, 60, 70, 80]
 
 graph1 = ROOT.TGraph(len(CFD_values), array('d', CFD_values), array('d', Resolution_values_W5))
 graph1.SetMarkerStyle(8)
@@ -81,8 +96,8 @@ canvas.Update()
 # Save the canvas as an image
 myStyle.BeamInfo()
 myStyle.SensorProductionInfo("HPK Production")
-canvas.SaveAs("%sCFD_study.png"%outdir)
-canvas.SaveAs("%sCFD_study.pdf"%outdir)
+canvas.SaveAs("%sCFD_study%s.png"%(outdir,suffix))
+canvas.SaveAs("%sCFD_study%s.pdf"%(outdir,suffix))
 canvas.Clear()
 
 # # Keep the program running to display the plot
