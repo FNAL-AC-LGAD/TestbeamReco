@@ -17,6 +17,19 @@ geometry2023_default = {
     "BNL_50um_2p5cm_mixConfig1_W3051_1_4": ["BNL_50um_2p5cm_mixConfig1_W3051", 500, 100, 25.0, 170, 50, "Null", "Null", "Null"],
     "BNL_50um_2p5cm_mixConfig2_W3051_1_4": ["BNL_50um_2p5cm_mixConfig2_W3051", 500, 50, 25.0, 170, 50, "Null", "Null", "Null"],
 
+    "BNL_30um_5mm_500um_W3104": ["BNL_30um_5mm_500um_W3104", 500, 100, 5.0, 90, 30, "Null", "Null", "Null"],
+    "BNL_30um_5mm_700um_W3104": ["BNL_30um_5mm_700um_W3104", 700, 100, 5.0, 115, 30, "Null", "Null", "Null"],
+    "BNL_20um_5mm_700um_W3080": ["BNL_20um_5mm_700um_W3080", 700, 100, 5.0, 80, 20, "Null", "Null", "Null"],
+    "BNL_20um_5mm_500um_W3080": ["BNL_20um_5mm_500um_W3080", 500, 100, 5.0, 80, 20, "Null", "Null", "Null"],
+    "BNL_30um_500x500_SmallSquare_W3104": ["BNL_30um_500x500_SmallSquare_W3104", 500, 500, 5.0, 115, 30, "Null", "Null", "Null"],
+    "BNL_20um_500x500_SmallSquare_W3080": ["BNL_20um_500x500_SmallSquare_W3080", 500, 500, 5.0, 76, 20, "Null", "Null", "Null"],
+    "BNL_30um_500x500_LargeSquare_W3104": ["BNL_30um_500x500_LargeSquare_W3104", 500, 500, 5.0, 115, 30, "Null", "Null", "Null"],
+    "BNL_20um_500x500_LargeSquare_W3080": ["BNL_20um_500x500_LargeSquare_W3080", 500, 500, 5.0, 80, 20, "Null", "Null", "Null"],
+    "BNL_30um_500x500_SquaredCircle_W3104": ["BNL_30um_500x500_SquaredCircle_W3104", 500, 500, 5.0, 110, 30, "Null", "Null", "Null"],
+    "BNL_20um_500x500_SquaredCircle_W3080": ["BNL_20um_500x500_SquaredCircle_W3080", 500, 500, 5.0, 85, 20, "Null", "Null", "Null"],
+    "BNL_30um_500x500_Cross_W3104": ["BNL_30um_500x500_Cross_W3104", 500, 500, 5.0,115, 30, "Null", "Null", "Null"],
+    "BNL_20um_500x500_Cross_W3080": ["BNL_20um_500x500_Cross_W3080", 500, 500,5.0, 80, 20, "Null", "Null", "Null"],
+
     # HPK pads (January)
     "HPK_20um_500x500um_2x2pad_E600_FNAL": ["HPK_20um_2x2pad", 500, 500, 0.5, 105, 20, "E", 600, "PH1"],
     "HPK_30um_500x500um_2x2pad_E600_FNAL": ["HPK_30um_2x2pad", 500, 500, 0.5, 140, 30, "E", 600, "PH2"],
