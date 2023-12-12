@@ -117,11 +117,12 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     haxis.SetLineWidth(1)
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
+    is_pad = ("500x500" in sensor_reference) or ("pad" in sensor_reference)
     infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
     geometry = myStyle.GetGeometry(sensor_reference)
     pitch = geometry["pitch"]
     boxes = getStripBox(infile_reference, ymin, ylength-yoffset, pitch = pitch/1000.0)
-    if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
+    if not is_pad:
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
         box.Draw()
@@ -161,6 +162,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         list_OneStrip_vs_x.append(hOneStrip)
         list_TwoStrip_vs_x.append(hTwoStrip)
 
+    sensor_type = "strip" if not is_pad else "channel"
     pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x, treat_as_2x2)
     for i, hist_two in enumerate(pruned_TwoStrip_vs_x):
         hist_one = list_OneStrip_vs_x[i]
@@ -172,14 +174,14 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
             hist_one.SetMarkerColor(colors[i*2])
         else:
             hist_one.SetMarkerColor(colors[i+1])
-        legend.AddEntry(hist_one, tag[i]+' - Exactly one strip', "P")
+        legend.AddEntry(hist_one, tag[i]+' - Exactly one %s'%sensor_type, "P")
 
         hist_two.SetLineWidth(3)
         if("thickness" in tagVars):
             hist_two.SetLineColor(colors[i*2])
         else:
             hist_two.SetLineColor(colors[i+1])
-        legend.AddEntry(hist_two, tag[i]+' - Two strip')
+        legend.AddEntry(hist_two, tag[i]+' - Two %s'%sensor_type)
         hist_two.Draw("hist same")
 
     legendHeader = tag[-1]
@@ -187,7 +189,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     legend.Draw()
 
     sensor_prod="Strip sensors"
-    if ("500x500" in sensor_reference):
+    if is_pad:
         sensor_prod = "Pixel sensors"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
