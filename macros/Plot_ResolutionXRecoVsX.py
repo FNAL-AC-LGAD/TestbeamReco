@@ -189,6 +189,7 @@ is_pad = len(dict_one_strip_info["resolution_onestrip"]) > 1
 for r, row in enumerate(dict_one_strip_info["resolution_onestrip"]):
     for c, value in enumerate(row):
         idx = "%i%i"%(r,c)
+        # Remove channels at the edges for strips only
         if not is_pad and idx in edge_indices:
             continue
         if value < 0.0:
@@ -204,8 +205,12 @@ for r, row in enumerate(dict_one_strip_info["resolution_onestrip"]):
 
         box = boxes[c]
         x_position = (box.GetX1() + box.GetX2())/2.
-        list_positions.append(x_position)
-        list_values.append(value)
+        # Take average of resolution per column for pads
+        if is_pad and (r > 0):
+            list_values[c] = (list_values[c]*r + value)/(r+1)
+        else:
+            list_positions.append(x_position)
+            list_values.append(value)
 
 if not list_values:
     use_one_strip = False
