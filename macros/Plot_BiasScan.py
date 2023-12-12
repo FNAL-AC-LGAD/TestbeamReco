@@ -11,7 +11,7 @@ import mySensorInfo as msi
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
 colors = myStyle.GetColors(True)
-colors = [colors[1], colors[4], colors[2]]
+colors = [colors[0], colors[4], colors[2]]
 
 ## Defining Style
 myStyle.ForceStyle()

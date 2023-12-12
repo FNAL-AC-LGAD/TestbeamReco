@@ -661,34 +661,35 @@ public:
 };
 
 class HPK_W9_23_3_20T_500x500_300M_E600_PixelsGeometry : public DefaultGeometry
+// HPK_W9_23_3_20T_500x500_300M_E600_112V
 {
 public:
-    // HPK_W9_23_3_20T_500x500_300M_E600_112V Mapping set
+    // (!) Missing channel 0 (!) Mapping set
     // Used lecroy scope channels 0-7
-    // -------
-    // |  2  |           -----
-    // |0 1 3|           |777|
-    // |6 5 4|           |777|
-    // -------           -----
+    // --------
+    // |  2   |           -----
+    // |3 1 X0|           |777|
+    // |4 5 X6|           |777|
+    // -------            -----
 
     HPK_W9_23_3_20T_500x500_300M_E600_PixelsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{3,0}}, {3,{0,2}}, {4,{1,2}}, {5,{1,1}}, {6,{1,0}}, {7,{2,0}}};
-    std::vector<std::vector<int>> geometry = {{0,1,3}, {6,5,4}, {7}};
-    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
-    int numLGADchannels = 6;
+    std::map<int, std::vector<int>> indexToGeometryMap = {{1,{0,1}}, {2,{3,0}}, {3,{0,0}}, {4,{1,0}}, {5,{1,1}}, {7,{2,0}}};
+    std::vector<std::vector<int>> geometry = {{3,1}, {4,5}, {7}}; // {{3,1,0}, {4,5,6}, {7}};
+    std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, false}, {7,false}};
+    int numLGADchannels = 4;
     //int extraChannelIndex = 4;
-    int lowGoodStripIndex = 0;
-    int highGoodStripIndex = 6;
+    int lowGoodStripIndex = 1;
+    int highGoodStripIndex = 5;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.0}, {1,0.66496}, {2,0.0}, {3,0.81830}, {4,0.71062}, {5,0.67177}, {6,0.57879}, {7,0.0}};
     double stripWidth = 0.300;
     double pitch = 0.500;
-    double sensorCenter = 1.45; // Lab-Tracker's frame ->  x_dut
+    double sensorCenter = 1.21; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY = -0.46; // Lab-Tracker's frame -> y_dut
-    std::vector<double> stripCenterXPosition = {-1.5,-2.5, -2.5, -1.5, -1.4, 0.0, 0.0, -2.0};
-    std::vector<double> stripCenterYPosition = {-1.5,-2.5, -2.5, -1.5, -1.4, 0.0, 0.0, -2.0};
-    double alpha = 0.0;
+    std::vector<double> stripCenterXPosition = {0.0, 0.251, 0.0, -0.250, -0.250, 0.243, 0.0, 0.0};
+    std::vector<double> stripCenterYPosition = {0.0, 0.231, 0.0, 0.232, -0.254, -0.254, 0.0, 0.0};
+    double alpha = -1.20;
     double beta  = 0.0;
     double gamma = 0.0;
     double z_dut = 0.0;
@@ -700,7 +701,7 @@ public:
     double yBinSize = 0.050;
     double xBinSize_delay_corr = 0.050;
     double yBinSize_delay_corr = 0.050;
-    double positionRecoMaxPointCol = 0.84; // 0.84;
+    double positionRecoMaxPointCol = 0.87;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
     double signalAmpThreshold = 15.0;
@@ -711,16 +712,16 @@ public:
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<double> positionRecoParCol = {0.250000, -0.901967, 7.164893, -56.484378, 195.379476, -243.826927};
+    std::vector<double> positionRecoParCol = {0.250000, -0.315639, 1.620337, -15.181558, 57.735255, -75.182057};
     // std::vector<double> positionRecoParTop = {-0.494315,  1.28059, 1.92055, -9.89445, 11.8025, -4.01589};
     // std::vector<double> positionRecoParBot = {-0.0849671, -3.72958, 25.6829, -63.7924, 70.3368, -28.3888};
     // std::vector<double> positionRecoParRight = {-0.046495, -3.91451, 24.6937, -57.5006, 59.3214, -22.163};
     // std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
-    std::vector<std::vector<double>> xSlices = {{0.80, 1.00}, {1.25, 1.45}, {1.75, 1.95}}; // Raw data coordinates
-    std::vector<std::vector<double>> ySlices = {{-0.80, -0.60}, {-1.30, -1.10}}; // Raw data coordinates
-    std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
-    std::vector<std::vector<double>> sensorEdgesExtra = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
-    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[4], stripCenterYPosition[4]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
+    std::vector<std::vector<double>> xSlices = {{0.77, 1.13}, {1.27, 1.63}}; // Raw data coordinates // {1.77, 2.13}
+    std::vector<std::vector<double>> ySlices = {{-0.40, 0.00}, {-0.90, -0.50}}; // Raw data coordinates
+    std::vector<std::vector<double>> sensorEdges = {{-0.50,-0.50}, {0.50, 0.50}}; //square interior of pads
+    std::vector<std::vector<double>> sensorEdgesExtra = {{-0.50,-0.50}, {0.50, 0.50}}; //square interior of pads
+    std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[4], stripCenterYPosition[4]}, {stripCenterXPosition[1], stripCenterYPosition[1]}}; // Sensor's local frame
     // std::vector<utility::ROI> regionsOfIntrest = {{"MetalAndGap", -0.70,0.70, -0.4,-0.1}, {"Half", -0.70,0.70, -0.25, 0.25}};
 };
 

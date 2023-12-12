@@ -141,6 +141,10 @@ for deg in range(fitOrder+1):
     str_geometry+= "%0.6f, "%fit.GetParameter(deg)
 str_geometry+="};\n\n"
 str_geometry = str_geometry.replace(", }","}")
+
+if ("pad" in dataset) or ("500x500" in dataset):
+    str_geometry = str_geometry.replace("positionRecoMaxPoint", "positionRecoMaxPointCol")
+    str_geometry = str_geometry.replace("positionRecoPar", "positionRecoParCol")
 print(str_geometry)
 
 # Draw and save fits
@@ -156,6 +160,12 @@ fit2nd.Draw("same")
 fit.Draw("same")
 
 Amp1OverAmp1and2_vs_deltaXmax_profile.Draw("AXIS same")
+
+gStyle.SetStatX(0.99)
+gStyle.SetStatY(0.99)
+gStyle.SetStatW(0.15)
+gStyle.SetStatH(0.1)
+canvas.Update()
 
 save_path = "%sPositionRecoFit"%(outdir)
 

@@ -179,7 +179,7 @@ for i, th1_overall in enumerate(list_th1_overall):
 htemp.Draw("AXIS same")
 legend.Draw()
 
-# myStyle.BeamInfo()
+myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset)
 
 save_path = "%sEfficiencyAll_vs_x"%(outdir)

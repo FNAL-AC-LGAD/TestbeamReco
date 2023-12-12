@@ -129,11 +129,11 @@ def SensorInfoSmart(dataset, adjust=0.0, mtop=marg, mright=marg, isPaperPlot = F
 
     SensorInfo(name, bias_voltage, True, adjust, mtop, mright)
 
-def SensorProductionInfo(sensor="Name",adjustleft=0):
+def SensorProductionInfo(sensor="Name", adjustleft=0, mtop=marg, mright=marg):
     text = ROOT.TLatex()
     text.SetTextSize(tsize-4)
     text.SetTextAlign(31)
-    text.DrawLatexNDC(1-marg-0.005-adjustleft,1-marg+0.01,"#bf{"+str(sensor)+"}")
+    text.DrawLatexNDC(1-mright-0.005-adjustleft, 1-mtop+0.01, "#bf{"+str(sensor)+"}")
 
 ### Change global values functions
 def ChangeMargins(mtop=marg, mright=marg, mbot=2*marg, mleft=2*marg):
