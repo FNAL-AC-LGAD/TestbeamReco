@@ -929,7 +929,7 @@ public:
 
     BNL_30um_5mm_500um_W3104_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -953,7 +953,7 @@ public:
     double xmax =  1.80; // Sensor's local frame
     double ymin = -2.25; // Sensor's local frame
     double ymax =  2.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.79; 
+    double positionRecoMaxPoint = 0.79;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -994,7 +994,7 @@ public:
 
     BNL_30um_5mm_700um_W3104_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1018,7 +1018,7 @@ public:
     double xmax =  2.25; // Sensor's local frame
     double ymin = -2.25; // Sensor's local frame
     double ymax =  2.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.79; 
+    double positionRecoMaxPoint = 0.79;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -1060,7 +1060,7 @@ public:
 
     BNL_20um_5mm_700um_W3080_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{1,0}}, {7,{2,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{1,0}}, {7,{2,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5},{6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,false}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1084,7 +1084,7 @@ public:
     double xmax =  2.25; // Sensor's local frame
     double ymin = -2.25; // Sensor's local frame
     double ymax =  2.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.79; 
+    double positionRecoMaxPoint = 0.79;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -1126,7 +1126,7 @@ public:
 
     BNL_20um_5mm_500um_W3080_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1150,7 +1150,7 @@ public:
     double xmax =  1.80; // Sensor's local frame
     double ymin = -2.25; // Sensor's local frame
     double ymax =  2.25; // Sensor's local frame
-    double positionRecoMaxPoint = 0.79; 
+    double positionRecoMaxPoint = 0.79;
     double photekSignalThreshold = 200.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
@@ -1212,7 +1212,7 @@ public:
     double yBinSize = 0.025;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
@@ -1220,8 +1220,8 @@ public:
     bool usesMay2023Tracker = false;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
-    std::vector<std::vector<double>> xSlices = {{1.15, 1.35}, {1.65, 1.85}, {2.05, 2.25}}; 
-    std::vector<std::vector<double>> ySlices = {{-0.65, -0.45}, {-1.10, -0.90}}; 
+    std::vector<std::vector<double>> xSlices = {{1.15, 1.35}, {1.65, 1.85}, {2.05, 2.25}};
+    std::vector<std::vector<double>> ySlices = {{-0.65, -0.45}, {-1.10, -0.90}};
     std::vector<std::vector<double>> sensorEdges = {{xmin, ymin}, {xmax, ymax}};
 	std::vector<std::vector<double>> sensorEdgesExtra = {{xmin, ymin}, {xmax, ymax}};
 };
@@ -1267,11 +1267,11 @@ public:
     double yBinSize = 0.025;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    bool isPadSensor = true; 
+    bool isPadSensor = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<std::vector<double>> xSlices = {{1.15, 1.35}, {1.65, 1.85}, {2.05, 2.25}}; // Raw data coordinates
@@ -1303,7 +1303,7 @@ public:
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,10.449868}, {1,10.578475}, {2,0.0}, {3,10.697433}, {4,10.591534}, {5,10.563197}, {6,10.488916}, {7,0.0}};
-    double stripWidth = 0.5; 
+    double stripWidth = 0.5;
     double pitch = 0.5;
     double sensorCenter = -0.875;// Lab-Tracker's frame ->  y_dut
     double sensorCenterY = 0.25; // Lab-Tracker's frame -> -x_dut
@@ -1320,11 +1320,11 @@ public:
     double yBinSize = 0.025;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    bool isPadSensor = true; 
+    bool isPadSensor = true;
     bool usesMay2023Tracker = false;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
@@ -1358,7 +1358,7 @@ public:
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,10.509198}, {1,10.626718}, {2,0.0}, {3,10.750338}, {4,10.653928}, {5,10.615395}, {6,10.550804}, {7,0.0}};
-    double stripWidth = 0.5; 
+    double stripWidth = 0.5;
     double pitch = 0.5;
     double sensorCenter = -0.95;// Lab-Tracker's frame ->  y_dut
     double sensorCenterY = 0.30; // Lab-Tracker's frame -> -x_dut
@@ -1375,11 +1375,11 @@ public:
     double yBinSize = 0.025;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    bool isPadSensor = true; 
+    bool isPadSensor = true;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<std::vector<double>> xSlices = {{1.15, 1.35}, {1.65, 1.85}, {2.05, 2.25}}; // Raw data coordinates
@@ -1412,7 +1412,7 @@ public:
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,10.452788}, {1,10.572580}, {2,0.0}, {3,10.697640}, {4,10.578140}, {5,10.553696}, {6,10.437773}, {7,0.0}};
-    double stripWidth = 0.5; 
+    double stripWidth = 0.5;
     double pitch = 0.5;
     double sensorCenter = -1.025;// Lab-Tracker's frame ->  y_dut
     double sensorCenterY = 0.3; // Lab-Tracker's frame -> -x_dut
@@ -1429,7 +1429,7 @@ public:
     double yBinSize = 0.025;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
@@ -1468,7 +1468,7 @@ public:
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,10.496743}, {1,10.615338}, {2,0.0}, {3,10.706889}, {4,10.646108}, {5,10.606342}, {6,10.485968}, {7,0.0}};
-    double stripWidth = 0.5; 
+    double stripWidth = 0.5;
     double pitch = 0.5;
     double sensorCenter = -0.85;// Lab-Tracker's frame ->  y_dut
     double sensorCenterY = 0.32; // Lab-Tracker's frame -> -x_dut
@@ -1485,12 +1485,12 @@ public:
     double yBinSize = 0.025;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
     bool isPadSensor = true;
-    bool usesMay2023Tracker = false; 
+    bool usesMay2023Tracker = false;
     bool enablePositionReconstruction = false;
     bool enablePositionReconstructionPad = true;
     std::vector<std::vector<double>> xSlices = {{1.15, 1.35}, {1.65, 1.85}, {2.05, 2.25}}; // Raw data coordinates
@@ -1524,7 +1524,7 @@ public:
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,10.450841}, {1,10.591952}, {2,0.0}, {3,10.711292}, {4,10.605504}, {5,10.569321}, {6,10.504950}, {7,0.0}};
-    double stripWidth = 0.5; 
+    double stripWidth = 0.5;
     double pitch = 0.5;
     double sensorCenter = -1.05;// Lab-Tracker's frame ->  y_dut
     double sensorCenterY = 0.12; // Lab-Tracker's frame -> -x_dut
@@ -1541,7 +1541,7 @@ public:
     double yBinSize = 0.025;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
@@ -1580,7 +1580,7 @@ public:
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,10.496731}, {1,10.629129}, {2,0.0}, {3,10.761273}, {4,10.649664}, {5,10.614115}, {6,10.537795}, {7,0.0}};
-    double stripWidth = 0.5; 
+    double stripWidth = 0.5;
     double pitch = 0.5;
     double sensorCenter = -1.0;// Lab-Tracker's frame ->  y_dut
     double sensorCenterY = 0.175; // Lab-Tracker's frame -> -x_dut
@@ -1597,7 +1597,7 @@ public:
     double yBinSize = 0.025;
     double photekSignalThreshold = 150.0;
     double noiseAmpThreshold = 15.0;
-    double signalAmpThreshold = 15.0; 
+    double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
@@ -1636,7 +1636,7 @@ public:
 
     BNL_50um_1cm_450um_W3051_2_2_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1711,7 +1711,7 @@ public:
 
     BNL_50um_1cm_400um_W3051_1_4_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1779,7 +1779,7 @@ public:
 
     BNL_50um_1cm_450um_W3052_2_4_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1847,7 +1847,7 @@ public:
 
     BNL_20um_1cm_400um_W3074_1_4_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1916,7 +1916,7 @@ public:
 
     BNL_20um_1cm_400um_W3075_1_2_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -2055,7 +2055,7 @@ public:
 
     BNL_20um_1cm_450um_W3075_2_4_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -2128,7 +2128,7 @@ public:
 
     BNL_50um_2p5cm_mixConfig1_W3051_1_4_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -2203,7 +2203,7 @@ public:
 
     BNL_50um_2p5cm_mixConfig2_W3051_1_4_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,true}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -2266,7 +2266,7 @@ public:
 
     CFD(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};   
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{0,6}}, {7,{1,0}}};
     std::vector<std::vector<int>> geometry = {{0,1}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,false}, {4,false}, {5,false}, {6,false}, {7,false}};
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.}, {1,1.}, {2,1.}, {3,1.}, {4,1.}, {5,1.}, {6,1.}, {7,1.0}};
