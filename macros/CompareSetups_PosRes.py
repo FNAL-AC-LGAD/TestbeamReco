@@ -1,4 +1,4 @@
-from ROOT import TFile,TLine,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, kBlack
+from ROOT import TFile,TLine,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TGraph,TEfficiency,TGraphAsymmErrors,TLegend,TPaveText,gROOT,gStyle, kWhite, kBlack
 import os
 import langaus
 import optparse
@@ -88,15 +88,28 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     sensor_reference = sensors[0]
     treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
 
-    yLegend = 0.026*len(sensors)
-    legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.3-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
-    legend.SetBorderSize(1)
-    legend.SetLineColor(kBlack)
-    legend.SetNColumns(1)
-    legend.SetTextFont(myStyle.GetFont())
-    legend.SetTextSize(myStyle.GetSize()-4)
-    # legend.SetBorderSize(0)
-    # legend.SetFillColor(kWhite)
+    legend_height = 0.055*(len(sensors) + 2) # Entries + title + binary readout
+    legX1 = 2*pad_margin+0.065
+    legX2 = 1-pad_margin-0.065
+    legendTop = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
+    # legendTop.SetBorderSize(1)
+    # legendTop.SetLineColor(kBlack)
+    legendTop.SetTextFont(myStyle.GetFont())
+    legendTop.SetTextSize(myStyle.GetSize()-4)
+
+    legTopY1 = 1-pad_margin-legend_height-0.03
+    legendBot = TLegend(legX1, legTopY1-0.055, legX2, legTopY1)
+    legendBot.SetNColumns(2)
+    # legendBot.SetBorderSize(1)
+    # legendBot.SetLineColor(kBlack)
+    legendBot.SetTextFont(myStyle.GetFont())
+    legendBot.SetTextSize(myStyle.GetSize()-4)
+
+    legendBox = TPaveText(legX1, legTopY1-0.055, legX2, 1-pad_margin-0.03, "NDC")
+    legendBox.SetBorderSize(1)
+    legendBox.SetLineColor(kBlack)
+    legendBox.SetFillColor(0)
+    legendBox.SetFillColorAlpha(0, 0.0)
 
     xlength = float(options.xlength)
     if ("500x500" in sensor_reference):
@@ -147,7 +160,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     binary_readout_res_sensor.SetLineStyle(7)
     binary_readout_res_sensor.SetLineColor(kBlack)
     binary_readout_res_sensor.Draw("same")
-    legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
+    legendTop.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
 
     plotfile = []
     list_OneStrip_vs_x = []
@@ -174,19 +187,29 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
             hist_one.SetMarkerColor(colors[i*2])
         else:
             hist_one.SetMarkerColor(colors[i+1])
-        legend.AddEntry(hist_one, tag[i]+' - Exactly one %s'%sensor_type, "P")
 
         hist_two.SetLineWidth(3)
         if("thickness" in tagVars):
             hist_two.SetLineColor(colors[i*2])
         else:
             hist_two.SetLineColor(colors[i+1])
-        legend.AddEntry(hist_two, tag[i]+' - Two %s'%sensor_type)
+        legendTop.AddEntry(hist_two, tag[i])
         hist_two.Draw("hist same")
 
+        if i==0:
+            markOne = TGraph(hist_one)
+            markOne.SetMarkerColor(kBlack)
+            markTwo = hist_two.Clone()
+            markTwo.SetLineColor(kBlack)
+            legendBot.AddEntry(markOne, "Exactly one %s"%sensor_type, "P")
+            legendBot.AddEntry(markTwo, "Two %s"%sensor_type, "L")
+
+
     legendHeader = tag[-1]
-    legend.SetHeader(legendHeader, "C")
-    legend.Draw()
+    legendTop.SetHeader(legendHeader, "C")
+    legendTop.Draw()
+    legendBot.Draw()
+    legendBox.Draw("same")
 
     sensor_prod="Strip sensors"
     if is_pad:
@@ -203,5 +226,6 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         file.Close()
     infile_reference.Close()
     canvas.Clear()
-    legend.Clear()
+    legendTop.Clear()
+    legendBot.Clear()
     haxis.Delete()
