@@ -32,14 +32,14 @@ if(sensor_type=='s'):
     Resolution_values_W5 = [65.88, 49.4, 38.37, 36.49, 35.55, 35.02, 34.74, 34.54, 35.06, 36.52, 40.22]
     Resolution_values_W9 = [90.59, 74.88, 55.06, 51.2, 49.11, 47.89, 47.99, 50.58, 54.0, 55.93, 66.41]
     suffix = "_strips"
-    sensor_type_label = "Strip Sensors"
+    sensor_type_label = "Strip sensors"
     sensors = ["HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V"]
 if(sensor_type=='p'):
     # Pads W5_1_1 and W9_22_3
     Resolution_values_W5 = [48.81, 37.74, 32.21, 32.05, 32.28, 32.69, 33.27, 33.79, 33.83, 34.66, 37.43]
     Resolution_values_W9 = [62.29, 41.19, 31.76, 31.44, 32.07, 31.46, 32.6, 34.73, 36.11, 40.17, 48.33]
     suffix = "_pads"
-    sensor_type_label = "Pixel Sensor"
+    sensor_type_label = "Pixel sensors"
     sensors = ["HPK_W5_1_1_50T_500x500_150M_E600_185V", "HPK_W9_22_3_20T_500x500_150M_E600_112V"]
 
 CFD_values = [5, 10, 20, 25, 30, 35, 40, 50, 60, 70, 80]
