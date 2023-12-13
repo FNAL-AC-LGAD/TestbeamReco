@@ -175,6 +175,8 @@ for i in range(1, nbins+1):
             minEvtsCut = 0.7*minEvtsCut
         if("20T" in dataset):
             minEvtsCut = 0.3*totalEvents/nbins
+        if(sensor == "HPK_W8_1_1_50T_500x500_150M_C600"):
+            minEvtsCut = 400
         # if(is_tight):
         #     minEvtsCut = 0
 
