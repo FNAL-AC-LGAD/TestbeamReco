@@ -98,17 +98,35 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     sensor_reference = sensors[0]
     treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
 
-    legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.35, 1-pad_margin-0.065, 1-pad_margin-0.25)
-    legend.SetNColumns(2)
-    # legend.SetBorderSize(1)
-    # legend.SetLineColor(kBlack)
+    legend_height = 0.055*(len(sensors) + 1) # Entries + title
+    legX1 = 2*pad_margin+0.065
+    legX2 = 1-pad_margin-0.065
+    legendTop = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
+    # legendTop.SetBorderSize(1)
+    # legendTop.SetLineColor(kBlack)
+    legendTop.SetTextFont(myStyle.GetFont())
+    legendTop.SetTextSize(myStyle.GetSize()-4)
 
-    yLegend = 0.026*len(sensors)
-    legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
-    # legend2.SetBorderSize(1)
-    legend2.SetLineColor(kBlack)
-    legend2.SetTextFont(myStyle.GetFont())
-    legend2.SetTextSize(myStyle.GetSize()-4)
+    legTopY1 = 1-pad_margin-legend_height-0.03
+    legendBot = TLegend(legX1, legTopY1-0.055, legX2, legTopY1)
+    legendBot.SetNColumns(2)
+    # legendBot.SetBorderSize(1)
+    # legendBot.SetLineColor(kBlack)
+    legendBot.SetTextFont(myStyle.GetFont())
+    legendBot.SetTextSize(myStyle.GetSize()-4)
+
+
+    # legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.35, 1-pad_margin-0.065, 1-pad_margin-0.25)
+    # legend.SetNColumns(2)
+    # # legend.SetBorderSize(1)
+    # # legend.SetLineColor(kBlack)
+
+    # yLegend = 0.026*len(sensors)
+    # legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
+    # # legend2.SetBorderSize(1)
+    # legend2.SetLineColor(kBlack)
+    # legend2.SetTextFont(myStyle.GetFont())
+    # legend2.SetTextSize(myStyle.GetSize()-4)
 
     xlength = float(options.xlength)
     if ("500x500" in sensor_reference):
@@ -131,7 +149,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
 
     infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
     geometry = myStyle.GetGeometry(sensor_reference)
-    boxes = getStripBox(infile_reference, ymin, ylength-30, pitch = geometry["pitch"]/1000.0)
+    boxes = getStripBox(infile_reference, ymin, 0.9*ylength, pitch = geometry["pitch"]/1000.0)
     if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
@@ -149,8 +167,8 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
                 vertical_line.SetLineColorAlpha(this_color, 0.4)
                 vertical_line.SetLineStyle(9)
                 center = (box.GetX1() + box.GetX2())/2.
-                vertical_line.DrawLine(center-swidth/2., ymin, center-swidth/2., ylength-10)
-                vertical_line.DrawLine(center+swidth/2., ymin, center+swidth/2., ylength-10)
+                vertical_line.DrawLine(center-swidth/2., ymin, center-swidth/2., 0.9*ylength)
+                vertical_line.DrawLine(center+swidth/2., ymin, center+swidth/2., 0.9*ylength)
 
     plotfile = []
     list_time_vs_x = []
@@ -180,27 +198,31 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
             hist.SetLineColor(colors[idx+1])
 
         if i < len(list_time_vs_x):
-            lengendEntry = legend2.AddEntry(hist, tag[idx])
+            lengendEntry = legendTop.AddEntry(hist, tag[idx])
         hist.Draw("hist same")
 
     # Draw legend
     if list_jitter_vs_x:
-        legend.AddEntry(pruned_time_vs_x[0], "Time resolution")
-        legend.AddEntry(list_jitter_vs_x[0], "Jitter")
-        legendBox = TPaveText(2*pad_margin+0.065, 1-pad_margin-0.03, 1-pad_margin-0.065, 1-pad_margin-0.35, "NDC")
+        tmpTime = pruned_time_vs_x[0].Clone()
+        tmpTime.SetLineColor(kBlack)
+        tmpJitter = list_jitter_vs_x[0].Clone()
+        tmpJitter.SetLineColor(kBlack)
+        legendBot.AddEntry(tmpTime, "Time resolution")
+        legendBot.AddEntry(tmpJitter, "Jitter")
+        legendBox = TPaveText(legX1, legTopY1-0.055, legX2, 1-pad_margin-0.03, "NDC")
         legendBox.SetBorderSize(1)
         legendBox.SetLineColor(kBlack)
         legendBox.SetFillColor(0)
         legendBox.SetFillColorAlpha(0, 0.0)
-        legend.Draw()
-        legend2.Draw()
+        legendTop.Draw()
+        legendBot.Draw()
         legendBox.Draw("same")
     else:
-        legend2.SetBorderSize(1)
-        legend2.Draw()
+        legendTop.SetBorderSize(1)
+        legendTop.Draw()
 
     legendHeader = tag[-1]
-    legend2.SetHeader(legendHeader, "C")
+    legendTop.SetHeader(legendHeader, "C")
 
     sensor_prod="Strip sensors"
     if ("500x500" in sensor_reference):
@@ -217,6 +239,6 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
             f.Close()
     infile_reference.Close()
     canvas.Clear()
-    legend.Clear()
-    legend2.Clear()
+    legendTop.Clear()
+    legendBot.Clear()
     haxis.Delete()

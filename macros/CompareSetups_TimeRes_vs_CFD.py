@@ -51,7 +51,7 @@ graph1.SetMarkerColor(colors[0])
 graph1.SetLineColor(colors[0])
 graph1.SetLineWidth(3)
 graph1.GetXaxis().SetRangeUser(0.0, 85.0)
-graph1.GetYaxis().SetRangeUser(0.001, 100)
+graph1.GetYaxis().SetRangeUser(0.001, 90)
 
 # Create TGraph for the second curve
 graph2 = ROOT.TGraph(len(CFD_values), array('d', CFD_values), array('d', Resolution_values_W9))
@@ -78,8 +78,8 @@ graph2.Draw("PL same")
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
 # Create a legend
-legend = TLegend(pad_center-0.29, 1-pad_margin-0.20, pad_center+0.29, 1-pad_margin-0.03)
-# legend = TLegend(2*pad_margin+0.095, 1-pad_margin-0.15, 1-pad_margin-0.095, 1-pad_margin-0.04)
+legend_height = 0.055*(len(sensors) + 1) # Entries + title
+legend = TLegend(pad_center-0.29, 1-pad_margin-legend_height-0.03, pad_center+0.29, 1-pad_margin-0.03)
 legend.SetNColumns(1)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-4)
@@ -110,6 +110,3 @@ myStyle.SensorProductionInfo(sensor_type_label)
 canvas.SaveAs("%sCFD_study%s.png"%(outdir,suffix))
 canvas.SaveAs("%sCFD_study%s.pdf"%(outdir,suffix))
 canvas.Clear()
-
-# # Keep the program running to display the plot
-# ROOT.gApplication.Run()

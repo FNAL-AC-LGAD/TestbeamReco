@@ -58,7 +58,7 @@ ylength_list = [
     # HPK Varying thickness
     170,
     # KOJI Varying thickness
-    100,
+    90,
     # BNL and HPK Varying metal widths
     100,
     # HPK pads Varying thickness and resistivity
@@ -94,8 +94,11 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     sensor_reference = sensors[0]
     treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
 
-    yLegend = 0.026*len(sensors)
-    legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
+    legend_height = 0.055*(len(sensors) + 1) # Entries + title
+    legX1 = 2*pad_margin+0.065
+    legX2 = 1-pad_margin-0.065
+
+    legend2 = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
     legend2.SetBorderSize(1)
     legend2.SetLineColor(kBlack)
     legend2.SetTextFont(myStyle.GetFont())
@@ -122,7 +125,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
 
     infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
     geometry = myStyle.GetGeometry(sensor_reference)
-    boxes = getStripBox(infile_reference, ymin, ylength-30, pitch = geometry["pitch"]/1000.0)
+    boxes = getStripBox(infile_reference, ymin, ylength-10, pitch = geometry["pitch"]/1000.0)
     if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:

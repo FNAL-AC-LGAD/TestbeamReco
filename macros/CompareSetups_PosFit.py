@@ -87,8 +87,12 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         max_width = this_width if this_width > max_width else max_width
         pitch = this_pitch if this_pitch > pitch else pitch
 
+    legend_height = 0.050*(len(sensors) + 1) # Entries + title
+    legX1 = 1-marginR-0.6
+    legX2 = 1-marginR-0.03
+
     yLegend = 0.026*len(sensors)
-    legend = TLegend(1-marginR-0.6, 1-pad_margin-0.2-yLegend, 1-marginR-0.03, 1-pad_margin-0.03)
+    legend = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
     legend.SetBorderSize(1)
     legend.SetLineColor(kBlack)
     legend.SetTextFont(myStyle.GetFont())
