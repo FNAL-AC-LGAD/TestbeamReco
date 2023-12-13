@@ -41,13 +41,21 @@ datasets = [
     "HPK_20um_500x500um_2x2pad_E600_FNAL_75V",
 ]
 
+sensors = [
+    "HPK_20um_500x500um_2x2pad_E600_FNAL_105V",
+    "HPK_30um_500x500um_2x2pad_E600_FNAL_140V",
+    "HPK_50um_500x500um_2x2pad_E600_FNAL_190V",
+]
+
 variables = ["time_resolution", "jitter", "amp_max", "risetime", "baseline"]
 y_label = ["Time resolution [ps]", "Jitter [ps]", "Amplitude peak [mV]",
            "Risetime [ps] (10 to 90%)", "Baseline RMS [mV]"]
 y_low_limit = [0, 0, 0, 200, 1.4]
 y_top_limit = [70, 0, 230, 800, 2.6]
 
-outdir = myStyle.getOutputDir("Paper2023")
+# outdir = myStyle.getOutputDir("Paper2023")
+# outdir = myStyle.GetPlotsDir(outdir, "Bias_scan/")
+outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
 outdir = myStyle.GetPlotsDir(outdir, "Bias_scan/")
 
 geometry_all = msi.sensorsGeom2023_biasScan
@@ -113,7 +121,7 @@ for i, var in enumerate(variables):
     gPad.RedrawAxis("g")
 
     # Create legend
-    legend = TLegend(pad_center-0.30, 1-pad_margin-0.20, pad_center+0.30, 1-pad_margin-0.01)
+    legend = TLegend(pad_center-0.29, 1-pad_margin-0.24, pad_center+0.29, 1-pad_margin-0.03)
     legend.SetTextFont(myStyle.GetFont())
     legend.SetTextSize(myStyle.GetSize()-4)
     legend.SetBorderSize(1)
@@ -121,16 +129,20 @@ for i, var in enumerate(variables):
     legend.SetLineStyle(1)
     legend.SetLineWidth(2)
 
+    legend_entries = mf.get_legend_comparation_plots(sensors, ["thickness"])
     for j, hist in enumerate(hists):
         thick = hist.GetName().split("_")[-1]
         hist.Draw("SAME P")
-        legend_title = "HPK %s #mum FNAL board"%(thick[:-2])
-        legend.AddEntry(hist, legend_title, "p")
+        legend.AddEntry(hist, legend_entries[j], "p")
+        # legend.AddEntry(hist, legend_entries[j] + " FNAL board", "p")
 
+    legendHeader = legend_entries[-1]
+    legend.SetHeader(legendHeader, "C")
     legend.Draw()
 
     myStyle.BeamInfo()
-    myStyle.SensorInfo("HPK 2x2 pad production")
+    # myStyle.SensorInfo("HPK 2x2 pad production")
+    myStyle.SensorInfo("Pixel sensors")
     canvas.SaveAs("%s%s.gif"%(outdir, var))
     canvas.SaveAs("%s%s.pdf"%(outdir, var))
 
