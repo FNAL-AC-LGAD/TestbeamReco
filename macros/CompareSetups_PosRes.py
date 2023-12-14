@@ -182,10 +182,15 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     if treat_as_2x2:
         list_2x2 = [list_TwoStrip_vs_x.pop(sensors.index(sensor_reference))]
         list_3x2 = list_TwoStrip_vs_x
-        list_TwoStrip_vs_x = mf.move_distribution(list_2x2, -0.025) + mf.move_distribution(list_3x2, -0.250)
+        list_TwoStrip_vs_x = mf.move_distribution(list_2x2, -0.025)
+        list_TwoStrip_vs_x+= mf.move_distribution(list_3x2, -0.250)
     pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x)
     for i, hist_two in enumerate(pruned_TwoStrip_vs_x):
         hist_one = list_OneStrip_vs_x[i]
+        # Move one strip markers to correct position wrt boxes
+        for j, box in enumerate(boxes):
+            x_position = (box.GetX1() + box.GetX2())/2.
+            hist_one.SetPointX(j, x_position)
         hist_one.Draw("P same")
         hist_one.SetLineStyle(1)
         hist_one.SetMarkerStyle(33)

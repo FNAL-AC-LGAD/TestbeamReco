@@ -164,18 +164,24 @@ def first_common_non_empty_x(list_histograms, first = True):
 
     return x_filled
 
-def move_distribution(list_histograms, new_center_pos):
-    for i, h in enumerate(list_histograms):
-        new_min, new_max = get_shifted_limits(h, new_center_pos)
-        nxbin = h.GetXaxis().GetNbins()
-        hname = "%s_%i_%i"%(h.GetName(), abs(new_center_pos/0.005), i)
-        th1 = ROOT.TH1D(hname, "", nxbin, new_min, new_max)
-        for j in range(1, nxbin+1):
-            th1.SetBinContent(j, h.GetBinContent(j))
-            th1.SetBinError(j, h.GetBinError(j))
-        list_histograms[i] = th1
+def move_distribution(list_elements, new_center_pos, is_tgraph = False):
+    for i, obj in enumerate(list_elements):
+        new_min, new_max = get_shifted_limits(obj, new_center_pos)
+        if is_tgraph:
+            npoints = obj.GetN()
+            for j in range(npoints):
+                obj.SetPointX(j, obj.GetPointX(j)-new_center_pos)
+            list_elements[i] = obj
+        else:
+            nxbin = obj.GetXaxis().GetNbins()
+            hname = "%s_%i_%i"%(obj.GetName(), abs(new_center_pos/0.005), i)
+            th1 = ROOT.TH1D(hname, "", nxbin, new_min, new_max)
+            for j in range(1, nxbin+1):
+                th1.SetBinContent(j, obj.GetBinContent(j))
+                th1.SetBinError(j, obj.GetBinError(j))
+            list_elements[i] = th1
 
-    return list_histograms
+    return list_elements
 
 def same_limits_compare(list_histograms):
     nbins = list_histograms[0].GetXaxis().GetNbins()
