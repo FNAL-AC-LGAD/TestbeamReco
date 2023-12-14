@@ -41,26 +41,9 @@ if(sensor_type=='p'):
     sensor_type_label = "Pixel sensors"
     sensors = ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"]
 
+resolutions = [Resolution_values_W9, Resolution_values_W5]
 CFD_values = [5, 10, 20, 25, 30, 35, 40, 50, 60, 70, 80]
 colors = myStyle.GetColorsCompare(len(sensors))
-
-graph1 = ROOT.TGraph(len(CFD_values), array('d', CFD_values), array('d', Resolution_values_W5))
-graph1.SetMarkerStyle(8)
-graph1.SetMarkerSize(2)
-graph1.SetMarkerColor(colors[0])
-graph1.SetLineColor(colors[0])
-graph1.SetLineWidth(3)
-graph1.GetXaxis().SetRangeUser(0.0, 85.0)
-graph1.GetYaxis().SetRangeUser(0.001, 90)
-
-# Create TGraph for the second curve
-graph2 = ROOT.TGraph(len(CFD_values), array('d', CFD_values), array('d', Resolution_values_W9))
-graph2.SetMarkerStyle(8)
-graph2.SetMarkerSize(2)
-graph2.SetMarkerColor(colors[1])
-graph2.SetLineColor(colors[1])
-graph2.SetLineWidth(3)
-graph2.GetYaxis().SetRangeUser(0.001, 100)
 
 # Create a canvas
 canvas = TCanvas("cv","cv",1000,800)
@@ -68,12 +51,6 @@ canvas.SetGrid(0,1)
 # gPad.SetTicks(1,1)
 TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
-
-# Draw the first graph
-graph1.Draw("APL")  # A for axes, P for points, L for line
-
-# Draw the second graph on the same canvas
-graph2.Draw("PL same")
 
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
@@ -87,19 +64,30 @@ legend.SetBorderSize(1)
 legend.SetLineColor(kBlack)
 # legend.SetLineStyle(1)
 # legend.SetLineWidth(2)
-
 legend_entries = mf.get_legend_comparation_plots(sensors, ["thickness"])
-legend.AddEntry(graph1, legend_entries[0], "lp")
-legend.AddEntry(graph2, legend_entries[1], "lp")
 
-# legend.AddEntry(graph2, "20 #mum active thickness", "lp")
-# legend.AddEntry(graph1, "50 #mum active thickness", "lp")
+graphs = []
+for i, sensor in enumerate(sensors):
+    graph = ROOT.TGraph(len(CFD_values), array('d', CFD_values), array('d', resolutions[i]))
+    graph.SetMarkerStyle(8)
+    graph.SetMarkerSize(2)
+    graph.SetMarkerColor(colors[i])
+    graph.SetLineColor(colors[i])
+    graph.SetLineWidth(3)
+    graph.GetXaxis().SetRangeUser(0.0, 85.0)
+    graph.GetYaxis().SetRangeUser(0.001, 90)
+    # Set axis titles
+    graph.GetXaxis().SetTitle("CFD [%]")
+    graph.GetYaxis().SetTitle("Time resolution [ps]")
+    graph.SetTitle("")
+
+    opts = "APL" if i==0 else "PL same"
+    graph.Draw(opts)
+
+    legend.AddEntry(graph, legend_entries[i], "lp")
+    graphs.append(graph)
+
 legend.Draw()
-
-# Set axis titles
-graph1.GetXaxis().SetTitle("CFD [%]")
-graph1.GetYaxis().SetTitle("Time resolution [ps]")
-graph1.SetTitle("")
 
 # Update the canvas
 canvas.Update()
