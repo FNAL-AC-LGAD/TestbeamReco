@@ -116,22 +116,29 @@ for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()):
 outputfile=TFile("%splotsAmplitudevsXY.root"%outdir,"RECREATE")
 
 
-if "BNL" in dataset:
+if "2x2pad" in dataset:
+    cutg = TCutG("cutg",4);
+    BoxHot = TBox(-0.25,-0.25,0.25,0.25)
+    cutg.SetPoint(0,-0.5,-0.55);
+    cutg.SetPoint(1,-0.5,0.5);
+    cutg.SetPoint(2,0.525,0.5);
+    cutg.SetPoint(3,0.525,-0.55); 
+elif "BNL" in dataset:
     cutg = TCutG("cutg",4);
     cutg.SetPoint(0,-0.65,-0.42);
     cutg.SetPoint(1,-0.65,0.42);
     cutg.SetPoint(2,0.68,0.42);
     cutg.SetPoint(3,0.68,-0.42); 
-BoxHot = TBox(-0.50,-0.25,0.50,0.25)
-
-
-if "2x2pad" in dataset:
+    BoxHot = TBox(-0.51,-0.25,0.51,0.25)
+else:
     cutg = TCutG("cutg",4);
-    BoxHot = TBox(-0.2375,-0.2625,0.2625,0.2375)
-    cutg.SetPoint(0,-0.5,-0.55);
-    cutg.SetPoint(1,-0.5,0.5);
-    cutg.SetPoint(2,0.525,0.5);
-    cutg.SetPoint(3,0.525,-0.55); 
+    cutg.SetPoint(0,-0.65,-0.42);
+    cutg.SetPoint(1,-0.65,0.42);
+    cutg.SetPoint(2,0.68,0.42);
+    cutg.SetPoint(3,0.68,-0.42); 
+    BoxHot = TBox(-0.50,-0.25,0.50,0.25)
+
+
 # BoxHot = TBox(-0.2525,-0.25,0.2375,0.25)
 BoxHot.SetLineColor(632)
 BoxHot.SetFillStyle(0)
