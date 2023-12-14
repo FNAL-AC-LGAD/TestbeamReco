@@ -95,7 +95,10 @@ canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
     sensor_reference = sensors[0]
-    treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
+    treat_as_2x2 = ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensors)
+    if treat_as_2x2:
+        sensor_reference = "HPK_W9_23_3_20T_500x500_300M_E600_112V"
+
     colors = myStyle.GetColorsCompare(len(sensors))
 
     legend_height = 0.058*(len(sensors) + 1) # Entries + title
@@ -175,7 +178,12 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         plotfile.append(inFile)
         list_time_vs_x.append(hTime)
 
-    pruned_time_vs_x = mf.same_limits_compare(list_time_vs_x + list_jitter_vs_x, treat_as_2x2)
+    if treat_as_2x2:
+        list_2x2 = [list_time_vs_x.pop(sensors.index(sensor_reference))]
+        list_3x2 = list_time_vs_x
+        list_time_vs_x = mf.move_distribution(list_2x2, -0.025) + mf.move_distribution(list_3x2, -0.250)
+        # Jitter could be added here for 2x2 vs 3x2 if needed
+    pruned_time_vs_x = mf.same_limits_compare(list_time_vs_x + list_jitter_vs_x)
     for i, hist in enumerate(pruned_time_vs_x):
         idx = i%len(list_time_vs_x)
         hist.SetLineWidth(3)

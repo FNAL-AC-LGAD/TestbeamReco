@@ -85,7 +85,10 @@ canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_list, saveName_list, ylength_list, yoffset_list):
     sensor_reference = sensors[0]
-    treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
+    treat_as_2x2 = ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensors)
+    if treat_as_2x2:
+        sensor_reference = "HPK_W9_23_3_20T_500x500_300M_E600_112V"
+
     colors = myStyle.GetColorsCompare(len(sensors))
 
     legend_height = 0.058*(len(sensors) + 2) # Entries + title + binary readout
@@ -176,7 +179,11 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         list_TwoStrip_vs_x.append(hTwoStrip)
 
     sensor_type = "strip" if not is_pad else "channel"
-    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x, treat_as_2x2)
+    if treat_as_2x2:
+        list_2x2 = [list_TwoStrip_vs_x.pop(sensors.index(sensor_reference))]
+        list_3x2 = list_TwoStrip_vs_x
+        list_TwoStrip_vs_x = mf.move_distribution(list_2x2, -0.025) + mf.move_distribution(list_3x2, -0.250)
+    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x)
     for i, hist_two in enumerate(pruned_TwoStrip_vs_x):
         hist_one = list_OneStrip_vs_x[i]
         hist_one.Draw("P same")
@@ -197,7 +204,6 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
             markTwo.SetLineColor(kBlack)
             legendBot.AddEntry(markOne, "Exactly one %s"%sensor_type, "P")
             legendBot.AddEntry(markTwo, "Two %s"%sensor_type, "L")
-
 
     legendHeader = tag[-1]
     legendTop.SetHeader(legendHeader, "C")
