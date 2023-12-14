@@ -20,7 +20,6 @@ parser.add_option('-x','--xlength', dest='xlength', default = 1.25, help="Limit 
 # parser.add_option('-y','--ylength', dest='ylength', default = 120, help="Max Amp value in final plot")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
-colors = myStyle.GetColors(True)
 
 sensors_list = [
     # Varying resistivity and capacitance
@@ -93,16 +92,17 @@ canvas = TCanvas("cv","cv",1000,800)
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
     sensor_reference = sensors[0]
     treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
+    colors = myStyle.GetColorsCompare(len(sensors))
 
-    legend_height = 0.055*(len(sensors) + 1) # Entries + title
+    legend_height = 0.058*(len(sensors) + 1) # Entries + title
     legX1 = 2*pad_margin+0.065
     legX2 = 1-pad_margin-0.065
 
-    legend2 = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
-    legend2.SetBorderSize(1)
-    legend2.SetLineColor(kBlack)
-    legend2.SetTextFont(myStyle.GetFont())
-    legend2.SetTextSize(myStyle.GetSize()-4)
+    legend = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
+    legend.SetBorderSize(1)
+    legend.SetLineColor(kBlack)
+    legend.SetTextFont(myStyle.GetFont())
+    legend.SetTextSize(myStyle.GetSize()-4)
 
     xlength = float(options.xlength)
     if ("500x500" in sensor_reference):
@@ -135,7 +135,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     if ("width" in tagVars):
         for i, sensor in enumerate(sensors):
             swidth = myStyle.GetGeometry(sensor)["width"]/1000.
-            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            this_color = colors[i]
             for box in boxes:
                 vertical_line = TLine()
                 vertical_line.SetLineWidth(2)
@@ -159,18 +159,15 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     pruned_amplitude_vs_x = mf.same_limits_compare(list_amplitude_vs_x, treat_as_2x2)
     for i, hist in enumerate(pruned_amplitude_vs_x):
         hist.SetLineWidth(3)
-        if("thickness" in tagVars):
-            hist.SetLineColor(colors[i*2])
-        else:
-            hist.SetLineColor(colors[i+1])
+        hist.SetLineColor(colors[i])
 
-        lengendEntry = legend2.AddEntry(hist, tag[i])
+        lengendEntry = legend.AddEntry(hist, tag[i])
         # lengendEntry.SetTextAlign(22)
         hist.Draw("hist same")
 
     legendHeader = tag[-1]
-    legend2.SetHeader(legendHeader, "C")
-    legend2.Draw()
+    legend.SetHeader(legendHeader, "C")
+    legend.Draw()
 
     # sensor_prod="HPK production"
     sensor_prod="Strip sensors"
@@ -188,5 +185,5 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         file.Close()
     infile_reference.Close()
     canvas.Clear()
-    legend2.Clear()
+    legend.Clear()
     haxis.Delete()

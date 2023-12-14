@@ -32,7 +32,6 @@ parser.add_option('-x','--xlength', dest='xlength', default = 1.5, help="Limit x
 # parser.add_option('-y','--ylength', dest='ylength', default = 150, help="Max TR value in final plot")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
-colors = myStyle.GetColors(True)
 
 sensors_list = [
     # Varying resistivity and capacitance
@@ -40,7 +39,7 @@ sensors_list = [
     # HPK Varying thickness
     ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # KOJI Varying thickness
-    [ "HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
+    ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
     # HPK pads Varying metal widths
@@ -97,8 +96,9 @@ canvas = TCanvas("cv","cv",1000,800)
 for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylength_list, saveName_list):
     sensor_reference = sensors[0]
     treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
+    colors = myStyle.GetColorsCompare(len(sensors))
 
-    legend_height = 0.055*(len(sensors) + 1) # Entries + title
+    legend_height = 0.058*(len(sensors) + 1) # Entries + title
     legX1 = 2*pad_margin+0.065
     legX2 = 1-pad_margin-0.065
     legendTop = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
@@ -114,19 +114,6 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     # legendBot.SetLineColor(kBlack)
     legendBot.SetTextFont(myStyle.GetFont())
     legendBot.SetTextSize(myStyle.GetSize()-4)
-
-
-    # legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.35, 1-pad_margin-0.065, 1-pad_margin-0.25)
-    # legend.SetNColumns(2)
-    # # legend.SetBorderSize(1)
-    # # legend.SetLineColor(kBlack)
-
-    # yLegend = 0.026*len(sensors)
-    # legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
-    # # legend2.SetBorderSize(1)
-    # legend2.SetLineColor(kBlack)
-    # legend2.SetTextFont(myStyle.GetFont())
-    # legend2.SetTextSize(myStyle.GetSize()-4)
 
     xlength = float(options.xlength)
     if ("500x500" in sensor_reference):
@@ -159,7 +146,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     if ("width" in tagVars):
         for i, sensor in enumerate(sensors):
             swidth = myStyle.GetGeometry(sensor)["width"]/1000.
-            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            this_color = colors[i]
             for box in boxes:
                 vertical_line = TLine()
                 vertical_line.SetLineWidth(2)
@@ -192,10 +179,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     for i, hist in enumerate(pruned_time_vs_x):
         idx = i%len(list_time_vs_x)
         hist.SetLineWidth(3)
-        if("thickness" in tagVars):
-            hist.SetLineColor(colors[idx*2])
-        else:
-            hist.SetLineColor(colors[idx+1])
+        hist.SetLineColor(colors[idx])
 
         if i < len(list_time_vs_x):
             lengendEntry = legendTop.AddEntry(hist, tag[idx])

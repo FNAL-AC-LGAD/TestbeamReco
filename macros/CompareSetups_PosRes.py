@@ -19,7 +19,6 @@ parser.add_option('-x','--xlength', dest='xlength', default = 1.5, help="Limit x
 # parser.add_option('-y','--ylength', dest='ylength', default = 200, help="Max Amp value in final plot")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
-colors = myStyle.GetColors(True)
 
 sensors_list = [
     # Varying thickness
@@ -60,7 +59,7 @@ ylength_list = [
     # Varying thickness KOJI
     90,
     # HPK pads Varying thickness and resistivity
-    300,
+    310,
     # HPK pads Varying metal widths
     300,
 ]
@@ -87,8 +86,9 @@ canvas = TCanvas("cv","cv",1000,800)
 for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_list, saveName_list, ylength_list, yoffset_list):
     sensor_reference = sensors[0]
     treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
+    colors = myStyle.GetColorsCompare(len(sensors))
 
-    legend_height = 0.055*(len(sensors) + 2) # Entries + title + binary readout
+    legend_height = 0.058*(len(sensors) + 2) # Entries + title + binary readout
     legX1 = 2*pad_margin+0.065
     legX2 = 1-pad_margin-0.065
     legendTop = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
@@ -144,7 +144,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     if ("width" in tagVars):
         for i, sensor in enumerate(sensors):
             swidth = myStyle.GetGeometry(sensor)["width"]/1000.
-            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            this_color = colors[i]
             for box in boxes:
                 vertical_line = TLine()
                 vertical_line.SetLineWidth(2)
@@ -183,16 +183,10 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         hist_one.SetLineStyle(1)
         hist_one.SetMarkerStyle(33)
         hist_one.SetMarkerSize(3)
-        if("thickness" in tagVars):
-            hist_one.SetMarkerColor(colors[i*2])
-        else:
-            hist_one.SetMarkerColor(colors[i+1])
+        hist_one.SetMarkerColor(colors[i])
 
         hist_two.SetLineWidth(3)
-        if("thickness" in tagVars):
-            hist_two.SetLineColor(colors[i*2])
-        else:
-            hist_two.SetLineColor(colors[i+1])
+        hist_two.SetLineColor(colors[i])
         legendTop.AddEntry(hist_two, tag[i])
         hist_two.Draw("hist same")
 

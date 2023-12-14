@@ -18,8 +18,7 @@ sensor_type = options.Type
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
-colors = myStyle.GetColors(True)
-# colors = [colors[1], colors[4], colors[2]]
+
 
 ## Defining Style
 myStyle.ForceStyle()
@@ -33,16 +32,17 @@ if(sensor_type=='s'):
     Resolution_values_W9 = [90.59, 74.88, 55.06, 51.2, 49.11, 47.89, 47.99, 50.58, 54.0, 55.93, 66.41]
     suffix = "_strips"
     sensor_type_label = "Strip sensors"
-    sensors = ["HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V"]
+    sensors = ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"]
 if(sensor_type=='p'):
     # Pads W5_1_1 and W9_22_3
     Resolution_values_W5 = [48.81, 37.74, 32.21, 32.05, 32.28, 32.69, 33.27, 33.79, 33.83, 34.66, 37.43]
     Resolution_values_W9 = [62.29, 41.19, 31.76, 31.44, 32.07, 31.46, 32.6, 34.73, 36.11, 40.17, 48.33]
     suffix = "_pads"
     sensor_type_label = "Pixel sensors"
-    sensors = ["HPK_W5_1_1_50T_500x500_150M_E600_185V", "HPK_W9_22_3_20T_500x500_150M_E600_112V"]
+    sensors = ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"]
 
 CFD_values = [5, 10, 20, 25, 30, 35, 40, 50, 60, 70, 80]
+colors = myStyle.GetColorsCompare(len(sensors))
 
 graph1 = ROOT.TGraph(len(CFD_values), array('d', CFD_values), array('d', Resolution_values_W5))
 graph1.SetMarkerStyle(8)
@@ -57,8 +57,8 @@ graph1.GetYaxis().SetRangeUser(0.001, 90)
 graph2 = ROOT.TGraph(len(CFD_values), array('d', CFD_values), array('d', Resolution_values_W9))
 graph2.SetMarkerStyle(8)
 graph2.SetMarkerSize(2)
-graph2.SetMarkerColor(colors[2])
-graph2.SetLineColor(colors[2])
+graph2.SetMarkerColor(colors[1])
+graph2.SetLineColor(colors[1])
 graph2.SetLineWidth(3)
 graph2.GetYaxis().SetRangeUser(0.001, 100)
 
@@ -78,7 +78,7 @@ graph2.Draw("PL same")
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
 # Create a legend
-legend_height = 0.055*(len(sensors) + 1) # Entries + title
+legend_height = 0.058*(len(sensors) + 1) # Entries + title
 legend = TLegend(pad_center-0.29, 1-pad_margin-legend_height-0.03, pad_center+0.29, 1-pad_margin-0.03)
 legend.SetNColumns(1)
 legend.SetTextFont(myStyle.GetFont())
@@ -89,8 +89,8 @@ legend.SetLineColor(kBlack)
 # legend.SetLineWidth(2)
 
 legend_entries = mf.get_legend_comparation_plots(sensors, ["thickness"])
-legend.AddEntry(graph2, legend_entries[1], "lp")
 legend.AddEntry(graph1, legend_entries[0], "lp")
+legend.AddEntry(graph2, legend_entries[1], "lp")
 
 # legend.AddEntry(graph2, "20 #mum active thickness", "lp")
 # legend.AddEntry(graph1, "50 #mum active thickness", "lp")
