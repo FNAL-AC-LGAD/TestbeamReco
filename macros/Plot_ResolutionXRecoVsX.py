@@ -264,8 +264,12 @@ for i in range(1, nbins+1):
 
         # Define minimum of bin's entries to be fitted
         minEvtsCut = totalEvents/nbins
-        if("HPK_W9_15_2" in dataset):
+        if ("HPK_W9_15_2" in dataset):
             minEvtsCut = 0.25*totalEvents/nbins
+        if ("500x500" in dataset):
+            minEvtsCut = 0.1*totalEvents/nbins
+        if ("W9_23_3_20T_500x500_300M" in dataset):
+            minEvtsCut = 0.50*totalEvents/nbins
 
         if (i == 1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)

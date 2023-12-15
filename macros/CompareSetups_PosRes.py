@@ -180,11 +180,23 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
 
     sensor_type = "strip" if not is_pad else "channel"
     if treat_as_2x2:
+        # Move distributions to be centered as a 2x2 pad
         list_2x2 = [list_TwoStrip_vs_x.pop(sensors.index(sensor_reference))]
         list_3x2 = list_TwoStrip_vs_x
         list_TwoStrip_vs_x = mf.move_distribution(list_2x2, -0.025)
         list_TwoStrip_vs_x+= mf.move_distribution(list_3x2, -0.250)
     pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x)
+
+    # Remove bad behaved bins in central pad of this group of sensors
+    if (saveName == "HPK_Pads_PosResolution_vs_x_thicknessRes"):
+        swidth = myStyle.GetGeometry(sensor_reference)["width"]/1000.
+        for hist in pruned_TwoStrip_vs_x:
+            for b in range(1, hist.GetXaxis().GetNbins()+1):
+                is_bad_zone = mf.is_inside_limits(b, hist, 1.001*swidth/2.)
+                if is_bad_zone:
+                    hist.SetBinContent(b, 0.0)
+                    hist.SetBinError(b, 0.0)
+
     for i, hist_two in enumerate(pruned_TwoStrip_vs_x):
         hist_one = list_OneStrip_vs_x[i]
         # Move one strip markers to correct position wrt boxes
