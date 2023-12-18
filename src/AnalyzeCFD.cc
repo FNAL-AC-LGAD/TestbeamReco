@@ -300,6 +300,16 @@ void AnalyzeCFD::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>
     utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp2OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
     utility::makeHisto(my_1d_prof,"Xtrack_vs_Amp3OverAmp123_prof","; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + Amp_{3})", (xmax-xmin)/xBinSize,xmin,xmax);
     utility::makeHisto(my_1d_prof,"clusterSize_vs_x_prof", "; X [mm]; Cluster Size", (xmax-xmin)/xBinSize,xmin,xmax);
+
+    utility::makeHisto(my_1d_prof,"waveProf0", "; Time [ns]; Voltage [mV]", 250,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf1", "; Time [ns]; Voltage [mV]", 250,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf2", "; Time [ns]; Voltage [mV]", 250,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf3", "; Time [ns]; Voltage [mV]", 250,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf4", "; Time [ns]; Voltage [mV]", 250,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf5", "; Time [ns]; Voltage [mV]", 250,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf6", "; Time [ns]; Voltage [mV]", 250,0.0,25.0);
+    utility::makeHisto(my_1d_prof,"waveProf7", "; Time [ns]; Voltage [mV]", 250,0.0,25.0);
+
        
     //Define TEfficiencies if you are doing trigger studies (for proper error bars) or cut flow charts.
     utility::makeHisto(my_efficiencies,"event_oneStripReco",";;Events %",9,0,9);
@@ -333,6 +343,7 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
     const auto& voltage = tr.getVar<int>("voltage");
     int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
     int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
+    bool plotWaveForm = true;
 
     if(firstFile) InitHistos(tr, geometry);
 
@@ -768,6 +779,26 @@ void AnalyzeCFD::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(goodTrack,                                                                      my_2d_prof, "efficiency_vs_xy_DCRing", x,y,goodDCAmp);
         utility::fillHisto(goodTrack,                                                                      my_2d_prof, "efficiency_vs_xy_Strip2or5", x,y,goodHitGlobal2and5);
         
+
+        if(plotWaveForm && corrAmp[0] > 94.0 &&  corrAmp[0] < 96.0)
+        {
+            std::cout<<corrAmp[0]<<std::endl;
+            const auto& channel = tr.getVecVec<float>("channel");
+            const auto& time = tr.getVecVec<float>("time");
+            const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
+            for(unsigned int i = 0; i < channel.size(); i++)
+            {
+                auto t = timeCalibrationCorrection.at(i) - 10.0;
+                if(i==7) continue;
+                std::string index = std::to_string(i);
+                for(unsigned int j = 0; j < time[0].size(); j++)
+                {
+                    my_1d_prof["waveProf"+index]->Fill(1e9*time[0][j] - photekTime - t, channel[i][j]);
+             
+                }
+            }
+            break;
+        }
     } //event loop
 }
 
