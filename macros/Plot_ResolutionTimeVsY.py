@@ -150,9 +150,10 @@ if debugMode:
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
 plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center)
-plot_xlimit = 0.8
 if ("pad" not in dataset) and ("500x500" not in dataset):
     plot_xlimit-= pitch/2.
+if "HPK_20um" in sensor:
+    plot_xlimit = 0.475
 
 # Loop over X bins
 for i in range(1, nbins+1):
@@ -201,9 +202,6 @@ for i in range(1, nbins+1):
             mySigmaError = fit.GetParError(2)
             valueRaw = 1000.0*mySigma
             errorRaw = 1000.0*mySigmaError
-            # if valueRaw > 27:
-                # valueRaw = 0
-                # errorRaw = 0
 
             value = valueRaw
             error  = errorRaw
@@ -239,7 +237,7 @@ for i in range(1, nbins+1):
         # info_entry.th1Mean.SetBinError(i,errorMean)
 
 # Define output file
-output_path = "%sTimeDiffVsX"%(outdir)
+output_path = "%sTimeDiffVsY"%(outdir)
 if (is_hotspot):
     output_path+= "_hotspot"
 elif (is_tight):
@@ -253,7 +251,7 @@ outputfile = TFile(output_path,"RECREATE")
 # Define hist for axes style
 htemp = TH1F("htemp", "", 1, -xlength, xlength)
 htemp.SetStats(0)
-htemp.GetXaxis().SetTitle("Track x position [mm]")
+htemp.GetXaxis().SetTitle("Track y position [mm]")
 htemp.GetYaxis().SetRangeUser(0.0, ylength)
 htemp.GetYaxis().SetTitle("Time resolution [ps]")  
 htemp.SetLineColor(colors[2])
@@ -338,7 +336,7 @@ legend.Draw()
 myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
 
-save_path = "%sTimeResolution_vs_x-AllMethods"%(outdir)
+save_path = "%sTimeResolution_vs_y-AllMethods"%(outdir)
 if (is_hotspot):
     save_path+= "-hotspot"
 elif (is_tight):
