@@ -348,3 +348,8 @@ for sensor in "${BNL_strips[@]}"; do
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 2.6
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 2.6 -y 100
 done
+
+for sensor in "${BNL_strips[@]}"; do
+    cd ../macros
+    python Print_Resolution.py          -D ${sensor}
+done

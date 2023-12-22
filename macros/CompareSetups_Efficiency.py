@@ -19,7 +19,6 @@ parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 1.75, help="Limit x-axis in final plot")
 # parser.add_option('-y','--ylength', dest='ylength', default = 1.4, help="Max Efficiency in final plot")
 options, args = parser.parse_args()
-colors = myStyle.GetColors(True)
 
 sensors_list = [
     # BNL and HPK sensors - different metal widths
@@ -76,14 +75,20 @@ canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     sensor_reference = sensors[0]
-    treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
+    treat_as_2x2 = ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensors)
+    if treat_as_2x2:
+        sensor_reference = "HPK_W9_23_3_20T_500x500_300M_E600_112V"
 
-    yLegend = 0.026*len(sensors)
-    legend2 = TLegend(2*pad_margin+0.065, 1-pad_margin-0.2-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
-    legend2.SetBorderSize(1)
-    legend2.SetLineColor(kBlack)
-    legend2.SetTextFont(myStyle.GetFont())
-    legend2.SetTextSize(myStyle.GetSize()-4)
+    colors = myStyle.GetColorsCompare(len(sensors))
+
+    legend_height = 0.058*(len(sensors) + 1) # Entries + title
+    legX1 = 2*pad_margin+0.065
+    legX2 = 1-pad_margin-0.065
+    legend = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
+    legend.SetBorderSize(1)
+    legend.SetLineColor(kBlack)
+    legend.SetTextFont(myStyle.GetFont())
+    legend.SetTextSize(myStyle.GetSize()-4)
 
     xlength = float(options.xlength)
     if ("500x500" in sensor_reference):
@@ -118,7 +123,7 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     if ("width" in tagVars):
         for i, sensor in enumerate(sensors):
             swidth = myStyle.GetGeometry(sensor)["width"]/1000.
-            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            this_color = colors[i]
             for box in boxes:
                 vertical_line = TLine()
                 vertical_line.SetLineWidth(2)
@@ -139,27 +144,28 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         plotfile.append(inFile)
         list_efficiency_vs_x.append(hEff)
 
-    pruned_efficiency_vs_x = mf.same_limits_compare(list_efficiency_vs_x, treat_as_2x2)
+    if treat_as_2x2:
+        list_2x2 = [list_efficiency_vs_x.pop(sensors.index(sensor_reference))]
+        list_3x2 = list_efficiency_vs_x
+        list_efficiency_vs_x = mf.move_distribution(list_2x2, -0.025) + mf.move_distribution(list_3x2, -0.250)
+    pruned_efficiency_vs_x = mf.same_limits_compare(list_efficiency_vs_x)
     for i, hist in enumerate(pruned_efficiency_vs_x):
         hist.SetLineWidth(3)
-        if("thickness" in tagVars):
-            hist.SetLineColor(colors[i*2])
-        else:
-            hist.SetLineColor(colors[i+1])
+        hist.SetLineColor(colors[i])
 
-        legend2.AddEntry(hist, tag[i])
+        legend.AddEntry(hist, tag[i])
         hist.Draw("hist same")
 
     horizontal_line = TLine(-xlength, 1, xlength, 1)
     horizontal_line.SetLineWidth(3)
     horizontal_line.SetLineColor(1)
     horizontal_line.SetLineStyle(9)
-    # horizontal_line.SetLineColorAlpha(colors[2*i],0.4)
+    # horizontal_line.SetLineColorAlpha(colors[i],0.4)
     horizontal_line.DrawClone("same")
 
     legendHeader = tag[-1]
-    legend2.SetHeader(legendHeader, "C")
-    legend2.Draw()
+    legend.SetHeader(legendHeader, "C")
+    legend.Draw()
 
     sensor_prod="Strip sensors"
     if ("500x500" in sensor_reference):
@@ -176,5 +182,5 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         file.Close()
     infile_reference.Close()
     canvas.Clear()
-    legend2.Clear()
+    legend.Clear()
     haxis.Delete()

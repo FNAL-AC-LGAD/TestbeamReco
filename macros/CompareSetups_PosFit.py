@@ -31,8 +31,6 @@ def getFitFunction(parameters, scale):
             fitFunction += " + %.6f*pow(x - 0.5, %i)"%(scale*par,i)
     return fitFunction
 
-colors = myStyle.GetColors(True)
-
 sensor_reco = {
     "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V": {'recomax': 0.69, 'recoPars':[0.250000, -1.102187, -2.496727, 25.676521, -97.950055]},
     "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V": {'recomax': 0.84, 'recoPars':[0.250000, -0.693443, 0.894506, -9.526453, 38.944962, -58.650584]},
@@ -77,6 +75,7 @@ canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     sensor_reference = sensors[0]
+    colors = myStyle.GetColorsCompare(len(sensors))
 
     # Get max width and pitch
     max_width, pitch = 0.0, 0.0
@@ -87,8 +86,12 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         max_width = this_width if this_width > max_width else max_width
         pitch = this_pitch if this_pitch > pitch else pitch
 
+    legend_height = 0.052*(len(sensors) + 1) # Entries + title
+    legX1 = 1-marginR-0.6
+    legX2 = 1-marginR-0.03
+
     yLegend = 0.026*len(sensors)
-    legend = TLegend(1-marginR-0.6, 1-pad_margin-0.2-yLegend, 1-marginR-0.03, 1-pad_margin-0.03)
+    legend = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
     legend.SetBorderSize(1)
     legend.SetLineColor(kBlack)
     legend.SetTextFont(myStyle.GetFont())
@@ -124,7 +127,7 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         horizontal_line = ROOT.TLine(xmin, width/2., xmax, width/2.)
         horizontal_line.SetLineWidth(3)
         horizontal_line.SetLineStyle(9)
-        horizontal_line.SetLineColorAlpha(colors[i+1], 0.4)
+        horizontal_line.SetLineColorAlpha(colors[i], 0.4)
         horizontal_line.DrawClone("same")
 
     # Draw fit functions
@@ -134,7 +137,7 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         recomax = sensor_reco[item]['recomax']
 
         func1 = TF1("f1%i"%(i), fitFunction, xmin, recomax)
-        func1.SetLineColor(colors[i+1])
+        func1.SetLineColor(colors[i])
         name = tag[i]
         fitFunction_list.append(func1)
         func1.DrawCopy("same")
