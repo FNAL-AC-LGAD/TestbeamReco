@@ -369,7 +369,7 @@ cd ../../test
 # HPK 500um Pitch sensors
 # -----------------------
 
-HPK_500P=('HPK_W8_18_2_50T_1P0_500P_100M_C600_208V' 'HPK_W8_17_2_50T_1P0_500P_50M_C600_200V' 'HPK_W4_17_2_50T_1P0_500P_50M_C240_204V' 'HPK_W5_17_2_50T_1P0_500P_50M_E600_190V' 'HPK_W2_3_2_50T_1P0_500P_50M_E240_180V' 'HPK_W9_15_2_20T_1P0_500P_50M_E600_114V' 'HPK_W9_14_2_20T_1P0_500P_100M_E600_112V' 'HPK_W9_15_4_20T_0P5_500P_50M_E600_110V')
+HPK_500P=("HPK_W9_15_4_20T_0P5_500P_50M_E600_110V" "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V" "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V" "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V" "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V" "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V" "HPK_W9_14_2_20T_1P0_500P_100M_E600_112V" "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V")
 
 for sensor in "${HPK_500P[@]}"; do
     printf "\nRunning over ${sensor} sensor\n"
@@ -410,20 +410,20 @@ done
 
 cd ../macros
 # DoPositionRecoFit
-python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  --xmax 0.71 --fitOrder 4
-python DoPositionRecoFit.py     -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V   --xmax 0.71 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   --xmax 0.69 --fitOrder 4
-python DoPositionRecoFit.py     -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V   --xmax 0.85 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V    --xmax 0.84 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V   --xmax 0.85 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V  --xmax 0.85 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V   --xmax 0.93 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V   --xmax 0.85 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   --xmax 0.69 --fitOrder 4
+python DoPositionRecoFit.py     -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V   --xmax 0.71 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V    --xmax 0.84 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V   --xmax 0.85 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V  --xmax 0.85 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  --xmax 0.71 --fitOrder 4
 
 
 # HPK narrow pitch sensors
 # ------------------------
 
-HPK_80P=('HPK_KOJI_50T_1P0_80P_60M_E240_190V' 'HPK_KOJI_20T_1P0_80P_60M_E240_112V')
+HPK_80P=("HPK_KOJI_20T_1P0_80P_60M_E240_112V" "HPK_KOJI_50T_1P0_80P_60M_E240_190V")
 
 for sensor in "${HPK_80P[@]}"; do
     printf "\nRunning over ${sensor} sensor\n"

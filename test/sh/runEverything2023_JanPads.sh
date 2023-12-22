@@ -160,9 +160,14 @@ for sensor in "${HPK_2x2pad[@]}"; do
     python Plot_Efficiency.py           -D ${sensor} -n -x 0.7
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 0.7 -y 60
 done
+
+for sensor in "${HPK_2x2pad[@]}"; do
+    cd ../macros
+    python Print_Resolution.py          -D ${sensor}
+done
 # commentout
 
-<<commentout_bias_scan ## Uncomment to run Bias Scan
+<<commentout_bias_scan ## Comment out to run Bias Scan
 # HPK_50um_500x500um_2x2pad_E600 Bias Scan
 # ----------------------------------------
 
