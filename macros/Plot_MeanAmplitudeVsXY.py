@@ -123,6 +123,11 @@ if "2x2pad" in dataset:
     cutg.SetPoint(1,-0.5,0.5);
     cutg.SetPoint(2,0.525,0.5);
     cutg.SetPoint(3,0.525,-0.55); 
+    x_low = list_amplitude_vs_xy[0].GetXaxis().FindBin(-0.4)
+    x_high = list_amplitude_vs_xy[0].GetXaxis().FindBin(0.4)
+    y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.4)
+    y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.4)
+
 elif "BNL" in dataset:
     cutg = TCutG("cutg",4);
     cutg.SetPoint(0,-0.65,-0.42);
@@ -130,6 +135,11 @@ elif "BNL" in dataset:
     cutg.SetPoint(2,0.68,0.42);
     cutg.SetPoint(3,0.68,-0.42); 
     BoxHot = TBox(-0.51,-0.25,0.51,0.25)
+    x_low = list_amplitude_vs_xy[0].GetXaxis().FindBin(-0.75)
+    x_high = list_amplitude_vs_xy[0].GetXaxis().FindBin(0.75)
+    y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.5)
+    y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.5)
+    
 else:
     cutg = TCutG("cutg",4);
     cutg.SetPoint(0,-0.65,-0.42);
@@ -137,6 +147,10 @@ else:
     cutg.SetPoint(2,0.68,0.42);
     cutg.SetPoint(3,0.68,-0.42); 
     BoxHot = TBox(-0.50,-0.25,0.50,0.25)
+    x_low = list_amplitude_vs_xy[0].GetXaxis().FindBin(-0.95)
+    x_high = list_amplitude_vs_xy[0].GetXaxis().FindBin(0.95)
+    y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.65)
+    y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.65)
 
 
 # BoxHot = TBox(-0.2525,-0.25,0.2375,0.25)
@@ -155,6 +169,8 @@ for channel in range(0, len(list_amplitude_vs_xy)):
     list_amplitude_vs_xy[channel].SetMinimum(zmin)
     list_amplitude_vs_xy[channel].SetMaximum(zmax)
     list_amplitude_vs_xy[channel].SetStats(0)
+    list_amplitude_vs_xy[channel].GetXaxis().SetRange(x_low, x_high)
+    list_amplitude_vs_xy[channel].GetYaxis().SetRange(y_low, y_high)
 
     # list_amplitude_vs_xy[channel].Draw("colz same [cutg]")
     if channel != (len(list_amplitude_vs_xy)-1):
