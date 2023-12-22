@@ -27,7 +27,7 @@ regions = ["Overall"]
 if all_regions:
     regions+= ["Metal", "Gap", "MidGap"]
 
-print("\t\tSensor %s summary info to be saved in mySensorInfo.py\n"%(myStyle.RemoveBV(dataset)))
+print("\n\t\tSensor %s summary info to be saved in mySensorInfo.py\n"%(myStyle.RemoveBV(dataset)))
 
 # Resolution values
 # -----------------
@@ -115,6 +115,13 @@ for reg in regions:
         info_str+= "%.1f, "%(info[key])
     info_str = info_str[:-2] + "],"
     print(info_str)
+
+    # # Output line for Excel (Check only two strip reco and time resolutions)
+    # info_str = "    - Excel format: ["
+    # for key in ["two_res", "time_res"]:
+    #     info_str+= "%.1f, "%(info[key])
+    # info_str = info_str[:-2] + "],"
+    # print(info_str)
 
     # Ouput for Latex table
     info["time_res"] = math.sqrt(info["time_res"]**2 - res_photek**2)

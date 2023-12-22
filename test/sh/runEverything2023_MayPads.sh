@@ -175,7 +175,7 @@ cd ../../test
 # ----------
 
 # NOTE: 'HPK_W9_23_3_20T_500x500_300M_E600_112V' has a missing channel
-HPK_2x3pad=('HPK_W9_22_3_20T_500x500_150M_E600_112V' 'HPK_W9_23_3_20T_500x500_300M_E600_112V' 'HPK_W11_22_3_20T_500x500_150M_C600_116V' 'HPK_W8_1_1_50T_500x500_150M_C600_200V' 'HPK_W5_1_1_50T_500x500_150M_E600_185V')
+HPK_2x3pad=("HPK_W11_22_3_20T_500x500_150M_C600_116V" "HPK_W9_22_3_20T_500x500_150M_E600_112V" "HPK_W8_1_1_50T_500x500_150M_C600_200V" "HPK_W5_1_1_50T_500x500_150M_E600_185V" "HPK_W9_23_3_20T_500x500_300M_E600_112V")
 
 for sensor in "${HPK_2x3pad[@]}"; do
     printf "\nRunning over ${sensor} sensor\n"
@@ -225,11 +225,11 @@ done
 
 cd ../macros
 # DoPositionRecoFit
-python DoPositionRecoFit.py     -D HPK_W9_22_3_20T_500x500_150M_E600_112V   --xmax 0.84 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W9_23_3_20T_500x500_300M_E600_112V   --xmax 0.87 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W11_22_3_20T_500x500_150M_C600_116V  --xmax 0.84 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W9_22_3_20T_500x500_150M_E600_112V   --xmax 0.84 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W8_1_1_50T_500x500_150M_C600_200V    --xmax 0.82 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W5_1_1_50T_500x500_150M_E600_185V    --xmax 0.86 --fitOrder 5
+python DoPositionRecoFit.py     -D HPK_W9_23_3_20T_500x500_300M_E600_112V   --xmax 0.87 --fitOrder 5
 
 for sensor in "${HPK_2x3pad[@]}"; do
     cd ../macros

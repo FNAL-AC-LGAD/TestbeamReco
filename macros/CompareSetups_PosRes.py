@@ -1,4 +1,4 @@
-from ROOT import TFile,TLine,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle, kWhite, kBlack
+from ROOT import TFile,TLine,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TGraph,TEfficiency,TGraphAsymmErrors,TLegend,TPaveText,gROOT,gStyle, kWhite, kBlack
 import os
 import langaus
 import optparse
@@ -19,7 +19,6 @@ parser.add_option('-x','--xlength', dest='xlength', default = 1.5, help="Limit x
 # parser.add_option('-y','--ylength', dest='ylength', default = 200, help="Max Amp value in final plot")
 options, args = parser.parse_args()
 xlength = float(options.xlength)
-colors = myStyle.GetColors(True)
 
 sensors_list = [
     # Varying thickness
@@ -60,7 +59,7 @@ ylength_list = [
     # Varying thickness KOJI
     90,
     # HPK pads Varying thickness and resistivity
-    300,
+    310,
     # HPK pads Varying metal widths
     300,
 ]
@@ -86,17 +85,34 @@ canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_list, saveName_list, ylength_list, yoffset_list):
     sensor_reference = sensors[0]
-    treat_as_2x2 = (sensor_reference == "HPK_W9_23_3_20T_500x500_300M_E600_112V")
+    treat_as_2x2 = ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensors)
+    if treat_as_2x2:
+        sensor_reference = "HPK_W9_23_3_20T_500x500_300M_E600_112V"
 
-    yLegend = 0.026*len(sensors)
-    legend = TLegend(2*pad_margin+0.065, 1-pad_margin-0.3-yLegend, 1-pad_margin-0.065, 1-pad_margin-0.03)
-    legend.SetBorderSize(1)
-    legend.SetLineColor(kBlack)
-    legend.SetNColumns(1)
-    legend.SetTextFont(myStyle.GetFont())
-    legend.SetTextSize(myStyle.GetSize()-4)
-    # legend.SetBorderSize(0)
-    # legend.SetFillColor(kWhite)
+    colors = myStyle.GetColorsCompare(len(sensors))
+
+    legend_height = 0.058*(len(sensors) + 2) # Entries + title + binary readout
+    legX1 = 2*pad_margin+0.065
+    legX2 = 1-pad_margin-0.065
+    legendTop = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
+    # legendTop.SetBorderSize(1)
+    # legendTop.SetLineColor(kBlack)
+    legendTop.SetTextFont(myStyle.GetFont())
+    legendTop.SetTextSize(myStyle.GetSize()-4)
+
+    legTopY1 = 1-pad_margin-legend_height-0.03
+    legendBot = TLegend(legX1, legTopY1-0.055, legX2, legTopY1)
+    legendBot.SetNColumns(2)
+    # legendBot.SetBorderSize(1)
+    # legendBot.SetLineColor(kBlack)
+    legendBot.SetTextFont(myStyle.GetFont())
+    legendBot.SetTextSize(myStyle.GetSize()-4)
+
+    legendBox = TPaveText(legX1, legTopY1-0.055, legX2, 1-pad_margin-0.03, "NDC")
+    legendBox.SetBorderSize(1)
+    legendBox.SetLineColor(kBlack)
+    legendBox.SetFillColor(0)
+    legendBox.SetFillColorAlpha(0, 0.0)
 
     xlength = float(options.xlength)
     if ("500x500" in sensor_reference):
@@ -117,11 +133,12 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     haxis.SetLineWidth(1)
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
+    is_pad = ("500x500" in sensor_reference) or ("pad" in sensor_reference)
     infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
     geometry = myStyle.GetGeometry(sensor_reference)
     pitch = geometry["pitch"]
     boxes = getStripBox(infile_reference, ymin, ylength-yoffset, pitch = pitch/1000.0)
-    if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
+    if not is_pad:
         boxes = boxes[1:len(boxes)-1]
     for box in boxes:
         box.Draw()
@@ -130,7 +147,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     if ("width" in tagVars):
         for i, sensor in enumerate(sensors):
             swidth = myStyle.GetGeometry(sensor)["width"]/1000.
-            this_color = colors[i*2] if ("thickness" in tagVars) else colors[i+1]
+            this_color = colors[i]
             for box in boxes:
                 vertical_line = TLine()
                 vertical_line.SetLineWidth(2)
@@ -146,7 +163,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     binary_readout_res_sensor.SetLineStyle(7)
     binary_readout_res_sensor.SetLineColor(kBlack)
     binary_readout_res_sensor.Draw("same")
-    legend.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
+    legendTop.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
 
     plotfile = []
     list_OneStrip_vs_x = []
@@ -161,33 +178,58 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         list_OneStrip_vs_x.append(hOneStrip)
         list_TwoStrip_vs_x.append(hTwoStrip)
 
-    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x, treat_as_2x2)
+    sensor_type = "strip" if not is_pad else "channel"
+    if treat_as_2x2:
+        # Move distributions to be centered as a 2x2 pad
+        list_2x2 = [list_TwoStrip_vs_x.pop(sensors.index(sensor_reference))]
+        list_3x2 = list_TwoStrip_vs_x
+        list_TwoStrip_vs_x = mf.move_distribution(list_2x2, -0.025)
+        list_TwoStrip_vs_x+= mf.move_distribution(list_3x2, -0.250)
+    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x)
+
+    # Remove bad behaved bins in central pad of this group of sensors
+    if (saveName == "HPK_Pads_PosResolution_vs_x_thicknessRes"):
+        swidth = myStyle.GetGeometry(sensor_reference)["width"]/1000.
+        for hist in pruned_TwoStrip_vs_x:
+            for b in range(1, hist.GetXaxis().GetNbins()+1):
+                is_bad_zone = mf.is_inside_limits(b, hist, 1.001*swidth/2.)
+                if is_bad_zone:
+                    hist.SetBinContent(b, 0.0)
+                    hist.SetBinError(b, 0.0)
+
     for i, hist_two in enumerate(pruned_TwoStrip_vs_x):
         hist_one = list_OneStrip_vs_x[i]
+        # Move one strip markers to correct position wrt boxes
+        for j, box in enumerate(boxes):
+            x_position = (box.GetX1() + box.GetX2())/2.
+            hist_one.SetPointX(j, x_position)
         hist_one.Draw("P same")
         hist_one.SetLineStyle(1)
         hist_one.SetMarkerStyle(33)
         hist_one.SetMarkerSize(3)
-        if("thickness" in tagVars):
-            hist_one.SetMarkerColor(colors[i*2])
-        else:
-            hist_one.SetMarkerColor(colors[i+1])
-        legend.AddEntry(hist_one, tag[i]+' - Exactly one strip', "P")
+        hist_one.SetMarkerColor(colors[i])
 
         hist_two.SetLineWidth(3)
-        if("thickness" in tagVars):
-            hist_two.SetLineColor(colors[i*2])
-        else:
-            hist_two.SetLineColor(colors[i+1])
-        legend.AddEntry(hist_two, tag[i]+' - Two strip')
+        hist_two.SetLineColor(colors[i])
+        legendTop.AddEntry(hist_two, tag[i])
         hist_two.Draw("hist same")
 
+        if i==0:
+            markOne = TGraph(hist_one)
+            markOne.SetMarkerColor(kBlack)
+            markTwo = hist_two.Clone()
+            markTwo.SetLineColor(kBlack)
+            legendBot.AddEntry(markOne, "Exactly one %s"%sensor_type, "P")
+            legendBot.AddEntry(markTwo, "Two %s"%sensor_type, "L")
+
     legendHeader = tag[-1]
-    legend.SetHeader(legendHeader, "C")
-    legend.Draw()
+    legendTop.SetHeader(legendHeader, "C")
+    legendTop.Draw()
+    legendBot.Draw()
+    legendBox.Draw("same")
 
     sensor_prod="Strip sensors"
-    if ("500x500" in sensor_reference):
+    if is_pad:
         sensor_prod = "Pixel sensors"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod)
@@ -201,5 +243,6 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         file.Close()
     infile_reference.Close()
     canvas.Clear()
-    legend.Clear()
+    legendTop.Clear()
+    legendBot.Clear()
     haxis.Delete()

@@ -164,22 +164,27 @@ def first_common_non_empty_x(list_histograms, first = True):
 
     return x_filled
 
-def same_limits_compare(list_histograms, diff_columns = False):
-    nbins = list_histograms[0].GetXaxis().GetNbins()
-
-    # NOTE: This section moves the center of a 3x2 pad to be in the middle of
-    # the first gap, in order to be compared with a 2x2 one. (!) The first
-    # element is assumed to be the HPK_W9_23_3_20T_500x500_300M_E600_112V sensor
-    if diff_columns:
-        for i, h in enumerate(list_histograms[1:]):
-            new_min, new_max = get_shifted_limits(h, -0.250)
-            nxbin = h.GetXaxis().GetNbins()
-            th1 = ROOT.TH1D("hist%i"%(i+1), "", nxbin, new_min, new_max)
+def move_distribution(list_elements, new_center_pos, is_tgraph = False):
+    for i, obj in enumerate(list_elements):
+        new_min, new_max = get_shifted_limits(obj, new_center_pos)
+        if is_tgraph:
+            npoints = obj.GetN()
+            for j in range(npoints):
+                obj.SetPointX(j, obj.GetPointX(j)-new_center_pos)
+            list_elements[i] = obj
+        else:
+            nxbin = obj.GetXaxis().GetNbins()
+            hname = "%s_%i_%i"%(obj.GetName(), abs(new_center_pos/0.005), i)
+            th1 = ROOT.TH1D(hname, "", nxbin, new_min, new_max)
             for j in range(1, nxbin+1):
-                th1.SetBinContent(j, h.GetBinContent(j))
-                th1.SetBinError(j, h.GetBinError(j))
+                th1.SetBinContent(j, obj.GetBinContent(j))
+                th1.SetBinError(j, obj.GetBinError(j))
+            list_elements[i] = th1
 
-            list_histograms[i+1] = th1
+    return list_elements
+
+def same_limits_compare(list_histograms):
+    nbins = list_histograms[0].GetXaxis().GetNbins()
 
     xfirst = abs(first_common_non_empty_x(list_histograms, True))
     xlast = abs(first_common_non_empty_x(list_histograms, False))

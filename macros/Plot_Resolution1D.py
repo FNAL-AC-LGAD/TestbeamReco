@@ -18,45 +18,42 @@ ROOT.gStyle.SetHistLineWidth(2)
 ROOT.gROOT.ForceStyle()
 
 
-def correct_limits(hist, peak_bin, vmin, vmax):
-    # Avoid limits to go beyond 20% of the peak (to avoid problems with the Gaussian fit)
+def shrink_limits(hist, limit_min, limit_max, peak_percentage = 0.2):
+    # Avoid limits to go beyond X% of the peak (to avoid problems with the Gaussian fit)
+    peak_bin = hist.GetMaximumBin()
     peak_value = hist.GetBinContent(peak_bin)
 
     # Correct left edge if needed
-    bin_left = hist.FindBin(vmin)
+    bin_left = hist.FindBin(limit_min)
     value_left = hist.GetBinContent(bin_left)
-    str_limit_left = " >> Left limit: %2.4f"%(vmin)
-    while (value_left < 0.2*peak_value):
-        vmin = hist.GetBinLowEdge(bin_left+1)
+    str_limit_left = " >> Initial left limit: %2.4f"%(limit_min)
+    while (value_left < peak_percentage*peak_value):
+        limit_min = hist.GetBinLowEdge(bin_left+1)
         value_left = hist.GetBinContent(bin_left + 1)
         bin_left+= 1
-        str_limit_left+= " -> %2.4f"%(vmin)
+    str_limit_left+= " >> Final left limit: %2.4f"%(limit_min)
     # print(str_limit_left)
 
     # Correct right edge if needed
-    bin_right = hist.FindBin(vmax)
+    bin_right = hist.FindBin(limit_max)
     value_right = hist.GetBinContent(bin_right)
-    str_limit_right = " >> Right limit: %2.4f"%(vmax)
-    while (value_right < 0.2*peak_value):
-        vmax = hist.GetBinLowEdge(bin_right)
+    str_limit_right = " >> Initial right limit: %2.4f"%(limit_max)
+    while (value_right < peak_percentage*peak_value):
+        limit_max = hist.GetBinLowEdge(bin_right)
         value_right = hist.GetBinContent(bin_right)
         bin_right-= 1
-        str_limit_right+= " -> %2.4f"%(vmax)
+        str_limit_right+= " >> Final right limit: %2.4f"%(limit_max)
     # print(str_limit_right)
 
-    return vmin, vmax
+    return limit_min, limit_max
 
-def plot1D(hist, outpath, xTitle, yTitle="Events", pads=False, bins=100, arange=(0,1), fmin=-1, fmax=1, tracker_res=0.0):
-    # ROOT.gStyle.SetOptFit(1)
+def plot1D(hist, outpath, fmin, fmax, xTitle="x [X]", yTitle="Events", pads=False, bins=100, arange=(0,1),
+           tracker_res=0.0, fit_around_peak=False, shrink_range=False):
     canvas = ROOT.TCanvas("canvas","canvas",1000,1000)
     ROOT.gPad.SetTicks(1,1)
     ROOT.TH1.SetDefaultSumw2()
-    #ROOT.gPad.SetLogy()
-    # ROOT.gROOT.ForceStyle()
 
     hname = hist.GetName()
-    print("----------------------------------------")
-    print(" Resolution: %s"%(hname))
 
     hist.Rebin(2)
     hist.GetXaxis().SetTitle(xTitle)
@@ -65,37 +62,51 @@ def plot1D(hist, outpath, xTitle, yTitle="Events", pads=False, bins=100, arange=
     myMean = hist.GetMean()
     myRMS = hist.GetRMS()
     myRMS_Error = hist.GetRMSError()
-    # # Define fit limits
-    # fit_min = myMean + fmin*myRMS
-    # fit_max = myMean + fmax*myRMS
 
-    # Make fit around peak of the distribution!
-    peak_bin = hist.GetMaximumBin()
-    peak = hist.GetBinCenter(peak_bin)
     # Define fit limits
-    fit_min = peak + fmin*myRMS
-    fit_max = peak + fmax*myRMS
-    fit_min, fit_max = correct_limits(hist, peak_bin, fit_min, fit_max)
+    fit_min = myMean + fmin*myRMS
+    fit_max = myMean + fmax*myRMS
+    # ... around peak
+    if fit_around_peak:
+        peak_bin = hist.GetMaximumBin()
+        peak_x = hist.GetBinCenter(peak_bin)
+        fit_min = peak_x + fmin*myRMS
+        fit_max = peak_x + fmax*myRMS
+    if shrink_range:
+        fit_min, fit_max = shrink_limits(hist, fit_min, fit_max)
 
     fit = ROOT.TF1("fit", "gaus", fit_min, fit_max)
     fit.SetLineColor(ROOT.kRed)
     hist.Fit(fit, "Q", "", fit_min, fit_max)
     fit.Draw("same")
 
-    # Print resolution value
-    use_RMS = "oneStrip" in hname
-    value_type = "from fit" if not use_RMS else "RMS"
-    sigma = 1000.*fit.GetParameter(2) if not use_RMS else 1000.*myRMS
-    sigma_error = 1000.*fit.GetParError(2) if not use_RMS else 1000.*myRMS_Error
+    show_output = True
+    for sufix in ["_Metal", "_Gap", "_MidGap"]:
+        if sufix in hname:
+            show_output = False
+            break
+    # Print output with resolution value
+    if show_output:
+        use_fit = "oneStrip" not in hname
 
-    msg_resolution = " >> Value %s: %.2f +- %.2f"%(value_type, sigma, sigma_error)
-    if (tracker_res < sigma):
-        sigma = math.sqrt(sigma**2 - tracker_res**2)
-        msg_resolution+= " (Removing %.1f from tracker: %.2f)"%(tracker_res, sigma)
-    else:
-        msg_resolution+= " (!) Value smaller than reference (!)"
+        print("----------------------------------------")
+        msg_title = " Resolution: %s"%(hname)
+        center = "mean" if not fit_around_peak else "peak"
+        if use_fit:
+            msg_title+= " > Range: [%s - %.2f*RMS, %s + %.2f*RMS]"%(center, abs(fmin), center, abs(fmax))
+        print(msg_title)
+        value_type = "from fit" if use_fit else "RMS"
+        sigma = 1000.*fit.GetParameter(2) if use_fit else 1000.*myRMS
+        sigma_error = 1000.*fit.GetParError(2) if use_fit else 1000.*myRMS_Error
 
-    print(msg_resolution)
+        msg_resolution = " >> Value %s: %.2f +- %.2f"%(value_type, sigma, sigma_error)
+        if (tracker_res > 0.0):
+            if (tracker_res < sigma):
+                sigma = math.sqrt(sigma**2 - tracker_res**2)
+                msg_resolution+= " (Removing %.1f from tracker: %.2f)"%(tracker_res, sigma)
+            else:
+                msg_resolution+= " (!) Value smaller than reference (!)"
+        print(msg_resolution)
 
     # Save plots
     # canvas.SaveAs("%s.png"%(outpath))
@@ -104,14 +115,6 @@ def plot1D(hist, outpath, xTitle, yTitle="Events", pads=False, bins=100, arange=
 
     return hist
 
-
-def getHisto(f, name, rebin, color):
-    h = f.Get(name)
-    h.Rebin(rebin)
-    h.Scale(1.0/h.Integral())
-    h.SetLineColor(color)
-    h.SetLineWidth(2)
-    return h
 
 # Limits of the fits used in the deltaX one and two strip reconstruction methods
 # The limits are defined such that [fmin, fmax] gives the limits --> [max_bin_center + (fmin)*myRMS, max_bin_center + (fmax)*myRMS]
@@ -122,35 +125,6 @@ fit_limits = {
     "EIC_W2_1cm_500up_100uw_220V": {'one': [-2.7,2.7], 'two': [-1.4,1.4]},
     "EIC_W1_2p5cm_500up_200uw_215V": {'one': [-3.0,3.0], 'two': [-0.8,0.6]},
     "EIC_W1_0p5cm_500up_200uw_1_4_245V": {'one': [-4.0,4.0], 'two': [-1.1,1.1]},
-
-    ## 2023 sensors (needs to be updated)
-    # BNL strips
-    "BNL_50um_1cm_450um_W3051_2_2_170V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "BNL_50um_1cm_400um_W3051_1_4_160V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "BNL_50um_1cm_450um_W3052_2_4_185V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "BNL_20um_1cm_400um_W3074_1_4_95V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "BNL_20um_1cm_400um_W3075_1_2_80V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "BNL_20um_1cm_450um_W3074_2_1_95V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "BNL_20um_1cm_450um_W3075_2_4_80V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "BNL_50um_2p5cm_mixConfig1_W3051_1_4_170V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "BNL_50um_2p5cm_mixConfig2_W3051_1_4_170V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-
-    # HPK pads
-    "HPK_20um_500x500um_2x2pad_E600_FNAL_105V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_30um_500x500um_2x2pad_E600_FNAL_140V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_50um_500x500um_2x2pad_E600_FNAL_190V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-
-    # HPK May 2023
-    "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_W9_14_2_20T_1P0_500P_100M_E600_112V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_KOJI_50T_1P0_80P_60M_E240_190V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_KOJI_20T_1P0_80P_60M_E240_112V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
-    "HPK_W9_15_4_20T_0P5_500P_50M_E600_110V": {'one': [-2.0,2.0], 'two': [-1.1,1.1]},
 }
 
 
@@ -158,8 +132,8 @@ fit_limits = {
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-a', dest='all_quantities', action='store_true', default = False, help="Draw all histograms (not only the most important ones)")
 parser.add_option('-c', dest='each_channel', action='store_true', default = False, help="Draw one strip reco for each channel")
-parser.add_option('-m', '--min', dest='min', default=-1.0, type="float", help="Low limit of the fit (fmin): max_bin_center + (fmin)*myRMS.")
-parser.add_option('-M', '--max', dest='max', default=1.0, type="float", help="High limit of the fit (fmax): max_bin_center + (fmax)*myRMS.")
+parser.add_option('-m', '--min', dest='min', default=0.0, type="float", help="Low limit of the fit (fmin): max_bin_center + (fmin)*myRMS.")
+parser.add_option('-M', '--max', dest='max', default=0.0, type="float", help="High limit of the fit (fmax): max_bin_center + (fmax)*myRMS.")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
 options, args = parser.parse_args()
@@ -173,22 +147,25 @@ use_each_channel = options.each_channel
 
 is_tight = options.useTight
 
-outdir=""
 outdir = myStyle.getOutputDir(dataset)
 inputfile = ROOT.TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 outdir = myStyle.GetPlotsDir(outdir, "Resolution1D/")
 
+# Set default or input limits for the fits
+rms_min = -1.5 if fitmin == 0.0 else fitmin
+rms_max = 1.5 if fitmax == 0.0 else fitmax
+# Use predefined fit limits for 2022 sensors only
 if dataset in fit_limits:
+    print(" >> Using limits defined in dictionary.")
     limits_one = fit_limits[dataset]['one']
     limits_two = fit_limits[dataset]['two']
 else:
-    print(" >> Using default fit limits.")
-    limits_one = [-2.0, 2.0]
-    limits_two = [-1.1, 1.1]
+    limits_one = [rms_min, rms_max]
+    limits_two = [rms_min, rms_max]
 
-# Modify tracker and time reference (Photek) contribution to be removed in quadrature
-res_tracker = 5 # um
+# Modify time reference (Photek) contribution to be removed in quadrature
+# res_tracker = 5 # um # Position tracker contribution is NOT removed
 res_photek = 10 # ps
 
 # Save list with histograms to draw
@@ -269,19 +246,21 @@ for info in list_htitles:
     # Units
     x_title+= "[ns]" if "time" in hname else "[mm]"
 
-    # Choose correct fit limits
-    fmin, fmax = fitmin, fitmax
-    if "deltaX_" in hname:
-        if "oneStrip" in hname:
-            fmin, fmax = limits_one[0], limits_one[1]
-        elif "twoStrip" in hname:
-            fmin, fmax = limits_two[0], limits_two[1]
+    peak_reference = False
+    # Use default fit limits
+    fmin, fmax = rms_min, rms_max
+    # Change default range to a given one for one or two strip reco if added in input
+    if "deltaX_oneStrip" in hname:
+        fmin, fmax = limits_one
+    elif "deltaX_twoStrip" in hname:
+        fmin, fmax = limits_two
+        peak_reference = True
 
-    # Value to remove in quadrature
-    tracker_component = res_photek if "photek" in ref else res_tracker
+    # Value to remove in quadrature (only for time plots)
+    tracker_component = res_photek if "photek" in ref else 0.0
 
     hist = inputfile.Get(hname)
-    hfinal = plot1D(hist, out_path, x_title, fmin=fmin, fmax=fmax, tracker_res=tracker_component)
+    hfinal = plot1D(hist, out_path, fmin, fmax, xTitle=x_title, tracker_res=tracker_component, fit_around_peak=peak_reference, shrink_range=False)
 
     hfinal.Write()
 
