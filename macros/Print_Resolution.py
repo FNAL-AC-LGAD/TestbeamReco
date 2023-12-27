@@ -8,6 +8,23 @@ ROOT.gROOT.SetBatch(True)
 
 myStyle.ForceStyle()
 
+
+def same_in_sensor_info(name_dataset, new_info):
+    saved_values = myStyle.GetResolutions(name_dataset)
+    qty_to_update = ""
+    list_2_compare = [["one_res", "res_one_strip"], ["two_res", "res_two_strip"]]
+    list_2_compare+= [["time_res", "time_resolution"]]
+    list_2_compare+= [["one_eff", "efficiency_one_strip"], ["two_eff", "efficiency_two_strip"]]
+    for new_qty, ref_qty in list_2_compare:
+        if format(new_info[new_qty], ".1f") != format(saved_values[ref_qty], ".1f"):
+            qty_to_update+= "%s, "%(ref_qty)
+
+    if qty_to_update != "":
+        qty_to_update = qty_to_update[:-2]
+
+    return qty_to_update
+
+
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
@@ -85,7 +102,7 @@ for reg in regions:
     # Resolution
     # NOTE: One strip tight distribution might look assymetric for some sensors, but this is because of the tight
     # cut that removes half of the channels at the edges. Since we care about the RMS this does not impact the result.
-    # Moreover, the RMS of the tight cut matches in a better way with the value per channel!
+    # Moreover, the RMS of the tight cut in the overall distribution matches in a much better way with each individual value per channel!
     name_onestrip = "deltaX_oneStrip%s_tight"%(res_region)
     name_twostrip = "deltaX_twoStrip%s_tight"%(res_region)
     name_time = "weighted2_timeDiff_tracker_tight" if reg == "Overall" else "weighted2_timeDiff_tracker_%s"%reg
@@ -114,6 +131,10 @@ for reg in regions:
     for key in ["one_res", "two_res", "time_res", "one_eff", "two_eff"]:
         info_str+= "%.1f, "%(info[key])
     info_str = info_str[:-2] + "],"
+    # Check if current saved info is the same or if it has changed
+    info_to_update = same_in_sensor_info(dataset, info)
+    if info_to_update:
+        info_str+= " (!!) Update mySensorInfo.py --> %s (!!)"%(info_to_update)
     print(info_str)
 
     # # Output line for Excel (Check only two strip reco and time resolutions)
@@ -123,7 +144,7 @@ for reg in regions:
     # info_str = info_str[:-2] + "],"
     # print(info_str)
 
-    # Ouput for Latex table
+    # Ouput for Latex table (time has tracker contribution removed!)
     info["time_res"] = math.sqrt(info["time_res"]**2 - res_photek**2)
     info_tex = "    - LaTeX format: "
     if all_regions:
@@ -136,7 +157,6 @@ for reg in regions:
         info_tex+= " &"
     info_tex+= " %%%% Time reference contribution removed (%.0f [ps])\n"%res_photek
     print(info_tex)
-
 
 inputfile_res1d.Close()
 inputfile_res1d_tight.Close()
