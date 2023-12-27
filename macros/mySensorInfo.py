@@ -31,9 +31,9 @@ geometry2023_default = {
     "BNL_20um_500x500_Cross_W3080": ["BNL_20um_500x500_Cross_W3080", 500, 500,5.0, 80, 20, "Null", "Null", "Null"],
 
     # HPK pads (January)
-    "HPK_20um_500x500um_2x2pad_E600_FNAL": ["HPK_20um_2x2pad", 500, 500, 0.5, 105, 20, "E", 600, "PH1"],
-    "HPK_30um_500x500um_2x2pad_E600_FNAL": ["HPK_30um_2x2pad", 500, 500, 0.5, 140, 30, "E", 600, "PH2"],
-    "HPK_50um_500x500um_2x2pad_E600_FNAL": ["HPK_50um_2x2pad", 500, 500, 0.5, 190, 50, "E", 600, "PH3"],
+    "HPK_20um_500x500um_2x2pad_E600_FNAL": ["HPK_20um_2x2pad", 500, 450, 0.5, 105, 20, "E", 600, "PH1"],
+    "HPK_30um_500x500um_2x2pad_E600_FNAL": ["HPK_30um_2x2pad", 500, 450, 0.5, 140, 30, "E", 600, "PH2"],
+    "HPK_50um_500x500um_2x2pad_E600_FNAL": ["HPK_50um_2x2pad", 500, 450, 0.5, 190, 50, "E", 600, "PH3"],
 
     # HPK pads (May)
     "HPK_W9_22_3_20T_500x500_150M_E600": ["HPK_W9_22_3_20T_500x500_150M_E600", 500, 150, 5.0, 112, 20, "E", 600, "PH5"],
