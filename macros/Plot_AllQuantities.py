@@ -27,11 +27,11 @@ run = 0
 fit = langaus.LanGausFit()
 
 # datasets = ["HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V", "HPK_W9_14_2_20T_1P0_500P_100M_E600_112V", "HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W9_15_4_20T_0P5_500P_50M_E600_110V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V", "HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_W5_1_1_50T_500x500_150M_E600_185V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"]
-datasets = ["HPK_W5_1_1_50T_500x500_150M_E600_185V"]
+datasets = ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"]
 
 # qty = ["ampMax_Overall", "risetime_Overall", "charge_Overall", "baselineRMS_Overall", "weighted2_jitter_Overall", "weighted2_timeDiff_tracker_Overall"]
-qty = ["ampMax_Metal", "risetime_Metal", "charge_Metal", "baselineRMS_Metal", "weighted2_jitter_Metal", "weighted2_timeDiff_tracker_Metal"]
-# qty = ["ampMax_MidGap", "risetime_MidGap", "charge_MidGap", "baselineRMS_MidGap", "weighted2_jitter_MidGap", "weighted2_timeDiff_tracker_MidGap"]
+# qty = ["ampMax_Metal", "risetime_Metal", "charge_Metal", "baselineRMS_Metal", "weighted2_jitter_Metal", "weighted2_timeDiff_tracker_Metal"]
+qty = ["ampMax_MidGap", "risetime_MidGap", "charge_MidGap", "baselineRMS_MidGap", "weighted2_jitter_MidGap", "weighted2_timeDiff_tracker_MidGap"]
 # qty = ["ampMax_Gap", "risetime_Gap", "charge_Gap", "baselineRMS_Gap", "weighted2_jitter_Gap", "weighted2_timeDiff_tracker_Gap"]
 fit_var = [3,1,3,2,3,2] # 1 - stat mean, 2 - gauss fit, 3 - langauss fit
 
