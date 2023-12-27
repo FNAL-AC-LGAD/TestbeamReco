@@ -102,9 +102,7 @@ outdir = myStyle.GetPlotsDir(outdir, "Amplitude/")
 list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
     ["amplitude_vs_xy", "Amplitude", "MPV signal amplitude [mV]"],
-    ["ampMax_vs_xy_Metal", "AmplitudeMetal", "MPV signal amplitude [mV]"],
     ["amplitudeNoSum_vs_xy", "AmplitudeNoSum", "MPV signal amplitude [mV]"],
-    ["ampMaxNoSum_vs_xy_Metal", "AmplitudeNoSumMetal", "MPV signal amplitude [mV]"],
 ]
 
 # TODO: Add per channel plots
@@ -153,9 +151,6 @@ for i in range(1, nXbins+1):
             myMean = tmpHist.GetMean()
             myRMS = tmpHist.GetRMS()
             value = myMean
-            if("Metal" in info_entry.inHistoName):
-                print(info_entry.inHistoName)
-                value = tmpHist.GetEntries()
 
             # #Do Langaus fit if histogram mean is larger than 10
             # #and mean is larger than RMS (a clear peak away from noise)
