@@ -460,8 +460,10 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 
     //Global 3D histograms
     utility::makeHisto(my_3d_histos,"amplitude_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"ampMax_vs_xy_Metal","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"amplitude_vs_xy_tight","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"amplitudeNoSum_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
+    utility::makeHisto(my_3d_histos,"ampMaxNoSum_vs_xy_Metal","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"amplitudeNoSum_vs_xy_tight","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
     utility::makeHisto(my_3d_histos,"amplitude_vs_xyROI","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500 );
     utility::makeHisto(my_3d_histos,"totgoodamplitude_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
@@ -1036,12 +1038,12 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 // Hit on metal strip
                 double metalLeft = stripCenterXPositionLGAD[rowIndex][i] - stripWidth/2.;
                 double metalRight = stripCenterXPositionLGAD[rowIndex][i] + stripWidth/2.;
-                if (stripCenterXPositionLGAD[rowIndex][i]!=0.0 && (metalLeft < x) && (x < metalRight))
+                if (isHPKStrips && stripCenterXPositionLGAD[rowIndex][i]!=0.0 && (metalLeft < x) && (x < metalRight))
                 {
                     hitOnMetal = true;
                 }
                 // Hit on metal pad
-                if (isPadSensor && hitOnMetal && ((stripCenterYPositionLGAD[rowIndex][i]-stripWidth/2.)<y) && (y<(stripCenterYPositionLGAD[rowIndex][i]+stripWidth/2.)))
+                if (isPadSensor && stripCenterXPositionLGAD[rowIndex][i]!=0.0 && (metalLeft < x) && (x < metalRight) && ((stripCenterYPositionLGAD[rowIndex][i]-stripWidth/2.)<y) && (y<(stripCenterYPositionLGAD[rowIndex][i]+stripWidth/2.)))
                 {
                     hitOnMetal = true;
                 }
@@ -1485,8 +1487,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
 
         // Save 3d histos
         utility::fillHisto(pass && goodOverNoiseAmpCol,                             my_3d_histos, "amplitude_vs_xy", x,y,ampColLGAD1st);
+        utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMetal,               my_3d_histos, "ampMax_vs_xy_Metal", x,y,ampColLGAD1st);
         utility::fillHisto(pass_tight && goodOverNoiseAmpCol,                       my_3d_histos, "amplitude_vs_xy_tight", x,y,ampColLGAD1st);
         utility::fillHisto(pass && goodOverNoiseAmp,                                my_3d_histos, "amplitudeNoSum_vs_xy", x,y,ampLGAD1st);
+        utility::fillHisto(pass && goodOverNoiseAmpCol && hitOnMetal,               my_3d_histos, "ampMaxNoSum_vs_xy_Metal", x,y,ampLGAD1st);
         utility::fillHisto(pass_tight && goodOverNoiseAmp,                          my_3d_histos, "amplitudeNoSum_vs_xy_tight", x,y,ampLGAD1st);
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "baselineRMS_vs_xy", x,y,baselineMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "risetime_vs_xy", x,y,risetimeMaxChannel);
