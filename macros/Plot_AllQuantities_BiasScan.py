@@ -58,13 +58,24 @@ datasets = [
     "HPK_20um_500x500um_2x2pad_E600_FNAL_75V",
 ]
 
-# regions = ["Overall", "Metal", "MidGap", "Gap"]
-regions = ["Overall"]
+
+# datasets = [
+#     "HPK_W5_1_1_50T_500x500_150M_E600_185V",
+
+#     "HPK_W5_17_2_50T_1P0_500P_50M_E600_186V",
+#     "HPK_W5_17_2_50T_1P0_500P_50M_E600_188V",
+#     "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V",
+#     "HPK_W5_17_2_50T_1P0_500P_50M_E600_192V",
+#     "HPK_W5_17_2_50T_1P0_500P_50M_E600_194V"
+# ]
+
+regions = ["Overall", "Metal", "MidGap", "Gap"]
+# regions = ["Overall"]
 
 # Quantity of interest (qty) first and a number related to the fit method next
 # --> (1) stat mean, (2) gauss fit, (3) langauss fit
 names = [("weighted2_timeDiff_tracker", 2), ("weighted2_jitter", 3),
-         ("ampMax", 1), ("risetime", 1), ("baselineRMS", 2),
+         ("ampMax", 3), ("risetime", 1), ("baselineRMS", 2),
          ("charge", 3)]
 
 # Remove SaveAs output message
@@ -91,7 +102,7 @@ for reg in regions:
             hist.Draw("hist")
 
             if(ifit == 3): # LanGauss fit
-                myLanGausFunction = fit.fit(hist, fitrange=(myMean-1.5*myRMS,myMean+3*myRMS))
+                myLanGausFunction = fit.fit(hist, fitrange=(myMean-1*myRMS,myMean+3*myRMS))
                 myMPV = myLanGausFunction.GetParameter(1)
                 if ("charge" in var) and (myMPV < 0):
                     # TODO: Fix this! Not quite working with higher voltage sensors :(

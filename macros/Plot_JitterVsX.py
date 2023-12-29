@@ -55,10 +55,10 @@ class HistoInfo:
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="Limit x-axis in final plot")
 parser.add_option('-y','--ylength', dest='ylength', default = 100, help="Max jitter value in final plot")
+parser.add_option('-m', dest='minCut_user', default = 1000.0, help="Minimum events requirement")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
-parser.add_option('-m', dest='minCut_user', default = 1000, help="Minimum events requirement")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
@@ -70,7 +70,7 @@ sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor = sensor_Geometry['sensor']
 pitch = sensor_Geometry['pitch']
 
-minCut_user = options.minCut_user
+minCut_user = float(options.minCut_user)
 fit = langaus.LanGausFit()
 xlength = float(options.xlength)
 ylength = float(options.ylength)
