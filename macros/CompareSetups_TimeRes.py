@@ -35,7 +35,7 @@ xlength = float(options.xlength)
 
 sensors_list = [
     # Varying resistivity and capacitance
-    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # HPK Varying thickness
     ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # KOJI Varying thickness
@@ -43,7 +43,7 @@ sensors_list = [
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
     # HPK pads Varying metal widths
-    ["HPK_W9_23_3_20T_500x500_300M_E600_112V", "HPK_W9_22_3_20T_500x500_150M_E600_112V"],
+    ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -179,10 +179,14 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         list_time_vs_x.append(hTime)
 
     if treat_as_2x2:
-        list_2x2 = [list_time_vs_x.pop(sensors.index(sensor_reference))]
+        ref_idx = sensors.index(sensor_reference)
+        list_2x2 = [list_time_vs_x.pop(ref_idx)]
+        moved_2x2 = mf.move_distribution(list_2x2, -0.025)
         list_3x2 = list_time_vs_x
-        list_time_vs_x = mf.move_distribution(list_2x2, -0.025) + mf.move_distribution(list_3x2, -0.250)
+        moved_3x2 = mf.move_distribution(list_3x2, -0.250)
+        list_time_vs_x = moved_3x2[:ref_idx] + moved_2x2 + moved_3x2[ref_idx:]
         # Jitter could be added here for 2x2 vs 3x2 if needed
+
     pruned_time_vs_x = mf.same_limits_compare(list_time_vs_x + list_jitter_vs_x)
     for i, hist in enumerate(pruned_time_vs_x):
         idx = i%len(list_time_vs_x)
@@ -191,6 +195,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
 
         if i < len(list_time_vs_x):
             lengendEntry = legendTop.AddEntry(hist, tag[idx])
+        # hist.Draw("hist e same")
         hist.Draw("hist same")
 
     # Draw legend
