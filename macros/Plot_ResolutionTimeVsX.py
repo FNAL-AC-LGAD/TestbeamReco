@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1D,TH1F,TH2F,TLatex,TMath,TColor,TLegend,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kRed,kWhite,TH1
+from ROOT import TFile,TTree,TCanvas,TH1D,TH1F,TH2F,TLatex,TMath,TColor,TLegend,TGaxis,TEfficiency,TGraphAsymmErrors,gROOT,gPad,TF1,gStyle,kBlack,kRed,kWhite,TH1
 import os
 import optparse
 from stripBox import getStripBox
@@ -250,7 +250,7 @@ outputfile = TFile(output_path,"RECREATE")
 htemp = TH1F("htemp", "", 1, -xlength, xlength)
 htemp.SetStats(0)
 htemp.GetXaxis().SetTitle("Track x position [mm]")
-htemp.GetYaxis().SetRangeUser(0.0, ylength)
+htemp.GetYaxis().SetRangeUser(0.0001, ylength)
 htemp.GetYaxis().SetTitle("Time resolution [ps]")  
 htemp.SetLineColor(colors[2])
 
@@ -283,6 +283,64 @@ htemp.SetLineColor(colors[2])
 
 #     canvas.Clear()
 
+
+# Draw weighted2_timeDiff_tracker_vs_xy in its own canvas
+for info in all_histoInfos:
+    if ("weighted2_timeDiff_tracker_vs_xy" not in info.inHistoName) and (not is_hotspot):
+        continue
+    # Draw axes
+    htemp.Draw("AXIS")
+
+    this_ymin = info.th1.GetMinimum()
+    this_ymax = info.th1.GetMaximum()
+    boxes = getStripBox(inputfile, ymin=this_ymin, ymax=this_ymax, shift=position_center, pitch=pitch)
+    for box in boxes:
+        box.Draw()
+
+    # Define legend
+    pad_center = myStyle.GetPadCenter()
+    pad_margin = myStyle.GetMargin()
+    legend = TLegend(pad_center-0.23, 1-pad_margin-0.15, pad_center+0.23, 1-pad_margin-0.05)
+    legend.SetTextFont(myStyle.GetFont())
+    legend.SetTextSize(myStyle.GetSize()-4)
+    legend.SetBorderSize(1)
+    legend.SetLineColor(kBlack)
+
+    # Add left axis (Time resolution)
+    left_axis = TGaxis(-xlength,0.0001,-xlength,ylength,0.0001,ylength,510, "-")
+    left_axis.UseCurrentStyle()
+    left_axis.SetTitle("Time resolution [ps]")
+    left_axis.SetLabelSize(myStyle.GetSize()-4)
+    left_axis.SetTitleSize(myStyle.GetSize())
+    left_axis.SetLabelFont(myStyle.GetFont())
+    left_axis.SetTitleFont(myStyle.GetFont())
+    left_axis.SetLineColor(colors[4])
+    left_axis.SetLabelColor(colors[4])
+
+    info.th1.SetLineColor(colors[4])
+    info.th1.SetLineWidth(4)
+    legend.AddEntry(info.th1, "Time resolution")
+
+    gPad.RedrawAxis("g")
+
+    info.th1.Draw("hist e same")
+    htemp.Draw("AXIS same")
+    left_axis.Draw()
+    legend.Draw()
+    myStyle.BeamInfo()
+    myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
+
+    save_path = "%sWeighted2Only"%(outdir)
+    if (is_hotspot):
+        save_path+= "-hotspot"
+    elif (is_tight):
+        save_path+= "-tight"
+
+    # canvas.SaveAs("%s.gif"%save_path)
+    canvas.SaveAs("%s.pdf"%save_path)
+
+    canvas.Clear()
+
 # Draw ALL values in the same canvas
 htemp.Draw("AXIS")
 
@@ -298,13 +356,16 @@ if is_hotspot:
     legend_name = ["Multi-channel, tracker delay correction"]
 
 # Define legend
-pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
-legend = TLegend(pad_center-0.20, 2*pad_margin+0.01, pad_center+0.20, 2*pad_margin+0.16)
-legend.SetBorderSize(0)
-# legend.SetFillColor(kWhite)
+legend_height = 0.058*(3 + 1) # Correction methods + title
+legX1 = 2*pad_margin+0.025
+legX2 = 1-pad_margin-0.025
+legend = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
+legend.SetBorderSize(1)
+legend.SetLineColor(kBlack)
 legend.SetTextFont(myStyle.GetFont())
-legend.SetTextSize(myStyle.GetSize()-20)
+legend.SetTextSize(myStyle.GetSize()-4)
+legend.SetHeader("#bf{Correction methods}", "C")
 
 for i,info_entry in enumerate(all_histoInfos):
     hist = info_entry.th1
@@ -315,7 +376,7 @@ for i,info_entry in enumerate(all_histoInfos):
 
     # Define and draw gray bars in the background (Position of metallic sections)
     if i==0:
-        boxes = getStripBox(inputfile, ymin=ymin, ymax=ymax, strips=True, shift=position_center)
+        boxes = getStripBox(inputfile, ymin=ymin, ymax=0.9*ymax, strips=True, shift=position_center)
         for box in boxes:
             box.Draw()
         gPad.RedrawAxis("g")
