@@ -11,7 +11,7 @@ import myFunctions as mf
 import mySensorInfo as msi
 
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-o', dest='Type', default = "p", help="Sensor type, use s for strips and p for pixels")
+parser.add_option('-o', dest='Type', default = "P", help="Sensor type, use s for strips, P for pixels-set1, and p for pixels-set2")
 options, args = parser.parse_args()
 
 sensor_type = options.Type
@@ -33,15 +33,36 @@ if(sensor_type=='s'):
     suffix = "_strips"
     sensor_type_label = "Strip sensors"
     sensors = ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"]
+if(sensor_type=='P'):
+    # Pads W11_22_3 and W8_1_1
+    Resolution_values_W11 = [55.5, 35.53, 24.84, 23.26, 22.01, 21.48, 21.28, 21.23, 22.33, 24.5, 30.53]
+    Resolution_values_W8 = [51.25, 37.85, 30.32, 29.64, 29.37, 29.68, 30.22, 30.8, 30.97, 31.58, 33.73]
+    suffix = "_pads-set1"
+    sensor_type_label = "Pixel sensors"
+    sensors = ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W8_1_1_50T_500x500_150M_C600_200V"]
 if(sensor_type=='p'):
     # Pads W5_1_1 and W9_22_3
     Resolution_values_W5 = [48.81, 37.74, 32.21, 32.05, 32.28, 32.69, 33.27, 33.79, 33.83, 34.66, 37.43]
     Resolution_values_W9 = [62.29, 41.19, 31.76, 31.44, 32.07, 31.46, 32.6, 34.73, 36.11, 40.17, 48.33]
-    suffix = "_pads"
+    suffix = "_pads-set2"
     sensor_type_label = "Pixel sensors"
     sensors = ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"]
+if(sensor_type=='A'):
+    Resolution_values_W11 = [55.5, 35.53, 24.84, 23.26, 22.01, 21.48, 21.28, 21.23, 22.33, 24.5, 30.53]
+    Resolution_values_W9 = [62.29, 41.19, 31.76, 31.44, 32.07, 31.46, 32.6, 34.73, 36.11, 40.17, 48.33]
+    Resolution_values_W8 = [51.25, 37.85, 30.32, 29.64, 29.37, 29.68, 30.22, 30.8, 30.97, 31.58, 33.73]
+    Resolution_values_W5 = [48.81, 37.74, 32.21, 32.05, 32.28, 32.69, 33.27, 33.79, 33.83, 34.66, 37.43]
+    suffix = "_pads-all"
+    sensor_type_label = "Pixel sensors"
+    sensors = ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"]
 
-resolutions = [Resolution_values_W9, Resolution_values_W5]
+if(sensor_type=='P'):
+    resolutions = [Resolution_values_W11, Resolution_values_W8]
+elif (sensor_type=='A'):
+    resolutions = [Resolution_values_W11, Resolution_values_W9, Resolution_values_W8, Resolution_values_W5]
+else:
+    resolutions = [Resolution_values_W9, Resolution_values_W5]
+
 CFD_values = [5, 10, 20, 25, 30, 35, 40, 50, 60, 70, 80]
 colors = myStyle.GetColorsCompare(len(sensors))
 
@@ -64,7 +85,10 @@ legend.SetBorderSize(1)
 legend.SetLineColor(kBlack)
 # legend.SetLineStyle(1)
 # legend.SetLineWidth(2)
-legend_entries = mf.get_legend_comparation_plots(sensors, ["thickness"])
+if(sensor_type=='A'):
+    legend_entries = mf.get_legend_comparation_plots(sensors, ["thickness", "resistivityNumber"])
+else:
+    legend_entries = mf.get_legend_comparation_plots(sensors, ["thickness"])
 
 graphs = []
 for i, sensor in enumerate(sensors):
@@ -81,7 +105,7 @@ for i, sensor in enumerate(sensors):
     graph.GetYaxis().SetTitle("Time resolution [ps]")
     graph.SetTitle("")
 
-    opts = "APL" if i==0 else "PL same"
+    opts = "APC" if i==0 else "PC same"
     graph.Draw(opts)
 
     legend.AddEntry(graph, legend_entries[i], "lp")
