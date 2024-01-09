@@ -149,7 +149,7 @@ if debugMode:
 # Get total number of bins in x-axis to loop over (all hists have the same number, in principle)
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
-plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center)
+plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center) # - strip_width/2.
 if ("pad" not in dataset) and ("500x500" not in dataset):
     plot_xlimit-= pitch/2.
 
@@ -330,7 +330,7 @@ for info in all_histoInfos:
     myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
 
-    save_path = "%sWeighted2Only"%(outdir)
+    save_path = "%sWeighted2OnlyX"%(outdir)
     if (is_hotspot):
         save_path+= "-hotspot"
     elif (is_tight):
@@ -376,7 +376,7 @@ for i,info_entry in enumerate(all_histoInfos):
 
     # Define and draw gray bars in the background (Position of metallic sections)
     if i==0:
-        boxes = getStripBox(inputfile, ymin=ymin, ymax=0.9*ymax, strips=True, shift=position_center)
+        boxes = getStripBox(inputfile, ymin=ymin, ymax=0.9*ymax, strips=True, shift=position_center, pitch=pitch)
         for box in boxes:
             box.Draw()
         gPad.RedrawAxis("g")

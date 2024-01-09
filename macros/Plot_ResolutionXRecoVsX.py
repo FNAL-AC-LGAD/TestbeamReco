@@ -177,7 +177,7 @@ for ibin in range(1, hist_expected.GetNbinsX()+1):
 # Get TGraph for One strip Reconstruction method's resolution
 # -----------------------------------------------------------
 
-boxes = getStripBox(inputfile, ymax=ylength, shift=position_center)
+boxes = getStripBox(inputfile, ymax=ylength, shift=position_center, pitch=pitch/1000.)
 
 use_one_strip = True
 dict_one_strip_info = myStyle.GetResolutions(dataset, per_channel=True)
