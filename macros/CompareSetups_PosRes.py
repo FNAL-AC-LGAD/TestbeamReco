@@ -180,15 +180,27 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
 
     sensor_type = "strip" if not is_pad else "channel"
     if treat_as_2x2:
-        # Move distributions to be centered as a 2x2 pad
+        # Move 3x2 sensors to be centered as a 2x2 pad
         ref_idx = sensors.index(sensor_reference)
         list_2x2 = [list_TwoStrip_vs_x.pop(ref_idx)]
         moved_2x2 = mf.move_distribution(list_2x2, -0.025)
+        moved_2x2[0].SetBinContent(moved_2x2[0].FindFirstBinAbove(0.001)-1, 0.001)
+        moved_2x2[0].SetBinContent(moved_2x2[0].FindLastBinAbove(0.001)+1, 0.001)
         list_3x2 = list_TwoStrip_vs_x
         moved_3x2 = mf.move_distribution(list_3x2, -0.250)
+        # Leave the 2x2 sensor in the very same position
         list_TwoStrip_vs_x = moved_3x2[:ref_idx] + moved_2x2 + moved_3x2[ref_idx:]
 
     pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x)
+
+    if treat_as_2x2:
+        # Leave 2x2 with a symmetric x-axis
+        ref_idx = sensors.index(sensor_reference)
+        hist2x2 = pruned_TwoStrip_vs_x[ref_idx]
+        hist2x2.SetBinContent(hist2x2.FindFirstBinAbove(0.0001), 0.0)
+        hist2x2.SetBinContent(hist2x2.FindLastBinAbove(0.0001), 0.0)
+        # Leave the 2x2 sensor in the very same position
+        pruned_TwoStrip_vs_x[ref_idx] = mf.same_limits_compare([hist2x2])[0]
 
     # Remove bad behaved bins in central pad of this group of sensors
     if (saveName == "HPK_Pads_PosResolution_vs_x_thicknessRes"):
@@ -215,7 +227,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         hist_two.SetLineWidth(3)
         hist_two.SetLineColor(colors[i])
         legendTop.AddEntry(hist_two, tag[i])
-        hist_two.Draw("hist same")
+        hist_two.Draw("hist e same")
 
         if i==0:
             markOne = TGraph(hist_one)
