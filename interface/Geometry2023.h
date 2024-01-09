@@ -646,7 +646,7 @@ public:
     double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
-    int CFD_threshold = 50;
+    int CFD_threshold = 25; // 50;
     bool isPadSensor = true;
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
