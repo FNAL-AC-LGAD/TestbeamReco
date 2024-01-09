@@ -30,7 +30,7 @@ sensors_list = [
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
     # HPK pads Varying metal widths
-    ["HPK_W9_23_3_20T_500x500_300M_E600_112V", "HPK_W9_22_3_20T_500x500_150M_E600_112V"],
+    ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -152,9 +152,13 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         list_risetime_vs_x.append(hRisetime)
 
     if treat_as_2x2:
-        list_2x2 = [list_risetime_vs_x.pop(sensors.index(sensor_reference))]
+        ref_idx = sensors.index(sensor_reference)
+        list_2x2 = [list_risetime_vs_x.pop(ref_idx)]
+        moved_2x2 = mf.move_distribution(list_2x2, -0.025)
         list_3x2 = list_risetime_vs_x
-        list_risetime_vs_x = mf.move_distribution(list_2x2, -0.025) + mf.move_distribution(list_3x2, -0.250)
+        moved_3x2 = mf.move_distribution(list_3x2, -0.250)
+        list_risetime_vs_x = moved_3x2[:ref_idx] + moved_2x2 + moved_3x2[ref_idx:]
+
     pruned_risetime_vs_x = mf.same_limits_compare(list_risetime_vs_x)
     for i, hist in enumerate(pruned_risetime_vs_x):
         hist.SetLineWidth(3)

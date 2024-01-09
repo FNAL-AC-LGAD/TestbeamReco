@@ -646,7 +646,7 @@ public:
     double signalAmpThreshold = 15.0;
     int minPixHits = 2;
     int minStripHits = 6;
-    int CFD_threshold = 50;
+    int CFD_threshold = 25; // 50;
     bool isPadSensor = true;
     bool usesMay2023Tracker = true;
     bool enablePositionReconstruction = false;
@@ -2335,7 +2335,7 @@ public:
     int highGoodStripIndex = 3;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,0.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,1.9320245},{1,1.9407506}, {2,1.8931535}, {3,1.907246289}, {4,1.7342231}, {5,2.0}, {6,2.0}, {7,0.0}};
-    double stripWidth = 0.500;
+    double stripWidth = 0.450;
     double pitch = 0.500;
     double sensorCenter =-1.05; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY =-1.875; // Lab-Tracker's frame -> y_dut
@@ -2399,7 +2399,7 @@ public:
     int highGoodStripIndex = 3;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,0.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,1.8435231}, {1,1.8658946}, {2,1.8200936}, {3,1.8310432}, {4,1.6554349}, {5,2.0}, {6,2.0}, {7,0.0}};
-    double stripWidth = 0.500;
+    double stripWidth = 0.450;
     double pitch = 0.500;
     double sensorCenter =-1.00; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY =-2.00; // Lab-Tracker's frame -> y_dut
@@ -2463,7 +2463,7 @@ public:
     int highGoodStripIndex = 3;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,0.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,1.7194699}, {1,1.7460299}, {2,1.7017298}, {3,1.7091336}, {4,1.5604737}, {5,2.0}, {6,2.0}, {7,0.0}};
-    double stripWidth = 0.500;
+    double stripWidth = 0.450;
     double pitch = 0.500;
     double sensorCenter =-2.15; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY =-2.25; // Lab-Tracker's frame -> y_dut
