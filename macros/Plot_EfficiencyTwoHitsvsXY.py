@@ -104,7 +104,7 @@ BoxHot.SetFillStyle(0)
 BoxHot.SetLineWidth(3)
 
 
-ratio.GetZaxis().SetTitle("TwoGoodHits efficiency")
+ratio.GetZaxis().SetTitle("Two good pixel efficiency")
 ratio.GetXaxis().SetTitle("Track x position [mm]")
 ratio.GetYaxis().SetTitle("Track y position [mm]")
 ratio.SetStats(0)
