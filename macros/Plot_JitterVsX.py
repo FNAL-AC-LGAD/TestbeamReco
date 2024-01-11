@@ -133,7 +133,8 @@ for i in range(1, nbins+1):
         myMean = tmpHist.GetMean()
         nEvents = tmpHist.GetEntries()
         value = myMean
-        error = 0.
+	# Add empty error for the moment
+        error = 0.0
 
         # Define minimum of bin's entries to be fitted
         minEvtsCut = myTotalEvents/nbins
