@@ -35,8 +35,8 @@ efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_TwoGoodHi
 # efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_NoSum_twoStrip_numerator")
 
 
-print( "Entries : ", efficiency_fullReco_numerator_global.GetEntries())
-print( "Entries den: ", efficiency_denominator_global.GetEntries())
+print("Entries : ", efficiency_fullReco_numerator_global.GetEntries())
+print("Entries den: ", efficiency_denominator_global.GetEntries())
 
 
 canvas = TCanvas("cv","cv",1000,800)    
