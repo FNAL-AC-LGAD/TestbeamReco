@@ -31,9 +31,9 @@ inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-pitch  = sensor_Geometry['pitch']
-strip_width  = sensor_Geometry['stripWidth']
-strip_length  = sensor_Geometry['length']
+pitch = sensor_Geometry['pitch']
+strip_width = sensor_Geometry['stripWidth']
+strip_length = sensor_Geometry['length']
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -109,6 +109,7 @@ left_axis.SetLabelFont(myStyle.GetFont())
 left_axis.SetTitleFont(myStyle.GetFont())
 left_axis.SetAxisColor(colors[2])
 left_axis.SetLabelColor(colors[2])
+left_axis.SetRangeUser(0.0001, ylength)
 left_axis.Draw()
 
 # Add right axis (Time)
@@ -124,13 +125,12 @@ right_axis.SetLabelColor(colors[4])
 right_axis.Draw()
 
 # Draw gray bars in the background (Position of metallic sections)
-boxes = getStripBox(inputfile, ymax=ylength, shift=position_center)
+boxes = getStripBox(inputfile, 0.0001, ymax=ylength, pitch=pitch/1000.)
 for box in boxes:
     # Don't draw strips that are outside the x-axis range
-    if box.GetX2() < -xlength:
+    if (box.GetX2() < -xlength) or (xlength < box.GetX1()):
         continue
-    if box.GetX1() > xlength:
-        continue
+
     box.Draw()
 gPad.RedrawAxis("g")
 

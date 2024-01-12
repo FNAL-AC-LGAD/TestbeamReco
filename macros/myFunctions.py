@@ -224,7 +224,7 @@ def get_legend_comparation_plots(sensors, variables):
     variablesUnits["BV"], variablesUnits["voltage"] = " mV ", " mV "
     variablesUnits["thickness"] = " #mum "
     variablesUnits["resistivity"] = ""
-    variablesUnits["resistivityNumber"] = " #Omega/sq "
+    variablesUnits["resistivityNumber"] = " #Omega/#Box "
     variablesUnits["capacitance"] = " pF/mm^{2} "
 
     # Define the name use in the legend of each variable
