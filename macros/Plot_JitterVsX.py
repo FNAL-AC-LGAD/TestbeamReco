@@ -133,6 +133,8 @@ for i in range(1, nbins+1):
         myMean = tmpHist.GetMean()
         nEvents = tmpHist.GetEntries()
         value = myMean
+	# Add empty error for the moment
+        error = 0.0
 
         # Define minimum of bin's entries to be fitted
         minEvtsCut = myTotalEvents/nbins
@@ -151,7 +153,7 @@ for i in range(1, nbins+1):
             myLanGausFunction = fit.fit(tmpHist, fitrange=(myMean-1.5*myRMS,myMean+3*myRMS))
             myMPV = myLanGausFunction.GetParameter(1)
             value = myMPV
-            # gaussian = TF1("gaussian", "gaus")
+	    # gaussian = TF1("gaussian", "gaus")
             # gaussian.SetRange(myMean-2*myRMS,myMean+2*myRMS)
             # tmpHist.Fit(gaussian, "R")
             # myMean = gaussian.GetParameter(1)
@@ -175,6 +177,7 @@ for i in range(1, nbins+1):
                 print(msg_amp)
         else:
             value = 0.0
+            error = 0.0
 
         value = value if (value>0.0) else 0.0
 
@@ -183,6 +186,7 @@ for i in range(1, nbins+1):
             continue
 
         info_entry.th1.SetBinContent(i, value)
+        info_entry.th1.SetBinError(i, error)
 
 # Define output file
 output_path = "%sJitterVsX"%(outdir)
@@ -221,7 +225,7 @@ for i,info_entry in enumerate(all_histoInfos):
         box.Draw()
     gPad.RedrawAxis("g")
 
-    hist.Draw("hist same")
+    hist.Draw("hist e same")
 
     hist.Write()
 

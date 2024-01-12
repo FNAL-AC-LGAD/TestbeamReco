@@ -32,9 +32,11 @@ xlength = float(options.xlength)
 
 efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_fullReco_Denominator")
 efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_TwoGoodHit_Numerator")
+# efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_NoSum_twoStrip_numerator")
 
 
-print( "Entries : ", efficiency_fullReco_numerator_global.GetEntries())
+print("Entries : ", efficiency_fullReco_numerator_global.GetEntries())
+print("Entries den: ", efficiency_denominator_global.GetEntries())
 
 
 canvas = TCanvas("cv","cv",1000,800)    
@@ -56,16 +58,16 @@ outputfile.Close()
 
 if "2x2pad" in dataset:
     cutg = TCutG("cutg",4);
-    BoxHot = TBox(-0.25,-0.25,0.25,0.25)
-    cutg.SetPoint(0,-0.25,-0.25);
-    cutg.SetPoint(1,-0.25,0.25);
-    cutg.SetPoint(2,0.25,0.25);
-    cutg.SetPoint(3,0.25,-0.25); 
-    x_low = ratio.GetXaxis().FindBin(-0.4)
-    x_high = ratio.GetXaxis().FindBin(0.4)
+    BoxHot = TBox(-9.25,-9.25,9.25,9.25)
+    cutg.SetPoint(0,-0.75,-0.75);
+    cutg.SetPoint(1,-0.75,0.75);
+    cutg.SetPoint(2,0.75,0.75);
+    cutg.SetPoint(3,0.75,-0.75); 
+    x_low = ratio.GetXaxis().FindBin(-0.8)
+    x_high = ratio.GetXaxis().FindBin(0.8)
     ratio.GetXaxis().SetRange(x_low, x_high)
-    y_low = ratio.GetYaxis().FindBin(-0.4)
-    y_high = ratio.GetYaxis().FindBin(0.4)
+    y_low = ratio.GetYaxis().FindBin(-0.8)
+    y_high = ratio.GetYaxis().FindBin(0.8)
     ratio.GetYaxis().SetRange(y_low, y_high)
 
 elif "BNL" in dataset:
@@ -89,11 +91,11 @@ else:
     cutg.SetPoint(2,0.5,0.25);
     cutg.SetPoint(3,0.5,-0.25); 
     BoxHot = TBox(-0.5,-0.25,0.5,0.25)
-    x_low = ratio.GetXaxis().FindBin(-0.75)
-    x_high = ratio.GetXaxis().FindBin(0.75)
+    x_low = ratio.GetXaxis().FindBin(-0.95)
+    x_high = ratio.GetXaxis().FindBin(0.95)
     ratio.GetXaxis().SetRange(x_low, x_high)
-    y_low = ratio.GetYaxis().FindBin(-0.5)
-    y_high = ratio.GetYaxis().FindBin(0.5)
+    y_low = ratio.GetYaxis().FindBin(-0.65)
+    y_high = ratio.GetYaxis().FindBin(0.65)
     ratio.GetYaxis().SetRange(y_low, y_high)
 
 

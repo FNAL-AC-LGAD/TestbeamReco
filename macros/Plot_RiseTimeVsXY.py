@@ -22,8 +22,8 @@ myStyle.ForceStyle()
 parser = optparse.OptionParser("usage: %prog [options]\n")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-b','--biasvolt', dest='biasvolt', default = 0, help="Bias Voltage value in [V]")
-parser.add_option('-z','--zmin', dest='zmin', default =   15.0, help="Set min Amp value in final plot")
-parser.add_option('-Z','--zmax', dest='zmax', default = 130.0, help="Set max Amp value in final plot")
+parser.add_option('-z','--zmin', dest='zmin', default = 300.0, help="Set min Amp value in final plot")
+parser.add_option('-Z','--zmax', dest='zmax', default = 370.0, help="Set max Amp value in final plot")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
@@ -41,18 +41,18 @@ sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor = sensor_Geometry['sensor']
 bias   = sensor_Geometry['BV'] if options.biasvolt == 0 else options.biasvolt
 
-outdir = myStyle.GetPlotsDir(outdir, "Amplitude/")
+outdir = myStyle.GetPlotsDir(outdir, "Risetime/")
 
 #Get 3D histograms
 channel_good_index = []
 th3_amplitude_vs_xy_ch = []
 for i in range(7):
-    hname = "amplitude_vs_xy_channel0"+str(i)
+    hname = "risetime_vs_xy_channel0"+str(i)
     if inputfile.Get(hname):
         channel_good_index.append(i)
         th3_amplitude_vs_xy_ch.append(inputfile.Get(hname))
 
-th3_amplitude_vs_xy_ch.append(inputfile.Get("amplitudeNoSum_vs_xy"))
+th3_amplitude_vs_xy_ch.append(inputfile.Get("risetime_vs_xy"))
 
 
 #Build amplitude histograms
@@ -177,7 +177,7 @@ for channel in range(0, len(list_amplitude_vs_xy)):
         list_amplitude_vs_xy[channel].Draw("col same [cutg]")
     else:
         list_amplitude_vs_xy[channel].Draw("colz same [cutg]")
-        list_amplitude_vs_xy[channel].GetZaxis().SetTitle("Mean amplitude [mV]")
+        list_amplitude_vs_xy[channel].GetZaxis().SetTitle("Risetime [ps]")
         BoxHot.Draw("same")
         myStyle.BeamInfo()
         myStyle.SensorInfoSmart(dataset,2.0*myStyle.GetMargin(), isPaperPlot = True)
@@ -187,7 +187,7 @@ for channel in range(0, len(list_amplitude_vs_xy)):
 
     list_amplitude_vs_xy[channel].Write()
 
-name = "amplitude_vs_xy"
+name = "risetime_vs_xy"
 canvas.SaveAs(outdir+dataset+name+".gif")
 canvas.SaveAs(outdir+dataset+name+".pdf")
 
