@@ -5,41 +5,30 @@ import EfficiencyUtils
 from stripBox import getStripBox
 import myStyle
 
-gROOT.SetBatch( True )
-organized_mode=True
+gROOT.SetBatch(True)
 colors = myStyle.GetColors()
 myStyle.ForceStyle()
 # Construct the argument parser
 parser = optparse.OptionParser("usage: %prog [options]\n")
-parser.add_option('-x','--xlength', dest='xlength', default = 2.5, help="Limit x-axis in final plot")
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
-parser.add_option('-o', dest='Overall', action='store_true', default = False, help="Draw Overall efficiency (from Global) in 1DProjection")
 options, args = parser.parse_args()
 
-draw_overall = options.Overall
 dataset = options.Dataset
 
-outdir=""
-if organized_mode: 
-    outdir = myStyle.getOutputDir(dataset)
-    inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
-else: 
-    inputfile = TFile("../test/myoutputfile.root")
+outdir = myStyle.getOutputDir(dataset)
+inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 # outdir = myStyle.getOutputDir("Paper2023")
 outdir = myStyle.GetPlotsDir(outdir, "Efficiency/")
-xlength = float(options.xlength)
 
 efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_fullReco_Denominator")
 efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_TwoGoodHit_Numerator")
 # efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_NoSum_twoStrip_numerator")
 
-
 print("Entries : ", efficiency_fullReco_numerator_global.GetEntries())
 print("Entries den: ", efficiency_denominator_global.GetEntries())
 
-
-canvas = TCanvas("cv","cv",1000,800)    
+canvas = TCanvas("cv","cv",1000,800)
 myStyle.ForceStyle()
 gStyle.SetOptStat(0)
 
@@ -57,12 +46,12 @@ outputfile.Close()
 
 
 if "2x2pad" in dataset:
-    cutg = TCutG("cutg",4);
+    cutg = TCutG("cutg",4)
     BoxHot = TBox(-9.25,-9.25,9.25,9.25)
-    cutg.SetPoint(0,-0.75,-0.75);
-    cutg.SetPoint(1,-0.75,0.75);
-    cutg.SetPoint(2,0.75,0.75);
-    cutg.SetPoint(3,0.75,-0.75); 
+    cutg.SetPoint(0,-0.53,-0.58)
+    cutg.SetPoint(1,-0.53,0.53)
+    cutg.SetPoint(2,0.75,0.53)
+    cutg.SetPoint(3,0.75,-0.58)
     x_low = ratio.GetXaxis().FindBin(-0.8)
     x_high = ratio.GetXaxis().FindBin(0.8)
     ratio.GetXaxis().SetRange(x_low, x_high)
@@ -71,11 +60,11 @@ if "2x2pad" in dataset:
     ratio.GetYaxis().SetRange(y_low, y_high)
 
 elif "BNL" in dataset:
-    cutg = TCutG("cutg",4);
-    cutg.SetPoint(0,-0.5,-0.25);
-    cutg.SetPoint(1,-0.5,0.25);
-    cutg.SetPoint(2,0.5,0.25);
-    cutg.SetPoint(3,0.5,-0.25); 
+    cutg = TCutG("cutg",4)
+    cutg.SetPoint(0,-0.5,-0.25)
+    cutg.SetPoint(1,-0.5,0.25)
+    cutg.SetPoint(2,0.5,0.25)
+    cutg.SetPoint(3,0.5,-0.25)
     BoxHot = TBox(-0.51,-0.25,0.51,0.25)
     x_low = ratio.GetXaxis().FindBin(-0.75)
     x_high = ratio.GetXaxis().FindBin(0.75)
@@ -85,11 +74,11 @@ elif "BNL" in dataset:
     ratio.GetYaxis().SetRange(y_low, y_high)
 
 else:
-    cutg = TCutG("cutg",4);
-    cutg.SetPoint(0,-0.5,-0.25);
-    cutg.SetPoint(1,-0.5,0.25);
-    cutg.SetPoint(2,0.5,0.25);
-    cutg.SetPoint(3,0.5,-0.25); 
+    cutg = TCutG("cutg",4)
+    cutg.SetPoint(0,-0.5,-0.25)
+    cutg.SetPoint(1,-0.5,0.25)
+    cutg.SetPoint(2,0.5,0.25)
+    cutg.SetPoint(3,0.5,-0.25)
     BoxHot = TBox(-0.5,-0.25,0.5,0.25)
     x_low = ratio.GetXaxis().FindBin(-0.95)
     x_high = ratio.GetXaxis().FindBin(0.95)
@@ -98,17 +87,15 @@ else:
     y_high = ratio.GetYaxis().FindBin(0.65)
     ratio.GetYaxis().SetRange(y_low, y_high)
 
-
 BoxHot.SetLineColor(632)
 BoxHot.SetFillStyle(0)
 BoxHot.SetLineWidth(3)
-
 
 ratio.GetZaxis().SetTitle("Two good pixel efficiency")
 ratio.GetXaxis().SetTitle("Track x position [mm]")
 ratio.GetYaxis().SetTitle("Track y position [mm]")
 ratio.SetStats(0)
-ratio.Draw("colz  same [cutg]")
+ratio.Draw("colz same [cutg]")
 BoxHot.Draw("same")
 # myStyle.SensorInfoSmart(dataset,2.0*myStyle.GetMargin())
 canvas.SetRightMargin(3.0*myStyle.GetMargin())
