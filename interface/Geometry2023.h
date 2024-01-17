@@ -2326,9 +2326,9 @@ public:
     // 
     HPK_20um_500x500um_E600_2x2PadGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,1}}, {1,{0,0}}, {2,{1,0}}, {3,{1,1}}, {7,{2,0}}};
-    std::vector<std::vector<int>> geometry = {{1,0},{2,3},{7}};
-    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,false}, {5, false}, {6, false}, {7,false}};
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,1}}, {1,{0,0}}, {2,{1,0}}, {3,{1,1}}, {4, {2,0}}, {5, {2, 1}}, {7,{3,0}}};
+    std::vector<std::vector<int>> geometry = {{1,0},{2,3}, {4,5},{7}};
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5, false}, {6, false}, {7,false}};
     int numLGADchannels = 4;
     int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
@@ -2371,6 +2371,7 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
     // std::vector<std::vector<double>> sensorEdgesTight = {{-0.47, -0.48}, {0.47, 0.43}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[2], stripCenterYPosition[2]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesExtra = {{0.47, -0.26}, {1.02, 0.33}}; // {{-0.576, -2.130}, {-0.030, -1.547}};
     // std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.47,-0.05, 0.03, 0.43},{"top_right", 0.07,0.47, 0.03, 0.43},
     //                                                 {"bot_left", -0.47,-0.05, -0.48,-0.09},{"bot_right", 0.07,0.47, -0.48,-0.09}};
 };
@@ -2390,9 +2391,9 @@ public:
     //
     HPK_30um_500x500um_E600_2x2PadGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,1}}, {1,{0,0}}, {2,{1,0}}, {3,{1,1}}, {7,{2,0}}};
-    std::vector<std::vector<int>> geometry = {{1,0},{2,3},{7}};
-    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,false}, {5, false}, {6, false}, {7,false}};
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,1}}, {1,{0,0}}, {2,{1,0}}, {3,{1,1}}, {4, {2,0}}, {5, {2,1}}, {7,{3,0}}};
+    std::vector<std::vector<int>> geometry = {{1,0},{2,3}, {4,5},{7}};
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5, false}, {6, false}, {7,false}};
     int numLGADchannels = 4;
     int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
@@ -2435,6 +2436,7 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
     // std::vector<std::vector<double>> sensorEdgesTight = {{-0.49, -0.48}, {0.46, 0.44}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[2], stripCenterYPosition[2]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesExtra = {{-1.08, -0.13}, {-0.56, 0.39}}; // {{-2.084, -2.130}, {-1.564, -1.610}};
     // std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.49,-0.06, 0.06, 0.44},{"top_right", 0.05,0.46, 0.06, 0.44},
     //                                                 {"bot_left", -0.49,-0.06, -0.48,-0.11},{"bot_right", 0.05,0.46, -0.48,-0.11}};
 };
@@ -2454,9 +2456,9 @@ public:
     //
     HPK_50um_500x500um_E600_2x2PadGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,1}}, {1,{0,0}}, {2,{1,0}}, {3,{1,1}}, {7,{2,0}}};
-    std::vector<std::vector<int>> geometry = {{1,0},{2,3},{7}};
-    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,false}, {5, false}, {6, false}, {7,false}};
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,1}}, {1,{0,0}}, {2,{1,0}}, {3,{1,1}}, {4,{2,0}}, {5,{2,1}}, {7,{3,0}}};
+    std::vector<std::vector<int>> geometry = {{1,0},{2,3}, {4,5},{7}};
+    std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5, false}, {6, false}, {7,false}};
     int numLGADchannels = 4;
     int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
@@ -2501,6 +2503,7 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
     // std::vector<std::vector<double>> sensorEdgesTight = {{-0.48, -0.48}, {0.48, 0.43}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[2], stripCenterYPosition[2]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
+    std::vector<std::vector<double>> sensorEdgesExtra = {{1.07, 0.22}, {1.68, 0.83}}; // {{-1.082, -2.03}, {-0.467, -1.421}};
     // std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.48,-0.04, 0.07, 0.43},{"top_right", 0.07,0.48, 0.07, 0.43},
     //                                                 {"bot_left", -0.48,-0.04, -0.48,-0.10},{"bot_right", 0.07,0.48, -0.48,-0.10}};
 };
