@@ -101,8 +101,8 @@ outdir = myStyle.GetPlotsDir(outdir, "Amplitude/")
 # Save list with histograms to draw
 list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
-    ["amplitude_vs_xy", "Amplitude", "MPV signal amplitude [mV]"],
-    ["amplitudeNoSum_vs_xy", "AmplitudeNoSum", "MPV signal amplitude [mV]"],
+    ["amplitude_vs_xy", "Amplitude", "Mean signal amplitude [mV]"],
+    ["amplitudeNoSum_vs_xy", "AmplitudeNoSum", "Mean signal amplitude [mV]"],
 ]
 
 # TODO: Add per channel plots
