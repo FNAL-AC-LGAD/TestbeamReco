@@ -19,9 +19,11 @@ def get_existing_indices(inputfile, prename):
 
     return list_indices
 
-def get_n_row_col(indices_list):
+def get_n_row_col(indices_list, use_prev_idx=False):
     # NOTE: This assumes all rows have the same length
     last_idx = indices_list[-1]
+    if use_prev_idx:
+        last_idx = indices_list[-2]
     n_row, n_col = int(last_idx[0]) + 1, int(last_idx[1]) +1
 
     return n_row, n_col
@@ -71,9 +73,9 @@ def get_central_channel_position(inputfile, direction="x"):
     for key in n_channels_paired_with:
         # TODO: Is this needed? Check
         if n_channels_paired_with[key] != n_subchannels:
-            print(" >> Rows (columns) with different number of columns (rows).")
+            print(" >> (Warning) Rows (columns) with different number of columns (rows).")
             print(n_channels_paired_with)
-            exit()
+            # exit()
 
     # Even number of columns
     if (n_subchannels%2 == 0):
