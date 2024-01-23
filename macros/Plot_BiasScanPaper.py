@@ -18,11 +18,12 @@ fitLangaus = langaus.LanGausFit()
 
 
 class HistoInfo:
-    def __init__(self, inHistoName, f, outHistoName, doFits=True, xMin=0.0, xMax=1000.0, yMin=0.0, yMax=30.0, title="", xlabel="Bias voltage [V]", ylabel="", color=ROOT.kBlack, 
-                 rebin=None, unit=1.0, doGaus=True, getGausMean=False, doLanGaus=False, rm_photek=False, markerStyle=ROOT.kFullCircle):
+    def __init__(self, inHistoName, f, outHistoName, info_ch="", doFits=True, xMin=0.0, xMax=1000.0, yMin=0.0, yMax=30.0, title="", xlabel="Bias voltage [V]", ylabel="",
+                 color=ROOT.kBlack, rebin=None, unit=1.0, doGaus=True, getGausMean=False, doLanGaus=False, rm_photek=False, markerStyle=ROOT.kFullCircle):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
+        self.info_ch = info_ch
         self.doFits = doFits
         self.xMin = xMin
         self.xMax = xMax
@@ -49,9 +50,9 @@ class HistoInfo:
         return th2
 
     def getTH1(self, th2, name):
-        t = time.time()
-        newName = "{}{}".format(name,t)
-        th1_temp = TH1D(newName,newName,th2.GetXaxis().GetNbins(),th2.GetXaxis().GetXmin(),th2.GetXaxis().GetXmax())
+        if self.info_ch:
+            name+= "_%s"%(self.info_ch)
+        th1_temp = TH1D(name, name, th2.GetXaxis().GetNbins(), th2.GetXaxis().GetXmin(), th2.GetXaxis().GetXmax())
         th1_temp.SetStats(0)
         th1_temp.SetLineWidth(3)
         th1_temp.SetLineColor(self.color)
@@ -94,52 +95,52 @@ legend_entry = mf.get_legend_comparation_plots(sensors, ["thickness"])
 
 all_histoInfos = [
     [
-        HistoInfo("timeDiff_vs_BV_channel01", infile_20um, "timeDiff_vs_BV_0", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[0]+"   ", ylabel="Time resolution [ps]", color=ROOT.kBlack,   unit=1000.0, doGaus=True, rm_photek=True),
-        HistoInfo("timeDiff_vs_BV_channel20", infile_20um, "timeDiff_vs_BV_1", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[0]+"   ", ylabel="Time resolution [ps]", color=ROOT.kBlack,   unit=1000.0, doGaus=True, rm_photek=True, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("timeDiff_vs_BV_channel01", infile_30um, "timeDiff_vs_BV_2", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[1]+"   ", ylabel="Time resolution [ps]", color=ROOT.kRed,     unit=1000.0, doGaus=True, rm_photek=True),
-        HistoInfo("timeDiff_vs_BV_channel20", infile_30um, "timeDiff_vs_BV_3", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[1]+"   ", ylabel="Time resolution [ps]", color=ROOT.kRed,     unit=1000.0, doGaus=True, rm_photek=True, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("timeDiff_vs_BV_channel11", infile_50um, "timeDiff_vs_BV_4", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[2]+"   ", ylabel="Time resolution [ps]", color=ROOT.kGreen+2, unit=1000.0, doGaus=True, rm_photek=True),
-        HistoInfo("timeDiff_vs_BV_channel20", infile_50um, "timeDiff_vs_BV_5", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[2]+"   ", ylabel="Time resolution [ps]", color=ROOT.kGreen+2, unit=1000.0, doGaus=True, rm_photek=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("timeDiff_vs_BV_channel01", infile_20um, "timeDiff_vs_BV", "20umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[0]+"   ", ylabel="Time resolution [ps]", color=ROOT.kBlack,   unit=1000.0, doGaus=True, rm_photek=True),
+        HistoInfo("timeDiff_vs_BV_channel20", infile_20um, "timeDiff_vs_BV", "20umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[0]+"   ", ylabel="Time resolution [ps]", color=ROOT.kBlack,   unit=1000.0, doGaus=True, rm_photek=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("timeDiff_vs_BV_channel01", infile_30um, "timeDiff_vs_BV", "30umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[1]+"   ", ylabel="Time resolution [ps]", color=ROOT.kRed,     unit=1000.0, doGaus=True, rm_photek=True),
+        HistoInfo("timeDiff_vs_BV_channel20", infile_30um, "timeDiff_vs_BV", "30umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[1]+"   ", ylabel="Time resolution [ps]", color=ROOT.kRed,     unit=1000.0, doGaus=True, rm_photek=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("timeDiff_vs_BV_channel11", infile_50um, "timeDiff_vs_BV", "50umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[2]+"   ", ylabel="Time resolution [ps]", color=ROOT.kGreen+2, unit=1000.0, doGaus=True, rm_photek=True),
+        HistoInfo("timeDiff_vs_BV_channel20", infile_50um, "timeDiff_vs_BV", "50umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=ylength, title=legend_entry[2]+"   ", ylabel="Time resolution [ps]", color=ROOT.kGreen+2, unit=1000.0, doGaus=True, rm_photek=True, markerStyle=ROOT.kOpenCircle),
     ],
     [
-        HistoInfo("slewrate_vs_BV_channel01", infile_20um, "slewrate_vs_BV_0", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[0]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kBlack,   doGaus=False),
-        HistoInfo("slewrate_vs_BV_channel20", infile_20um, "slewrate_vs_BV_1", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[0]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kBlack,   doGaus=False, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("slewrate_vs_BV_channel01", infile_30um, "slewrate_vs_BV_2", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[1]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kRed,     doGaus=False),
-        HistoInfo("slewrate_vs_BV_channel20", infile_30um, "slewrate_vs_BV_3", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[1]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kRed,     doGaus=False, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("slewrate_vs_BV_channel11", infile_50um, "slewrate_vs_BV_4", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[2]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kGreen+2, doGaus=False),
-        HistoInfo("slewrate_vs_BV_channel20", infile_50um, "slewrate_vs_BV_5", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[2]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kGreen+2, doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("slewrate_vs_BV_channel01", infile_20um, "slewrate_vs_BV", "20umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[0]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kBlack,   doGaus=False),
+        HistoInfo("slewrate_vs_BV_channel20", infile_20um, "slewrate_vs_BV", "20umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[0]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kBlack,   doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("slewrate_vs_BV_channel01", infile_30um, "slewrate_vs_BV", "30umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[1]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kRed,     doGaus=False),
+        HistoInfo("slewrate_vs_BV_channel20", infile_30um, "slewrate_vs_BV", "30umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[1]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kRed,     doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("slewrate_vs_BV_channel11", infile_50um, "slewrate_vs_BV", "50umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[2]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kGreen+2, doGaus=False),
+        HistoInfo("slewrate_vs_BV_channel20", infile_50um, "slewrate_vs_BV", "50umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=0.0, yMax=320.0, title=legend_entry[2]+"   ", ylabel="Slewrate [mV/ns]", color=ROOT.kGreen+2, doGaus=False, markerStyle=ROOT.kOpenCircle),
     ],
     [
-        HistoInfo("amp_vs_BV_channel01", infile_20um, "amp_vs_BV_0", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[0]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kBlack,   doLanGaus=True),
-        HistoInfo("amp_vs_BV_channel20", infile_20um, "amp_vs_BV_1", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[0]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kBlack,   doLanGaus=True, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("amp_vs_BV_channel01", infile_30um, "amp_vs_BV_2", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[1]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kRed,     doLanGaus=True),
-        HistoInfo("amp_vs_BV_channel20", infile_30um, "amp_vs_BV_3", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[1]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kRed,     doLanGaus=True, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("amp_vs_BV_channel11", infile_50um, "amp_vs_BV_4", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[2]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kGreen+2, doLanGaus=True),
-        HistoInfo("amp_vs_BV_channel20", infile_50um, "amp_vs_BV_5", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[2]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kGreen+2, doLanGaus=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("amp_vs_BV_channel01", infile_20um, "amp_vs_BV", "20umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[0]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kBlack,   doLanGaus=True),
+        HistoInfo("amp_vs_BV_channel20", infile_20um, "amp_vs_BV", "20umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[0]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kBlack,   doLanGaus=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("amp_vs_BV_channel01", infile_30um, "amp_vs_BV", "30umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[1]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kRed,     doLanGaus=True),
+        HistoInfo("amp_vs_BV_channel20", infile_30um, "amp_vs_BV", "30umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[1]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kRed,     doLanGaus=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("amp_vs_BV_channel11", infile_50um, "amp_vs_BV", "50umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[2]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kGreen+2, doLanGaus=True),
+        HistoInfo("amp_vs_BV_channel20", infile_50um, "amp_vs_BV", "50umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=260.0, title=legend_entry[2]+"   ", ylabel="MPV Amplitude [mV]", color=ROOT.kGreen+2, doLanGaus=True, markerStyle=ROOT.kOpenCircle),
     ],
     [
-        HistoInfo("baselineRMS_vs_BV_channel01", infile_20um, "baselineRMS_vs_BV_0", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[0]+"   ", ylabel="Noise [mV]", color=ROOT.kBlack,   doGaus=False),
-        HistoInfo("baselineRMS_vs_BV_channel20", infile_20um, "baselineRMS_vs_BV_1", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[0]+"   ", ylabel="Noise [mV]", color=ROOT.kBlack,   doGaus=False, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("baselineRMS_vs_BV_channel01", infile_30um, "baselineRMS_vs_BV_2", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[1]+"   ", ylabel="Noise [mV]", color=ROOT.kRed,     doGaus=False),
-        HistoInfo("baselineRMS_vs_BV_channel20", infile_30um, "baselineRMS_vs_BV_3", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[1]+"   ", ylabel="Noise [mV]", color=ROOT.kRed,     doGaus=False, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("baselineRMS_vs_BV_channel11", infile_50um, "baselineRMS_vs_BV_4", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[2]+"   ", ylabel="Noise [mV]", color=ROOT.kGreen+2, doGaus=False),
-        HistoInfo("baselineRMS_vs_BV_channel20", infile_50um, "baselineRMS_vs_BV_5", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[2]+"   ", ylabel="Noise [mV]", color=ROOT.kGreen+2, doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("baselineRMS_vs_BV_channel01", infile_20um, "baselineRMS_vs_BV", "20umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[0]+"   ", ylabel="Noise [mV]", color=ROOT.kBlack,   doGaus=False),
+        HistoInfo("baselineRMS_vs_BV_channel20", infile_20um, "baselineRMS_vs_BV", "20umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[0]+"   ", ylabel="Noise [mV]", color=ROOT.kBlack,   doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("baselineRMS_vs_BV_channel01", infile_30um, "baselineRMS_vs_BV", "30umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[1]+"   ", ylabel="Noise [mV]", color=ROOT.kRed,     doGaus=False),
+        HistoInfo("baselineRMS_vs_BV_channel20", infile_30um, "baselineRMS_vs_BV", "30umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[1]+"   ", ylabel="Noise [mV]", color=ROOT.kRed,     doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("baselineRMS_vs_BV_channel11", infile_50um, "baselineRMS_vs_BV", "50umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[2]+"   ", ylabel="Noise [mV]", color=ROOT.kGreen+2, doGaus=False),
+        HistoInfo("baselineRMS_vs_BV_channel20", infile_50um, "baselineRMS_vs_BV", "50umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=1.0, yMax=3.0, title=legend_entry[2]+"   ", ylabel="Noise [mV]", color=ROOT.kGreen+2, doGaus=False, markerStyle=ROOT.kOpenCircle),
     ],
     [
-        HistoInfo("risetime_vs_BV_channel01", infile_20um, "risetime_vs_BV_0", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[0]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kBlack,   doGaus=False),
-        HistoInfo("risetime_vs_BV_channel20", infile_20um, "risetime_vs_BV_1", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[0]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kBlack,   doGaus=False, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("risetime_vs_BV_channel01", infile_30um, "risetime_vs_BV_2", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[1]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kRed,     doGaus=False),
-        HistoInfo("risetime_vs_BV_channel20", infile_30um, "risetime_vs_BV_3", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[1]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kRed,     doGaus=False, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("risetime_vs_BV_channel11", infile_50um, "risetime_vs_BV_4", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[2]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kGreen+2, doGaus=False),
-        HistoInfo("risetime_vs_BV_channel20", infile_50um, "risetime_vs_BV_5", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[2]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kGreen+2, doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("risetime_vs_BV_channel01", infile_20um, "risetime_vs_BV", "20umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[0]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kBlack,   doGaus=False),
+        HistoInfo("risetime_vs_BV_channel20", infile_20um, "risetime_vs_BV", "20umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[0]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kBlack,   doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("risetime_vs_BV_channel01", infile_30um, "risetime_vs_BV", "30umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[1]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kRed,     doGaus=False),
+        HistoInfo("risetime_vs_BV_channel20", infile_30um, "risetime_vs_BV", "30umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[1]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kRed,     doGaus=False, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("risetime_vs_BV_channel11", infile_50um, "risetime_vs_BV", "50umFNAL", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[2]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kGreen+2, doGaus=False),
+        HistoInfo("risetime_vs_BV_channel20", infile_50um, "risetime_vs_BV", "50umUCSC", doFits=False, xMin=xmin, xMax=xmax, yMin=200.0, yMax=900.0, title=legend_entry[2]+"   ", ylabel="Risetime [ps] (10 to 90%)", color=ROOT.kGreen+2, doGaus=False, markerStyle=ROOT.kOpenCircle),
     ],
     [
-        HistoInfo("jitter_vs_BV_channel01", infile_20um, "jitter_vs_BV_0", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[0]+"   ", ylabel="Jitter [ps]", color=ROOT.kBlack,   doLanGaus=True),
-        HistoInfo("jitter_vs_BV_channel20", infile_20um, "jitter_vs_BV_1", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[0]+"   ", ylabel="Jitter [ps]", color=ROOT.kBlack,   doLanGaus=True, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("jitter_vs_BV_channel01", infile_30um, "jitter_vs_BV_2", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[1]+"   ", ylabel="Jitter [ps]", color=ROOT.kRed,     doLanGaus=True),
-        HistoInfo("jitter_vs_BV_channel20", infile_30um, "jitter_vs_BV_3", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[1]+"   ", ylabel="Jitter [ps]", color=ROOT.kRed,     doLanGaus=True, markerStyle=ROOT.kOpenCircle),
-        HistoInfo("jitter_vs_BV_channel11", infile_50um, "jitter_vs_BV_4", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[2]+"   ", ylabel="Jitter [ps]", color=ROOT.kGreen+2, doLanGaus=True),
-        HistoInfo("jitter_vs_BV_channel20", infile_50um, "jitter_vs_BV_5", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[2]+"   ", ylabel="Jitter [ps]", color=ROOT.kGreen+2, doLanGaus=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("jitter_vs_BV_channel01", infile_20um, "jitter_vs_BV", "20umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[0]+"   ", ylabel="Jitter [ps]", color=ROOT.kBlack,   doLanGaus=True),
+        HistoInfo("jitter_vs_BV_channel20", infile_20um, "jitter_vs_BV", "20umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[0]+"   ", ylabel="Jitter [ps]", color=ROOT.kBlack,   doLanGaus=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("jitter_vs_BV_channel01", infile_30um, "jitter_vs_BV", "30umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[1]+"   ", ylabel="Jitter [ps]", color=ROOT.kRed,     doLanGaus=True),
+        HistoInfo("jitter_vs_BV_channel20", infile_30um, "jitter_vs_BV", "30umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[1]+"   ", ylabel="Jitter [ps]", color=ROOT.kRed,     doLanGaus=True, markerStyle=ROOT.kOpenCircle),
+        HistoInfo("jitter_vs_BV_channel11", infile_50um, "jitter_vs_BV", "50umFNAL", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[2]+"   ", ylabel="Jitter [ps]", color=ROOT.kGreen+2, doLanGaus=True),
+        HistoInfo("jitter_vs_BV_channel20", infile_50um, "jitter_vs_BV", "50umUCSC", xMin=xmin, xMax=xmax, yMin=0.0, yMax=60.0, title=legend_entry[2]+"   ", ylabel="Jitter [ps]", color=ROOT.kGreen+2, doLanGaus=True, markerStyle=ROOT.kOpenCircle),
     ],
 ]
 
@@ -149,6 +150,9 @@ TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
 pad_margin = myStyle.GetMargin()
 print("Finished setting up langaus fit class")
+
+if debugMode:
+    outdir_q = myStyle.CreateFolder(outdir, "q_BiasScan0/")
 
 nXBins = all_histoInfos[0][0].th2.GetXaxis().GetNbins()
 
@@ -161,8 +165,8 @@ for i in range(1, nXBins+1):
             myRMS = tmpHist.GetRMS()
             myMean = tmpHist.GetMean()
             nEvents = tmpHist.GetEntries()
-            fitlow = myMean - 2.4*myRMS # 1.5
-            fithigh = myMean + 2.4*myRMS # 1.5
+            fitlow = myMean - 1.5*myRMS # 1.5 - 2.4
+            fithigh = myMean + 1.5*myRMS # 1.5 - 2.4
             value = info.unit*myMean
             error = info.unit*tmpHist.GetMeanError()
 
@@ -198,8 +202,9 @@ for i in range(1, nXBins+1):
                     if (debugMode):
                         tmpHist.Draw("hist")
                         fit.Draw("same")
-                        canvas.SaveAs(outdir+"q"+info.outHistoName+"_"+str(i)+".gif")
-                        print("Bin : " + str(i) + " -> " + str(value) + " +/- " + str(error))
+                        volt = info.th1.GetXaxis().GetBinLowEdge(i)
+                        canvas.SaveAs("%sq_%s-%iV.gif"%(outdir_q, info.th1.GetName(), volt))
+                        print("%s - %iV: %.2f +/- %.2f"%(info.th1.GetName(), volt, value, error))
                 else:
                     value = 0.0
                     error = 0.0
@@ -259,6 +264,6 @@ for histoInfos in all_histoInfos:
     myStyle.SensorProductionInfo(sensor_prod)
     htemp.Draw("axis same")
 
-    # canvas.SaveAs("%s%s.gif"%(outdir, info.outHistoName[:-2]))
-    canvas.SaveAs("%s%s.pdf"%(outdir, info.outHistoName[:-2]))
+    # canvas.SaveAs("%s%s.gif"%(outdir, info.outHistoName))
+    canvas.SaveAs("%s%s.pdf"%(outdir, info.outHistoName))
     htemp.Delete()
