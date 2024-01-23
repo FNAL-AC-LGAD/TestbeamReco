@@ -62,6 +62,13 @@ hResolution_position = inputfile_position.Get("track_twoStrip_tight")
 hResolution_position.SetLineWidth(3)
 hResolution_position.SetLineColor(colors[2])
 
+# Get Expected position resolution histogram
+# ---------------------------------
+
+hResolution_expected = inputfile_position.Get("h_expected")
+hResolution_expected.SetLineWidth(3)
+hResolution_expected.SetLineStyle(7)
+hResolution_expected.SetLineColor(colors[2])
 
 # Get Time resolution histogram
 # ---------------------------------
@@ -148,6 +155,9 @@ legend.SetLineColor(kBlack)
 
 hResolution_position.Draw("hist e same")
 legend.AddEntry(hResolution_position, "Position resolution", "l")
+
+hResolution_expected.Draw("hist same")
+legend.AddEntry(hResolution_expected, "Expected resolution", "l")
 
 hResolution_time.Draw("hist e same")
 legend.AddEntry(hResolution_time,"Time resolution", "l")
