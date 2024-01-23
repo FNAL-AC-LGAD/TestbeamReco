@@ -244,7 +244,8 @@ private:
         const auto& amp = tr.getVec<float>("amp");
         const auto& extraChannelIndex = tr.getVar<int>("extraChannelIndex");
         const auto& rawAmpLGAD = utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
-        int n_row = (extraChannelIndex > -1) ? rawAmpLGAD.size() : rawAmpLGAD.size() -1;
+        int n_row = rawAmpLGAD.size();
+        if (extraChannelIndex > -1) {n_row = rawAmpLGAD.size() -1;}
         tr.registerDerivedVar("n_row", static_cast<int>(n_row));
         tr.registerDerivedVar("n_col", static_cast<int>(rawAmpLGAD[0].size()));
 
