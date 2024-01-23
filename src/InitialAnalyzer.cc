@@ -44,21 +44,24 @@ void InitialAnalyzer::InitHistos(NTupleReader& tr, const std::vector<std::vector
     //int xBinsDelay = 100; 
     //Time map: use 100 micron bins along strip
 
+    const auto& acLGADChannelMap = tr.getVar<std::map<int, bool>>("acLGADChannelMap");
+
     int rowIndex = 0;
     for(const auto& row : geometry)
     {
         if(row.size()<2) continue;
         for(unsigned int i = 0; i < row.size(); i++)
         {
+            if(!acLGADChannelMap.at(row[i])) continue;
             const auto& r = std::to_string(rowIndex);
             const auto& s = std::to_string(i);
 
-            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500);
             // utility::makeHisto(my_3d_histos,"timeDiff_coarse_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize_delay_corr,xmin,xmax, (ymax-ymin)/yBinSize_delay_corr,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
             utility::makeHisto(my_3d_histos,"timeDiff_fine_vs_xy_channel"+r+s, "; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
 
-            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_col_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
-            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_row_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500 );
+            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_col_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500);
+            utility::makeHisto(my_3d_histos,"amplitude_vs_xy_row_channel"+r+s,"; X [mm]; Y [mm]",(xmax-xmin)/xBinSize,xmin,xmax, (ymax-ymin)/yBinSize,ymin,ymax, 500,0,500);
         }
         rowIndex++;
     }
@@ -179,6 +182,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
             {
                 const auto& r = std::to_string(rowIndex);
                 const auto& s = std::to_string(i);
+
                 // const auto& ampChannel = ampLGAD[rowIndex][i];
                 // const auto& relFracChannel = relFrac[rowIndex][i];
                 const auto& rawAmpChannel = rawAmpLGAD[rowIndex][i];
@@ -194,10 +198,9 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 // utility::fillHisto(pass && goodNoiseAmp,                                my_3d_histos, "timeDiff_coarse_vs_xy_channel"+r+s, x,y,time-photekTime);
                 utility::fillHisto(pass && goodNoiseAmp,                                my_3d_histos, "timeDiff_fine_vs_xy_channel"+r+s, x,y,timeTracker-photekTime);
 
-                if (!isPadSensor)
-                {
-                    continue;
-                }
+                if (!isPadSensor) {continue;}
+                // Skip extra channel
+                if (row.size() == 1) continue;
 
                 std::vector<double> yPad = ySlices[rowIndex];
                 std::vector<double> xPad = xSlices[i];
