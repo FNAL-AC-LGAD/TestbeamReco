@@ -195,8 +195,9 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
 
         if i < len(list_time_vs_x):
             lengendEntry = legendTop.AddEntry(hist, tag[idx])
-        # hist.Draw("hist e same")
-        hist.Draw("hist same")
+            hist.Draw("hist e same")
+        else:
+            hist.Draw("hist same")
 
     # Draw legend
     if list_jitter_vs_x:
