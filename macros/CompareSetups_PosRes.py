@@ -218,6 +218,9 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         for j, box in enumerate(boxes):
             x_position = (box.GetX1() + box.GetX2())/2.
             hist_one.SetPointX(j, x_position)
+        # Move extra points far away, if existing
+        for j in range(len(boxes), hist_one.GetN()):
+            hist_one.SetPointX(j, 99999.0)
         hist_one.Draw("P same")
         hist_one.SetLineStyle(1)
         hist_one.SetMarkerStyle(33)
