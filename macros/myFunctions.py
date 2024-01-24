@@ -4,7 +4,7 @@ import myStyle
 # Get list of all pairs of indices saved in histograms
 # with name <prename> in <inputfile>
 
-def get_existing_indices(inputfile, prename):
+def get_existing_indices(inputfile, prename, skip_extra_channel=True):
     list_indices = []
     # Loop over all possible names and save only those existing!
     for i in range(8):
@@ -17,13 +17,18 @@ def get_existing_indices(inputfile, prename):
 
             list_indices.append(channel)
 
+    # Remove extra channel used in pads
+    if skip_extra_channel:
+        elements_per_row = elements_associated(list_indices, row=True, show_output=False)
+        for row in elements_per_row:
+            if elements_per_row[row] == 1:
+                list_indices.remove(row+"0")
+
     return list_indices
 
-def get_n_row_col(indices_list, use_prev_idx=False):
+def get_n_row_col(indices_list):
     # NOTE: This assumes all rows have the same length
     last_idx = indices_list[-1]
-    if use_prev_idx:
-        last_idx = indices_list[-2]
     n_row, n_col = int(last_idx[0]) + 1, int(last_idx[1]) +1
 
     return n_row, n_col
@@ -48,45 +53,62 @@ def get_edge_indices(indices_list):
 
     return edge_indices
 
-def get_central_channel_position(inputfile, direction="x"):
-    # Get total number of channels used
-    indices = get_existing_indices(inputfile, "stripBoxInfo")
+def check_same_n_elements(dict_elements, row=True, show_output=True):
+    same_numbers = True
+    # Using the first column or row as reference
+    n_subchannels = dict_elements["0"]
+    for key in dict_elements:
+        if dict_elements[key] != n_subchannels:
+            prev = "Rows" if row else "Columns"
+            post = "columns" if row else "rows"
+            msg = " >> (Warning) %s with different number of %s."%(prev, post)
+            if show_output:
+                print(msg)
+                print(dict_elements)
+                # exit()
+            same_numbers = False
 
+    return same_numbers
+
+def elements_associated(indices, row=True, show_output=False):
     # Create a dictionary to get the number of columns (rows) associated with
-    # each row (column). The later is chosen with the input <direction>.
+    # each row (column)
     n_channels_paired_with = {}
     for i, j in indices:
-        if direction is "x":
-            key = i
-        elif direction is "y":
-            key = j
-        else:
-            print(" >> Choose a correct direction ('x' or 'y').")
-            exit()
+        key = i if row else j
 
         if key not in n_channels_paired_with:
             n_channels_paired_with[key] = 0
         n_channels_paired_with[key]+= 1
 
-    # Using the first column or row as reference
-    n_subchannels = n_channels_paired_with["0"]
-    for key in n_channels_paired_with:
-        # TODO: Is this needed? Check
-        if n_channels_paired_with[key] != n_subchannels:
-            print(" >> (Warning) Rows (columns) with different number of columns (rows).")
-            print(n_channels_paired_with)
-            # exit()
+    if show_output:
+        same_elem = check_same_n_elements(n_channels_paired_with, row)
 
+    return n_channels_paired_with
+
+def get_central_channel_position(inputfile, direction="x"):
+    # Get total number of channels used
+    indices = get_existing_indices(inputfile, "stripBoxInfo")
+
+    dict_associated = elements_associated(indices, (direction=="x"))
+    n_subchannels = dict_associated["0"]
+    if not check_same_n_elements(dict_associated, (direction=="x")):
+        n_subchannels = dict_associated["1"]
+
+    stripBox = "stripBoxInfo" if direction == "x" else "stripBoxInfoY"
     # Even number of columns
     if (n_subchannels%2 == 0):
         central_idx = round(n_subchannels/2)
-        l_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx-1)).GetMean(1)
-        r_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx)).GetMean(1)
+        pairL = "0%i"%(central_idx-1) if direction is "x" else "%i0"%(central_idx-1)
+        pairR = "0%i"%(central_idx) if direction is "x" else "%i0"%(central_idx)
+        l_channel = inputfile.Get("%s%s"%(stripBox, pairL)).GetMean(1)
+        r_channel = inputfile.Get("%s%s"%(stripBox, pairR)).GetMean(1)
         position_center = (l_channel + r_channel)/2
     # Odd number of columns
     else:
         central_idx = round((n_subchannels-1)/2)
-        position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
+        pair = "0%i"%(central_idx) if direction is "x" else "%i0"%(central_idx)
+        position_center = inputfile.Get("%s%s"%(stripBox, pair)).GetMean(1)
 
     return position_center
 

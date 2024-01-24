@@ -210,7 +210,7 @@ if use_each_channel:
     if (is_tight):
         print(" >> Tight cut is not compatible with 'each channel'. Skipping.")
     else:
-        indices_one = mf.get_existing_indices(inputfile, "deltaX_oneStrip")
+        indices_one = mf.get_existing_indices(inputfile, "deltaX_oneStrip", False)
 
         for index in indices_one:
             channel_element = ["deltaX_oneStrip%s"%index, "deltaX_oneStripCh%s"%index, "tracker"]
@@ -221,7 +221,7 @@ if plot_all_hists:
     if (is_tight):
         print(" >> Tight cut is not compatible with 'all histograms'. Skipping.")
     else:
-        indices_time = mf.get_existing_indices(inputfile, "timeDiffTracker_channel")
+        indices_time = mf.get_existing_indices(inputfile, "timeDiffTracker_channel", False)
 
         for index in indices_time:
             channel_element = ["timeDiffTracker_channel%s"%index, "time_trackerCh%s"%index, "photek"]
