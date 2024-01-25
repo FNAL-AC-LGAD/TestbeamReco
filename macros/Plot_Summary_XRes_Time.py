@@ -62,6 +62,7 @@ hResolution_position = inputfile_position.Get("track_twoStrip_tight")
 hResolution_position.SetLineWidth(3)
 hResolution_position.SetLineColor(colors[2])
 
+
 # Get Expected position resolution histogram
 # ---------------------------------
 
@@ -131,13 +132,17 @@ right_axis.SetLineColor(colors[4]) ## Check: Use the same color as time-line?
 right_axis.SetLabelColor(colors[4])
 right_axis.Draw()
 
+xlimit = 0
 # Draw gray bars in the background (Position of metallic sections)
 boxes = getStripBox(inputfile, 0.0001, ymax=ylength, pitch=pitch/1000.)
+if ("500x500" not in dataset) and ("pad" not in dataset):
+    boxes = boxes[1:len(boxes)-1]
+    xlimit = abs((boxes[0].GetX1() + boxes[0].GetX2())/2.)
+    xlimit+= pitch/(2 * 1000.)
 for box in boxes:
     # Don't draw strips that are outside the x-axis range
     if (box.GetX2() < -xlength) or (xlength < box.GetX1()):
         continue
-
     box.Draw()
 gPad.RedrawAxis("g")
 
@@ -153,14 +158,23 @@ legend.SetLineColor(kBlack)
 # legend.SetFillColor(kWhite)
 # legend.SetFillStyle(0)
 
-hResolution_position.Draw("hist e same")
-legend.AddEntry(hResolution_position, "Position resolution", "l")
+# Clear central region in position res for HPK_W11_22_3_20T_500x500_150M_C600 sensor
+if "HPK_W11_22_3_20T_500x500_150M_C600" in dataset:
+    for i in range(1, hResolution_position.GetXaxis().GetNbins()+1):
+        if mf.is_inside_limits(i, hResolution_position, xmax=0.1):
+            hResolution_position.SetBinContent(i, 0.0)
 
-hResolution_expected.Draw("hist same")
-legend.AddEntry(hResolution_expected, "Expected resolution", "l")
+list_histograms = [hResolution_position, hResolution_expected, hResolution_time]
+pruned_position, pruned_expected, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit)
 
-hResolution_time.Draw("hist e same")
-legend.AddEntry(hResolution_time,"Time resolution", "l")
+pruned_position.Draw("hist e same")
+legend.AddEntry(pruned_position, "Position resolution", "l")
+
+pruned_expected.Draw("hist same")
+legend.AddEntry(pruned_expected, "Expected resolution", "l")
+
+pruned_time.Draw("hist e same")
+legend.AddEntry(pruned_time,"Time resolution", "l")
     
 htemp.Draw("AXIS same")
 left_axis.Draw()
