@@ -139,10 +139,17 @@ def get_shifted_limits(th2, center_position):
     return xmin, xmax
 
 def is_inside_limits(this_bin, hist, xmax, xmin=0):
-    if not xmin:
+    symmetric = not xmin
+    if symmetric:
         xmin = -xmax
     bin_min = hist.GetXaxis().FindBin(xmin)
     bin_max = hist.GetXaxis().FindBin(xmax)
+
+    # Avoid asymmetry when value is in bin limit
+    if symmetric:
+        max_low_limit = hist.GetXaxis().GetBinLowEdge(bin_max)
+        if round(xmax, 3) == round(max_low_limit, 3):
+            bin_min-= 1
 
     return (bin_min < this_bin) and (this_bin < bin_max)
 
@@ -207,12 +214,14 @@ def move_distribution(list_elements, new_center_pos, is_tgraph = False):
 
     return list_elements
 
-def same_limits_compare(list_histograms):
+def same_limits_compare(list_histograms, xlimit = 0):
     nbins = list_histograms[0].GetXaxis().GetNbins()
 
     xfirst = abs(first_common_non_empty_x(list_histograms, True))
     xlast = abs(first_common_non_empty_x(list_histograms, False))
     x_simmetric_limit = xfirst if xfirst < xlast else xlast
+    if xlimit and (xlimit < x_simmetric_limit):
+        x_simmetric_limit = xlimit
 
     for hist in list_histograms:
         if hist.GetXaxis().GetNbins() != nbins:
@@ -230,14 +239,11 @@ def same_limits_compare(list_histograms):
     return list_histograms
 
 
-
-
 # Return a list with the legends dependening on the sensors and variables
 # receive a list of sensors and a list of variables as arguments
 # example: [("HPK_W9_22_3_20T_500x500_150M_E600", "HPK_W9_23_3_20T_500x500_300M_E600",
 #    "HPK_W8_1_1_50T_500x500_150M_C600"], ["resistivityNumber", "capacitance"]))
 # The last entrie of the list is the legend header: "Varying (variables)"
-
 
 def get_legend_comparation_plots(sensors, variables):
     # Define the units of each variable

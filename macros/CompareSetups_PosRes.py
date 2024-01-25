@@ -133,6 +133,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     haxis.SetLineWidth(1)
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
+    xlimit = 0
     is_pad = ("500x500" in sensor_reference) or ("pad" in sensor_reference)
     infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
     geometry = myStyle.GetGeometry(sensor_reference)
@@ -140,6 +141,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     boxes = getStripBox(infile_reference, ymin, ylength-yoffset, pitch = pitch/1000.0)
     if not is_pad:
         boxes = boxes[1:len(boxes)-1]
+        xlimit = abs(boxes[0].GetX1()) if abs(boxes[0].GetX1()) > abs(boxes[0].GetX2()) else abs(boxes[0].GetX2())
     for box in boxes:
         box.Draw()
 
@@ -191,7 +193,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         # Leave the 2x2 sensor in the very same position
         list_TwoStrip_vs_x = moved_3x2[:ref_idx] + moved_2x2 + moved_3x2[ref_idx:]
 
-    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x)
+    pruned_TwoStrip_vs_x = mf.same_limits_compare(list_TwoStrip_vs_x, xlimit=xlimit)
 
     if treat_as_2x2:
         # Leave 2x2 with a symmetric x-axis

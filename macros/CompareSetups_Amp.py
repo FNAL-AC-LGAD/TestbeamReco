@@ -126,11 +126,13 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     haxis.SetLineWidth(3)
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
+    xlimit = 0
     infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
     geometry = myStyle.GetGeometry(sensor_reference)
     boxes = getStripBox(infile_reference, ymin, ylength-10, pitch = geometry["pitch"]/1000.0)
     if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
         boxes = boxes[1:len(boxes)-1]
+        xlimit = abs(boxes[0].GetX1()) if abs(boxes[0].GetX1()) > abs(boxes[0].GetX2()) else abs(boxes[0].GetX2())
     for box in boxes:
         box.Draw()
 
@@ -167,7 +169,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         moved_3x2 = mf.move_distribution(list_3x2, -0.250)
         list_amplitude_vs_x = moved_3x2[:ref_idx] + moved_2x2 + moved_3x2[ref_idx:]
 
-    pruned_amplitude_vs_x = mf.same_limits_compare(list_amplitude_vs_x)
+    pruned_amplitude_vs_x = mf.same_limits_compare(list_amplitude_vs_x, xlimit=xlimit)
     for i, hist in enumerate(pruned_amplitude_vs_x):
         hist.SetLineWidth(3)
         hist.SetLineColor(colors[i])
