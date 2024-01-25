@@ -1038,7 +1038,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 // Hit on metal strip
                 double metalLeft = stripCenterXPositionLGAD[rowIndex][i] - stripWidth/2.;
                 double metalRight = stripCenterXPositionLGAD[rowIndex][i] + stripWidth/2.;
-                if (isHPKStrips && stripCenterXPositionLGAD[rowIndex][i]!=0.0 && (metalLeft < x) && (x < metalRight))
+                if (!isPadSensor && stripCenterXPositionLGAD[rowIndex][i]!=0.0 && (metalLeft < x) && (x < metalRight))
                 {
                     hitOnMetal = true;
                 }
