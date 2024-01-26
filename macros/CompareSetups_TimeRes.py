@@ -137,11 +137,15 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     haxis.SetLineWidth(3)
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
+    xlimit = 0
     infile_reference = TFile("../output/%s/%s_Analyze.root"%(sensor_reference, sensor_reference),"READ")
     geometry = myStyle.GetGeometry(sensor_reference)
     boxes = getStripBox(infile_reference, ymin, 0.9*ylength, pitch = geometry["pitch"]/1000.0)
     if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
         boxes = boxes[1:len(boxes)-1]
+        xlimit = abs(boxes[0].GetX1()) if abs(boxes[0].GetX1()) > abs(boxes[0].GetX2()) else abs(boxes[0].GetX2())
+        if saveName == "Koji_TimeResolution_vs_x_thickness":
+            xlimit-= myStyle.GetGeometry(sensor_reference)["width"]/(2*1000.)
     for box in boxes:
         box.Draw()
 
@@ -187,7 +191,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         list_time_vs_x = moved_3x2[:ref_idx] + moved_2x2 + moved_3x2[ref_idx:]
         # Jitter could be added here for 2x2 vs 3x2 if needed
 
-    pruned_time_vs_x = mf.same_limits_compare(list_time_vs_x + list_jitter_vs_x)
+    pruned_time_vs_x = mf.same_limits_compare(list_time_vs_x + list_jitter_vs_x, xlimit=xlimit)
     for i, hist in enumerate(pruned_time_vs_x):
         idx = i%len(list_time_vs_x)
         hist.SetLineWidth(3)
@@ -195,8 +199,9 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
 
         if i < len(list_time_vs_x):
             lengendEntry = legendTop.AddEntry(hist, tag[idx])
-        # hist.Draw("hist e same")
-        hist.Draw("hist same")
+            hist.Draw("hist e same")
+        else:
+            hist.Draw("hist same")
 
     # Draw legend
     if list_jitter_vs_x:

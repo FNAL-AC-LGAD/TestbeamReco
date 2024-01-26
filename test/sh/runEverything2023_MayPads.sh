@@ -205,7 +205,7 @@ for sensor in "${HPK_2x3pad[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 1.1
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 1.1
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 1.1 -y 60
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 1.1 -y 80
 
     python Plot_RisetimeVsX.py          -D ${sensor} -t -x 1.1
     python Plot_JitterVsX.py            -D ${sensor} -t -x 1.1
@@ -214,13 +214,10 @@ for sensor in "${HPK_2x3pad[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 1.1
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 1.1
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 1.1 -y 60
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 1.1 -y 80
 
     python Plot_Efficiency.py           -D ${sensor} -n -x 1.1
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 1.1 -y 60
-
-    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 1.1 -y 80
-    python Print_Resolution.py          -D ${sensor}
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 1.1 -y 80
 done
 
 cd ../macros
@@ -234,5 +231,5 @@ python DoPositionRecoFit.py     -D HPK_W9_23_3_20T_500x500_300M_E600_112V   --xm
 for sensor in "${HPK_2x3pad[@]}"; do
     cd ../macros
     python Print_Resolution.py          -D ${sensor}
-    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 1.0 -y 80
+    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 0.9 -y 80
 done

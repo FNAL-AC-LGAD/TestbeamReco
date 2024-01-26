@@ -82,17 +82,21 @@ private:
     void addAmplitudeRowCol(NTupleReader& tr) const
     {
         const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
+        const auto& extraChannelIndex  = tr.getVar<int>("extraChannelIndex");
         // const auto& n_row = tr.getVar("n_row")
         const auto& n_col = tr.getVar<int>("n_col");
-        // ex. geometry = {{3,1,0}, {4,5,6}, {7}};
-        std::vector<std::vector<int>> list_rows; // {{3,1,0}, {4,5,6}};
-        std::vector<std::vector<int>> list_cols(n_col); // {{3,4}, {1,5}, {0,6}};
+        // example: geometry -- list_rows -- list_columns
+        // ex. {{3,1,0}, {4,5,6}, {7}}; -- {{3,1,0}, {4,5,6}}; -- {{3,4}, {1,5}, {0,6}};
+        // ex. {{1,0},{2,3},{4,5},{7}}; (4 is extraChannel) -- {{1,0},{2,3}}; -- {{1,2}, {0,3}};
+        std::vector<std::vector<int>> list_rows;
+        std::vector<std::vector<int>> list_cols(n_col);
         // Fill lists with indices
         for (const auto& row : geometry)
         {
             if (row.size() < 2) continue;
-            list_rows.emplace_back(row);
+            if (std::find(row.begin(), row.end(), extraChannelIndex) != row.end()) continue;
 
+            list_rows.emplace_back(row);
             for(unsigned int i = 0; i < row.size(); i++)
             {
                 list_cols[i].emplace_back(row[i]);
@@ -238,8 +242,11 @@ private:
 
         // Correct amp and map raw amplitude
         const auto& amp = tr.getVec<float>("amp");
+        const auto& extraChannelIndex = tr.getVar<int>("extraChannelIndex");
         const auto& rawAmpLGAD = utility::remapToLGADgeometry(tr, amp, "rawAmpLGAD");
-        tr.registerDerivedVar("n_row", static_cast<int>(rawAmpLGAD.size()));
+        int n_row = rawAmpLGAD.size();
+        if (extraChannelIndex > -1) {n_row = rawAmpLGAD.size() -1;}
+        tr.registerDerivedVar("n_row", static_cast<int>(n_row));
         tr.registerDerivedVar("n_col", static_cast<int>(rawAmpLGAD[0].size()));
 
         applyAmplitudeCorrection(tr);
@@ -294,7 +301,7 @@ private:
         auto& corrTime = tr.createDerivedVec<double>("corrTime");
         auto& corrTime_30mV = tr.createDerivedVec<double>("corrTime_30mV");
         auto& corrTimeTracker = tr.createDerivedVec<double>("corrTimeTracker");
-    
+
         const auto& CFD_list = tr.getVar<std::vector<std::string>>("CFD_list");
         std::vector<std::vector<float>> v_LP2_allCFD;
         std::vector<std::vector<double>*> v_corrTime_allCFD;
@@ -356,7 +363,7 @@ private:
             //SlewRate[i] = 1e-9*abs(risetime[i]);
         }
         utility::remapToLGADgeometry(tr, corrRisetime, "risetimeLGAD");
-        
+
         const auto& slewrate = tr.getVec<float>("risetime");
         auto& corrSlewrate = tr.createDerivedVec<double>("corrSlewrate", slewrate.size());
         auto& baselineRMSSlewRateRatio = tr.createDerivedVec<double>("baselineRMSSlewRateRatio",slewrate.size());
@@ -366,7 +373,8 @@ private:
 			 baselineRMSSlewRateRatio[i] = 1000*(baselineRMS[i]/corrSlewrate[i]);
         }
         utility::remapToLGADgeometry(tr, corrSlewrate, "slewrateLGAD");
-		utility::remapToLGADgeometry(tr, baselineRMSSlewRateRatio, "baselineRMSSlewRateRatioLGAD");
+        utility::remapToLGADgeometry(tr, baselineRMSSlewRateRatio, "baselineRMSSlewRateRatioLGAD");
+        utility::remapToLGADgeometry(tr, baselineRMSSlewRateRatio, "jitterLGAD");
         //utility::remapToLGADgeometry(tr, SlewRate, "slewrateLGAD");
         //Charge, amp/charge ratio
         const auto& integral = tr.getVec<float>("integral");
@@ -382,9 +390,8 @@ private:
         utility::remapToLGADgeometry(tr, charge, "chargeLGAD");
         utility::remapToLGADgeometry(tr, AmpChargeRatio, "ampChargeRatioLGAD");
         utility::remapToLGADgeometry(tr, SlewRateChargeRatio, "slewRateChargeRatioLGAD");
-    
     }
-        
+
 
 public:
 

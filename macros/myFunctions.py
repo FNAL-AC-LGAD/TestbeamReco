@@ -4,7 +4,7 @@ import myStyle
 # Get list of all pairs of indices saved in histograms
 # with name <prename> in <inputfile>
 
-def get_existing_indices(inputfile, prename):
+def get_existing_indices(inputfile, prename, skip_extra_channel=True):
     list_indices = []
     # Loop over all possible names and save only those existing!
     for i in range(8):
@@ -16,6 +16,13 @@ def get_existing_indices(inputfile, prename):
                 continue
 
             list_indices.append(channel)
+
+    # Remove extra channel used in pads
+    if skip_extra_channel:
+        elements_per_row = elements_associated(list_indices, row=True, show_output=False)
+        for row in elements_per_row:
+            if elements_per_row[row] == 1:
+                list_indices.remove(row+"0")
 
     return list_indices
 
@@ -46,45 +53,62 @@ def get_edge_indices(indices_list):
 
     return edge_indices
 
-def get_central_channel_position(inputfile, direction="x"):
-    # Get total number of channels used
-    indices = get_existing_indices(inputfile, "stripBoxInfo")
+def check_same_n_elements(dict_elements, row=True, show_output=True):
+    same_numbers = True
+    # Using the first column or row as reference
+    n_subchannels = dict_elements["0"]
+    for key in dict_elements:
+        if dict_elements[key] != n_subchannels:
+            prev = "Rows" if row else "Columns"
+            post = "columns" if row else "rows"
+            msg = " >> (Warning) %s with different number of %s."%(prev, post)
+            if show_output:
+                print(msg)
+                print(dict_elements)
+                # exit()
+            same_numbers = False
 
+    return same_numbers
+
+def elements_associated(indices, row=True, show_output=False):
     # Create a dictionary to get the number of columns (rows) associated with
-    # each row (column). The later is chosen with the input <direction>.
+    # each row (column)
     n_channels_paired_with = {}
     for i, j in indices:
-        if direction is "x":
-            key = i
-        elif direction is "y":
-            key = j
-        else:
-            print(" >> Choose a correct direction ('x' or 'y').")
-            exit()
+        key = i if row else j
 
         if key not in n_channels_paired_with:
             n_channels_paired_with[key] = 0
         n_channels_paired_with[key]+= 1
 
-    # Using the first column or row as reference
-    n_subchannels = n_channels_paired_with["0"]
-    for key in n_channels_paired_with:
-        # TODO: Is this needed? Check
-        if n_channels_paired_with[key] != n_subchannels:
-            print(" >> Rows (columns) with different number of columns (rows).")
-            print(n_channels_paired_with)
-            exit()
+    if show_output:
+        same_elem = check_same_n_elements(n_channels_paired_with, row)
 
+    return n_channels_paired_with
+
+def get_central_channel_position(inputfile, direction="x"):
+    # Get total number of channels used
+    indices = get_existing_indices(inputfile, "stripBoxInfo")
+
+    dict_associated = elements_associated(indices, (direction=="x"))
+    n_subchannels = dict_associated["0"]
+    if not check_same_n_elements(dict_associated, (direction=="x")):
+        n_subchannels = dict_associated["1"]
+
+    stripBox = "stripBoxInfo" if direction == "x" else "stripBoxInfoY"
     # Even number of columns
     if (n_subchannels%2 == 0):
         central_idx = round(n_subchannels/2)
-        l_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx-1)).GetMean(1)
-        r_channel = inputfile.Get("stripBoxInfo0%i"%(central_idx)).GetMean(1)
+        pairL = "0%i"%(central_idx-1) if direction is "x" else "%i0"%(central_idx-1)
+        pairR = "0%i"%(central_idx) if direction is "x" else "%i0"%(central_idx)
+        l_channel = inputfile.Get("%s%s"%(stripBox, pairL)).GetMean(1)
+        r_channel = inputfile.Get("%s%s"%(stripBox, pairR)).GetMean(1)
         position_center = (l_channel + r_channel)/2
     # Odd number of columns
     else:
         central_idx = round((n_subchannels-1)/2)
-        position_center = (inputfile.Get("stripBoxInfo0%i"%central_idx)).GetMean(1)
+        pair = "0%i"%(central_idx) if direction is "x" else "%i0"%(central_idx)
+        position_center = inputfile.Get("%s%s"%(stripBox, pair)).GetMean(1)
 
     return position_center
 
@@ -115,10 +139,17 @@ def get_shifted_limits(th2, center_position):
     return xmin, xmax
 
 def is_inside_limits(this_bin, hist, xmax, xmin=0):
-    if not xmin:
+    symmetric = not xmin
+    if symmetric:
         xmin = -xmax
     bin_min = hist.GetXaxis().FindBin(xmin)
     bin_max = hist.GetXaxis().FindBin(xmax)
+
+    # Avoid asymmetry when value is in bin limit
+    if symmetric:
+        max_low_limit = hist.GetXaxis().GetBinLowEdge(bin_max)
+        if round(xmax, 3) == round(max_low_limit, 3):
+            bin_min-= 1
 
     return (bin_min < this_bin) and (this_bin < bin_max)
 
@@ -183,12 +214,14 @@ def move_distribution(list_elements, new_center_pos, is_tgraph = False):
 
     return list_elements
 
-def same_limits_compare(list_histograms):
+def same_limits_compare(list_histograms, xlimit = 0):
     nbins = list_histograms[0].GetXaxis().GetNbins()
 
     xfirst = abs(first_common_non_empty_x(list_histograms, True))
     xlast = abs(first_common_non_empty_x(list_histograms, False))
     x_simmetric_limit = xfirst if xfirst < xlast else xlast
+    if xlimit and (xlimit < x_simmetric_limit):
+        x_simmetric_limit = xlimit
 
     for hist in list_histograms:
         if hist.GetXaxis().GetNbins() != nbins:
@@ -206,14 +239,11 @@ def same_limits_compare(list_histograms):
     return list_histograms
 
 
-
-
 # Return a list with the legends dependening on the sensors and variables
 # receive a list of sensors and a list of variables as arguments
 # example: [("HPK_W9_22_3_20T_500x500_150M_E600", "HPK_W9_23_3_20T_500x500_300M_E600",
 #    "HPK_W8_1_1_50T_500x500_150M_C600"], ["resistivityNumber", "capacitance"]))
 # The last entrie of the list is the legend header: "Varying (variables)"
-
 
 def get_legend_comparation_plots(sensors, variables):
     # Define the units of each variable

@@ -31,6 +31,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     const auto& ymin = tr.getVar<double>("ymin");
     const auto& ymax = tr.getVar<double>("ymax");
     const auto& regionsOfIntrest = tr.getVar<std::vector<utility::ROI>>("regionsOfIntrest");
+    const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
+    const auto& acLGADChannelMap = tr.getVar<std::map<int, bool>>("acLGADChannelMap");
     int xbins = 175;
     int ybins = 175;
     double xBinSizePad = 0.5;
@@ -51,6 +53,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
         if(row.size()<2) continue;
         for(unsigned int i = 0; i < row.size(); i++)
         {
+            if(!acLGADChannelMap.at(row[i])) continue;
             const auto& r = std::to_string(rowIndex);
             const auto& s = std::to_string(i);
 
@@ -77,10 +80,18 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_histos,"slewRateChargeRatio"+r+s,"", 300,0.0,30.0);
             utility::makeHisto(my_histos,"deltaX_oneStrip"+r+s, "; X_{reco} - X_{track} [mm]; Events", 200, -pitch, pitch);
 
-            for (unsigned int ch = 0; ch < row.size(); ch++)
+            for (unsigned int ch = 0; ch < acLGADChannelMap.size(); ch++)
             {
-                const auto& c = std::to_string(ch);
-                utility::makeHisto(my_histos,"amp"+r+s+"From"+c,"", 405,-5.0,400.0);
+                if(!acLGADChannelMap.at(ch)) continue;
+
+                const auto& idx1 = std::to_string(indexToGeometryMap.at(ch)[0]);
+                const auto& idx2 = std::to_string(indexToGeometryMap.at(ch)[1]);
+
+                utility::makeHisto(my_histos,"amp"+r+s+"From"+idx1+idx2,"", 405,-5.0,400.0);
+                /*
+                utility::makeHisto(my_2d_histos,"wave"+r+s+"From"+idx1+idx2+"","", timeDiffNbin,-5.,5.,100,-85,15);
+                utility::makeHisto(my_2d_histos,"wave"+r+s+"From"+idx1+idx2+"goodHit","", timeDiffNbin,-5.,5.,100,-85,15);
+                */
             }
            
             for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
@@ -125,6 +136,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_2d_histos,"risetime_vs_BV_channel"+r+s,    "; BV [V]; risetime [ps]", bvNbin,bvLow,bvHigh, 100,100.0,1500.0);
             utility::makeHisto(my_2d_histos,"baselineRMS_vs_BV_channel"+r+s, "; BV [V]; amp [mV]"     , bvNbin,bvLow,bvHigh, 250,0.0,250);
             utility::makeHisto(my_2d_histos,"slewrate_vs_BV_channel"+r+s,    "; BV [V]; slewrate"     , bvNbin,bvLow,bvHigh, 300,0.0,400.0);
+            utility::makeHisto(my_2d_histos,"jitter_vs_BV_channel"+r+s,      "; BV [V]; jitter [ps]"  , bvNbin,bvLow,bvHigh, 200,0.0,100.0);
 
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_noNeighb_numerator_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
@@ -142,13 +154,6 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_twoStrip_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
             utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_numerator_tight_channel"+r+s, "; X [mm]; Y [mm]", 2*std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
 
-
-            /*for (unsigned int ch = 0; ch < row.size(); ch++)
-            {
-                const auto& c = std::to_string(ch);
-                utility::makeHisto(my_2d_histos,"wave"+r+s+"From"+c+"","", timeDiffNbin,-5.,5.,100,-85,15);
-                utility::makeHisto(my_2d_histos,"wave"+r+s+"From"+c+"goodHit","", timeDiffNbin,-5.,5.,100,-85,15);
-            }*/
 
             //Define 3D histograms
             utility::makeHisto(my_3d_histos,"baselineRMS_vs_xy_channel"+r+s,"; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 250,0,500);
@@ -792,6 +797,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         const auto& risetimeLGAD = tr.getVec<std::vector<double>>("risetimeLGAD");
         const auto& chargeLGAD = tr.getVec<std::vector<double>>("chargeLGAD");
         const auto& ampChargeRatioLGAD = tr.getVec<std::vector<double>>("ampChargeRatioLGAD");
+        const auto& jitterLGAD = tr.getVec<std::vector<double>>("jitterLGAD");
         const auto& slewrateLGAD = tr.getVec<std::vector<double>>("slewrateLGAD");
         const auto& slewRateChargeRatioLGAD = tr.getVec<std::vector<double>>("slewRateChargeRatioLGAD");
         const auto& baselineRMSSlewRateRatioLGAD = tr.getVec<std::vector<double>>("baselineRMSSlewRateRatioLGAD");
@@ -904,9 +910,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         if(isPadSensor) goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
         if(usesMay2023Tracker) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
-        
-        // bool hitSensorOnlyTightY = stripCenterXPositionLGAD[0][numLGADchannels-1] < x && x < stripCenterXPositionLGAD[0][0] && hitSensorTightY;
-        bool passExtra = goodTrack && hitSensorExtra && goodPhotek; // equivalent to pass_loose
+
         double edge_left = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]];
         double edge_right = stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]];
         if (edge_left > edge_right)
@@ -932,6 +936,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         bool pass_tight = goodTrack && hitSensorTight && goodPhotek;
         bool pass_NoXYEdges_NoPhotek = goodTrack && hitSensorNoEdges;
         bool pass_NoXYEdges = pass_NoXYEdges_NoPhotek && goodPhotek;
+        bool passExtra = goodTrack && hitSensorExtra && goodPhotek;
 
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool goodOverNoiseAmp = maxAmpLGAD > noiseAmpThreshold;
@@ -1010,8 +1015,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
             {
                 const auto& r = std::to_string(rowIndex);
                 const auto& s = std::to_string(i);
+                const auto& maxAmpIdx1 = std::to_string(amp1Indexes.first);
+                const auto& maxAmpIdx2 = std::to_string(amp1Indexes.second);
                 auto passChannel = pass;
-                const auto& maxAmpStr = std::to_string(maxAmpIndex);
                 const auto& ampChannel = ampLGAD[rowIndex][i];
                 const auto& ampColChannel = ampColLGAD[rowIndex][i];
                 const auto& relFracChannel = relFrac[rowIndex][i];
@@ -1021,6 +1027,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 const auto& risetime = risetimeLGAD[rowIndex][i];
                 const auto& charge = chargeLGAD[rowIndex][i];
                 const auto& ampChargeRatio = ampChargeRatioLGAD[rowIndex][i];
+                const auto& jitter = jitterLGAD[rowIndex][i];
                 const auto& slewrate = slewrateLGAD[rowIndex][i];
                 const auto& slewRateChargeRatio = slewRateChargeRatioLGAD[rowIndex][i];
                 const auto& baselineRMSSlewRateRatio = baselineRMSSlewRateRatioLGAD[rowIndex][i];
@@ -1067,7 +1074,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 }
 
                 utility::fillHisto(passChannel,                                                    my_histos, "amp"+r+s, ampChannel);
-                utility::fillHisto(passChannel,                                                    my_histos, "amp"+r+s+"From"+maxAmpStr, ampChannel);
+                utility::fillHisto(passChannel,                                                    my_histos, "amp"+r+s+"From"+maxAmpIdx1+maxAmpIdx2, ampChannel);
                 utility::fillHisto(passChannel && isMaxChannel,                                    my_histos, "ampMax"+r+s, ampChannel);
                 utility::fillHisto(passChannel && goodHit,                                         my_histos, "relFrac"+r+s, relFracChannel);
                 utility::fillHisto(passChannel && goodHit && (maxAmpinPad3 || maxAmpinPad4),       my_histos, "relFrac_bottom"+r+s, relFracChannel);
@@ -1118,6 +1125,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "risetime_vs_BV_channel"+r+s, voltage,risetime);
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "baselineRMS_vs_BV_channel"+r+s, voltage,noise);
                 utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "slewrate_vs_BV_channel"+r+s, voltage,slewrate);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel,                         my_2d_histos, "jitter_vs_BV_channel"+r+s, voltage,jitter);
+
 
                 /*
                 utility::fillHisto(passChannel && goodHit && goodNearHit,                          my_2d_histos, "relFrac_vs_x_channel"+r+s+"_NearHit", x,relFracChannel);
@@ -1144,8 +1153,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 {
                     auto signal = channel[geometry[1][i]][j];
                     auto time_channel = 1e+9*time_real[0][j]+timeCalibrationCorrection.at(geometry[1][i]);
-                    utility::fillHisto(pass,      my_2d_histos, "wave"+r+s+"From"+maxAmpStr+"", time_channel-photekTime, signal);
-                    utility::fillHisto(pass && goodHit,      my_2d_histos, "wave"+r+s+"From"+maxAmpStr+"goodHit", time_channel-photekTime, signal);
+                    utility::fillHisto(pass,      my_2d_histos, "wave"+r+s+"From"+maxAmpIdx1+maxAmpIdx2+"", time_channel-photekTime, signal);
+                    utility::fillHisto(pass && goodHit,      my_2d_histos, "wave"+r+s+"From"+maxAmpIdx1+maxAmpIdx2+"goodHit", time_channel-photekTime, signal);
                 }*/
                 utility::fillHisto(passChannel,                                                    my_3d_histos, "baselineRMS_vs_xy_channel"+r+s, x,y,noise);
                 utility::fillHisto(passChannel && goodHit,                                         my_3d_histos, "amplitude_vs_xy_channel"+r+s, x,y,ampChannel);

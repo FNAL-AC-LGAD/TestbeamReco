@@ -24,14 +24,20 @@ namespace utility
         const auto& geometry = tr.getVar<std::vector<std::vector<int>>>("geometry");
         const auto& indexToGeometryMap = tr.getVar<std::map<int, std::vector<int>>>("indexToGeometryMap");
         auto& vecvec = tr.createDerivedVec<std::vector<T>>(name);
-    
+
+        const auto& acLGADChannelMap = tr.getVar<std::map<int, bool>>("acLGADChannelMap");
+        const auto& extraChannelIndex  = tr.getVar<int>("extraChannelIndex");
+
         for(const auto& row : geometry)
         {
             if(row.size()<2) continue;
-    
-            vecvec.emplace_back(row.size());
+
+            int vecSize = (std::find(row.begin(), row.end(), extraChannelIndex) != row.end()) ? 1 : row.size();
+            vecvec.emplace_back(vecSize);
             for(unsigned int i = 0; i < vec.size(); i++)
-            {            
+            {
+                // Make sure the extra channel is alone
+                if(!acLGADChannelMap.at(i)) continue;
                 if(std::find(row.begin(), row.end(), i) != row.end())
                 {
                     const int index = indexToGeometryMap.at(i)[1];

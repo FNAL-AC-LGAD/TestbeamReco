@@ -467,11 +467,11 @@ done
 for sensor in "${HPK_500P[@]}"; do
     cd ../macros
     python Print_Resolution.py          -D ${sensor}
-    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 1.9 -y 80
+    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 1.5 -y 80
 done
 
 for sensor in "${HPK_80P[@]}"; do
     cd ../macros
     python Print_Resolution.py          -D ${sensor}
-    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 0.5 -y 80
+    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 0.3 -y 80
 done

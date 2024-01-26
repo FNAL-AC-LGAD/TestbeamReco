@@ -33,10 +33,13 @@ def draw_reco_method_percentage(hist, denominator_bin_name):
     # Get right limit to draw text
     r_limit = bin_two
 
-    percent_one = 100*value_one/value_pass
-    percent_two = 100*value_two/value_pass
-    str_recoinfo = "One strip: %3.1f%%   "%(percent_one)
-    str_recoinfo+= "Two strip: %3.1f%%"%(percent_two)
+    if not value_pass:
+        str_recoinfo = "Empty denominator"
+    else:
+        percent_one = 100*value_one/value_pass
+        percent_two = 100*value_two/value_pass
+        str_recoinfo = "One strip: %3.1f%%   "%(percent_one)
+        str_recoinfo+= "Two strip: %3.1f%%"%(percent_two)
     txt_recoinfo = TLatex()
     txt_recoinfo.SetTextAlign(33)
     txt_recoinfo.SetTextSize(myStyle.GetSize()-4)

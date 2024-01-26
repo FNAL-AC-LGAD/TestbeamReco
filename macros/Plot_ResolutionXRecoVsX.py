@@ -87,7 +87,8 @@ strip_length = sensor_Geometry['length']
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
 rm_tracker = False
-trkr_value = 5 # um
+# trkr_value = 5 # um
+trkr_value = 0.0 # um To avoid having this factor removed in any curve!
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -159,6 +160,8 @@ for ibin in range(1, hist_expected.GetNbinsX()+1):
         amp12 = mean_amp12_vs_x.GetBinContent(ibin)
 
         value_expected = abs(1000*dXFrac * (0.5*noise12) * pow(pow(amp1,2)+pow(amp2,2),0.5) / (amp12)**2)
+        if ("pad" in dataset) or ("500x500" in dataset):
+            value_expected = TMath.Sqrt(2)*value_expected
 
     else:
         value_expected = -10.0

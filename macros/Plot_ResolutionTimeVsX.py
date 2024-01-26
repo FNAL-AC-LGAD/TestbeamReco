@@ -17,7 +17,7 @@ myStyle.ForceStyle()
 class HistoInfo:
     def __init__(self, inHistoName, f, outHistoName, yMax=30.0,
                  xlabel="Track x position [mm]", ylabel="Time resolution [ps]",
-                 sensor="", center_position=0.0):
+                 sensor="", center_position=0.0, direction="x"):
         self.inHistoName = inHistoName
         self.f = f
         self.outHistoName = outHistoName
@@ -26,10 +26,12 @@ class HistoInfo:
         self.ylabel = ylabel
         self.sensor = sensor
         self.center_position = center_position
+        self.direction = direction
         self.th2 = self.getTH2(f, inHistoName, sensor)
         self.th1 = self.getTH1(outHistoName)
 
-    def getTH2(self, f, name, sensor, axis='zx'):
+    def getTH2(self, f, name, sensor):
+        axis = "zx" if (self.direction == "x") else "zy"
         th3 = f.Get(name)
         th2 = th3.Project3D(axis)
 
@@ -73,7 +75,6 @@ parser.add_option('-n', dest='useNoSum', action='store_true', default = False, h
 parser.add_option('-a', dest='plotAll', action='store_true', default = False, help="Plot no delay correction and LGAD correction too")
 
 options, args = parser.parse_args()
-use_center_y = options.centerAlongY
 dataset = options.Dataset
 
 outdir = myStyle.getOutputDir(dataset)
@@ -99,6 +100,7 @@ noSum = options.useNoSum
 show_all = options.plotAll
 is_hotspot = options.hotspot
 
+use_center_y = options.centerAlongY
 # Get position of the central channel in the direction requested
 # (x is default and y should be useful for pads only)
 direction = "x" if not use_center_y else "y"
@@ -135,7 +137,7 @@ all_histoInfos = []
 for titles in list_htitles:
     hname, outname, ytitle = titles
     info_obj = HistoInfo(hname, inputfile, outname, yMax=ylength, ylabel=ytitle,
-                         sensor=dataset, center_position=position_center)
+                         sensor=dataset, center_position=position_center, direction=direction)
     all_histoInfos.append(info_obj)
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -144,15 +146,18 @@ TH1.SetDefaultSumw2()
 gStyle.SetOptStat(0)
 
 if debugMode:
-    outdir_q = myStyle.CreateFolder(outdir, "q_ResTimeVsX0/")
+    q_name = "q_ResTimeVs%s0/"%(direction.upper())
+    outdir_q = myStyle.CreateFolder(outdir, q_name)
 
 # Get total number of bins in x-axis to loop over (all hists have the same number, in principle)
 nbins = all_histoInfos[0].th2.GetXaxis().GetNbins()
 
-plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center) # - strip_width/2.
+box_reference = "stripBoxInfo00" if not use_center_y else "stripBoxInfoY00"
+plot_xlimit = abs(inputfile.Get(box_reference).GetMean(1) - position_center) # - strip_width/2.
 if ("pad" not in dataset) and ("500x500" not in dataset):
     plot_xlimit-= pitch/2.
-
+if ("500x500" in dataset):
+    plot_xlimit+= strip_width/2.
 # Loop over X bins
 for i in range(1, nbins+1):
     for info_entry in all_histoInfos:
@@ -235,7 +240,7 @@ for i in range(1, nbins+1):
         # info_entry.th1Mean.SetBinError(i,errorMean)
 
 # Define output file
-output_path = "%sTimeDiffVsX"%(outdir)
+output_path = "%sTimeDiffVs%s"%(outdir, direction.upper())
 if (is_hotspot):
     output_path+= "_hotspot"
 elif (is_tight):
@@ -249,7 +254,7 @@ outputfile = TFile(output_path,"RECREATE")
 # Define hist for axes style
 htemp = TH1F("htemp", "", 1, -xlength, xlength)
 htemp.SetStats(0)
-htemp.GetXaxis().SetTitle("Track x position [mm]")
+htemp.GetXaxis().SetTitle("Track %s position [mm]"%(direction))
 htemp.GetYaxis().SetRangeUser(0.0001, ylength)
 htemp.GetYaxis().SetTitle("Time resolution [ps]")  
 htemp.SetLineColor(colors[2])
@@ -293,7 +298,7 @@ for info in all_histoInfos:
 
     this_ymin = info.th1.GetMinimum()
     this_ymax = info.th1.GetMaximum()
-    boxes = getStripBox(inputfile, ymin=this_ymin, ymax=this_ymax, shift=position_center, pitch=pitch)
+    boxes = getStripBox(inputfile, ymin=this_ymin, ymax=this_ymax, shift=position_center, pitch=pitch, direction=direction)
     for box in boxes:
         box.Draw()
 
@@ -330,7 +335,7 @@ for info in all_histoInfos:
     myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
 
-    save_path = "%sWeighted2OnlyX"%(outdir)
+    save_path = "%sWeighted2Only%s"%(outdir, direction.upper())
     if (is_hotspot):
         save_path+= "-hotspot"
     elif (is_tight):
@@ -376,7 +381,7 @@ for i,info_entry in enumerate(all_histoInfos):
 
     # Define and draw gray bars in the background (Position of metallic sections)
     if i==0:
-        boxes = getStripBox(inputfile, ymin=ymin, ymax=0.9*ymax, strips=True, shift=position_center, pitch=pitch)
+        boxes = getStripBox(inputfile, ymin=ymin, ymax=0.9*ymax, strips=True, shift=position_center, pitch=pitch, direction=direction)
         for box in boxes:
             box.Draw()
         gPad.RedrawAxis("g")
@@ -395,7 +400,7 @@ legend.Draw()
 myStyle.BeamInfo()
 myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
 
-save_path = "%sTimeResolution_vs_x-AllMethods"%(outdir)
+save_path = "%sTimeResolution_vs_%s-AllMethods"%(outdir, direction)
 if (is_hotspot):
     save_path+= "-hotspot"
 elif (is_tight):
