@@ -146,7 +146,8 @@ for sensor in "${HPK_2x2pad[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 60
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 80
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 80 -Y
 
     python Plot_RisetimeVsX.py          -D ${sensor} -t -x 0.7
     python Plot_JitterVsX.py            -D ${sensor} -t -x 0.7
@@ -155,10 +156,10 @@ for sensor in "${HPK_2x2pad[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.7
     # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 60
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 80
 
     python Plot_Efficiency.py           -D ${sensor} -n -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 0.7 -y 60
+    python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 0.7 -y 80
 done
 
 for sensor in "${HPK_2x2pad[@]}"; do
@@ -166,6 +167,16 @@ for sensor in "${HPK_2x2pad[@]}"; do
     python Print_Resolution.py          -D ${sensor}
 done
 # commentout
+
+HPK_2x2BiasScan=('HPK_20um_500x500um_2x2pad_E600_FNAL' 'HPK_30um_500x500um_2x2pad_E600_FNAL' 'HPK_50um_500x500um_2x2pad_E600_FNAL')
+
+for sensor in "${HPK_2x2BiasScan[@]}"; do
+    printf "\nRunning Bias scan over ${sensor} sensor\n"
+    cd ../test
+    ./MyAnalysis -A Analyze -D ${sensor}
+done
+cd ../macros
+python Plot_BiasScanPaper.py -d
 
 <<commentout_bias_scan ## Comment out to run Bias Scan
 # HPK_50um_500x500um_2x2pad_E600 Bias Scan
