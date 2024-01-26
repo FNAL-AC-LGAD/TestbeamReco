@@ -617,7 +617,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -678,7 +677,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1}, {4,5}, {7}}; // {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,false}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, false}, {7,false}};
     int numLGADchannels = 4;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 1;
     int highGoodStripIndex = 5;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -742,7 +740,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -801,7 +798,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -861,7 +857,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1191,7 +1186,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1246,7 +1240,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1299,7 +1292,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1354,7 +1346,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1408,7 +1399,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1464,7 +1454,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1520,7 +1509,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -1576,7 +1564,6 @@ public:
     std::vector<std::vector<int>> geometry = {{3,1,0}, {4,5,6}, {7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,false}, {3,true}, {4,true}, {5, true}, {6, true}, {7,false}};
     int numLGADchannels = 6;
-    //int extraChannelIndex = 4;
     int lowGoodStripIndex = 0;
     int highGoodStripIndex = 6;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
@@ -2368,10 +2355,10 @@ public:
     std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
     std::vector<std::vector<double>> xSlices = {{-1.60, -1.00}, {-1.05, -0.45}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-1.95, -1.35}, {-2.45, -1.85}}; // Raw data coordinates
-    std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
+    std::vector<std::vector<double>> sensorEdges = {{-0.50, -0.55}, {0.50, 0.50}};
     // std::vector<std::vector<double>> sensorEdgesTight = {{-0.47, -0.48}, {0.47, 0.43}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[2], stripCenterYPosition[2]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdgesExtra = {{0.47, -0.26}, {1.02, 0.33}}; // {{-0.576, -2.130}, {-0.030, -1.547}};
+    std::vector<std::vector<double>> sensorEdgesExtra = {{0.57, -0.16}, {0.92, 0.23}}; // {{-0.576, -2.130}, {-0.030, -1.547}};
     // std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.47,-0.05, 0.03, 0.43},{"top_right", 0.07,0.47, 0.03, 0.43},
     //                                                 {"bot_left", -0.47,-0.05, -0.48,-0.09},{"bot_right", 0.07,0.47, -0.48,-0.09}};
 };
@@ -2433,10 +2420,10 @@ public:
     std::vector<double> positionRecoParLeft = {0.0339823, -5.42069, 33.1184, -78.8264, 84.4803, -33.3587};
     std::vector<std::vector<double>> xSlices = {{-1.55, -0.95}, {-1.05, -0.45}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-2.05, -1.45}, {-2.55, -1.95}}; // Raw data coordinates
-    std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
+    std::vector<std::vector<double>> sensorEdges = {{-0.50, -0.55}, {0.50, 0.50}};
     // std::vector<std::vector<double>> sensorEdgesTight = {{-0.49, -0.48}, {0.46, 0.44}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[2], stripCenterYPosition[2]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdgesExtra = {{-1.08, -0.13}, {-0.56, 0.39}}; // {{-2.084, -2.130}, {-1.564, -1.610}};
+    std::vector<std::vector<double>> sensorEdgesExtra = {{-0.98, -0.03}, {-0.66, 0.29}}; // {{-2.084, -2.130}, {-1.564, -1.610}};
     // std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.49,-0.06, 0.06, 0.44},{"top_right", 0.05,0.46, 0.06, 0.44},
     //                                                 {"bot_left", -0.49,-0.06, -0.48,-0.11},{"bot_right", 0.05,0.46, -0.48,-0.11}};
 };
@@ -2500,10 +2487,10 @@ public:
     // std::vector<std::vector<double>> sensorEdges = {{-0.6 , -4.75}, { 0.35, -3.8}}; //square interior of pads
     std::vector<std::vector<double>> xSlices = {{-2.70, -2.10}, {-2.20, -1.60}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-2.30, -1.70}, {-2.85, -2.25}}; // Raw data coordinates
-    std::vector<std::vector<double>> sensorEdges = {{-0.55 , -0.6}, {0.55, 0.55}};
+    std::vector<std::vector<double>> sensorEdges = {{-0.45, -0.50}, {0.45, 0.45}};
     // std::vector<std::vector<double>> sensorEdgesTight = {{-0.48, -0.48}, {0.48, 0.43}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[2], stripCenterYPosition[2]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
-    std::vector<std::vector<double>> sensorEdgesExtra = {{1.07, 0.22}, {1.68, 0.83}}; // {{-1.082, -2.03}, {-0.467, -1.421}};
+    std::vector<std::vector<double>> sensorEdgesExtra = {{1.17, 0.32}, {1.54, 0.68}}; // {{-1.082, -2.03}, {-0.467, -1.421}};
     // std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.48,-0.04, 0.07, 0.43},{"top_right", 0.07,0.48, 0.07, 0.43},
     //                                                 {"bot_left", -0.48,-0.04, -0.48,-0.10},{"bot_right", 0.07,0.48, -0.48,-0.10}};
 };
