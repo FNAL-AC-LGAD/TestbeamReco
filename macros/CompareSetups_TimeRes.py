@@ -144,6 +144,8 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     if ("500x500" not in sensor_reference) and ("pad" not in sensor_reference):
         boxes = boxes[1:len(boxes)-1]
         xlimit = abs(boxes[0].GetX1()) if abs(boxes[0].GetX1()) > abs(boxes[0].GetX2()) else abs(boxes[0].GetX2())
+        if saveName == "Koji_TimeResolution_vs_x_thickness":
+            xlimit-= myStyle.GetGeometry(sensor_reference)["width"]/(2*1000.)
     for box in boxes:
         box.Draw()
 
