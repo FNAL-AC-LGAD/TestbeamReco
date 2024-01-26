@@ -19,10 +19,29 @@ def same_in_sensor_info(name_dataset, new_info):
         if format(new_info[new_qty], ".1f") != format(saved_values[ref_qty], ".1f"):
             qty_to_update+= "%s, "%(ref_qty)
 
-    if qty_to_update != "":
+    if qty_to_update:
         qty_to_update = qty_to_update[:-2]
 
     return qty_to_update
+
+def same_onestrip_info(name_dataset, new_info):
+    saved_values = myStyle.GetResolutions(name_dataset, per_channel=True)["resolution_onestrip"]
+    out_msg = ""
+    for r,row in enumerate(new_info):
+        if len(new_info) != len(saved_values):
+            out_msg = "Number of rows, "
+            break
+        for c,value in enumerate(row):
+            if len(row) != len(saved_values[r]):
+                out_msg = "Number of columns (%i), "%(c)
+                break
+            if format(value, ".1f") != format(saved_values[r][c], ".1f"):
+                out_msg+= "Ch%i%i, "%(r,c)
+
+    if out_msg:
+        out_msg = out_msg[:-2]
+
+    return out_msg
 
 
 # Construct the argument parser
@@ -88,6 +107,10 @@ for reg in regions:
                 info_str+= "%.1f, "%(v)
             info_str = info_str[:-2] + "], "
         info_str = info_str[:-2] + "],"
+        # Check if current saved info is the same or if it has changed
+        msg = same_onestrip_info(dataset, info_channels)
+        if msg:
+            info_str+= " --> (!!) Differences: %s (!!)"%msg
         print(info_str)
 
     info = {}
