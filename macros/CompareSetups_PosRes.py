@@ -228,7 +228,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         swidth = myStyle.GetGeometry(sensor_reference)["width"]/1000.
         for hist in pruned_TwoStrip_vs_x:
             for b in range(1, hist.GetXaxis().GetNbins()+1):
-                is_bad_zone = mf.is_inside_limits(b, hist, 1.001*swidth/2.)
+                is_bad_zone = mf.is_inside_limits(b, hist, xmin = -1.001*swidth/2., xmax = 1.001*swidth/2.)
                 if is_bad_zone:
                     hist.SetBinContent(b, 0.0)
                     hist.SetBinError(b, 0.0)
