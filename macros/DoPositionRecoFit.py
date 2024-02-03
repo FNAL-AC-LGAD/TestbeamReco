@@ -69,7 +69,8 @@ print(" - Fit function: %s"%fitFunction)
 print(" - Extra fit: %s"%newFitFunction)
 
 #Get dX vs a1/(a1+a2) hist
-Amp1OverAmp1and2_vs_deltaXmax = inputfile.Get("Amp1OverAmp1and2_vs_deltaXmax")
+# Amp1OverAmp1and2_vs_deltaXmax = inputfile.Get("Amp1OverAmp1and2_vs_deltaXmax")
+Amp1OverAmp1and2_vs_deltaXmax = inputfile.Get("Amp1OverAmp1and2_vs_deltaXmax_channel01")
 
 #Define profile hist
 Amp1OverAmp1and2_vs_deltaXmax_profile = Amp1OverAmp1and2_vs_deltaXmax.ProjectionY().Clone("Amp1OverAmp1and2_vs_deltaXmax_profile")
@@ -87,11 +88,15 @@ for i in range(1, nbins+1):
     nEntries = tmpHist.GetEntries()
 
     if (nEntries > 20.0):
-        myGausFunction = TF1("mygaus","gaus(0)",0, pitch);
-        tmpHist.Fit(myGausFunction,"Q","",0, pitch);
+        canvas = TCanvas()
+        myGausFunction = TF1("mygaus","gaus(0)",0, pitch)
+        tmpHist.Fit(myGausFunction,"Q","",0, pitch)
         mean = myGausFunction.GetParameter(1)
         meanErr = myGausFunction.GetParError(1)
         sigma = myGausFunction.GetParameter(2)
+        myGausFunction.Draw()
+        tmpHist.Draw()
+        canvas.SaveAs(outdir+"PosFits/histogram"+str(i)+".png")
 
     else:
         mean = 0.0

@@ -61,7 +61,7 @@ tagVar_list = [
 
 ylength_list = [
     # Varying resistivity and capacitance
-    70,
+    90,
     # HPK Varying thickness
     160,
     # KOJI Varying thickness
@@ -173,6 +173,13 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         hTime = inFile[0].Get("Time_DiffW2Tracker")
 
         if(("thickness" in tagVars[0]) and ("500x500" not in sensor_reference)):
+            inName = "../output/"+sname+"/Jitter/JitterVsX.root"
+            inFile.append(TFile(inName,"READ"))
+            hJitter = inFile[1].Get("jitter_vs_x")
+            hJitter.SetLineStyle(2)
+
+            list_jitter_vs_x.append(hJitter)
+        if("HPK_W4_17_2_50T_1P0_500P_50M_C240_204V" in sensors[0]):
             inName = "../output/"+sname+"/Jitter/JitterVsX.root"
             inFile.append(TFile(inName,"READ"))
             hJitter = inFile[1].Get("jitter_vs_x")

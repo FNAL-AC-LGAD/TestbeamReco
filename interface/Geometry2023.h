@@ -60,7 +60,10 @@ public:
     int minPixHits = 3;
     int minStripHits = 8;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -1.152450, 1.628628, -12.547487, 12.409411};
+    // reco parameters for 4th order polynomial
+    // std::vector<double> positionRecoPar = {0.250000, -1.152450, 1.628628, -12.547487, 12.409411};
+    // reco parameters for 5th order polynomial
+    std::vector<double> positionRecoPar = {0.250000, -1.057035, -2.963484, 58.283739, -422.846674, 923.928427};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
     // int centerGoodStripIndex = 3;
@@ -182,7 +185,10 @@ public:
     int minPixHits = 2;
     int minStripHits = 6;
     int CFD_threshold = 50;
-    std::vector<double> positionRecoPar = {0.250000, -1.102187, -2.496727, 25.676521, -97.950055};
+    // reco parameters for 4th order polynomial
+    // std::vector<double> positionRecoPar = {0.250000, -1.102187, -2.496727, 25.676521, -97.950055};
+    // reco parameters for 5th order polynomial
+    std::vector<double> positionRecoPar = {0.250000, -1.113364, -1.909585, 15.749963, -30.768253, -157.913623};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
 };

@@ -340,7 +340,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"slewrate_NoSum","", 300,0.0,400.0);
     utility::makeHisto(my_histos,"slewRateChargeRatio_NoSum","", 300,0.0,50.0);
     utility::makeHisto(my_histos,"weighted2_jitter_NoSum","", 200,0.0,100.0);
-    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_NoSum","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitterOldDef_NoSum","", 200,0.0,100.0);
 
     // Overall
     utility::makeHisto(my_histos,"ampMax_Overall", "", 450, -50.0, 400.0);
@@ -351,7 +351,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"slewrate_Overall","", 300,0.0,400.0);
     utility::makeHisto(my_histos,"slewRateChargeRatio_Overall","", 300,0.0,50.0);
     utility::makeHisto(my_histos,"weighted2_jitter_Overall","", 200,0.0,100.0);
-    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_Overall","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitterOldDef_Overall","", 200,0.0,100.0);
 
     // Metal
     utility::makeHisto(my_histos,"ampMax_Metal", "", 450, -50.0, 400.0);
@@ -362,7 +362,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"slewrate_Metal","", 300,0.0,400.0);
     utility::makeHisto(my_histos,"slewRateChargeRatio_Metal","", 300,0.0,50.0);
     utility::makeHisto(my_histos,"weighted2_jitter_Metal","", 200,0.0,100.0);
-    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_Metal","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitterOldDef_Metal","", 200,0.0,100.0);
 
     // Gap
     utility::makeHisto(my_histos,"ampMax_Gap", "", 450, -50.0, 400.0);
@@ -373,7 +373,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"slewrate_Gap","", 300,0.0,400.0);
     utility::makeHisto(my_histos,"slewRateChargeRatio_Gap","", 300,0.0,50.0);
     utility::makeHisto(my_histos,"weighted2_jitter_Gap","", 200,0.0,100.0);
-    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_Gap","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitterOldDef_Gap","", 200,0.0,100.0);
 
     // Middle gap
     utility::makeHisto(my_histos,"ampMax_MidGap", "", 450, -50.0, 400.0);
@@ -384,7 +384,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_histos,"slewrate_MidGap","", 300,0.0,400.0);
     utility::makeHisto(my_histos,"slewRateChargeRatio_MidGap","", 300,0.0,50.0);
     utility::makeHisto(my_histos,"weighted2_jitter_MidGap","", 200,0.0,100.0);
-    utility::makeHisto(my_histos,"weighted2_jitter_NewDef_MidGap","", 200,0.0,100.0);
+    utility::makeHisto(my_histos,"weighted2_jitterOldDef_MidGap","", 200,0.0,100.0);
 
     // Region of interest (ROI)
     for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
@@ -595,7 +595,9 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_3d_histos,"ampChargeRatio_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,50.0);
     utility::makeHisto(my_3d_histos,"slewRate_vs_xy","; X [mm]; Y [mm]",std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax,300,0.0,500.0);
     utility::makeHisto(my_3d_histos,"weighted2_jitter_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200.0, 0.0, 200.0);
+    utility::makeHisto(my_3d_histos,"weighted2_jitterOldDef_vs_xy", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200.0, 0.0, 200.0);
     utility::makeHisto(my_3d_histos,"weighted2_jitter_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200.0, 0.0, 200.0);
+    utility::makeHisto(my_3d_histos,"weighted2_jitterOldDef_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax, 200.0, 0.0, 200.0);
 
     utility::makeHisto(my_3d_histos,"timeDiff_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
     utility::makeHisto(my_3d_histos,"timeDiffTracker_vs_xy_tight", "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, timeDiffYnbin,ymin,ymax, timeDiffNbin,timeDiffLow,timeDiffHigh);
@@ -1136,7 +1138,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
                 utility::fillHisto(passChannel && goodHit && goodNearHit,                          my_2d_histos, "Amp1OverAmp1and2_vs_x_channel"+r+s+"_NearHit", x,Amp1OverAmp1and2);
                 */
                 utility::fillHisto(passChannel && goodHit,                                         my_2d_histos, "relFrac_vs_y_channel"+r+s, y,relFracChannel);
-                utility::fillHisto(passChannel && goodHit && isMaxChannel && goodNeighbour,        my_2d_histos, "Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s, deltaXmax, Amp1OverAmp1and2);
+                utility::fillHisto(passChannel && goodHit && isMaxChannel && goodNeighbour,        my_2d_histos, "Amp1OverAmp1and2_vs_deltaXmax_channel"+r+s, fabs(deltaXmax), Amp1OverAmp1and2);
 
                 utility::fillHisto(pass_tightY && goodHit && goodNearHit,                          my_2d_histos, "AmpOverMaxAmp_vs_x_channel"+r+s, x-stripXPosition,fracMaxChannel);
 
@@ -1362,8 +1364,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpHit,                      my_histos, "baselineRMS_NoSum",baselineMaxChannel);
         utility::fillHisto(pass && goodAmpHit,                      my_histos, "slewrate_NoSum", slewrateMaxChannel);
         utility::fillHisto(pass && goodAmpHit,                      my_histos, "slewRateChargeRatio_NoSum", slewRateChargeRatioMaxChannel);
-        utility::fillHisto(pass && goodAmpHit,                      my_histos, "weighted2_jitter_NoSum", weighted2_jitter);
-        utility::fillHisto(pass && goodAmpHit,                      my_histos, "weighted2_jitter_NewDef_NoSum", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpHit,                      my_histos, "weighted2_jitter_NoSum", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpHit,                      my_histos, "weighted2_jitterOldDef_NoSum", weighted2_jitter);
 
         // Overall
         utility::fillHisto(pass && goodAmpColHit,                   my_histos, "ampMax_Overall", maxAmp);
@@ -1373,8 +1375,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit,                   my_histos, "baselineRMS_Overall",baselineMaxChannel);
         utility::fillHisto(pass && goodAmpColHit,                   my_histos, "slewrate_Overall", slewrateMaxChannel);
         utility::fillHisto(pass && goodAmpColHit,                   my_histos, "slewRateChargeRatio_Overall", slewRateChargeRatioMaxChannel);
-        utility::fillHisto(pass && goodAmpColHit,                   my_histos, "weighted2_jitter_Overall", weighted2_jitter);
-        utility::fillHisto(pass && goodAmpColHit,                   my_histos, "weighted2_jitter_NewDef_Overall", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit,                   my_histos, "weighted2_jitter_Overall", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit,                   my_histos, "weighted2_jitterOldDef_Overall", weighted2_jitter);
 
         // Metal
         utility::fillHisto(pass && goodAmpColHit && hitOnMetal,     my_histos, "ampMax_Metal", maxAmp);
@@ -1384,8 +1386,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit && hitOnMetal,     my_histos, "baselineRMS_Metal",baselineMaxChannel);
         utility::fillHisto(pass && goodAmpColHit && hitOnMetal,     my_histos, "slewrate_Metal", slewrateMaxChannel);
         utility::fillHisto(pass && goodAmpColHit && hitOnMetal,     my_histos, "slewRateChargeRatio_Metal", slewRateChargeRatioMaxChannel);
-        utility::fillHisto(pass && goodAmpColHit && hitOnMetal,     my_histos, "weighted2_jitter_Metal", weighted2_jitter);
-        utility::fillHisto(pass && goodAmpColHit && hitOnMetal,     my_histos, "weighted2_jitter_NewDef_Metal", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit && hitOnMetal,     my_histos, "weighted2_jitter_Metal", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit && hitOnMetal,     my_histos, "weighted2_jitterOldDef_Metal", weighted2_jitter);
 
         // Gap
         utility::fillHisto(pass && goodAmpColHit && !hitOnMetal,    my_histos, "ampMax_Gap", maxAmp);
@@ -1395,8 +1397,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit && !hitOnMetal,    my_histos, "baselineRMS_Gap",baselineMaxChannel);
         utility::fillHisto(pass && goodAmpColHit && !hitOnMetal,    my_histos, "slewrate_Gap", slewrateMaxChannel);
         utility::fillHisto(pass && goodAmpColHit && !hitOnMetal,    my_histos, "slewRateChargeRatio_Gap", slewRateChargeRatioMaxChannel);
-        utility::fillHisto(pass && goodAmpColHit && !hitOnMetal,    my_histos, "weighted2_jitter_Gap", weighted2_jitter);
-        utility::fillHisto(pass && goodAmpColHit && !hitOnMetal,    my_histos, "weighted2_jitter_NewDef_Gap", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit && !hitOnMetal,    my_histos, "weighted2_jitter_Gap", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit && !hitOnMetal,    my_histos, "weighted2_jitterOldDef_Gap", weighted2_jitter);
 
         // Middle gap
         utility::fillHisto(pass && goodAmpColHit && hitOnMidGap,    my_histos, "ampMax_MidGap", maxAmp);
@@ -1406,8 +1408,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit && hitOnMidGap,    my_histos, "baselineRMS_MidGap",baselineMaxChannel);
         utility::fillHisto(pass && goodAmpColHit && hitOnMidGap,    my_histos, "slewrate_MidGap", slewrateMaxChannel);
         utility::fillHisto(pass && goodAmpColHit && hitOnMidGap,    my_histos, "slewRateChargeRatio_MidGap", slewRateChargeRatioMaxChannel);
-        utility::fillHisto(pass && goodAmpColHit && hitOnMidGap,    my_histos, "weighted2_jitter_MidGap", weighted2_jitter);
-        utility::fillHisto(pass && goodAmpColHit && hitOnMidGap,    my_histos, "weighted2_jitter_NewDef_MidGap", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit && hitOnMidGap,    my_histos, "weighted2_jitter_MidGap", weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit && hitOnMidGap,    my_histos, "weighted2_jitterOldDef_MidGap", weighted2_jitter);
 
 
         // Region of interest (ROI)
@@ -1507,8 +1509,10 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "charge_vs_xy", x,y,chargeMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "ampChargeRatio_vs_xy", x,y,ampChargeRatioMaxChannel);
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "slewRate_vs_xy", x,y,slewrateMaxChannel);
-        utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "weighted2_jitter_vs_xy", x,y,weighted2_jitter);
-        utility::fillHisto(pass_NoXYEdges && goodAmpColHit,                         my_3d_histos, "weighted2_jitter_vs_xy_tight", x,y,weighted2_jitter);
+        utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "weighted2_jitter_vs_xy", x,y,weighted2_jitter_NewDef);
+        utility::fillHisto(pass && goodAmpColHit,                                   my_3d_histos, "weighted2_jitterOldDef_vs_xy", x,y,weighted2_jitter);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit,                         my_3d_histos, "weighted2_jitter_vs_xy_tight", x,y,weighted2_jitter_NewDef);
+        utility::fillHisto(pass_NoXYEdges && goodAmpColHit,                         my_3d_histos, "weighted2_jitterOldDef_vs_xy_tight", x,y,weighted2_jitter);
 
 
         utility::fillHisto(pass && goodMaxLGADAmp,                                  my_3d_histos, "totgoodamplitude_vs_xy", x,y,totGoodAmpLGAD);
