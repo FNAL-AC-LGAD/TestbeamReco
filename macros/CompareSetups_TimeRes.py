@@ -61,7 +61,7 @@ tagVar_list = [
 
 ylength_list = [
     # Varying resistivity and capacitance
-    90,
+    55,
     # HPK Varying thickness
     160,
     # KOJI Varying thickness
@@ -135,6 +135,8 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     haxis.GetXaxis().SetTitle("Track x position [mm]")
     haxis.GetYaxis().SetTitle("Time resolution [ps]")
     haxis.SetLineWidth(3)
+    if("ResCap" in saveName):
+        ymin = 25
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
     xlimit = 0
@@ -179,13 +181,13 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
             hJitter.SetLineStyle(2)
 
             list_jitter_vs_x.append(hJitter)
-        if("HPK_W4_17_2_50T_1P0_500P_50M_C240_204V" in sensors[0]):
-            inName = "../output/"+sname+"/Jitter/JitterVsX.root"
-            inFile.append(TFile(inName,"READ"))
-            hJitter = inFile[1].Get("jitter_vs_x")
-            hJitter.SetLineStyle(2)
+        # if("HPK_W4_17_2_50T_1P0_500P_50M_C240_204V" in sensors[0]):
+        #     inName = "../output/"+sname+"/Jitter/JitterVsX.root"
+        #     inFile.append(TFile(inName,"READ"))
+        #     hJitter = inFile[1].Get("jitter_vs_x")
+        #     hJitter.SetLineStyle(2)
 
-            list_jitter_vs_x.append(hJitter)
+        #     list_jitter_vs_x.append(hJitter)
         plotfile.append(inFile)
         list_time_vs_x.append(hTime)
 

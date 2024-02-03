@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,TF1,gStyle,gROOT,kBlack
+from ROOT import TFile,TTree,TCanvas,TH1F,TH2F,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,TF1,gStyle,gROOT,kBlack, TPaveText
 import ROOT
 import os
 import optparse
@@ -47,26 +47,14 @@ sensor_reco = {
     "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V": {'recomax': 0.70, 'recoPars':[0.250000, -1.057035, -2.963484, 58.283739, -422.846674, 923.928427]}
 }
 
-sensors_list = [
-    #BNL and HPK sensors - different metal widths
-    ["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
-    # Varying resistivity and capacitance
-    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
-]
+sensors_list = [["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V", "HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"]]
 
-tagVar_list = [
-    #BNL and HPK sensors - different metal widths
-    ["manufacturer", "width"],
-    # Varying resistivity and capacitance
-    ["resistivityNumber", "capacitance"]
-]
+tagVar_list = [["manufacturer", "resistivityNumber", "capacitance"]]
 
-saveName_list = [
-    #BNL and HPK sensors - different metal widths
-    "BNL_and_HPK_PosFit_vs_MetalWidth",
-    # Varying resistivity and capacitance
-    "HPK_PosFit_vs_ResCap"
-]
+colors = myStyle.GetColorsCompare(len(sensors_list[0]))
+color_and_lineStyle = [[colors[0],1],[colors[0],2],[colors[1],1],[colors[1],2],[colors[2],1],[colors[3],1],[colors[4],1]]
+
+saveName_list = ["Comprehensive_comparison"]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
 outdir = myStyle.GetPlotsDir(outdir, "ReconstructionFit/")
@@ -74,14 +62,13 @@ outdir = myStyle.GetPlotsDir(outdir, "ReconstructionFit/")
 xmin = 0.50
 xmax = 0.98
 ymin = 0.001
-ymax = 300 # um
+ymax = 400 # um
 pad_margin = myStyle.GetMargin()
 
 canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     sensor_reference = sensors[0]
-    colors = myStyle.GetColorsCompare(len(sensors))
 
     # Get max width and pitch
     max_width, pitch = 0.0, 0.0
@@ -92,16 +79,22 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         max_width = this_width if this_width > max_width else max_width
         pitch = this_pitch if this_pitch > pitch else pitch
 
-    legend_height = 0.052*(len(sensors) + 1) # Entries + title
+    legend_height = 0.052*(len(sensors)) # Entries + title
     legX1 = 1-marginR-0.6
     legX2 = 1-marginR-0.03
+    legendTop = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
+    # legendTop.SetBorderSize(1)
+    # legendTop.SetLineColor(kBlack)
+    legendTop.SetTextFont(myStyle.GetFont())
+    legendTop.SetTextSize(myStyle.GetSize()-10)
 
-    yLegend = 0.026*len(sensors)
-    legend = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
-    legend.SetBorderSize(1)
-    legend.SetLineColor(kBlack)
-    legend.SetTextFont(myStyle.GetFont())
-    legend.SetTextSize(myStyle.GetSize()-4 -2)
+    legTopY1 = 1-pad_margin-legend_height-0.03
+    legendBot = TLegend(legX1, legTopY1-0.055, legX2, legTopY1)
+    legendBot.SetNColumns(2)
+    # legendBot.SetBorderSize(1)
+    # legendBot.SetLineColor(kBlack)
+    legendBot.SetTextFont(myStyle.GetFont())
+    legendBot.SetTextSize(myStyle.GetSize()-10)
 
     tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
@@ -138,24 +131,42 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
 
     # Draw fit functions
     fitFunction_list = []
+    tmp50um = []
+    tmp100um = []
     for i,item in enumerate(sensors):
         fitFunction = getFitFunction(sensor_reco[item]['recoPars'], scale = 1000.)
         recomax = sensor_reco[item]['recomax']
 
         func1 = TF1("f1%i"%(i), fitFunction, xmin, recomax)
-        func1.SetLineColor(colors[i])
+        func1.SetLineColor(color_and_lineStyle[i][0])
+        func1.SetLineStyle(color_and_lineStyle[i][1])
         name = tag[i]
         fitFunction_list.append(func1)
         func1.DrawCopy("same")
-        legend.AddEntry(fitFunction_list[-1], name,"L")
+        if(("Comprehensive_comparison" in saveName) and (("100M" in item) or ("400um" in item))):
+            pass
+        else:
+            legendTop.AddEntry(fitFunction_list[-1], name,"L")
 
-    legendHeader = tag[-1]
-    legend.SetHeader(legendHeader, "C")
-    legend.Draw()
+    tmp50um = fitFunction_list[0].Clone()
+    tmp50um.SetLineColor(kBlack)
+    tmp100um = fitFunction_list[1].Clone()
+    tmp100um.SetLineColor(kBlack)
+    legendBot.AddEntry(tmp50um, "50um metal width")
+    legendBot.AddEntry(tmp100um, "100um metal width")
+    legendBox = TPaveText(legX1, legTopY1-0.055, legX2, 1-pad_margin-0.03, "NDC")
+    legendBox.SetBorderSize(1)
+    legendBox.SetLineColor(kBlack)
+    legendBox.SetFillColor(0)
+    legendBox.SetFillColorAlpha(0, 0.0)
+    legendTop.Draw()
+    legendBot.Draw("same")
+    legendBox.Draw("same")
+    
+    legendHeader = "#bf{%s}"%"Varying metal width, res., and cap."
+    legendTop.SetHeader(legendHeader, "C")
 
     sensor_prod="Strip sensors"
-    if ("500x500" in sensor_reference):
-        sensor_prod = "Pixel sensors"
     myStyle.BeamInfo()
     myStyle.SensorProductionInfo(sensor_prod, mright = marginR)
 
@@ -165,5 +176,6 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     canvas.SaveAs("%s%s.pdf"%(outdir, saveName))
 
     canvas.Clear()
-    legend.Clear()
+    legendTop.Clear()
+    legendBot.Clear()
     haxis.Delete()
