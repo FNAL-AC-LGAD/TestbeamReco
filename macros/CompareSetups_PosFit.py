@@ -41,6 +41,7 @@ sensor_reco = {
     "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V": {'recomax': 0.85, 'recoPars':[0.250000, -0.623392, 0.074807, -3.237477, 17.697710, -31.574229]},
     "BNL_50um_1cm_400um_W3051_1_4_160V": {'recomax': 0.78, 'recoPars':[0.250000, -0.718665, -0.139214, 1.987639, -8.425333, -2.053463]},
     "BNL_50um_1cm_450um_W3051_2_2_170V": {'recomax': 0.79, 'recoPars':[0.250000, -0.779099, 0.955034, -12.717777, 62.983960, -115.093931]},
+    "BNL_50um_1cm_450um_W3052_2_4_185V": {'recomax': 0.79, 'recoPars':[0.250000, -0.810944, 1.960402, -28.122023, 158.066782, -313.770118]},
     # 4th degree poly
     # "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V": {'recomax': 0.70, 'recoPars':[0.250000, -1.152450, 1.628628, -12.547487, 12.409411]}
     # 5th degree poly
@@ -51,7 +52,7 @@ sensors_list = [
     #BNL and HPK sensors - different metal widths
     ["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
     # Varying resistivity and capacitance
-    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "BNL_50um_1cm_450um_W3052_2_4_185V", "BNL_50um_1cm_450um_W3051_2_2_170V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
 ]
 
 tagVar_list = [
@@ -74,7 +75,7 @@ outdir = myStyle.GetPlotsDir(outdir, "ReconstructionFit/")
 xmin = 0.50
 xmax = 0.98
 ymin = 0.001
-ymax = 300 # um
+ymax = 330 # um
 pad_margin = myStyle.GetMargin()
 
 canvas = TCanvas("cv","cv",1000,800)

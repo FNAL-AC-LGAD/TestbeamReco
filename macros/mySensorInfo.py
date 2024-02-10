@@ -7,9 +7,9 @@
 #  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>, tag}
 geometry2023_default = {
     # BNL strips
-    "BNL_50um_1cm_450um_W3051_2_2": ["BNL_50um_1cm_450um_W3051", 500, 50, 10.0, 170, 50, "Null", "Null", "SB1"],
-    "BNL_50um_1cm_400um_W3051_1_4": ["BNL_50um_1cm_400um_W3051", 500, 100, 10.0, 160, 50, "Null", "Null", "SB2"],
-    "BNL_50um_1cm_450um_W3052_2_4": ["BNL_50um_1cm_450um_W3052", 500, 50, 10.0, 185, 50, "Null", "Null", "Null"],
+    "BNL_50um_1cm_450um_W3051_2_2": ["BNL_50um_1cm_450um_W3051", 500, 50, 10.0, 170, 50, "G", "270", "SB1"],
+    "BNL_50um_1cm_400um_W3051_1_4": ["BNL_50um_1cm_400um_W3051", 500, 100, 10.0, 160, 50, "G", "270", "SB2"],
+    "BNL_50um_1cm_450um_W3052_2_4": ["BNL_50um_1cm_450um_W3052", 500, 50, 10.0, 185, 50, "G", "260", "SB3"],
     "BNL_20um_1cm_400um_W3074_1_4": ["BNL_20um_1cm_400um_W3074", 500, 100, 10.0, 95, 20, "Null", "Null", "Null"],
     "BNL_20um_1cm_400um_W3075_1_2": ["BNL_20um_1cm_400um_W3075", 500, 100, 10.0, 80, 20, "Null", "Null", "Null"],
     "BNL_20um_1cm_450um_W3074_2_1": ["BNL_20um_1cm_450um_W3074", 500, 50, 10.0, 95, 20, "Null", "Null", "Null"],
@@ -70,6 +70,8 @@ for key, info in geometry2023_default.items():
         info_dict["resistivityNumber"] = 1600
     elif info[6] == "C":
         info_dict["resistivityNumber"] = 400
+    elif info[6] == "G":
+        info_dict["resistivityNumber"] = 1400
     info_dict["capacitance"] = info[7]
     if info[8] == "Null":
         info_dict["tag"] = info[0]
