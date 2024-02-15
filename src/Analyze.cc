@@ -8,6 +8,7 @@
 #include <TEfficiency.h>
 #include <TFile.h>
 #include <iostream>
+#include <fstream>
 
 Analyze::Analyze()
 {
@@ -763,6 +764,9 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
     int lowGoodStrip = indexToGeometryMap.at(lowGoodStripIndex)[1];
     int highGoodStrip = indexToGeometryMap.at(highGoodStripIndex)[1];
     bool plotWaveForm = false;
+
+    int counter[2] = {0, 0};
+    int max_save = 20;
 
     if(firstFile) InitHistos(tr, geometry);
 
@@ -1731,7 +1735,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //    std::cout<<abs( corrAmp[2] - corrAmp[4])<<" "<<corrAmp[2]<<" "<<(abs( corrAmp[2] - corrAmp[4]) / corrAmp[2])<<std::endl;
         //}
         //if(plotWaveForm && pass && maxAmpInCenter && goodMaxLGADAmp && maxAmpLGAD > 100.0 && maxAmpLGAD < 120.0 && directHit)
-        if(plotWaveForm && goodMaxLGADAmp && maxAmpInCenter)
+        if(plotWaveForm && goodMaxLGADAmp)
         {
             const auto& channel = tr.getVecVec<float>("channel");
             const auto& time = tr.getVecVec<float>("time");
@@ -1740,6 +1744,24 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
             {
                 if(regionsOfIntrest[k].passROI(x,y))
                 {
+                    if(counter[k] < max_save)
+                    {
+                        // Open a CSV file for writing
+                        // std::ofstream outputFile("waveform_"+regionsOfIntrest[k].getName()+"("+std::to_string(x)+","+std::to_string(y)+")_"+std::to_string(counter[k])+".csv");
+                        std::ofstream outputFile("waveform_"+regionsOfIntrest[k].getName()+"_"+std::to_string(counter[k])+".csv");
+                        // Write the header to the CSV file
+                        outputFile << "Time[ns],Channel1[mV],Channel2[mV],Channel3[mV],Channel4[mV],Channel5[mV],Channel6[mV],Channel7[mV]" << std::endl;
+                        for(unsigned int j = 0; j < time[0].size(); j++)
+                        {
+                            // auto t = timeCalibrationCorrection.at(i) + 80.0;
+                            outputFile<<1e9*time[0][j]<<","<<channel[0][j]<<","<<channel[1][j]<<","<<channel[2][j]<<","<<channel[3][j]<<","<<channel[4][j]<<","<<channel[5][j]<<","<<channel[6][j]<<std::endl;
+                        }
+                        // Close the CSV file
+                        outputFile.close();
+                        std::cout << "Data saved." << std::endl;
+                        counter[k]++;
+                    }
+
                     for(unsigned int i = 0; i < channel.size(); i++)
                     {
                         auto t = timeCalibrationCorrection.at(i) - 10.0;

@@ -249,6 +249,9 @@ public:
     std::vector<double> positionRecoPar = {0.250000, -0.623392, 0.074807, -3.237477, 17.697710, -31.574229};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
+    int centerGoodStripIndex = 3;
+    double centerStripX = stripCenterXPosition[centerGoodStripIndex];
+	std::vector<utility::ROI> regionsOfIntrest = {{"nearStrip", centerStripX - xBinSize/2, centerStripX + xBinSize/2, 0-yBinSize/2,0+yBinSize/2}, {"stripCenter", centerStripX - xBinSize/4, centerStripX + xBinSize/4, 0 - yBinSize/8, 0 + yBinSize/8}};
 };
 
 class HPK_W2_3_2_50T_1P0_500P_50M_E240_StripsGeometry: public DefaultGeometry
@@ -365,6 +368,9 @@ public:
     std::vector<double> positionRecoPar = {0.250000, -0.639735, -0.431173, 3.227442, -8.977157, 11.446396};
     std::vector<std::vector<double>> sensorEdges = {{-1.8, -4.70}, {1.8, 4.70}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[highGoodStripIndex], -4.6}, {stripCenterXPosition[lowGoodStripIndex], 4.6}}; // Sensor's local frame
+    int centerGoodStripIndex = 3;
+    double centerStripX = stripCenterXPosition[centerGoodStripIndex];
+	std::vector<utility::ROI> regionsOfIntrest = {{"nearStrip", centerStripX - xBinSize/2, centerStripX + xBinSize/2, 0-yBinSize/2,0+yBinSize/2}, {"stripCenter", centerStripX - xBinSize/4, centerStripX + xBinSize/4, 0 - yBinSize/8, 0 + yBinSize/8}};
 };
 
 class HPK_W9_14_2_20T_1P0_500P_100M_E600_StripsGeometry: public DefaultGeometry
