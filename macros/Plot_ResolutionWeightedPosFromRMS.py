@@ -83,7 +83,6 @@ sensor = sensor_Geometry['sensor']
 pitch = sensor_Geometry['pitch']
 strip_width = sensor_Geometry['stripWidth']
 strip_length = sensor_Geometry['length']
-stripcenterpos = [1.5, 1, 0.5, 0, -0.5, -1, -1.5]
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
@@ -103,7 +102,7 @@ else:
 # Get position of the central channel in the "x" direction
 position_center = mf.get_central_channel_position(inputfile, "x")
 
-outdir = myStyle.GetPlotsDir(outdir, "WeightedResolution_Pos/")
+outdir = myStyle.GetPlotsDir(outdir, "WeightedResolution_PosRMS/")
 
 # Save list with histograms to draw
 list_htitles = [
@@ -115,6 +114,7 @@ inName = outdirtemp+"Efficiency/EfficiencyVsX"+tight_postfix+".root"
 inFile = TFile(inName,"READ")
 hTwoEff = inFile.Get("efficiency_vs_x_twoStrip_coarseBins"+tight_postfix)
 hOneEff = inFile.Get("efficiency_vs_x_oneStrip_coarseBins"+tight_postfix)
+
 # Use of tight cut histograms not needed because will be weighted with the tight histograms which have value = 0 outside tight region
 # if (is_tight):
 #     print(" >> Using tight cuts!")
@@ -213,6 +213,9 @@ for i in range(1, nbins+1):
         fithigh = myMean + 1.5*myRMS
         value = 1000*myRMS
         error = myRMSError
+        if (debugMode):
+                tmpHist.Draw("hist")
+                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
 
         # Define minimum of bin's entries to be fitted
         minEvtsCut = totalEvents/nbins
@@ -263,28 +266,21 @@ for i in range(1, nbins+1):
         info_entry.th1.SetBinContent(i, value)
         # info_entry.th1.SetBinError(i, error)
 
-weightedhist = all_histoInfos[0].th1.Clone("weighted_pos_res")
-
-dict_one_strip_info = myStyle.GetResolutions(dataset, per_channel=True)
-dict_resolution = dict_one_strip_info["resolution_onestrip"]
+weightedhist = all_histoInfos[0].th1.Clone("weighted_pos_resRMS")
 for i in range(1, nbins+1):
     # Apply weights
     tmpHistOne = all_histoInfos[0].th1
     tmpHistTwo = all_histoInfos[1].th1
-    binPos = tmpHistOne.GetXaxis().GetBinCenter(i)
-    nearest = min(stripcenterpos, key=lambda x:abs(x-binPos))
-    nearest_index = stripcenterpos.index(nearest)
-    onePR = dict_resolution[0][nearest_index]
     oneEff = hOneEff.GetBinContent(hOneEff.GetXaxis().FindBin(tmpHistOne.GetXaxis().GetBinCenter(i)))
     twoEff = hTwoEff.GetBinContent(hTwoEff.GetXaxis().FindBin(tmpHistOne.GetXaxis().GetBinCenter(i)))
-    print("{:.2f} -> oneEff {:.3f} (onePR {:.2f}), twoEff {:.3f} (twoPR {:.2f})".format(tmpHistOne.GetXaxis().GetBinCenter(i), oneEff, onePR, twoEff, tmpHistTwo.GetBinContent(i)))
+    print("{:.1f}, {:.2f} -> {:.3f} ({:.2f}), {:.3f} ({:.2f})".format(i, tmpHistOne.GetXaxis().GetBinCenter(i), oneEff, tmpHistOne.GetBinContent(i), twoEff, tmpHistTwo.GetBinContent(i)))
     if(oneEff+twoEff <= 0): #ensure sum of efficiencies is not 0. Cannot also be negative, but adding it just-in-case
         value = 0
     else:
         # Formula 1:
-        value = (oneEff*onePR + twoEff*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff)
+        value = (oneEff*tmpHistOne.GetBinContent(i) + twoEff*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff)
         # Formula 2:
-        # value = (oneEff*oneEff*onePR + twoEff*twoEff*tmpHistTwo.GetBinContent(i))/(oneEff*oneEff+twoEff*twoEff)
+        # value = (oneEff*oneEff*tmpHistOne.GetBinContent(i) + twoEff*twoEff*tmpHistTwo.GetBinContent(i))/(oneEff*oneEff+twoEff*twoEff)
     
     # Removing tracker's contribution
     if rm_tracker and (value > trkr_value):
