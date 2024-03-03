@@ -83,7 +83,15 @@ sensor = sensor_Geometry['sensor']
 pitch = sensor_Geometry['pitch']
 strip_width = sensor_Geometry['stripWidth']
 strip_length = sensor_Geometry['length']
-stripcenterpos = [1.5, 1, 0.5, 0, -0.5, -1, -1.5]
+
+# Define position of strip/pad centers to find nearest one-strip/pad position resolution
+dict_one_strip_info = myStyle.GetResolutions(dataset, per_channel=True)
+dict_resolution = dict_one_strip_info["resolution_onestrip"]
+is_pad = len(dict_one_strip_info["resolution_onestrip"]) > 1
+if(is_pad):
+    stripcenterpos = [0.5, 0, -0.5]
+else:
+    stripcenterpos = [1.5, 1, 0.5, 0, -0.5, -1, -1.5]
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
@@ -135,45 +143,45 @@ if ("pad" not in dataset) and ("500x500" not in dataset):
 # Get histograms for Expected Resolution of Two strip Reconstruction
 # ------------------------------------------------------------------
 
-mean_noise12_vs_x = get_profX(inputfile, "BaselineRMS12_vs_x", is_tight)
-mean_amp12_vs_x = get_profX(inputfile, "Amp12_vs_x", is_tight)
-mean_amp1_vs_x = get_profX(inputfile, "Amp1_vs_x", is_tight)
-mean_amp2_vs_x = get_profX(inputfile, "Amp2_vs_x", is_tight)
-mean_dXFrac_vs_x = get_profX(inputfile, "dXdFrac_vs_Xtrack", is_tight)
+# mean_noise12_vs_x = get_profX(inputfile, "BaselineRMS12_vs_x", is_tight)
+# mean_amp12_vs_x = get_profX(inputfile, "Amp12_vs_x", is_tight)
+# mean_amp1_vs_x = get_profX(inputfile, "Amp1_vs_x", is_tight)
+# mean_amp2_vs_x = get_profX(inputfile, "Amp2_vs_x", is_tight)
+# mean_dXFrac_vs_x = get_profX(inputfile, "dXdFrac_vs_Xtrack", is_tight)
 
-nbins = mean_amp12_vs_x.GetNbinsX()
-xmin, xmax = mf.get_shifted_limits(mean_amp12_vs_x, position_center)
+# nbins = mean_amp12_vs_x.GetNbinsX()
+# xmin, xmax = mf.get_shifted_limits(mean_amp12_vs_x, position_center)
 
-hist_expected = ROOT.TH1F("h_expected", "", nbins, xmin, xmax)
-hist_expected.SetLineWidth(3)
-hist_expected.SetLineStyle(7)
-hist_expected.SetLineColor(colors[2])
+# hist_expected = ROOT.TH1F("h_expected", "", nbins, xmin, xmax)
+# hist_expected.SetLineWidth(3)
+# hist_expected.SetLineStyle(7)
+# hist_expected.SetLineColor(colors[2])
 
-# Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
-for ibin in range(1, hist_expected.GetNbinsX()+1):
-    if mean_amp12_vs_x.GetBinContent(ibin) > 0:
-        dXFrac = mean_dXFrac_vs_x.GetBinContent(ibin)
-        noise12 = mean_noise12_vs_x.GetBinContent(ibin)
-        amp1 = mean_amp1_vs_x.GetBinContent(ibin)
-        amp2 = mean_amp2_vs_x.GetBinContent(ibin)
-        amp12 = mean_amp12_vs_x.GetBinContent(ibin)
+# # Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
+# for ibin in range(1, hist_expected.GetNbinsX()+1):
+#     if mean_amp12_vs_x.GetBinContent(ibin) > 0:
+#         dXFrac = mean_dXFrac_vs_x.GetBinContent(ibin)
+#         noise12 = mean_noise12_vs_x.GetBinContent(ibin)
+#         amp1 = mean_amp1_vs_x.GetBinContent(ibin)
+#         amp2 = mean_amp2_vs_x.GetBinContent(ibin)
+#         amp12 = mean_amp12_vs_x.GetBinContent(ibin)
 
-        value_expected = abs(1000*dXFrac * (0.5*noise12) * pow(pow(amp1,2)+pow(amp2,2),0.5) / (amp12)**2)
-        if ("pad" in dataset) or ("500x500" in dataset):
-            value_expected = TMath.Sqrt(2)*value_expected
+#         value_expected = abs(1000*dXFrac * (0.5*noise12) * pow(pow(amp1,2)+pow(amp2,2),0.5) / (amp12)**2)
+#         if ("pad" in dataset) or ("500x500" in dataset):
+#             value_expected = TMath.Sqrt(2)*value_expected
 
-    else:
-        value_expected = -10.0
+#     else:
+#         value_expected = -10.0
 
-    # Adding tracker contribution
-    if (not rm_tracker) and (value_expected > 0.0):
-        value_expected = math.sqrt(trkr_value**2 + value_expected**2)
+#     # Adding tracker contribution
+#     if (not rm_tracker) and (value_expected > 0.0):
+#         value_expected = math.sqrt(trkr_value**2 + value_expected**2)
 
-    # Fill only when inside limits
-    if not mf.is_inside_limits(ibin, hist_expected, xmax=plot_xlimit):
-        continue
+#     # Fill only when inside limits
+#     if not mf.is_inside_limits(ibin, hist_expected, xmax=plot_xlimit):
+#         continue
 
-    hist_expected.SetBinContent(ibin, value_expected)
+#     hist_expected.SetBinContent(ibin, value_expected)
 
 
 # Get TLine with binary readout
@@ -245,6 +253,7 @@ for i in range(1, nbins+1):
         
             # For Debugging
             if (debugMode):
+                gStyle.SetOptStat(1)
                 tmpHist.Draw("hist")
                 fit.Draw("same")
                 canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
@@ -254,7 +263,7 @@ for i in range(1, nbins+1):
                 print(msg_binres)
         else:
             if("twoStrip" in info_entry.outHistoName):
-                value = 0.0 # previously was set to -10 for plotting reasons, but needs to be set to 0 for weighted posres.
+                value = 0.0 # previously was set to -10 for plotting reasons, but needs to be set to 0 for weighted pos. res.
 
         # Fill only when inside limits
         if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
@@ -265,8 +274,6 @@ for i in range(1, nbins+1):
 
 weightedhist = all_histoInfos[0].th1.Clone("weighted_pos_res")
 
-dict_one_strip_info = myStyle.GetResolutions(dataset, per_channel=True)
-dict_resolution = dict_one_strip_info["resolution_onestrip"]
 for i in range(1, nbins+1):
     # Apply weights
     tmpHistOne = all_histoInfos[0].th1
@@ -281,11 +288,8 @@ for i in range(1, nbins+1):
     if(oneEff+twoEff <= 0): #ensure sum of efficiencies is not 0. Cannot also be negative, but adding it just-in-case
         value = 0
     else:
-        # Formula 1:
-        value = (oneEff*onePR + twoEff*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff)
-        # Formula 2:
-        # value = (oneEff*oneEff*onePR + twoEff*twoEff*tmpHistTwo.GetBinContent(i))/(oneEff*oneEff+twoEff*twoEff)
-    
+        value = TMath.Sqrt((oneEff*onePR*onePR + twoEff*tmpHistTwo.GetBinContent(i)*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff))
+        
     # Removing tracker's contribution
     if rm_tracker and (value > trkr_value):
         # error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
@@ -352,10 +356,10 @@ if "twoStrip" in info_entry.inHistoName:
     this_legend = "Weighted resolution, observed"
 
     # Add two strips expected resolution
-    hist_expected.Draw("HIST SAME")
-    entry_expected = "Two %s expected"%(legend_reco)
-    legend.AddEntry(hist_expected, entry_expected, "l")
-    hist_expected.Write()
+    # hist_expected.Draw("HIST SAME")
+    # entry_expected = "Two %s expected"%(legend_reco)
+    # legend.AddEntry(hist_expected, entry_expected, "l")
+    # hist_expected.Write()
 # If not twoStrip, set a default title for the legend
 else:
     this_legend = info_entry.outHistoName.replace("track_", "")

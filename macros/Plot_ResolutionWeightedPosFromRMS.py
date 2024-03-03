@@ -277,11 +277,8 @@ for i in range(1, nbins+1):
     if(oneEff+twoEff <= 0): #ensure sum of efficiencies is not 0. Cannot also be negative, but adding it just-in-case
         value = 0
     else:
-        # Formula 1:
-        value = (oneEff*tmpHistOne.GetBinContent(i) + twoEff*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff)
-        # Formula 2:
-        # value = (oneEff*oneEff*tmpHistOne.GetBinContent(i) + twoEff*twoEff*tmpHistTwo.GetBinContent(i))/(oneEff*oneEff+twoEff*twoEff)
-    
+        value = TMath.Sqrt((oneEff*tmpHistOne.GetBinContent(i)*tmpHistOne.GetBinContent(i) + twoEff*tmpHistTwo.GetBinContent(i)*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff))
+
     # Removing tracker's contribution
     if rm_tracker and (value > trkr_value):
         # error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
