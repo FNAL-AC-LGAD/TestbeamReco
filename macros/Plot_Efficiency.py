@@ -190,30 +190,62 @@ elif (is_tight):
 canvas.SaveAs("%s.gif"%save_path)
 canvas.SaveAs("%s.pdf"%save_path)
 
-# TODO: Save coarseBins histograms too (is this needed?)
-# list_hist_coarse_bin = ["efficiency_vs_xy_numerator_coarseBins%s"%tight_ext, "efficiency_vs_xy_oneStrip_numerator_coarseBins%s"%tight_ext, "efficiency_vs_xy_twoStrip_numerator_coarseBins%s"%tight_ext]
-# list_name_coarse_bin = ["efficiency_vs_x_coarseBins", "efficiency_vs_x_oneStrip_coarseBins", "efficiency_vs_x_twoStrip_coarseBins"]
-# list_good_hists = []
 
-# this_denom = inputfile.Get("efficiency_vs_xy_denominator_coarseBins").ProjectionX()
-# for n,name in enumerate(list_hist_coarse_bin):
-#     this_hist = inputfile.Get(name).ProjectionX()
-#     good_hist = EfficiencyUtils.Make1DEfficiencyHist(this_hist, this_denom, list_name_coarse_bin[n], list_name_coarse_bin[n], "X [mm]", xmin, xmax, 0.0, 0.0)
-#     list_good_hists.append(good_hist)
+# Coarse bins projections
+list_name_coarse = []
+for reco in ["denominator", "numerator", "oneStrip_numerator", "twoStrip_numerator"]:
+    hname = "efficiency_vs_xy_%s_coarseBins"%(reco)
+    if (is_tight):
+        hname+= "_tight"
+    list_name_coarse.append(hname)
 
-# for h,hist in enumerate(list_good_hists):
-#     hist.Write(list_name_coarse_bin[h])
+hname_denominator = list_name_coarse.pop(0)
+th1_coarse_eff_denominator = inputfile.Get(hname_denominator).ProjectionX()
 
-# e=0
-# for t in list_thresholds:
-#     for m in list_recoMethod:
-#         for i in channel_good_index:
-#             list_efficiency_vs_x_project_ch[e].Write("efficiency_vs_x%s%s_channel%s"%(t,m,i))
-#             e+=1
+legend = TLegend(pad_center-0.36, 1-pad_margin-0.01-0.23, pad_center+0.36, 1-pad_margin-0.01)
+legend.SetTextFont(myStyle.GetFont())
+legend.SetTextSize(myStyle.GetSize()-4)
+# legend.SetNColumns(3)
 
-# for i in range(len(channel_good_index)):
-#     list_efficiency_vs_x_project_fullReco_ch[i].Write("efficiency_vs_x_fullReco_channel%s"%(channel_good_index[i]))
+canvas.Clear()
+htemp.Draw("AXIS")
+for i,box in enumerate(boxes):
+    # if (i!=0 and i!=(len(boxes)-1)):
+    box.Draw()
+reference_line.Draw()
+
+list_th1 = []
+for i, in_name in enumerate(list_name_coarse):
+    new_hname = in_name.replace("_xy_", "_x_")
+    projX_efficiency = inputfile.Get(in_name).ProjectionX()
+    th1_efficiency = EfficiencyUtils.Make1DEfficiencyHist(projX_efficiency, th1_coarse_eff_denominator, new_hname, center=position_center)
+    th1_efficiency.SetLineWidth(3)
+    th1_efficiency.SetLineColor(sub_colors[i])
+    th1_efficiency.Draw("hist same")
+    th1_efficiency.Write()
+
+    list_th1.append(th1_efficiency)
+    legend.AddEntry(th1_efficiency, list_legend_overall[i])
+
+# # Check adding oneStrip + twoStrip is equivalent to single numerator
+# hSum = list_th1[0].Clone("hsum")
+# hSum.Add(list_th1[1], list_th1[2])
+# hSum.SetLineWidth(3)
+# hSum.SetLineStyle(2)
+# hSum.SetLineColor(colors[3])
+# hSum.Draw("hist same")
+# legend.AddEntry(hSum, "Sum 1 + 2")
+
+htemp.Draw("AXIS same")
+legend.Draw()
+
+myStyle.BeamInfo()
+myStyle.SensorInfoSmart(dataset)
+
+save_path = "%sEfficiencyCoarse"%(outdir)
+if (is_tight):
+    save_path+= "_tight"
+# canvas.SaveAs("%s.gif"%(save_path))
+canvas.SaveAs("%s.pdf"%(save_path))
 
 outputfile.Close()
-
-
