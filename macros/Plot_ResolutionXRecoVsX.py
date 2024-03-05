@@ -86,9 +86,9 @@ strip_length = sensor_Geometry['length']
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
-rm_tracker = False
-# trkr_value = 5 # um
-trkr_value = 0.0 # um To avoid having this factor removed in any curve!
+rm_tracker = True
+trkr_value = 5 # um
+# trkr_value = 0.0 # um As a safety-measure to avoid having this factor removed in any curve!
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -227,7 +227,7 @@ else:
     hist_one_strip.SetMarkerColor(colors[0])
 
 
-# Get TLine with binary readout
+# Get TLine with binary readout - after final comments, decided on excluding this line
 # -----------------------------
 
 line_binary_readout = ROOT.TLine(-xlength,pitch/TMath.Sqrt(12), xlength,pitch/TMath.Sqrt(12))
@@ -384,7 +384,7 @@ for i,info_entry in enumerate(all_histoInfos):
             legend.AddEntry(hist_one_strip, entry_one, "P")
             hist_one_strip.Write()
 
-        # Add two strips expected resolution
+        # Add two strips expected resolution - after final comments, decided on excluding this 
         hist_expected.Draw("HIST SAME")
         entry_expected = "Two %s expected"%(legend_reco)
         legend.AddEntry(hist_expected, entry_expected, "l")

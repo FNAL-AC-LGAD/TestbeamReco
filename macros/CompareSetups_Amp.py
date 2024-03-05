@@ -23,7 +23,7 @@ xlength = float(options.xlength)
 
 sensors_list = [
     # Varying resistivity and capacitance
-    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "BNL_50um_1cm_450um_W3052_2_4_185V", "BNL_50um_1cm_450um_W3051_2_2_170V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "BNL_50um_1cm_450um_W3051_2_2_170V", "BNL_50um_1cm_450um_W3052_2_4_185V"],
     # HPK Varying thickness
     ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # KOJI Varying thickness
@@ -68,7 +68,7 @@ ylength_list = [
 
 saveName_list = [
     # Varying resistivity and capacitance
-    "HPK_Amplitude_vs_x_ResCap",
+    "HPK_and_BNL_Amplitude_vs_x_ResCap",
     # HPK Varying thickness
     "HPK_Amplitude_vs_x_thickness",
     # KOJI Varying thickness

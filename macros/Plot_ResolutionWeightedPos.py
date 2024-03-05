@@ -121,8 +121,8 @@ list_htitles = [
 ]
 inName = outdirtemp+"Efficiency/EfficiencyVsX"+tight_postfix+".root"
 inFile = TFile(inName,"READ")
-hTwoEff = inFile.Get("efficiency_vs_x_twoStrip_coarseBins"+tight_postfix)
-hOneEff = inFile.Get("efficiency_vs_x_oneStrip_coarseBins"+tight_postfix)
+hTwoEff = inFile.Get("hefficiency_vs_x_twoStrip_numerator_coarseBins"+tight_postfix)
+hOneEff = inFile.Get("hefficiency_vs_x_oneStrip_numerator_coarseBins"+tight_postfix)
 # Use of tight cut histograms not needed because will be weighted with the tight histograms which have value = 0 outside tight region
 # if (is_tight):
 #     print(" >> Using tight cuts!")

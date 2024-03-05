@@ -30,7 +30,7 @@ sensors_list = [
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
     # HPK pads Varying metal widths
-    ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
+    ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"]
 ]
 
 tagVar_list = [
@@ -43,7 +43,7 @@ tagVar_list = [
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
     # HPK pads Varying metal widths
-    ["width"],
+    ["width"]
 ]
 
 ylength_list = [
@@ -56,7 +56,7 @@ ylength_list = [
     # HPK pads Varying thickness and resistivity
     1199,
     # HPK pads Varying metal widths
-    800,
+    800
 ]
 
 saveName_list = [
@@ -69,7 +69,7 @@ saveName_list = [
     # HPK pads Varying thickness and resistivity
     "HPK_Pads_Risetime_vs_x_thicknessRes",
     # HPK pads Varying metal widths
-    "HPK_Pads_Risetime_vs_x_MetalWidth",
+    "HPK_Pads_Risetime_vs_x_MetalWidth"
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")

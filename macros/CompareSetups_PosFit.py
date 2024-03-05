@@ -52,7 +52,7 @@ sensors_list = [
     #BNL and HPK sensors - different metal widths
     ["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
     # Varying resistivity and capacitance
-    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "BNL_50um_1cm_450um_W3052_2_4_185V", "BNL_50um_1cm_450um_W3051_2_2_170V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
+    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "BNL_50um_1cm_450um_W3051_2_2_170V", "BNL_50um_1cm_450um_W3052_2_4_185V"],
 ]
 
 tagVar_list = [
@@ -66,7 +66,7 @@ saveName_list = [
     #BNL and HPK sensors - different metal widths
     "BNL_and_HPK_PosFit_vs_MetalWidth",
     # Varying resistivity and capacitance
-    "HPK_PosFit_vs_ResCap"
+    "HPK_and_BNL_PosFit_vs_ResCap"
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
@@ -75,12 +75,15 @@ outdir = myStyle.GetPlotsDir(outdir, "ReconstructionFit/")
 xmin = 0.50
 xmax = 0.98
 ymin = 0.001
-ymax = 330 # um
 pad_margin = myStyle.GetMargin()
 
 canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
+    if("MetalWidth" in saveName):
+        ymax = 420 # um
+    else:
+        ymax = 480 # um
     sensor_reference = sensors[0]
     colors = myStyle.GetColorsCompare(len(sensors))
 
@@ -93,16 +96,17 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         max_width = this_width if this_width > max_width else max_width
         pitch = this_pitch if this_pitch > pitch else pitch
 
-    legend_height = 0.052*(len(sensors) + 1) # Entries + title
-    legX1 = 1-marginR-0.6
-    legX2 = 1-marginR-0.03
+    legend_height = 0.058*(len(sensors) + 1) # Entries + title
+    #legX1 = 1-marginR-0.75
+    #legX2 = 1-marginR-0.03
+    legX1 = 2*pad_margin+0.065
+    legX2 = 1-marginR-0.065
 
-    yLegend = 0.026*len(sensors)
     legend = TLegend(legX1, 1-pad_margin-legend_height-0.03, legX2, 1-pad_margin-0.03)
     legend.SetBorderSize(1)
     legend.SetLineColor(kBlack)
     legend.SetTextFont(myStyle.GetFont())
-    legend.SetTextSize(myStyle.GetSize()-4 -2)
+    legend.SetTextSize(myStyle.GetSize()-4)
 
     tag = mf.get_legend_comparation_plots(sensors, tagVars)
 
@@ -124,8 +128,8 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
 
     # Draw metal in background
     boxes = stripBox.getStripBoxForRecoFit(max_width, pitch, ymax, xmax, xmin)
-    for box in boxes:
-        box.DrawClone("same")
+    # for box in boxes:
+    boxes[0].DrawClone("same")
 
     # Draw lines with different metal widths
     for i,item in enumerate(sensors):
