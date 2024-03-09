@@ -219,7 +219,7 @@ for i in range(1, nbins+1):
         nEvents = tmpHist.GetEntries()
         fitlow = myMean - 1.5*myRMS
         fithigh = myMean + 1.5*myRMS
-        value = 1000*myRMS
+        value = 1000*TMath.Sqrt(myRMS*myRMS + myMean*myMean)
         error = myRMSError
 
         # Define minimum of bin's entries to be fitted

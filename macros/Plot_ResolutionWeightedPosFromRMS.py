@@ -109,16 +109,14 @@ list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
     ["deltaX_vs_Xtrack_oneStrip", "track_oneStrip", "Position resolution [#mum]"],
     ["deltaX_vs_Xtrack_twoStrip", "track_twoStrip", "Position resolution [#mum]"],
+    ["deltaX_vs_Xtrack_BothStrip", "track_BothReco", "Position resolution [#mum]"],
 ]
-inName = outdirtemp+"Efficiency/EfficiencyVsX"+tight_postfix+".root"
-inFile = TFile(inName,"READ")
-hTwoEff = inFile.Get("efficiency_vs_x_twoStrip_coarseBins"+tight_postfix)
-hOneEff = inFile.Get("efficiency_vs_x_oneStrip_coarseBins"+tight_postfix)
 
-# Use of tight cut histograms not needed because will be weighted with the tight histograms which have value = 0 outside tight region
 # if (is_tight):
 #     print(" >> Using tight cuts!")
-#     list_htitles = [["deltaX_vs_Xtrack_oneStrip_tight", "track_oneStrip_tight", "Position resolution [#mum]"],["deltaX_vs_Xtrack_twoStrip_tight", "track_twoStrip_tight", "Position resolution [#mum]"]]
+#     list_htitles = [["deltaX_vs_Xtrack_oneStrip_tight", "track_oneStrip_tight", "Position resolution [#mum]"],["deltaX_vs_Xtrack_twoStrip_tight", "track_twoStrip_tight", "Position resolution [#mum]"],
+#     ["deltaX_vs_Xtrack_BothStrip_tight", "track_BothReco_tight", "Position resolution [#mum]"],
+# ]
 
 # List with histograms using HistoInfo class
 all_histoInfos = []
@@ -131,59 +129,6 @@ for titles in list_htitles:
 plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center)
 if ("pad" not in dataset) and ("500x500" not in dataset):
     plot_xlimit-= pitch/(2. * 1000)
-
-# Get histograms for Expected Resolution of Two strip Reconstruction
-# ------------------------------------------------------------------
-
-mean_noise12_vs_x = get_profX(inputfile, "BaselineRMS12_vs_x", is_tight)
-mean_amp12_vs_x = get_profX(inputfile, "Amp12_vs_x", is_tight)
-mean_amp1_vs_x = get_profX(inputfile, "Amp1_vs_x", is_tight)
-mean_amp2_vs_x = get_profX(inputfile, "Amp2_vs_x", is_tight)
-mean_dXFrac_vs_x = get_profX(inputfile, "dXdFrac_vs_Xtrack", is_tight)
-
-nbins = mean_amp12_vs_x.GetNbinsX()
-xmin, xmax = mf.get_shifted_limits(mean_amp12_vs_x, position_center)
-
-hist_expected = ROOT.TH1F("h_expected", "", nbins, xmin, xmax)
-hist_expected.SetLineWidth(3)
-hist_expected.SetLineStyle(7)
-hist_expected.SetLineColor(colors[2])
-
-# Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
-for ibin in range(1, hist_expected.GetNbinsX()+1):
-    if mean_amp12_vs_x.GetBinContent(ibin) > 0:
-        dXFrac = mean_dXFrac_vs_x.GetBinContent(ibin)
-        noise12 = mean_noise12_vs_x.GetBinContent(ibin)
-        amp1 = mean_amp1_vs_x.GetBinContent(ibin)
-        amp2 = mean_amp2_vs_x.GetBinContent(ibin)
-        amp12 = mean_amp12_vs_x.GetBinContent(ibin)
-
-        value_expected = abs(1000*dXFrac * (0.5*noise12) * pow(pow(amp1,2)+pow(amp2,2),0.5) / (amp12)**2)
-        if ("pad" in dataset) or ("500x500" in dataset):
-            value_expected = TMath.Sqrt(2)*value_expected
-
-    else:
-        value_expected = -10.0
-
-    # Adding tracker contribution
-    if (not rm_tracker) and (value_expected > 0.0):
-        value_expected = math.sqrt(trkr_value**2 + value_expected**2)
-
-    # Fill only when inside limits
-    if not mf.is_inside_limits(ibin, hist_expected, xmax=plot_xlimit):
-        continue
-
-    hist_expected.SetBinContent(ibin, value_expected)
-
-
-# Get TLine with binary readout
-# -----------------------------
-
-line_binary_readout = ROOT.TLine(-xlength,pitch/TMath.Sqrt(12), xlength,pitch/TMath.Sqrt(12))
-line_binary_readout.SetLineWidth(3)
-line_binary_readout.SetLineStyle(7)
-line_binary_readout.SetLineColor(colors[4])
-
 
 # Get histogram for One+Two strip Reconstruction's resolution
 # -------------------------------------------------------
@@ -211,13 +156,9 @@ for i in range(1, nbins+1):
         nEvents = tmpHist.GetEntries()
         fitlow = myMean - 1.5*myRMS
         fithigh = myMean + 1.5*myRMS
-        value = 1000*myRMS
+        value = 1000*TMath.Sqrt(myRMS*myRMS + myMean*myMean)
         error = myRMSError
-        if (debugMode):
-                tmpHist.Draw("hist")
-                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
-
-        # Define minimum of bin's entries to be fitted
+        
         minEvtsCut = totalEvents/nbins
         if ("HPK_W9_15_2" in dataset):
             minEvtsCut = 0.25*totalEvents/nbins
@@ -230,55 +171,21 @@ for i in range(1, nbins+1):
             msg_nentries = "%s: nEvents > %.2f "%(info_entry.inHistoName, minEvtsCut)
             msg_nentries+= "(Total events: %i)"%(totalEvents)
             print(msg_nentries)
-
-        #Do fit 
-        if(nEvents > minEvtsCut):
-            # tmpHist.Rebin(2)
-            fit = TF1('fit','gaus',fitlow,fithigh)
-            # if "twoStrip" in info_entry.inHistoName:
-            #     fit.SetParameter(1, 0.0)
-            tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
-            myMPV = fit.GetParameter(1)
-            mySigma = fit.GetParameter(2)
-            mySigmaError = fit.GetParError(2)
-            # Save sigma value of fit only for two-strip position resolution
-            if("twoStrip" in info_entry.outHistoName):
-                value = 1000.0*mySigma
-                error = 1000.0*mySigmaError
-        
-            # For Debugging
-            if (debugMode):
-                tmpHist.Draw("hist")
-                fit.Draw("same")
-                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
-                bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
-                msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
-                msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
-                print(msg_binres)
-        else:
-            if("twoStrip" in info_entry.outHistoName):
-                value = 0.0 # previously was set to -10 for plotting reasons, but needs to be set to 0 for weighted posres.
-
+        if ((nEvents>minEvtsCut) and (debugMode)):
+            gStyle.SetOptStat(1)
+            tmpHist.Draw("hist")
+            canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
         # Fill only when inside limits
         if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
             continue
 
         info_entry.th1.SetBinContent(i, value)
-        # info_entry.th1.SetBinError(i, error)
 
 weightedhist = all_histoInfos[0].th1.Clone("weighted_pos_resRMS")
 for i in range(1, nbins+1):
     # Apply weights
-    tmpHistOne = all_histoInfos[0].th1
-    tmpHistTwo = all_histoInfos[1].th1
-    oneEff = hOneEff.GetBinContent(hOneEff.GetXaxis().FindBin(tmpHistOne.GetXaxis().GetBinCenter(i)))
-    twoEff = hTwoEff.GetBinContent(hTwoEff.GetXaxis().FindBin(tmpHistOne.GetXaxis().GetBinCenter(i)))
-    print("{:.1f}, {:.2f} -> {:.3f} ({:.2f}), {:.3f} ({:.2f})".format(i, tmpHistOne.GetXaxis().GetBinCenter(i), oneEff, tmpHistOne.GetBinContent(i), twoEff, tmpHistTwo.GetBinContent(i)))
-    if(oneEff+twoEff <= 0): #ensure sum of efficiencies is not 0. Cannot also be negative, but adding it just-in-case
-        value = 0
-    else:
-        value = TMath.Sqrt((oneEff*tmpHistOne.GetBinContent(i)*tmpHistOne.GetBinContent(i) + twoEff*tmpHistTwo.GetBinContent(i)*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff))
-
+    tmpHistBoth = all_histoInfos[2].th1
+    value = tmpHistBoth.GetBinContent(i)
     # Removing tracker's contribution
     if rm_tracker and (value > trkr_value):
         # error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
@@ -313,8 +220,6 @@ legend_reco = "strip"
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
 
-
-
 htemp.Draw("AXIS")
 
 hist = weightedhist
@@ -335,20 +240,10 @@ legend.SetTextSize(myStyle.GetSize()-4)
 # legend.SetFillColor(kWhite)
 # legend.SetFillStyle(0)
 
-# Add binary readout
-line_binary_readout.Draw("SAME")
-legend.AddEntry(line_binary_readout, "Pitch / #sqrt{12}", "l")
-
 # Draw all other elements with Two Strip Reconstructed histogram only
-if "twoStrip" in info_entry.inHistoName:
+if "BothReco" in info_entry.inHistoName:
     # Get correct legend for Two Strip Reco
-    this_legend = "Weighted resolution, observed"
-
-    # Add two strips expected resolution
-    hist_expected.Draw("HIST SAME")
-    entry_expected = "Two %s expected"%(legend_reco)
-    legend.AddEntry(hist_expected, entry_expected, "l")
-    hist_expected.Write()
+    this_legend = "Variance, observed"
 # If not twoStrip, set a default title for the legend
 else:
     this_legend = info_entry.outHistoName.replace("track_", "")
@@ -376,3 +271,47 @@ canvas.SaveAs("%s.pdf"%save_path)
 canvas.Clear()
 
 outputfile.Close()
+
+
+# Open the ROOT file
+file1 = TFile.Open("%sWeightedPositionResVsX.root"%(outdir))
+file2 = TFile.Open("%sWeightedPositionResVsX_tight.root"%(myStyle.getOutputDir(dataset)+'WeightedResolution_Pos/'))
+file3 = TFile.Open("%sPositionResVsX_tight.root"%(myStyle.getOutputDir(dataset)+'Resolution_Pos/'))
+hists = []
+hists.append(file1.Get("weighted_pos_resRMS"))
+hists.append(file2.Get("weighted_pos_res"))
+hists.append(file3.Get("track_twoStrip_tight"))
+hists.append(file3.Get("h_one_strip"))
+
+legNames = ["Combined res. 1", "Combined res. 2", "Two-strip res.", "One-strip res."]
+canvas = TCanvas("cv2","cv2",1000,800)
+canvas.SetGrid(0,1)
+# gPad.SetTicks(1,1)
+TH1.SetDefaultSumw2()
+gStyle.SetOptStat(0)
+legend2 = TLegend(pad_center-0.32, 1-pad_margin-0.285, pad_center+0.32, 1-pad_margin-0.095)
+legend2.SetTextFont(myStyle.GetFont())
+legend2.SetTextSize(myStyle.GetSize()-4)
+legend2.SetNColumns(2)
+
+for i in range(len(hists)):
+    if(i==0):
+        hists[i].Draw("hist")
+        hists[i].GetXaxis().SetRangeUser(-xlength,xlength)
+        hists[i].SetLineColor(colors[i])
+        legend2.AddEntry(hists[i], legNames[i], "l")
+    elif("One" in legNames[i]):
+        hists[i].Draw("P same")
+        hists[i].SetMarkerColor(colors[i])
+        hists[i].SetLineStyle(1)
+        hists[i].SetMarkerStyle(33)
+        hists[i].SetMarkerSize(3)
+        legend2.AddEntry(hists[i], legNames[i], "P")
+    else:
+        hists[i].Draw("hist same")
+        hists[i].SetLineColor(colors[i])
+        legend2.AddEntry(hists[i], legNames[i], "l")
+legend2.Draw()
+myStyle.BeamInfo()
+myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
+canvas.SaveAs("%scombinedplot.gif"%(myStyle.getOutputDir(dataset)+'WeightedResolution_PosRMS/'))
