@@ -227,6 +227,15 @@ for i, in_name in enumerate(list_name_coarse):
     list_th1.append(th1_efficiency)
     legend.AddEntry(th1_efficiency, list_legend_overall[i])
 
+# # Check adding oneStrip + twoStrip is equivalent to single numerator
+# hSum = list_th1[0].Clone("hsum")
+# hSum.Add(list_th1[1], list_th1[2])
+# hSum.SetLineWidth(3)
+# hSum.SetLineStyle(2)
+# hSum.SetLineColor(colors[3])
+# hSum.Draw("hist same")
+# legend.AddEntry(hSum, "Sum 1 + 2")
+
 htemp.Draw("AXIS same")
 legend.Draw()
 

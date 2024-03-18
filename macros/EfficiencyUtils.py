@@ -550,11 +550,9 @@ def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
 
     return effGraph
 
-def Make1DEfficiencyHist(num, den, plotname, topTitle="", xAxisTitle="", xAxisRangeLow=0, xAxisRangeHigh=0, shift=0.0, center=0) :
-
+def Make1DEfficiencyHist(num, den, plotname, topTitle="", xAxisTitle="", xAxisRangeLow=0, xAxisRangeHigh=0, shift=0.0, center=0):
     nbins = num.GetXaxis().GetNbins()
     xmin, xmax = mf.get_shifted_limits(num, center)
-
     this_hist = TH1F("h%s"%plotname, topTitle, nbins, xmin, xmax)
 
     for b in range(1,nbins+1):
@@ -566,15 +564,19 @@ def Make1DEfficiencyHist(num, den, plotname, topTitle="", xAxisTitle="", xAxisRa
         #print ("numerator: " + str(n1) + " and denominator: " + str(n2))
         if (n1 > n2):
             n1 = n2
+            # Define warning if bin gets numerator > denominator
+            warn_msg = "WARNING! Bin got numerator higher than denominator"
+            print("%s (bin %i)"%(warn_msg, b))
 
         if (n2>0):
             ratio = float(n1)/float(n2)
             if (ratio > 1):
                 ratio = 1
-
-        ytemp = ratio
+                # Define warning if bin gets efficicency higher than 1
+                warn_msg = "WARNING! Bin got efficiency higher than unit"
+                print("%s (bin %i)"%(warn_msg, b))
         this_bin = num.GetXaxis().FindBin(xtemp)
 
-        this_hist.SetBinContent(this_bin,ytemp)
+        this_hist.SetBinContent(this_bin, ratio)
 
     return this_hist
