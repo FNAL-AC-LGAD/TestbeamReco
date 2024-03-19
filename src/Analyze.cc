@@ -1465,7 +1465,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && goodAmpColHit && highFraction,                       my_2d_histos, "deltaX_vs_Xtrack_highFrac", x,x_reco-x);
         utility::fillHisto(pass && goodAmpColHit && oneStripReco,                       my_2d_histos, "deltaX_vs_Xtrack_oneStrip", x,x_reco-x);
         utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "deltaX_vs_Xtrack_twoStrip", x,x_reco-x);
-        utility::fillHisto(pass && goodAmpColHit && (oneStripReco||twoStripReco),                       my_2d_histos, "deltaX_vs_Xtrack_BothStrip", x,x_reco-x);
+        utility::fillHisto(pass && goodAmpColHit && (oneStripReco||twoStripReco),       my_2d_histos, "deltaX_vs_Xtrack_BothStrip", x,x_reco-x);
         utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "Amp12_vs_x", x, Amp12);
         utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "Amp1_vs_x", x, ampColLGAD1st);
         utility::fillHisto(pass && goodAmpColHit && twoStripReco,                       my_2d_histos, "Amp2_vs_x", x, ampColLGAD2nd);
@@ -1744,36 +1744,36 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
             const auto& timeCalibrationCorrection = tr.getVar<std::map<int, double>>("timeCalibrationCorrection");
             for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
             {
-                if(regionsOfIntrest[k].passROI(x,y))
-                {
-                    if(counter[k] < max_save)
-                    {
-                        // Open a CSV file for writing
-                        // std::ofstream outputFile("waveform_"+regionsOfIntrest[k].getName()+"("+std::to_string(x)+","+std::to_string(y)+")_"+std::to_string(counter[k])+".csv");
-                        std::ofstream outputFile("waveform_"+regionsOfIntrest[k].getName()+"_"+std::to_string(counter[k])+".csv");
-                        // Write the header to the CSV file
-                        outputFile << "Time[ns],Channel1[mV],Channel2[mV],Channel3[mV],Channel4[mV],Channel5[mV],Channel6[mV],Channel7[mV]" << std::endl;
-                        for(unsigned int j = 0; j < time[0].size(); j++)
-                        {
-                            // auto t = timeCalibrationCorrection.at(i) + 80.0;
-                            outputFile<<1e9*time[0][j]<<","<<channel[0][j]<<","<<channel[1][j]<<","<<channel[2][j]<<","<<channel[3][j]<<","<<channel[4][j]<<","<<channel[5][j]<<","<<channel[6][j]<<std::endl;
-                        }
-                        // Close the CSV file
-                        outputFile.close();
-                        std::cout << "Data saved." << std::endl;
-                        counter[k]++;
-                    }
+                if(!(regionsOfIntrest[k].passROI(x,y))) continue;
 
-                    for(unsigned int i = 0; i < channel.size(); i++)
+                if(counter[k] < max_save)
+                {
+                    // Open a CSV file for writing
+                    // std::ofstream outputFile("waveform_"+regionsOfIntrest[k].getName()+"("+std::to_string(x)+","+std::to_string(y)+")_"+std::to_string(counter[k])+".csv");
+                    std::ofstream outputFile("waveform_"+regionsOfIntrest[k].getName()+"_"+std::to_string(counter[k])+".csv");
+                    // Write the header to the CSV file
+                    outputFile << "Time[ns],Channel1[mV],Channel2[mV],Channel3[mV],Channel4[mV],Channel5[mV],Channel6[mV],Channel7[mV]" << std::endl;
+                    for(unsigned int j = 0; j < time[0].size(); j++)
                     {
-                        auto t = timeCalibrationCorrection.at(i) - 10.0;
-                        if(i==7) continue;
-                        std::string index = std::to_string(i);
-                        for(unsigned int j = 0; j < time[0].size(); j++)
-                        {
-                            my_histos["wave"+index]->Fill(1e9*time[0][j] - photekTime - t, channel[i][j]);
-                            my_1d_prof["waveProf"+index+regionsOfIntrest[k].getName()]->Fill(1e9*time[0][j] - photekTime - t, channel[i][j]);
-                        }
+                        // auto t = timeCalibrationCorrection.at(i) + 80.0;
+                        outputFile<<1e9*time[0][j]<<","<<channel[0][j]<<","<<channel[1][j]<<","<<channel[2][j]<<","<<channel[3][j]<<","<<channel[4][j]<<","<<channel[5][j]<<","<<channel[6][j]<<std::endl;
+                    }
+                    // Close the CSV file
+                    outputFile.close();
+                    std::cout << "Data saved." << std::endl;
+                    counter[k]++;
+                }
+
+                if (!maxAmpInCenter) continue;
+                for(unsigned int i = 0; i < channel.size(); i++)
+                {
+                    auto t = timeCalibrationCorrection.at(i) - 10.0;
+                    if(i==7) continue;
+                    std::string index = std::to_string(i);
+                    for(unsigned int j = 0; j < time[0].size(); j++)
+                    {
+                        my_histos["wave"+index]->Fill(1e9*time[0][j] - photekTime - t, channel[i][j]);
+                        my_1d_prof["waveProf"+index+regionsOfIntrest[k].getName()]->Fill(1e9*time[0][j] - photekTime - t, channel[i][j]);
                     }
                 }
             }
