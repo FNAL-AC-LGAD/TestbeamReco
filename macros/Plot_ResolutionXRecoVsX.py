@@ -86,9 +86,10 @@ strip_length = sensor_Geometry['length']
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
-rm_tracker = True
-trkr_value = 5 # um
-# trkr_value = 0.0 # um As a safety-measure to avoid having this factor removed in any curve!
+rm_tracker = False
+# trkr_value = 5 # um
+# Use 0 as a safety-measure to avoid having this factor removed or added in any curve!
+trkr_value = 0.0 # um
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
