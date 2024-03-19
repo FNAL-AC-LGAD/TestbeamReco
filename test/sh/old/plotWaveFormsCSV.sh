@@ -1,3 +1,4 @@
+cd ../..
 make clean
 make -j4
 ./MyAnalysis -A Analyze -D HPK_W11_22_3_20T_500x500_150M_C600_116V
