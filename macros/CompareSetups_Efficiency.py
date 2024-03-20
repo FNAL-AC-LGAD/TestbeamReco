@@ -22,7 +22,7 @@ options, args = parser.parse_args()
 
 sensors_list = [
     # BNL and HPK sensors - different metal widths
-    ["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
+    ["BNL_50um_1cm_450um_W3051_2_2_170V", "BNL_50um_1cm_400um_W3051_1_4_160V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
     # Varying resistivity and capacitance
     ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # HPK Varying thickness
@@ -40,7 +40,7 @@ tagVar_list = [
     ["manufacturer", "width"],
     # Varying resistivity and capacitance
     ["resistivityNumber", "capacitance"],
-    #HPK Varying thickness
+    # HPK Varying thickness
     ["thickness"],
     # KOJI Varying thickness
     ["thickness"],
@@ -55,7 +55,7 @@ saveName_list = [
     "BNL_and_HPK_Efficiency_vs_x_MetalWidth",
     #Varying resistivity and capacitance
     "HPK_Efficiency_vs_x_ResCap",
-    #HPK Varying thickness
+    # HPK Varying thickness
     "HPK_efficiency_vs_x_thickness",
     # KOJI Varying thickness
     "Koji_efficiency_vs_x_thickness",
@@ -74,11 +74,8 @@ pad_margin = myStyle.GetMargin()
 canvas = TCanvas("cv","cv",1000,800)
 
 for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
-    if ("HPK_W9_15_2" in sensors[0]):
-        active_thickness_comp = True
-    else: 
-        active_thickness_comp = False
     sensor_reference = sensors[0]
+    active_thickness_comp = ("HPK_W9_15_2" in sensor_reference)
     treat_as_2x2 = ("HPK_W9_23_3_20T_500x500_300M_E600_112V" in sensors)
     if treat_as_2x2:
         sensor_reference = "HPK_W9_23_3_20T_500x500_300M_E600_112V"
@@ -172,25 +169,20 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
         list_efficiency_vs_x = moved_3x2[:ref_idx] + moved_2x2 + moved_3x2[ref_idx:]
 
     pruned_efficiency_vs_x = mf.same_limits_compare(list_efficiency_vs_x + list_FullRecoEfficiency_vs_x, xlimit=xlimit)
-    # for i, hist in enumerate(pruned_efficiency_vs_x):
-    #     hist.SetLineWidth(3)
-    #     hist.SetLineColor(colors[i])
-    #     legendTop.AddEntry(hist, tag[i])
-    #     hist.Draw("hist same")
 
+    # Add only two-strip efficiency in top legend
     for i, hist in enumerate(pruned_efficiency_vs_x):
         idx = i%len(list_efficiency_vs_x)
         hist.SetLineWidth(3)
         hist.SetLineColor(colors[idx])
 
-        if i < len(list_efficiency_vs_x):
+        if (i < len(list_efficiency_vs_x)):
             lengendEntry = legendTop.AddEntry(hist, tag[idx])
-            hist.Draw("hist same")
-        else:
-            hist.Draw("hist same")
+        hist.Draw("hist same")
 
-    if(not active_thickness_comp):
-        horizontal_line = TLine(-xlength, 1, xlength, 1)
+    # Draw line at efficiency 1.0 as a reference
+    if (not active_thickness_comp):
+        horizontal_line = TLine(-xlength, 1.0, xlength, 1.0)
         horizontal_line.SetLineWidth(3)
         horizontal_line.SetLineColor(1)
         horizontal_line.SetLineStyle(9)
@@ -216,10 +208,8 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     else:
         legendTop.SetBorderSize(1)
         legendTop.Draw()
-
     legendHeader = tag[-1]
     legendTop.SetHeader(legendHeader, "C")
-
 
     sensor_prod="Strip sensors"
     if ("500x500" in sensor_reference):
