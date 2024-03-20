@@ -324,8 +324,6 @@ legend_reco = "strip"
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
 
-
-
 htemp.Draw("AXIS")
 
 hist = weightedhist
