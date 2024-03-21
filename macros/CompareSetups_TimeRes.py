@@ -88,7 +88,6 @@ saveName_list = [
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
 outdir = myStyle.GetPlotsDir(outdir, "ResolutionTimeVsX/")
 
-ymin = 1
 pad_margin = myStyle.GetMargin()
 
 canvas = TCanvas("cv","cv",1000,800)
@@ -135,8 +134,8 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     haxis.GetXaxis().SetTitle("Track x position [mm]")
     haxis.GetYaxis().SetTitle("Time resolution [ps]")
     haxis.SetLineWidth(3)
-    if("ResCap" in saveName):
-        ymin = 25
+
+    ymin = 1 if ("ResCap" not in saveName) else 26
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
     xlimit = 0
