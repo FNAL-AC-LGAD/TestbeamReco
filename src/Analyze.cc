@@ -1727,7 +1727,8 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         //    std::cout<<abs( corrAmp[2] - corrAmp[4])<<" "<<corrAmp[2]<<" "<<(abs( corrAmp[2] - corrAmp[4]) / corrAmp[2])<<std::endl;
         //}
         //if(plotWaveForm && pass && maxAmpInCenter && goodMaxLGADAmp && maxAmpLGAD > 100.0 && maxAmpLGAD < 120.0 && directHit)
-        if(plotWaveForm && goodMaxLGADAmp && maxAmpInCenter)
+        //if(plotWaveForm && goodMaxLGADAmp && maxAmpInCenter)
+        if(plotWaveForm)
         {
             const auto& channel = tr.getVecVec<float>("channel");
             const auto& time = tr.getVecVec<float>("time");

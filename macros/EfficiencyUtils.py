@@ -47,7 +47,7 @@ def Plot2DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
 
     c.SaveAs(plotname+".gif")
     if savePDF: c.SaveAs(plotname+".pdf")
-
+    c.SaveAs(plotname+".C")
 
 
 def NoisePlusLandauGaus(x, par) :
