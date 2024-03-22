@@ -97,7 +97,7 @@ private:
             average_time_LGADX = (timeLGADX1 + timeLGADX2)*0.5;
 
             weighted2_jitter = std::sqrt((amp1*amp1*jitter1*jitter1 + amp2*amp2*jitter2*jitter2)/sum_amp2);
-            weighted2_jitter_NewDef = (amp1*amp1*jitter1 + amp2*amp2*jitter2)/sum_amp2;
+            weighted2_jitter_NewDef = std::sqrt((amp1*amp1*amp1*amp1*jitter1*jitter1 + amp2*amp2*amp2*amp2*jitter2*jitter2)/(sum_amp2*sum_amp2));
         }
    
         bool twoGoodChannelSignalThres = amp1 > signalAmpThreshold  &&  amp2 > signalAmpThreshold && similarTime12 && time1 != 0.0 && time2 != 0.0;

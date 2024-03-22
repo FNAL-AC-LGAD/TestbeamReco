@@ -24,7 +24,7 @@ datasets = [
     "HPK_50um_500x500um_2x2pad_E600_FNAL_170V",
     "HPK_50um_500x500um_2x2pad_E600_FNAL_160V",
 
-    # "HPK_30um_500x500um_2x2pad_E600_FNAL_144V",
+    "HPK_30um_500x500um_2x2pad_E600_FNAL_144V",
     "HPK_30um_500x500um_2x2pad_E600_FNAL_140V",
     "HPK_30um_500x500um_2x2pad_E600_FNAL_135V",
     "HPK_30um_500x500um_2x2pad_E600_FNAL_130V",
@@ -56,7 +56,7 @@ y_top_limit = [70, 0, 230, 800, 2.6]
 # outdir = myStyle.getOutputDir("Paper2023")
 # outdir = myStyle.GetPlotsDir(outdir, "Bias_scan/")
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
-outdir = myStyle.GetPlotsDir(outdir, "Bias_scan/")
+outdir = myStyle.GetPlotsDir(outdir, "Bias_scan_orig/")
 
 geometry_all = msi.sensorsGeom2023_biasScan
 

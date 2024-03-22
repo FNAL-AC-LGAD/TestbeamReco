@@ -55,13 +55,13 @@ saveName_list = [
 
 ylength_list = [
     # Varying thickness
-    250,
+    210,
     # Varying thickness KOJI
-    90,
+    30,
     # HPK pads Varying thickness and resistivity
-    310,
+    210,
     # HPK pads Varying metal widths
-    300,
+    200,
 ]
 
 yoffset_list = [
@@ -104,7 +104,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
 
     legTopY1 = 1-pad_margin-legend_height-0.03
     legendBot = TLegend(legX1-0.05, legTopY1-0.055, legX2+0.05, legTopY1)
-    legendBot.SetNColumns(3)
+    legendBot.SetNColumns(2)
     # legendBot.SetBorderSize(1)
     # legendBot.SetLineColor(kBlack)
     legendBot.SetFillColor(0)
@@ -165,13 +165,14 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
                 center = (box.GetX1() + box.GetX2())/2.
                 vertical_line.DrawLine(center-swidth/2., ymin, center-swidth/2., ylength-10)
                 vertical_line.DrawLine(center+swidth/2., ymin, center+swidth/2., ylength-10)
-
-    binary_readout_res_sensor = TLine(-xlength, pitch/TMath.Sqrt(12), xlength, pitch/TMath.Sqrt(12))
-    binary_readout_res_sensor.SetLineWidth(3)
-    binary_readout_res_sensor.SetLineStyle(7)
-    binary_readout_res_sensor.SetLineColor(kBlack)
-    binary_readout_res_sensor.Draw("same")
-    legendTop.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
+    
+    # After final comments, decided on excluding this line
+    # binary_readout_res_sensor = TLine(-xlength, pitch/TMath.Sqrt(12), xlength, pitch/TMath.Sqrt(12))
+    # binary_readout_res_sensor.SetLineWidth(3)
+    # binary_readout_res_sensor.SetLineStyle(7)
+    # binary_readout_res_sensor.SetLineColor(kBlack)
+    # binary_readout_res_sensor.Draw("same")
+    # legendTop.AddEntry(binary_readout_res_sensor, "Pitch / #sqrt{12}","l")
 
     plotfile = []
     list_OneStrip_vs_x = []
@@ -252,23 +253,24 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
         hist_two.SetLineColor(colors[i])
         legendTop.AddEntry(hist_two, tag[i])
         hist_two.Draw("hist e same")
-
-        hist_twoExpected = list_TwoStripExpected_vs_x[i]
-        hist_twoExpected.SetLineWidth(3)
-        hist_twoExpected.SetLineStyle(2)
-        hist_twoExpected.SetLineColor(colors[i])
-        hist_twoExpected.Draw("hist same")
+        
+        # After final comments, decided on excluding this line
+        # hist_twoExpected = list_TwoStripExpected_vs_x[i]
+        # hist_twoExpected.SetLineWidth(3)
+        # hist_twoExpected.SetLineStyle(2)
+        # hist_twoExpected.SetLineColor(colors[i])
+        # hist_twoExpected.Draw("hist same")
 
         if i==0:
             markOne = TGraph(hist_one)
             markOne.SetMarkerColor(kBlack)
             markTwo = hist_two.Clone()
             markTwo.SetLineColor(kBlack)
-            markTwoExp = hist_twoExpected.Clone()
-            markTwoExp.SetLineColor(kBlack)
+            # markTwoExp = hist_twoExpected.Clone()
+            # markTwoExp.SetLineColor(kBlack)
             legendBot.AddEntry(markOne, "Exactly one %s"%sensor_type, "P")
             legendBot.AddEntry(markTwo, "Two %s"%sensor_type, "L")
-            legendBot.AddEntry(markTwoExp, "Expected", "L")
+            # legendBot.AddEntry(markTwoExp, "Expected", "L")
 
     sensor_prod="Strip sensors"
     if is_pad:

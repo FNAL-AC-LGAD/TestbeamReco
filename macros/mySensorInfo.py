@@ -7,9 +7,9 @@
 #  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>, tag}
 geometry2023_default = {
     # BNL strips
-    "BNL_50um_1cm_450um_W3051_2_2": ["BNL_50um_1cm_450um_W3051", 500, 50, 10.0, 170, 50, "Null", "Null", "SB1"],
-    "BNL_50um_1cm_400um_W3051_1_4": ["BNL_50um_1cm_400um_W3051", 500, 100, 10.0, 160, 50, "Null", "Null", "SB2"],
-    "BNL_50um_1cm_450um_W3052_2_4": ["BNL_50um_1cm_450um_W3052", 500, 50, 10.0, 185, 50, "Null", "Null", "Null"],
+    "BNL_50um_1cm_450um_W3051_2_2": ["BNL_50um_1cm_450um_W3051", 500, 50, 10.0, 170, 50, "G", "270", "SB1"],
+    "BNL_50um_1cm_400um_W3051_1_4": ["BNL_50um_1cm_400um_W3051", 500, 100, 10.0, 160, 50, "G", "270", "SB2"],
+    "BNL_50um_1cm_450um_W3052_2_4": ["BNL_50um_1cm_450um_W3052", 500, 50, 10.0, 185, 50, "G", "260", "SB3"],
     "BNL_20um_1cm_400um_W3074_1_4": ["BNL_20um_1cm_400um_W3074", 500, 100, 10.0, 95, 20, "Null", "Null", "Null"],
     "BNL_20um_1cm_400um_W3075_1_2": ["BNL_20um_1cm_400um_W3075", 500, 100, 10.0, 80, 20, "Null", "Null", "Null"],
     "BNL_20um_1cm_450um_W3074_2_1": ["BNL_20um_1cm_450um_W3074", 500, 50, 10.0, 95, 20, "Null", "Null", "Null"],
@@ -70,6 +70,8 @@ for key, info in geometry2023_default.items():
         info_dict["resistivityNumber"] = 1600
     elif info[6] == "C":
         info_dict["resistivityNumber"] = 400
+    elif info[6] == "G":
+        info_dict["resistivityNumber"] = 1400
     info_dict["capacitance"] = info[7]
     if info[8] == "Null":
         info_dict["tag"] = info[0]
@@ -487,6 +489,27 @@ characteristics2023_biasscan_Overall = {
     "HPK_20um_500x500um_2x2pad_E600_FNAL_90V": [30.77, 21.54, 34.33, 383.27, 1.84, 2.73],
     "HPK_20um_500x500um_2x2pad_E600_FNAL_85V": [34.94, 25.71, 30.14, 399.14, 1.85, 2.23],
     "HPK_20um_500x500um_2x2pad_E600_FNAL_75V": [43.99, 31.85, 24.95, 428.53, 1.84, 1.26],
+
+    # Made to explain the contradiction between the jitter plot and the time resolution plot:
+    # "HPK_50um_500x500um_2x2pad_E600_FNAL_190V": [32.39, 7.49, 153.36, 572.27, 1.90, -59.16],
+    # "HPK_50um_500x500um_2x2pad_E600_FNAL_185V": [37.07, 11.86, 133.83, 564.67, 1.86, 28.12],
+    # "HPK_50um_500x500um_2x2pad_E600_FNAL_180V": [39.03, 13.06, 117.84, 567.66, 1.86, 23.34],
+    # "HPK_50um_500x500um_2x2pad_E600_FNAL_170V": [44.03, 15.27, 93.99, 576.85, 1.86, 18.13],
+    # "HPK_50um_500x500um_2x2pad_E600_FNAL_160V": [47.93, 16.70, 75.57, 592.30, 1.86, 14.84],
+    # "HPK_30um_500x500um_2x2pad_E600_FNAL_144V": [33.51, 8.21, 124.30, 405.92, 1.88, -7.83],
+    # "HPK_30um_500x500um_2x2pad_E600_FNAL_140V": [23.29, 7.36, 99.17, 395.06, 1.84, 16.61],
+    # "HPK_30um_500x500um_2x2pad_E600_FNAL_135V": [25.49, 11.51, 79.04, 398.11, 1.84, 10.99],
+    # "HPK_30um_500x500um_2x2pad_E600_FNAL_130V": [27.29, 12.51, 64.93, 400.59, 1.84, 8.31],
+    # "HPK_30um_500x500um_2x2pad_E600_FNAL_120V": [31.40, 15.62, 45.15, 412.12, 1.84, 5.61],
+    # "HPK_30um_500x500um_2x2pad_E600_FNAL_110V": [35.92, 18.29, 32.45, 431.87, 1.84, 4.06],
+    # "HPK_20um_500x500um_2x2pad_E600_FNAL_110V": [30.62, 9.20, 99.81, 383.23, 1.88, 49.75],
+    # "HPK_20um_500x500um_2x2pad_E600_FNAL_108V": [22.46, 10.36, 74.39, 363.51, 1.85, 14.42],
+    # "HPK_20um_500x500um_2x2pad_E600_FNAL_105V": [20.58, 10.15, 57.73, 352.36, 1.84, 7.95],
+    # "HPK_20um_500x500um_2x2pad_E600_FNAL_100V": [23.51, 13.69, 40.57, 360.31, 1.84, 4.62],
+    # "HPK_20um_500x500um_2x2pad_E600_FNAL_95V": [25.26, 15.97, 30.03, 369.59, 1.84, 3.34],
+    # "HPK_20um_500x500um_2x2pad_E600_FNAL_90V": [28.93, 19.72, 23.09, 383.27, 1.84, 2.66],
+    # "HPK_20um_500x500um_2x2pad_E600_FNAL_85V": [32.79, 26.82, 19.53, 399.14, 1.85, 2.35],
+    # "HPK_20um_500x500um_2x2pad_E600_FNAL_75V": [42.80, 35.88, 16.13, 428.53, 1.84, 2.03],
 
     # # Use the ampMax values from here: which is from new definition of hitOnMetal and LanGauss fit
     # # Metal region

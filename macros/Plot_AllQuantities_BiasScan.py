@@ -9,7 +9,7 @@ import time
 import myStyle
 # from matplotlib import pyplot as plt
 import mySensorInfo as msi
-
+import math
 
 gROOT.SetBatch( True )
 gStyle.SetOptFit(1011)
@@ -69,8 +69,8 @@ datasets = [
 #     "HPK_W5_17_2_50T_1P0_500P_50M_E600_194V"
 # ]
 
-regions = ["Overall", "Metal", "MidGap", "Gap"]
-# regions = ["Overall"]
+# regions = ["Overall", "Metal", "MidGap", "Gap"]
+regions = ["Overall"]
 
 # Quantity of interest (qty) first and a number related to the fit method next
 # --> (1) stat mean, (2) gauss fit, (3) langauss fit
@@ -102,7 +102,7 @@ for reg in regions:
             hist.Draw("hist")
 
             if(ifit == 3): # LanGauss fit
-                myLanGausFunction = fit.fit(hist, fitrange=(myMean-1*myRMS,myMean+3*myRMS))
+                myLanGausFunction = fit.fit(hist, fitrange=(myMean-0.7*myRMS,myMean+0.5*myRMS))
                 myMPV = myLanGausFunction.GetParameter(1)
                 if ("charge" in var) and (myMPV < 0):
                     # TODO: Fix this! Not quite working with higher voltage sensors :(
@@ -113,12 +113,16 @@ for reg in regions:
             elif(ifit == 2): # Gaussian fit
                 gaussian = TF1("gaussian", "gaus")
                 gaussian.SetRange(myMean-1.5*myRMS,myMean+1.5*myRMS)
+                # Bad fit for one sensor, needs manual input to fit range
+                if(("HPK_20um_500x500um_2x2pad_E600_FNAL_110V" in dataset) and (var=="weighted2_timeDiff_tracker")):
+                    gaussian.SetRange(myMean-1*myRMS,myMean+0.05*myRMS)
                 hist.Fit(gaussian, "QR")
                 myMean = gaussian.GetParameter(1)
                 mySigma = gaussian.GetParameter(2)
                 # If quantity is weighted2_timediff_tracker, then value is the sigma of fit, not the mean
+                # Also, subtract the photek contribution
                 if("timeDiff_tracker" in var):
-                    value = 1000*mySigma
+                    value = math.sqrt(1000*mySigma*1000*mySigma-100)
                 else:
                     value = myMean
                 gaussian.Draw("same")

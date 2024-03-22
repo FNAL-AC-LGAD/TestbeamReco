@@ -87,12 +87,11 @@ for i in range(1, nbins+1):
     nEntries = tmpHist.GetEntries()
 
     if (nEntries > 20.0):
-        myGausFunction = TF1("mygaus","gaus(0)",0, pitch);
-        tmpHist.Fit(myGausFunction,"Q","",0, pitch);
+        myGausFunction = TF1("mygaus","gaus(0)",0, pitch)
+        tmpHist.Fit(myGausFunction,"Q","",0, pitch)
         mean = myGausFunction.GetParameter(1)
         meanErr = myGausFunction.GetParError(1)
         sigma = myGausFunction.GetParameter(2)
-
     else:
         mean = 0.0
         meanErr = 0.0

@@ -40,8 +40,9 @@ class HistoInfo:
             th2.RebinX(5)
         elif sensor=="BNL2021":
             th2.RebinX(10)
-        # if "1cm_500up_300uw" in sensor:
-        #     th2.RebinX(2)
+        # Rebin for SB1, SB3:
+        if "BNL_50um_1cm_450um" in sensor:
+            th2.RebinX(2)
 
         return th2
 
