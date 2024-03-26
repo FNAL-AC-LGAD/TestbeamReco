@@ -89,18 +89,26 @@ def draw_cut_flow(evt_name, evt_graph, list_cuts):
     top_left_text.DrawLatexNDC(lpos, bpos, "#bf{%s}"%evt_name)
 
     for perc in l_txt_percentage:
-        perc.Draw()
+    	perc.Draw()
 
     # Loop over the bin labels
     label_exists = False
     for bin in range(1, nbins + 1):
         bin_label = hist.GetXaxis().GetBinLabel(bin)
-        if bin_label == evt_name:
+        denominator_bin_name = ""
+        if "tight" in evt_name:	
+            denominator_bin_name = "Pass_tight"
+        else:
+            denominator_bin_name = "Pass"
+	    
+        if bin_label == denominator_bin_name:
             label_exists = True
             break
+
+
     # Draw one and two strip reco efficiency in this region
     if (label_exists):
-        draw_reco_method_percentage(hist, evt_name)
+        draw_reco_method_percentage(hist, denominator_bin_name)
 
     # myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset)
@@ -142,6 +150,8 @@ list_cuts_twoStrip = ["Pass", "Signal over highThreshold", "Good neighbour",
                       "TwoStripReco & OnMetal"]
 list_cuts_Overall = ["Pass", "No edge strip", "Overall",
                    "OneStripReco", "TwoStripReco"]
+list_cuts_Overall_tight = ["Pass_tight", "No edge strip", "Overall",
+                   "OneStripReco", "TwoStripReco"]
 list_cuts_Metal = ["Pass", "No edge strip", "Over noise", "Metal",
                    "OneStripReco", "TwoStripReco"]
 list_cuts_Gap = ["Pass", "No edge strip", "Over noise", "Gap",
@@ -153,6 +163,7 @@ list_cuts_MidGap = ["Pass", "No edge strip", "Over noise", "MidGap",
 event_oneStripReco = inputfile.Get("event_oneStripReco")
 event_twoStripReco = inputfile.Get("event_twoStripReco")
 event_Overall = inputfile.Get("event_Overall")
+event_Overall_tight = inputfile.Get("event_Overall_tight")
 event_Metal = inputfile.Get("event_Metal")
 event_Gap = inputfile.Get("event_Gap")
 event_MidGap = inputfile.Get("event_MidGap")
@@ -161,6 +172,7 @@ event_MidGap = inputfile.Get("event_MidGap")
 h_oneStrip = draw_cut_flow("oneStrip", event_oneStripReco, list_cuts_oneStrip)
 h_twoStrip = draw_cut_flow("twoStrip", event_twoStripReco, list_cuts_twoStrip)
 h_Overall = draw_cut_flow("Overall", event_Overall, list_cuts_Overall)
+h_Overall_tight = draw_cut_flow("Overall_tight", event_Overall_tight, list_cuts_Overall_tight)
 h_Metal = draw_cut_flow("Metal", event_Metal, list_cuts_Metal)
 h_Gap = draw_cut_flow("Gap", event_Gap, list_cuts_Gap)
 h_MidGap = draw_cut_flow("MidGap", event_MidGap, list_cuts_MidGap)
@@ -171,6 +183,7 @@ outputfile = TFile("%sPlot_cutflow.root"%(outdir),"RECREATE")
 h_oneStrip.Write()
 h_twoStrip.Write()
 h_Overall.Write()
+h_Overall_tight.Write()
 h_Metal.Write()
 h_Gap.Write()
 h_MidGap.Write()
