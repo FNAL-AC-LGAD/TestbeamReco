@@ -83,7 +83,7 @@ cd ../../test
 # ./MyAnalysis -A Analyze -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V
 # cd ../macros
 
-# python DoPositionRecoFit.py         -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V -A --xmax 0.70 --fitOrder 4
+# python DoPositionRecoFit.py         -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V -A --xmax 0.69 --fitOrder 4
 # python Plot_AmplitudeVsX.py         -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V --xlength 2.7 --ylength 140.0
 # python Plot_AmplitudeVsXY.py        -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V --zmin 20.0 --zmax 140.0
 # # python Plot_TimeDiffVsXY.py         -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V --zmin 25.0 --zmax 75.0
@@ -412,12 +412,12 @@ cd ../macros
 # DoPositionRecoFit
 python DoPositionRecoFit.py     -D HPK_W9_15_4_20T_0P5_500P_50M_E600_110V   --xmax 0.93 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W9_15_2_20T_1P0_500P_50M_E600_114V   --xmax 0.85 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   --xmax 0.69 --fitOrder 4
+python DoPositionRecoFit.py     -D HPK_W4_17_2_50T_1P0_500P_50M_C240_204V   --xmax 0.69 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W8_17_2_50T_1P0_500P_50M_C600_200V   --xmax 0.71 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W2_3_2_50T_1P0_500P_50M_E240_180V    --xmax 0.84 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W5_17_2_50T_1P0_500P_50M_E600_190V   --xmax 0.85 --fitOrder 5
 python DoPositionRecoFit.py     -D HPK_W9_14_2_20T_1P0_500P_100M_E600_112V  --xmax 0.85 --fitOrder 5
-python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  --xmax 0.71 --fitOrder 4
+python DoPositionRecoFit.py     -D HPK_W8_18_2_50T_1P0_500P_100M_C600_208V  --xmax 0.71 --fitOrder 5
 
 
 # HPK narrow pitch sensors

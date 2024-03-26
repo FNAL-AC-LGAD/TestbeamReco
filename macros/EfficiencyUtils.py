@@ -491,18 +491,18 @@ def Make1DEfficiency( num, den, plotname, topTitle, xAxisTitle, xAxisRangeLow, x
         errLow = 0
         errHigh = 0
 
-        n1 = int(num.GetBinContent(b+1));
-        n2 = int(den.GetBinContent(b+1));
+        n1 = int(num.GetBinContent(b+1))
+        n2 = int(den.GetBinContent(b+1))
         #print ("numerator: " + str(n1) + " and denominator: " + str(n2))
         if (n1 > n2):
-            n1 = n2;
+            n1 = n2
 
         if (n2>0) :
           ratio = float(n1)/float(n2);
           if (ratio > 1) :
-              ratio = 1;
-          errLow = ratio - TEfficiency.ClopperPearson(n2, n1, 0.68269, False);
-          errHigh = TEfficiency.ClopperPearson(n2, n1, 0.68269, True) - ratio;
+              ratio = 1
+          errLow = ratio - TEfficiency.ClopperPearson(n2, n1, 0.68269, False)
+          errHigh = TEfficiency.ClopperPearson(n2, n1, 0.68269, True) - ratio
     
 
         #print (" done bin " + str(b) + " " + str(xtemp) + " : " + str(n1) + "(" + str(num.GetBinContent(b+1)) + ")" + " / " + str(n2) + "(" + str(den.GetBinContent(b+1)) + ")" + " = " + str(ratio) + " " + str(errLow) + " " + str(errHigh))
