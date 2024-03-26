@@ -59,7 +59,7 @@ sensor_name = sensor_Geometry["sensor"]
 
 res_photek = 10 # ps
 
-regions = ["Overall"]
+regions = ["Overall_tight"]
 if all_regions:
     regions+= ["Metal", "Gap", "MidGap"]
 
@@ -81,7 +81,7 @@ inputfile_eff = ROOT.TFile("%sPlot_cutflow.root"%(outdir_efficiency), "READ")
 
 for reg in regions:
     # One strip resolution per channel (only once)
-    if reg == "Overall":
+    if reg in "Overall":
         indices = mf.get_existing_indices(inputfile_res1d, "deltaX_oneStrip")
         edge_indices = mf.get_edge_indices(indices)
 
@@ -119,7 +119,7 @@ for reg in regions:
     res_region = "_%s"%reg
     if reg == "MidGap":
         res_region = "_Gap"
-    elif reg == "Overall":
+    elif "Overall" in reg:
         res_region = ""
     
     # Resolution
@@ -128,8 +128,8 @@ for reg in regions:
     # Moreover, the RMS of the tight cut in the overall distribution matches in a much better way with each individual value per channel!
     name_onestrip = "deltaX_oneStrip%s_tight"%(res_region)
     name_twostrip = "deltaX_twoStrip%s_tight"%(res_region)
-    name_time = "weighted2_timeDiff_tracker_tight" if reg == "Overall" else "weighted2_timeDiff_tracker_%s"%reg
-    inputfile_time = inputfile_res1d_tight if reg == "Overall" else inputfile_res1d
+    name_time = "weighted2_timeDiff_tracker_tight" if "Overall" in reg else "weighted2_timeDiff_tracker_%s"%reg
+    inputfile_time = inputfile_res1d_tight if "Overall" in reg else inputfile_res1d
 
     info["one_res"] = 1000 * inputfile_res1d_tight.Get(name_onestrip).GetStdDev()
     info["two_res"] = 1000 * inputfile_res1d_tight.Get(name_twostrip).GetFunction("fit").GetParameter(2)
@@ -139,13 +139,15 @@ for reg in regions:
     name_eff = "cut_flow_%s"%(reg)
     hist_eff = inputfile_eff.Get(name_eff)
     bin_pass = hist_eff.GetXaxis().FindBin(reg)
+    if reg == "Overall_tight":
+        bin_pass = hist_eff.GetXaxis().FindBin("Pass_tight")
     bin_one = hist_eff.GetXaxis().FindBin("OneStripReco")
     bin_two = hist_eff.GetXaxis().FindBin("TwoStripReco")
 
     value_pass = hist_eff.GetBinContent(bin_pass)
     value_one = hist_eff.GetBinContent(bin_one)
     value_two = hist_eff.GetBinContent(bin_two)
-
+    
     info["one_eff"] = 100 * value_one / value_pass
     info["two_eff"] = 100 * value_two / value_pass
     
