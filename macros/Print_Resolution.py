@@ -81,7 +81,7 @@ inputfile_eff = ROOT.TFile("%sPlot_cutflow.root"%(outdir_efficiency), "READ")
 
 for reg in regions:
     # One strip resolution per channel (only once)
-    if reg in "Overall":
+    if "Overall" in reg:
         indices = mf.get_existing_indices(inputfile_res1d, "deltaX_oneStrip")
         edge_indices = mf.get_edge_indices(indices)
 
@@ -147,10 +147,10 @@ for reg in regions:
     value_pass = hist_eff.GetBinContent(bin_pass)
     value_one = hist_eff.GetBinContent(bin_one)
     value_two = hist_eff.GetBinContent(bin_two)
-    
+
     info["one_eff"] = 100 * value_one / value_pass
     info["two_eff"] = 100 * value_two / value_pass
-    
+
     # Output line for mySensorInfo.py
     info_str = "    - List format: ["
     for key in ["one_res", "two_res", "time_res", "one_eff", "two_eff"]:
