@@ -84,15 +84,6 @@ pitch = sensor_Geometry['pitch']
 strip_width = sensor_Geometry['stripWidth']
 strip_length = sensor_Geometry['length']
 
-# Define position of strip/pad centers to find nearest one-strip/pad position resolution
-dict_one_strip_info = myStyle.GetResolutions(dataset, per_channel=True)
-dict_resolution = dict_one_strip_info["resolution_onestrip"]
-is_pad = len(dict_one_strip_info["resolution_onestrip"]) > 1
-if(is_pad):
-    stripcenterpos = [0.5, 0, -0.5]
-else:
-    stripcenterpos = [1.5, 1, 0.5, 0, -0.5, -1, -1.5]
-
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
 rm_tracker = False
@@ -111,22 +102,23 @@ else:
 # Get position of the central channel in the "x" direction
 position_center = mf.get_central_channel_position(inputfile, "x")
 
-outdir = myStyle.GetPlotsDir(outdir, "WeightedResolution_Pos/")
+outdir = myStyle.GetPlotsDir(outdir, "WeightedResolution_PosMethod2/")
 
 # Save list with histograms to draw
 list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
-    ["deltaX_vs_Xtrack_oneStrip", "track_oneStrip", "Position resolution [#mum]"],
-    ["deltaX_vs_Xtrack_twoStrip", "track_twoStrip", "Position resolution [#mum]"],
+    ["deltaX_vs_Xtrack_oneStrip", "track_oneStrip_resolution", "Position resolution [#mum]"],
+    ["deltaX_vs_Xtrack_twoStrip", "track_twoStrip_resolution", "Position resolution [#mum]"],
 ]
 inName = outdirtemp+"Efficiency/EfficiencyVsX"+tight_postfix+".root"
 inFile = TFile(inName,"READ")
 hTwoEff = inFile.Get("hefficiency_vs_x_twoStrip_numerator_coarseBins"+tight_postfix)
 hOneEff = inFile.Get("hefficiency_vs_x_oneStrip_numerator_coarseBins"+tight_postfix)
-# Use of tight cut histograms not needed because will be weighted with the tight histograms which have value = 0 outside tight region
-# if (is_tight):
-#     print(" >> Using tight cuts!")
-#     list_htitles = [["deltaX_vs_Xtrack_oneStrip_tight", "track_oneStrip_tight", "Position resolution [#mum]"],["deltaX_vs_Xtrack_twoStrip_tight", "track_twoStrip_tight", "Position resolution [#mum]"]]
+
+if (is_tight):
+    print(" >> Using tight cuts!")
+    list_htitles = [["deltaX_vs_Xtrack_oneStrip_tight", "track_oneStrip_resolution", "Position resolution [#mum]"],["deltaX_vs_Xtrack_twoStrip_tight", "track_twoStrip_resolution", "Position resolution [#mum]"]
+]
 
 # List with histograms using HistoInfo class
 all_histoInfos = []
@@ -139,59 +131,6 @@ for titles in list_htitles:
 plot_xlimit = abs(inputfile.Get("stripBoxInfo00").GetMean(1) - position_center)
 if ("pad" not in dataset) and ("500x500" not in dataset):
     plot_xlimit-= pitch/(2. * 1000)
-
-# Get histograms for Expected Resolution of Two strip Reconstruction
-# ------------------------------------------------------------------
-
-# mean_noise12_vs_x = get_profX(inputfile, "BaselineRMS12_vs_x", is_tight)
-# mean_amp12_vs_x = get_profX(inputfile, "Amp12_vs_x", is_tight)
-# mean_amp1_vs_x = get_profX(inputfile, "Amp1_vs_x", is_tight)
-# mean_amp2_vs_x = get_profX(inputfile, "Amp2_vs_x", is_tight)
-# mean_dXFrac_vs_x = get_profX(inputfile, "dXdFrac_vs_Xtrack", is_tight)
-
-# nbins = mean_amp12_vs_x.GetNbinsX()
-# xmin, xmax = mf.get_shifted_limits(mean_amp12_vs_x, position_center)
-
-# hist_expected = ROOT.TH1F("h_expected", "", nbins, xmin, xmax)
-# hist_expected.SetLineWidth(3)
-# hist_expected.SetLineStyle(7)
-# hist_expected.SetLineColor(colors[2])
-
-# # Run across X-bins. ROOT convention: bin 0 - underflow, nbins+1 - overflow bin
-# for ibin in range(1, hist_expected.GetNbinsX()+1):
-#     if mean_amp12_vs_x.GetBinContent(ibin) > 0:
-#         dXFrac = mean_dXFrac_vs_x.GetBinContent(ibin)
-#         noise12 = mean_noise12_vs_x.GetBinContent(ibin)
-#         amp1 = mean_amp1_vs_x.GetBinContent(ibin)
-#         amp2 = mean_amp2_vs_x.GetBinContent(ibin)
-#         amp12 = mean_amp12_vs_x.GetBinContent(ibin)
-
-#         value_expected = abs(1000*dXFrac * (0.5*noise12) * pow(pow(amp1,2)+pow(amp2,2),0.5) / (amp12)**2)
-#         if ("pad" in dataset) or ("500x500" in dataset):
-#             value_expected = TMath.Sqrt(2)*value_expected
-
-#     else:
-#         value_expected = -10.0
-
-#     # Adding tracker contribution
-#     if (not rm_tracker) and (value_expected > 0.0):
-#         value_expected = math.sqrt(trkr_value**2 + value_expected**2)
-
-#     # Fill only when inside limits
-#     if not mf.is_inside_limits(ibin, hist_expected, xmax=plot_xlimit):
-#         continue
-
-#     hist_expected.SetBinContent(ibin, value_expected)
-
-
-# Get TLine with binary readout
-# -----------------------------
-
-line_binary_readout = ROOT.TLine(-xlength,pitch/TMath.Sqrt(12), xlength,pitch/TMath.Sqrt(12))
-line_binary_readout.SetLineWidth(3)
-line_binary_readout.SetLineStyle(7)
-line_binary_readout.SetLineColor(colors[4])
-
 
 # Get histogram for One+Two strip Reconstruction's resolution
 # -------------------------------------------------------
@@ -212,6 +151,8 @@ for i in range(1, nbins+1):
     for info_entry in all_histoInfos:
         totalEvents = info_entry.th2.GetEntries()
         tmpHist = info_entry.th2.ProjectionY("py",i,i)
+        if("twoStrip" in info_entry.outHistoName):
+            tmpHist.GetXaxis().SetRangeUser(-0.1,0.1)
         myMean = tmpHist.GetMean()
         # myMean = 0.0
         myRMS = tmpHist.GetRMS()
@@ -221,7 +162,6 @@ for i in range(1, nbins+1):
         fithigh = myMean + 1.5*myRMS
         value = 1000*TMath.Sqrt(myRMS*myRMS + myMean*myMean)
         error = myRMSError
-
         # Define minimum of bin's entries to be fitted
         minEvtsCut = totalEvents/nbins
         if ("HPK_W9_15_2" in dataset):
@@ -237,59 +177,52 @@ for i in range(1, nbins+1):
             print(msg_nentries)
 
         #Do fit 
-        if(nEvents > minEvtsCut):
-            # tmpHist.Rebin(2)
-            fit = TF1('fit','gaus',fitlow,fithigh)
-            # if "twoStrip" in info_entry.inHistoName:
-            #     fit.SetParameter(1, 0.0)
-            tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
-            myMPV = fit.GetParameter(1)
-            mySigma = fit.GetParameter(2)
-            mySigmaError = fit.GetParError(2)
-            # Save sigma value of fit only for two-strip position resolution
-            if("twoStrip" in info_entry.outHistoName):
+        if("twoStrip" in info_entry.outHistoName):
+            if(nEvents > minEvtsCut):
+                # tmpHist.Rebin(2)
+                fit = TF1('fit','gaus',fitlow,fithigh)
+                # if "twoStrip" in info_entry.inHistoName:
+                #     fit.SetParameter(1, 0.0)
+                tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
+                myMPV = fit.GetParameter(1)
+                mySigma = fit.GetParameter(2)
+                mySigmaError = fit.GetParError(2)
+                # Save sigma value of fit only for two-strip position resolution
                 value = 1000.0*mySigma
                 error = 1000.0*mySigmaError
-        
-            # For Debugging
-            if (debugMode):
-                gStyle.SetOptStat(1)
-                tmpHist.Draw("hist")
-                fit.Draw("same")
-                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
-                bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
-                msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
-                msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
-                print(msg_binres)
-        else:
+            # else:
+            #     value = 0.0 # previously was set to -10 for plotting reasons
+        # For Debugging
+        if (debugMode and (nEvents > 0)):
+            gStyle.SetOptStat(1111111)
+            tmpHist.Draw("hist")
+            canvas.SetLogy()
+            tmpHist.GetYaxis().SetRangeUser(0.1,100000)
             if("twoStrip" in info_entry.outHistoName):
-                value = 0.0 # previously was set to -10 for plotting reasons, but needs to be set to 0 for weighted pos. res.
-
-        # Fill only when inside limits
+                fit.Draw("same")
+            canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
+            bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
+            msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
+            msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
+            print(msg_binres)
         if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
             continue
 
         info_entry.th1.SetBinContent(i, value)
-        # info_entry.th1.SetBinError(i, error)
 
-weightedhist = all_histoInfos[0].th1.Clone("weighted_pos_res")
-
+weightedhist = all_histoInfos[0].th1.Clone("weighted_pos_resRMS")
+tmpHistOne = all_histoInfos[0].th1
+tmpHistTwo = all_histoInfos[1].th1
 for i in range(1, nbins+1):
     # Apply weights
-    tmpHistOne = all_histoInfos[0].th1
-    tmpHistTwo = all_histoInfos[1].th1
     binPos = tmpHistOne.GetXaxis().GetBinCenter(i)
-    nearest = min(stripcenterpos, key=lambda x:abs(x-binPos))
-    nearest_index = stripcenterpos.index(nearest)
-    onePR = dict_resolution[0][nearest_index]
     oneEff = hOneEff.GetBinContent(hOneEff.GetXaxis().FindBin(tmpHistOne.GetXaxis().GetBinCenter(i)))
     twoEff = hTwoEff.GetBinContent(hTwoEff.GetXaxis().FindBin(tmpHistOne.GetXaxis().GetBinCenter(i)))
-    print("{:.2f} -> oneEff {:.3f} (onePR {:.2f}), twoEff {:.3f} (twoPR {:.2f})".format(tmpHistOne.GetXaxis().GetBinCenter(i), oneEff, onePR, twoEff, tmpHistTwo.GetBinContent(i)))
+    print("{:.2f} -> oneEff {:.3f} (onePR {:.2f}), twoEff {:.3f} (twoPR {:.2f})".format(tmpHistOne.GetXaxis().GetBinCenter(i), oneEff, tmpHistOne.GetBinContent(i), twoEff, tmpHistTwo.GetBinContent(i)))
     if(oneEff+twoEff <= 0): #ensure sum of efficiencies is not 0. Cannot also be negative, but adding it just-in-case
         value = 0
     else:
-        value = TMath.Sqrt((oneEff*onePR*onePR + twoEff*tmpHistTwo.GetBinContent(i)*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff))
-        
+        value = TMath.Sqrt((oneEff*tmpHistOne.GetBinContent(i)*tmpHistOne.GetBinContent(i) + twoEff*tmpHistTwo.GetBinContent(i)*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff))
     # Removing tracker's contribution
     if rm_tracker and (value > trkr_value):
         # error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
@@ -318,18 +251,10 @@ htemp.SetStats(0)
 htemp.GetXaxis().SetTitle("Track x position [mm]")
 htemp.GetYaxis().SetRangeUser(0.0, ylength)
 htemp.GetYaxis().SetTitle("Position resolution [#mum]")
-
 legend_reco = "strip"
-
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
-
 htemp.Draw("AXIS")
-
-hist = weightedhist
-hist.SetLineColor(colors[2])
-hist.SetLineWidth(3)
-
 # Draw gray bars in the background (Position of metallic sections)
 boxes = getStripBox(inputfile, ymax=ylength, shift=position_center, pitch=pitch/1000.)
 for box in boxes:
@@ -337,35 +262,31 @@ for box in boxes:
 gPad.RedrawAxis("g")
 
 # Create legend
-legend = TLegend(pad_center-0.25, 1-pad_margin-0.385, pad_center+0.25, 1-pad_margin-0.095)
+legend = TLegend(pad_center-0.25, 1-pad_margin-0.3, pad_center+0.25, 1-pad_margin-0.055)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-4)
 # legend.SetBorderSize(0)
 # legend.SetFillColor(kWhite)
 # legend.SetFillStyle(0)
 
-# Add binary readout
-line_binary_readout.Draw("SAME")
-legend.AddEntry(line_binary_readout, "Pitch / #sqrt{12}", "l")
+for i,info_entry in enumerate(all_histoInfos):
+    print(info_entry.outHistoName)
+    hist = info_entry.th1
+    hist.SetLineColor(colors[i])
+    hist.SetLineWidth(3)
+    gPad.RedrawAxis("g")
 
-# Draw all other elements with Two Strip Reconstructed histogram only
-if "twoStrip" in info_entry.inHistoName:
-    # Get correct legend for Two Strip Reco
-    this_legend = "Weighted resolution, observed"
-
-    # Add two strips expected resolution
-    # hist_expected.Draw("HIST SAME")
-    # entry_expected = "Two %s expected"%(legend_reco)
-    # legend.AddEntry(hist_expected, entry_expected, "l")
-    # hist_expected.Write()
-# If not twoStrip, set a default title for the legend
-else:
     this_legend = info_entry.outHistoName.replace("track_", "")
 
-# Add this entry histogram
-hist.Draw("HIST SAME")
-legend.AddEntry(hist, this_legend, "l")
-hist.Write()
+    # Add this entry histogram
+    hist.Draw("HIST SAME")
+    legend.AddEntry(hist, this_legend, "l")
+    hist.Write()
+
+weightedhist.Draw("hist same")
+weightedhist.SetLineColor(colors[len(all_histoInfos)])
+weightedhist.SetLineWidth(3)
+legend.AddEntry(weightedhist, "Weighted Resolution", "l")
 
 htemp.Draw("AXIS same")
 legend.Draw()
@@ -385,3 +306,4 @@ canvas.SaveAs("%s.pdf"%save_path)
 canvas.Clear()
 
 outputfile.Close()
+
