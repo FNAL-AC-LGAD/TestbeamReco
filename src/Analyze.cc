@@ -749,6 +749,7 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_efficiencies,"event_oneStripReco",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_twoStripReco",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_Overall",";;Events %",9,0,9);
+    utility::makeHisto(my_efficiencies,"event_Overall_tight",";;Events %",9,0,9); 
     utility::makeHisto(my_efficiencies,"event_Metal",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_Gap",";;Events %",9,0,9);
     utility::makeHisto(my_efficiencies,"event_MidGap",";;Events %",9,0,9);
@@ -1906,6 +1907,14 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodOverNoiseAmpCol && hitOnMidGap,1.0,3); // "OnGap");
         my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodOverNoiseAmpCol && hitOnMidGap && oneStripReco,1.0,4); // "OneStripReco");
         my_efficiencies["event_MidGap"]->FillWeighted(pass && maxAmpNotEdgeStrip && goodOverNoiseAmpCol && hitOnMidGap && twoStripReco,1.0,5); // "TwoStripReco");
+
+        // Hit on overall tight
+        my_efficiencies["event_Overall_tight"]->SetUseWeightedEvents();
+        my_efficiencies["event_Overall_tight"]->FillWeighted(pass_tight,1.0,0); // "Pass");
+        my_efficiencies["event_Overall_tight"]->FillWeighted(pass_tight && maxAmpNotEdgeStrip,1.0,1); // "No edge strip");
+        my_efficiencies["event_Overall_tight"]->FillWeighted(pass_tight && maxAmpNotEdgeStrip && goodOverNoiseAmpCol,1.0,2); // "Noise");
+        my_efficiencies["event_Overall_tight"]->FillWeighted(pass_tight && maxAmpNotEdgeStrip && goodOverNoiseAmpCol && oneStripReco,1.0,3); // "OneStripReco");
+        my_efficiencies["event_Overall_tight"]->FillWeighted(pass_tight && maxAmpNotEdgeStrip && goodOverNoiseAmpCol && twoStripReco,1.0,4); // "TwoStripReco"); 
     } //event loop
 }
 
