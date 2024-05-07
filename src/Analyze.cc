@@ -25,6 +25,17 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
 
     //Define 1D histograms
     const auto& pitch = tr.getVar<double>("pitch");
+    const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
+    double deltaXoffset = 0.0;
+    const auto& stripCenterXPosition = tr.getVar<std::vector<double>>("stripCenterXPosition");
+    // Get position of central channel
+    if(!isPadSensor){
+        deltaXoffset = stripCenterXPosition[3];
+        }
+    else{
+        deltaXoffset = stripCenterXPosition[1]; 
+    }
+    std::cout<<"Test.... deltaXoffset = "<<deltaXoffset<<std::endl;
     const auto& xBinSize = tr.getVar<double>("xBinSize");
     const auto& yBinSize = tr.getVar<double>("yBinSize");
     const auto& xmin = tr.getVar<double>("xmin");
@@ -459,8 +470,8 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"Xtrack_vs_Amp3OverAmp123", "; #X_{track} [mm]; Amp_{Max} / (Amp_{Max} + Amp_{2} + m_{3})", std::round((xmax-xmin)/xBinSize),xmin,xmax, 100,0.0,1.0);
 
 
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip_pitchWide", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", 9,-9*pitch/2, 9*pitch/2, 200,-0.5,0.5);
-    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip_pitchWide_tight", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", 9,-9*pitch/2, 9*pitch/2, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip_pitchWide", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", 9,0.0-9*pitch/2, 0.0+9*pitch/2, 200,-0.5,0.5);
+    utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip_pitchWide_tight", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", 9,0.0-9*pitch/2, 0.0+9*pitch/2, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip_100um_tight", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize)/2,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_twoStrip_100um_tight", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize)/2,xmin,xmax, 200,-0.5,0.5);
     utility::makeHisto(my_2d_histos,"deltaX_vs_Xtrack_oneStrip_tight", "; X_{track} [mm]; #X_{reco} - X_{track} [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, 200,-0.5,0.5);

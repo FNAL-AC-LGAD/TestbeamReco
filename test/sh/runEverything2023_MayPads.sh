@@ -214,6 +214,7 @@ for sensor in "${HPK_2x3pad[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 1.1
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 1.1
+    python Plot_ResolutionCombinedPosMethod1.py   -D ${sensor} -t -x 1.1
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 1.1 -y 80
 
     python Plot_Efficiency.py           -D ${sensor} -n -x 1.1

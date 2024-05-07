@@ -86,10 +86,10 @@ strip_length = sensor_Geometry['length']
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
-rm_tracker = False
-# trkr_value = 5 # um
+rm_tracker = True
+trkr_value = 5 # um
 # Use 0 as a safety-measure to avoid having this factor removed or added in any curve!
-trkr_value = 0.0 # um
+#trkr_value = 0.0 # um
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -288,21 +288,22 @@ for i in range(1, nbins+1):
             error = 1000.0*mySigmaError
         
             # For Debugging
-            if (debugMode):
-                gStyle.SetOptStat(1111111)
-                tmpHist.Draw("hist")
+        if (debugMode):
+            gStyle.SetOptStat(1111111)
+            tmpHist.Draw("hist")
+            if(nEvents > minEvtsCut):
                 fit.Draw("same")
-                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
-                bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
-                msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
-                msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
-                print(msg_binres)
-        else:
-            value = -10.0
-            error = 0
+            canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
+            bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
+            msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
+            msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
+            print(msg_binres)
+        # else:
+            # value = -10.0
+            # error = 0
 
         # Removing tracker's contribution
-        if rm_tracker and (value > trkr_value):
+        if (rm_tracker and value > trkr_value):
             error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
             value = TMath.Sqrt(value**2 - trkr_value**2)
         # Mark bins with resolution smaller than tracker
