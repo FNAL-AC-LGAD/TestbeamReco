@@ -86,10 +86,11 @@ strip_length = sensor_Geometry['length']
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
-rm_tracker = False
-# trkr_value = 5 # um
-# Use 0 as a safety-measure to avoid having this factor removed or added in any curve!
-trkr_value = 0.0 # um
+rm_tracker = True
+trkr_value = 5 # um
+# Don't remove tracker component in KOJI sensors (Close values!)
+if "1P0_80P_60M_E240" in sensor:
+    trkr_value = 0.0 # um
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
