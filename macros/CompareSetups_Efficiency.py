@@ -30,7 +30,7 @@ sensors_list = [
     # KOJI Varying thickness
     ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # HPK pads Varying thickness and resistivity
-    ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
+    ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
     # HPK pads Varying metal widths
     ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
 ]
@@ -116,9 +116,9 @@ for sensors, tagVars, saveName in zip(sensors_list, tagVar_list, saveName_list):
     haxis.SetStats(0)
     haxis.SetTitle("")
     haxis.GetXaxis().SetTitle("Track x position [mm]")
-    haxis.GetYaxis().SetTitle("Two-strip efficiency")
-    if ("500x500" in sensor_reference):
-        haxis.GetYaxis().SetTitle("Two-channel efficiency")
+    haxis.GetYaxis().SetTitle("Efficiency")
+    # if ("500x500" in sensor_reference):
+    #     haxis.GetYaxis().SetTitle("Two-channel efficiency")
     haxis.SetLineWidth(3)
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
