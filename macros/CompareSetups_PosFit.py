@@ -52,7 +52,7 @@ sensors_list = [
     # BNL and HPK sensors - different metal widths
     ["BNL_50um_1cm_450um_W3051_2_2_170V", "BNL_50um_1cm_400um_W3051_1_4_160V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
     # Varying resistivity and capacitance
-    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "BNL_50um_1cm_450um_W3051_2_2_170V", "BNL_50um_1cm_450um_W3052_2_4_185V"],
+    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
 ]
 
 tagVar_list = [
@@ -73,7 +73,7 @@ saveName_list = [
     # BNL and HPK sensors - different metal widths
     "BNL_and_HPK_PosFit_vs_MetalWidth",
     # Varying resistivity and capacitance
-    "HPK_and_BNL_PosFit_vs_ResCap"
+    "HPK_PosFit_vs_ResCap"
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
