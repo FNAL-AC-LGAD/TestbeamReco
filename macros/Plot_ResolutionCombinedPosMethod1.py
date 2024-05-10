@@ -80,7 +80,7 @@ inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 sensor_Geometry = myStyle.GetGeometry(dataset)
 
 sensor = sensor_Geometry['sensor']
-pitch = sensor_Geometry['pitch']/1000 # convert to mm
+pitch = sensor_Geometry['pitch']/1000. # convert to mm
 strip_width = sensor_Geometry['stripWidth']
 strip_length = sensor_Geometry['length']
 deltaXoffset = sensor_Geometry['stripCenterXPosition']
@@ -161,7 +161,8 @@ for info_entry in all_histoInfos:
         totalEvents = info_entry.th2.GetEntries()
         tmpHist = info_entry.th2.ProjectionY("py",i,i)
         if("twoStrip" in info_entry.outHistoName): #NewChange - results in matching std. dev and gauss sigma values
-            tmpHist.GetXaxis().SetRangeUser(-0.3,0.3)
+            narrow_range = 0.6 * pitch
+            tmpHist.GetXaxis().SetRangeUser(-narrow_range, narrow_range)
         if("oneStrip" in info_entry.outHistoName):
             tmpHist.GetXaxis().SetRangeUser(-pitch,pitch)
         myMean = tmpHist.GetMean()

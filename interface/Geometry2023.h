@@ -788,12 +788,10 @@ public:
     std::vector<double> positionRecoParCol = {0.250000, -1.063382, 12.004629, -103.303789, 376.826502, -487.471421};
     std::vector<std::vector<double>> xSlices = {{0.70, 0.90}, {1.20, 1.40}, {1.65, 1.85}}; // Raw data coordinates
     std::vector<std::vector<double>> ySlices = {{-0.65, -0.45}, {-1.15, -0.95}}; // Raw data coordinates
-    // std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
-    // std::vector<std::vector<double>> sensorEdgesExtra = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
-    // std::vector<std::vector<double>> sensorEdgesTight = {{-0.70,-0.50}, {0.70, 0.50}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
     std::vector<std::vector<double>> sensorEdgesExtra = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[4], stripCenterYPosition[4]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdgesTight = {{-0.70,-0.50}, {0.70, 0.50}}; // Sensor's local frame
 };
 
 class HPK_W8_1_1_50T_500x500_150M_C600_PixelsGeometry : public DefaultGeometry
