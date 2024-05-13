@@ -88,9 +88,6 @@ strip_length = sensor_Geometry['length']
 # rm_tracker True shows expected and measured curves without tracker component
 rm_tracker = True
 trkr_value = 5 # um
-# Don't remove tracker component in KOJI sensors (Close values!)
-if "1P0_80P_60M_E240" in sensor:
-    trkr_value = 0.0 # um
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -310,8 +307,9 @@ for i in range(1, nbins+1):
 
         # Removing tracker's contribution
         if rm_tracker and (value > trkr_value):
-            error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
-            value = TMath.Sqrt(value**2 - trkr_value**2)
+            new_value = TMath.Sqrt(value**2 - trkr_value**2)
+            new_error = value / new_value * error
+            value, error = new_value, new_error
         # Mark bins with resolution smaller than tracker
         elif (trkr_value > value) and (value > 0.0):
             print("  WARNING: Bin %i got resolution smaller than tracker (%.3f)"%(i, value))
