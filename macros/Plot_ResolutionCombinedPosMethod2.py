@@ -225,8 +225,10 @@ for i in range(1, nbins+1):
         value = TMath.Sqrt((oneEff*tmpHistOne.GetBinContent(i)*tmpHistOne.GetBinContent(i) + twoEff*tmpHistTwo.GetBinContent(i)*tmpHistTwo.GetBinContent(i))/(oneEff+twoEff))
     # Removing tracker's contribution
     if rm_tracker and (value > trkr_value):
-        # error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
-        value = TMath.Sqrt(value**2 - trkr_value**2)
+        new_value = TMath.Sqrt(value**2 - trkr_value**2)
+        # new_error = value / new_value * error
+        value = new_value
+        # error = new_error
     # Mark bins with resolution smaller than tracker
     elif (trkr_value > value) and (value > 0.0):
         print("  WARNING: Bin %i got resolution smaller than tracker (%.3f)"%(i, value))

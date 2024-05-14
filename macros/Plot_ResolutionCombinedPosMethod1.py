@@ -178,7 +178,7 @@ for info_entry in all_histoInfos:
             print(myMeanError,", ",myRMSError,", ", error)
         else:
             value = 0 # if both mean and std. dev. are 0 then the value will immediately be 0, but adding this as a safety measure.
-            error=0
+            error = 0
 
         # Define minimum of bin's entries to be fitted
         minEvtsCut = totalEvents/nbins
@@ -211,7 +211,7 @@ for info_entry in all_histoInfos:
                     error = 1000*TMath.Sqrt((myMPV*myMPV*myMPVError*myMPVError + mySigma*mySigma*mySigmaError*mySigmaError)/(mySigma*mySigma + myMPV*myMPV))
                 else:
                     value = 0 # if both mean and sigma are 0 then the value will immediately be 0, but adding this as a safety measure.
-                    error=0
+                    error = 0
         
         # For Debugging
         if (debugMode):
@@ -260,10 +260,12 @@ for i in range(1, nbins+1):
         
     # Removing tracker's contribution
     if rm_tracker and (value > trkr_value):
-        value = TMath.Sqrt(value**2 - trkr_value**2)
+        new_value = TMath.Sqrt(value**2 - trkr_value**2)
+        new_error = value / new_value * error
+        value, error = new_value, new_error
     # Mark bins with resolution smaller than tracker
     elif (trkr_value > value) and (value > 0.0):
-        print("  WARNING: Bin %i got resolution smaller than tracker (%.3f)"%(i, value))
+        print("  WARNING: Bin %i got method 1 resolution smaller than tracker (%.3f)"%(i, value))
         value = 2.0
         # error = 2.0
     Combinedhist.SetBinContent(i, value)
