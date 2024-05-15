@@ -264,7 +264,7 @@ for i in range(1, nbins+1):
         fitlow = myMean - 1.5*myRMS
         fithigh = myMean + 1.5*myRMS
         value = 1000*myRMS
-        error = myRMSError
+        error = 1000*myRMSError
 
         # Define minimum of bin's entries to be fitted
         minEvtsCut = totalEvents/nbins
