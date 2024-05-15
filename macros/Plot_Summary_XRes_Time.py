@@ -50,26 +50,25 @@ position_center = mf.get_central_channel_position(inputfile, "x")
 # ---------------------------------
 
 # Define input file
-indir_position = myStyle.GetPlotsDir(outdir, "Resolution_Pos/")
-input_path_position = "%sPositionResVsX_tight.root"%(indir_position)
+indir_position = myStyle.GetPlotsDir(outdir, "CombinedResolution_PosMethod1/")
+input_path_position = "%sCombinedPositionResVsX_tight.root"%(indir_position)
 
 if not os.path.exists(input_path_position):
     print(" >> Summary plot uses Resolution X with tight cuts. File was not found!")
     exit()
 
 inputfile_position = TFile(input_path_position, "READ")
-hResolution_position = inputfile_position.Get("track_twoStrip_tight")
+hResolution_position = inputfile_position.Get("CombinedPosRes")
 hResolution_position.SetLineWidth(3)
 hResolution_position.SetLineColor(colors[2])
-
 
 # Get Expected position resolution histogram
 # ---------------------------------
 
-hResolution_expected = inputfile_position.Get("h_expected")
-hResolution_expected.SetLineWidth(3)
-hResolution_expected.SetLineStyle(7)
-hResolution_expected.SetLineColor(colors[2])
+# hResolution_expected = inputfile_position.Get("h_expected")
+# hResolution_expected.SetLineWidth(3)
+# hResolution_expected.SetLineStyle(7)
+# hResolution_expected.SetLineColor(colors[2])
 
 # Get Time resolution histogram
 # ---------------------------------
@@ -149,7 +148,7 @@ gPad.RedrawAxis("g")
 # Define legend
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
-legend = TLegend(0.50-0.23, 1-pad_margin-0.25, 0.50+0.23, 1-pad_margin-0.05)
+legend = TLegend(0.50-0.3, 1-pad_margin-0.25, 0.50+0.3, 1-pad_margin-0.05)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-4)
 legend.SetBorderSize(1)
@@ -159,23 +158,25 @@ legend.SetLineColor(kBlack)
 # legend.SetFillStyle(0)
 
 # Clear central region in position res for HPK_W11_22_3_20T_500x500_150M_C600 sensor
-if "HPK_W11_22_3_20T_500x500_150M_C600" in dataset:
-    for i in range(1, hResolution_position.GetXaxis().GetNbins()+1):
-        if mf.is_inside_limits(i, hResolution_position, xmax=0.1):
-            hResolution_position.SetBinContent(i, 0.0)
+# if "HPK_W11_22_3_20T_500x500_150M_C600" in dataset:
+#     for i in range(1, hResolution_position.GetXaxis().GetNbins()+1):
+#         if mf.is_inside_limits(i, hResolution_position, xmax=0.1):
+#             hResolution_position.SetBinContent(i, 0.0)
 
-list_histograms = [hResolution_position, hResolution_expected, hResolution_time]
-pruned_position, pruned_expected, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit)
-
+list_histograms = [hResolution_position, hResolution_time]
+pruned_position, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit)
 pruned_position.Draw("hist e same")
-legend.AddEntry(pruned_position, "Position resolution", "l")
-
-pruned_expected.Draw("hist same")
-legend.AddEntry(pruned_expected, "Expected resolution", "l")
-
+legend.AddEntry(pruned_position, "Combined position resolution", "l")
 pruned_time.Draw("hist e same")
 legend.AddEntry(pruned_time,"Time resolution", "l")
-    
+
+# list_histograms = [hResolution_position, hResolution_expected, hResolution_time]
+# pruned_position, pruned_expected, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit)
+# pruned_position.Draw("hist e same")
+# legend.AddEntry(pruned_position, "Position resolution", "l")
+# pruned_expected.Draw("hist same")
+# legend.AddEntry(pruned_expected, "Expected resolution", "l")
+
 htemp.Draw("AXIS same")
 left_axis.Draw()
 right_axis.Draw()
@@ -190,4 +191,3 @@ save_path = "%sResolutionSummary_vs_x"%(outdir_summary)
 
 # canvas.SaveAs("%s.gif"%save_path)
 canvas.SaveAs("%s.pdf"%save_path)
-

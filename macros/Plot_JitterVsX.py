@@ -201,7 +201,7 @@ htemp = TH1F("htemp", "", 1, -xlength, xlength)
 htemp.SetStats(0)
 htemp.GetXaxis().SetTitle("Track x position [mm]")
 htemp.GetYaxis().SetRangeUser(0.0, ylength)
-htemp.GetYaxis().SetTitle("Jitter [ps]")
+htemp.GetYaxis().SetTitle("Weighted jitter [ps]")
 htemp.SetLineColor(colors[2])
 
 # Draw overall amplitude vs X

@@ -405,6 +405,7 @@ for sensor in "${HPK_500P[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 1.9
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 1.9
+    python Plot_ResolutionCombinedPosMethod1.py   -D ${sensor} -t -x 1.9
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 1.9 -y 100
 done
 
@@ -460,6 +461,7 @@ for sensor in "${HPK_80P[@]}"; do
     python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.6
     python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.6 -y 50
+    python Plot_ResolutionCombinedPosMethod1.py   -D ${sensor} -t -x 0.6 -y 50
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.6 -y 100
 done
 
@@ -473,5 +475,5 @@ done
 for sensor in "${HPK_80P[@]}"; do
     cd ../macros
     python Print_Resolution.py          -D ${sensor}
-    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 0.3 -y 80
+    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 0.3 -y 60
 done

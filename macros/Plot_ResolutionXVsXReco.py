@@ -86,10 +86,10 @@ strip_length = sensor_Geometry['length']
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
-rm_tracker = False
-# trkr_value = 5 # um
+rm_tracker = True
+trkr_value = 5 # um
 # Use 0 as a safety-measure to avoid having this factor removed or added in any curve!
-trkr_value = 0.0 # um
+#trkr_value = 0.0 # um
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -101,25 +101,18 @@ is_hotspot = options.hotspot
 # Get position of the central channel in the "x" direction
 position_center = mf.get_central_channel_position(inputfile, "x")
 
-outdir = myStyle.GetPlotsDir(outdir, "Resolution_Pos/")
+outdir = myStyle.GetPlotsDir(outdir, "Resolution_Pos_VsXReco/")
 
 # Save list with histograms to draw
 list_htitles = [
     # [hist_input_name, short_output_name, y_axis_title]
-    ["deltaX_vs_Xtrack_twoStrip", "track_twoStrip", "Position resolution [#mum]"],
-    ["deltaX_vs_Xtrack_noNeighb", "track_twoStrip_noNeighb", "Position resolution [#mum]"],
-    ["deltaX_vs_Xtrack_highFrac", "track_twoStrip_highFrac", "Position resolution [#mum]"],
-    ["deltaX_vs_Xtrack_oneStrip", "track_oneStrip", "Position resolution [#mum]"],
+    ["deltaX_vs_Xreco", "track_bothStrip", "Position resolution [#mum]"],
 ]
 
 # Use tight cut histograms
 if (is_tight):
     print(" >> Using tight cuts!")
-    list_htitles = [["deltaX_vs_Xtrack_twoStrip_tight", "track_twoStrip_tight", "Position resolution [#mum]"]]
-
-# Use hotspot extension if required
-if (is_hotspot):
-    list_htitles = [["deltaX_vs_Xtrack_twoStrip_hotspot", "track_twoStrip_hotspot", "Position resolution [#mum]"]]
+    list_htitles = [["deltaX_vs_Xreco_tight", "track_bothStrip_tight", "Position resolution [#mum]"]]
 
 # List with histograms using HistoInfo class
 all_histoInfos = []
@@ -295,20 +288,22 @@ for i in range(1, nbins+1):
             error = 1000.0*mySigmaError
         
             # For Debugging
-            if (debugMode):
-                tmpHist.Draw("hist")
+        if (debugMode):
+            gStyle.SetOptStat(1111111)
+            tmpHist.Draw("hist")
+            if(nEvents > minEvtsCut):
                 fit.Draw("same")
-                canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
-                bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
-                msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
-                msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
-                print(msg_binres)
-        else:
-            value = -10.0
-            error = 0
+            canvas.SaveAs("%sq_%s%i.gif"%(outdir_q, info_entry.outHistoName, i))
+            bin_center = info_entry.th1.GetXaxis().GetBinCenter(i)
+            msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
+            msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
+            print(msg_binres)
+        # else:
+            # value = -10.0
+            # error = 0
 
         # Removing tracker's contribution
-        if rm_tracker and (value > trkr_value):
+        if (rm_tracker and value > trkr_value):
             error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
             value = TMath.Sqrt(value**2 - trkr_value**2)
         # Mark bins with resolution smaller than tracker
@@ -325,7 +320,7 @@ for i in range(1, nbins+1):
         info_entry.th1.SetBinError(i, error)
 
 # Define output file
-output_path = "%sPositionResVsX"%(outdir)
+output_path = "%sPositionResVsXreco"%(outdir)
 if (is_hotspot):
     output_path+= "_hotspot"
 elif (is_tight):
@@ -339,7 +334,7 @@ htemp = TH1F("htemp", "", 1, -xlength, xlength)
 htemp.SetStats(0)
 # htemp.SetMinimum(0.0)
 # htemp.SetMaximum(info.yMax)
-htemp.GetXaxis().SetTitle("Track x position [mm]")
+htemp.GetXaxis().SetTitle("Reco x position [mm]")
 htemp.GetYaxis().SetRangeUser(0.0, ylength)
 htemp.GetYaxis().SetTitle("Position resolution [#mum]")
 
@@ -370,8 +365,8 @@ for i,info_entry in enumerate(all_histoInfos):
     # legend.SetFillStyle(0)
 
     # Add binary readout
-    line_binary_readout.Draw("SAME")
-    legend.AddEntry(line_binary_readout, "Pitch / #sqrt{12}", "l")
+    # line_binary_readout.Draw("SAME")
+    # legend.AddEntry(line_binary_readout, "Pitch / #sqrt{12}", "l")
 
     # Draw all other elements with Two Strip Reconstructed histogram only
     if "twoStrip" in info_entry.inHistoName:
@@ -386,7 +381,7 @@ for i,info_entry in enumerate(all_histoInfos):
             hist_one_strip.Write()
 
         # Add two strips expected resolution - after final comments, decided on excluding this 
-        hist_expected.Draw("HIST SAME")
+        # hist_expected.Draw("HIST SAME")
         entry_expected = "Two %s expected"%(legend_reco)
         legend.AddEntry(hist_expected, entry_expected, "l")
         hist_expected.Write()
@@ -400,12 +395,12 @@ for i,info_entry in enumerate(all_histoInfos):
     hist.Write()
 
     htemp.Draw("AXIS same")
-    legend.Draw()
+    # legend.Draw()
 
     myStyle.BeamInfo()
     myStyle.SensorInfoSmart(dataset, isPaperPlot=True)
 
-    save_path = "%sPositionResolution_vs_x"%(outdir)
+    save_path = "%sPositionResolution_vs_xreco"%(outdir)
     # Choose another name if not Two Strip Reconstructed histogram
     if "twoStrip" not in info_entry.inHistoName:
         save_path = "%sPosRes-%s"%(outdir, this_legend)
