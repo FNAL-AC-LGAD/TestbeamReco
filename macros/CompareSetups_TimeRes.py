@@ -218,7 +218,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
         tmpJitter = list_jitter_vs_x[0].Clone()
         tmpJitter.SetLineColor(kBlack)
         legendBot.AddEntry(tmpTime, "Time resolution")
-        legendBot.AddEntry(tmpJitter, "Jitter")
+        legendBot.AddEntry(tmpJitter, "Weighted jitter")
         legendBox = TPaveText(legX1, legTopY1-0.055, legX2, 1-pad_margin-0.03, "NDC")
         legendBox.SetBorderSize(1)
         legendBox.SetLineColor(kBlack)

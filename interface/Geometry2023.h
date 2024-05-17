@@ -791,6 +791,7 @@ public:
     std::vector<std::vector<double>> sensorEdges = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
     std::vector<std::vector<double>> sensorEdgesExtra = {{-0.70,-0.50}, {0.70, 0.50}}; //square interior of pads
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[4], stripCenterYPosition[4]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
+    // std::vector<std::vector<double>> sensorEdgesTight = {{-0.70,-0.50}, {0.70, 0.50}}; // Sensor's local frame
 };
 
 class HPK_W8_1_1_50T_500x500_150M_C600_PixelsGeometry : public DefaultGeometry

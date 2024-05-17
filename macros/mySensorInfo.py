@@ -4,55 +4,55 @@
 ################################################################################
 ##################################  Geometry  ##################################
 # {<sensor name_long>, <sensor name_short/label>, <pitch [um]>, <width [um]>, <length [mm]>,
-#  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>, tag}
+#  <Bias voltage [V]>, <thickness [um]>, <resistivity [Ohm/sq]>, <capacitance [pF/mm2]>, tag, central-ch-position}
 geometry2023_default = {
     # BNL strips
-    "BNL_50um_1cm_450um_W3051_2_2": ["BNL_50um_1cm_450um_W3051", 500, 50, 10.0, 170, 50, "G", "270", "SB1"],
-    "BNL_50um_1cm_400um_W3051_1_4": ["BNL_50um_1cm_400um_W3051", 500, 100, 10.0, 160, 50, "G", "270", "SB2"],
-    "BNL_50um_1cm_450um_W3052_2_4": ["BNL_50um_1cm_450um_W3052", 500, 50, 10.0, 185, 50, "G", "260", "SB3"],
-    "BNL_20um_1cm_400um_W3074_1_4": ["BNL_20um_1cm_400um_W3074", 500, 100, 10.0, 95, 20, "Null", "Null", "Null"],
-    "BNL_20um_1cm_400um_W3075_1_2": ["BNL_20um_1cm_400um_W3075", 500, 100, 10.0, 80, 20, "Null", "Null", "Null"],
-    "BNL_20um_1cm_450um_W3074_2_1": ["BNL_20um_1cm_450um_W3074", 500, 50, 10.0, 95, 20, "Null", "Null", "Null"],
-    "BNL_20um_1cm_450um_W3075_2_4": ["BNL_20um_1cm_450um_W3075", 500, 50, 10.0, 80, 20, "Null", "Null", "Null"],
-    "BNL_50um_2p5cm_mixConfig1_W3051_1_4": ["BNL_50um_2p5cm_mixConfig1_W3051", 500, 100, 25.0, 170, 50, "Null", "Null", "Null"],
-    "BNL_50um_2p5cm_mixConfig2_W3051_1_4": ["BNL_50um_2p5cm_mixConfig2_W3051", 500, 50, 25.0, 170, 50, "Null", "Null", "Null"],
+    "BNL_50um_1cm_450um_W3051_2_2": ["BNL_50um_1cm_450um_W3051", 500, 50, 10.0, 170, 50, "G", "270", "SB1", 0.0],
+    "BNL_50um_1cm_400um_W3051_1_4": ["BNL_50um_1cm_400um_W3051", 500, 100, 10.0, 160, 50, "G", "270", "SB2", 0.0],
+    "BNL_50um_1cm_450um_W3052_2_4": ["BNL_50um_1cm_450um_W3052", 500, 50, 10.0, 185, 50, "G", "260", "SB3", 0.0],
+    "BNL_20um_1cm_400um_W3074_1_4": ["BNL_20um_1cm_400um_W3074", 500, 100, 10.0, 95, 20, "Null", "Null", "Null", 0.0],
+    "BNL_20um_1cm_400um_W3075_1_2": ["BNL_20um_1cm_400um_W3075", 500, 100, 10.0, 80, 20, "Null", "Null", "Null", 0.0],
+    "BNL_20um_1cm_450um_W3074_2_1": ["BNL_20um_1cm_450um_W3074", 500, 50, 10.0, 95, 20, "Null", "Null", "Null", 0.0],
+    "BNL_20um_1cm_450um_W3075_2_4": ["BNL_20um_1cm_450um_W3075", 500, 50, 10.0, 80, 20, "Null", "Null", "Null", 0.0],
+    "BNL_50um_2p5cm_mixConfig1_W3051_1_4": ["BNL_50um_2p5cm_mixConfig1_W3051", 500, 100, 25.0, 170, 50, "Null", "Null", "Null", 0.0],
+    "BNL_50um_2p5cm_mixConfig2_W3051_1_4": ["BNL_50um_2p5cm_mixConfig2_W3051", 500, 50, 25.0, 170, 50, "Null", "Null", "Null", 0.0],
 
-    "BNL_30um_5mm_500um_W3104": ["BNL_30um_5mm_500um_W3104", 500, 100, 5.0, 90, 30, "Null", "Null", "Null"],
-    "BNL_30um_5mm_700um_W3104": ["BNL_30um_5mm_700um_W3104", 700, 100, 5.0, 115, 30, "Null", "Null", "Null"],
-    "BNL_20um_5mm_700um_W3080": ["BNL_20um_5mm_700um_W3080", 700, 100, 5.0, 80, 20, "Null", "Null", "Null"],
-    "BNL_20um_5mm_500um_W3080": ["BNL_20um_5mm_500um_W3080", 500, 100, 5.0, 80, 20, "Null", "Null", "Null"],
-    "BNL_30um_500x500_SmallSquare_W3104": ["BNL_30um_500x500_SmallSquare_W3104", 500, 500, 5.0, 115, 30, "Null", "Null", "PB1"],
-    "BNL_20um_500x500_SmallSquare_W3080": ["BNL_20um_500x500_SmallSquare_W3080", 500, 500, 5.0, 76, 20, "Null", "Null", "Null"],
-    "BNL_30um_500x500_LargeSquare_W3104": ["BNL_30um_500x500_LargeSquare_W3104", 500, 500, 5.0, 115, 30, "Null", "Null", "PB2"],
-    "BNL_20um_500x500_LargeSquare_W3080": ["BNL_20um_500x500_LargeSquare_W3080", 500, 500, 5.0, 80, 20, "Null", "Null", "Null"],
-    "BNL_30um_500x500_SquaredCircle_W3104": ["BNL_30um_500x500_SquaredCircle_W3104", 500, 500, 5.0, 110, 30, "Null", "Null", "PB3"],
-    "BNL_20um_500x500_SquaredCircle_W3080": ["BNL_20um_500x500_SquaredCircle_W3080", 500, 500, 5.0, 85, 20, "Null", "Null", "Null"],
-    "BNL_30um_500x500_Cross_W3104": ["BNL_30um_Cross", 500, 400, 5.0, 115, 30, "G", 695, "PB4"],
-    "BNL_20um_500x500_Cross_W3080": ["BNL_20um_500x500_Cross_W3080", 500, 500,5.0, 80, 20, "Null", "Null", "Null"],
+    "BNL_30um_5mm_500um_W3104": ["BNL_30um_5mm_500um_W3104", 500, 100, 5.0, 90, 30, "Null", "Null", "Null", 0.0],
+    "BNL_30um_5mm_700um_W3104": ["BNL_30um_5mm_700um_W3104", 700, 100, 5.0, 115, 30, "Null", "Null", "Null", 0.0],
+    "BNL_20um_5mm_700um_W3080": ["BNL_20um_5mm_700um_W3080", 700, 100, 5.0, 80, 20, "Null", "Null", "Null", 0.0],
+    "BNL_20um_5mm_500um_W3080": ["BNL_20um_5mm_500um_W3080", 500, 100, 5.0, 80, 20, "Null", "Null", "Null", 0.0],
+    "BNL_30um_500x500_SmallSquare_W3104": ["BNL_30um_500x500_SmallSquare_W3104", 500, 500, 5.0, 115, 30, "Null", "Null", "PB1", 0.0],
+    "BNL_20um_500x500_SmallSquare_W3080": ["BNL_20um_500x500_SmallSquare_W3080", 500, 500, 5.0, 76, 20, "Null", "Null", "Null", 0.0],
+    "BNL_30um_500x500_LargeSquare_W3104": ["BNL_30um_500x500_LargeSquare_W3104", 500, 500, 5.0, 115, 30, "Null", "Null", "PB2", 0.0],
+    "BNL_20um_500x500_LargeSquare_W3080": ["BNL_20um_500x500_LargeSquare_W3080", 500, 500, 5.0, 80, 20, "Null", "Null", "Null", 0.0],
+    "BNL_30um_500x500_SquaredCircle_W3104": ["BNL_30um_500x500_SquaredCircle_W3104", 500, 500, 5.0, 110, 30, "Null", "Null", "PB3", 0.0],
+    "BNL_20um_500x500_SquaredCircle_W3080": ["BNL_20um_500x500_SquaredCircle_W3080", 500, 500, 5.0, 85, 20, "Null", "Null", "Null", 0.0],
+    "BNL_30um_500x500_Cross_W3104": ["BNL_30um_Cross", 500, 400, 5.0, 115, 30, "G", 695, "PB4", 0.0],
+    "BNL_20um_500x500_Cross_W3080": ["BNL_20um_500x500_Cross_W3080", 500, 500,5.0, 80, 20, "Null", "Null", "Null", 0.0],
 
     # HPK pads (January)
-    "HPK_20um_500x500um_2x2pad_E600_FNAL": ["HPK_20um_2x2pad", 500, 450, 0.5, 105, 20, "E", 600, "PH1"],
-    "HPK_30um_500x500um_2x2pad_E600_FNAL": ["HPK_30um_2x2pad", 500, 450, 0.5, 140, 30, "E", 600, "PH2"],
-    "HPK_50um_500x500um_2x2pad_E600_FNAL": ["HPK_50um_2x2pad", 500, 450, 0.5, 190, 50, "E", 600, "PH3"],
+    "HPK_20um_500x500um_2x2pad_E600_FNAL": ["HPK_20um_2x2pad", 500, 450, 0.5, 105, 20, "E", 600, "PH1", 0.0],
+    "HPK_30um_500x500um_2x2pad_E600_FNAL": ["HPK_30um_2x2pad", 500, 450, 0.5, 140, 30, "E", 600, "PH2", 0.0],
+    "HPK_50um_500x500um_2x2pad_E600_FNAL": ["HPK_50um_2x2pad", 500, 450, 0.5, 190, 50, "E", 600, "PH3", 0.0],
 
     # HPK pads (May)
-    "HPK_W9_22_3_20T_500x500_150M_E600": ["HPK_W9_22_3_20T_500x500_150M_E600", 500, 150, 5.0, 112, 20, "E", 600, "PH5"],
-    "HPK_W9_23_3_20T_500x500_300M_E600": ["HPK_W9_23_3_20T_500x500_300M_E600", 500, 300, 5.0, 112, 20, "E", 600, "PH8"],
-    "HPK_W11_22_3_20T_500x500_150M_C600": ["HPK_W11_22_3_20T_500x500_150M_C600", 500, 150, 5.0, 116, 20, "C", 600, "PH4"],
-    "HPK_W8_1_1_50T_500x500_150M_C600": ["HPK_W8_1_1_50T_500x500_150M_C600", 500, 150, 5.0, 200, 50, "C", 600, "PH6"],
-    "HPK_W5_1_1_50T_500x500_150M_E600": ["HPK_W5_1_1_50T_500x500_150M_E600", 500, 150, 5.0, 185, 50, "E", 600, "PH7"],
+    "HPK_W9_22_3_20T_500x500_150M_E600": ["HPK_W9_22_3_20T_500x500_150M_E600", 500, 150, 5.0, 112, 20, "E", 600, "PH5", 0.003],
+    "HPK_W9_23_3_20T_500x500_300M_E600": ["HPK_W9_23_3_20T_500x500_300M_E600", 500, 300, 5.0, 112, 20, "E", 600, "PH8", 0.0],
+    "HPK_W11_22_3_20T_500x500_150M_C600": ["HPK_W11_22_3_20T_500x500_150M_C600", 500, 150, 5.0, 116, 20, "C", 600, "PH4", -0.005],
+    "HPK_W8_1_1_50T_500x500_150M_C600": ["HPK_W8_1_1_50T_500x500_150M_C600", 500, 150, 5.0, 200, 50, "C", 600, "PH6", 0.007],
+    "HPK_W5_1_1_50T_500x500_150M_E600": ["HPK_W5_1_1_50T_500x500_150M_E600", 500, 150, 5.0, 185, 50, "E", 600, "PH7", -0.004],
 
     # HPK strips
-    "HPK_W8_18_2_50T_1P0_500P_100M_C600": ["HPK_W8_18_2_50T_100M_C600", 500, 100, 10.0, 208, 50, "C", 600, "SH7"],
-    "HPK_W8_17_2_50T_1P0_500P_50M_C600": ["HPK_W8_17_2_50T_50M_C600", 500, 50, 10.0, 206, 50, "C", 600, "SH3"],
-    "HPK_W4_17_2_50T_1P0_500P_50M_C240": ["HPK_W4_17_2_50T_1P0_500P_50M_C240", 500, 50, 10.0, 204, 50, "C", 240, "SH2"],
-    "HPK_W5_17_2_50T_1P0_500P_50M_E600": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 190, 50, "E", 600, "SH5"],
-    "HPK_W2_3_2_50T_1P0_500P_50M_E240": ["HPK_W2_3_2_50T_1P0_500P_50M_E240", 500, 50, 10.0, 180, 50, "E", 240, "SH4"],
-    "HPK_W9_15_2_20T_1P0_500P_50M_E600": ["HPK_W9_15_2_20T_1P0_500P_50M_E600", 500, 50, 10.0, 114, 20, "E", 600, "SH1"],
-    "HPK_W9_14_2_20T_1P0_500P_100M_E600": ["HPK_W9_14_2_20T_1P0_500P_100M_E600", 500, 100, 10.0, 112, 20, "E", 600, "SH6"],
-    "HPK_KOJI_50T_1P0_80P_60M_E240": ["HPK_50T_1P0_80P_60M_E240", 80, 60, 10.0, 190, 50, "E", 240, "SHN2"],
-    "HPK_KOJI_20T_1P0_80P_60M_E240": ["HPK_20T_1P0_80P_60M_E240", 80, 60, 10.0, 112, 20, "E", 240, "SHN1"],
-    "HPK_W9_15_4_20T_0P5_500P_50M_E600": ["HPK_W9_15_4_20T_0P5_500P_50M_E600", 500, 50, 5.0, 110, 20, "E", 600, "Null"],
+    "HPK_W8_18_2_50T_1P0_500P_100M_C600": ["HPK_W8_18_2_50T_100M_C600", 500, 100, 10.0, 208, 50, "C", 600, "SH7", -0.010],
+    "HPK_W8_17_2_50T_1P0_500P_50M_C600": ["HPK_W8_17_2_50T_50M_C600", 500, 50, 10.0, 206, 50, "C", 600, "SH3", 0.023],
+    "HPK_W4_17_2_50T_1P0_500P_50M_C240": ["HPK_W4_17_2_50T_1P0_500P_50M_C240", 500, 50, 10.0, 204, 50, "C", 240, "SH2", 0.013],
+    "HPK_W5_17_2_50T_1P0_500P_50M_E600": ["HPK_W5_17_2_50T_1P0_500P_50M_E600", 500, 50, 10.0, 190, 50, "E", 600, "SH5", 0.017],
+    "HPK_W2_3_2_50T_1P0_500P_50M_E240": ["HPK_W2_3_2_50T_1P0_500P_50M_E240", 500, 50, 10.0, 180, 50, "E", 240, "SH4", 0.008],
+    "HPK_W9_15_2_20T_1P0_500P_50M_E600": ["HPK_W9_15_2_20T_1P0_500P_50M_E600", 500, 50, 10.0, 114, 20, "E", 600, "SH1", -0.042],
+    "HPK_W9_14_2_20T_1P0_500P_100M_E600": ["HPK_W9_14_2_20T_1P0_500P_100M_E600", 500, 100, 10.0, 112, 20, "E", 600, "SH6", 0.006],
+    "HPK_KOJI_50T_1P0_80P_60M_E240": ["HPK_50T_1P0_80P_60M_E240", 80, 60, 10.0, 190, 50, "E", 240, "SHN2", -0.028],
+    "HPK_KOJI_20T_1P0_80P_60M_E240": ["HPK_20T_1P0_80P_60M_E240", 80, 60, 10.0, 112, 20, "E", 240, "SHN1", 0.001],
+    "HPK_W9_15_4_20T_0P5_500P_50M_E600": ["HPK_W9_15_4_20T_0P5_500P_50M_E600", 500, 50, 5.0, 110, 20, "E", 600, "Null", 0.006],
 }
 
 sensorsGeom2023 = {}
@@ -60,6 +60,7 @@ for key, info in geometry2023_default.items():
     info_dict = {}
     info_dict["sensor"] = info[0]
     info_dict["pitch"] = info[1]
+    info_dict["stripCenterXPosition"] = info[9]
     info_dict["stripWidth"], info_dict["width"] = info[2], info[2]
     info_dict["length"] = info[3]
     info_dict["BV"], info_dict["voltage"] = info[4], info[4]
