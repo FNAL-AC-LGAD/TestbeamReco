@@ -27,7 +27,7 @@ geometry2023_default = {
     "BNL_20um_500x500_LargeSquare_W3080": ["BNL_20um_500x500_LargeSquare_W3080", 500, 500, 5.0, 80, 20, "Null", "Null", "Null"],
     "BNL_30um_500x500_SquaredCircle_W3104": ["BNL_30um_500x500_SquaredCircle_W3104", 500, 500, 5.0, 110, 30, "Null", "Null", "PB3"],
     "BNL_20um_500x500_SquaredCircle_W3080": ["BNL_20um_500x500_SquaredCircle_W3080", 500, 500, 5.0, 85, 20, "Null", "Null", "Null"],
-    "BNL_30um_500x500_Cross_W3104": ["BNL_30um_500x500_Cross_W3104", 500, 500, 5.0,115, 30, "Null", "Null", "PB4"],
+    "BNL_30um_500x500_Cross_W3104": ["BNL_30um_Cross", 500, 400, 5.0, 115, 30, "G", 695, "PB4"],
     "BNL_20um_500x500_Cross_W3080": ["BNL_20um_500x500_Cross_W3080", 500, 500,5.0, 80, 20, "Null", "Null", "Null"],
 
     # HPK pads (January)
@@ -101,6 +101,9 @@ resolutions2023_Overall = {
     "HPK_30um_500x500um_2x2pad_E600_FNAL": [0.0, 0.0, 0.0, 0.0, 0.0],
     "HPK_50um_500x500um_2x2pad_E600_FNAL": [0.0, 0.0, 0.0, 0.0, 0.0],
 
+    # BNL Cross (April)
+    "BNL_30um_500x500_Cross_W3104": [77.7, 22.4, 26.0, 46.1, 53.8],
+
     # HPK pads (May)
     "HPK_W11_22_3_20T_500x500_150M_C600": [61.4, 20.6, 22.9, 55.5, 44.5],
     "HPK_W9_22_3_20T_500x500_150M_E600": [72.9, 25.4, 32.8, 62.1, 37.9],
@@ -152,6 +155,9 @@ resolutions2023_Metal = {
     "HPK_30um_500x500um_2x2pad_E600_FNAL": [],
     "HPK_50um_500x500um_2x2pad_E600_FNAL": [],
 
+    # BNL Cross (April)
+    "BNL_30um_500x500_Cross_W3104": [],
+
     # HPK pads (May)
     "HPK_W9_22_3_20T_500x500_150M_E600": [],
     "HPK_W9_23_3_20T_500x500_300M_E600": [],
@@ -190,6 +196,9 @@ resolutions2023_Gap = {
     "HPK_20um_500x500um_2x2pad_E600_FNAL": [],
     "HPK_30um_500x500um_2x2pad_E600_FNAL": [],
     "HPK_50um_500x500um_2x2pad_E600_FNAL": [],
+
+    # BNL Cross (April)
+    "BNL_30um_500x500_Cross_W3104": [],
 
     # HPK pads (May)
     "HPK_W9_22_3_20T_500x500_150M_E600": [],
@@ -243,6 +252,9 @@ characteristics2023_Overall = {
     "HPK_30um_500x500um_2x2pad_E600_FNAL": [],
     "HPK_50um_500x500um_2x2pad_E600_FNAL": [],
 
+    # BNL Cross (April)
+    "BNL_30um_500x500_Cross_W3104": [],
+
     # HPK pads (May)
     "HPK_W9_22_3_20T_500x500_150M_E600": [],
     "HPK_W9_23_3_20T_500x500_300M_E600": [],
@@ -282,6 +294,9 @@ characteristics2023_Metal = {
     "HPK_30um_500x500um_2x2pad_E600_FNAL": [],
     "HPK_50um_500x500um_2x2pad_E600_FNAL": [],
 
+    # BNL Cross (April)
+    "BNL_30um_500x500_Cross_W3104": [],
+
     # HPK pads (May)
     "HPK_W9_22_3_20T_500x500_150M_E600": [],
     "HPK_W9_23_3_20T_500x500_300M_E600": [],
@@ -320,6 +335,9 @@ characteristics2023_Gap = {
     "HPK_20um_500x500um_2x2pad_E600_FNAL": [],
     "HPK_30um_500x500um_2x2pad_E600_FNAL": [],
     "HPK_50um_500x500um_2x2pad_E600_FNAL": [],
+
+    # BNL Cross (April)
+    "BNL_30um_500x500_Cross_W3104": [],
 
     # HPK pads (May)
     "HPK_W9_22_3_20T_500x500_150M_E600": [],
@@ -397,6 +415,9 @@ resolutions2023_onestrip = {
     "HPK_20um_500x500um_2x2pad_E600_FNAL": [[145.7, 128.7], [139.4, 127.6]],
     "HPK_30um_500x500um_2x2pad_E600_FNAL": [],
     "HPK_50um_500x500um_2x2pad_E600_FNAL": [],
+
+    # BNL Cross (April)
+    "BNL_30um_500x500_Cross_W3104": [[77.9, 79.3, 70.6], [77.7, 78.0, 69.9]],
 
     # HPK pads (May)
     "HPK_W9_22_3_20T_500x500_150M_E600": [[81.5, 69.9, 69.7], [81.8, 68.2, 70.3]],

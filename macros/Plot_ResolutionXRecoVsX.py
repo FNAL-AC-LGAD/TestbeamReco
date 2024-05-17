@@ -268,7 +268,7 @@ for i in range(1, nbins+1):
         minEvtsCut = totalEvents/nbins
         if ("HPK_W9_15_2" in dataset):
             minEvtsCut = 0.25*totalEvents/nbins
-        if ("500x500" in dataset):
+        if ("500x500" in dataset) and ("Cross" not in dataset):
             minEvtsCut = 0.1*totalEvents/nbins
         if ("W9_23_3_20T_500x500_300M" in dataset):
             minEvtsCut = 0.50*totalEvents/nbins
