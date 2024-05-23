@@ -203,7 +203,7 @@ for info_entry in all_histoInfos:
             myMPVError = fit.GetParError(1)
             mySigma = fit.GetParameter(2)
             mySigmaError = fit.GetParError(2)
-            # Save sigma value of fit only for two-strip position resolution
+            # Save sigma value of fit only for two-ch position resolution
             if("twoStrip" in info_entry.outHistoName):
                 value = 1000.0*TMath.Sqrt(mySigma*mySigma + myMPV*myMPV)
                 # error = 1000.0*mySigmaError
@@ -212,6 +212,11 @@ for info_entry in all_histoInfos:
                 else:
                     value = 0 # if both mean and sigma are 0 then the value will immediately be 0, but adding this as a safety measure.
                     error = 0
+        # Do not use statistical RMS value for two-ch position resolution if there are very few events
+        else:
+            if("twoStrip" in info_entry.outHistoName):
+                value=0.0
+                error=0.0
         
         # For Debugging
         if (debugMode):
@@ -258,16 +263,16 @@ for i in range(1, nbins+1):
         value = TMath.Sqrt((oneEff*onePR*onePR + twoEff*twoPR*twoPR)/(oneEff+twoEff))
         error = TMath.Sqrt((onePR*onePR*oneEff*oneEff*onePRError*onePRError + twoPR*twoPR*twoEff*twoEff*twoPRError*twoPRError)/((oneEff+twoEff)*(oneEff*onePR*onePR + twoEff*twoPR*twoPR)))
         
-    # Removing tracker's contribution
-    if rm_tracker and (value > trkr_value):
-        new_value = TMath.Sqrt(value**2 - trkr_value**2)
-        new_error = value / new_value * error
-        value, error = new_value, new_error
-    # Mark bins with resolution smaller than tracker
-    elif (trkr_value > value) and (value > 0.0):
-        print("  WARNING: Bin %i got method 1 resolution smaller than tracker (%.3f)"%(i, value))
-        value = 2.0
-        # error = 2.0
+    # Tracker contribution already removed for one- and two-channel contribution
+    # if rm_tracker and (value > trkr_value):
+    #     new_value = TMath.Sqrt(value**2 - trkr_value**2)
+    #     new_error = value / new_value * error
+    #     value, error = new_value, new_error
+    # # Mark bins with resolution smaller than tracker
+    # elif (trkr_value > value) and (value > 0.0):
+    #     print("  WARNING: Bin %i got method 1 resolution smaller than tracker (%.3f)"%(i, value))
+    #     value = 2.0
+    #     # error = 2.0
     Combinedhist.SetBinContent(i, value)
     Combinedhist.SetBinError(i, error)
 
