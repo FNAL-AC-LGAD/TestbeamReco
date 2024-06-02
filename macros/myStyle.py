@@ -87,7 +87,7 @@ def ForceStyle():
     ROOT.gStyle.SetLegendFillColor(0)
 
     ROOT.gStyle.SetTitleXOffset(1.0)
-    ROOT.gStyle.SetTitleYOffset(1.0)
+    ROOT.gStyle.SetTitleYOffset(1.3)
     ROOT.gStyle.SetOptTitle(0)
     # ROOT.gStyle.SetOptStat(0)
 
