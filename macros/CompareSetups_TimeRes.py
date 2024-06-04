@@ -35,13 +35,13 @@ xlength = float(options.xlength)
 
 sensors_list = [
     # Varying resistivity and capacitance
-    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V", "BNL_50um_1cm_450um_W3051_2_2_170V", "BNL_50um_1cm_450um_W3052_2_4_185V"],
+    ["HPK_W4_17_2_50T_1P0_500P_50M_C240_204V", "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W2_3_2_50T_1P0_500P_50M_E240_180V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # HPK Varying thickness
     ["HPK_W9_15_2_20T_1P0_500P_50M_E600_114V", "HPK_W5_17_2_50T_1P0_500P_50M_E600_190V"],
     # KOJI Varying thickness
     ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # HPK pads Varying thickness and resistivity
-    ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
+    ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
     # HPK pads Varying metal widths
     ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
 ]
@@ -61,7 +61,7 @@ tagVar_list = [
 
 ylength_list = [
     # Varying resistivity and capacitance
-    75,
+    70,
     # HPK Varying thickness
     160,
     # KOJI Varying thickness
@@ -74,7 +74,7 @@ ylength_list = [
 
 saveName_list = [
     # Varying resistivity and capacitance
-    "HPK_and_BNL_TimeResolution_vs_x_ResCap",
+    "HPK_TimeResolution_vs_x_ResCap",
     # HPK Varying thickness
     "HPK_TimeResolution_vs_x_thickness",
     # KOJI Varying thickness
@@ -135,7 +135,7 @@ for sensors, tagVars, ylength, saveName in zip(sensors_list, tagVar_list, ylengt
     haxis.GetYaxis().SetTitle("Time resolution [ps]")
     haxis.SetLineWidth(3)
 
-    ymin = 1 if ("ResCap" not in saveName) else 26
+    ymin = 1 if ("ResCap" not in saveName) else 21
     haxis.GetYaxis().SetRangeUser(ymin, ylength)
 
     xlimit = 0
