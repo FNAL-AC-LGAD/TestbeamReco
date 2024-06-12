@@ -172,10 +172,15 @@ for info_entry in all_histoInfos:
         nEvents = tmpHist.GetEntries()
         fitlow = myMean - 1.5*myRMS
         fithigh = myMean + 1.5*myRMS
-        value = 1000*TMath.Sqrt(myRMS*myRMS + myMean*myMean)
-        if ((myRMS!=0) or (myMean !=0)):
-            error = 1000*TMath.Sqrt((myMean*myMean*myMeanError*myMeanError + myRMS*myRMS*myRMSError*myRMSError)/(myRMS*myRMS + myMean*myMean))
-            print(myMeanError,", ",myRMSError,", ", error)
+        # Define shorter quantities to make propagation of error easy of reading
+        mean2 = myMean * myMean
+        rms2 = myRMS * myRMS
+        value = 1000 * TMath.Sqrt(mean2 + rms2)
+        if ((myMean!=0) or (myRMS!=0)):
+            mean_err2 = myMeanError * myMeanError
+            rms_err2 = myRMSError * myRMSError
+            error = 1000 * TMath.Sqrt((mean2*mean_err2 + rms2*rms_err2)/(mean2 + rms2))
+            print(myMeanError, ", ", myRMSError, ", ", error)
         else:
             value = 0 # if both mean and std. dev. are 0 then the value will immediately be 0, but adding this as a safety measure.
             error = 0
@@ -194,7 +199,7 @@ for info_entry in all_histoInfos:
             msg_nentries+= "(Total events: %i)"%(totalEvents)
             print(msg_nentries)
 
-        #Do fit 
+        # Do fit
         if(nEvents > minEvtsCut):
             # tmpHist.Rebin(2)
             fit = TF1('fit','gaus',fitlow,fithigh)
@@ -205,18 +210,21 @@ for info_entry in all_histoInfos:
             mySigmaError = fit.GetParError(2)
             # Save sigma value of fit only for two-ch position resolution
             if("twoStrip" in info_entry.outHistoName):
-                value = 1000.0*TMath.Sqrt(mySigma*mySigma + myMPV*myMPV)
-                # error = 1000.0*mySigmaError
-                if ((mySigma!=0) or (myMPV !=0)):
-                    error = 1000*TMath.Sqrt((myMPV*myMPV*myMPVError*myMPVError + mySigma*mySigma*mySigmaError*mySigmaError)/(mySigma*mySigma + myMPV*myMPV))
+                mpv2 = myMPV * myMPV
+                sigma2 = mySigma * mySigma
+                value = 1000.0 * TMath.Sqrt(mpv2 + sigma2)
+                if ((myMPV!=0) or (mySigma!=0)):
+                    mpv_err2 = myMPVError * myMPVError
+                    sigma_err2 = mySigmaError * mySigmaError
+                    error = 1000 * TMath.Sqrt((mpv2*mpv_err2 + sigma2*sigma_err2)/(mpv2 + sigma2))
                 else:
                     value = 0 # if both mean and sigma are 0 then the value will immediately be 0, but adding this as a safety measure.
                     error = 0
         # Do not use statistical RMS value for two-ch position resolution if there are very few events
         else:
             if("twoStrip" in info_entry.outHistoName):
-                value=0.0
-                error=0.0
+                value = 0.0
+                error = 0.0
         
         # For Debugging
         if (debugMode):
@@ -229,9 +237,17 @@ for info_entry in all_histoInfos:
             msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
             msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
             print(msg_binres)
-        # else: #NewChange - if fitting is not done, then resolution = RMS value
-        #     if("twoStrip" in info_entry.outHistoName):
-        #         value = 0.0 # previously was set to -10 for plotting reasons, but needs to be set to 0 for Combined pos. res.
+
+        # Remove tracker contribution for one- and two-channel resolutions
+        if rm_tracker and (value > trkr_value):
+            new_value = TMath.Sqrt(value**2 - trkr_value**2)
+            new_error = value / new_value * error
+            value, error = new_value, new_error
+        # Mark bins with resolution smaller than tracker
+        elif (trkr_value > value) and (value > 0.0):
+            print("  WARNING: Bin %i got method 1 resolution smaller than tracker (%.3f)"%(i, value))
+            value = 2.0
+            # error = 2.0
 
         # Fill only when inside limits
         if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
@@ -256,23 +272,30 @@ for i in range(1, nbins+1):
     twoPRError = tmpHistTwo.GetBinError(tmpHistTwo.GetXaxis().FindBin(binPos))
     # print("{:.2f} -> oneEff {:.3f} (onePR {:.2f}), twoEff {:.3f} (twoPR {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), oneEff, onePR, twoEff, twoPR))
     print("{:.2f} -> onePR {:.3f} (onePRE {:.2f}), twoPR {:.3f} (twoPRE {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), onePR, onePRError, twoPR, twoPRError))
-    if((oneEff+twoEff <= 0) or (oneEff*onePR*onePR + twoEff*twoPR*twoPR==0)): #ensure sum of efficiencies is not 0. Cannot also be negative
+
+    # Ensure sum of efficiencies is not 0 and it's no negative
+    if ((oneEff*onePR*onePR + twoEff*twoPR*twoPR!=0) and (oneEff + twoEff > 0)):
+        resOne2 = onePR * onePR
+        resOne_err2 = onePRError * onePRError
+        resTwo2 = twoPR * twoPR
+        resTwo_err2 = twoPRError * twoPRError
+        value = TMath.Sqrt((oneEff*resOne2 + twoEff*resTwo2)/(oneEff + twoEff))
+
+        effOne2 = oneEff * oneEff
+        effTwo2 = twoEff * twoEff
+        error_num = effOne2*resOne2*resOne_err2 + effTwo2*resTwo2*resTwo_err2
+        error_den = (oneEff + twoEff) * (oneEff*resOne2 + twoEff*resTwo2)
+        error = TMath.Sqrt(error_num/error_den)
+    else:
         value = 0
         error = 0
-    else:
-        value = TMath.Sqrt((oneEff*onePR*onePR + twoEff*twoPR*twoPR)/(oneEff+twoEff))
-        error = TMath.Sqrt((onePR*onePR*oneEff*oneEff*onePRError*onePRError + twoPR*twoPR*twoEff*twoEff*twoPRError*twoPRError)/((oneEff+twoEff)*(oneEff*onePR*onePR + twoEff*twoPR*twoPR)))
-        
+
     # Tracker contribution already removed for one- and two-channel contribution
     # if rm_tracker and (value > trkr_value):
     #     new_value = TMath.Sqrt(value**2 - trkr_value**2)
     #     new_error = value / new_value * error
     #     value, error = new_value, new_error
-    # # Mark bins with resolution smaller than tracker
-    # elif (trkr_value > value) and (value > 0.0):
-    #     print("  WARNING: Bin %i got method 1 resolution smaller than tracker (%.3f)"%(i, value))
-    #     value = 2.0
-    #     # error = 2.0
+
     Combinedhist.SetBinContent(i, value)
     Combinedhist.SetBinError(i, error)
 
