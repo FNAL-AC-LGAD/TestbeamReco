@@ -140,6 +140,7 @@ right_axis.SetLabelFont(myStyle.GetFont())
 right_axis.SetTitleFont(myStyle.GetFont())
 right_axis.SetLineColor(colors[4]) ## Check: Use the same color as time-line?
 right_axis.SetLabelColor(colors[4])
+right_axis.SetTitleOffset(1.3)
 right_axis.Draw()
 
 xlimit = 0
@@ -159,7 +160,8 @@ gPad.RedrawAxis("g")
 # Define legend
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
-legend = TLegend(0.50-0.3, 1-pad_margin-0.25, 0.50+0.3, 1-pad_margin-0.05)
+# legend = TLegend(0.50-0.3, 1-pad_margin-0.25, 0.50+0.3, 1-pad_margin-0.05)
+legend = TLegend(0.50-0.3, 1-pad_margin-0.27, 0.50+0.3, 1-pad_margin-0.03)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-4)
 legend.SetBorderSize(1)
