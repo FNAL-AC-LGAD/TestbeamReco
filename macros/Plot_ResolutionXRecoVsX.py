@@ -38,7 +38,10 @@ class HistoInfo:
         self.ylabel = ylabel
         self.sensor = sensor
         self.center_position = center_position
-        self.th2 = self.getTH2(f, inHistoName, sensor)
+        if("KOJI" in inHistoName):
+            self.th2 = self.getTH2(f, inHistoName, sensor).RebinX(2)
+        else:
+            self.th2 = self.getTH2(f, inHistoName, sensor)
         self.th1 = self.getTH1(outHistoName)
 
     def getTH2(self, f, name, sensor):
@@ -289,23 +292,11 @@ for i in range(1, nbins+1):
             #     fit.SetParameter(1, 0.0)
             tmpHist.Fit(fit,"Q", "", fitlow, fithigh)
             myMPV = fit.GetParameter(1)
-            myMPVError = fit.GetParError(1)
             mySigma = fit.GetParameter(2)
             mySigmaError = fit.GetParError(2)
-            # value = 1000.0*mySigma
-            # error = 1000.0*mySigmaError
-
-            mpv2 = myMPV * myMPV
-            sigma2 = mySigma * mySigma
-            value = 1000.0 * TMath.Sqrt(mpv2 + sigma2)
-            if ((myMPV!=0) or (mySigma!=0)):
-                mpv_err2 = myMPVError * myMPVError
-                sigma_err2 = mySigmaError * mySigmaError
-                error = 1000 * TMath.Sqrt((mpv2*mpv_err2 + sigma2*sigma_err2)/(mpv2 + sigma2))
-            else:
-                value = 0 # if both mean and sigma are 0 then the value will immediately be 0, but adding this as a safety measure.
-                error = 0
-
+            value = 1000.0*mySigma
+            error = 1000.0*mySigmaError
+        
             # For Debugging
             if (debugMode):
                 tmpHist.Draw("hist")
