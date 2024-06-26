@@ -232,5 +232,5 @@ python DoPositionRecoFit.py     -D HPK_W9_23_3_20T_500x500_300M_E600_112V   --xm
 for sensor in "${HPK_2x3pad[@]}"; do
     cd ../macros
     python Print_Resolution.py          -D ${sensor}
-    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 0.9 -y 100
+    python Plot_Summary_XRes_Time.py    -D ${sensor} -x 0.9 -y 190
 done
