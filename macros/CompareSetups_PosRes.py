@@ -144,10 +144,16 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     pitch = geometry["pitch"]
     boxes = getStripBox(infile_reference, ymin, ylength-yoffset, pitch = pitch/1000.0)
     if not is_pad:
+        # Remove edge strips from list to be drawn as boxes in the background
         boxes = boxes[1:len(boxes)-1]
+        # Set outer edge of the first strip as limit to draw histograms!
         xlimit = abs(boxes[0].GetX1()) if abs(boxes[0].GetX1()) > abs(boxes[0].GetX2()) else abs(boxes[0].GetX2())
+        # For Koji strips, reduce the limit by half a strip-width
         if saveName == "Koji_PosResolution_vs_x_thickness":
             xlimit-= myStyle.GetGeometry(sensor_reference)["width"]/(2*1000.)
+    elif saveName == "HPK_Pads_PosResolution_vs_x_thicknessRes":
+        # Set internal side of the first channel as limit to draw
+        xlimit = abs(boxes[0].GetX1()) if abs(boxes[0].GetX1()) < abs(boxes[0].GetX2()) else abs(boxes[0].GetX2())
     for box in boxes:
         box.Draw()
 
