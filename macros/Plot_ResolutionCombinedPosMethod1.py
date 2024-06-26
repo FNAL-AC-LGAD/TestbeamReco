@@ -38,7 +38,10 @@ class HistoInfo:
         self.ylabel = ylabel
         self.sensor = sensor
         self.center_position = center_position
-        self.th2 = self.getTH2(f, inHistoName, sensor)
+        if(("KOJI" in sensor) and ("twoStrip" in inHistoName)):
+            self.th2 = self.getTH2(f, inHistoName, sensor).RebinX(2)
+        else:
+            self.th2 = self.getTH2(f, inHistoName, sensor)
         self.th1 = self.getTH1(outHistoName)
 
     def getTH2(self, f, name, sensor):
@@ -70,6 +73,7 @@ parser.add_option('-y','--ylength', dest='ylength', default = 250.0, help="Y axi
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
+parser.add_option('-M', dest='MPVnoFit', action='store_true', default = False, help="Use MPV value for two ch reco if not enough entries for fit")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
@@ -93,6 +97,9 @@ trkr_value = 5 # um
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
+useMPVifNOfit = options.MPVnoFit
+if "W11_22_3_20T_500x500_150M" in dataset:
+    useMPVifNOfit = True
 
 is_tight = options.useTight
 if(is_tight):
@@ -180,7 +187,7 @@ for info_entry in all_histoInfos:
             mean_err2 = myMeanError * myMeanError
             rms_err2 = myRMSError * myRMSError
             error = 1000 * TMath.Sqrt((mean2*mean_err2 + rms2*rms_err2)/(mean2 + rms2))
-            print(myMeanError, ", ", myRMSError, ", ", error)
+            # print(myMeanError, ", ", myRMSError, ", ", error)
         else:
             value = 0 # if both mean and std. dev. are 0 then the value will immediately be 0, but adding this as a safety measure.
             error = 0
@@ -220,12 +227,10 @@ for info_entry in all_histoInfos:
                 else:
                     value = 0 # if both mean and sigma are 0 then the value will immediately be 0, but adding this as a safety measure.
                     error = 0
-        # Do not use statistical RMS value for two-ch position resolution if there are very few events
-        else:
-            if("twoStrip" in info_entry.outHistoName):
-                value = 0.0
-                error = 0.0
-        
+        elif ("twoStrip" in info_entry.outHistoName) and (not useMPVifNOfit):
+            value = 0.0
+            error = 0.0
+
         # For Debugging
         if (debugMode):
             gStyle.SetOptStat(1111111)
@@ -253,6 +258,10 @@ for info_entry in all_histoInfos:
         if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
             continue
 
+        # Alert that statistical RMS value is used for two-ch position resolution if no enough events for fit
+        if(nEvents < minEvtsCut) and (value>0) and ("twoStrip" in info_entry.outHistoName):
+            print(" (!) Using RMS in bin %i of %s due to lack of stats"%(i, info_entry.outHistoName))
+
         info_entry.th1.SetBinContent(i, value)
         info_entry.th1.SetBinError(i, error)
 
@@ -270,8 +279,8 @@ for i in range(1, nbins+1):
     twoEff = hTwoEff.GetBinContent(hTwoEff.GetXaxis().FindBin(binPos))
     twoPR = tmpHistTwo.GetBinContent(tmpHistTwo.GetXaxis().FindBin(binPos))
     twoPRError = tmpHistTwo.GetBinError(tmpHistTwo.GetXaxis().FindBin(binPos))
-    # print("{:.2f} -> oneEff {:.3f} (onePR {:.2f}), twoEff {:.3f} (twoPR {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), oneEff, onePR, twoEff, twoPR))
-    print("{:.2f} -> onePR {:.3f} (onePRE {:.2f}), twoPR {:.3f} (twoPRE {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), onePR, onePRError, twoPR, twoPRError))
+    # # print("{:.2f} -> oneEff {:.3f} (onePR {:.2f}), twoEff {:.3f} (twoPR {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), oneEff, onePR, twoEff, twoPR))
+    # print("{:.2f} -> onePR {:.3f} (onePRE {:.2f}), twoPR {:.3f} (twoPRE {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), onePR, onePRError, twoPR, twoPRError))
 
     # Ensure sum of efficiencies is not 0 and it's no negative
     if ((oneEff*onePR*onePR + twoEff*twoPR*twoPR!=0) and (oneEff + twoEff > 0)):
@@ -330,7 +339,6 @@ legend.SetTextSize(myStyle.GetSize()-4)
 for box in boxes:
     box.Draw()
 for i,info_entry in enumerate(all_histoInfos):
-    print(info_entry.outHistoName)
     hist = info_entry.th1
     hist.SetLineColor(colors[i])
     hist.SetLineWidth(3)
