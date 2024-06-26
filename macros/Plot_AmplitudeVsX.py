@@ -27,10 +27,7 @@ class HistoInfo:
         self.ylabel = ylabel
         self.sensor = sensor
         self.center_position = center_position
-        if("KOJI" in sensor):
-            self.th2 = self.getTH2(f, inHistoName, sensor).RebinX(2)
-        else:
-            self.th2 = self.getTH2(f, inHistoName, sensor)
+        self.th2 = self.getTH2(f, inHistoName, sensor)
         self.th1 = self.getTH1(outHistoName)
 
     def getTH2(self, f, name, sensor, axis='zx'):

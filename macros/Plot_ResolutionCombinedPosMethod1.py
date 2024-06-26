@@ -40,6 +40,7 @@ class HistoInfo:
         self.center_position = center_position
         if(("KOJI" in sensor) and ("twoStrip" in inHistoName)):
             self.th2 = self.getTH2(f, inHistoName, sensor).RebinX(2)
+            print(" (!!) Using RebinX(2) to handle low stat bins!")
         else:
             self.th2 = self.getTH2(f, inHistoName, sensor)
         self.th1 = self.getTH1(outHistoName)
