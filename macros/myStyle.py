@@ -87,7 +87,7 @@ def ForceStyle():
     ROOT.gStyle.SetLegendFillColor(0)
 
     ROOT.gStyle.SetTitleXOffset(1.0)
-    ROOT.gStyle.SetTitleYOffset(1.0)
+    ROOT.gStyle.SetTitleYOffset(1.3)
     ROOT.gStyle.SetOptTitle(0)
     # ROOT.gStyle.SetOptStat(0)
 
@@ -178,6 +178,8 @@ def GetColorsCompare(n_sensors):
     palette = basic_palette
     if n_sensors == 2:
         palette = [basic_palette[0], basic_palette[2]]
+    elif n_sensors == 3:
+        palette = [basic_palette[0], basic_palette[3], basic_palette[4]]
     elif n_sensors == 4:
         palette = [basic_palette[0], basic_palette[2], basic_palette[3], basic_palette[4]]
 

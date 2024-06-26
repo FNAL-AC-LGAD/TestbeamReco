@@ -89,10 +89,8 @@ strip_length = sensor_Geometry['length']
 
 # Define tracker contribution
 # rm_tracker True shows expected and measured curves without tracker component
-rm_tracker = False
-# trkr_value = 5 # um
-# Use 0 as a safety-measure to avoid having this factor removed or added in any curve!
-trkr_value = 0.0 # um
+rm_tracker = True
+trkr_value = 5 # um
 
 xlength = float(options.xlength)
 ylength = float(options.ylength)
@@ -276,7 +274,7 @@ for i in range(1, nbins+1):
         minEvtsCut = totalEvents/nbins
         if ("HPK_W9_15_2" in dataset):
             minEvtsCut = 0.25*totalEvents/nbins
-        if ("500x500" in dataset):
+        if ("500x500" in dataset) and ("Cross" not in dataset):
             minEvtsCut = 0.1*totalEvents/nbins
         if ("W9_23_3_20T_500x500_300M" in dataset):
             minEvtsCut = 0.50*totalEvents/nbins
@@ -323,8 +321,9 @@ for i in range(1, nbins+1):
 
         # Removing tracker's contribution
         if rm_tracker and (value > trkr_value):
-            error = error*value/TMath.Sqrt(value**2 - trkr_value**2)
-            value = TMath.Sqrt(value**2 - trkr_value**2)
+            new_value = TMath.Sqrt(value**2 - trkr_value**2)
+            new_error = value / new_value * error
+            value, error = new_value, new_error
         # Mark bins with resolution smaller than tracker
         elif (trkr_value > value) and (value > 0.0):
             print("  WARNING: Bin %i got resolution smaller than tracker (%.3f)"%(i, value))

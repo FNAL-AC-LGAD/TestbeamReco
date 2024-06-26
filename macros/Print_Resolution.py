@@ -56,6 +56,7 @@ outdir = myStyle.getOutputDir(dataset)
 
 sensor_Geometry = myStyle.GetGeometry(dataset)
 sensor_name = sensor_Geometry["sensor"]
+pitch = sensor_Geometry["pitch"]/1000.
 
 res_photek = 10 # ps
 
@@ -90,6 +91,7 @@ for reg in regions:
 
         for idx in indices:
             hres_onestrip = inputfile_res1d.Get("deltaX_oneStrip%s"%idx)
+            hres_onestrip.GetXaxis().SetRangeUser(-pitch/2., pitch/2.)
             value = 1000 * hres_onestrip.GetStdDev()
 
             # Approximate appropriate std dev for edge channels (with only half of the channel info)
