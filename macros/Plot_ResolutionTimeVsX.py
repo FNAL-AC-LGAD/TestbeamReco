@@ -319,7 +319,7 @@ for info in all_histoInfos:
     # Add left axis (Time resolution)
     left_axis = TGaxis(-xlength,0.0001,-xlength,ylength,0.0001,ylength,510, "-")
     left_axis.UseCurrentStyle()
-    left_axis.SetTitle("Time resolution [ps]")
+    # left_axis.SetTitle("Time resolution [ps]")
     left_axis.SetLabelSize(myStyle.GetSize()-4)
     left_axis.SetTitleSize(myStyle.GetSize())
     left_axis.SetLabelFont(myStyle.GetFont())
@@ -354,7 +354,6 @@ for info in all_histoInfos:
 # Draw ALL values in the same canvas
 htemp.Draw("AXIS")
 
-# TODO: Remove unnecessary histograms!
 sub_colors = [colors[5], kBlack, colors[1], colors[2]]
 sub_widths = [2, 2, 2, 4]
 legend_name = [
@@ -364,6 +363,10 @@ legend_name = [
     "Multi-channel, tracker delay correction",]
 if is_hotspot:
     legend_name = ["Multi-channel, tracker delay correction"]
+
+if ("HPK_20um_500x500um_2x2pad_E600" in dataset):
+    for i,legend_text in enumerate(legend_name):
+        legend_name[i] = legend_text.split(", ")[0]
 
 # Define legend
 pad_margin = myStyle.GetMargin()
@@ -396,6 +399,9 @@ for i,info_entry in enumerate(all_histoInfos):
     # Skip some histograms if not needed
     if (not show_all and ("LGADXY" in info_entry.outHistoName)):
         continue
+    if ("HPK_20um_500x500um_2x2pad_E600" in dataset) and (info_entry.outHistoName == "Time_Diff"):
+        continue
+
     hist.Draw("hist e same")
     legend.AddEntry(hist, legend_name[i], "lep")
 
