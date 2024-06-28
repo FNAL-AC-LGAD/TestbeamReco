@@ -2340,12 +2340,12 @@ public:
     int highGoodStripIndex = 3;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,0.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,1.9320245},{1,1.9407506}, {2,1.8931535}, {3,1.907246289}, {4,1.7342231}, {5,2.0}, {6,2.0}, {7,0.0}};
-    double stripWidth = 0.450;
-    double pitch = 0.500;
+    double stripWidth = 0.500;
+    double pitch = 0.510;
     double sensorCenter =-1.05; // Lab-Tracker's frame ->  x_dut
     double sensorCenterY =-1.875; // Lab-Tracker's frame -> y_dut
     std::vector<double> stripCenterXPosition = {0.255,-0.255, -0.255, 0.255, 0.0, 0.0, 0.0, 0.0};
-    std::vector<double> stripCenterYPosition = {0.25, 0.25, -0.25, -0.25, 0.0, 0.0, 0.0, 0.0};
+    std::vector<double> stripCenterYPosition = {0.255, 0.255, -0.255, -0.255, 0.0, 0.0, 0.0, 0.0};
     double alpha =  0.7;
     double beta  =  0.0;
     double gamma =  0.0;
