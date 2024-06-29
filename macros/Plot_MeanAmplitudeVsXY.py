@@ -110,11 +110,8 @@ for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()):
             #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             # if tmpHist.GetEntries()>20: 
             list_amplitude_vs_xy[channel].SetBinContent(i,j,value)
-            
-            
 
 outputfile=TFile("%splotsAmplitudevsXY.root"%outdir,"RECREATE")
-
 
 if "2x2pad" in dataset:
     cutg = TCutG("cutg",4);
@@ -127,7 +124,6 @@ if "2x2pad" in dataset:
     x_high = list_amplitude_vs_xy[0].GetXaxis().FindBin(0.4)
     y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.4)
     y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.4)
-
 elif "BNL" in dataset:
     cutg = TCutG("cutg",4);
     cutg.SetPoint(0,-0.65,-0.42);
@@ -139,7 +135,6 @@ elif "BNL" in dataset:
     x_high = list_amplitude_vs_xy[0].GetXaxis().FindBin(0.75)
     y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.5)
     y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.5)
-    
 else:
     cutg = TCutG("cutg",4);
     cutg.SetPoint(0,-0.65,-0.42);
@@ -152,45 +147,40 @@ else:
     y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.65)
     y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.65)
 
-
-# BoxHot = TBox(-0.2525,-0.25,0.2375,0.25)
 BoxHot.SetLineColor(632)
 BoxHot.SetFillStyle(0)
 BoxHot.SetLineWidth(3)
 #BoxHot.Draw("same")
 
-list_amplitude_vs_xy[0].GetXaxis().SetTitle("Track x position [mm]")
-list_amplitude_vs_xy[0].GetYaxis().SetTitle("Track y position [mm]")
-
 # Plot 2D histograms
 for channel in range(0, len(list_amplitude_vs_xy)):
-
-    list_amplitude_vs_xy[channel].GetXaxis().SetRangeUser(-2.1,2.1)
+    list_amplitude_vs_xy[channel].GetXaxis().SetTitle("Track x position [mm]")
+    list_amplitude_vs_xy[channel].GetYaxis().SetTitle("Track y position [mm]")
+    list_amplitude_vs_xy[channel].GetXaxis().SetRangeUser(-0.75, 0.75)
+    list_amplitude_vs_xy[channel].GetYaxis().SetRangeUser(-0.50, 0.50)
     list_amplitude_vs_xy[channel].SetMinimum(zmin)
     list_amplitude_vs_xy[channel].SetMaximum(zmax)
     list_amplitude_vs_xy[channel].SetStats(0)
     list_amplitude_vs_xy[channel].GetXaxis().SetRange(x_low, x_high)
     list_amplitude_vs_xy[channel].GetYaxis().SetRange(y_low, y_high)
 
-    # list_amplitude_vs_xy[channel].Draw("colz same [cutg]")
     if channel != (len(list_amplitude_vs_xy)-1):
-        list_amplitude_vs_xy[channel].Draw("col same [cutg]")
+        list_amplitude_vs_xy[channel].Draw("col [cutg]")
     else:
-        list_amplitude_vs_xy[channel].Draw("colz same [cutg]")
+        list_amplitude_vs_xy[channel].Draw("colz [cutg]")
+
         list_amplitude_vs_xy[channel].GetZaxis().SetTitle("Mean amplitude [mV]")
+        list_amplitude_vs_xy[channel].GetZaxis().SetTitleOffset(1.3)
         BoxHot.Draw("same")
         myStyle.BeamInfo()
         myStyle.SensorInfoSmart(dataset,2.0*myStyle.GetMargin(), isPaperPlot = True)
         canvas.SetRightMargin(3.0*myStyle.GetMargin())
-    #canvas.SetLeftMargin(0.12)
-
 
     list_amplitude_vs_xy[channel].Write()
 
 name = "amplitude_vs_xy"
 canvas.SaveAs(outdir+dataset+name+".gif")
 canvas.SaveAs(outdir+dataset+name+".pdf")
-
 
 outputfile.Close()
 
