@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCutG,TCanvas,TH1F,TArrow,TH2F,TH1D,TH2D,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle,TBox,TGraph,TMarker
+from ROOT import TFile,TTree,TCutG,TCanvas,TH1F,TArrow,TH2F,TH3D,TH1D,TH2D,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle,TBox,TGraph,TMarker
 import os
 import EfficiencyUtils
 import langaus
@@ -52,13 +52,13 @@ for i in range(7):
         channel_good_index.append(i)
         th3_amplitude_vs_xy_ch.append(inputfile.Get(hname))
 
-th3_amplitude_vs_xy_ch.append(inputfile.Get("risetime_vs_xy"))
+hname_totalXY = "risetime_vs_xy"
+if "HPK_W11_22_3" in dataset: hname_totalXY+= "_thinBins"
+th3_amplitude_vs_xy_ch.append(inputfile.Get(hname_totalXY))
 
 
 #Build amplitude histograms
-#efficiency_vs_xy_denominator = inputfile.Get("efficiency_vs_xy_denominator")
-#amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
-amplitude_th2_4binning = inputfile.Get("amplitude_vs_xy")
+amplitude_th2_4binning = TH3D(th3_amplitude_vs_xy_ch[-1])
 amplitude_vs_xy_temp = amplitude_th2_4binning.Project3D("yx")
 
 list_amplitude_vs_xy = []

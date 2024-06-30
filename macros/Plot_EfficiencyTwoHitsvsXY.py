@@ -22,9 +22,15 @@ inputfile = TFile("%s%s_Analyze.root"%(outdir,dataset))
 
 outdir = myStyle.GetPlotsDir(outdir, "Efficiency/")
 
-efficiency_denominator_global = inputfile.Get("efficiency_vs_xy_fullReco_Denominator")
-numerator_name = "fullReco" if use_fullreco else "TwoGoodHit"
-efficiency_fullReco_numerator_global = inputfile.Get("efficiency_vs_xy_%s_Numerator"%(numerator_name))
+denominator_name = "efficiency_vs_xy_fullReco_Denominator"
+numerator_name = "efficiency_vs_xy_fullReco_Numerator"
+if not use_fullreco: numerator_name = "efficiency_vs_xy_TwoGoodHit_Numerator"
+if "HPK_W11_22_3" in dataset:
+    denominator_name+= "_thinBins"
+    numerator_name+= "_thinBins"
+
+efficiency_denominator_global = inputfile.Get(denominator_name)
+efficiency_fullReco_numerator_global = inputfile.Get(numerator_name)
 
 print("Entries : ", efficiency_fullReco_numerator_global.GetEntries())
 print("Entries den: ", efficiency_denominator_global.GetEntries())
@@ -60,6 +66,8 @@ if "2x2pad" in dataset:
     x1_box, y1_box = -9.25, -9.25
     x2_box, y2_box = 9.25, 9.25
 elif "Cross" in dataset:
+    x1_box, x2_box = -0.50, 0.50
+elif "HPK_W11_22_3" in dataset:
     x1_box, x2_box = -0.50, 0.50
 
 BoxHot = TBox(x1_box, y1_box, x2_box, y2_box)
