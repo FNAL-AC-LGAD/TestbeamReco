@@ -32,8 +32,8 @@ sensors_list = [
     ["BNL_50um_1cm_450um_W3051_2_2_170V","BNL_50um_1cm_400um_W3051_1_4_160V" , "HPK_W8_17_2_50T_1P0_500P_50M_C600_200V", "HPK_W8_18_2_50T_1P0_500P_100M_C600_208V"],
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
-    # HPK pads Varying metal widths
-    ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
+    # # HPK pads Varying metal widths
+    # ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -47,8 +47,8 @@ tagVar_list = [
     ["manufacturer", "width"],
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
-    # HPK pads Varying metal widths
-    ["width"],
+    # # HPK pads Varying metal widths
+    # ["width"],
 ]
 
 ylength_list = [
@@ -62,8 +62,8 @@ ylength_list = [
     100,
     # HPK pads Varying thickness and resistivity
     200,
-    # HPK pads Varying metal widths
-    200,
+    # # HPK pads Varying metal widths
+    # 200,
 ]
 
 saveName_list = [
@@ -77,8 +77,8 @@ saveName_list = [
     "BNL_and_HPK_Amplitude_vs_x_MetalWidth",
     # HPK pads Varying thickness and resistivity
     "HPK_Pads_Amplitude_vs_x_thicknessRes",
-    # HPK pads Varying metal widths
-    "HPK_Pads_Amplitude_vs_x_MetalWidth",
+    # # HPK pads Varying metal widths
+    # "HPK_Pads_Amplitude_vs_x_MetalWidth",
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")

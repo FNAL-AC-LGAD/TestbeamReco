@@ -27,8 +27,8 @@ sensors_list = [
     ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
-    # HPK pads Varying metal widths
-    ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
+    # # HPK pads Varying metal widths
+    # ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -38,8 +38,8 @@ tagVar_list = [
     ["thickness"],
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
-    # HPK pads Varying metal widths
-    ["width"],
+    # # HPK pads Varying metal widths
+    # ["width"],
 ]
 
 saveName_list = [
@@ -49,8 +49,8 @@ saveName_list = [
     "Koji_PosResolution_vs_x_thickness",
     # HPK pads Varying thickness and resistivity
     "HPK_Pads_PosResolution_vs_x_thicknessRes",
-    # HPK pads Varying metal widths
-    "HPK_Pads_PosResolution_vs_x_MetalWidth",
+    # # HPK pads Varying metal widths
+    # "HPK_Pads_PosResolution_vs_x_MetalWidth",
 ]
 
 ylength_list = [
@@ -60,8 +60,8 @@ ylength_list = [
     30,
     # HPK pads Varying thickness and resistivity
     210,
-    # HPK pads Varying metal widths
-    200,
+    # # HPK pads Varying metal widths
+    # 200,
 ]
 
 yoffset_list = [
@@ -71,8 +71,8 @@ yoffset_list = [
     10,
     # HPK pads Varying thickness and resistivity
     10,
-    # HPK pads Varying metal widths
-    10,
+    # # HPK pads Varying metal widths
+    # 10,
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")
@@ -144,10 +144,16 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     pitch = geometry["pitch"]
     boxes = getStripBox(infile_reference, ymin, ylength-yoffset, pitch = pitch/1000.0)
     if not is_pad:
+        # Remove edge strips from list to be drawn as boxes in the background
         boxes = boxes[1:len(boxes)-1]
+        # Set outer edge of the first strip as limit to draw histograms!
         xlimit = abs(boxes[0].GetX1()) if abs(boxes[0].GetX1()) > abs(boxes[0].GetX2()) else abs(boxes[0].GetX2())
+        # For Koji strips, reduce the limit by half a strip-width
         if saveName == "Koji_PosResolution_vs_x_thickness":
             xlimit-= myStyle.GetGeometry(sensor_reference)["width"]/(2*1000.)
+    elif saveName == "HPK_Pads_PosResolution_vs_x_thicknessRes":
+        # Set internal side of the first channel as limit to draw
+        xlimit = abs(boxes[0].GetX1()) if abs(boxes[0].GetX1()) < abs(boxes[0].GetX2()) else abs(boxes[0].GetX2())
     for box in boxes:
         box.Draw()
 
@@ -179,16 +185,16 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
     list_TwoStrip_vs_x = []
     list_TwoStripExpected_vs_x = []
     for i, sname in enumerate(sensors):
-        inName = "../output/"+sname+"/Resolution_Pos/PositionResVsX_tight.root"
+        inName = "../output/"+sname+"/CombinedResolution_PosMethod1/CombinedPositionResVsX_tight.root"
         inFile = TFile(inName,"READ")
-        hOneStrip = inFile.Get("h_one_strip")
-        hTwoStrip = inFile.Get("track_twoStrip_tight")
-        hTwoStripExpected = inFile.Get("h_expected")
+        hOneStrip = inFile.Get("track_oneStrip_resolution")
+        hTwoStrip = inFile.Get("track_twoStrip_resolution")
+        # hTwoStripExpected = inFile.Get("h_expected")
 
         plotfile.append(inFile)
         list_OneStrip_vs_x.append(hOneStrip)
         list_TwoStrip_vs_x.append(hTwoStrip)
-        list_TwoStripExpected_vs_x.append(hTwoStripExpected)
+        # list_TwoStripExpected_vs_x.append(hTwoStripExpected)
 
     sensor_type = "strip" if not is_pad else "channel"
     if treat_as_2x2:
@@ -236,14 +242,7 @@ for sensors, tagVars, saveName, ylength, yoffset in zip(sensors_list, tagVar_lis
 
     for i, hist_two in enumerate(pruned_TwoStrip_vs_x):
         hist_one = list_OneStrip_vs_x[i]
-        # Move one strip markers to correct position wrt boxes
-        for j, box in enumerate(boxes):
-            x_position = (box.GetX1() + box.GetX2())/2.
-            hist_one.SetPointX(j, x_position)
-        # Move extra points far away, if existing
-        for j in range(len(boxes), hist_one.GetN()):
-            hist_one.SetPointX(j, 99999.0)
-        hist_one.Draw("P same")
+        hist_one.Draw("hist P same")
         hist_one.SetLineStyle(1)
         hist_one.SetMarkerStyle(33)
         hist_one.SetMarkerSize(3)

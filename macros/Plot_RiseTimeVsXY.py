@@ -1,4 +1,4 @@
-from ROOT import TFile,TTree,TCutG,TCanvas,TH1F,TArrow,TH2F,TH1D,TH2D,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle,TBox,TGraph,TMarker
+from ROOT import TFile,TTree,TCutG,TCanvas,TH1F,TArrow,TH2F,TH3D,TH1D,TH2D,TLatex,TMath,TEfficiency,TGraphAsymmErrors,TLegend,gROOT,gStyle,TBox,TGraph,TMarker
 import os
 import EfficiencyUtils
 import langaus
@@ -52,13 +52,13 @@ for i in range(7):
         channel_good_index.append(i)
         th3_amplitude_vs_xy_ch.append(inputfile.Get(hname))
 
-th3_amplitude_vs_xy_ch.append(inputfile.Get("risetime_vs_xy"))
+hname_totalXY = "risetime_vs_xy"
+if "HPK_W11_22_3" in dataset: hname_totalXY+= "_thinBins"
+th3_amplitude_vs_xy_ch.append(inputfile.Get(hname_totalXY))
 
 
 #Build amplitude histograms
-#efficiency_vs_xy_denominator = inputfile.Get("efficiency_vs_xy_denominator")
-#amplitude_vs_xy_temp = efficiency_vs_xy_denominator.Clone("amplitude_vs_xy")
-amplitude_th2_4binning = inputfile.Get("amplitude_vs_xy")
+amplitude_th2_4binning = TH3D(th3_amplitude_vs_xy_ch[-1])
 amplitude_vs_xy_temp = amplitude_th2_4binning.Project3D("yx")
 
 list_amplitude_vs_xy = []
@@ -110,11 +110,8 @@ for i in range(1, amplitude_vs_xy_temp.GetXaxis().GetNbins()):
             #print ("Bin : " + str(i) + " , " + str(j) + " -> " + str(value))
             # if tmpHist.GetEntries()>20: 
             list_amplitude_vs_xy[channel].SetBinContent(i,j,value)
-            
-            
 
 outputfile=TFile("%splotsAmplitudevsXY.root"%outdir,"RECREATE")
-
 
 if "2x2pad" in dataset:
     cutg = TCutG("cutg",4);
@@ -122,75 +119,67 @@ if "2x2pad" in dataset:
     cutg.SetPoint(0,-0.5,-0.55);
     cutg.SetPoint(1,-0.5,0.5);
     cutg.SetPoint(2,0.525,0.5);
-    cutg.SetPoint(3,0.525,-0.55); 
+    cutg.SetPoint(3,0.525,-0.55);
     x_low = list_amplitude_vs_xy[0].GetXaxis().FindBin(-0.4)
     x_high = list_amplitude_vs_xy[0].GetXaxis().FindBin(0.4)
     y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.4)
     y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.4)
-
 elif "BNL" in dataset:
     cutg = TCutG("cutg",4);
     cutg.SetPoint(0,-0.65,-0.42);
     cutg.SetPoint(1,-0.65,0.42);
-    cutg.SetPoint(2,0.68,0.42);
-    cutg.SetPoint(3,0.68,-0.42); 
+    cutg.SetPoint(2,0.67,0.42);
+    cutg.SetPoint(3,0.67,-0.42);
     BoxHot = TBox(-0.51,-0.25,0.51,0.25)
     x_low = list_amplitude_vs_xy[0].GetXaxis().FindBin(-0.75)
     x_high = list_amplitude_vs_xy[0].GetXaxis().FindBin(0.75)
     y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.5)
     y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.5)
-    
 else:
     cutg = TCutG("cutg",4);
     cutg.SetPoint(0,-0.65,-0.42);
     cutg.SetPoint(1,-0.65,0.42);
     cutg.SetPoint(2,0.68,0.42);
-    cutg.SetPoint(3,0.68,-0.42); 
+    cutg.SetPoint(3,0.68,-0.42);
     BoxHot = TBox(-0.50,-0.25,0.50,0.25)
     x_low = list_amplitude_vs_xy[0].GetXaxis().FindBin(-0.95)
     x_high = list_amplitude_vs_xy[0].GetXaxis().FindBin(0.95)
     y_low = list_amplitude_vs_xy[0].GetYaxis().FindBin(-0.65)
     y_high = list_amplitude_vs_xy[0].GetYaxis().FindBin(0.65)
 
-
-# BoxHot = TBox(-0.2525,-0.25,0.2375,0.25)
 BoxHot.SetLineColor(632)
 BoxHot.SetFillStyle(0)
 BoxHot.SetLineWidth(3)
 #BoxHot.Draw("same")
 
-list_amplitude_vs_xy[0].GetXaxis().SetTitle("Track x position [mm]")
-list_amplitude_vs_xy[0].GetYaxis().SetTitle("Track y position [mm]")
-
 # Plot 2D histograms
 for channel in range(0, len(list_amplitude_vs_xy)):
-
-    list_amplitude_vs_xy[channel].GetXaxis().SetRangeUser(-2.1,2.1)
+    list_amplitude_vs_xy[channel].GetXaxis().SetTitle("Track x position [mm]")
+    list_amplitude_vs_xy[channel].GetYaxis().SetTitle("Track y position [mm]")
+    list_amplitude_vs_xy[channel].GetXaxis().SetRangeUser(-0.75, 0.75)
+    list_amplitude_vs_xy[channel].GetYaxis().SetRangeUser(-0.50, 0.50)
     list_amplitude_vs_xy[channel].SetMinimum(zmin)
     list_amplitude_vs_xy[channel].SetMaximum(zmax)
     list_amplitude_vs_xy[channel].SetStats(0)
     list_amplitude_vs_xy[channel].GetXaxis().SetRange(x_low, x_high)
     list_amplitude_vs_xy[channel].GetYaxis().SetRange(y_low, y_high)
 
-    # list_amplitude_vs_xy[channel].Draw("colz same [cutg]")
     if channel != (len(list_amplitude_vs_xy)-1):
-        list_amplitude_vs_xy[channel].Draw("col same [cutg]")
+        list_amplitude_vs_xy[channel].Draw("col [cutg]")
     else:
-        list_amplitude_vs_xy[channel].Draw("colz same [cutg]")
-        list_amplitude_vs_xy[channel].GetZaxis().SetTitle("Risetime [ps]")
+        list_amplitude_vs_xy[channel].Draw("colz [cutg]")
+        list_amplitude_vs_xy[channel].GetZaxis().SetTitle("Mean risetime [ps]")
+        list_amplitude_vs_xy[channel].GetZaxis().SetTitleOffset(1.3)
         BoxHot.Draw("same")
         myStyle.BeamInfo()
         myStyle.SensorInfoSmart(dataset,2.0*myStyle.GetMargin(), isPaperPlot = True)
         canvas.SetRightMargin(3.0*myStyle.GetMargin())
-    #canvas.SetLeftMargin(0.12)
-
 
     list_amplitude_vs_xy[channel].Write()
 
 name = "risetime_vs_xy"
 canvas.SaveAs(outdir+dataset+name+".gif")
 canvas.SaveAs(outdir+dataset+name+".pdf")
-
 
 outputfile.Close()
 

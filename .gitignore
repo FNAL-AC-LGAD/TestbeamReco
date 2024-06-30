@@ -225,3 +225,6 @@ TopTaggerCfg*
 
 ##Skip unnecessary files
 AlignBinning.py
+
+#Skip screen log files
+screenlog.0
