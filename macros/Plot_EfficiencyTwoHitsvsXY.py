@@ -32,8 +32,9 @@ if "HPK_W11_22_3" in dataset:
 efficiency_denominator_global = inputfile.Get(denominator_name)
 efficiency_fullReco_numerator_global = inputfile.Get(numerator_name)
 
-print("Entries : ", efficiency_fullReco_numerator_global.GetEntries())
-print("Entries den: ", efficiency_denominator_global.GetEntries())
+entries_num = efficiency_fullReco_numerator_global.GetEntries()
+entries_den = efficiency_denominator_global.GetEntries()
+print("Entries numerator: %i; Entries denominator: %i"%(entries_num, entries_den))
 
 canvas = TCanvas("cv","cv",1000,800)
 myStyle.ForceStyle()
@@ -41,6 +42,13 @@ gStyle.SetOptStat(0)
 
 ratio = efficiency_fullReco_numerator_global.Clone("ratio")
 ratio.Divide(efficiency_denominator_global)
+
+# Add close to zero value in empty bins to avoid white spots in ratio
+for i in range(1, ratio.GetXaxis().GetNbins()+1):
+    for j in range(1, ratio.GetYaxis().GetNbins()+1):
+        if ratio.GetBinContent(i,j) < 0.0001:
+            ratio.SetBinContent(i,j, 0.0001)
+
 ratio.SetMaximum(1.0)
 ratio.SetMinimum(0.0)
 
