@@ -176,8 +176,11 @@ legend.SetLineColor(kBlack)
 #         if mf.is_inside_limits(i, hResolution_position, xmax=0.1):
 #             hResolution_position.SetBinContent(i, 0.0)
 
+# Draw compared histograms using the same non-empty bins, except for certain sensors
+# where the first is followed!
+use_first_hist_ref = ("W11_22_3_20T" in dataset)
 list_histograms = [hResolution_position, hResolution_Twoposition, hResolution_time]
-pruned_position, pruned_Twoposition, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit)
+pruned_position, pruned_Twoposition, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit, use_first_binning=use_first_hist_ref)
 hResolution_Oneposition.Draw("hist P same")
 pruned_Twoposition.Draw("hist e same")
 pruned_position.Draw("hist e same")

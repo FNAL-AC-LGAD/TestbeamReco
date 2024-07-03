@@ -99,8 +99,8 @@ xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
 useMPVifNOfit = options.MPVnoFit
-if "W11_22_3_20T_500x500_150M" in dataset:
-    useMPVifNOfit = True
+# if "W11_22_3_20T_500x500_150M" in dataset:
+#     useMPVifNOfit = True
 
 is_tight = options.useTight
 if(is_tight):
@@ -285,17 +285,23 @@ for i in range(1, nbins+1):
 
     # Ensure sum of efficiencies is not 0 and it's no negative
     if ((oneEff*onePR*onePR + twoEff*twoPR*twoPR!=0) and (oneEff + twoEff > 0)):
-        resOne2 = onePR * onePR
-        resOne_err2 = onePRError * onePRError
-        resTwo2 = twoPR * twoPR
-        resTwo_err2 = twoPRError * twoPRError
-        value = TMath.Sqrt((oneEff*resOne2 + twoEff*resTwo2)/(oneEff + twoEff))
+        # Set to zero two-strip bins with eff < 0.05 (5%) and use one-strip value for combined in those cases
+        if (twoEff < 0.05):
+            value = onePR
+            error = onePRError
+            print(" (!!!) Bin %i efficiency lower than 0.05. Using only oneStrip reco value in Combined!"%(i))
+        else:
+            resOne2 = onePR * onePR
+            resOne_err2 = onePRError * onePRError
+            resTwo2 = twoPR * twoPR
+            resTwo_err2 = twoPRError * twoPRError
+            value = TMath.Sqrt((oneEff*resOne2 + twoEff*resTwo2)/(oneEff + twoEff))
 
-        effOne2 = oneEff * oneEff
-        effTwo2 = twoEff * twoEff
-        error_num = effOne2*resOne2*resOne_err2 + effTwo2*resTwo2*resTwo_err2
-        error_den = (oneEff + twoEff) * (oneEff*resOne2 + twoEff*resTwo2)
-        error = TMath.Sqrt(error_num/error_den)
+            effOne2 = oneEff * oneEff
+            effTwo2 = twoEff * twoEff
+            error_num = effOne2*resOne2*resOne_err2 + effTwo2*resTwo2*resTwo_err2
+            error_den = (oneEff + twoEff) * (oneEff*resOne2 + twoEff*resTwo2)
+            error = TMath.Sqrt(error_num/error_den)
     else:
         value = 0
         error = 0
