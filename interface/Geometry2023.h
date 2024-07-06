@@ -2377,6 +2377,7 @@ public:
     // std::vector<std::vector<double>> sensorEdgesTight = {{-0.47, -0.48}, {0.47, 0.43}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesTight = {{stripCenterXPosition[2], stripCenterYPosition[2]}, {stripCenterXPosition[0], stripCenterYPosition[0]}}; // Sensor's local frame
     std::vector<std::vector<double>> sensorEdgesExtra = {{0.57, -0.16}, {0.92, 0.23}}; // {{-0.576, -2.130}, {-0.030, -1.547}};
+    // std::vector<utility::ROI> regionsOfIntrest = { {"WholeSensor", -0.7,0.7, -0.7, 0.7} };
     // std::vector<utility::ROI> regionsOfIntrest = {  {"top_left", -0.47,-0.05, 0.03, 0.43},{"top_right", 0.07,0.47, 0.03, 0.43},
     //                                                 {"bot_left", -0.47,-0.05, -0.48,-0.09},{"bot_right", 0.07,0.47, -0.48,-0.09}};
 };

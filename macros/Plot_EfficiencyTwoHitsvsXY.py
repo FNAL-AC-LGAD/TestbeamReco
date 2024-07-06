@@ -28,6 +28,9 @@ if not use_fullreco: numerator_name = "efficiency_vs_xy_TwoGoodHit_Numerator"
 if "HPK_W11_22_3" in dataset:
     denominator_name+= "_thinBins"
     numerator_name+= "_thinBins"
+# elif "HPK_20um_500x500um_2x2pad_E600" in dataset:
+#     denominator_name+= "_WholeSensor"
+#     numerator_name+= "_WholeSensor"
 
 efficiency_denominator_global = inputfile.Get(denominator_name)
 efficiency_fullReco_numerator_global = inputfile.Get(numerator_name)
@@ -54,8 +57,8 @@ ratio.SetMinimum(0.0)
 
 # Define limits of cut and box position
 if "2x2pad" in dataset:
-    x1, y1 = -0.53, -0.58
-    x2, y2 = 0.75, 0.53
+    x1, y1 = -0.52, -0.58
+    x2, y2 = 0.52, 0.53
 elif "BNL" in dataset:
     x1, y1 = -0.50, -0.25
     x2, y2 = 0.50,0.25

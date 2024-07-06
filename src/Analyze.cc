@@ -724,6 +724,13 @@ void Analyze::InitHistos(NTupleReader& tr, const std::vector<std::vector<int>>& 
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_Numerator_thinBins", "; X [mm]; Y [mm]", std::round(2*(xmax-xmin)/xBinSize),xmin,xmax, std::round(2*(ymax-ymin)/yBinSize),ymin,ymax);
     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_TwoGoodHit_Numerator_thinBins", "; X [mm]; Y [mm]", std::round(2*(xmax-xmin)/xBinSize),xmin,xmax, std::round(2*(ymax-ymin)/yBinSize),ymin,ymax);
 
+    // for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+    // {
+    //     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_Denominator_"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    //     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_fullReco_Numerator_"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    //     utility::makeHisto(my_2d_histos,"efficiency_vs_xy_TwoGoodHit_Numerator_"+regionsOfIntrest[k].getName(), "; X [mm]; Y [mm]", std::round((xmax-xmin)/xBinSize),xmin,xmax, std::round((ymax-ymin)/yBinSize),ymin,ymax);
+    // }
+
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_EdgeCut_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
     utility::makeHisto(my_2d_prof  ,"efficiency_vs_xy_noNeighb_prof", "; X [mm]; Y [mm]", xbins,xmin,xmax, ybins,ymin,ymax );
@@ -1769,6 +1776,13 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         utility::fillHisto(pass && allGoodHits,                                         my_2d_histos, "efficiency_vs_xy_fullReco_Numerator_thinBins", x,y);
         utility::fillHisto(pass && twoGoodHits,                                         my_2d_histos, "efficiency_vs_xy_TwoGoodHit_Numerator_thinBins", x,y);
 
+        // for(unsigned int k = 0; k < regionsOfIntrest.size(); k++)
+        // {
+        //     bool pass_ROI = goodTrack && regionsOfIntrest[k].passROI(x,y) && goodPhotek;
+        //     utility::fillHisto(pass_ROI,                                                my_2d_histos, "efficiency_vs_xy_fullReco_Denominator_"+regionsOfIntrest[k].getName(), x,y);
+        //     utility::fillHisto(pass_ROI && allGoodHits,                                 my_2d_histos, "efficiency_vs_xy_fullReco_Numerator_"+regionsOfIntrest[k].getName(), x,y);
+        //     utility::fillHisto(pass_ROI && twoGoodHits,                                 my_2d_histos, "efficiency_vs_xy_TwoGoodHit_Numerator_"+regionsOfIntrest[k].getName(), x,y);
+        // }
 
         // Use pass_tightY instead of simple pass (pass_loose)
         utility::fillHisto(pass_NoXYEdges_NoPhotek,                                             my_2d_histos, "efficiency_vs_xy_denominator_tight", x,y);
