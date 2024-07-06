@@ -6,4 +6,4 @@ python CompareSetups_PosFit.py
 python CompareSetups_PosRes.py
 python CompareSetups_Risetime.py
 python CompareSetups_TimeRes.py
-python CompareSetups_TimeRes_vs_CFD.py
+# python CompareSetups_TimeRes_vs_CFD.py
