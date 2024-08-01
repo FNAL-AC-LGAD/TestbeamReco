@@ -62,13 +62,24 @@ hResolution_position = inputfile_position.Get("CombinedPosRes")
 hResolution_position.SetLineWidth(3)
 hResolution_position.SetLineColor(colors[2])
 
-# Get Expected position resolution histogram
-# ---------------------------------
+# inputfile_res = TFile("../output/Compare/ResolutionPosVsX/"+saveName+".root", "READ")
+# hResolution_Oneposition = inputfile_res.Get("h_one_strip")
+# hResolution_Oneposition.SetMarkerStyle(33)
+# hResolution_Oneposition.SetMarkerSize(3)
+# hResolution_Oneposition.SetMarkerColor(colors[0]) ## Check colors
 
-# hResolution_expected = inputfile_position.Get("h_expected")
-# hResolution_expected.SetLineWidth(3)
-# hResolution_expected.SetLineStyle(7)
-# hResolution_expected.SetLineColor(colors[2])
+# hResolution_Twoposition = inputfile_res.Get("track_twoStrip")
+# hResolution_Twoposition.SetLineWidth(3)
+# hResolution_Twoposition.SetLineColor(colors[1]) ## Check colors
+
+hResolution_Oneposition = inputfile_position.Get("track_oneStrip_resolution")
+hResolution_Oneposition.SetMarkerStyle(33)
+hResolution_Oneposition.SetMarkerSize(3)
+hResolution_Oneposition.SetMarkerColor(colors[0])
+
+hResolution_Twoposition = inputfile_position.Get("track_twoStrip_resolution")
+hResolution_Twoposition.SetLineWidth(3)
+hResolution_Twoposition.SetLineColor(colors[1])
 
 # Get Time resolution histogram
 # ---------------------------------
@@ -129,6 +140,7 @@ right_axis.SetLabelFont(myStyle.GetFont())
 right_axis.SetTitleFont(myStyle.GetFont())
 right_axis.SetLineColor(colors[4]) ## Check: Use the same color as time-line?
 right_axis.SetLabelColor(colors[4])
+right_axis.SetTitleOffset(1.3)
 right_axis.Draw()
 
 xlimit = 0
@@ -148,7 +160,8 @@ gPad.RedrawAxis("g")
 # Define legend
 pad_center = myStyle.GetPadCenter()
 pad_margin = myStyle.GetMargin()
-legend = TLegend(0.50-0.3, 1-pad_margin-0.25, 0.50+0.3, 1-pad_margin-0.05)
+# legend = TLegend(0.50-0.3, 1-pad_margin-0.25, 0.50+0.3, 1-pad_margin-0.05)
+legend = TLegend(0.50-0.35, 1-pad_margin-0.27, 0.50+0.35, 1-pad_margin-0.03)
 legend.SetTextFont(myStyle.GetFont())
 legend.SetTextSize(myStyle.GetSize()-4)
 legend.SetBorderSize(1)
@@ -163,19 +176,19 @@ legend.SetLineColor(kBlack)
 #         if mf.is_inside_limits(i, hResolution_position, xmax=0.1):
 #             hResolution_position.SetBinContent(i, 0.0)
 
-list_histograms = [hResolution_position, hResolution_time]
-pruned_position, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit)
+# Draw compared histograms using the same non-empty bins, except for certain sensors
+# where the first is followed!
+use_first_hist_ref = ("W11_22_3_20T" in dataset)
+list_histograms = [hResolution_position, hResolution_Twoposition, hResolution_time]
+pruned_position, pruned_Twoposition, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit, use_first_binning=use_first_hist_ref)
+hResolution_Oneposition.Draw("hist P same")
+pruned_Twoposition.Draw("hist e same")
 pruned_position.Draw("hist e same")
 legend.AddEntry(pruned_position, "Combined position resolution", "l")
+legend.AddEntry(hResolution_Oneposition, "One-channel position resolution", "p")
+legend.AddEntry(pruned_Twoposition, "Two-channel position resolution", "l")
 pruned_time.Draw("hist e same")
 legend.AddEntry(pruned_time,"Time resolution", "l")
-
-# list_histograms = [hResolution_position, hResolution_expected, hResolution_time]
-# pruned_position, pruned_expected, pruned_time = mf.same_limits_compare(list_histograms, xlimit=xlimit)
-# pruned_position.Draw("hist e same")
-# legend.AddEntry(pruned_position, "Position resolution", "l")
-# pruned_expected.Draw("hist same")
-# legend.AddEntry(pruned_expected, "Expected resolution", "l")
 
 htemp.Draw("AXIS same")
 left_axis.Draw()

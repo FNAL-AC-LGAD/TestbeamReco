@@ -1,117 +1,5 @@
 cd ../../test
 
-# # HPK_20um_500x500um_2x2pad_E600_FNAL_105V
-# echo "Running over HPK_20um_500x500um_2x2pad_E600_FNAL_105V sensor"
-# cd ../test
-# ./MyAnalysis -A InitialAnalyzer -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V
-# cd ../macros
-# python FindDelayCorrections.py -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V
-# python FindInputHistos4YReco.py -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -I
-# cd ../test
-# ./MyAnalysis -A Analyze -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V
-# cd ../macros
-
-# # python DoPositionRecoFit.py         -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -A --xmax 0.70 --fitOrder 4
-# # python Plot_AmplitudeVsX.py         -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V --xlength 2.7 --ylength 140.0 # Needs to be updated
-# # python Plot_AmplitudeVsXY.py        -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V --zmin 20.0 --zmax 140.0 # Needs to be updated
-# # python Plot_TimeDiffVsXY.py         -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V --zmin 10.0 --zmax 50.0
-# # python Plot_TimeDiffVsY.py          -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V --xlength 1.0 --ylength 100.0
-# python Plot_SimpleXYMaps.py         -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V
-# # python Plot_AmpChargeVsXY.py        -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V # Needs to be updated
-# # python Plot_RecoDiffVsXY.py         -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V --zmin 0.0 --zmax 100.0
-# # python Plot_RecoDiffVsY.py          -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V --xlength 13.5 --ylength 4.0
-# python Plot_CutFlow.py              -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V
-
-# # Paper plots
-# python Plot_Resolution1D.py         -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V
-# python Plot_Efficiency.py           -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -x 0.7
-# # python Plot_XRes.py                 -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -x 0.7
-# python Plot_ResolutionTimeVsX.py    -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -x 0.7 -y 50
-
-# python Plot_Resolution1D.py         -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -t
-# python Plot_Efficiency.py           -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -t -x 0.7
-# # python Plot_XRes.py                 -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -t -x 0.7
-# python Plot_ResolutionTimeVsX.py    -D HPK_20um_500x500um_2x2pad_E600_FNAL_105V -t -x 0.7 -y 50
-
-
-# # HPK_30um_500x500um_2x2pad_E600_FNAL_140V
-# echo "Running over HPK_30um_500x500um_2x2pad_E600_FNAL_140V sensor"
-# cd ../test
-# ./MyAnalysis -A InitialAnalyzer -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V
-# cd ../macros
-# python FindDelayCorrections.py -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V
-# python FindInputHistos4YReco.py -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -I
-# cd ../test
-# ./MyAnalysis -A Analyze -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V
-# cd ../macros
-
-# # python DoPositionRecoFit.py         -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -A --xmax 0.70 --fitOrder 4
-# # python Plot_AmplitudeVsX.py         -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V --xlength 2.7 --ylength 140.0 # Needs to be updated
-# # python Plot_AmplitudeVsXY.py        -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V --zmin 20.0 --zmax 140.0 # Needs to be updated
-# # python Plot_TimeDiffVsXY.py         -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V --zmin 10.0 --zmax 50.0
-# # python Plot_TimeDiffVsY.py          -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V --xlength 1.0 --ylength 100.0
-# python Plot_SimpleXYMaps.py         -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V
-# # python Plot_AmpChargeVsXY.py        -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V # Needs to be updated
-# # python Plot_RecoDiffVsXY.py         -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V --zmin 0.0 --zmax 100.0
-# # python Plot_RecoDiffVsY.py          -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V --xlength 13.5 --ylength 4.0
-# python Plot_CutFlow.py              -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V
-
-# # Paper plots
-# python Plot_Resolution1D.py         -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V
-# python Plot_Efficiency.py           -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -x 0.7
-# # python Plot_XRes.py                 -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -x 0.7
-# python Plot_ResolutionTimeVsX.py    -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -x 0.7 -y 50
-
-# python Plot_Resolution1D.py         -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -t
-# python Plot_Efficiency.py           -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -t -x 0.7
-# # python Plot_XRes.py                 -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -t -x 0.7
-# python Plot_ResolutionTimeVsX.py    -D HPK_30um_500x500um_2x2pad_E600_FNAL_140V -t -x 0.7 -y 50
-
-
-# # HPK_50um_500x500um_2x2pad_E600_FNAL_190V
-# echo "Running over HPK_50um_500x500um_2x2pad_E600_FNAL_190V sensor"
-# cd ../test
-# ./MyAnalysis -A InitialAnalyzer -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V
-# cd ../macros
-# python FindDelayCorrections.py -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V
-# python FindInputHistos4YReco.py -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -I
-# cd ../test
-# ./MyAnalysis -A Analyze -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V
-# cd ../macros
-
-
-# # python DoPositionRecoFit.py         -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -A --xmax 0.70 --fitOrder 4
-# # python Plot_AmplitudeVsX.py         -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V --xlength 2.7 --ylength 140.0 # Needs to be updated
-# # python Plot_AmplitudeVsXY.py        -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V --zmin 20.0 --zmax 140.0 # Needs to be updated
-# # python Plot_TimeDiffVsXY.py         -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V --zmin 10.0 --zmax 50.0
-# # python Plot_TimeDiffVsY.py          -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V --xlength 1.0 --ylength 100.0
-# python Plot_SimpleXYMaps.py         -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V
-# # python Plot_AmpChargeVsXY.py        -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V # Needs to be updated
-# # python Plot_RecoDiffVsXY.py         -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V --zmin 0.0 --zmax 100.0
-# # python Plot_RecoDiffVsY.py          -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V --xlength 13.5 --ylength 4.0
-# python Plot_CutFlow.py              -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V
-
-# # Paper plots
-# python Plot_Resolution1D.py         -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V
-# python Plot_Efficiency.py           -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -x 0.7
-# # python Plot_XRes.py                 -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -x 0.7
-# python Plot_ResolutionTimeVsX.py    -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -x 0.7 -y 50
-
-# python Plot_Resolution1D.py         -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -t
-# python Plot_Efficiency.py           -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -t -x 0.7
-# # python Plot_XRes.py                 -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -t -x 0.7
-# python Plot_ResolutionTimeVsX.py    -D HPK_50um_500x500um_2x2pad_E600_FNAL_190V -t -x 0.7 -y 50
-
-
-# # Run Bias Scans
-# echo "Running full bias scan results"
-# cd ../test
-# ./MyAnalysis -A Analyze -D HPK_50um_500x500um_2x2pad_E600_FNAL
-# ./MyAnalysis -A Analyze -D HPK_30um_500x500um_2x2pad_E600_FNAL
-# ./MyAnalysis -A Analyze -D HPK_20um_500x500um_2x2pad_E600_FNAL
-# cd ../macros
-# python PlotBiasScans.py -D HPK_50um_500x500um_2x2pad_E600_FNAL
-
 # <<commentout
 # HPK_500x500um_2x2pad_E600
 # -------------------------
@@ -132,34 +20,36 @@ for sensor in "${HPK_2x2pad[@]}"; do
     # python DoPositionRecoFit.py         -D ${sensor} --xmax 0.70 --fitOrder 4
     # python Plot_TimeDiffVsXY.py         -D ${sensor} --zmin 10.0 --zmax 50.0
     # python Plot_TimeDiffVsY.py          -D ${sensor} --xlength 1.0 --ylength 100.0
-    python Plot_SimpleXYMaps.py         -D ${sensor}
+    # python Plot_SimpleXYMaps.py         -D ${sensor}
     # python Plot_AmpChargeVsXY.py        -D ${sensor} # Needs to be updated
     # python Plot_RecoDiffVsXY.py         -D ${sensor} --zmin 0.0 --zmax 100.0
     # python Plot_RecoDiffVsY.py          -D ${sensor} --xlength 13.5 --ylength 4.0
-    python Plot_CutFlow.py              -D ${sensor}
+    # python Plot_CutFlow.py              -D ${sensor}
 
-    # Paper plots
-    python Plot_RisetimeVsX.py          -D ${sensor} -x 0.7
-    python Plot_JitterVsX.py            -D ${sensor} -x 0.7
-    python Plot_AmplitudeVsX.py         -D ${sensor} -x 0.7 -y 200.0
-    python Plot_AmplitudeVsXY.py        -D ${sensor} -z 0.0 -Z 200.0
-    python Plot_Resolution1D.py         -D ${sensor} -c
+    # # Paper plots
+    # python Plot_RisetimeVsX.py          -D ${sensor} -x 0.7
+    # python Plot_JitterVsX.py            -D ${sensor} -x 0.7
+    # python Plot_AmplitudeVsX.py         -D ${sensor} -x 0.7 -y 200.0
+    # python Plot_AmplitudeVsXY.py        -D ${sensor} -z 0.0 -Z 200.0
+    # python Plot_Resolution1D.py         -D ${sensor} -c
     python Plot_Efficiency.py           -D ${sensor} -x 0.7
-    # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.7
+    # # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -x 0.7
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 80
     python Plot_ResolutionTimeVsX.py    -D ${sensor} -x 0.7 -y 80 -Y
 
-    python Plot_RisetimeVsX.py          -D ${sensor} -t -x 0.7
-    python Plot_JitterVsX.py            -D ${sensor} -t -x 0.7
-    python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 0.7 -y 200.0
+    # python Plot_RisetimeVsX.py          -D ${sensor} -t -x 0.7
+    # python Plot_JitterVsX.py            -D ${sensor} -t -x 0.7
+    # python Plot_AmplitudeVsX.py         -D ${sensor} -t -x 0.7 -y 200.0
     python Plot_AmplitudeVsXY.py        -D ${sensor} -t -z 0.0 -Z 200.0
-    python Plot_Resolution1D.py         -D ${sensor} -t
+    # python Plot_Resolution1D.py         -D ${sensor} -t
     python Plot_Efficiency.py           -D ${sensor} -t -x 0.7
-    # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 80
+    # # python Plot_ResolutionXRecoVsX.py   -D ${sensor} -t -x 0.7
+    # python Plot_ResolutionTimeVsX.py    -D ${sensor} -t -x 0.7 -y 80
 
     python Plot_Efficiency.py           -D ${sensor} -n -x 0.7
-    python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 0.7 -y 80
+    # python Plot_ResolutionTimeVsX.py    -D ${sensor} -n -x 0.7 -y 80
+    python Plot_EfficiencyTwoHitsvsXY.py  -D ${sensor}
+    python Plot_EfficiencyTwoHitsvsXY.py  -D ${sensor} -F
 done
 
 for sensor in "${HPK_2x2pad[@]}"; do

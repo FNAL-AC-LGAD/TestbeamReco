@@ -31,8 +31,8 @@ sensors_list = [
     ["HPK_KOJI_20T_1P0_80P_60M_E240_112V", "HPK_KOJI_50T_1P0_80P_60M_E240_190V"],
     # HPK pads Varying thickness and resistivity
     ["HPK_W11_22_3_20T_500x500_150M_C600_116V", "HPK_W8_1_1_50T_500x500_150M_C600_200V", "HPK_W5_1_1_50T_500x500_150M_E600_185V"],
-    # HPK pads Varying metal widths
-    ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
+    # # HPK pads Varying metal widths
+    # ["HPK_W9_22_3_20T_500x500_150M_E600_112V", "HPK_W9_23_3_20T_500x500_300M_E600_112V"],
 ]
 
 tagVar_list = [
@@ -46,8 +46,8 @@ tagVar_list = [
     ["thickness"],
     # HPK pads Varying thickness and resistivity
     ["thickness", "resistivityNumber"],
-    # HPK pads Varying metal widths
-    ["width"],
+    # # HPK pads Varying metal widths
+    # ["width"],
 ]
 
 saveName_list = [
@@ -61,8 +61,8 @@ saveName_list = [
     "Koji_efficiency_vs_x_thickness",
     # HPK pads Varying thickness and resistivity
     "HPK_Pads_efficiency_vs_x_ThicknessRes",
-    # HPK pads Varying metal widths
-    "HPK_Pads_efficiency_vs_x_MetalWidth",
+    # # HPK pads Varying metal widths
+    # "HPK_Pads_efficiency_vs_x_MetalWidth",
 ]
 
 outdir = myStyle.GetPlotsDir((myStyle.getOutputDir("Compare")), "")

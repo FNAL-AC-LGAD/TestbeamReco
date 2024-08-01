@@ -38,7 +38,11 @@ class HistoInfo:
         self.ylabel = ylabel
         self.sensor = sensor
         self.center_position = center_position
-        self.th2 = self.getTH2(f, inHistoName, sensor)
+        if(("KOJI" in sensor) and ("twoStrip" in inHistoName)):
+            self.th2 = self.getTH2(f, inHistoName, sensor).RebinX(2)
+            print(" (!!) Using RebinX(2) to handle low stat bins!")
+        else:
+            self.th2 = self.getTH2(f, inHistoName, sensor)
         self.th1 = self.getTH1(outHistoName)
 
     def getTH2(self, f, name, sensor):
@@ -70,6 +74,7 @@ parser.add_option('-y','--ylength', dest='ylength', default = 250.0, help="Y axi
 parser.add_option('-D', dest='Dataset', default = "", help="Dataset, which determines filepath")
 parser.add_option('-d', dest='debugMode', action='store_true', default = False, help="Run debug mode")
 parser.add_option('-t', dest='useTight', action='store_true', default = False, help="Use tight cut for pass")
+parser.add_option('-M', dest='MPVnoFit', action='store_true', default = False, help="Use MPV value for two ch reco if not enough entries for fit")
 options, args = parser.parse_args()
 
 dataset = options.Dataset
@@ -93,6 +98,9 @@ trkr_value = 5 # um
 xlength = float(options.xlength)
 ylength = float(options.ylength)
 debugMode = options.debugMode
+useMPVifNOfit = options.MPVnoFit
+# if "W11_22_3_20T_500x500_150M" in dataset:
+#     useMPVifNOfit = True
 
 is_tight = options.useTight
 if(is_tight):
@@ -172,10 +180,15 @@ for info_entry in all_histoInfos:
         nEvents = tmpHist.GetEntries()
         fitlow = myMean - 1.5*myRMS
         fithigh = myMean + 1.5*myRMS
-        value = 1000*TMath.Sqrt(myRMS*myRMS + myMean*myMean)
-        if ((myRMS!=0) or (myMean !=0)):
-            error = 1000*TMath.Sqrt((myMean*myMean*myMeanError*myMeanError + myRMS*myRMS*myRMSError*myRMSError)/(myRMS*myRMS + myMean*myMean))
-            print(myMeanError,", ",myRMSError,", ", error)
+        # Define shorter quantities to make propagation of error easy of reading
+        mean2 = myMean * myMean
+        rms2 = myRMS * myRMS
+        value = 1000 * TMath.Sqrt(mean2 + rms2)
+        if ((myMean!=0) or (myRMS!=0)):
+            mean_err2 = myMeanError * myMeanError
+            rms_err2 = myRMSError * myRMSError
+            error = 1000 * TMath.Sqrt((mean2*mean_err2 + rms2*rms_err2)/(mean2 + rms2))
+            # print(myMeanError, ", ", myRMSError, ", ", error)
         else:
             value = 0 # if both mean and std. dev. are 0 then the value will immediately be 0, but adding this as a safety measure.
             error = 0
@@ -194,7 +207,7 @@ for info_entry in all_histoInfos:
             msg_nentries+= "(Total events: %i)"%(totalEvents)
             print(msg_nentries)
 
-        #Do fit 
+        # Do fit
         if(nEvents > minEvtsCut):
             # tmpHist.Rebin(2)
             fit = TF1('fit','gaus',fitlow,fithigh)
@@ -203,16 +216,22 @@ for info_entry in all_histoInfos:
             myMPVError = fit.GetParError(1)
             mySigma = fit.GetParameter(2)
             mySigmaError = fit.GetParError(2)
-            # Save sigma value of fit only for two-strip position resolution
+            # Save sigma value of fit only for two-ch position resolution
             if("twoStrip" in info_entry.outHistoName):
-                value = 1000.0*TMath.Sqrt(mySigma*mySigma + myMPV*myMPV)
-                # error = 1000.0*mySigmaError
-                if ((mySigma!=0) or (myMPV !=0)):
-                    error = 1000*TMath.Sqrt((myMPV*myMPV*myMPVError*myMPVError + mySigma*mySigma*mySigmaError*mySigmaError)/(mySigma*mySigma + myMPV*myMPV))
+                mpv2 = myMPV * myMPV
+                sigma2 = mySigma * mySigma
+                value = 1000.0 * TMath.Sqrt(mpv2 + sigma2)
+                if ((myMPV!=0) or (mySigma!=0)):
+                    mpv_err2 = myMPVError * myMPVError
+                    sigma_err2 = mySigmaError * mySigmaError
+                    error = 1000 * TMath.Sqrt((mpv2*mpv_err2 + sigma2*sigma_err2)/(mpv2 + sigma2))
                 else:
                     value = 0 # if both mean and sigma are 0 then the value will immediately be 0, but adding this as a safety measure.
                     error = 0
-        
+        elif ("twoStrip" in info_entry.outHistoName) and (not useMPVifNOfit):
+            value = 0.0
+            error = 0.0
+
         # For Debugging
         if (debugMode):
             gStyle.SetOptStat(1111111)
@@ -224,13 +243,25 @@ for info_entry in all_histoInfos:
             msg_binres = "Bin: %i (x center = %.3f)"%(i, bin_center)
             msg_binres+= " -> Resolution: %.3f +/- %.3f"%(value, error)
             print(msg_binres)
-        # else: #NewChange - if fitting is not done, then resolution = RMS value
-        #     if("twoStrip" in info_entry.outHistoName):
-        #         value = 0.0 # previously was set to -10 for plotting reasons, but needs to be set to 0 for Combined pos. res.
+
+        # Remove tracker contribution for one- and two-channel resolutions
+        if rm_tracker and (value > trkr_value):
+            new_value = TMath.Sqrt(value**2 - trkr_value**2)
+            new_error = value / new_value * error
+            value, error = new_value, new_error
+        # Mark bins with resolution smaller than tracker
+        elif (trkr_value > value) and (value > 0.0):
+            print("  WARNING: Bin %i got method 1 resolution smaller than tracker (%.3f)"%(i, value))
+            value = 2.0
+            # error = 2.0
 
         # Fill only when inside limits
         if not mf.is_inside_limits(i, info_entry.th1, xmax=plot_xlimit):
             continue
+
+        # Alert that statistical RMS value is used for two-ch position resolution if no enough events for fit
+        if(nEvents < minEvtsCut) and (value>0) and ("twoStrip" in info_entry.outHistoName):
+            print(" (!) Using RMS in bin %i of %s due to lack of stats"%(i, info_entry.outHistoName))
 
         info_entry.th1.SetBinContent(i, value)
         info_entry.th1.SetBinError(i, error)
@@ -249,25 +280,38 @@ for i in range(1, nbins+1):
     twoEff = hTwoEff.GetBinContent(hTwoEff.GetXaxis().FindBin(binPos))
     twoPR = tmpHistTwo.GetBinContent(tmpHistTwo.GetXaxis().FindBin(binPos))
     twoPRError = tmpHistTwo.GetBinError(tmpHistTwo.GetXaxis().FindBin(binPos))
-    # print("{:.2f} -> oneEff {:.3f} (onePR {:.2f}), twoEff {:.3f} (twoPR {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), oneEff, onePR, twoEff, twoPR))
-    print("{:.2f} -> onePR {:.3f} (onePRE {:.2f}), twoPR {:.3f} (twoPRE {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), onePR, onePRError, twoPR, twoPRError))
-    if((oneEff+twoEff <= 0) or (oneEff*onePR*onePR + twoEff*twoPR*twoPR==0)): #ensure sum of efficiencies is not 0. Cannot also be negative
+    # # print("{:.2f} -> oneEff {:.3f} (onePR {:.2f}), twoEff {:.3f} (twoPR {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), oneEff, onePR, twoEff, twoPR))
+    # print("{:.2f} -> onePR {:.3f} (onePRE {:.2f}), twoPR {:.3f} (twoPRE {:.2f})".format(tmpHistTwo.GetXaxis().GetBinCenter(i), onePR, onePRError, twoPR, twoPRError))
+
+    # Ensure sum of efficiencies is not 0 and it's no negative
+    if ((oneEff*onePR*onePR + twoEff*twoPR*twoPR!=0) and (oneEff + twoEff > 0)):
+        # Set to zero two-strip bins with eff < 0.05 (5%) and use one-strip value for combined in those cases
+        if (twoEff < 0.05):
+            value = onePR
+            error = onePRError
+            print(" (!!!) Bin %i efficiency lower than 0.05. Using only oneStrip reco value in Combined!"%(i))
+        else:
+            resOne2 = onePR * onePR
+            resOne_err2 = onePRError * onePRError
+            resTwo2 = twoPR * twoPR
+            resTwo_err2 = twoPRError * twoPRError
+            value = TMath.Sqrt((oneEff*resOne2 + twoEff*resTwo2)/(oneEff + twoEff))
+
+            effOne2 = oneEff * oneEff
+            effTwo2 = twoEff * twoEff
+            error_num = effOne2*resOne2*resOne_err2 + effTwo2*resTwo2*resTwo_err2
+            error_den = (oneEff + twoEff) * (oneEff*resOne2 + twoEff*resTwo2)
+            error = TMath.Sqrt(error_num/error_den)
+    else:
         value = 0
         error = 0
-    else:
-        value = TMath.Sqrt((oneEff*onePR*onePR + twoEff*twoPR*twoPR)/(oneEff+twoEff))
-        error = TMath.Sqrt((onePR*onePR*oneEff*oneEff*onePRError*onePRError + twoPR*twoPR*twoEff*twoEff*twoPRError*twoPRError)/((oneEff+twoEff)*(oneEff*onePR*onePR + twoEff*twoPR*twoPR)))
-        
-    # Removing tracker's contribution
-    if rm_tracker and (value > trkr_value):
-        new_value = TMath.Sqrt(value**2 - trkr_value**2)
-        new_error = value / new_value * error
-        value, error = new_value, new_error
-    # Mark bins with resolution smaller than tracker
-    elif (trkr_value > value) and (value > 0.0):
-        print("  WARNING: Bin %i got method 1 resolution smaller than tracker (%.3f)"%(i, value))
-        value = 2.0
-        # error = 2.0
+
+    # Tracker contribution already removed for one- and two-channel contribution
+    # if rm_tracker and (value > trkr_value):
+    #     new_value = TMath.Sqrt(value**2 - trkr_value**2)
+    #     new_error = value / new_value * error
+    #     value, error = new_value, new_error
+
     Combinedhist.SetBinContent(i, value)
     Combinedhist.SetBinError(i, error)
 
@@ -302,7 +346,6 @@ legend.SetTextSize(myStyle.GetSize()-4)
 for box in boxes:
     box.Draw()
 for i,info_entry in enumerate(all_histoInfos):
-    print(info_entry.outHistoName)
     hist = info_entry.th1
     hist.SetLineColor(colors[i])
     hist.SetLineWidth(3)

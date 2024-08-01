@@ -99,8 +99,8 @@ def get_central_channel_position(inputfile, direction="x"):
     # Even number of columns
     if (n_subchannels%2 == 0):
         central_idx = round(n_subchannels/2)
-        pairL = "0%i"%(central_idx-1) if direction is "x" else "%i0"%(central_idx-1)
-        pairR = "0%i"%(central_idx) if direction is "x" else "%i0"%(central_idx)
+        pairL = "0%i"%(central_idx-1) if direction == "x" else "%i0"%(central_idx-1)
+        pairR = "0%i"%(central_idx) if direction == "x" else "%i0"%(central_idx)
         l_channel = inputfile.Get("%s%s"%(stripBox, pairL)).GetMean(1)
         r_channel = inputfile.Get("%s%s"%(stripBox, pairR)).GetMean(1)
         position_center = (l_channel + r_channel)/2
@@ -214,11 +214,17 @@ def move_distribution(list_elements, new_center_pos, is_tgraph = False):
 
     return list_elements
 
-def same_limits_compare(list_histograms, xlimit = 0):
+def same_limits_compare(list_histograms, xlimit = 0, use_first_binning = False):
     nbins = list_histograms[0].GetXaxis().GetNbins()
 
     xfirst = abs(first_common_non_empty_x(list_histograms, True))
     xlast = abs(first_common_non_empty_x(list_histograms, False))
+
+    # Draw bins following first histogram range
+    if use_first_binning:
+        xfirst = abs(first_common_non_empty_x([list_histograms[0]], True))
+        xlast = abs(first_common_non_empty_x([list_histograms[0]], False))
+
     x_simmetric_limit = xfirst if xfirst < xlast else xlast
     if xlimit and (xlimit < x_simmetric_limit):
         x_simmetric_limit = xlimit
