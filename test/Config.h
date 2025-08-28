@@ -3,6 +3,7 @@
 
 #include "TestbeamReco/interface/NTupleReader.h"
 #include "TestbeamReco/interface/Geometry.h"
+#include "TestbeamReco/interface/Geometry2025.h"
 #include "TestbeamReco/interface/Geometry2023.h"
 #include "TestbeamReco/interface/Geometry2022.h"
 #include "TestbeamReco/interface/PrepNTupleVars.h"
@@ -92,6 +93,7 @@ private:
         tr.registerDerivedVar("enablePositionReconstructionPad", g.enablePositionReconstructionPad);
         tr.registerDerivedVar("uses2022Pix", g.uses2022Pix);
         tr.registerDerivedVar("usesMay2023Tracker", g.usesMay2023Tracker);
+        tr.registerDerivedVar("usesDESYorCERNTracker", g.usesDESYorCERNTracker);
         tr.registerDerivedVar("isHorizontal", g.isHorizontal);
         tr.registerDerivedVar("minPixHits", g.minPixHits);
         tr.registerDerivedVar("minStripHits", g.minStripHits);
@@ -242,6 +244,7 @@ public:
         else if(filetag.find("HPK_W8_1_1_50T_500x500_150M_C600")            != std::string::npos) registerGeometry(tr, HPK_W8_1_1_50T_500x500_150M_C600_PixelsGeometry(voltage));
         else if(filetag.find("HPK_W5_1_1_50T_500x500_150M_E600")            != std::string::npos) registerGeometry(tr, HPK_W5_1_1_50T_500x500_150M_E600_PixelsGeometry(voltage));
 
+        else if(filetag.find("CFD_HPK_W2_3_2_50T_1P0_500P_50M_E240_187V")       != std::string::npos) registerGeometry(tr, CFD_HPK_W2_3_2_50T_1P0_500P_50M_E240_StripsGeometry(voltage));
 	    else
         {
             registerGeometry(tr, DefaultGeometry(voltage));
