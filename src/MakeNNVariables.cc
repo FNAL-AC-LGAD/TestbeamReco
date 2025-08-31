@@ -123,12 +123,14 @@ void MakeNNVariables::Loop(NTupleReader& tr, int maxevents)
         const auto& chi2 = tr.getVar<float>("chi2");
         const auto& hitSensor = tr.getVar<bool>("hitSensor");
         const auto& maxAmpIndex = tr.getVar<int>("maxAmpIndex");
+        const auto& usesDESYorCERNTracker = tr.getVar<bool>("usesDESYorCERNTracker");
         const auto& lowGoodStripIndex = tr.getVar<int>("lowGoodStripIndex");
         const auto& maxAmpLGAD = tr.getVar<double>("maxAmpLGAD");
         const auto& signalAmpThreshold = tr.getVar<double>("signalAmpThreshold");
 
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold;
         bool passTrigger = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
+        if (usesDESYorCERNTracker) passTrigger = ntracks==1;
         bool pass = passTrigger && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = maxAmpIndex >= lowGoodStripIndex && maxAmpIndex <= 4;
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;

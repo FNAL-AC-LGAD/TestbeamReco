@@ -24,9 +24,16 @@ public:
 
     CFD_HPK_W2_3_2_50T_1P0_500P_50M_E240_StripsGeometry(const int v=0) : voltage(v){}
     const int voltage;
-    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,0}}, {2,{0,1}}, {3,{0,1}}, {4,{0,2}}, {5,{0,2}}, {6,{1,0}}, {7,{2,0}}};
-    std::vector<std::vector<int>> geometry = {{0,1,2},{6},{7}};
+    std::map<int, std::vector<int>> indexToGeometryMap = {{0,{0,0}}, {1,{0,1}}, {2,{0,2}}, {3,{0,3}}, {4,{0,4}}, {5,{0,5}}, {6,{1,0}}, {7,{2,0}}};
+    std::vector<std::vector<int>> geometry = {{0,1,2,3,4,5},{6},{7}};
     std::map<int, bool> acLGADChannelMap = {{0,true}, {1,true}, {2,true}, {3,true}, {4,true}, {5,true}, {6,false}, {7,false}};
+    std::map<int, bool> isCFDchannel = {
+    {0,false}, {1,true},  // strip 1
+    {2,false}, {3,true},  // strip 2
+    {4,false}, {5,true},  // strip 3
+    {6,false},            // DC LGAD (amp only)
+    {7,false}             // photek (amp only)
+    } ;
     std::map<int, double> amplitudeCorrectionFactor = {{0,1.0}, {1,1.0}, {2,1.0}, {3,1.0}, {4,1.0}, {5,1.0}, {6,1.0}, {7,1.0}};
     std::map<int, double> timeCalibrationCorrection = {{0,0.56401}, {1,0.41657}, {2,0.59696}, {3,0.41189}, {4,0.47175}, {5,0.37958}, {6,0.52220}, {7,0.0}};
     double stripWidth = 0.050;
@@ -51,12 +58,12 @@ public:
     double photekSignalThreshold = 130.0;
     double noiseAmpThreshold  = 15.0;
     double signalAmpThreshold = 15.0;
-    bool uses2022Pix = true;
+    bool uses2022Pix = false;
     bool usesDESYorCERNTracker = true;
     bool isHorizontal = false;
     bool enablePositionReconstruction = true;
     ///MODIFY ME!!!!???
-    int minPixHits = 5; //all pixel planes at DESY/CERN
+    int minPixHits = 0; //all pixel planes at DESY/CERN - but stored as 0 in code
     int minStripHits = 0;//all pixel planes at DESY/CERN
     int CFD_threshold = 50;
     std::vector<double> positionRecoPar = {0.250000, -0.693443, 0.894506, -9.526453, 38.944962, -58.650584};

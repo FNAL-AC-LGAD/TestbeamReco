@@ -147,6 +147,7 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
     const auto& isPadSensor = tr.getVar<bool>("isPadSensor");
     const auto& isHPKStrips = tr.getVar<bool>("isHPKStrips");
     const auto& uses2022Pix = tr.getVar<bool>("uses2022Pix");
+    const auto& usesDESYorCERNTracker = tr.getVar<bool>("usesDESYorCERNTracker");
     const auto& minPixHits = tr.getVar<int>("minPixHits");
     const auto& minStripHits = tr.getVar<int>("minStripHits");
     const auto& positionRecoMaxPoint = tr.getVar<double>("positionRecoMaxPoint");
@@ -218,8 +219,9 @@ void RecoAnalyzer::Loop(NTupleReader& tr, int maxevents)
         //Define selection bools
         bool goodPhotek = corrAmp[photekIndex] > photekSignalThreshold && corrAmp[photekIndex] < photekSignalMax;
         bool goodTrack = ntracks==1 && nplanes>=14 && npix>0 && chi2 < 3.0 && xSlope<0.0001 && xSlope>-0.0001;// && ntracks_alt==1;
-        if(isPadSensor)      goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
+        if(isPadSensor) goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
+        else if (usesDESYorCERNTracker) goodTrack = ntracks==1;
         bool pass = goodTrack && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;

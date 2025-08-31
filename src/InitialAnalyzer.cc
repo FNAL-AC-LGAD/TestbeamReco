@@ -163,8 +163,9 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         bool goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
         if (usesMay2023Tracker) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
         ///MODIFY ME!!!!???
-        if (usesDESYorCERNTracker) goodTrack = ntracks==1 && nplanes>=minPixHits; //chi2 close to zero in DESY/CERN
-        bool pass = goodTrack && hitSensor && goodPhotek;
+        if (usesDESYorCERNTracker) goodTrack = ntracks==1;// && nplanes>=minPixHits; //chi2 close to zero in DESY/CERN
+        //bool pass = goodTrack && hitSensor && goodPhotek;
+        bool pass = goodTrack && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
 
@@ -178,14 +179,16 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         //Make cuts and fill histograms here
     	//******************************************************************        
         //Loop over each channel in each sensor
+        
         int rowIndex=0;
         for(const auto& row : ampLGAD)
         {
+            
             for(unsigned int i = 0; i < row.size(); i++)
             {
                 const auto& r = std::to_string(rowIndex);
                 const auto& s = std::to_string(i);
-
+                std::cout<<tr.getEvtNum()<<","<<rowIndex<<","<<i<<","<<rawAmpLGAD[rowIndex][i]<<std::endl;
                 // const auto& ampChannel = ampLGAD[rowIndex][i];
                 // const auto& relFracChannel = relFrac[rowIndex][i];
                 const auto& rawAmpChannel = rawAmpLGAD[rowIndex][i];
@@ -196,7 +199,8 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
                 bool goodNoiseAmp = rawAmpChannel>noiseAmpThreshold;
                 //double time = timeLGAD[rowIndex][i];
                 double timeTracker = timeLGADTracker[rowIndex][i];
-
+                //std::cout<<goodTrack <<","<<hitSensor<<","<<goodPhotek<<std::endl;
+                //std::cout<<"passing selections: "<<(pass && goodNoiseAmp)<<std::endl;
                 utility::fillHisto(pass && goodNoiseAmp,                                my_3d_histos, "amplitude_vs_xy_channel"+r+s, x,y,rawAmpChannel);
                 // utility::fillHisto(pass && goodNoiseAmp,                                my_3d_histos, "timeDiff_coarse_vs_xy_channel"+r+s, x,y,time-photekTime);
                 utility::fillHisto(pass && goodNoiseAmp,                                my_3d_histos, "timeDiff_fine_vs_xy_channel"+r+s, x,y,timeTracker-photekTime);
