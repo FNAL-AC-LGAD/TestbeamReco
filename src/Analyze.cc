@@ -974,7 +974,7 @@ void Analyze::Loop(NTupleReader& tr, int maxevents)
         if(isPadSensor) goodTrack = ntracks==1 && nplanes>10 && npix>0 && chi2 < 30.0;
         else if(isHPKStrips || uses2022Pix) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
         if(usesMay2023Tracker) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
-        if(usesDESYorCERNTracker) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
+        if(usesDESYorCERNTracker) goodTrack = ntracks==1 && npix>=minPixHits && chi2 < 100;
         double edge_left = stripCenterXPositionLGAD[highEdgeStrip[0]][highEdgeStrip[1]];
         double edge_right = stripCenterXPositionLGAD[lowEdgeStrip[0]][lowEdgeStrip[1]];
         if (edge_left > edge_right)

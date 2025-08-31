@@ -163,7 +163,7 @@ void InitialAnalyzer::Loop(NTupleReader& tr, int maxevents)
         bool goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 40;
         if (usesMay2023Tracker) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100;
         ///MODIFY ME!!!!???
-        if (usesDESYorCERNTracker) goodTrack = ntracks==1 && (nplanes-npix)>=minStripHits && npix>=minPixHits && chi2 < 100; 
+        if (usesDESYorCERNTracker) goodTrack = ntracks==1 && nplanes>=minPixHits; //chi2 close to zero in DESY/CERN
         bool pass = goodTrack && hitSensor && goodPhotek;
         bool maxAmpNotEdgeStrip = ((maxAmpIndex >= lowGoodStrip && maxAmpIndex <= highGoodStrip) || isPadSensor);
         bool goodMaxLGADAmp = maxAmpLGAD > signalAmpThreshold;
